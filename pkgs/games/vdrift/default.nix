@@ -55,7 +55,7 @@ let
   };
   wrappedName = "vdrift-${version}-with-data-${toString data.rev}";
 in
-(writeShellScriptBin "vdrift"  ''
+(writeShellScriptBin "vdrift" ''
   export VDRIFT_DATA_DIRECTORY="${data}"
   exec ${bin}/bin/vdrift "$@"
 '').overrideAttrs (_: {

@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.programs.calls;
-in {
+in
+{
   options = {
     programs.calls = {
       enable = mkEnableOption ''

@@ -38,4 +38,5 @@ import ./make-test-python.nix (
           "test 'News - Engelsystem' = \"$(xml sel -T -t -c html/head/title news)\""
       )
     '';
-  })
+  }
+)

@@ -5,10 +5,27 @@
 , perlBindings ? false
 , javahlBindings ? false
 , saslSupport ? false
-, lib, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
-, autoconf, libtool
-, apacheHttpd ? null, expat, swig ? null, jdk ? null, python3 ? null, py3c ? null, perl ? null
-, sasl ? null, serf ? null
+, lib
+, stdenv
+, fetchurl
+, apr
+, aprutil
+, zlib
+, sqlite
+, openssl
+, lz4
+, utf8proc
+, autoconf
+, libtool
+, apacheHttpd ? null
+, expat
+, swig ? null
+, jdk ? null
+, python3 ? null
+, py3c ? null
+, perl ? null
+, sasl ? null
+, serf ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -118,7 +135,8 @@ let
     CXXCPP = "clang++ -E";
   });
 
-in {
+in
+{
   subversion_1_10 = common {
     version = "1.10.7";
     sha256 = "1nhrd8z6c94sc0ryrzpyd98qdn5a5g3x0xv1kdb9da4drrk8y2ww";

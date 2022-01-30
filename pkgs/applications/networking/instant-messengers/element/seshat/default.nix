@@ -3,7 +3,8 @@
 let
   pinData = lib.importJSON ./pin.json;
 
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "seshat-node";
   inherit (pinData) version;
 

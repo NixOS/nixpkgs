@@ -16,7 +16,8 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.windowManager.session = singleton
-      { name = "metacity";
+      {
+        name = "metacity";
         start = ''
           ${gnome.metacity}/bin/metacity &
           waitPID=$!

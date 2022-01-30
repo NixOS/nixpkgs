@@ -7,7 +7,8 @@
 
 let
   inherit (llvmPackages) stdenv;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "odin";
   version = "0.13.0";
 

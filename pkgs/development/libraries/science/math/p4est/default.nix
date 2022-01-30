@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, p4est-withMetis ? true, metis
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, p4est-withMetis ? true
+, metis
 , p4est-sc
 }:
 

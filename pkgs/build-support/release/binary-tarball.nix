@@ -1,18 +1,20 @@
 /* This function builds a binary tarball.  The resulting binaries are
-   usually only useful if they are don't have any runtime dependencies
-   on any paths in the Nix store, since those aren't distributed in
-   the tarball.  For instance, the binaries should be statically
-   linked: they can't depend on dynamic libraries in the store
-   (including Glibc).
+  usually only useful if they are don't have any runtime dependencies
+  on any paths in the Nix store, since those aren't distributed in
+  the tarball.  For instance, the binaries should be statically
+  linked: they can't depend on dynamic libraries in the store
+  (including Glibc).
 
-   The binaries are built and installed with a prefix of /usr/local by
-   default.  They are installed by setting DESTDIR to a temporary
-   directory, so the Makefile of the package should support DESTDIR.
+  The binaries are built and installed with a prefix of /usr/local by
+  default.  They are installed by setting DESTDIR to a temporary
+  directory, so the Makefile of the package should support DESTDIR.
 */
 
-{ src, stdenv
+{ src
+, stdenv
 , name ? "binary-tarball"
-, ... } @ args:
+, ...
+} @ args:
 
 stdenv.mkDerivation (
 
@@ -70,7 +72,7 @@ stdenv.mkDerivation (
       test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
     '';
 
-    meta = (if args ? meta then args.meta else {}) // {
+    meta = (if args ? meta then args.meta else { }) // {
       description = "Build of a generic binary distribution";
     };
 

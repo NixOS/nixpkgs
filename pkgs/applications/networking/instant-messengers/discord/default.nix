@@ -1,15 +1,16 @@
 { branch ? "stable", pkgs, lib, stdenv }:
 let
   inherit (pkgs) callPackage fetchurl;
-  versions = if stdenv.isLinux then {
-    stable = "0.0.16";
-    ptb = "0.0.27";
-    canary = "0.0.132";
-  } else {
-    stable = "0.0.264";
-    ptb = "0.0.58";
-    canary = "0.0.280";
-  };
+  versions =
+    if stdenv.isLinux then {
+      stable = "0.0.16";
+      ptb = "0.0.27";
+      canary = "0.0.132";
+    } else {
+      stable = "0.0.264";
+      ptb = "0.0.58";
+      canary = "0.0.280";
+    };
   version = versions.${branch};
   srcs = {
     x86_64-linux = {
@@ -86,4 +87,5 @@ let
       desktopName = "Discord Canary";
     };
   };
-in packages.${branch}
+in
+packages.${branch}

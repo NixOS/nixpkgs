@@ -281,21 +281,21 @@ in
 
   config = mkIf cfg.enable {
     users.users.murmur = {
-      description     = "Murmur Service user";
-      home            = "/var/lib/murmur";
-      createHome      = true;
-      uid             = config.ids.uids.murmur;
-      group           = "murmur";
+      description = "Murmur Service user";
+      home = "/var/lib/murmur";
+      createHome = true;
+      uid = config.ids.uids.murmur;
+      group = "murmur";
     };
     users.groups.murmur = {
-      gid             = config.ids.gids.murmur;
+      gid = config.ids.gids.murmur;
     };
 
     systemd.services.murmur = {
       description = "Murmur Chat Service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network-online.target "];
-      preStart    = ''
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target " ];
+      preStart = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \
           -i ${configFile}

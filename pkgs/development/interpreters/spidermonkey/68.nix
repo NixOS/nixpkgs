@@ -1,11 +1,29 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoconf213, pkg-config, perl, python2, python3, zip, buildPackages
-, which, readline, zlib, icu, cargo, rustc, llvmPackages }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoconf213
+, pkg-config
+, perl
+, python2
+, python3
+, zip
+, buildPackages
+, which
+, readline
+, zlib
+, icu
+, cargo
+, rustc
+, llvmPackages
+}:
 
 with lib;
 
 let
-  python3Env = buildPackages.python3.withPackages (p: [p.six]);
-in stdenv.mkDerivation rec {
+  python3Env = buildPackages.python3.withPackages (p: [ p.six ]);
+in
+stdenv.mkDerivation rec {
   pname = "spidermonkey";
   version = "68.12.0";
 
@@ -80,7 +98,7 @@ in stdenv.mkDerivation rec {
 
   # mkDerivation by default appends --build/--host to configureFlags when cross compiling
   # These defaults are bogus for Spidermonkey - avoid passing them by providing an empty list
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

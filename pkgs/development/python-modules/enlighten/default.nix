@@ -26,7 +26,7 @@ buildPythonPackage rec {
   disabledTests =
     # https://github.com/Rockhopper-Technologies/enlighten/issues/44
     lib.optional stdenv.isDarwin "test_autorefresh"
-    ;
+  ;
 
   meta = with lib; {
     description = "Enlighten Progress Bar for Python Console Apps";

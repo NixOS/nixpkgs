@@ -5,7 +5,9 @@
 , mpir
 , mpfr
 , ntl
-, openblas ? null, blas, lapack
+, openblas ? null
+, blas
+, lapack
 , withBlas ? true
 }:
 

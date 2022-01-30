@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
 , setuptools-scm
 , more-itertools
 , pytestCheckHook

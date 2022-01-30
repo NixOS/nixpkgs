@@ -4,11 +4,12 @@ with lib;
 
 let
   cfg = config.services.vikunja;
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
   configFile = format.generate "config.yaml" cfg.settings;
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
-in {
+in
+{
   options.services.vikunja = with lib; {
     enable = mkEnableOption "vikunja service";
     package-api = mkOption {
@@ -59,12 +60,12 @@ in {
 
     settings = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       description = ''
         Vikunja configuration. Refer to
         <link xlink:href="https://vikunja.io/docs/config-options/"/>
         for details on supported values.
-        '';
+      '';
     };
     database = {
       type = mkOption {

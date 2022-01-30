@@ -9,8 +9,11 @@
 , six
 , nose
 , Mako
-, cudaSupport ? false, cudatoolkit
-, openclSupport ? true, ocl-icd, clblas
+, cudaSupport ? false
+, cudatoolkit
+, openclSupport ? true
+, ocl-icd
+, clblas
 }:
 
 buildPythonPackage rec {

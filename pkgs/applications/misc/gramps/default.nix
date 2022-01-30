@@ -1,14 +1,27 @@
-{ lib, fetchFromGitHub, gtk3, pythonPackages, intltool, gexiv2,
-  pango, gobject-introspection, wrapGAppsHook, gettext,
-# Optional packages:
- enableOSM ? true, osm-gps-map, glib-networking,
- enableGraphviz ? true, graphviz,
- enableGhostscript ? true, ghostscript
- }:
+{ lib
+, fetchFromGitHub
+, gtk3
+, pythonPackages
+, intltool
+, gexiv2
+, pango
+, gobject-introspection
+, wrapGAppsHook
+, gettext
+, # Optional packages:
+  enableOSM ? true
+, osm-gps-map
+, glib-networking
+, enableGraphviz ? true
+, graphviz
+, enableGhostscript ? true
+, ghostscript
+}:
 
 let
   inherit (pythonPackages) python buildPythonApplication;
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   version = "5.1.4";
   pname = "gramps";
 

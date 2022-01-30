@@ -1,7 +1,8 @@
 { fetchgit, fetchhg, fetchzip, lib }:
 
 { owner
-, repo, rev
+, repo
+, rev
 , domain ? "sr.ht"
 , vc ? "git"
 , name ? "source"
@@ -18,7 +19,13 @@ let
   baseArgs = {
     inherit name;
   } // removeAttrs args [
-    "owner" "repo" "rev" "domain" "vc" "name" "fetchSubmodules"
+    "owner"
+    "repo"
+    "rev"
+    "domain"
+    "vc"
+    "name"
+    "fetchSubmodules"
   ];
   vcArgs = baseArgs // {
     inherit rev;
@@ -44,7 +51,8 @@ let
       };
     };
   };
-in cases.${fetcher}.fetch cases.${fetcher}.arguments // {
+in
+cases.${fetcher}.fetch cases.${fetcher}.arguments // {
   inherit rev;
   meta.homepage = "${baseUrl}";
 }

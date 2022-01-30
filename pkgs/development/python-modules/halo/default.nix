@@ -6,7 +6,8 @@
 , log-symbols
 , six
 , spinners
-, termcolor }:
+, termcolor
+}:
 
 buildPythonPackage rec {
   pname = "halo";

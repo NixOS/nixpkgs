@@ -6,19 +6,21 @@ let
   cfg = config.services.stubby;
   settingsFormat = pkgs.formats.yaml { };
   confFile = settingsFormat.generate "stubby.yml" cfg.settings;
-in {
-  imports = map (x:
-    (mkRemovedOptionModule [ "services" "stubby" x ]
-      "Stubby configuration moved to services.stubby.settings.")) [
-        "authenticationMode"
-        "fallbackProtocols"
-        "idleTimeout"
-        "listenAddresses"
-        "queryPaddingBlocksize"
-        "roundRobinUpstreams"
-        "subnetPrivate"
-        "upstreamServers"
-      ];
+in
+{
+  imports = map
+    (x:
+      (mkRemovedOptionModule [ "services" "stubby" x ]
+        "Stubby configuration moved to services.stubby.settings.")) [
+    "authenticationMode"
+    "fallbackProtocols"
+    "idleTimeout"
+    "listenAddresses"
+    "queryPaddingBlocksize"
+    "roundRobinUpstreams"
+    "subnetPrivate"
+    "upstreamServers"
+  ];
 
   options = {
     services.stubby = {

@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, jre
-, fetchpatch, fetchFromGitHub, cmake, ninja, pkg-config, libuuid, utf8cpp, darwin }:
+{ lib
+, stdenv
+, fetchurl
+, jre
+, fetchpatch
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, libuuid
+, utf8cpp
+, darwin
+}:
 
 let
   version = "4.9.2";
@@ -92,4 +103,5 @@ let
       platforms = platforms.unix;
     };
   };
-in antlr
+in
+antlr

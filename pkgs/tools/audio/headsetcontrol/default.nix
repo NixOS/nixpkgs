@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   /*
-  Test depends on having the apropiate headsets connected.
+    Test depends on having the apropiate headsets connected.
   */
   doCheck = false;
 

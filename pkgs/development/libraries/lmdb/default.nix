@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
   ]
-    ++ lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so";
+  ++ lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so";
 
   doCheck = true;
   checkTarget = "test";
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput bin "$bin"
   ''
-    # add lmdb.pc (dynamic only)
-    + ''
+  # add lmdb.pc (dynamic only)
+  + ''
     mkdir -p "$dev/lib/pkgconfig"
     cat > "$dev/lib/pkgconfig/lmdb.pc" <<EOF
     Name: lmdb

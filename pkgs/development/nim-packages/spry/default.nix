@@ -1,5 +1,13 @@
-{ lib, buildNimPackage, fetchFromGitHub, rocksdb, snappy, spryvm, stew
-, tempfile, ui }:
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, rocksdb
+, snappy
+, spryvm
+, stew
+, tempfile
+, ui
+}:
 
 buildNimPackage rec {
   pname = "spry";

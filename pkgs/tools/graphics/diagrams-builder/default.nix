@@ -5,12 +5,12 @@
 
   ~~~
   diagrams-builder.override {
-    extraPackages = self : [myHaskellPackage];
+  extraPackages = self : [myHaskellPackage];
   }
   ­~~~
 */
 
-{ lib, stdenv, ghcWithPackages, makeWrapper, diagrams-builder, extraPackages ? (self: []) }:
+{ lib, stdenv, ghcWithPackages, makeWrapper, diagrams-builder, extraPackages ? (self: [ ]) }:
 
 let
 
@@ -19,14 +19,14 @@ let
     (self: [ diagrams-builder ] ++ extraPackages self);
   ghcVersion = wrappedGhc.version;
 
-  exeWrapper = backend : ''
+  exeWrapper = backend: ''
     makeWrapper \
     "${diagrams-builder}/bin/diagrams-builder-${backend}" "$out/bin/diagrams-builder-${backend}" \
       --set NIX_GHC ${wrappedGhc}/bin/ghc \
       --set NIX_GHC_LIBDIR ${wrappedGhc}/lib/ghc-${ghcVersion}
   '';
 
-  backends = ["svg" "cairo" "ps"];
+  backends = [ "svg" "cairo" "ps" ];
 
 in
 

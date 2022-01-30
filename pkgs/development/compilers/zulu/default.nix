@@ -6,15 +6,15 @@
 , makeWrapper
 , setJavaClassPath
 , zulu
-# minimum dependencies
+  # minimum dependencies
 , alsa-lib
 , fontconfig
 , freetype
 , zlib
 , xorg
-# runtime dependencies
+  # runtime dependencies
 , cups
-# runtime dependencies for GTK+ Look and Feel
+  # runtime dependencies for GTK+ Look and Feel
 , gtkSupport ? stdenv.isLinux
 , cairo
 , glib
@@ -35,11 +35,14 @@ let
   runtimeDependencies = [
     cups
   ] ++ lib.optionals gtkSupport [
-    cairo glib gtk3
+    cairo
+    glib
+    gtk3
   ];
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit version openjdk platform hash extension;
 
   pname = "zulu";
@@ -63,7 +66,8 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook makeWrapper
+    autoPatchelfHook
+    makeWrapper
   ] ++ lib.optionals stdenv.isDarwin [
     unzip
   ];

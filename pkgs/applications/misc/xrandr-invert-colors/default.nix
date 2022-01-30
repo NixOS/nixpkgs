@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libXrandr}:
+{ lib, stdenv, fetchFromGitHub, libXrandr }:
 
 stdenv.mkDerivation rec {
   pname = "xrandr-invert-colors";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Inverts the colors of your screen";
     license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/zoltanp/xrandr-invert-colors";
-    maintainers = [lib.maintainers.magnetophon ];
+    maintainers = [ lib.maintainers.magnetophon ];
     platforms = platforms.linux;
   };
 }

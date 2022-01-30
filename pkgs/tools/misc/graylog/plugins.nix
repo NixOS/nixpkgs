@@ -1,27 +1,28 @@
-{ pkgs,  lib, stdenv, fetchurl, unzip, graylog }:
+{ pkgs, lib, stdenv, fetchurl, unzip, graylog }:
 
 with pkgs.lib;
 
 let
-  glPlugin = a@{
-    pluginName,
-    version,
-    installPhase ? ''
-      mkdir -p $out/bin
-      cp $src $out/bin/${pluginName}-${version}.jar
-    '',
-    ...
-  }:
+  glPlugin =
+    a@{ pluginName
+    , version
+    , installPhase ? ''
+        mkdir -p $out/bin
+        cp $src $out/bin/${pluginName}-${version}.jar
+      ''
+    , ...
+    }:
     stdenv.mkDerivation (a // {
       inherit installPhase;
       dontUnpack = true;
       nativeBuildInputs = [ unzip ];
       meta = a.meta // {
         platforms = graylog.meta.platforms;
-        maintainers = (a.meta.maintainers or []) ++ [ maintainers.fadenb ];
+        maintainers = (a.meta.maintainers or [ ]) ++ [ maintainers.fadenb ];
       };
     });
-in {
+in
+{
   aggregates = glPlugin rec {
     name = "graylog-aggregates-${version}";
     pluginName = "graylog-plugin-aggregates";

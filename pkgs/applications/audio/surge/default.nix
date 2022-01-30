@@ -1,6 +1,21 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, cmake, git, pkg-config, python3
-, cairo, libsndfile, libxcb, libxkbcommon, xcbutil, xcbutilcursor, xcbutilkeysyms, zenity
-, curl, rsync
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, cmake
+, git
+, pkg-config
+, python3
+, cairo
+, libsndfile
+, libxcb
+, libxkbcommon
+, xcbutil
+, xcbutilcursor
+, xcbutilkeysyms
+, zenity
+, curl
+, rsync
 }:
 
 stdenv.mkDerivation rec {

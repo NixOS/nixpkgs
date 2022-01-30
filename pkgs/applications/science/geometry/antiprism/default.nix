@@ -1,10 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , libX11
 , libGL
 , libGLU
-, freeglut }:
+, freeglut
+}:
 
 stdenv.mkDerivation rec {
   pname = "antiprism";

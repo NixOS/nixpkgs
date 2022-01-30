@@ -1,15 +1,21 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , copper
 , python3
 , pkg-config
-, withQt ? false, qtbase ? null, wrapQtAppsHook ? null
-, withGtk2 ? false, gtk2
-, withGtk3 ? false, gtk3
+, withQt ? false
+, qtbase ? null
+, wrapQtAppsHook ? null
+, withGtk2 ? false
+, gtk2
+, withGtk3 ? false
+, gtk3
 , mkDerivation ? stdenv.mkDerivation
 }:
 let onlyOneEnabled = xs: 1 == builtins.length (builtins.filter lib.id xs);
-in assert onlyOneEnabled [ withQt withGtk2 withGtk3 ];
+in
+assert onlyOneEnabled [ withQt withGtk2 withGtk3 ];
 mkDerivation rec {
   pname = "code-browser";
   version = "8.0";
@@ -32,24 +38,26 @@ mkDerivation rec {
     substituteInPlace libs/copper-ui/Makefile --replace "all: qt gtk gtk2" "all: gtk"
   ''
   ;
-  nativeBuildInputs = [ copper
-                        python3
-                        pkg-config
-                      ]
+  nativeBuildInputs = [
+    copper
+    python3
+    pkg-config
+  ]
   ++ lib.optionals withGtk2 [ gtk2 ]
   ++ lib.optionals withGtk3 [ gtk3 ]
   ++ lib.optionals withQt [ qtbase wrapQtAppsHook ];
   buildInputs = lib.optionals withQt [ qtbase ]
-                ++ lib.optionals withGtk2 [ gtk2 ]
-                ++ lib.optionals withGtk3 [ gtk3 ];
+    ++ lib.optionals withGtk2 [ gtk2 ]
+    ++ lib.optionals withGtk3 [ gtk3 ];
   makeFlags = [
     "prefix=$(out)"
     "COPPER=${copper}/bin/copper-elf64"
     "with-local-libs"
   ]
-  ++ lib.optionals withQt [ "QINC=${qtbase.dev}/include"
-                            "UI=qt"
-                          ]
+  ++ lib.optionals withQt [
+    "QINC=${qtbase.dev}/include"
+    "UI=qt"
+  ]
   ++ lib.optionals withGtk2 [ "UI=gtk2" ]
   ++ lib.optionals withGtk3 [ "UI=gtk" ];
 

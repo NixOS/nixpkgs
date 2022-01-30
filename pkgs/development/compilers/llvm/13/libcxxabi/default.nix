@@ -1,4 +1,12 @@
-{ lib, stdenv, llvm_meta, cmake, python3, src, cxx-headers, libunwind, version
+{ lib
+, stdenv
+, llvm_meta
+, cmake
+, python3
+, src
+, cxx-headers
+, libunwind
+, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 , standalone ? stdenv.hostPlatform.useLLVM or false
 , withLibunwind ? !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm
@@ -39,7 +47,8 @@ stdenv.mkDerivation rec {
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
 
-  installPhase = if stdenv.isDarwin
+  installPhase =
+    if stdenv.isDarwin
     then ''
       for file in lib/*.dylib; do
         # this should be done in CMake, but having trouble figuring out

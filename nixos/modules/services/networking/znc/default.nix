@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -14,52 +14,57 @@ let
   };
 
   listenerPorts = concatMap (l: optional (l ? Port) l.Port)
-    (attrValues (cfg.config.Listener or {}));
+    (attrValues (cfg.config.Listener or { }));
 
   # Converts the config option to a string
-  semanticString = let
+  semanticString =
+    let
 
-      sortedAttrs = set: sort (l: r:
-        if l == "extraConfig" then false # Always put extraConfig last
-        else if isAttrs set.${l} == isAttrs set.${r} then l < r
-        else isAttrs set.${r} # Attrsets should be last, makes for a nice config
-        # This last case occurs when any side (but not both) is an attrset
-        # The order of these is correct when the attrset is on the right
-        # which we're just returning
-      ) (attrNames set);
+      sortedAttrs = set: sort
+        (l: r:
+          if l == "extraConfig" then false # Always put extraConfig last
+          else if isAttrs set.${l} == isAttrs set.${r} then l < r
+          else isAttrs set.${r} # Attrsets should be last, makes for a nice config
+          # This last case occurs when any side (but not both) is an attrset
+          # The order of these is correct when the attrset is on the right
+          # which we're just returning
+        )
+        (attrNames set);
 
       # Specifies an attrset that encodes the value according to its type
       encode = name: value: {
-          null = [];
-          bool = [ "${name} = ${boolToString value}" ];
-          int = [ "${name} = ${toString value}" ];
+        null = [ ];
+        bool = [ "${name} = ${boolToString value}" ];
+        int = [ "${name} = ${toString value}" ];
 
-          # extraConfig should be inserted verbatim
-          string = [ (if name == "extraConfig" then value else "${name} = ${value}") ];
+        # extraConfig should be inserted verbatim
+        string = [ (if name == "extraConfig" then value else "${name} = ${value}") ];
 
-          # Values like `Foo = [ "bar" "baz" ];` should be transformed into
-          #   Foo=bar
-          #   Foo=baz
-          list = concatMap (encode name) value;
+        # Values like `Foo = [ "bar" "baz" ];` should be transformed into
+        #   Foo=bar
+        #   Foo=baz
+        list = concatMap (encode name) value;
 
-          # Values like `Foo = { bar = { Baz = "baz"; Qux = "qux"; Florps = null; }; };` should be transmed into
-          #   <Foo bar>
-          #     Baz=baz
-          #     Qux=qux
-          #   </Foo>
-          set = concatMap (subname: optionals (value.${subname} != null) ([
-              "<${name} ${subname}>"
-            ] ++ map (line: "\t${line}") (toLines value.${subname}) ++ [
-              "</${name}>"
-            ])) (filter (v: v != null) (attrNames value));
+        # Values like `Foo = { bar = { Baz = "baz"; Qux = "qux"; Florps = null; }; };` should be transmed into
+        #   <Foo bar>
+        #     Baz=baz
+        #     Qux=qux
+        #   </Foo>
+        set = concatMap
+          (subname: optionals (value.${subname} != null) ([
+            "<${name} ${subname}>"
+          ] ++ map (line: "\t${line}") (toLines value.${subname}) ++ [
+            "</${name}>"
+          ]))
+          (filter (v: v != null) (attrNames value));
 
-        }.${builtins.typeOf value};
+      }.${builtins.typeOf value};
 
       # One level "above" encode, acts upon a set and uses encode on each name,value pair
       toLines = set: concatMap (name: encode name set.${name}) (sortedAttrs set);
 
     in
-      concatStringsSep "\n" (toLines cfg.config);
+    concatStringsSep "\n" (toLines cfg.config);
 
   semanticTypes = with types; rec {
     zncAtom = nullOr (oneOf [ int bool str ]);
@@ -124,7 +129,7 @@ in
 
       config = mkOption {
         type = semanticTypes.zncConf;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             LoadModule = [ "webadmin" "adminlog" ];
@@ -316,17 +321,19 @@ in
 
     users.users = optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} =
-        { description = "ZNC server daemon owner";
+        {
+          description = "ZNC server daemon owner";
           group = defaultUser;
           uid = config.ids.uids.znc;
           home = cfg.dataDir;
           createHome = true;
         };
-      };
+    };
 
     users.groups = optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} =
-        { gid = config.ids.gids.znc;
+        {
+          gid = config.ids.gids.znc;
           members = [ defaultUser ];
         };
     };

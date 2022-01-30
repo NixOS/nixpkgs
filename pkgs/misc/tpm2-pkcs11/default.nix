@@ -1,7 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, substituteAll
-, pkg-config, autoreconfHook, autoconf-archive, makeWrapper, patchelf
-, tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python37, glibc, libyaml
-, abrmdSupport ? true, tpm2-abrmd ? null
+{ stdenv
+, lib
+, fetchFromGitHub
+, substituteAll
+, pkg-config
+, autoreconfHook
+, autoconf-archive
+, makeWrapper
+, patchelf
+, tpm2-tss
+, tpm2-tools
+, opensc
+, openssl
+, sqlite
+, python37
+, glibc
+, libyaml
+, abrmdSupport ? true
+, tpm2-abrmd ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -29,10 +44,19 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkg-config autoreconfHook autoconf-archive makeWrapper patchelf
+    pkg-config
+    autoreconfHook
+    autoconf-archive
+    makeWrapper
+    patchelf
   ];
   buildInputs = [
-    tpm2-tss tpm2-tools opensc openssl sqlite libyaml
+    tpm2-tss
+    tpm2-tools
+    opensc
+    openssl
+    sqlite
+    libyaml
     (python37.withPackages (ps: [ ps.pyyaml ps.cryptography ps.pyasn1-modules ]))
   ];
 
@@ -43,24 +67,26 @@ stdenv.mkDerivation rec {
 
   # To be able to use the userspace resource manager, the RUNPATH must
   # explicitly include the tpm2-abrmd shared libraries.
-  preFixup = let
-    rpath = lib.makeLibraryPath (
-      (lib.optional abrmdSupport tpm2-abrmd)
-      ++ [
-        tpm2-tss
-        sqlite
-        openssl
-        glibc
-        libyaml
-      ]
-    );
-  in ''
-    patchelf \
-      --set-rpath ${rpath} \
-      ${lib.optionalString abrmdSupport "--add-needed ${lib.makeLibraryPath [tpm2-abrmd]}/libtss2-tcti-tabrmd.so"} \
-      --add-needed ${lib.makeLibraryPath [tpm2-tss]}/libtss2-tcti-device.so \
-      $out/lib/libtpm2_pkcs11.so.0.0.0
-  '';
+  preFixup =
+    let
+      rpath = lib.makeLibraryPath (
+        (lib.optional abrmdSupport tpm2-abrmd)
+        ++ [
+          tpm2-tss
+          sqlite
+          openssl
+          glibc
+          libyaml
+        ]
+      );
+    in
+    ''
+      patchelf \
+        --set-rpath ${rpath} \
+        ${lib.optionalString abrmdSupport "--add-needed ${lib.makeLibraryPath [tpm2-abrmd]}/libtss2-tcti-tabrmd.so"} \
+        --add-needed ${lib.makeLibraryPath [tpm2-tss]}/libtss2-tcti-device.so \
+        $out/lib/libtpm2_pkcs11.so.0.0.0
+    '';
 
   postInstall = ''
     mkdir -p $bin/bin/ $bin/share/tpm2_pkcs11/

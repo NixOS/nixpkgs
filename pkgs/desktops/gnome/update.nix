@@ -12,7 +12,8 @@ let
       minorAvailable = builtins.length versionComponents > 1 && builtins.match "[0-9]+" minorVersion != null;
       nextMinor = builtins.fromJSON minorVersion + 1;
       upperBound = "${lib.versions.major packageVersion}.${builtins.toString nextMinor}";
-    in lib.optionalString (freeze && minorAvailable) ''--upper-bound="${upperBound}"'';
+    in
+    lib.optionalString (freeze && minorAvailable) ''--upper-bound="${upperBound}"'';
   updateScript = writeScript "gnome-update-script" ''
     #!${stdenv.shell}
     set -o errexit
@@ -23,4 +24,5 @@ let
     latest_tag=$(python "${./find-latest-version.py}" "$package_name" "$version_policy" "stable" ${upperBoundFlag})
     update-source-version "$attr_path" "$latest_tag"
   '';
-in [ updateScript packageName attrPath versionPolicy ]
+in
+[ updateScript packageName attrPath versionPolicy ]

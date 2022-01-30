@@ -1,6 +1,13 @@
-{ lib, buildDunePackage, cohttp-lwt
-, conduit-lwt-unix, conduit-lwt, ppx_sexp_conv
-, cmdliner, fmt, logs, magic-mime
+{ lib
+, buildDunePackage
+, cohttp-lwt
+, conduit-lwt-unix
+, conduit-lwt
+, ppx_sexp_conv
+, cmdliner
+, fmt
+, logs
+, magic-mime
 , ounit
 , cacert
 }:
@@ -14,7 +21,12 @@ buildDunePackage {
   buildInputs = [ cmdliner ppx_sexp_conv ];
 
   propagatedBuildInputs = [
-    cohttp-lwt conduit-lwt conduit-lwt-unix fmt logs magic-mime
+    cohttp-lwt
+    conduit-lwt
+    conduit-lwt-unix
+    fmt
+    logs
+    magic-mime
   ];
 
   # TODO(@sternenseemann): fail for unknown reason

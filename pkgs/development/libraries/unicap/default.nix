@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libunicap";
-  version="0.9.12";
+  version = "0.9.12";
 
   src = fetchurl {
     url = "https://www.unicap-imaging.org/downloads/${pname}-${version}.tar.gz";

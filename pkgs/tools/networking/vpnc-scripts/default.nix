@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchgit
+{ lib
+, stdenv
+, fetchgit
 , makeWrapper
-, nettools, gawk, systemd, openresolv, coreutils, gnugrep, iproute2
+, nettools
+, gawk
+, systemd
+, openresolv
+, coreutils
+, gnugrep
+, iproute2
 }:
 
 stdenv.mkDerivation {

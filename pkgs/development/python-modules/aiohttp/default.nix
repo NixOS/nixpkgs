@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-# install_requires
+  # install_requires
 , attrs
 , charset-normalizer
 , multidict
@@ -17,7 +17,7 @@
 , asynctest
 , typing-extensions
 , idna-ssl
-# tests_require
+  # tests_require
 , async_generator
 , freezegun
 , gunicorn
@@ -78,7 +78,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [
-    "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
+    "test_addresses" # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
     "test_close"
   ];
 

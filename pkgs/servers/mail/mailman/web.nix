@@ -1,5 +1,12 @@
-{ buildPythonPackage, lib, fetchPypi, pythonOlder
-, sassc, hyperkitty, postorius, whoosh, setuptools-scm
+{ buildPythonPackage
+, lib
+, fetchPypi
+, pythonOlder
+, sassc
+, hyperkitty
+, postorius
+, whoosh
+, setuptools-scm
 }:
 
 buildPythonPackage rec {

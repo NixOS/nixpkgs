@@ -1,6 +1,11 @@
-{ lib, buildPythonApplication, fetchFromGitHub
-, gtk3, gobject-introspection
-, wrapGAppsHook, python3Packages }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, gtk3
+, gobject-introspection
+, wrapGAppsHook
+, python3Packages
+}:
 
 buildPythonApplication rec {
   pname = "gshogi";
@@ -13,7 +18,7 @@ buildPythonApplication rec {
     sha256 = "06vgndfgwyfi50wg3cw92zspc9z0k7xn2pp6qsjih0l5yih8iwqh";
   };
 
-  doCheck = false;  # no tests available
+  doCheck = false; # no tests available
 
   buildInputs = [
     gtk3

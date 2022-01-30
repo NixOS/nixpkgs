@@ -1,17 +1,24 @@
-{ lib, stdenv, fetchurl, buildPackages, perl, coreutils, fetchFromGitHub
-, withCryptodev ? false, cryptodev
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, perl
+, coreutils
+, fetchFromGitHub
+, withCryptodev ? false
+, cryptodev
 , enableSSL2 ? false
 , enableSSL3 ? false
 , static ? stdenv.hostPlatform.isStatic
-# Used to avoid cross compiling perl, for example, in darwin bootstrap tools.
-# This will cause c_rehash to refer to perl via the environment, but otherwise
-# will produce a perfectly functional openssl binary and library.
+  # Used to avoid cross compiling perl, for example, in darwin bootstrap tools.
+  # This will cause c_rehash to refer to perl via the environment, but otherwise
+  # will produce a perfectly functional openssl binary and library.
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
 }:
 
 assert (
   lib.assertMsg (!withPerl -> stdenv.hostPlatform != stdenv.buildPlatform)
-  "withPerl should not be disabled unless cross compiling"
+    "withPerl should not be disabled unless cross compiling"
 );
 
 stdenv.mkDerivation rec {
@@ -33,8 +40,8 @@ stdenv.mkDerivation rec {
     ../openssl/3.0/openssl-disable-kernel-detection.patch
 
     (if stdenv.hostPlatform.isDarwin
-      then ../openssl/use-etc-ssl-certs-darwin.patch
-      else ../openssl/use-etc-ssl-certs.patch)
+    then ../openssl/use-etc-ssl-certs-darwin.patch
+    else ../openssl/use-etc-ssl-certs.patch)
   ];
 
   postPatch = ''
@@ -63,36 +70,36 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPerl perl;
 
   # TODO(@Ericson2314): Improve with mass rebuild
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   configureScript = {
-      armv5tel-linux = "./Configure linux-armv4 -march=armv5te";
-      armv6l-linux = "./Configure linux-armv4 -march=armv6";
-      armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
-      x86_64-darwin  = "./Configure darwin64-x86_64-cc";
-      aarch64-darwin = "./Configure darwin64-arm64-cc";
-      x86_64-linux = "./Configure linux-x86_64";
-      x86_64-solaris = "./Configure solaris64-x86_64-gcc";
-      riscv64-linux = "./Configure linux64-riscv64";
-    }.${stdenv.hostPlatform.system} or (
-      if stdenv.hostPlatform == stdenv.buildPlatform
-        then "./config"
-      else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
-        then "./Configure BSD-x86_64"
-      else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_32
-        then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
-      else if stdenv.hostPlatform.isBSD
-        then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
-      else if stdenv.hostPlatform.isMinGW
-        then "./Configure mingw${lib.optionalString
+    armv5tel-linux = "./Configure linux-armv4 -march=armv5te";
+    armv6l-linux = "./Configure linux-armv4 -march=armv6";
+    armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
+    x86_64-darwin = "./Configure darwin64-x86_64-cc";
+    aarch64-darwin = "./Configure darwin64-arm64-cc";
+    x86_64-linux = "./Configure linux-x86_64";
+    x86_64-solaris = "./Configure solaris64-x86_64-gcc";
+    riscv64-linux = "./Configure linux64-riscv64";
+  }.${stdenv.hostPlatform.system} or (
+    if stdenv.hostPlatform == stdenv.buildPlatform
+    then "./config"
+    else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
+    then "./Configure BSD-x86_64"
+    else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_32
+    then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+    else if stdenv.hostPlatform.isBSD
+    then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
+    else if stdenv.hostPlatform.isMinGW
+    then "./Configure mingw${lib.optionalString
                                    (stdenv.hostPlatform.parsed.cpu.bits != 32)
                                    (toString stdenv.hostPlatform.parsed.cpu.bits)}"
-      else if stdenv.hostPlatform.isLinux
-        then "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
-      else if stdenv.hostPlatform.isiOS
-        then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
-      else
-        throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
-    );
+    else if stdenv.hostPlatform.isLinux
+    then "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
+    else if stdenv.hostPlatform.isiOS
+    then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+    else
+      throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
+  );
 
   # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
   dontAddStaticConfigureFlags = true;
@@ -105,12 +112,12 @@ stdenv.mkDerivation rec {
     "-DHAVE_CRYPTODEV"
     "-DUSE_CRYPTODEV_DIGESTS"
   ] ++ lib.optional enableSSL2 "enable-ssl2"
-    ++ lib.optional enableSSL3 "enable-ssl3"
-    ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
-    # OpenSSL needs a specific `no-shared` configure flag.
-    # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
-    # for a comprehensive list of configuration options.
-    ++ lib.optional static "no-shared";
+  ++ lib.optional enableSSL3 "enable-ssl3"
+  ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
+  # OpenSSL needs a specific `no-shared` configure flag.
+  # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
+  # for a comprehensive list of configuration options.
+  ++ lib.optional static "no-shared";
 
   makeFlags = [
     "MANDIR=$(man)/share/man"
@@ -140,9 +147,9 @@ stdenv.mkDerivation rec {
     #
     # In both cases, if withPerl = false, the intepreter line is expected be
     # "#!/usr/bin/env perl"
-  ''
-    substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
-  '' + ''
+    ''
+      substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
+    '' + ''
     mkdir -p $bin
     mv $out/bin $bin/bin
     mkdir $dev

@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, python3, bluez
-, tcl, acl, kmod, coreutils, shadow, util-linux, udev
-, alsaSupport ? stdenv.isLinux, alsa-lib
-, systemdSupport ? stdenv.isLinux, systemd
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, python3
+, bluez
+, tcl
+, acl
+, kmod
+, coreutils
+, shadow
+, util-linux
+, udev
+, alsaSupport ? stdenv.isLinux
+, alsa-lib
+, systemdSupport ? stdenv.isLinux
+, systemd
 }:
 
 stdenv.mkDerivation rec {

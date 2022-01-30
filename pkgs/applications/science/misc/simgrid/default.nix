@@ -1,11 +1,27 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, cmake, perl, python3, boost, valgrind
-# Optional requirements
-# Lua 5.3 needed and not available now
-#, luaSupport ? false, lua5
-, fortranSupport ? false, gfortran
-, buildDocumentation ? false, transfig, ghostscript, doxygen
-, buildJavaBindings ? false, openjdk
-, modelCheckingSupport ? false, libunwind, libevent, elfutils # Inside elfutils: libelf and libdw
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, cmake
+, perl
+, python3
+, boost
+, valgrind
+  # Optional requirements
+  # Lua 5.3 needed and not available now
+  #, luaSupport ? false, lua5
+, fortranSupport ? false
+, gfortran
+, buildDocumentation ? false
+, transfig
+, ghostscript
+, doxygen
+, buildJavaBindings ? false
+, openjdk
+, modelCheckingSupport ? false
+, libunwind
+, libevent
+, elfutils # Inside elfutils: libelf and libdw
 , debug ? false
 , moreTests ? false
 }:
@@ -38,10 +54,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ boost ];
   nativeBuildInputs = [ cmake perl python3 valgrind ]
-      ++ optionals fortranSupport [ gfortran ]
-      ++ optionals buildJavaBindings [ openjdk ]
-      ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
-      ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
+    ++ optionals fortranSupport [ gfortran ]
+    ++ optionals buildJavaBindings [ openjdk ]
+    ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
+    ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
 
   #buildInputs = optional luaSupport lua5;
 

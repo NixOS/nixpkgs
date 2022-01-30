@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchurl, bash, coreutils, python3
-, libcap_ng, policycoreutils, selinux-python, dbus
-, xorgserver, openbox, xmodmap }:
+{ lib
+, stdenv
+, fetchurl
+, bash
+, coreutils
+, python3
+, libcap_ng
+, policycoreutils
+, selinux-python
+, dbus
+, xorgserver
+, openbox
+, xmodmap
+}:
 
 # this is python3 only as it depends on selinux-python
 

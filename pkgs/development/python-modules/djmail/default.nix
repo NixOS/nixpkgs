@@ -1,6 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , glibcLocales
-, celery, django, psycopg2
+, celery
+, django
+, psycopg2
 }:
 
 buildPythonPackage rec {

@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl
+{ stdenv
+, lib
+, fetchurl
 , linuxHeaders ? null
 , useBSDCompatHeaders ? true
 }:
@@ -31,11 +33,12 @@ let
     sha256 = "1mzxnc2ncq8lw9x6n7p00fvfklc9p3wfv28m68j0dfz5l8q2k6pp";
   };
 
-  arch = if stdenv.hostPlatform.isx86_64
+  arch =
+    if stdenv.hostPlatform.isx86_64
     then "x86_64"
     else if stdenv.hostPlatform.isx86_32
-      then "i386"
-      else null;
+    then "i386"
+    else null;
 
 in
 stdenv.mkDerivation rec {
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
   version = "1.2.2";
 
   src = fetchurl {
-    url    = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
+    url = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
     sha256 = "1p8r6bac64y98ln0wzmnixysckq3crca69ys7p16sy9d04i975lv";
   };
 
@@ -144,10 +147,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An efficient, small, quality libc implementation";
-    homepage    = "https://musl.libc.org/";
-    changelog   = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://musl.libc.org/";
+    changelog = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
 }

@@ -1,22 +1,23 @@
 /* This function composes the Nix Packages collection. It:
 
-     1. Elaborates `localSystem` and `crossSystem` with defaults as needed.
+  1. Elaborates `localSystem` and `crossSystem` with defaults as needed.
 
-     2. Applies the final stage to the given `config` if it is a function
+  2. Applies the final stage to the given `config` if it is a function
 
-     3. Defaults to no non-standard config and no cross-compilation target
+  3. Defaults to no non-standard config and no cross-compilation target
 
-     4. Uses the above to infer the default standard environment's (stdenv's)
-        stages if no stdenv's are provided
+  4. Uses the above to infer the default standard environment's (stdenv's)
+  stages if no stdenv's are provided
 
-     5. Folds the stages to yield the final fully booted package set for the
-        chosen stdenv
+  5. Folds the stages to yield the final fully booted package set for the
+  chosen stdenv
 
-   Use `impure.nix` to also infer the `system` based on the one on which
-   evaluation is taking place, and the configuration from environment variables
-   or dot-files. */
+  Use `impure.nix` to also infer the `system` based on the one on which
+  evaluation is taking place, and the configuration from environment variables
+  or dot-files. */
 
-{ # The system packages will be built on. See the manual for the
+{
+  # The system packages will be built on. See the manual for the
   # subtle division of labor between these two `*System`s and the three
   # `*Platform`s.
   localSystem
@@ -25,13 +26,13 @@
   crossSystem ? localSystem
 
 , # Allow a configuration attribute set to be passed in as an argument.
-  config ? {}
+  config ? { }
 
 , # List of overlays layers used to extend Nixpkgs.
-  overlays ? []
+  overlays ? [ ]
 
 , # List of overlays to apply to target packages only.
-  crossOverlays ? []
+  crossOverlays ? [ ]
 
 , # A function booting the final package set for a specific standard
   # environment. See below for the arguments given to that function, the type of
@@ -42,21 +43,30 @@
   ...
 } @ args:
 
-let # Rename the function arguments
+let
+  # Rename the function arguments
   config0 = config;
   crossSystem0 = crossSystem;
 
-in let
+in
+let
   lib = import ../../lib;
 
   inherit (lib) throwIfNot;
 
   checked =
     throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
-    lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
-    throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list."
-    lib.foldr (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.") (r: r) crossOverlays
-    ;
+      lib.foldr
+      (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.")
+      (r: r)
+      overlays
+      throwIfNot
+      (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list."
+      lib.foldr
+      (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.")
+      (r: r)
+      crossOverlays
+  ;
 
   localSystem = lib.systems.elaborate args.localSystem;
 
@@ -130,4 +140,5 @@ in let
 
   pkgs = boot stages;
 
-in checked pkgs
+in
+checked pkgs

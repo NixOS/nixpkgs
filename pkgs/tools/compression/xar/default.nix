@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   pname = "xar";
 
   src = fetchurl {
-    url    = "https://github.com/downloads/mackyle/xar/${pname}-${version}.tar.gz";
+    url = "https://github.com/downloads/mackyle/xar/${pname}-${version}.tar.gz";
     sha256 = "0ghmsbs6xwg1092v7pjcibmk5wkyifwxw6ygp08gfz25d2chhipf";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = "https://mackyle.github.io/xar/";
+    homepage = "https://mackyle.github.io/xar/";
     description = "Extensible Archiver";
 
     longDescription =
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
          of content's rich meta-data.
       '';
 
-    license     = lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ copumpkin ];
-    platforms   = lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

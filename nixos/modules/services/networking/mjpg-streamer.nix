@@ -6,7 +6,8 @@ let
 
   cfg = config.services.mjpg-streamer;
 
-in {
+in
+{
 
   options = {
 

@@ -26,13 +26,16 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config texinfo
+    autoreconfHook
+    pkg-config
+    texinfo
   ];
   buildInputs = [
     guile
   ];
   propagatedBuildInputs = [
-    libgit2 scheme-bytestructures
+    libgit2
+    scheme-bytestructures
   ];
 
   enableParallelBuilding = true;

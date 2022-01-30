@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy36
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, isPy36
 , dataclasses
 , h11
 , pytest

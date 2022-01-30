@@ -1,6 +1,14 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config
-, gtk-doc, docbook-xsl-nons
-, glib, ncurses, libxml2
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gtk-doc
+, docbook-xsl-nons
+, glib
+, ncurses
+, libxml2
 , buildDocs ? true
 }:
 stdenv.mkDerivation rec {

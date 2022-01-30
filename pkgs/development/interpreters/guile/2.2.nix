@@ -18,9 +18,10 @@
 
 let
   # Do either a coverage analysis build or a standard build.
-  builder = if coverageAnalysis != null
-            then coverageAnalysis
-            else stdenv.mkDerivation;
+  builder =
+    if coverageAnalysis != null
+    then coverageAnalysis
+    else stdenv.mkDerivation;
 in
 builder rec {
   pname = "guile";
@@ -116,7 +117,7 @@ builder rec {
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
             s|includedir=$out|includedir=$dev|g
             "
-    '';
+  '';
 
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.

@@ -7,12 +7,13 @@
 with pkgs.lib;
 
 let
-  tests = let callTest = p: flip (import p) { inherit system pkgs; }; in {
-    basic = callTest ./basic.nix;
-    namespaces = callTest ./namespaces.nix;
-    wg-quick = callTest ./wg-quick.nix;
-    generated = callTest ./generated.nix;
-  };
+  tests = let callTest = p: flip (import p) { inherit system pkgs; }; in
+    {
+      basic = callTest ./basic.nix;
+      namespaces = callTest ./namespaces.nix;
+      wg-quick = callTest ./wg-quick.nix;
+      generated = callTest ./generated.nix;
+    };
 in
 
 listToAttrs (

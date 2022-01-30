@@ -23,7 +23,8 @@
 }:
 
 assert !enableGPU -> (
-  !enableCuda);
+  !enableCuda
+);
 
 # N.b. older versions of cuda toolkit (e.g. 10) do not support newer versions
 # of gcc.  If you need to use cuda10, please override stdenv with gcc8Stdenv
@@ -102,9 +103,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Go engine modeled after AlphaGo Zero";
-    homepage    = "https://github.com/lightvector/katago";
-    license     = licenses.mit;
+    homepage = "https://github.com/lightvector/katago";
+    license = licenses.mit;
     maintainers = [ maintainers.omnipotententity ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

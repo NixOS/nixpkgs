@@ -47,13 +47,20 @@ mkDerivation rec {
     ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
 
   nativeBuildInputs = [
-    file pkg-config python3Packages.setuptools which
+    file
+    pkg-config
+    python3Packages.setuptools
+    which
   ];
 
   buildInputs = [
-    bison chmlib python3Packages.python xapian zlib
+    bison
+    chmlib
+    python3Packages.python
+    xapian
+    zlib
   ] ++ lib.optional withGui qtbase
-    ++ lib.optional stdenv.isDarwin libiconv;
+  ++ lib.optional stdenv.isDarwin libiconv;
 
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with

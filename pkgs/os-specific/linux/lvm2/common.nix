@@ -1,6 +1,7 @@
 { version, sha256 }:
 
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchpatch
 , fetchurl
 , pkg-config
@@ -9,7 +10,8 @@
 , libaio
 , enableCmdlib ? false
 , enableDmeventd ? false
-, udevSupport ? !stdenv.targetPlatform.isStatic, udev ? null
+, udevSupport ? !stdenv.targetPlatform.isStatic
+, udev ? null
 , onlyLib ? stdenv.targetPlatform.isStatic
 , nixosTests
 }:

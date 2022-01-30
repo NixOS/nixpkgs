@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub
-, llvm_10, qt5, qrencode, libmicrohttpd, libjack2, alsa-lib, faust, curl
-, bc, coreutils, which, libsndfile, pkg-config, libxcb
+{ lib
+, stdenv
+, fetchFromGitHub
+, llvm_10
+, qt5
+, qrencode
+, libmicrohttpd
+, libjack2
+, alsa-lib
+, faust
+, curl
+, bc
+, coreutils
+, which
+, libsndfile
+, pkg-config
+, libxcb
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +31,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config qt5.wrapQtAppsHook ];
 
   buildInputs = [
-    llvm_10 qt5.qtbase qrencode libmicrohttpd libjack2 alsa-lib faust curl
-    bc coreutils which libsndfile libxcb
+    llvm_10
+    qt5.qtbase
+    qrencode
+    libmicrohttpd
+    libjack2
+    alsa-lib
+    faust
+    curl
+    bc
+    coreutils
+    which
+    libsndfile
+    libxcb
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

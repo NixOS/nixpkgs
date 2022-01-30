@@ -1,14 +1,28 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, numactl, libxml2
-, perl, gfortran, slurm, openssh, hwloc, zlib, makeWrapper
-# InfiniBand dependencies
-, opensm, rdma-core
-# OmniPath dependencies
-, libpsm2, libfabric
-# Compile with slurm as a process manager
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, bison
+, numactl
+, libxml2
+, perl
+, gfortran
+, slurm
+, openssh
+, hwloc
+, zlib
+, makeWrapper
+  # InfiniBand dependencies
+, opensm
+, rdma-core
+  # OmniPath dependencies
+, libpsm2
+, libfabric
+  # Compile with slurm as a process manager
 , useSlurm ? false
-# Network type for MVAPICH2
+  # Network type for MVAPICH2
 , network ? "ethernet"
-} :
+}:
 
 assert builtins.elem network [ "ethernet" "infiniband" "omnipath" ];
 
@@ -30,8 +44,8 @@ stdenv.mkDerivation rec {
     openssh
     hwloc
   ] ++ optionals (network == "infiniband") [ rdma-core opensm ]
-    ++ optionals (network == "omnipath") [ libpsm2 libfabric ]
-    ++ optional useSlurm slurm;
+  ++ optionals (network == "omnipath") [ libpsm2 libfabric ]
+  ++ optional useSlurm slurm;
 
   configureFlags = with lib; [
     "--with-pm=hydra"
@@ -41,9 +55,9 @@ stdenv.mkDerivation rec {
     "--enable-hybrid"
     "--enable-shared"
   ] ++ optional useSlurm "--with-pm=slurm"
-    ++ optional (network == "ethernet") "--with-device=ch3:sock"
-    ++ optionals (network == "infiniband") [ "--with-device=ch3:mrail" "--with-rdma=gen2" ]
-    ++ optionals (network == "omnipath") ["--with-device=ch3:psm" "--with-psm2=${libpsm2}"];
+  ++ optional (network == "ethernet") "--with-device=ch3:sock"
+  ++ optionals (network == "infiniband") [ "--with-device=ch3:mrail" "--with-rdma=gen2" ]
+  ++ optionals (network == "omnipath") [ "--with-device=ch3:psm" "--with-psm2=${libpsm2}" ];
 
   doCheck = true;
 

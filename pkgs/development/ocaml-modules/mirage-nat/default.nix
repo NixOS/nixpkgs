@@ -1,8 +1,18 @@
-{ lib, buildDunePackage, fetchurl
-, ipaddr, cstruct, lwt, logs, lru
-, tcpip, ethernet, stdlib-shims
-, alcotest, mirage-clock-unix
-, ppxlib, ppx_deriving
+{ lib
+, buildDunePackage
+, fetchurl
+, ipaddr
+, cstruct
+, lwt
+, logs
+, lru
+, tcpip
+, ethernet
+, stdlib-shims
+, alcotest
+, mirage-clock-unix
+, ppxlib
+, ppx_deriving
 }:
 
 buildDunePackage rec {

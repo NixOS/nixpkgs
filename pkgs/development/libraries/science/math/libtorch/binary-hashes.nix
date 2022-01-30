@@ -1,4 +1,4 @@
-version : builtins.getAttr version {
+version: builtins.getAttr version {
   "1.10.0" = {
     x86_64-darwin-cpu = {
       name = "libtorch-macos-1.10.0.zip";

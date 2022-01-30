@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage
-, fmt, mirage-device
+{ lib
+, fetchurl
+, buildDunePackage
+, fmt
+, mirage-device
 , alcotest
 }:
 

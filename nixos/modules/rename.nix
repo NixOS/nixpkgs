@@ -5,11 +5,11 @@ with lib;
 {
   imports = [
     /*
-    This file defines some renaming/removing options for backwards compatibility
+      This file defines some renaming/removing options for backwards compatibility
 
-    It should ONLY be used when the relevant module can't define these imports
-    itself, such as when the module was removed completely.
-    See https://github.com/NixOS/nixpkgs/pull/61570 for explanation
+      It should ONLY be used when the relevant module can't define these imports
+      itself, such as when the module was removed completely.
+      See https://github.com/NixOS/nixpkgs/pull/61570 for explanation
     */
 
     # This alias module can't be where _module.check is defined because it would
@@ -35,12 +35,12 @@ with lib;
     (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
       "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
-        The hidepid module was removed, since the underlying machinery
-        is broken when using cgroups-v2.
+      The hidepid module was removed, since the underlying machinery
+      is broken when using cgroups-v2.
     '')
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
-    (mkRemovedOptionModule [ "services" "cgmanager" "enable"] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "cgmanager" "enable" ] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "chronos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "couchpotato" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "deepin" ] "The corresponding packages were removed from nixpkgs.")
@@ -65,7 +65,7 @@ with lib;
     (mkRemovedOptionModule [ "services" "quagga" ] "the corresponding package has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "seeks" ] "")
     (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
-    (mkRemovedOptionModule [ "services" "wakeonlan"] "This module was removed in favor of enabling it with networking.interfaces.<name>.wakeOnLan")
+    (mkRemovedOptionModule [ "services" "wakeonlan" ] "This module was removed in favor of enabling it with networking.interfaces.<name>.wakeOnLan")
     (mkRemovedOptionModule [ "services" "winstone" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "xserver" "displayManager" "auto" ] ''
       The services.xserver.displayManager.auto module has been removed

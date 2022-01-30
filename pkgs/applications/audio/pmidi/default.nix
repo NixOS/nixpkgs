@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, alsa-lib
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
 , version ? "1.7.1"
 , sourceSha256 ? "051mv6f13c8y13c1iv3279k1hhzpz4fm9sfczhgp9sim2bjdj055"
 }:

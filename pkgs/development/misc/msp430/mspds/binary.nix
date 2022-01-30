@@ -4,7 +4,8 @@ with lib;
 
 let
   archPostfix = optionalString (stdenv.is64bit && !stdenv.isDarwin) "_64";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "msp-debug-stack-bin";
   version = "3.15.1.1";
   src = fetchurl {

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "vms-empire";
   version = "1.16";
 
-  src = fetchurl{
+  src = fetchurl {
     url = "http://www.catb.org/~esr/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-XETIbt/qVU+TpamPc2WQynqqUuZqkTUnItBprjg+gPk=";
   };

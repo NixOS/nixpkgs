@@ -1,7 +1,7 @@
 # Test whether hibernation from partition works.
 
 { system ? builtins.currentSystem
-, config ? {}
+, config ? { }
 , pkgs ? import ../.. { inherit system config; }
 }:
 
@@ -28,13 +28,14 @@ let
     fileSystems = {
       "/".device = "/dev/vda2";
     };
-    swapDevices = mkOverride 0 [ { device = "/dev/vda1"; } ];
+    swapDevices = mkOverride 0 [{ device = "/dev/vda1"; }];
   };
   installedSystem = (import ../lib/eval-config.nix {
     inherit system;
     modules = [ installedConfig ];
   }).config.system.build.toplevel;
-in makeTest {
+in
+makeTest {
   name = "hibernate";
 
   nodes = {
@@ -46,7 +47,7 @@ in makeTest {
       ];
 
       nix.settings = {
-        substituters = mkForce [];
+        substituters = mkForce [ ];
         hashed-mirrors = null;
         connect-timeout = 1;
       };

@@ -9,11 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SmrsZmmR+0XQiJxErt6K1usQgHHDVU/N/2cfnJR5SXY=";
   };
 
-  postPatch = if stdenv.cc.isClang then ''
-    substituteInPlace configure.ac --replace "-lgcc_s" ""
-  '' else lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
-  '';
+  postPatch =
+    if stdenv.cc.isClang then ''
+      substituteInPlace configure.ac --replace "-lgcc_s" ""
+    '' else
+      lib.optionalString stdenv.hostPlatform.isMusl ''
+        substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
+      '';
 
   nativeBuildInputs = [ autoreconfHook ];
 

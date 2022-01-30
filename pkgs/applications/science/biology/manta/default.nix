@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     homepage = "https://github.com/Illumina/manta";
     maintainers = with maintainers; [ jbedo ];
-    platforms =  platforms.x86_64;
+    platforms = platforms.x86_64;
   };
 }

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, zlib, gperf}:
+{ lib, stdenv, fetchurl, zlib, gperf }:
 
 stdenv.mkDerivation rec {
   pname = "libid3tag";

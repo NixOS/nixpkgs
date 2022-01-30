@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace 2006/src/config/linux.cf \
       --replace "# ifdef Hasgfortran" "# if 1" \
-      --replace "# define CcCmd			gcc4" "# define CcCmd			gcc"
+      --replace "# define CcCmd      gcc4" "# define CcCmd      gcc"
     substituteInPlace 2006/src/scripts/cernlib \
       --replace "-lnsl" ""
 

@@ -2,7 +2,8 @@
 
 let
   version = "0_995";
-in fetchzip {
+in
+fetchzip {
   name = "iwona-${version}";
   url = "http://jmn.pl/pliki/Iwona-otf-${version}.zip";
 

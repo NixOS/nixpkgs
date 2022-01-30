@@ -2,7 +2,8 @@
 
 let
   py = python3Packages;
-in py.buildPythonApplication rec {
+in
+py.buildPythonApplication rec {
   pname = "friture";
   version = "0.48";
 

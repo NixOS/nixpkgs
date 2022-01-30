@@ -80,7 +80,7 @@ in
     environment.systemPackages = [ pkgs.ocserv ];
     environment.etc."ocserv/ocserv.conf".text = cfg.config;
 
-    security.pam.services.ocserv = {};
+    security.pam.services.ocserv = { };
 
     systemd.services.ocserv = {
       description = "OpenConnect SSL VPN server";

@@ -1,4 +1,12 @@
-{ lib, stdenv, llvm_meta, cmake, fetch, libcxx, libunwind, llvm, version
+{ lib
+, stdenv
+, llvm_meta
+, cmake
+, fetch
+, libcxx
+, libunwind
+, llvm
+, version
 , fetchpatch
 , standalone ? stdenv.hostPlatform.useLLVM or false
 , withLibunwind ? !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm
@@ -44,7 +52,8 @@ stdenv.mkDerivation {
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
   ] ++ lib.optional (!enableShared) "-DLIBCXXABI_ENABLE_SHARED=OFF";
 
-  installPhase = if stdenv.isDarwin
+  installPhase =
+    if stdenv.isDarwin
     then ''
       for file in lib/*.dylib; do
         # this should be done in CMake, but having trouble figuring out

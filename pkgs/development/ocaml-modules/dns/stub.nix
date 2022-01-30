@@ -1,6 +1,18 @@
-{ buildDunePackage, dns, dns-client, dns-mirage, dns-resolver, dns-tsig
-, dns-server, duration, randomconv, lwt, mirage-time, mirage-clock
-, mirage-random, mirage-stack, metrics
+{ buildDunePackage
+, dns
+, dns-client
+, dns-mirage
+, dns-resolver
+, dns-tsig
+, dns-server
+, duration
+, randomconv
+, lwt
+, mirage-time
+, mirage-clock
+, mirage-random
+, mirage-stack
+, metrics
 }:
 
 buildDunePackage {

@@ -1,7 +1,18 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
 , dune-configurator
-, bos, ctypes, fmt, logs, rresult
-, mdx, alcotest, crowbar, junit_alcotest, ezjsonm
+, bos
+, ctypes
+, fmt
+, logs
+, rresult
+, mdx
+, alcotest
+, crowbar
+, junit_alcotest
+, ezjsonm
 }:
 
 buildDunePackage rec {

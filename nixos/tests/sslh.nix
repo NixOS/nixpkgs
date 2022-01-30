@@ -33,7 +33,7 @@ import ./make-test-python.nix {
         virtualHosts."localhost" = {
           addSSL = false;
           default = true;
-          root = pkgs.runCommand "testdir" {} ''
+          root = pkgs.runCommand "testdir" { } ''
             mkdir "$out"
             echo hello world > "$out/index.html"
           '';

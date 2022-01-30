@@ -7,11 +7,11 @@
 , gnatcoll-core
 , xmlada
 , component
-# components built by this derivation other components depend on
+  # components built by this derivation other components depend on
 , gnatcoll-sql
 , gnatcoll-sqlite
 , gnatcoll-xref
-# component specific extra dependencies
+  # component specific extra dependencies
 , gnatcoll-iconv
 , gnatcoll-readline
 , sqlite
@@ -87,10 +87,11 @@ stdenv.mkDerivation rec {
   # the closure size dramatically
   ${if onlyExecutable then "buildInputs" else "propagatedBuildInputs"} = [
     gnatcoll-core
-  ] ++ libsFor."${component}" or [];
+  ] ++ libsFor."${component}" or [ ];
 
   makeFlags = [
-    "-C" component
+    "-C"
+    component
     "PROCESSORS=$(NIX_BUILD_CORES)"
     # confusingly, for gprbuild --target is autoconf --host
     "TARGET=${stdenv.hostPlatform.config}"

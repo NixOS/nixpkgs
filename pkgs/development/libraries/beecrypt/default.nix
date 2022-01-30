@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, m4}:
+{ lib, stdenv, fetchurl, m4 }:
 
 stdenv.mkDerivation rec {
   pname = "beecrypt";

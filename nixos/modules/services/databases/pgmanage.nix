@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... } :
+{ lib, pkgs, config, ... }:
 
 with lib;
 
@@ -7,7 +7,7 @@ let
 
   confFile = pkgs.writeTextFile {
     name = "pgmanage.conf";
-    text =  ''
+    text = ''
       connection_file = ${pgmanageConnectionsFile}
 
       allow_custom_connections = ${builtins.toJSON cfg.allowCustomConnections}
@@ -36,12 +36,13 @@ let
   pgmanageConnectionsFile = pkgs.writeTextFile {
     name = "pgmanage-connections.conf";
     text = concatStringsSep "\n"
-      (mapAttrsToList (name : conn : "${name}: ${conn}") cfg.connections);
+      (mapAttrsToList (name: conn: "${name}: ${conn}") cfg.connections);
   };
 
   pgmanage = "pgmanage";
 
-in {
+in
+{
 
   options.services.pgmanage = {
     enable = mkEnableOption "PostgreSQL Administration for the web";
@@ -57,9 +58,9 @@ in {
 
     connections = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = {
-        nuc-server  = "hostaddr=192.168.0.100 port=5432 dbname=postgres";
+        nuc-server = "hostaddr=192.168.0.100 port=5432 dbname=postgres";
         mini-server = "hostaddr=127.0.0.1 port=5432 dbname=postgres sslmode=require";
       };
       description = ''
@@ -170,7 +171,7 @@ in {
     };
 
     logLevel = mkOption {
-      type = types.enum ["error" "warn" "notice" "info"];
+      type = types.enum [ "error" "warn" "notice" "info" ];
       default = "error";
       description = ''
         Verbosity of logs
@@ -181,21 +182,21 @@ in {
   config = mkIf cfg.enable {
     systemd.services.pgmanage = {
       description = "pgmanage - PostgreSQL Administration for the web";
-      wants    = [ "postgresql.service" ];
-      after    = [ "postgresql.service" ];
+      wants = [ "postgresql.service" ];
+      after = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        User         = pgmanage;
-        Group        = pgmanage;
-        ExecStart    = "${pkgs.pgmanage}/sbin/pgmanage -c ${confFile}" +
-                       optionalString cfg.localOnly " --local-only=true";
+        User = pgmanage;
+        Group = pgmanage;
+        ExecStart = "${pkgs.pgmanage}/sbin/pgmanage -c ${confFile}" +
+          optionalString cfg.localOnly " --local-only=true";
       };
     };
     users = {
       users.${pgmanage} = {
-        name  = pgmanage;
+        name = pgmanage;
         group = pgmanage;
-        home  = cfg.sqlRoot;
+        home = cfg.sqlRoot;
         createHome = true;
         isSystemUser = true;
       };

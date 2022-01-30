@@ -1,10 +1,11 @@
-{
-  lib, stdenv,
-  cmake,
-  fetchFromGitHub,
-  boost,
-  xercesc,
-  icu,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, boost
+, xercesc
+, icu
+,
 }:
 
 stdenv.mkDerivation rec {

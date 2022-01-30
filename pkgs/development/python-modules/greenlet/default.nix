@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "greenlet";
   version = "1.1.2";
-  disabled = isPyPy;  # builtin for pypy
+  disabled = isPyPy; # builtin for pypy
 
   src = fetchPypi {
     inherit pname version;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-greenlet/greenlet";
     description = "Module for lightweight in-process concurrent programming";
     license = with licenses; [
-      psfl  # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
+      psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
       mit
     ];
   };

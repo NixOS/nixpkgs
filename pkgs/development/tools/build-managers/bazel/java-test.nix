@@ -1,5 +1,4 @@
-{
-  bazel
+{ bazel
 , bazelTest
 , bazel-examples
 , gccStdenv
@@ -29,7 +28,7 @@ let
     exec "$BAZEL_REAL" "$@"
   '';
 
-  workspaceDir = runLocal "our_workspace" {} (''
+  workspaceDir = runLocal "our_workspace" { } (''
     cp -r ${bazel-examples}/java-tutorial $out
     find $out -type d -exec chmod 755 {} \;
   ''
@@ -52,11 +51,12 @@ let
           --sandbox_debug \
           //:ProjectRunner \
     '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
-          --host_javabase='@local_jdk//:jdk' \
-          --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
-          --javabase='@local_jdk//:jdk' \
+      --host_javabase='@local_jdk//:jdk' \
+      --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+      --javabase='@local_jdk//:jdk' \
     '';
   };
 
-in testBazel
+in
+testBazel
 

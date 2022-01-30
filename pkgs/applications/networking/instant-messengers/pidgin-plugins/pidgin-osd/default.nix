@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pidgin, xosd
-, autoreconfHook } :
+{ lib
+, stdenv
+, fetchFromGitHub
+, pidgin
+, xosd
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-osd";

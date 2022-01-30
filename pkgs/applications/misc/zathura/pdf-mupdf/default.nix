@@ -1,4 +1,9 @@
-{ stdenv, lib, meson, ninja, fetchurl, fetchpatch
+{ stdenv
+, lib
+, meson
+, ninja
+, fetchurl
+, fetchpatch
 , cairo
 , girara
 , gtk-mac-integration
@@ -40,7 +45,7 @@ stdenv.mkDerivation rec {
   # avoid: undefined symbol: gumbo_destroy_output
   NIX_LDFLAGS = [ "-lgumbo" ];
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
+  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-pdf-mupdf/";

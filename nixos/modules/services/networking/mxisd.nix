@@ -15,26 +15,29 @@ let
   cfg = config.services.mxisd;
 
   server = optionalAttrs (cfg.server.name != null) { inherit (cfg.server) name; }
-        // optionalAttrs (cfg.server.port != null) { inherit (cfg.server) port; };
+    // optionalAttrs (cfg.server.port != null) { inherit (cfg.server) port; };
 
   baseConfig = {
     matrix.domain = cfg.matrix.domain;
     key.path = "${cfg.dataDir}/signing.key";
     storage = {
-      provider.sqlite.database = if isMa1sd cfg.package
-                                 then "${cfg.dataDir}/ma1sd.db"
-                                 else "${cfg.dataDir}/mxisd.db";
+      provider.sqlite.database =
+        if isMa1sd cfg.package
+        then "${cfg.dataDir}/ma1sd.db"
+        else "${cfg.dataDir}/mxisd.db";
     };
-  } // optionalAttrs (server != {}) { inherit server; };
+  } // optionalAttrs (server != { }) { inherit server; };
 
   # merges baseConfig and extraConfig into a single file
   fullConfig = recursiveUpdate baseConfig cfg.extraConfig;
 
-  configFile = if isMa1sd cfg.package
-               then pkgs.writeText "ma1sd-config.yaml" (builtins.toJSON fullConfig)
-               else pkgs.writeText "mxisd-config.yaml" (builtins.toJSON fullConfig);
+  configFile =
+    if isMa1sd cfg.package
+    then pkgs.writeText "ma1sd-config.yaml" (builtins.toJSON fullConfig)
+    else pkgs.writeText "mxisd-config.yaml" (builtins.toJSON fullConfig);
 
-in {
+in
+{
   options = {
     services.mxisd = {
       enable = mkEnableOption "matrix federated identity server";
@@ -54,7 +57,7 @@ in {
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Extra options merged into the mxisd/ma1sd configuration";
       };
 
@@ -112,16 +115,18 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      serviceConfig = let
-        executable = if isMa1sd cfg.package then "ma1sd" else "mxisd";
-      in {
-        Type = "simple";
-        User = "mxisd";
-        Group = "mxisd";
-        ExecStart = "${cfg.package}/bin/${executable} -c ${configFile}";
-        WorkingDirectory = cfg.dataDir;
-        Restart = "on-failure";
-      };
+      serviceConfig =
+        let
+          executable = if isMa1sd cfg.package then "ma1sd" else "mxisd";
+        in
+        {
+          Type = "simple";
+          User = "mxisd";
+          Group = "mxisd";
+          ExecStart = "${cfg.package}/bin/${executable} -c ${configFile}";
+          WorkingDirectory = cfg.dataDir;
+          Restart = "on-failure";
+        };
     };
   };
 }

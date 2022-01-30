@@ -9,7 +9,8 @@ let
 
   settingsFile = settingsFormat.generate "starship.toml" cfg.settings;
 
-in {
+in
+{
   options.programs.starship = {
     enable = mkEnableOption "the Starship shell prompt";
 

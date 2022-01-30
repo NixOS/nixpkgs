@@ -34,8 +34,20 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/aplpy/aplpy/pull/448.patch";
       sha256 = "1pnzh7ykjc8hwahzbzyryrzv5a8fddgd1bmzbhagkrn6lmvhhpvq";
-      excludes = [ "tox.ini" "azure-pipelines.yml" ".circleci/config.yml" "MANIFEST.in" ".gitignore"
-       "setup.cfg" "appveyor.yml" "readthedocs.yml" "CHANGES.rst" ".gitmodules" ".travis.yml" "astropy_helpers" ];
+      excludes = [
+        "tox.ini"
+        "azure-pipelines.yml"
+        ".circleci/config.yml"
+        "MANIFEST.in"
+        ".gitignore"
+        "setup.cfg"
+        "appveyor.yml"
+        "readthedocs.yml"
+        "CHANGES.rst"
+        ".gitmodules"
+        ".travis.yml"
+        "astropy_helpers"
+      ];
     })
     # Fix for matplotlib >= 3.4 (https://github.com/aplpy/aplpy/pull/466)
     # Note: because of a security thing, github will refuse to serve this patch from the

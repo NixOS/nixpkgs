@@ -4,7 +4,8 @@ with lib;
 let
   pkg = [ pkgs.switcheroo-control ];
   cfg = config.services.switcherooControl;
-in {
+in
+{
   options.services.switcherooControl = {
     enable = mkEnableOption "switcheroo-control, a D-Bus service to check the availability of dual-GPU";
   };

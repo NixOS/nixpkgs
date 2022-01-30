@@ -1,9 +1,9 @@
 /* List of maintainer teams.
-    name = {
-      # Required
-      members = [ maintainer1 maintainer2 ];
-      scope = "Maintain foo packages.";
-    };
+  name = {
+  # Required
+  members = [ maintainer1 maintainer2 ];
+  scope = "Maintain foo packages.";
+  };
 
   where
 
@@ -13,7 +13,7 @@
   More fields may be added in the future.
 
   Please keep the list alphabetically sorted.
-  */
+*/
 
 { lib }:
 with lib.maintainers; {

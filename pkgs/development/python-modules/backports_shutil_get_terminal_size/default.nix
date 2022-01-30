@@ -5,7 +5,8 @@
 , pythonOlder
 }:
 
-if !(pythonOlder "3.3") then null else buildPythonPackage {
+if !(pythonOlder "3.3") then null else
+buildPythonPackage {
   pname = "backports.shutil_get_terminal_size";
   version = "unstable-2016-02-21";
 

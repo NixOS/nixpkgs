@@ -1,19 +1,63 @@
-{ lib, stdenv, fetchurl, buildEnv, makeWrapper, glib, alsa-lib , dbus, gtk2, atk
-, pango, freetype, fontconfig, gdk-pixbuf , cairo, cups, expat, nspr, gconf, nss
-, xorg, libcap, unzip
+{ lib
+, stdenv
+, fetchurl
+, buildEnv
+, makeWrapper
+, glib
+, alsa-lib
+, dbus
+, gtk2
+, atk
+, pango
+, freetype
+, fontconfig
+, gdk-pixbuf
+, cairo
+, cups
+, expat
+, nspr
+, gconf
+, nss
+, xorg
+, libcap
+, unzip
 }:
 
 let
   thrustEnv = buildEnv {
     name = "env-thrust";
     paths = [
-      stdenv.cc.cc glib dbus gtk2 atk pango freetype fontconfig gdk-pixbuf
-      cairo cups expat alsa-lib nspr gconf nss xorg.libXrender xorg.libX11
-      xorg.libXext xorg.libXdamage xorg.libXtst xorg.libXcomposite
-      xorg.libXi xorg.libXfixes xorg.libXrandr xorg.libXcursor libcap
+      stdenv.cc.cc
+      glib
+      dbus
+      gtk2
+      atk
+      pango
+      freetype
+      fontconfig
+      gdk-pixbuf
+      cairo
+      cups
+      expat
+      alsa-lib
+      nspr
+      gconf
+      nss
+      xorg.libXrender
+      xorg.libX11
+      xorg.libXext
+      xorg.libXdamage
+      xorg.libXtst
+      xorg.libXcomposite
+      xorg.libXi
+      xorg.libXfixes
+      xorg.libXrandr
+      xorg.libXcursor
+      libcap
     ];
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "thrust";
   version = "0.7.6";
 

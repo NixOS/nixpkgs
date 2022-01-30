@@ -1,6 +1,28 @@
-{ lib, stdenv, alsa-lib, atk, at-spi2-atk, cairo, cups, dbus, dpkg, expat, fontconfig, freetype
-, fetchurl, GConf, gdk-pixbuf, glib, gtk2, gtk3, libpulseaudio, makeWrapper, nspr
-, nss, pango, udev, xorg
+{ lib
+, stdenv
+, alsa-lib
+, atk
+, at-spi2-atk
+, cairo
+, cups
+, dbus
+, dpkg
+, expat
+, fontconfig
+, freetype
+, fetchurl
+, GConf
+, gdk-pixbuf
+, glib
+, gtk2
+, gtk3
+, libpulseaudio
+, makeWrapper
+, nspr
+, nss
+, pango
+, udev
+, xorg
 }:
 
 let

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jdk, ant } :
+{ lib, stdenv, fetchurl, jdk, ant }:
 
 stdenv.mkDerivation rec {
   pname = "java-cup";

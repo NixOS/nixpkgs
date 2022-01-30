@@ -21,7 +21,8 @@ let
           testPlay = { inherit (pkgs) sox alsa-utils; };
           testPlay32 = { inherit (pkgs.pkgsi686Linux) sox alsa-utils; };
         };
-      in {
+      in
+      {
         name = "pulseaudio${lib.optionalString systemWide "-systemWide"}";
         meta = with pkgs.lib.maintainers; {
           maintainers = [ synthetica ] ++ pkgs.pulseaudio.meta.maintainers;
@@ -38,7 +39,7 @@ let
             };
 
             environment.systemPackages = [ testers.testPlay pkgs.pavucontrol ]
-              ++ lib.optional pkgs.stdenv.isx86_64 testers.testPlay32;
+            ++ lib.optional pkgs.stdenv.isx86_64 testers.testPlay32;
           } // lib.optionalAttrs systemWide {
             users.users.alice.extraGroups = [ "audio" ];
             systemd.services.pulseaudio.wantedBy = [ "multi-user.target" ];
@@ -65,7 +66,8 @@ let
           machine.screenshot("Pavucontrol")
         '';
       });
-in builtins.mapAttrs (key: val: mkTest val) {
+in
+builtins.mapAttrs (key: val: mkTest val) {
   user = { systemWide = false; };
   system = { systemWide = true; };
 }

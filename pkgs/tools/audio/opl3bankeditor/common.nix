@@ -1,4 +1,4 @@
-{ pname, chip, version, sha256, extraPatches ? [] }:
+{ pname, chip, version, sha256, extraPatches ? [ ] }:
 
 { mkDerivation
 , stdenv

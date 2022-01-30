@@ -1,7 +1,13 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  baloo, kconfig, kfilemetadata, ki18n, kio, kservice
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, baloo
+, kconfig
+, kfilemetadata
+, ki18n
+, kio
+, kservice
 }:
 
 mkDerivation {
@@ -12,7 +18,12 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
-    baloo kconfig kfilemetadata ki18n kio kservice
+    baloo
+    kconfig
+    kfilemetadata
+    ki18n
+    kio
+    kservice
   ];
   outputs = [ "out" "dev" ];
 }

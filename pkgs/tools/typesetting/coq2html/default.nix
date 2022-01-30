@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ocaml }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "coq2html";
   version = "1.3";
 

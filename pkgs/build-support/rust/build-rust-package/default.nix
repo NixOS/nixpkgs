@@ -23,16 +23,16 @@
 , src ? null
 , srcs ? null
 , unpackPhase ? null
-, cargoPatches ? []
-, patches ? []
+, cargoPatches ? [ ]
+, patches ? [ ]
 , sourceRoot ? null
 , logLevel ? ""
-, buildInputs ? []
-, nativeBuildInputs ? []
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , buildType ? "release"
-, meta ? {}
+, meta ? { }
 , cargoLock ? null
 , cargoVendorDir ? null
 , checkType ? buildType
@@ -40,17 +40,18 @@
 , checkNoDefaultFeatures ? buildNoDefaultFeatures
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
-, depsExtraArgs ? {}
+, depsExtraArgs ? { }
 
-# Toggles whether a custom sysroot is created when the target is a .json file.
+  # Toggles whether a custom sysroot is created when the target is a .json file.
 , __internal_dontAddSysroot ? false
 
-# Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
-# contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
-# case for `rustfmt`/etc from the `rust-sources).
-# Otherwise, everything from the tarball would've been built/tested.
+  # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
+  # contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
+  # case for `rustfmt`/etc from the `rust-sources).
+  # Otherwise, everything from the tarball would've been built/tested.
 , buildAndTestSubdir ? null
-, ... } @ args:
+, ...
+} @ args:
 
 assert cargoVendorDir == null && cargoLock == null -> !(args ? cargoSha256) && !(args ? cargoHash)
   -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
@@ -61,15 +62,16 @@ let
   cargoDeps =
     if cargoVendorDir == null
     then if cargoLock != null then importCargoLock cargoLock
-    else fetchCargoTarball ({
-      inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
-      name = cargoDepsName;
-      patches = cargoPatches;
-    } // lib.optionalAttrs (args ? cargoHash) {
-      hash = args.cargoHash;
-    } // lib.optionalAttrs (args ? cargoSha256) {
-      sha256 = args.cargoSha256;
-    } // depsExtraArgs)
+    else
+      fetchCargoTarball ({
+        inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
+        name = cargoDepsName;
+        patches = cargoPatches;
+      } // lib.optionalAttrs (args ? cargoHash) {
+        hash = args.cargoHash;
+      } // lib.optionalAttrs (args ? cargoSha256) {
+        sha256 = args.cargoSha256;
+      } // depsExtraArgs)
     else null;
 
   # If we have a cargoSha256 fixed-output derivation, validate it at build time
@@ -82,7 +84,8 @@ let
 
   # see https://github.com/rust-lang/cargo/blob/964a16a28e234a3d397b2a7031d4ab4a428b1391/src/cargo/core/compiler/compile_kind.rs#L151-L168
   # the "${}" is needed to transform the path into a /nix/store path before baseNameOf
-  shortTarget = if targetIsJSON then
+  shortTarget =
+    if targetIsJSON then
       (lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
     else target;
 
@@ -95,7 +98,7 @@ let
 in
 
 # Tests don't currently work for `no_std`, and all custom sysroots are currently built without `std`.
-# See https://os.phil-opp.com/testing/ for more information.
+  # See https://os.phil-opp.com/testing/ for more information.
 assert useSysroot -> !(args.doCheck or true);
 
 stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoLock" ]) // lib.optionalAttrs useSysroot {
@@ -151,7 +154,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoLock" ]) // lib.o
 
   strictDeps = true;
 
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
+  passthru = { inherit cargoDeps; } // (args.passthru or { });
 
   meta = {
     # default to Rust's platforms

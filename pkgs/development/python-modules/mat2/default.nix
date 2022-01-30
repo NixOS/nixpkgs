@@ -16,7 +16,8 @@
 , mutagen
 , pygobject3
 , pycairo
-, dolphinIntegration ? false, plasma5Packages
+, dolphinIntegration ? false
+, plasma5Packages
 }:
 
 buildPythonPackage rec {

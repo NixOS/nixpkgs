@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
-, perlPackages, libxml2, libiconv }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, autoreconfHook
+, makeWrapper
+, perlPackages
+, libxml2
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   pname = "hivex";
@@ -14,7 +22,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    autoreconfHook makeWrapper libxml2
+    autoreconfHook
+    makeWrapper
+    libxml2
   ]
   ++ (with perlPackages; [ perl IOStringy ])
   ++ lib.optionals stdenv.isDarwin [ libiconv ];
@@ -32,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "Windows registry hive extraction library";
     license = licenses.lgpl2;
     homepage = "https://github.com/libguestfs/hivex";
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

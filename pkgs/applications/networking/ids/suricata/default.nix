@@ -26,9 +26,14 @@
 , pcre
 , python
 , zlib
-, redisSupport ? true, redis, hiredis
-, rustSupport ? true, rustc, cargo
-}: let
+, redisSupport ? true
+, redis
+, hiredis
+, rustSupport ? true
+, rustc
+, cargo
+}:
+let
   libmagic = file;
   hyperscanSupport = stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 in

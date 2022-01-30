@@ -1,5 +1,16 @@
-{ stdenv, lib, fetchzip, wxGTK31, coreutils, SDL2, openal, alsa-lib, pkg-config
-, autoreconfHook, withNetworking ? true, withALSA ? true }:
+{ stdenv
+, lib
+, fetchzip
+, wxGTK31
+, coreutils
+, SDL2
+, openal
+, alsa-lib
+, pkg-config
+, autoreconfHook
+, withNetworking ? true
+, withALSA ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "pcem";

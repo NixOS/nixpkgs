@@ -3,7 +3,8 @@
 let
   pythonEnv = pythonPackages.python.withPackages (p: [ p.requests p.setuptools p.zxcvbn ]);
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pass-audit";
   version = "1.1";
 

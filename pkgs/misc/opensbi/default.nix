@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , withPlatform ? "generic"
 , withPayload ? null
 , withFDT ? null

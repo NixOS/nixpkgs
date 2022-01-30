@@ -1,6 +1,6 @@
 # This test runs docker and checks if simple container starts
 
-import ./make-test-python.nix ({ lib, pkgs, ...} : {
+import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "docker-rootless";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ abbradar ];
@@ -23,9 +23,13 @@ import ./make-test-python.nix ({ lib, pkgs, ...} : {
       sudo = lib.concatStringsSep " " [
         "XDG_RUNTIME_DIR=/run/user/${toString user.uid}"
         "DOCKER_HOST=unix:///run/user/${toString user.uid}/docker.sock"
-        "sudo" "--preserve-env=XDG_RUNTIME_DIR,DOCKER_HOST" "-u" "alice"
+        "sudo"
+        "--preserve-env=XDG_RUNTIME_DIR,DOCKER_HOST"
+        "-u"
+        "alice"
       ];
-    in ''
+    in
+    ''
       machine.wait_for_unit("multi-user.target")
 
       machine.succeed("loginctl enable-linger alice")

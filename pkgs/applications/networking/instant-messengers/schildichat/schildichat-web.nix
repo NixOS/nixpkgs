@@ -1,10 +1,13 @@
-{ stdenv, lib
+{ stdenv
+, lib
 , fetchgit
 , fetchYarnDeps
 , nodejs
 , yarn
 , fixup_yarn_lock
-, writeText, jq, conf ? {}
+, writeText
+, jq
+, conf ? { }
 }:
 
 let
@@ -14,7 +17,8 @@ let
   };
   configOverrides = writeText "element-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "schildichat-web";
   inherit (pinData) version;
 

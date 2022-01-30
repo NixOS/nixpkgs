@@ -1,5 +1,6 @@
 { mkDerivation
-, lib, stdenv
+, lib
+, stdenv
 , fetchurl
 , ncurses
 , libuuid
@@ -7,9 +8,14 @@
 , libjpeg
 , zlib
 , libewf
-, enableNtfs ? !stdenv.isDarwin, ntfs3g ? null
-, enableExtFs ? !stdenv.isDarwin, e2fsprogs ? null
-, enableQt ? false, qtbase ? null, qttools ? null, qwt ? null
+, enableNtfs ? !stdenv.isDarwin
+, ntfs3g ? null
+, enableExtFs ? !stdenv.isDarwin
+, e2fsprogs ? null
+, enableQt ? false
+, qtbase ? null
+, qttools ? null
+, qwt ? null
 }:
 
 assert enableNtfs -> ntfs3g != null;
@@ -41,7 +47,7 @@ assert enableQt -> qwt != null;
 
   nativeBuildInputs = [ pkg-config ];
 
-  NIX_CFLAGS_COMPILE="-Wno-unused";
+  NIX_CFLAGS_COMPILE = "-Wno-unused";
 
   meta = with lib; {
     homepage = "https://www.cgsecurity.org/wiki/Main_Page";

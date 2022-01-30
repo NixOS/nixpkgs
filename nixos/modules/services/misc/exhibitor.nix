@@ -59,11 +59,11 @@ let
     };
   };
   cliOptions = concatStringsSep " " (mapAttrsToList (k: v: "--${k} ${v}") (filterAttrs (k: v: v != null && v != "") (cliOptionsCommon //
-               cliOptionsPerConfig.${cfg.configType} //
-               s3CommonOptions //
-               optionalAttrs cfg.s3Backup { s3backup = "true"; } //
-               optionalAttrs cfg.fileSystemBackup { filesystembackup = "true"; }
-               )));
+    cliOptionsPerConfig.${cfg.configType} //
+    s3CommonOptions //
+    optionalAttrs cfg.s3Backup { s3backup = "true"; } //
+    optionalAttrs cfg.fileSystemBackup { filesystembackup = "true"; }
+  )));
 in
 {
   options = {
@@ -136,7 +136,7 @@ in
       logLines = mkOption {
         type = types.int;
         description = ''
-        Max lines of logging to keep in memory for display.
+          Max lines of logging to keep in memory for display.
         '';
         default = 1000;
       };
@@ -223,7 +223,7 @@ in
       };
       zkServersSpec = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Zookeeper server spec for all servers in the ensemble.
         '';
@@ -252,7 +252,7 @@ in
         description = ''
           The initial connection string for ZooKeeper shared config storage
         '';
-        example = ["host1:2181" "host2:2181"];
+        example = [ "host1:2181" "host2:2181" ];
       };
       zkConfigExhibitorPath = mkOption {
         type = types.str;
@@ -382,7 +382,7 @@ in
           among the members of the Zookeeper ensemble. I'm going for a different approach here,
           which is to manage all the configuration via nix and have it write out the configuration
           files that exhibitor will use, and to reduce the amount of inter-exhibitor orchestration.
-        ***/
+          ***/
         ExecStart = ''
           ${pkgs.exhibitor}/bin/startExhibitor.sh ${cliOptions}
         '';

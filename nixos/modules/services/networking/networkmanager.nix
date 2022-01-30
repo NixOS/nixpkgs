@@ -15,9 +15,9 @@ let
     networkmanager-openvpn
     networkmanager-vpnc
     networkmanager-sstp
-   ] ++ optional (!delegateWireless && !enableIwd) wpa_supplicant;
+  ] ++ optional (!delegateWireless && !enableIwd) wpa_supplicant;
 
-  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
+  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [ ];
 
   enableIwd = cfg.wifi.backend == "iwd";
 
@@ -52,7 +52,7 @@ let
     })
     (mkSection "keyfile" {
       unmanaged-devices =
-        if cfg.unmanaged == [] then null
+        if cfg.unmanaged == [ ] then null
         else lib.concatStringsSep ";" cfg.unmanaged;
     })
     (mkSection "logging" {
@@ -115,7 +115,7 @@ let
   };
 
   macAddressOpt = mkOption {
-    type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
+    type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" ]);
     default = "preserve";
     example = "00:11:22:33:44:55";
     description = ''
@@ -145,7 +145,8 @@ let
     '';
   };
 
-in {
+in
+{
 
   meta = {
     maintainers = teams.freedesktop.members;
@@ -175,7 +176,7 @@ in {
           int
           str
         ]));
-        default = {};
+        default = { };
         description = ''
           Configuration for the [connection] section of NetworkManager.conf.
           Refer to
@@ -211,7 +212,7 @@ in {
 
       unmanaged = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           List of interfaces that will not be managed by NetworkManager.
           Interface name can be specified here, but if you need more fidelity,
@@ -263,7 +264,7 @@ in {
 
       appendNameservers = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           A list of name servers that should be appended
           to the ones configured in NetworkManager or received by DHCP.
@@ -272,7 +273,7 @@ in {
 
       insertNameservers = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           A list of name servers that should be inserted before
           the ones configured in NetworkManager or received by DHCP.
@@ -352,21 +353,21 @@ in {
             };
           };
         });
-        default = [];
+        default = [ ];
         example = literalExpression ''
-        [ {
-              source = pkgs.writeText "upHook" '''
+          [ {
+                source = pkgs.writeText "upHook" '''
 
-                if [ "$2" != "up" ]; then
-                    logger "exit: event $2 != up"
-                    exit
-                fi
+                  if [ "$2" != "up" ]; then
+                      logger "exit: event $2 != up"
+                      exit
+                  fi
 
-                # coreutils and iproute are in PATH too
-                logger "Device $DEVICE_IFACE coming up"
-            ''';
-            type = "basic";
-        } ]'';
+                  # coreutils and iproute are in PATH too
+                  logger "Device $DEVICE_IFACE coming up"
+              ''';
+              type = "basic";
+          } ]'';
         description = ''
           A list of scripts which will be executed in response to  network  events.
         '';
@@ -389,7 +390,7 @@ in {
 
   imports = [
     (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
-    (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
+    (mkRemovedOptionModule [ "networking" "networkmanager" "dynamicHosts" ] ''
       This option was removed because allowing (multiple) regular users to
       override host entries affecting the whole system opens up a huge attack
       vector. There seem to be very rare cases where this might be useful.
@@ -405,7 +406,8 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [];
+      {
+        assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [ ];
         message = ''
           You can not use networking.networkmanager with networking.wireless.
           Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
@@ -438,21 +440,23 @@ in {
 
       "NetworkManager/VPN/nm-sstp-service.name".source =
         "${networkmanager-sstp}/lib/NetworkManager/VPN/nm-sstp-service.name";
+    }
+    // optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ])
+      {
+        "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
       }
-      // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
-         {
-           "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
-         }
-      // optionalAttrs cfg.enableStrongSwan
-         {
-           "NetworkManager/VPN/nm-strongswan-service.name".source =
-             "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
-         }
-      // listToAttrs (lib.imap1 (i: s:
-         {
-            name = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
-            value = { mode = "0544"; inherit (s) source; };
-         }) cfg.dispatcherScripts);
+    // optionalAttrs cfg.enableStrongSwan
+      {
+        "NetworkManager/VPN/nm-strongswan-service.name".source =
+          "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
+      }
+    // listToAttrs (lib.imap1
+      (i: s:
+        {
+          name = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
+          value = { mode = "0544"; inherit (s) source; };
+        })
+      cfg.dispatcherScripts);
 
     environment.systemPackages = cfg.packages;
 

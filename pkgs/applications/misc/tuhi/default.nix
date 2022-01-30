@@ -31,17 +31,25 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
-    pkg-config meson ninja
-    appstream-glib desktop-file-utils
+    pkg-config
+    meson
+    ninja
+    appstream-glib
+    desktop-file-utils
     wrapGAppsHook
   ];
   buildInputs = [
-    gtk3 gobject-introspection
+    gtk3
+    gobject-introspection
     glib
   ];
   checkInputs = with python3Packages; [ flake8 pytest ];
   propagatedBuildInputs = with python3Packages; [
-    svgwrite pyxdg pycairo pygobject3 setuptools-scm
+    svgwrite
+    pyxdg
+    pycairo
+    pygobject3
+    setuptools-scm
   ];
 
   strictDeps = false;

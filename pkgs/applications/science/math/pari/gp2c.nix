@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description =  "A compiler to translate GP scripts to PARI programs";
+    description = "A compiler to translate GP scripts to PARI programs";
     homepage = "http://pari.math.u-bordeaux.fr/";
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license = licenses.gpl2Plus;

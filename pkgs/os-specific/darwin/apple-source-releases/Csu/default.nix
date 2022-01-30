@@ -22,7 +22,7 @@ appleDerivation' stdenv {
   meta = with lib; {
     description = "Apple's common startup stubs for darwin";
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

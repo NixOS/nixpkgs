@@ -1,7 +1,8 @@
 { buildPythonPackage
 , fetchPypi
 , isPy27
-, lib }:
+, lib
+}:
 
 buildPythonPackage rec {
   pname = "spinners";

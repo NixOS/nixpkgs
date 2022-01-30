@@ -36,27 +36,28 @@ mkDerivation rec {
     mimeType = "application/x-chat";
   };
 
-  installPhase = if stdenv.isDarwin then ''
-    runHook preInstall
+  installPhase =
+    if stdenv.isDarwin then ''
+      runHook preInstall
 
-    mkdir -p $out/Applications
-    cp -r tensor.app $out/Applications/tensor.app
+      mkdir -p $out/Applications
+      cp -r tensor.app $out/Applications/tensor.app
 
-    runHook postInstall
-  '' else ''
-    runHook preInstall
+      runHook postInstall
+    '' else ''
+      runHook preInstall
 
-    install -Dm755 tensor $out/bin/tensor
-    install -Dm644 client/logo.png \
-                   $out/share/icons/hicolor/512x512/apps/tensor.png
-    install -Dm644 ${desktopItem}/share/applications/tensor.desktop \
-                   $out/share/applications/tensor.desktop
+      install -Dm755 tensor $out/bin/tensor
+      install -Dm644 client/logo.png \
+                     $out/share/icons/hicolor/512x512/apps/tensor.png
+      install -Dm644 ${desktopItem}/share/applications/tensor.desktop \
+                     $out/share/applications/tensor.desktop
 
-    substituteInPlace $out/share/applications/tensor.desktop \
-      --subst-var-by bin $out/bin/tensor
+      substituteInPlace $out/share/applications/tensor.desktop \
+        --subst-var-by bin $out/bin/tensor
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
     homepage = "https://matrix.org/docs/projects/client/tensor.html";

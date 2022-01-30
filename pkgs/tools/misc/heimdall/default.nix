@@ -1,5 +1,12 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, zlib, libusb1
-, enableGUI ? false, qtbase ? null
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, zlib
+, libusb1
+, enableGUI ? false
+, qtbase ? null
 }:
 
 mkDerivation rec {
@@ -7,9 +14,9 @@ mkDerivation rec {
   version = "1.4.2";
 
   src = fetchFromGitHub {
-    owner  = "Benjamin-Dobell";
-    repo   = "Heimdall";
-    rev    = "v${version}";
+    owner = "Benjamin-Dobell";
+    repo = "Heimdall";
+    rev = "v${version}";
     sha256 = "1ygn4snvcmi98rgldgxf5hwm7zzi1zcsihfvm6awf9s6mpcjzbqz";
   };
 

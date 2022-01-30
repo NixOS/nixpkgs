@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, udatetime, pytz, pendulum, nose
-, delorean, coveralls, arrow
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, udatetime
+, pytz
+, pendulum
+, nose
+, delorean
+, coveralls
+, arrow
 }:
 
 buildPythonPackage rec {

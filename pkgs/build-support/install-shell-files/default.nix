@@ -6,7 +6,7 @@ let
 in
 
 setupHook.overrideAttrs (oldAttrs: {
-  passthru = (oldAttrs.passthru or {}) // {
+  passthru = (oldAttrs.passthru or { }) // {
     tests = tests.install-shell-files;
   };
 })

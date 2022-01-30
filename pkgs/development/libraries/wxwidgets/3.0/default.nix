@@ -1,14 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, pkg-config
-, libXinerama, libSM, libXxf86vm
-, gtk2, gtk3
-, xorgproto, gst_all_1, setfile
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, pkg-config
+, libXinerama
+, libSM
+, libXxf86vm
+, gtk2
+, gtk3
+, xorgproto
+, gst_all_1
+, setfile
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported
-, libGLU, libGL
-, compat24 ? false, compat26 ? true, unicode ? true
+, libGLU
+, libGL
+, compat24 ? false
+, compat26 ? true
+, unicode ? true
 , withGtk2 ? true
-, withWebKit ? false, webkitgtk
-, AGL, Carbon, Cocoa, Kernel, QTKit
+, withWebKit ? false
+, webkitgtk
+, AGL
+, Carbon
+, Cocoa
+, Kernel
+, QTKit
 }:
 
 with lib;
@@ -29,34 +46,43 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libXinerama libSM libXxf86vm xorgproto gst_all_1.gstreamer gst_all_1.gst-plugins-base
+    libXinerama
+    libSM
+    libXxf86vm
+    xorgproto
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
   ] ++ optional withGtk2 gtk2
-    ++ optional (!withGtk2) gtk3
-    ++ optional withMesa libGLU
-    ++ optional withWebKit webkitgtk
-    ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
+  ++ optional (!withGtk2) gtk3
+  ++ optional withMesa libGLU
+  ++ optional withWebKit webkitgtk
+  ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
   patches = [
-    (fetchurl { # https://trac.wxwidgets.org/ticket/17942
+    (fetchurl {
+      # https://trac.wxwidgets.org/ticket/17942
       url = "https://trac.wxwidgets.org/raw-attachment/ticket/17942/"
-          + "fix_assertion_using_hide_in_destroy.diff";
+        + "fix_assertion_using_hide_in_destroy.diff";
       sha256 = "009y3dav79wiig789vkkc07g1qdqprg1544lih79199kb1h64lvy";
     })
   ];
 
   configureFlags =
-    [ "--disable-precomp-headers" "--enable-mediactrl"
+    [
+      "--disable-precomp-headers"
+      "--enable-mediactrl"
       (if compat24 then "--enable-compat24" else "--disable-compat24")
-      (if compat26 then "--enable-compat26" else "--disable-compat26") ]
+      (if compat26 then "--enable-compat26" else "--disable-compat26")
+    ]
     ++ optional unicode "--enable-unicode"
     ++ optional withMesa "--with-opengl"
     ++ optionals stdenv.isDarwin
       # allow building on 64-bit
       [ "--with-cocoa" "--enable-universal-binaries" "--with-macosx-version-min=10.7" ]
     ++ optionals withWebKit
-      ["--enable-webview" "--enable-webview-webkit"];
+      [ "--enable-webview" "--enable-webview-webkit" ];
 
   SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
 

@@ -4,7 +4,7 @@
 , python-setup-hook
 , self
 , which
-# Dependencies
+  # Dependencies
 , bzip2
 , zlib
 , openssl_1_0_2
@@ -12,8 +12,8 @@
 , ncurses6
 , tcl-8_5
 , tk-8_5
-# For the Python package set
-, packageOverrides ? (self: super: {})
+  # For the Python package set
+, packageOverrides ? (self: super: { })
 , sourceVersion
 , pythonVersion
 , sha256
@@ -57,7 +57,8 @@ let
     tk-8_5
   ];
 
-in with passthru; stdenv.mkDerivation {
+in
+with passthru; stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
@@ -99,21 +100,23 @@ in with passthru; stdenv.mkDerivation {
   doInstallCheck = true;
 
   # Check whether importing of (extension) modules functions
-  installCheckPhase = let
-    modules = [
-      "ssl"
-      "sys"
-      "curses"
-    ] ++ optionals (!isPy3k) [
-      "Tkinter"
-    ] ++ optionals isPy3k [
-      "tkinter"
-    ];
-    imports = concatMapStringsSep "; " (x: "import ${x}") modules;
-  in ''
-    echo "Testing whether we can import modules"
-    $out/bin/${executable} -c '${imports}'
-  '';
+  installCheckPhase =
+    let
+      modules = [
+        "ssl"
+        "sys"
+        "curses"
+      ] ++ optionals (!isPy3k) [
+        "Tkinter"
+      ] ++ optionals isPy3k [
+        "tkinter"
+      ];
+      imports = concatMapStringsSep "; " (x: "import ${x}") modules;
+    in
+    ''
+      echo "Testing whether we can import modules"
+      $out/bin/${executable} -c '${imports}'
+    '';
 
   setupHook = python-setup-hook sitePackages;
 

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, zlib, boost, openssl, python, ncurses, SystemConfiguration
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, zlib
+, boost
+, openssl
+, python
+, ncurses
+, SystemConfiguration
 }:
 
 let
@@ -8,7 +16,8 @@ let
   # Make sure we override python, so the correct version is chosen
   boostPython = boost.override { enablePython = true; inherit python; };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libtorrent-rasterbar";
   inherit version;
 

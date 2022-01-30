@@ -1,6 +1,9 @@
-{ lib, fetchurl, buildDunePackage
+{ lib
+, fetchurl
+, buildDunePackage
 , ppx_cstruct
-, cstruct, lwt
+, cstruct
+, lwt
 }:
 
 buildDunePackage rec {

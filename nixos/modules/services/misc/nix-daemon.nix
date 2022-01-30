@@ -179,7 +179,7 @@ in
           <citerefentry><refentrytitle>systemd.resource-control
           </refentrytitle><manvolnum>5</manvolnum></citerefentry> and adjust
           <option>systemd.services.nix-daemon</option> directly.
-      '';
+        '';
       };
 
       daemonIOSchedClass = mkOption {
@@ -202,7 +202,7 @@ in
           systems that experience only intermittent phases of high I/O load,
           such as desktop or portable computers used interactively. Other
           systems should use the <literal>best-effort</literal> class.
-      '';
+        '';
       };
 
       daemonIOSchedPriority = mkOption {

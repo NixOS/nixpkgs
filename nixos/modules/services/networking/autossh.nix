@@ -53,7 +53,7 @@ in
           };
         });
 
-        default = [];
+        default = [ ];
         description = ''
           List of AutoSSH sessions to start as systemd services. Each service is
           named 'autossh-{session.name}'.
@@ -61,10 +61,10 @@ in
 
         example = [
           {
-            name="socks-peer";
-            user="bill";
+            name = "socks-peer";
+            user = "bill";
             monitoringPort = 20000;
-            extraArguments="-N -D4343 billremote@socks.host.net";
+            extraArguments = "-N -D4343 billremote@socks.host.net";
           }
         ];
 
@@ -75,37 +75,40 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.sessions != []) {
+  config = mkIf (cfg.sessions != [ ]) {
 
     systemd.services =
 
-      lib.foldr ( s : acc : acc //
-        {
-          "autossh-${s.name}" =
-            let
-              mport = if s ? monitoringPort then s.monitoringPort else 0;
-            in
-            {
-              description = "AutoSSH session (" + s.name + ")";
+      lib.foldr
+        (s: acc: acc //
+          {
+            "autossh-${s.name}" =
+              let
+                mport = if s ? monitoringPort then s.monitoringPort else 0;
+              in
+              {
+                description = "AutoSSH session (" + s.name + ")";
 
-              after = [ "network.target" ];
-              wantedBy = [ "multi-user.target" ];
+                after = [ "network.target" ];
+                wantedBy = [ "multi-user.target" ];
 
-              # To be able to start the service with no network connection
-              environment.AUTOSSH_GATETIME="0";
+                # To be able to start the service with no network connection
+                environment.AUTOSSH_GATETIME = "0";
 
-              # How often AutoSSH checks the network, in seconds
-              environment.AUTOSSH_POLL="30";
+                # How often AutoSSH checks the network, in seconds
+                environment.AUTOSSH_POLL = "30";
 
-              serviceConfig = {
+                serviceConfig = {
                   User = "${s.user}";
                   # AutoSSH may exit with 0 code if the SSH session was
                   # gracefully terminated by either local or remote side.
                   Restart = "on-success";
                   ExecStart = "${pkgs.autossh}/bin/autossh -M ${toString mport} ${s.extraArguments}";
+                };
               };
-            };
-        }) {} cfg.sessions;
+          })
+        { }
+        cfg.sessions;
 
     environment.systemPackages = [ pkgs.autossh ];
 

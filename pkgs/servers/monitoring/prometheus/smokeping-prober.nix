@@ -8,17 +8,21 @@ buildGoModule rec {
   pname = "smokeping_prober";
   version = "${baseVersion}-g${commit}";
 
-  ldflags = let
-    setVars = {
-      Version = baseVersion;
-      Revision = commit;
-      Branch = commit;
-      BuildUser = "nix";
-    };
-    varFlags = lib.concatStringsSep " " (lib.mapAttrsToList (name: value: "-X github.com/prometheus/common/version.${name}=${value}") setVars);
-  in [
-    "${varFlags}" "-s" "-w"
-  ];
+  ldflags =
+    let
+      setVars = {
+        Version = baseVersion;
+        Revision = commit;
+        Branch = commit;
+        BuildUser = "nix";
+      };
+      varFlags = lib.concatStringsSep " " (lib.mapAttrsToList (name: value: "-X github.com/prometheus/common/version.${name}=${value}") setVars);
+    in
+    [
+      "${varFlags}"
+      "-s"
+      "-w"
+    ];
 
   src = fetchFromGitHub {
     rev = commit;

@@ -4,13 +4,13 @@ with lib;
 
 let
   cfg = config.services.spotifyd;
-  toml = pkgs.formats.toml {};
+  toml = pkgs.formats.toml { };
   warnConfig =
     if cfg.config != ""
     then lib.trace "Using the stringly typed .config attribute is discouraged. Use the TOML typed .settings attribute instead."
     else id;
   spotifydConf =
-    if cfg.settings != {}
+    if cfg.settings != { }
     then toml.generate "spotify.conf" cfg.settings
     else warnConfig (pkgs.writeText "spotifyd.conf" cfg.config);
 in
@@ -29,7 +29,7 @@ in
       };
 
       settings = mkOption {
-        default = {};
+        default = { };
         type = toml.type;
         example = { global.bitrate = 320; };
         description = ''
@@ -43,7 +43,7 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.config == "" || cfg.settings == {};
+        assertion = cfg.config == "" || cfg.settings == { };
         message = "At most one of the .config attribute and the .settings attribute may be set";
       }
     ];
@@ -59,7 +59,7 @@ in
         RestartSec = 12;
         DynamicUser = true;
         CacheDirectory = "spotifyd";
-        SupplementaryGroups = ["audio"];
+        SupplementaryGroups = [ "audio" ];
       };
     };
   };

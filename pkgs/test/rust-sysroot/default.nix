@@ -5,10 +5,10 @@ let
     name = "blog_os-sysroot-test";
 
     src = fetchFromGitHub {
-        owner = "phil-opp";
-        repo = "blog_os";
-        rev = "4e38e7ddf8dd021c3cd7e4609dfa01afb827797b";
-        sha256 = "0k9ipm9ddm1bad7bs7368wzzp6xwrhyfzfpckdax54l4ffqwljcg";
+      owner = "phil-opp";
+      repo = "blog_os";
+      rev = "4e38e7ddf8dd021c3cd7e4609dfa01afb827797b";
+      sha256 = "0k9ipm9ddm1bad7bs7368wzzp6xwrhyfzfpckdax54l4ffqwljcg";
     };
 
     cargoSha256 = "1x8iwgy1irgfkv2yjkxm6479nwbrk82b0c80jm7y4kw0s32r01lg";
@@ -21,9 +21,9 @@ let
     doCheck = false;
 
     meta = with lib; {
-        description = "Test for using custom sysroots with buildRustPackage";
-        maintainers = with maintainers; [ aaronjanse ];
-        platforms = lib.platforms.x86_64;
+      description = "Test for using custom sysroots with buildRustPackage";
+      maintainers = with maintainers; [ aaronjanse ];
+      platforms = lib.platforms.x86_64;
     };
   };
 
@@ -47,14 +47,17 @@ let
     "features" = "-mmx,-sse,+soft-float";
   };
 
-in {
+in
+{
   blogOS-targetByFile = mkBlogOsTest (builtins.toFile "x86_64-blog_os.json" (builtins.toJSON targetContents));
-  blogOS-targetByNix = let
-    plat = lib.systems.elaborate { config = "x86_64-none"; } // {
-      rustc = {
-        config = "x86_64-blog_os";
-        platform = targetContents;
+  blogOS-targetByNix =
+    let
+      plat = lib.systems.elaborate { config = "x86_64-none"; } // {
+        rustc = {
+          config = "x86_64-blog_os";
+          platform = targetContents;
+        };
       };
-    };
-    in mkBlogOsTest (rust.toRustTargetSpec plat);
+    in
+    mkBlogOsTest (rust.toRustTargetSpec plat);
 }

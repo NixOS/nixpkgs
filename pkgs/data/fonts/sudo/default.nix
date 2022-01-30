@@ -2,7 +2,8 @@
 
 let
   version = "0.62";
-in fetchzip {
+in
+fetchzip {
   name = "sudo-font-${version}";
   url = "https://github.com/jenskutilek/sudo-font/releases/download/v${version}/sudo.zip";
   sha256 = "sha256-I0E2zYbfEFBEIBNC7nnJb+hOaBgGZkAIg08YpA8awso=";

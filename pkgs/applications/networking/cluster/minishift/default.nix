@@ -1,6 +1,19 @@
-{ lib, buildGoPackage, fetchFromGitHub, go-bindata, pkg-config, makeWrapper
-, glib, gtk3, libappindicator-gtk3, gpgme, openshift, ostree, libselinux, btrfs-progs
-, lvm2, docker-machine-kvm
+{ lib
+, buildGoPackage
+, fetchFromGitHub
+, go-bindata
+, pkg-config
+, makeWrapper
+, glib
+, gtk3
+, libappindicator-gtk3
+, gpgme
+, openshift
+, ostree
+, libselinux
+, btrfs-progs
+, lvm2
+, docker-machine-kvm
 }:
 
 let
@@ -10,7 +23,8 @@ let
   centOsIsoVersion = "v1.17.0";
   openshiftVersion = "v3.11.0";
 
-in buildGoPackage rec {
+in
+buildGoPackage rec {
   pname = "minishift";
   inherit version;
 

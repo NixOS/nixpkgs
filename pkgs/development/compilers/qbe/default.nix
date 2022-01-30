@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchgit
 , unstableGitUpdater
 , callPackage
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
+    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
     updateScript = unstableGitUpdater { };
   };
 

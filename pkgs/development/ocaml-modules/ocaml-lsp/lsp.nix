@@ -38,7 +38,8 @@ buildDunePackage rec {
     if lib.versionAtLeast version "1.7.0" then
       [ pp re ppx_yojson_conv_lib octavius dune-build-info omd cmdliner ocamlformat-rpc-lib ]
     else
-      [ cppo
+      [
+        cppo
         ppx_yojson_conv_lib
         ocaml-syntax-shims
         octavius

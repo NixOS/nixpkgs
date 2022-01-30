@@ -135,7 +135,8 @@ let
     }
   '';
 
-in {
+in
+{
   options = {
     services.maddy = {
 
@@ -189,7 +190,7 @@ in {
 
       localDomains = mkOption {
         type = with types; listOf str;
-        default = ["$(primary_domain)"];
+        default = [ "$(primary_domain)" ];
         example = [
           "$(primary_domain)"
           "example.com"

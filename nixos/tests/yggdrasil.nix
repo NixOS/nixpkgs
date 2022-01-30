@@ -17,7 +17,8 @@ let
   };
   danIp6 = bobPrefix + "::2";
 
-in import ./make-test-python.nix ({ pkgs, ...} : {
+in
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "yggdrasil";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ gazally ];
@@ -43,13 +44,13 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
         services.yggdrasil = {
           enable = true;
           config = {
-            Listen = ["tcp://0.0.0.0:12345"];
+            Listen = [ "tcp://0.0.0.0:12345" ];
             MulticastInterfaces = [ ];
           };
           configFile = toString (pkgs.writeTextFile {
-                         name = "yggdrasil-alice-conf";
-                         text = builtins.toJSON aliceKeys;
-                       });
+            name = "yggdrasil-alice-conf";
+            text = builtins.toJSON aliceKeys;
+          });
         };
       };
 
@@ -63,9 +64,9 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
           enable = true;
           openMulticastPort = true;
           configFile = toString (pkgs.writeTextFile {
-                         name = "yggdrasil-bob-conf";
-                         text = builtins.toJSON bobConfig;
-                       });
+            name = "yggdrasil-bob-conf";
+            text = builtins.toJSON bobConfig;
+          });
         };
 
         boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
@@ -121,7 +122,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
           persistentKeys = true;
         };
       };
-    };
+  };
 
   testScript =
     ''

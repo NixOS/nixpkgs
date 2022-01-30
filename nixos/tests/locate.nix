@@ -1,6 +1,7 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }:
   let inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
-  in {
+  in
+  {
     name = "locate";
     meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
 

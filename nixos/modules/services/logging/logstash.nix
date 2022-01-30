@@ -25,7 +25,8 @@ let
 
   logstashJvmOptionsFile = pkgs.writeText "jvm.options" cfg.extraJvmOptions;
 
-  logstashSettingsDir = pkgs.runCommand "logstash-settings" {
+  logstashSettingsDir = pkgs.runCommand "logstash-settings"
+    {
       inherit logstashJvmOptionsFile;
       inherit logstashSettingsYml;
       preferLocalBuild = true;

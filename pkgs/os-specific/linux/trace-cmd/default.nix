@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   version = "2.9.5";
 
   src = fetchgit {
-    url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
-    rev    = "trace-cmd-v${version}";
+    url = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
+    rev = "trace-cmd-v${version}";
     sha256 = "0kc5cldk5i7q2zr2nyz3mvs5v7w0km6lpx7g39sy3pmhshp0wqlq";
   };
 
@@ -21,13 +21,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  MANPAGE_DOCBOOK_XSL="${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
+  MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
   dontConfigure = true;
 
   enableParallelBuilding = true;
   makeFlags = [
-    "all" "libs" "doc"
+    "all"
+    "libs"
+    "doc"
     # The following values appear in the generated .pc file
     "prefix=${placeholder "lib"}"
     "libdir=${placeholder "lib"}/lib"
@@ -46,9 +48,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
-    homepage    = "https://www.trace-cmd.org/";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage = "https://www.trace-cmd.org/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice basvandijk ];
   };
 }

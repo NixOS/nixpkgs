@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, cunit, file
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, cunit
+, file
 }:
 
 stdenv.mkDerivation rec {

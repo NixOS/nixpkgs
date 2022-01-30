@@ -6,13 +6,20 @@
 , libtool
 , libpcap
 , libcdada
-# Optional Dependencies
-, withJansson ? true, jansson
-, withNflog ? true, libnetfilter_log
-, withSQLite ? true, sqlite
-, withPgSQL ? true, postgresql
-, withMysql ? true, libmysqlclient, zlib
-, gnutlsSupport ? false, gnutls
+  # Optional Dependencies
+, withJansson ? true
+, jansson
+, withNflog ? true
+, libnetfilter_log
+, withSQLite ? true
+, sqlite
+, withPgSQL ? true
+, postgresql
+, withMysql ? true
+, libmysqlclient
+, zlib
+, gnutlsSupport ? false
+, gnutls
 }:
 
 stdenv.mkDerivation rec {

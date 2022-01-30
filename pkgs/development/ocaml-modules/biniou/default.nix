@@ -16,7 +16,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ easy-format ];
 
   postPatch = ''
-   patchShebangs .
+    patchShebangs .
   '';
 
   meta = {

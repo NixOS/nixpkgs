@@ -42,7 +42,7 @@ in
 
       config = mkOption {
         type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
-        default = {};
+        default = { };
         description = ''
           automysqlbackup configuration. Refer to
           <filename>''${pkgs.automysqlbackup}/etc/automysqlbackup.conf</filename>
@@ -65,7 +65,8 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = !config.services.mysqlBackup.enable;
+      {
+        assertion = !config.services.mysqlBackup.enable;
         message = "Please choose one of services.mysqlBackup or services.automysqlbackup.";
       }
     ];

@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, runCommand
-, jdk8, ant
-, jre8, makeWrapper
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, jdk8
+, ant
+, jre8
+, makeWrapper
 }:
 
 let
@@ -28,7 +33,8 @@ let
     rev = "gcs-4.8.0";
     sha256 = "085jpp9mpv5kw00zds9sywmfq31mrlbrgahnwcjkx0z9i22amz4g";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gcs";
   version = "4.8.0";
 
@@ -72,6 +78,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://gurpscharactersheet.com/";
     license = licenses.mpl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

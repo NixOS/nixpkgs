@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "inform6";
   version = "6.34-6.12.2";
 
-  src = fetchurl  {
+  src = fetchurl {
     url = "https://ifarchive.org/if-archive/infocom/compilers/inform6/source/inform-${version}.tar.gz";
     sha256 = "c149f143f2c29a4cb071e578afef8097647cc9e823f7fcfab518ac321d9d259f";
   };

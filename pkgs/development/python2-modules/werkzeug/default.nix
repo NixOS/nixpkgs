@@ -1,8 +1,13 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
-, itsdangerous, hypothesis
-, pytestCheckHook, requests
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, itsdangerous
+, hypothesis
+, pytestCheckHook
+, requests
 , pytest-timeout
- }:
+}:
 
 buildPythonPackage rec {
   pname = "Werkzeug";

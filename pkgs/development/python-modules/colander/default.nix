@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, translationstring, iso8601, enum34 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, translationstring
+, iso8601
+, enum34
+}:
 
 buildPythonPackage rec {
   pname = "colander";

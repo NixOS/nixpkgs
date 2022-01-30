@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-     "--prefix=$out"
-     "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
+    "--prefix=$out"
+    "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
   ];
 
   buildInputs = [ ocaml findlib ];

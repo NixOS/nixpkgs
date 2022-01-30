@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper, clang, llvm, libbfd
-, libopcodes, libunwind, libblocksruntime }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, makeWrapper
+, clang
+, llvm
+, libbfd
+, libopcodes
+, libunwind
+, libblocksruntime
+}:
 
 let
   honggfuzz = stdenv.mkDerivation rec {
@@ -48,4 +58,5 @@ let
       maintainers = with lib.maintainers; [ cpu ];
     };
   };
-in honggfuzz
+in
+honggfuzz

@@ -1,8 +1,13 @@
-{ buildPythonPackage, lib, fetchFromGitLab
+{ buildPythonPackage
+, lib
+, fetchFromGitLab
 
-, isPy3k, isPyPy
+, isPy3k
+, isPyPy
 
-, distro, setuptools, psutil
+, distro
+, setuptools
+, psutil
 
 , pkgs
 }:

@@ -6,7 +6,8 @@ let
     if stdenv.isDarwin then xmlsec
     else pam;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "oath-toolkit";
   version = "2.6.7";
 

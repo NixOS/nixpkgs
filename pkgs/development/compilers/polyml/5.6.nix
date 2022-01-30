@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, autoreconfHook}:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 let
   version = "5.6";
@@ -27,7 +27,8 @@ stdenv.mkDerivation {
     homepage = "https://www.polyml.org/";
     license = lib.licenses.lgpl21;
     platforms = with lib.platforms; linux;
-    maintainers = [ #Add your name here!
+    maintainers = [
+      #Add your name here!
       lib.maintainers.maggesi
     ];
   };

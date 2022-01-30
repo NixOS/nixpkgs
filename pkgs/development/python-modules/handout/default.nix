@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, imageio, imageio-ffmpeg }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, imageio
+, imageio-ffmpeg
+}:
 
 buildPythonPackage rec {
   pname = "handout";

@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let so = stdenv.hostPlatform.extensions.sharedLibrary;
-    in ''
+    in
+    ''
       # This is pretty horrible but sadly there is not installation procedure
       # provided.
       mkdir -p $dev/include

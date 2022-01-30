@@ -1,10 +1,26 @@
-{ lib, stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkg-config, file, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome, kmod, libnma }:
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
+, openvpn
+, intltool
+, libxml2
+, pkg-config
+, file
+, networkmanager
+, libsecret
+, gtk3
+, withGnome ? true
+, gnome
+, kmod
+, libnma
+}:
 
 let
   pname = "NetworkManager-openvpn";
   version = "1.8.16";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {

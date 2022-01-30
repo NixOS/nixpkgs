@@ -30,14 +30,15 @@ let
     ${cfg.extraConfig}
   '';
 
-  conf = if cfg.validateConfig then
-    pkgs.runCommand "collectd.conf" {} ''
-      echo testing ${unvalidated_conf}
-      # collectd -t fails if BaseDir does not exist.
-      sed '1s/^BaseDir.*$/BaseDir "."/' ${unvalidated_conf} > collectd.conf
-      ${package}/bin/collectd -t -C collectd.conf
-      cp ${unvalidated_conf} $out
-    '' else unvalidated_conf;
+  conf =
+    if cfg.validateConfig then
+      pkgs.runCommand "collectd.conf" { } ''
+        echo testing ${unvalidated_conf}
+        # collectd -t fails if BaseDir does not exist.
+        sed '1s/^BaseDir.*$/BaseDir "."/' ${unvalidated_conf} > collectd.conf
+        ${package}/bin/collectd -t -C collectd.conf
+        cp ${unvalidated_conf} $out
+      '' else unvalidated_conf;
 
   package =
     if cfg.buildMinimalPackage
@@ -48,7 +49,8 @@ let
     enabledPlugins = [ "syslog" ] ++ builtins.attrNames cfg.plugins;
   };
 
-in {
+in
+{
   options.services.collectd = with types; {
     enable = mkEnableOption "collectd agent";
 
@@ -104,7 +106,7 @@ in {
     };
 
     include = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         Additional paths to load config from.
       '';
@@ -112,7 +114,7 @@ in {
     };
 
     plugins = mkOption {
-      default = {};
+      default = { };
       example = { cpu = ""; memory = ""; network = "Server 192.168.1.1 25826"; };
       description = ''
         Attribute set of plugin names to plugin config segments
@@ -156,7 +158,7 @@ in {
     };
 
     users.groups = optionalAttrs (cfg.user == "collectd") {
-      collectd = {};
+      collectd = { };
     };
   };
 }

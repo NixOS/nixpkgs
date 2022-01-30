@@ -1,6 +1,16 @@
-{ mkDerivation, lib, stdenv, fetchurl
-, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwebsockets
-, qtx11extras, qtwayland
+{ mkDerivation
+, lib
+, stdenv
+, fetchurl
+, qmake
+, qttools
+, qtbase
+, qtsvg
+, qtdeclarative
+, qtxmlpatterns
+, qtwebsockets
+, qtx11extras
+, qtwayland
 }:
 
 mkDerivation rec {

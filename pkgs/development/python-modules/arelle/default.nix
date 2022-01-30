@@ -1,8 +1,18 @@
-{ gui ? true,
-  buildPythonPackage, fetchFromGitHub, lib,
-  sphinx, lxml, isodate, numpy, openpyxl,
-  tkinter ? null, py3to2, isPy3k, python,
-  ... }:
+{ gui ? true
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, sphinx
+, lxml
+, isodate
+, numpy
+, openpyxl
+, tkinter ? null
+, py3to2
+, isPy3k
+, python
+, ...
+}:
 
 buildPythonPackage rec {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
@@ -18,7 +28,7 @@ buildPythonPackage rec {
     rev = "edgr${version}";
     sha256 = "12a94ipdp6xalqyds7rcp6cjwps6fbj3byigzfy403hlqc9n1g33";
   };
-  outputs = ["out" "doc"];
+  outputs = [ "out" "doc" ];
   patches = [
     ./tests.patch
   ];
@@ -50,7 +60,7 @@ buildPythonPackage rec {
   # Documentation
   postBuild = ''
     (cd apidocs && make html && cp -r _build $doc)
-    '';
+  '';
 
   doCheck = false;
 

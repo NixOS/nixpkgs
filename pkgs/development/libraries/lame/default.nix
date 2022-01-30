@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchurl
-, nasmSupport ? true, nasm ? null # Assembly optimizations
+{ lib
+, stdenv
+, fetchurl
+, nasmSupport ? true
+, nasm ? null # Assembly optimizations
 , cpmlSupport ? true # Compaq's fast math library
-#, efenceSupport ? false, libefence ? null # Use ElectricFence for malloc debugging
-, sndfileFileIOSupport ? false, libsndfile ? null # Use libsndfile, instead of lame's internal routines
+  #, efenceSupport ? false, libefence ? null # Use ElectricFence for malloc debugging
+, sndfileFileIOSupport ? false
+, libsndfile ? null # Use libsndfile, instead of lame's internal routines
 , analyzerHooksSupport ? true # Use analyzer hooks
 , decoderSupport ? true # mpg123 decoder
 , frontendSupport ? true # Build the lame executable
-#, mp3xSupport ? false, gtk1 ? null # Build GTK frame analyzer
+  #, mp3xSupport ? false, gtk1 ? null # Build GTK frame analyzer
 , mp3rtpSupport ? false # Build mp3rtp
 , debugSupport ? false # Debugging (disables optimizations)
 }:
@@ -63,9 +67,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A high quality MPEG Audio Layer III (MP3) encoder";
-    homepage    = "http://lame.sourceforge.net";
-    license     = licenses.lgpl2;
+    homepage = "http://lame.sourceforge.net";
+    license = licenses.lgpl2;
     maintainers = with maintainers; [ codyopel fpletz ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, xlibsWrapper, libXmu, libXi
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, libGLU
+, xlibsWrapper
+, libXmu
+, libXi
 , OpenGL
 , enableEGL ? false
 }:

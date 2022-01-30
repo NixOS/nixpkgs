@@ -20,6 +20,7 @@
     libXcomposite
     libXcursor
     libXtst
-    libXScrnSaver])
+    libXScrnSaver
+  ])
   );
 }

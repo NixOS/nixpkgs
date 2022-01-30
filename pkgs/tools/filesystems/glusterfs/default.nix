@@ -1,8 +1,45 @@
-{lib, stdenv, fetchFromGitHub, fuse, bison, flex, openssl, python3, ncurses, readline,
- autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
- liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
- openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, glibc, rpcsvc-proto, libtirpc, gperftools, nixosTests
+{ lib
+, stdenv
+, fetchFromGitHub
+, fuse
+, bison
+, flex
+, openssl
+, python3
+, ncurses
+, readline
+, autoconf
+, automake
+, libtool
+, pkg-config
+, zlib
+, libaio
+, libxml2
+, acl
+, sqlite
+, liburcu
+, liburing
+, attr
+, makeWrapper
+, coreutils
+, gnused
+, gnugrep
+, which
+, openssh
+, gawk
+, findutils
+, util-linux
+, lvm2
+, btrfs-progs
+, e2fsprogs
+, xfsprogs
+, systemd
+, rsync
+, glibc
+, rpcsvc-proto
+, libtirpc
+, gperftools
+, nixosTests
 }:
 let
   # NOTE: On each glusterfs release, it should be checked if gluster added
@@ -14,9 +51,27 @@ let
   #       can help with finding new Python scripts.
 
   buildInputs = [
-    fuse bison flex openssl ncurses readline
-    autoconf automake libtool pkg-config zlib libaio libxml2
-    acl sqlite liburcu attr makeWrapper util-linux libtirpc gperftools
+    fuse
+    bison
+    flex
+    openssl
+    ncurses
+    readline
+    autoconf
+    automake
+    libtool
+    pkg-config
+    zlib
+    libaio
+    libxml2
+    acl
+    sqlite
+    liburcu
+    attr
+    makeWrapper
+    util-linux
+    libtirpc
+    gperftools
     liburing
     (python3.withPackages (pkgs: [
       pkgs.flask
@@ -53,7 +108,8 @@ let
     which # which
     xfsprogs # xfs_info
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "glusterfs";
   version = "10.0";
 

@@ -1,14 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, python3Packages, makeWrapper
-, bash, libsamplerate, libsndfile, readline, eigen, celt
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, python3Packages
+, makeWrapper
+, bash
+, libsamplerate
+, libsndfile
+, readline
+, eigen
+, celt
 , wafHook
-# Darwin Dependencies
-, aften, AudioUnit, CoreAudio, libobjc, Accelerate
+  # Darwin Dependencies
+, aften
+, AudioUnit
+, CoreAudio
+, libobjc
+, Accelerate
 
-# Optional Dependencies
-, dbus ? null, libffado ? null, alsa-lib ? null
+  # Optional Dependencies
+, dbus ? null
+, libffado ? null
+, alsa-lib ? null
 , libopus ? null
 
-# Extra options
+  # Extra options
 , prefix ? ""
 }:
 
@@ -37,10 +53,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
-  buildInputs = [ libsamplerate libsndfile readline eigen celt
-    optDbus optPythonDBus optLibffado optAlsaLib optLibopus
+  buildInputs = [
+    libsamplerate
+    libsndfile
+    readline
+    eigen
+    celt
+    optDbus
+    optPythonDBus
+    optLibffado
+    optAlsaLib
+    optLibopus
   ] ++ optionals stdenv.isDarwin [
-    aften AudioUnit CoreAudio Accelerate libobjc
+    aften
+    AudioUnit
+    CoreAudio
+    Accelerate
+    libobjc
   ];
 
   prePatch = ''
@@ -55,8 +84,8 @@ stdenv.mkDerivation rec {
     "--classic"
     "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
   ] ++ optional (optDbus != null) "--dbus"
-    ++ optional (optLibffado != null) "--firewire"
-    ++ optional (optAlsaLib != null) "--alsa";
+  ++ optional (optLibffado != null) "--firewire"
+  ++ optional (optAlsaLib != null) "--alsa";
 
   postInstall = (if libOnly then ''
     rm -rf $out/{bin,share}

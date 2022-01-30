@@ -353,10 +353,11 @@ in
 
     environment.etc = foldr (a: b: a // b) { }
       (flip mapAttrsToList cfg.networks (network: data:
-        flip mapAttrs' data.hosts (host: text: nameValuePair
-          ("tinc/${network}/hosts/${host}")
-          ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
-        ) // {
+        flip mapAttrs' data.hosts
+          (host: text: nameValuePair
+            ("tinc/${network}/hosts/${host}")
+            ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
+          ) // {
           "tinc/${network}/tinc.conf" = {
             mode = "0444";
             text = ''
@@ -407,21 +408,23 @@ in
       })
     );
 
-    environment.systemPackages = let
-      cli-wrappers = pkgs.stdenv.mkDerivation {
-        name = "tinc-cli-wrappers";
-        buildInputs = [ pkgs.makeWrapper ];
-        buildCommand = ''
-          mkdir -p $out/bin
-          ${concatStringsSep "\n" (mapAttrsToList (network: data:
-            optionalString (versionAtLeast data.package.version "1.1pre") ''
-              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
-                --add-flags "--pidfile=/run/tinc.${network}.pid" \
-                --add-flags "--config=/etc/tinc/${network}"
-            '') cfg.networks)}
-        '';
-      };
-    in [ cli-wrappers ];
+    environment.systemPackages =
+      let
+        cli-wrappers = pkgs.stdenv.mkDerivation {
+          name = "tinc-cli-wrappers";
+          buildInputs = [ pkgs.makeWrapper ];
+          buildCommand = ''
+            mkdir -p $out/bin
+            ${concatStringsSep "\n" (mapAttrsToList (network: data:
+              optionalString (versionAtLeast data.package.version "1.1pre") ''
+                makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
+                  --add-flags "--pidfile=/run/tinc.${network}.pid" \
+                  --add-flags "--config=/etc/tinc/${network}"
+              '') cfg.networks)}
+          '';
+        };
+      in
+      [ cli-wrappers ];
 
     users.users = flip mapAttrs' cfg.networks (network: _:
       nameValuePair ("tinc.${network}") ({
@@ -431,7 +434,7 @@ in
       })
     );
     users.groups = flip mapAttrs' cfg.networks (network: _:
-      nameValuePair "tinc.${network}" {}
+      nameValuePair "tinc.${network}" { }
     );
   };
 

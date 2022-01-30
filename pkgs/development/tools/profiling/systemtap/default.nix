@@ -1,5 +1,14 @@
-{ lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper
-, cpio, elfutils, kernel, gnumake, python3
+{ lib
+, fetchgit
+, pkg-config
+, gettext
+, runCommand
+, makeWrapper
+, cpio
+, elfutils
+, kernel
+, gnumake
+, python3
 }:
 
 let
@@ -35,7 +44,9 @@ let
 
   pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
-in runCommand "systemtap-${kernel.version}-${version}" {
+in
+runCommand "systemtap-${kernel.version}-${version}"
+{
   inherit stapBuild kernelBuildDir;
   nativeBuildInputs = [ makeWrapper ];
   meta = {

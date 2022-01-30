@@ -23,7 +23,7 @@ buildPythonPackage {
   };
 
   /* build with tests fails with "Can not create application dirictory :
-   /homeless-shelter/.geeknotebuilder". */
+    /homeless-shelter/.geeknotebuilder". */
   doCheck = false;
 
   propagatedBuildInputs = [ thrift beautifulsoup4 markdown2 sqlalchemy html2text evernote ];

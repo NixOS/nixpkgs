@@ -13,11 +13,20 @@
 #   * https://github.com/google/jax/issues/971#issuecomment-508216439
 #   * https://github.com/google/jax/issues/5723#issuecomment-913038780
 
-{ addOpenGLRunpath, autoPatchelfHook, buildPythonPackage, config
-, fetchurl, isPy39, lib, stdenv
-# propagatedBuildInputs
-, absl-py, flatbuffers, scipy, cudatoolkit_11
-# Options:
+{ addOpenGLRunpath
+, autoPatchelfHook
+, buildPythonPackage
+, config
+, fetchurl
+, isPy39
+, lib
+, stdenv
+  # propagatedBuildInputs
+, absl-py
+, flatbuffers
+, scipy
+, cudatoolkit_11
+  # Options:
 , cudaSupport ? config.cudaSupport or false
 }:
 
@@ -82,8 +91,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "XLA library for JAX";
-    homepage    = "https://github.com/google/jax";
-    license     = licenses.asl20;
+    homepage = "https://github.com/google/jax";
+    license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
     platforms = [ "x86_64-linux" ];
   };

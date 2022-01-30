@@ -1,5 +1,14 @@
-{ buildDunePackage, dns, dns-server, dns-mirage, lru, duration
-, randomconv, lwt, mirage-time, mirage-clock, mirage-random
+{ buildDunePackage
+, dns
+, dns-server
+, dns-mirage
+, lru
+, duration
+, randomconv
+, lwt
+, mirage-time
+, mirage-clock
+, mirage-random
 , alcotest
 }:
 

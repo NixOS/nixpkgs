@@ -1,10 +1,10 @@
-{lib, stdenv, fetchurl, ocaml, zlib, which, eprover, makeWrapper, coq}:
+{ lib, stdenv, fetchurl, ocaml, zlib, which, eprover, makeWrapper, coq }:
 stdenv.mkDerivation rec {
   pname = "satallax";
   version = "2.7";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ocaml zlib which eprover coq];
+  buildInputs = [ ocaml zlib which eprover coq ];
   src = fetchurl {
     url = "https://www.ps.uni-saarland.de/~cebrown/satallax/downloads/${pname}-${version}.tar.gz";
     sha256 = "1kvxn8mc35igk4vigi5cp7w3wpxk2z3bgwllfm4n3h2jfs0vkpib";
@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Automated theorem prover for higher-order logic";
-    license = lib.licenses.mit ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     downloadPage = "http://www.ps.uni-saarland.de/~cebrown/satallax/downloads.php";
     homepage = "http://www.ps.uni-saarland.de/~cebrown/satallax/index.php";

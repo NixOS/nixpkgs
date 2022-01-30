@@ -5,7 +5,8 @@ let
   folder = with builtins;
     let parts = splitVersion version;
     in concatStringsSep "." [ (elemAt parts 0) (elemAt parts 1) ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "hyphen";
   inherit version;
 

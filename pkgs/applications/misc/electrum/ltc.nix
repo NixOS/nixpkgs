@@ -7,7 +7,7 @@
 , zbar
 , secp256k1
 , enableQt ? true
-# for updater.nix
+  # for updater.nix
 , writeScript
 , common-updater-scripts
 , bash
@@ -141,8 +141,8 @@ python3.pkgs.buildPythonApplication {
   pytestFlagsArray = [ "electrum_ltc/tests" ];
 
   disabledTests = [
-    "test_loop"  # test tries to bind 127.0.0.1 causing permission error
-    "test_is_ip_address"  # fails spuriously https://github.com/spesmilo/electrum/issues/7307
+    "test_loop" # test tries to bind 127.0.0.1 causing permission error
+    "test_is_ip_address" # fails spuriously https://github.com/spesmilo/electrum/issues/7307
   ];
 
   postCheck = ''
@@ -161,7 +161,7 @@ python3.pkgs.buildPythonApplication {
       gnugrep
       gnused
       nix
-    ;
+      ;
   };
 
   meta = with lib; {

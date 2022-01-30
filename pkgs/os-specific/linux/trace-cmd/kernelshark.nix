@@ -1,6 +1,18 @@
-{ lib, mkDerivation, fetchgit, qtbase, cmake, asciidoc
-, docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config
-, libtraceevent, libtracefs, freefont_ttf
+{ lib
+, mkDerivation
+, fetchgit
+, qtbase
+, cmake
+, asciidoc
+, docbook_xsl
+, json_c
+, mesa_glu
+, freeglut
+, trace-cmd
+, pkg-config
+, libtraceevent
+, libtracefs
+, freefont_ttf
 }:
 
 mkDerivation rec {
@@ -28,9 +40,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "GUI for trace-cmd which is an interface for the Linux kernel ftrace subsystem";
-    homepage    = "https://kernelshark.org/";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage = "https://kernelshark.org/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ basvandijk ];
   };
 }

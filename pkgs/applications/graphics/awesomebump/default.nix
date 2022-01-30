@@ -22,7 +22,8 @@ let
       install -D bin-linux/QtnPEG $out/bin/QtnPEG
     '';
   };
-in mkDerivation {
+in
+mkDerivation {
   pname = "awesomebump";
   inherit version;
 

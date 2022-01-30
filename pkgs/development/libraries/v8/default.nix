@@ -1,6 +1,15 @@
-{ stdenv, lib, fetchgit, fetchFromGitHub
-, gn, ninja, python3, glib, pkg-config, icu
-, xcbuild, darwin
+{ stdenv
+, lib
+, fetchgit
+, fetchFromGitHub
+, gn
+, ninja
+, python3
+, glib
+, pkg-config
+, icu
+, xcbuild
+, darwin
 , fetchpatch
 }:
 
@@ -19,38 +28,38 @@ let
   # This data is from the DEPS file in the root of a V8 checkout.
   deps = {
     "base/trace_event/common" = fetchgit {
-      url    = "${git_url}/chromium/src/base/trace_event/common.git";
-      rev    = "7f36dbc19d31e2aad895c60261ca8f726442bfbb";
+      url = "${git_url}/chromium/src/base/trace_event/common.git";
+      rev = "7f36dbc19d31e2aad895c60261ca8f726442bfbb";
       sha256 = "01b2fhbxznqbakxv42ivrzg6w8l7i9yrd9nf72d6p5xx9dm993j4";
     };
     "build" = fetchgit {
-      url    = "${git_url}/chromium/src/build.git";
-      rev    = "cf325916d58a194a935c26a56fcf6b525d1e2bf4";
+      url = "${git_url}/chromium/src/build.git";
+      rev = "cf325916d58a194a935c26a56fcf6b525d1e2bf4";
       sha256 = "1ix4h1cpx9bvgln8590xh7lllhsd9w1hd5k9l1gx5yxxrmywd3s4";
     };
     "third_party/googletest/src" = fetchgit {
-      url    = "${git_url}/external/github.com/google/googletest.git";
-      rev    = "16f637fbf4ffc3f7a01fa4eceb7906634565242f";
+      url = "${git_url}/external/github.com/google/googletest.git";
+      rev = "16f637fbf4ffc3f7a01fa4eceb7906634565242f";
       sha256 = "11012k3c3mxzdwcw2iparr9lrckafpyhqzclsj26hmfbgbdi0rrh";
     };
     "third_party/icu" = fetchgit {
-      url    = "${git_url}/chromium/deps/icu.git";
-      rev    = "eedbaf76e49d28465d9119b10c30b82906e606ff";
+      url = "${git_url}/chromium/deps/icu.git";
+      rev = "eedbaf76e49d28465d9119b10c30b82906e606ff";
       sha256 = "0mppvx7wf9zlqjsfaa1cf06brh1fjb6nmiib0lhbb9hd55mqjdjj";
     };
     "third_party/zlib" = fetchgit {
-      url    = "${git_url}/chromium/src/third_party/zlib.git";
-      rev    = "6da1d53b97c89b07e47714d88cab61f1ce003c68";
+      url = "${git_url}/chromium/src/third_party/zlib.git";
+      rev = "6da1d53b97c89b07e47714d88cab61f1ce003c68";
       sha256 = "0v7ylmbwfwv6w6wp29qdf77kjjnfr2xzin08n0v1yvbhs01h5ppy";
     };
     "third_party/jinja2" = fetchgit {
-      url    = "${git_url}/chromium/src/third_party/jinja2.git";
-      rev    = "ee69aa00ee8536f61db6a451f3858745cf587de6";
+      url = "${git_url}/chromium/src/third_party/jinja2.git";
+      rev = "ee69aa00ee8536f61db6a451f3858745cf587de6";
       sha256 = "1fsnd5h0gisfp8bdsfd81kk5v4mkqf8z368c7qlm1qcwc4ri4x7a";
     };
     "third_party/markupsafe" = fetchgit {
-      url    = "${git_url}/chromium/src/third_party/markupsafe.git";
-      rev    = "1b882ef6372b58bfd55a3285f37ed801be9137cd";
+      url = "${git_url}/chromium/src/third_party/markupsafe.git";
+      rev = "1b882ef6372b58bfd55a3285f37ed801be9137cd";
       sha256 = "1jnjidbh03lhfaawimkjxbprmsgz4snr0jl06630dyd41zkdw5kr";
     };
   };

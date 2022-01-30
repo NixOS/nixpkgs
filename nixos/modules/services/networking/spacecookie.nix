@@ -11,11 +11,12 @@ let
     };
   } // cfg.settings;
 
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
 
   configFile = format.generate "spacecookie.json" spacecookieConfig;
 
-in {
+in
+{
   imports = [
     (mkRenamedOptionModule [ "services" "spacecookie" "root" ] [ "services" "spacecookie" "settings" "root" ])
     (mkRenamedOptionModule [ "services" "spacecookie" "hostname" ] [ "services" "spacecookie" "settings" "hostname" ])

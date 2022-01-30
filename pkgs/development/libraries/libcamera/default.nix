@@ -76,13 +76,13 @@ stdenv.mkDerivation {
     "-Dv4l2=true"
     "-Dqcam=disabled"
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
-    ];
+  ];
 
   # Fixes error on a deprecated declaration
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # Silence fontconfig warnings about missing config
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = []; };
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   meta = with lib; {
     description = "An open source camera stack and framework for Linux, Android, and ChromeOS";

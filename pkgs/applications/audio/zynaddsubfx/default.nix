@@ -51,7 +51,8 @@ let
     "zest" = "Zyn-Fusion";
   }.${guiModule};
   mruby-zest = callPackage ./mruby-zest { };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zynaddsubfx";
   version = "3.0.5";
 
@@ -90,17 +91,19 @@ in stdenv.mkDerivation rec {
   checkInputs = [ cxxtest ];
 
   # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
-  checkPhase = let
-    # Tests fail on aarch64
-    disabledTests = lib.optionals stdenv.isAarch64 [
-      "MessageTest"
-      "UnisonTest"
-    ];
-  in ''
-    runHook preCheck
-    ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      # Tests fail on aarch64
+      disabledTests = lib.optionals stdenv.isAarch64 [
+        "MessageTest"
+        "UnisonTest"
+      ];
+    in
+    ''
+      runHook preCheck
+      ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
+      runHook postCheck
+    '';
 
   # When building with zest GUI, patch plugins
   # and standalone executable to properly locate zest

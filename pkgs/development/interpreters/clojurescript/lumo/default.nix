@@ -63,33 +63,33 @@ let
       lumo.common '';
 
   compileClojurescript = (simple: ''
-    (require '[cljs.build.api :as cljs])
-    (cljs/build \"src/cljs/snapshot\"
-      {:optimizations      ${if simple then ":simple" else ":none"}
-       :main               'lumo.core
-       :cache-analysis     true
-       :source-map         false
-       :dump-core          false
-       :static-fns         true
-       :optimize-constants false
-       :npm-deps           false
-       :verbose            true
-       :closure-defines    {'cljs.core/*target*       \"nodejs\"
-                            'lumo.core/*lumo-version* \"${version}\"}
-       :compiler-stats     true
-       :process-shim       false
-       :fn-invoke-direct   true
-       :parallel-build     false
-       :browser-repl       false
-       :target             :nodejs
-       :hashbang           false
-       ;; :libs               [ \"src/cljs/bundled\" \"src/js\" ]
-       :output-dir         ${if simple
-  then ''\"cljstmp\"''
-  else ''\"target\"''}
-       :output-to          ${if simple
-  then ''\"cljstmp/main.js\"''
-  else ''\"target/deleteme.js\"'' }})
+      (require '[cljs.build.api :as cljs])
+      (cljs/build \"src/cljs/snapshot\"
+        {:optimizations      ${if simple then ":simple" else ":none"}
+         :main               'lumo.core
+         :cache-analysis     true
+         :source-map         false
+         :dump-core          false
+         :static-fns         true
+         :optimize-constants false
+         :npm-deps           false
+         :verbose            true
+         :closure-defines    {'cljs.core/*target*       \"nodejs\"
+                              'lumo.core/*lumo-version* \"${version}\"}
+         :compiler-stats     true
+         :process-shim       false
+         :fn-invoke-direct   true
+         :parallel-build     false
+         :browser-repl       false
+         :target             :nodejs
+         :hashbang           false
+         ;; :libs               [ \"src/cljs/bundled\" \"src/js\" ]
+         :output-dir         ${if simple
+    then ''\"cljstmp\"''
+    else ''\"target\"''}
+         :output-to          ${if simple
+    then ''\"cljstmp/main.js\"''
+    else ''\"target/deleteme.js\"'' }})
   ''
   );
 

@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, zlib, curl, protobuf, prime-server, boost, sqlite, libspatialite
-, luajit, geos, python3, zeromq }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, zlib
+, curl
+, protobuf
+, prime-server
+, boost
+, sqlite
+, libspatialite
+, luajit
+, geos
+, python3
+, zeromq
+}:
 
 stdenv.mkDerivation rec {
   pname = "valhalla";
@@ -25,8 +39,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    zlib curl protobuf prime-server boost sqlite libspatialite
-    luajit geos python3 zeromq
+    zlib
+    curl
+    protobuf
+    prime-server
+    boost
+    sqlite
+    libspatialite
+    luajit
+    geos
+    python3
+    zeromq
   ];
 
   cmakeFlags = [

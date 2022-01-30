@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, pcre, pkg-config, libsepol
-, enablePython ? !stdenv.hostPlatform.isStatic, swig ? null, python3 ? null
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, buildPackages
+, pcre
+, pkg-config
+, libsepol
+, enablePython ? !stdenv.hostPlatform.isStatic
+, swig ? null
+, python3 ? null
 , fts
 }:
 
@@ -79,7 +88,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" ] ++ optional enablePython "install-pywrap";
 
-  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
+  meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {
     description = "SELinux core library";
   };
 }

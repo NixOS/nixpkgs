@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , substituteAll
 , nixosTests
@@ -45,7 +46,8 @@
 let
   installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "flatpak-builder";
   version = "1.2.2";
 

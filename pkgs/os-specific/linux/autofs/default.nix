@@ -1,5 +1,23 @@
-{ lib, stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
-, libxml2, libkrb5, kmod, openldap, sssd, cyrus_sasl, openssl, rpcsvc-proto }:
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, linuxHeaders
+, libtirpc
+, mount
+, umount
+, nfs-utils
+, e2fsprogs
+, libxml2
+, libkrb5
+, kmod
+, openldap
+, sssd
+, cyrus_sasl
+, openssl
+, rpcsvc-proto
+}:
 
 stdenv.mkDerivation rec {
   version = "5.1.6";
@@ -34,8 +52,18 @@ stdenv.mkDerivation rec {
     #make install SUBDIRS="samples" # impure!
   '';
 
-  buildInputs = [ linuxHeaders libtirpc libxml2 libkrb5 kmod openldap sssd
-                  openssl cyrus_sasl rpcsvc-proto ];
+  buildInputs = [
+    linuxHeaders
+    libtirpc
+    libxml2
+    libkrb5
+    kmod
+    openldap
+    sssd
+    openssl
+    cyrus_sasl
+    rpcsvc-proto
+  ];
 
   nativeBuildInputs = [ flex bison ];
 

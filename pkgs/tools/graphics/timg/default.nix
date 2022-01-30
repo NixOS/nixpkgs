@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, graphicsmagick, libjpeg
-, ffmpeg, zlib, libexif, openslide }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, graphicsmagick
+, libjpeg
+, ffmpeg
+, zlib
+, libexif
+, openslide
+}:
 
 stdenv.mkDerivation rec {
   pname = "timg";

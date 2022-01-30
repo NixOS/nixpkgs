@@ -1,5 +1,14 @@
-{ lib, buildPythonApplication, fetchFromGitHub, isPy3k, botocore, pytest, mock
-, flake8, tox, awscli }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, isPy3k
+, botocore
+, pytest
+, mock
+, flake8
+, tox
+, awscli
+}:
 
 buildPythonApplication rec {
   pname = "git-remote-codecommit";

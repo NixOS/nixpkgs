@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   # Many thanks @mthuurne from OpenMSX project for providing support to
   # Nixpkgs! :)
-  TCL_CONFIG="${tcl}/lib/";
+  TCL_CONFIG = "${tcl}/lib/";
 
   meta = with lib; {
     homepage = "https://openmsx.org";

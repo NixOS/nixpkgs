@@ -1,6 +1,28 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, wxGTK30, openal, pkg-config, curl, libtorrent-rasterbar
-, libpng, libX11, gettext, boost, libnotify, gtk2, doxygen, spring
-, makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, wxGTK30
+, openal
+, pkg-config
+, curl
+, libtorrent-rasterbar
+, libpng
+, libX11
+, gettext
+, boost
+, libnotify
+, gtk2
+, doxygen
+, spring
+, makeWrapper
+, glib
+, minizip
+, alure
+, pcre
+, jsoncpp
+}:
 
 stdenv.mkDerivation rec {
   pname = "springlobby";
@@ -13,8 +35,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config gettext doxygen makeWrapper ];
   buildInputs = [
-    wxGTK30 openal curl libtorrent-rasterbar pcre jsoncpp
-    boost libpng libX11 libnotify gtk2 glib minizip alure
+    wxGTK30
+    openal
+    curl
+    libtorrent-rasterbar
+    pcre
+    jsoncpp
+    boost
+    libpng
+    libX11
+    libnotify
+    gtk2
+    glib
+    minizip
+    alure
   ];
 
   patches = [

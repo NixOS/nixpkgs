@@ -1,8 +1,9 @@
 { stdenv, ghcWithPackages, xmessage, makeWrapper, packages }:
 
 let
-xmonadEnv = ghcWithPackages (self: [ self.xmonad ] ++ packages self);
-in stdenv.mkDerivation {
+  xmonadEnv = ghcWithPackages (self: [ self.xmonad ] ++ packages self);
+in
+stdenv.mkDerivation {
   name = "xmonad-with-packages-${xmonadEnv.version}";
 
   nativeBuildInputs = [ makeWrapper ];

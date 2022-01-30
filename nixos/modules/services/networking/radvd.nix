@@ -60,14 +60,16 @@ in
         group = "radvd";
         description = "Router Advertisement Daemon User";
       };
-    users.groups.radvd = {};
+    users.groups.radvd = { };
 
     systemd.services.radvd =
-      { description = "IPv6 Router Advertisement Daemon";
+      {
+        description = "IPv6 Router Advertisement Daemon";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig =
-          { ExecStart = "@${pkgs.radvd}/bin/radvd radvd -n -u radvd -C ${confFile}";
+          {
+            ExecStart = "@${pkgs.radvd}/bin/radvd radvd -n -u radvd -C ${confFile}";
             Restart = "always";
           };
       };

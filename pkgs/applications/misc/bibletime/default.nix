@@ -1,6 +1,18 @@
-{ lib, mkDerivation, fetchurl, cmake, pkg-config, sword, boost, clucene_core
-, qtbase, qttools, qtsvg, perlPackages, docbook_xml_dtd_45
-, docbook_xsl_ns }:
+{ lib
+, mkDerivation
+, fetchurl
+, cmake
+, pkg-config
+, sword
+, boost
+, clucene_core
+, qtbase
+, qttools
+, qtsvg
+, perlPackages
+, docbook_xml_dtd_45
+, docbook_xsl_ns
+}:
 
 mkDerivation rec {
   pname = "bibletime";

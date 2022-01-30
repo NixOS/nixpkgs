@@ -1,5 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, PyGithub, GitPython, toml, click, tqdm,
-  networkx, pydot, pyyaml, atomicwrites }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, PyGithub
+, GitPython
+, toml
+, click
+, tqdm
+, networkx
+, pydot
+, pyyaml
+, atomicwrites
+}:
 
 buildPythonPackage rec {
   pname = "mathlibtools";
@@ -11,7 +22,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    PyGithub GitPython toml click tqdm networkx pydot pyyaml atomicwrites
+    PyGithub
+    GitPython
+    toml
+    click
+    tqdm
+    networkx
+    pydot
+    pyyaml
+    atomicwrites
   ];
 
   # requires internet access

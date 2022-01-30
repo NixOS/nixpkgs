@@ -1,5 +1,5 @@
-{stdenv, unzip}:
-{package, os ? null, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
+{ stdenv, unzip }:
+{ package, os ? null, buildInputs ? [ ], patchInstructions ? "", meta ? { }, ... }@args:
 
 let
   extraParams = removeAttrs args [ "package" "os" "buildInputs" "patchInstructions" ];

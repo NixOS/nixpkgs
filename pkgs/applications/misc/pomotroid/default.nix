@@ -7,7 +7,8 @@ let
     sha256 = "sha256-BEPoOBErw5ZCeK4rtdxdwZZLimbpglu1Cu++4xzuVUs=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pomotroid";
   inherit version;
 

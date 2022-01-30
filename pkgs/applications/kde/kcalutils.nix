@@ -1,8 +1,16 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  grantlee, kcalendarcore, kconfig, kontactinterface, kcoreaddons,
-  kidentitymanagement, kpimtextedit,
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, grantlee
+, kcalendarcore
+, kconfig
+, kontactinterface
+, kcoreaddons
+, kidentitymanagement
+, kpimtextedit
+,
 }:
 
 mkDerivation {
@@ -13,8 +21,13 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    grantlee kcalendarcore kconfig kontactinterface kcoreaddons
-    kidentitymanagement kpimtextedit
+    grantlee
+    kcalendarcore
+    kconfig
+    kontactinterface
+    kcoreaddons
+    kidentitymanagement
+    kpimtextedit
   ];
   outputs = [ "out" "dev" ];
 }

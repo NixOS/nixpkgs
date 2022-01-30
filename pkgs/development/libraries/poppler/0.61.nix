@@ -15,11 +15,15 @@
 , openjpeg
 , pkg-config
 , zlib
-, withData ? true, poppler_data
-, qt5Support ? false, qtbase ? null
-, introspectionSupport ? false, gobject-introspection ? null
+, withData ? true
+, poppler_data
+, qt5Support ? false
+, qtbase ? null
+, introspectionSupport ? false
+, gobject-introspection ? null
 , utils ? false
-, minimal ? false, suffix ? "glib"
+, minimal ? false
+, suffix ? "glib"
 }:
 
 let

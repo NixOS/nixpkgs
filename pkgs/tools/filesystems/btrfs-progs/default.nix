@@ -1,8 +1,23 @@
-{ lib, stdenv, fetchurl
-, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, pkg-config, python3, xmlto
+{ lib
+, stdenv
+, fetchurl
+, asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxslt
+, pkg-config
+, python3
+, xmlto
 , zstd
-, acl, attr, e2fsprogs, libuuid, lzo, systemd, zlib
-, runCommand, btrfs-progs
+, acl
+, attr
+, e2fsprogs
+, libuuid
+, lzo
+, systemd
+, zlib
+, runCommand
+, btrfs-progs
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +30,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
-    python3 python3.pkgs.setuptools
+    pkg-config
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
+    python3
+    python3.pkgs.setuptools
   ];
 
   buildInputs = [ acl attr e2fsprogs libuuid lzo python3 zlib zstd ] ++ lib.optionals stdenv.hostPlatform.isGnu [ systemd ];
@@ -39,7 +60,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    simple-filesystem = runCommand "btrfs-progs-create-fs" {} ''
+    simple-filesystem = runCommand "btrfs-progs-create-fs" { } ''
       mkdir -p $out
       truncate -s110M $out/disc
       ${btrfs-progs}/bin/mkfs.btrfs $out/disc | tee $out/success

@@ -3,7 +3,7 @@
 , contrib
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "dict";
   version = "2016-12-26";
 

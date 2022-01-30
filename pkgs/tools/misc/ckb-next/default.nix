@@ -1,6 +1,20 @@
-{ lib, mkDerivation, fetchFromGitHub, substituteAll, udev, stdenv
-, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu
-, withPulseaudio ? stdenv.isLinux, libpulseaudio
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, substituteAll
+, udev
+, stdenv
+, pkg-config
+, qtbase
+, cmake
+, zlib
+, kmod
+, libXdmcp
+, qttools
+, qtx11extras
+, libdbusmenu
+, withPulseaudio ? stdenv.isLinux
+, libpulseaudio
 }:
 
 mkDerivation rec {

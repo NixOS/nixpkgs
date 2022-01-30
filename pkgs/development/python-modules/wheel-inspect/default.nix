@@ -1,8 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchurl
-, bleach, docutils, pygments, six
-, attrs, entry-points-txt, headerparser, packaging, wheel-filename
+, bleach
+, docutils
+, pygments
+, six
+, attrs
+, entry-points-txt
+, headerparser
+, packaging
+, wheel-filename
 }:
 
 # wheel-filename is stuck on readme_renderer~=24.0.0, but the upstream is at a
@@ -34,7 +41,8 @@ let readme_renderer_24 = buildPythonPackage rec {
   };
 };
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   version = "1.7.0";
   pname = "wheel-inspect";
   format = "wheel";

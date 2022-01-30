@@ -28,8 +28,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Pulseaudio bindings for Qt";
-    homepage    = "https://invent.kde.org/libraries/pulseaudio-qt";
-    license     = with licenses; [ lgpl2 ];
+    homepage = "https://invent.kde.org/libraries/pulseaudio-qt";
+    license = with licenses; [ lgpl2 ];
     maintainers = with maintainers; [ doronbehar ];
   };
 }

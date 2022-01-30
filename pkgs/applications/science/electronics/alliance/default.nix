@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitLab, xorgproto, motif, libX11, libXt, libXpm, bison
-, flex, automake, autoconf, libtool
+{ lib
+, stdenv
+, fetchFromGitLab
+, xorgproto
+, motif
+, libX11
+, libXt
+, libXpm
+, bison
+, flex
+, automake
+, autoconf
+, libtool
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +33,8 @@ stdenv.mkDerivation rec {
   ALLIANCE_TOP = placeholder "out";
 
   configureFlags = [
-    "--prefix=${placeholder "out"}" "--enable-alc-shared"
+    "--prefix=${placeholder "out"}"
+    "--enable-alc-shared"
   ];
 
   postPatch = ''

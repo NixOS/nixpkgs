@@ -23,7 +23,7 @@ buildDunePackage (rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 } // (
-if lib.versions.majorMinor ocaml.version == "4.04" then {
-  dontStrip = true;
-} else {}
+  if lib.versions.majorMinor ocaml.version == "4.04" then {
+    dontStrip = true;
+  } else { }
 ))

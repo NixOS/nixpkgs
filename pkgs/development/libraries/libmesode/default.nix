@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , libtool
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
       TLS functionality such as manual SSL certificate verification.
     '';
     homepage = "https://github.com/profanity-im/libmesode/";
-    license = with licenses; [ gpl3Only mit];
+    license = with licenses; [ gpl3Only mit ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ devhell ];

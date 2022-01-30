@@ -34,10 +34,11 @@ let
     '';
   };
 
-  mediawikiScripts = pkgs.runCommand "mediawiki-scripts" {
-    buildInputs = [ pkgs.makeWrapper ];
-    preferLocalBuild = true;
-  } ''
+  mediawikiScripts = pkgs.runCommand "mediawiki-scripts"
+    {
+      buildInputs = [ pkgs.makeWrapper ];
+      preferLocalBuild = true;
+    } ''
     mkdir -p $out/bin
     for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
       makeWrapper ${pkgs.php}/bin/php $out/bin/mediawiki-$(basename $i .php) \
@@ -203,7 +204,7 @@ in
       };
 
       skins = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf types.path;
         description = ''
           Attribute set of paths whose content is copied to the <filename>skins</filename>
@@ -212,7 +213,7 @@ in
       };
 
       extensions = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf (types.nullOr types.path);
         description = ''
           Attribute set of paths whose content is copied to the <filename>extensions</filename>
@@ -354,16 +355,20 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.type == "mysql";
+      {
+        assertion = cfg.database.createLocally -> cfg.database.type == "mysql";
         message = "services.mediawiki.createLocally is currently only supported for database type 'mysql'";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == user;
         message = "services.mediawiki.database.user must be set to ${user} if services.mediawiki.database.createLocally is set true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.socket != null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.socket != null;
         message = "services.mediawiki.database.socket must be set if services.mediawiki.database.createLocally is set to true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.mediawiki.database.createLocally is set to true";
       }
     ];
@@ -379,7 +384,8 @@ in
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
@@ -397,27 +403,30 @@ in
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${pkg}/share/mediawiki";
-        extraConfig = ''
-          <Directory "${pkg}/share/mediawiki">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
+        cfg.virtualHost
+        {
+          documentRoot = mkForce "${pkg}/share/mediawiki";
+          extraConfig = ''
+            <Directory "${pkg}/share/mediawiki">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
 
-            Require all granted
-            DirectoryIndex index.php
-            AllowOverride All
-          </Directory>
-        '' + optionalString (cfg.uploadsDir != null) ''
-          Alias "/images" "${cfg.uploadsDir}"
-          <Directory "${cfg.uploadsDir}">
-            Require all granted
-          </Directory>
-        '';
-      } ];
+              Require all granted
+              DirectoryIndex index.php
+              AllowOverride All
+            </Directory>
+          '' + optionalString (cfg.uploadsDir != null) ''
+            Alias "/images" "${cfg.uploadsDir}"
+            <Directory "${cfg.uploadsDir}">
+              Require all granted
+            </Directory>
+          '';
+        }
+      ];
     };
 
     systemd.tmpfiles.rules = [

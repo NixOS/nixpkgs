@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://portswigger.net/burp/freedownload";
     license = licenses.unfree;
     platforms = jdk11.meta.platforms;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ bennofs ];
   };
 }

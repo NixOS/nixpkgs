@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, glib, pcre
-, json_c, flex, bison, dtc, pciutils, dmidecode, acpica-tools, libbsd }:
+{ lib
+, stdenv
+, fetchzip
+, autoreconfHook
+, pkg-config
+, glib
+, pcre
+, json_c
+, flex
+, bison
+, dtc
+, pciutils
+, dmidecode
+, acpica-tools
+, libbsd
+}:
 
 stdenv.mkDerivation rec {
   pname = "fwts";

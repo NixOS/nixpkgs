@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi
-, nose, pyparsing, decorator, six, future }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nose
+, pyparsing
+, decorator
+, six
+, future
+}:
 
 buildPythonPackage rec {
   pname = "PyContracts";

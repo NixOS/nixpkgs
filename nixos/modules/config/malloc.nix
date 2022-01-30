@@ -22,21 +22,23 @@ let
       '';
     };
 
-    scudo = let
-      platformMap = {
-        aarch64-linux = "aarch64";
-        x86_64-linux  = "x86_64";
-      };
+    scudo =
+      let
+        platformMap = {
+          aarch64-linux = "aarch64";
+          x86_64-linux = "x86_64";
+        };
 
-      systemPlatform = platformMap.${pkgs.stdenv.hostPlatform.system} or (throw "scudo not supported on ${pkgs.stdenv.hostPlatform.system}");
-    in {
-      libPath = "${pkgs.llvmPackages_latest.compiler-rt}/lib/linux/libclang_rt.scudo-${systemPlatform}.so";
-      description = ''
-        A user-mode allocator based on LLVM Sanitizer’s CombinedAllocator,
-        which aims at providing additional mitigations against heap based
-        vulnerabilities, while maintaining good performance.
-      '';
-    };
+        systemPlatform = platformMap.${pkgs.stdenv.hostPlatform.system} or (throw "scudo not supported on ${pkgs.stdenv.hostPlatform.system}");
+      in
+      {
+        libPath = "${pkgs.llvmPackages_latest.compiler-rt}/lib/linux/libclang_rt.scudo-${systemPlatform}.so";
+        description = ''
+          A user-mode allocator based on LLVM Sanitizer’s CombinedAllocator,
+          which aims at providing additional mitigations against heap based
+          vulnerabilities, while maintaining good performance.
+        '';
+      };
 
     mimalloc = {
       libPath = "${pkgs.mimalloc}/lib/libmimalloc.so";

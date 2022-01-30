@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , python3
 , par2cmdline
@@ -10,7 +11,7 @@
 }:
 
 let
-  pythonEnv = python3.withPackages(ps: with ps; [
+  pythonEnv = python3.withPackages (ps: with ps; [
     chardet
     cheetah3
     cherrypy
@@ -22,7 +23,8 @@ let
     guessit
   ]);
   path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "3.4.2";
   pname = "sabnzbd";
 

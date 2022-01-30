@@ -5,50 +5,69 @@ with pkgs;
 rec {
 
   sourceTarball = args: import ./source-tarball.nix (
-    { inherit stdenv autoconf automake libtool;
-    } // args);
+    {
+      inherit stdenv autoconf automake libtool;
+    } // args
+  );
 
   makeSourceTarball = sourceTarball; # compatibility
 
   binaryTarball = args: import ./binary-tarball.nix (
-    { inherit stdenv;
-    } // args);
+    {
+      inherit stdenv;
+    } // args
+  );
 
   mvnBuild = args: import ./maven-build.nix (
-    { inherit stdenv;
-    } // args);
+    {
+      inherit stdenv;
+    } // args
+  );
 
   nixBuild = args: import ./nix-build.nix (
-    { inherit lib stdenv;
-    } // args);
+    {
+      inherit lib stdenv;
+    } // args
+  );
 
   coverageAnalysis = args: nixBuild (
-    { inherit lcov enableGCOVInstrumentation makeGCOVReport;
+    {
+      inherit lcov enableGCOVInstrumentation makeGCOVReport;
       doCoverageAnalysis = true;
-    } // args);
+    } // args
+  );
 
   clangAnalysis = args: nixBuild (
-    { inherit clang-analyzer;
+    {
+      inherit clang-analyzer;
       doClangAnalysis = true;
-    } // args);
+    } // args
+  );
 
   coverityAnalysis = args: nixBuild (
-    { inherit cov-build xz;
+    {
+      inherit cov-build xz;
       doCoverityAnalysis = true;
-    } // args);
+    } // args
+  );
 
   rpmBuild = args: import ./rpm-build.nix (
-    { inherit vmTools;
-    } // args);
+    {
+      inherit vmTools;
+    } // args
+  );
 
   debBuild = args: import ./debian-build.nix (
-    { inherit lib stdenv vmTools checkinstall;
-    } // args);
+    {
+      inherit lib stdenv vmTools checkinstall;
+    } // args
+  );
 
   aggregate =
     { name, constituents, meta ? { } }:
     pkgs.runCommand name
-      { inherit constituents meta;
+      {
+        inherit constituents meta;
         preferLocalBuild = true;
         _hydraAggregate = true;
       }
@@ -66,24 +85,24 @@ rec {
       '';
 
   /* Create a channel job which success depends on the success of all of
-     its contituents. Channel jobs are a special type of jobs that are
-     listed in the channel tab of Hydra and that can be suscribed.
-     A tarball of the src attribute is distributed via the channel.
+    its contituents. Channel jobs are a special type of jobs that are
+    listed in the channel tab of Hydra and that can be suscribed.
+    A tarball of the src attribute is distributed via the channel.
 
-     - constituents: a list of derivations on which the channel success depends.
-     - name: the channel name that will be used in the hydra interface.
-     - src: should point to the root folder of the nix-expressions used by the
-            channel, typically a folder containing a `default.nix`.
+    - constituents: a list of derivations on which the channel success depends.
+    - name: the channel name that will be used in the hydra interface.
+    - src: should point to the root folder of the nix-expressions used by the
+    channel, typically a folder containing a `default.nix`.
 
-       channel {
-         constituents = [ foo bar baz ];
-         name = "my-channel";
-         src = ./.;
-       };
+    channel {
+    constituents = [ foo bar baz ];
+    name = "my-channel";
+    src = ./.;
+    };
 
   */
   channel =
-    { name, src, constituents ? [], meta ? {}, isNixOS ? true, ... }@args:
+    { name, src, constituents ? [ ], meta ? { }, isNixOS ? true, ... }@args:
     stdenv.mkDerivation ({
       preferLocalBuild = true;
       _hydraAggregate = true;

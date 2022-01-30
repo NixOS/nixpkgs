@@ -14,7 +14,9 @@ buildGoModule rec {
   vendorSha256 = "sha256-oA8/9LjMRM1RXKKDWhcbt2qr/4T7YgOq92U2mF9E+sw=";
 
   ldflags = [
-    "-s" "-w" "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}"
+    "-s"
+    "-w"
+    "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}"
   ];
 
   meta = with lib; {

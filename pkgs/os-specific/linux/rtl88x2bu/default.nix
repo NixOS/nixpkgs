@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bc ];
   buildInputs = kernel.moduleBuildDependencies;
 
- prePatch = ''
+  prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
       --replace '$(shell uname -r)' "${kernel.modDirVersion}" \

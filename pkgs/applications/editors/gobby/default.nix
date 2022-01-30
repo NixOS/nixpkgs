@@ -1,10 +1,26 @@
 { avahiSupport ? false # build support for Avahi in libinfinity
-, lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, wrapGAppsHook, yelp-tools
-, gtkmm3, gsasl, gtksourceview3, libxmlxx, libinfinity, intltool, itstool, gnome }:
+, lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, pkg-config
+, wrapGAppsHook
+, yelp-tools
+, gtkmm3
+, gsasl
+, gtksourceview3
+, libxmlxx
+, libinfinity
+, intltool
+, itstool
+, gnome
+}:
 
 let
   libinf = libinfinity.override { gtkWidgets = true; inherit avahiSupport; };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gobby";
   version = "0.6.0";
 

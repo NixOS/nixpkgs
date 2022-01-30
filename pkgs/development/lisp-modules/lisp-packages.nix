@@ -1,19 +1,19 @@
-{lib, stdenv, clwrapper, pkgs, sbcl, coreutils, nix, asdf}:
+{ lib, stdenv, clwrapper, pkgs, sbcl, coreutils, nix, asdf }:
 let lispPackages = rec {
   inherit lib pkgs clwrapper stdenv;
   nixLib = pkgs.lib;
   callPackage = nixLib.callPackageWith lispPackages;
 
-  buildLispPackage =  callPackage ./define-package.nix;
+  buildLispPackage = callPackage ./define-package.nix;
 
   quicklisp = buildLispPackage rec {
     baseName = "quicklisp";
     version = "2021-02-13";
 
-    buildSystems = [];
+    buildSystems = [ ];
 
     description = "The Common Lisp package manager";
-    deps = [];
+    deps = [ ];
     src = pkgs.fetchgit {
       url = "https://github.com/quicklisp/quicklisp-client/";
       rev = "refs/tags/version-${version}";
@@ -40,9 +40,10 @@ let lispPackages = rec {
     pname = "quicklisp-to-nix-system-info";
     version = "1.0.0";
     src = ./quicklisp-to-nix;
-    nativeBuildInputs = [sbcl];
+    nativeBuildInputs = [ sbcl ];
     buildInputs = [
-      lispPackages.quicklisp coreutils
+      lispPackages.quicklisp
+      coreutils
     ];
     touch = coreutils;
     nix-prefetch-url = nix;
@@ -61,12 +62,12 @@ let lispPackages = rec {
     pname = "quicklisp-to-nix";
     version = "1.0.0";
     src = ./quicklisp-to-nix;
-    buildDependencies = [sbcl quicklisp-to-nix-system-info];
-    buildInputs = with pkgs.lispPackages; [md5 cl-emb alexandria external-program];
+    buildDependencies = [ sbcl quicklisp-to-nix-system-info ];
+    buildInputs = with pkgs.lispPackages; [ md5 cl-emb alexandria external-program ];
     touch = coreutils;
     nix-prefetch-url = nix;
     inherit quicklisp;
-    deps = [];
+    deps = [ ];
     system-info = quicklisp-to-nix-system-info;
     buildPhase = ''
       ${clwrapper}/bin/cl-wrapper.sh "${sbcl}/bin/sbcl" --eval '(load #P"${asdf}/lib/common-lisp/asdf/build/asdf.lisp")' --load $src/ql-to-nix.lisp --eval '(ql-to-nix::dump-image)'
@@ -79,25 +80,34 @@ let lispPackages = rec {
   };
 
   clx-truetype = buildLispPackage rec {
-          baseName = "clx-truetype";
-          version = "20160825-git";
+    baseName = "clx-truetype";
+    version = "20160825-git";
 
-          buildSystems = [ "clx-truetype" ];
-          parasites = [ "clx-truetype-test" ];
+    buildSystems = [ "clx-truetype" ];
+    parasites = [ "clx-truetype-test" ];
 
-          description = "clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension.";
-          deps = with pkgs.lispPackages; [
-                  alexandria bordeaux-threads cl-aa cl-fad cl-paths cl-paths-ttf cl-store
-                          cl-vectors clx trivial-features zpb-ttf
-          ];
-          src = pkgs.fetchurl {
-                  url = "http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
-                  sha256 = "0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67";
-          };
+    description = "clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension.";
+    deps = with pkgs.lispPackages; [
+      alexandria
+      bordeaux-threads
+      cl-aa
+      cl-fad
+      cl-paths
+      cl-paths-ttf
+      cl-store
+      cl-vectors
+      clx
+      trivial-features
+      zpb-ttf
+    ];
+    src = pkgs.fetchurl {
+      url = "http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
+      sha256 = "0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67";
+    };
 
-          packageName = "clx-truetype";
+    packageName = "clx-truetype";
 
-          asdFilesToKeep = ["clx-truetype.asd"];
+    asdFilesToKeep = [ "clx-truetype.asd" ];
   };
   cluffer = buildLispPackage rec {
     baseName = "cluffer";
@@ -108,7 +118,8 @@ let lispPackages = rec {
 
     description = "General purpose text-editor buffer";
     deps = with pkgs.lispPackages; [
-      acclimation clump
+      acclimation
+      clump
     ];
     src = pkgs.fetchFromGitHub {
       owner = "robert-strandh";
@@ -148,55 +159,55 @@ let lispPackages = rec {
       '';
 
       # Prevent nyxt from trying to obtain dependencies as submodules
-      makeFlags = [ "NYXT_SUBMODULES=false" ] ++ x.buildFlags or [];
+      makeFlags = [ "NYXT_SUBMODULES=false" ] ++ x.buildFlags or [ ];
     };
 
     deps = with pkgs.lispPackages; [
-            alexandria
-            bordeaux-threads
-            calispel
-            cl-css
-            cl-json
-            cl-markup
-            cl-ppcre
-            cl-ppcre-unicode
-            cl-prevalence
-            closer-mop
-            cl-containers
-            cl-qrencode
-            clss
-            cluffer
-            moptilities
-            dexador
-            enchant
-            file-attributes
-            iolib
-            local-time
-            log4cl
-            lparallel
-            mk-string-metrics
-            osicat
-            parenscript
-            quri
-            serapeum
-            spinneret
-            str
-            plump
-            swank
-            trivia
-            trivial-clipboard
-            trivial-features
-            trivial-garbage
-            trivial-package-local-nicknames
-            trivial-types
-            unix-opts
-            cl-html-diff
-            hu_dot_dwim_dot_defclass-star
-            cl-custom-hash-table
-            fset
-            cl-cffi-gtk
-            cl-webkit2
-            cl-gobject-introspection
+      alexandria
+      bordeaux-threads
+      calispel
+      cl-css
+      cl-json
+      cl-markup
+      cl-ppcre
+      cl-ppcre-unicode
+      cl-prevalence
+      closer-mop
+      cl-containers
+      cl-qrencode
+      clss
+      cluffer
+      moptilities
+      dexador
+      enchant
+      file-attributes
+      iolib
+      local-time
+      log4cl
+      lparallel
+      mk-string-metrics
+      osicat
+      parenscript
+      quri
+      serapeum
+      spinneret
+      str
+      plump
+      swank
+      trivia
+      trivial-clipboard
+      trivial-features
+      trivial-garbage
+      trivial-package-local-nicknames
+      trivial-types
+      unix-opts
+      cl-html-diff
+      hu_dot_dwim_dot_defclass-star
+      cl-custom-hash-table
+      fset
+      cl-cffi-gtk
+      cl-webkit2
+      cl-gobject-introspection
     ];
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
@@ -219,8 +230,15 @@ let lispPackages = rec {
     version = "2021-10-07";
     description = "MGL is a machine learning library for backpropagation neural networks, boltzmann machines, gaussian processes and more";
     deps = with pkgs.lispPackages; [
-      alexandria closer-mop array-operations lla cl-reexport mgl-mat mgl-pax
-      named-readtables pythonic-string-reader
+      alexandria
+      closer-mop
+      array-operations
+      lla
+      cl-reexport
+      mgl-mat
+      mgl-pax
+      named-readtables
+      pythonic-string-reader
     ];
     src = pkgs.fetchFromGitHub {
       owner = "melisgl";
@@ -240,8 +258,18 @@ let lispPackages = rec {
     version = "2021-10-11";
     description = "Multi-dimensional arrays with FFI/CUDA support";
     deps = with pkgs.lispPackages; [
-      alexandria bordeaux-threads cffi cffi-grovel cl-cuda flexi-streams ieee-floats
-      lla mgl-pax static-vectors trivial-garbage cl-fad
+      alexandria
+      bordeaux-threads
+      cffi
+      cffi-grovel
+      cl-cuda
+      flexi-streams
+      ieee-floats
+      lla
+      mgl-pax
+      static-vectors
+      trivial-garbage
+      cl-fad
     ];
     src = pkgs.fetchFromGitHub {
       owner = "melisgl";

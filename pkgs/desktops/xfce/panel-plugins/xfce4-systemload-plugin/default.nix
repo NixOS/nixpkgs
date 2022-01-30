@@ -11,8 +11,9 @@
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-systemload-plugin";
+in
+stdenv.mkDerivation rec {
+  pname = "xfce4-systemload-plugin";
   version = "1.3.1";
 
   src = fetchurl {

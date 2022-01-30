@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, python
+, fetchFromGitHub
 , fetchpatch
-, cmake, sip_4, protobuf, pythonOlder }:
+, cmake
+, sip_4
+, protobuf
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "libarcus";

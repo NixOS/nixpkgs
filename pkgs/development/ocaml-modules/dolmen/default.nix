@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage
-, menhir, menhirLib
+{ lib
+, fetchurl
+, buildDunePackage
+, menhir
+, menhirLib
 , fmt
 }:
 

@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   version = "2.20";
 
   src = fetchFromGitHub {
-    owner  = "MusicPlayerDaemon";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "MusicPlayerDaemon";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "sha256-qEgdwG7ygVblIa3uRf1tddxHg7T1yvY17nbhZ7NRNvg=";
   };
 
   nativeBuildInputs = [ meson ninja ]
-  ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   meta = with lib; {
     description = "Client library for MPD (music player daemon)";

@@ -6,9 +6,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
-    repo  = "fdupes";
-    rev   = "v${version}";
-    hash  = "sha256-WtSuFWRqQo5D/FLwl3AaIIfg6q+09A3aP5//J4AUzus=";
+    repo = "fdupes";
+    rev = "v${version}";
+    hash = "sha256-WtSuFWRqQo5D/FLwl3AaIIfg6q+09A3aP5//J4AUzus=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

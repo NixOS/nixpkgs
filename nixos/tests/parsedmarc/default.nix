@@ -96,7 +96,8 @@ in
         let
           esPort = toString nodes.parsedmarc.config.services.elasticsearch.port;
           valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.config.services.elasticsearch.package.version "7") ".value";
-        in ''
+        in
+        ''
           parsedmarc.start()
           parsedmarc.wait_for_unit("postfix.service")
           parsedmarc.wait_for_unit("dovecot2.service")
@@ -125,111 +126,112 @@ in
       mailDomain = certs.domain;
       parsedmarcDomain = "parsedmarc.fake.domain";
     in
-      makeTest {
-        name = "parsedmarc-external-mail";
-        meta = with lib.maintainers; {
-          maintainers = [ talyz ];
-        };
-
-        nodes = {
-          parsedmarc =
-            { nodes, ... }:
-            {
-              virtualisation.memorySize = 2048;
-
-              security.pki.certificateFiles = [
-                certs.ca.cert
-              ];
-
-              networking.extraHosts = ''
-                127.0.0.1 ${parsedmarcDomain}
-                ${nodes.mail.config.networking.primaryIPAddress} ${mailDomain}
-              '';
-
-              services.parsedmarc = {
-                enable = true;
-                provision.geoIp = false;
-                settings.imap = {
-                  host = mailDomain;
-                  port = 993;
-                  ssl = true;
-                  user = "alice";
-                  password = "${pkgs.writeText "imap-password" "foobar"}";
-                  watch = true;
-                };
-              };
-
-              services.elasticsearch.package = pkgs.elasticsearch-oss;
-
-              environment.systemPackages = [
-                pkgs.jq
-              ];
-            };
-
-          mail =
-            { nodes, ... }:
-            {
-              imports = [ ../common/user-account.nix ];
-
-              networking.extraHosts = ''
-                127.0.0.1 ${mailDomain}
-                ${nodes.parsedmarc.config.networking.primaryIPAddress} ${parsedmarcDomain}
-              '';
-
-              services.dovecot2 = {
-                enable = true;
-                protocols = [ "imap" ];
-                sslCACert = "${certs.ca.cert}";
-                sslServerCert = "${certs.${mailDomain}.cert}";
-                sslServerKey = "${certs.${mailDomain}.key}";
-              };
-
-              services.postfix = {
-                enable = true;
-                origin = mailDomain;
-                config = {
-                  myhostname = mailDomain;
-                  mydestination = mailDomain;
-                };
-                enableSubmission = true;
-                enableSubmissions = true;
-                submissionsOptions = {
-                  smtpd_sasl_auth_enable = "yes";
-                  smtpd_client_restrictions = "permit";
-                };
-              };
-              environment.systemPackages = [ (sendEmail "alice@${mailDomain}") ];
-
-              networking.firewall.allowedTCPPorts = [ 993 ];
-            };
-        };
-
-        testScript = { nodes }:
-          let
-            esPort = toString nodes.parsedmarc.config.services.elasticsearch.port;
-            valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.config.services.elasticsearch.package.version "7") ".value";
-          in ''
-            mail.start()
-            mail.wait_for_unit("postfix.service")
-            mail.wait_for_unit("dovecot2.service")
-
-            parsedmarc.start()
-            parsedmarc.wait_for_unit("parsedmarc.service")
-            parsedmarc.wait_until_succeeds(
-                "curl -sS -f http://localhost:${esPort}"
-            )
-
-            parsedmarc.fail(
-                "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
-                + " | tee /dev/console"
-                + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
-            )
-            mail.succeed("send-email")
-            parsedmarc.wait_until_succeeds(
-                "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
-                + " | tee /dev/console"
-                + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
-            )
-          '';
+    makeTest {
+      name = "parsedmarc-external-mail";
+      meta = with lib.maintainers; {
+        maintainers = [ talyz ];
       };
+
+      nodes = {
+        parsedmarc =
+          { nodes, ... }:
+          {
+            virtualisation.memorySize = 2048;
+
+            security.pki.certificateFiles = [
+              certs.ca.cert
+            ];
+
+            networking.extraHosts = ''
+              127.0.0.1 ${parsedmarcDomain}
+              ${nodes.mail.config.networking.primaryIPAddress} ${mailDomain}
+            '';
+
+            services.parsedmarc = {
+              enable = true;
+              provision.geoIp = false;
+              settings.imap = {
+                host = mailDomain;
+                port = 993;
+                ssl = true;
+                user = "alice";
+                password = "${pkgs.writeText "imap-password" "foobar"}";
+                watch = true;
+              };
+            };
+
+            services.elasticsearch.package = pkgs.elasticsearch-oss;
+
+            environment.systemPackages = [
+              pkgs.jq
+            ];
+          };
+
+        mail =
+          { nodes, ... }:
+          {
+            imports = [ ../common/user-account.nix ];
+
+            networking.extraHosts = ''
+              127.0.0.1 ${mailDomain}
+              ${nodes.parsedmarc.config.networking.primaryIPAddress} ${parsedmarcDomain}
+            '';
+
+            services.dovecot2 = {
+              enable = true;
+              protocols = [ "imap" ];
+              sslCACert = "${certs.ca.cert}";
+              sslServerCert = "${certs.${mailDomain}.cert}";
+              sslServerKey = "${certs.${mailDomain}.key}";
+            };
+
+            services.postfix = {
+              enable = true;
+              origin = mailDomain;
+              config = {
+                myhostname = mailDomain;
+                mydestination = mailDomain;
+              };
+              enableSubmission = true;
+              enableSubmissions = true;
+              submissionsOptions = {
+                smtpd_sasl_auth_enable = "yes";
+                smtpd_client_restrictions = "permit";
+              };
+            };
+            environment.systemPackages = [ (sendEmail "alice@${mailDomain}") ];
+
+            networking.firewall.allowedTCPPorts = [ 993 ];
+          };
+      };
+
+      testScript = { nodes }:
+        let
+          esPort = toString nodes.parsedmarc.config.services.elasticsearch.port;
+          valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.config.services.elasticsearch.package.version "7") ".value";
+        in
+        ''
+          mail.start()
+          mail.wait_for_unit("postfix.service")
+          mail.wait_for_unit("dovecot2.service")
+
+          parsedmarc.start()
+          parsedmarc.wait_for_unit("parsedmarc.service")
+          parsedmarc.wait_until_succeeds(
+              "curl -sS -f http://localhost:${esPort}"
+          )
+
+          parsedmarc.fail(
+              "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+              + " | tee /dev/console"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+          )
+          mail.succeed("send-email")
+          parsedmarc.wait_until_succeeds(
+              "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+              + " | tee /dev/console"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+          )
+        '';
+    };
 }

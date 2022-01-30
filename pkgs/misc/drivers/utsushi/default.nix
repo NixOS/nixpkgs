@@ -1,7 +1,21 @@
-{ lib, stdenv, writeScriptBin, fetchpatch, fetchFromGitLab, autoreconfHook, pkg-config
-, autoconf-archive, libxslt, boost, gtkmm2, imagemagick, sane-backends
-, tesseract4, udev, libusb1
-, withNetworkScan ? false, utsushi-networkscan
+{ lib
+, stdenv
+, writeScriptBin
+, fetchpatch
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, autoconf-archive
+, libxslt
+, boost
+, gtkmm2
+, imagemagick
+, sane-backends
+, tesseract4
+, udev
+, libusb1
+, withNetworkScan ? false
+, utsushi-networkscan
 }:
 
 
@@ -13,7 +27,8 @@ let
     fi
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "imagescan";
   version = "3.65.0";
 

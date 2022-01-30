@@ -2,7 +2,8 @@
 
 let
   mspgccVersion = "6_1_1_0";
-in stdenvNoCC.mkDerivation rec {
+in
+stdenvNoCC.mkDerivation rec {
   pname = "msp430-gcc-support-files";
   version = "1.207";
   src = fetchzip {

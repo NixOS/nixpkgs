@@ -24,7 +24,14 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    django suds-jurko ldap mechanize beautifulsoup4 pyxdg python-dateutil requests
+    django
+    suds-jurko
+    ldap
+    mechanize
+    beautifulsoup4
+    pyxdg
+    python-dateutil
+    requests
   ];
 
   buildInputs = [ httpretty ];

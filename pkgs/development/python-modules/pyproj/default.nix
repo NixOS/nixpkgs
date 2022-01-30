@@ -40,7 +40,7 @@ buildPythonPackage rec {
   buildInputs = [ proj ];
 
   propagatedBuildInputs = [
-     certifi
+    certifi
   ];
 
   checkInputs = [

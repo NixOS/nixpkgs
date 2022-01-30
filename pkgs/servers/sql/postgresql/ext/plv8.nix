@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, v8, perl, postgresql
-# For test
-, runCommand, coreutils, gnugrep }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, v8
+, perl
+, postgresql
+  # For test
+, runCommand
+, coreutils
+, gnugrep
+}:
 
 let self = stdenv.mkDerivation rec {
   pname = "plv8";
@@ -52,10 +60,12 @@ let self = stdenv.mkDerivation rec {
     # Without this, PostgreSQL will crash at runtime.
     # The flags are only included in Makefile, not Makefile.shared.
     # https://github.com/plv8/plv8/pull/469
-    "-DJSONB_DIRECT_CONVERSION" "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1"
+    "-DJSONB_DIRECT_CONVERSION"
+    "-DV8_COMPRESS_POINTERS=1"
+    "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1"
   ];
 
-  passthru.tests.smoke = runCommand "${pname}-test" {} ''
+  passthru.tests.smoke = runCommand "${pname}-test" { } ''
     export PATH=${lib.makeBinPath [ (postgresql.withPackages (_: [self])) coreutils gnugrep ]}
     db="$PWD/testdb"
     initdb "$db"

@@ -1,5 +1,14 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, boost, capstone
-, double-conversion, graphviz, qtxmlpatterns }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boost
+, capstone
+, double-conversion
+, graphviz
+, qtxmlpatterns
+}:
 
 mkDerivation rec {
   pname = "edb";

@@ -1,6 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, attrs, enum34, hyperlink, incremental, six, twisted, typing, tubes, werkzeug, zope_interface
-, hypothesis, treq
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, attrs
+, enum34
+, hyperlink
+, incremental
+, six
+, twisted
+, typing
+, tubes
+, werkzeug
+, zope_interface
+, hypothesis
+, treq
 }:
 
 buildPythonPackage rec {
@@ -22,8 +35,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Klein Web Micro-Framework";
-    homepage    = "https://github.com/twisted/klein";
-    license     = licenses.mit;
+    homepage = "https://github.com/twisted/klein";
+    license = licenses.mit;
     maintainers = with maintainers; [ exarkun ];
   };
 }

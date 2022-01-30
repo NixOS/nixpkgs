@@ -23,7 +23,7 @@ buildPythonPackage rec {
     ipython
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs =  [
+  checkInputs = [
     pytestCheckHook
   ];
 

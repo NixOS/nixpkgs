@@ -6,7 +6,7 @@
 , jdupes
 , allColorVariants ? false
 , circularFolder ? false
-, colorVariants ? [] # default is standard
+, colorVariants ? [ ] # default is standard
 }:
 
 let
@@ -14,7 +14,8 @@ let
 in
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "black" "blue" "brown" "green" "grey" "orange" "pink" "purple" "red" "yellow" "manjaro" "ubuntu" ] colorVariants
 
-stdenvNoCC.mkDerivation rec {
+  stdenvNoCC.mkDerivation
+rec {
   inherit pname;
   version = "unstable-2021-12-24";
 

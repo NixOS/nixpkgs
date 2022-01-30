@@ -1,4 +1,6 @@
-{ lib, fetchFromGitHub, buildDunePackage
+{ lib
+, fetchFromGitHub
+, buildDunePackage
 , ppxlib
 }:
 

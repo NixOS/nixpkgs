@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl
-, libX11, libXft, libclthreads, libclxclient, libjack2, libpng, libsndfile, zita-resampler
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, libXft
+, libclthreads
+, libclxclient
+, libjack2
+, libpng
+, libsndfile
+, zita-resampler
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 libXft libclthreads libclxclient libjack2 libpng libsndfile zita-resampler
+    libX11
+    libXft
+    libclthreads
+    libclxclient
+    libjack2
+    libpng
+    libsndfile
+    zita-resampler
   ];
 
   preConfigure = ''

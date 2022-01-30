@@ -1,6 +1,18 @@
-{ stdenv, lib, fetchurl, rpmextract, undmg, autoPatchelfHook
-, xorg, gtk3, gnome2, nss, alsa-lib, udev, libnotify
-, wrapGAppsHook }:
+{ stdenv
+, lib
+, fetchurl
+, rpmextract
+, undmg
+, autoPatchelfHook
+, xorg
+, gtk3
+, gnome2
+, nss
+, alsa-lib
+, udev
+, libnotify
+, wrapGAppsHook
+}:
 
 let
   pname = "vk-messenger";
@@ -26,7 +38,7 @@ let
     homepage = "https://vk.com/messenger";
     license = licenses.unfree;
     maintainers = [ ];
-    platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 
   linux = stdenv.mkDerivation {
@@ -34,7 +46,10 @@ let
 
     nativeBuildInputs = [ rpmextract autoPatchelfHook wrapGAppsHook ];
     buildInputs = (with xorg; [
-      libXdamage libXtst libXScrnSaver libxkbfile
+      libXdamage
+      libXtst
+      libXScrnSaver
+      libxkbfile
     ]) ++ [ gtk3 nss alsa-lib ];
 
     runtimeDependencies = [ (lib.getLib udev) libnotify ];
@@ -70,4 +85,5 @@ let
       cp -r *.app $out/Applications
     '';
   };
-in if stdenv.isDarwin then darwin else linux
+in
+if stdenv.isDarwin then darwin else linux

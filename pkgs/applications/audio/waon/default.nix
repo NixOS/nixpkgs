@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fftw, gtk2, libao, libsamplerate
-, libsndfile, ncurses, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, fftw
+, gtk2
+, libao
+, libsamplerate
+, libsndfile
+, ncurses
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {

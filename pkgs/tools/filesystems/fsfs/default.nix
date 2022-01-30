@@ -1,8 +1,9 @@
-{lib, stdenv, fetchurl, openssl, fuse}:
+{ lib, stdenv, fetchurl, openssl, fuse }:
 
 throw "It still does not build"
 
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation
+rec {
   pname = "fsfs";
   version = "0.1.1";
 

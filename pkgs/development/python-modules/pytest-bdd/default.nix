@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
 , execnet
 , glob2
 , Mako

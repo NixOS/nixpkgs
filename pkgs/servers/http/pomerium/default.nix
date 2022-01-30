@@ -25,30 +25,36 @@ buildGoModule rec {
     "cmd/pomerium-cli"
   ];
 
-  ldflags = let
-    # Set a variety of useful meta variables for stamping the build with.
-    setVars = {
-      "github.com/pomerium/pomerium/internal/version" = {
-        Version = "v${version}";
-        BuildMeta = "nixpkgs";
-        ProjectName = "pomerium";
-        ProjectURL = "github.com/pomerium/pomerium";
+  ldflags =
+    let
+      # Set a variety of useful meta variables for stamping the build with.
+      setVars = {
+        "github.com/pomerium/pomerium/internal/version" = {
+          Version = "v${version}";
+          BuildMeta = "nixpkgs";
+          ProjectName = "pomerium";
+          ProjectURL = "github.com/pomerium/pomerium";
+        };
+        "github.com/pomerium/pomerium/internal/envoy" = {
+          OverrideEnvoyPath = "${envoy}/bin/envoy";
+        };
       };
-      "github.com/pomerium/pomerium/internal/envoy" = {
-        OverrideEnvoyPath = "${envoy}/bin/envoy";
-      };
-    };
-    concatStringsSpace = list: concatStringsSep " " list;
-    mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
-    varFlags = concatStringsSpace (
-      mapAttrsToFlatList (package: packageVars:
-        mapAttrsToList (variable: value:
-          "-X ${package}.${variable}=${value}"
-        ) packageVars
-      ) setVars);
-  in [
-    "${varFlags}"
-  ];
+      concatStringsSpace = list: concatStringsSep " " list;
+      mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
+      varFlags = concatStringsSpace (
+        mapAttrsToFlatList
+          (package: packageVars:
+            mapAttrsToList
+              (variable: value:
+                "-X ${package}.${variable}=${value}"
+              )
+              packageVars
+          )
+          setVars);
+    in
+    [
+      "${varFlags}"
+    ];
 
   preBuild = ''
     # Replace embedded envoy with nothing.
@@ -86,6 +92,6 @@ buildGoModule rec {
     description = "Authenticating reverse proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" ];  # Envoy derivation is x86_64-linux only.
+    platforms = [ "x86_64-linux" ]; # Envoy derivation is x86_64-linux only.
   };
 }

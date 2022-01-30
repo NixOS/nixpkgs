@@ -7,7 +7,8 @@ let
     "3.300" = "1bja1ma1mnna0qlk3dis31cvq5z1kgcqj7wjp8ml03zc5mpa2wb2";
   }."${version}";
 
-in fetchzip rec {
+in
+fetchzip rec {
   name = "scheherazade${lib.optionalString new "-new"}-${version}";
 
   url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";

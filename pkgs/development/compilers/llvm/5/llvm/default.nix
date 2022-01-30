@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , pkgsBuildBuild
 , fetch
 , fetchpatch
@@ -145,9 +147,10 @@ stdenv.mkDerivation (rec {
     ] ++ optionals enableSharedLibraries [
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
-  in flagsForLlvmConfig ++ [
+  in
+  flagsForLlvmConfig ++ [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
+    "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
 
@@ -155,16 +158,16 @@ stdenv.mkDerivation (rec {
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
   ]
-  ++ lib.optionals enableManpages [
+    ++ lib.optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ]
-  ++ lib.optional (!isDarwin)
+    ++ lib.optional (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ++ lib.optionals (isDarwin) [
+    ++ lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -190,8 +193,9 @@ stdenv.mkDerivation (rec {
           "-DCMAKE_INSTALL_LIBDIR=${placeholder "lib"}/lib"
           "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "lib"}/libexec"
         ];
-      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
-      + lib.concatStringsSep ";" (lib.concatLists [
+      in
+      "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
+        + lib.concatStringsSep ";" (lib.concatLists [
         flagsForLlvmConfig
         nativeToolchainFlags
         nativeInstallFlags
@@ -257,7 +261,7 @@ stdenv.mkDerivation (rec {
     make docs-llvm-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     make -C docs install

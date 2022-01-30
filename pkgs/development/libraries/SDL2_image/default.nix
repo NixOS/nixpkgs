@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , pkg-config
-, SDL2, libpng, libjpeg, libtiff, giflib, libwebp, libXpm, zlib, Foundation
+, SDL2
+, libpng
+, libjpeg
+, libtiff
+, giflib
+, libwebp
+, libXpm
+, zlib
+, Foundation
 }:
 
 stdenv.mkDerivation rec {

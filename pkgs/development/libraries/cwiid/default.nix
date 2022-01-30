@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "2010-02-21";
 
   src = fetchFromGitHub {
-    owner  = "abstrakraft";
-    repo   = "cwiid";
-    rev    = "fadf11e89b579bcc0336a0692ac15c93785f3f82";
+    owner = "abstrakraft";
+    repo = "cwiid";
+    rev = "fadf11e89b579bcc0336a0692ac15c93785f3f82";
     sha256 = "0qdb0x757k76nfj32xc2nrrdqd9jlwgg63vfn02l2iznnzahxp0h";
   };
 
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux Nintendo Wiimote interface";
-    homepage    = "http://cwiid.org";
-    license     = licenses.gpl2Plus;
+    homepage = "http://cwiid.org";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ bennofs ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

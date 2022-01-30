@@ -1,16 +1,16 @@
-{
-  buildEnv,
-  lib,
-  man,
-  nixos,
-  # TODO: replace indirect self-reference by proper self-reference
+{ buildEnv
+, lib
+, man
+, nixos
+, # TODO: replace indirect self-reference by proper self-reference
   #       https://github.com/NixOS/nixpkgs/pull/119942
-  nixos-install-tools,
-  runCommand,
-  nixosTests,
+  nixos-install-tools
+, runCommand
+, nixosTests
+,
 }:
 let
-  inherit (nixos {}) config;
+  inherit (nixos { }) config;
   version = config.system.nixos.version;
 in
 (buildEnv {
@@ -24,7 +24,7 @@ in
     inherit (config.system.build.manual) manpages;
   };
 
-  extraOutputsToInstall = ["man"];
+  extraOutputsToInstall = [ "man" ];
 
   meta = {
     description = "The essential commands from the NixOS installer as a package";
@@ -42,16 +42,17 @@ in
 
   passthru.tests = {
     nixos-tests = lib.recurseIntoAttrs nixosTests.installer;
-    nixos-install-help = runCommand "test-nixos-install-help" {
-      nativeBuildInputs = [
-        man
-        nixos-install-tools
-      ];
-      meta.description = ''
-        Make sure that --help works. It's somewhat non-trivial because it
-        requires man.
-      '';
-    } ''
+    nixos-install-help = runCommand "test-nixos-install-help"
+      {
+        nativeBuildInputs = [
+          man
+          nixos-install-tools
+        ];
+        meta.description = ''
+          Make sure that --help works. It's somewhat non-trivial because it
+          requires man.
+        '';
+      } ''
       nixos-install --help | grep -F 'NixOS Reference Pages'
       nixos-install --help | grep -F 'configuration.nix'
       nixos-generate-config --help | grep -F 'NixOS Reference Pages'

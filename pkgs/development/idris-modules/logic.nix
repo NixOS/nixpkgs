@@ -3,7 +3,7 @@
 , bifunctors
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "logic";
   version = "2016-12-02";
 

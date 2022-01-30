@@ -32,4 +32,4 @@ let
     };
   };
 in
-  toKodiAddon drv
+toKodiAddon drv

@@ -10,14 +10,21 @@ let
 
   keyFile = "${cfg.keyPath}/${cfg.selector}.private";
 
-  args = [ "-f" "-l"
-           "-p" cfg.socket
-           "-d" cfg.domains
-           "-k" keyFile
-           "-s" cfg.selector
-         ] ++ optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
+  args = [
+    "-f"
+    "-l"
+    "-p"
+    cfg.socket
+    "-d"
+    cfg.domains
+    "-k"
+    keyFile
+    "-s"
+    cfg.selector
+  ] ++ optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
 
-in {
+in
+{
   imports = [
     (mkRenamedOptionModule [ "services" "opendkim" "keyFile" ] [ "services" "opendkim" "keyPath" ])
   ];
@@ -134,7 +141,7 @@ in {
         StateDirectoryMode = "0700";
         ReadWritePaths = [ cfg.keyPath ];
 
-        AmbientCapabilities = [];
+        AmbientCapabilities = [ ];
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
         LockPersonality = true;

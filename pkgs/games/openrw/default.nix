@@ -14,7 +14,8 @@
 , boost
 , ffmpeg
 , Cocoa
-, OpenAL }:
+, OpenAL
+}:
 
 stdenv.mkDerivation {
   version = "unstable-2021-10-14";
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9"))''
+  postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9")) ''
     substituteInPlace cmake_configure.cmake \
       --replace 'target_link_libraries(rw_interface INTERFACE "stdc++fs")' ""
   '';
@@ -36,7 +37,17 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    sfml libGLU libGL bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
+    sfml
+    libGLU
+    libGL
+    bullet
+    glm
+    libmad
+    xlibsWrapper
+    openal
+    SDL2
+    boost
+    ffmpeg
   ] ++ lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];
 
   meta = with lib; {

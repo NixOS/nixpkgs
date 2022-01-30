@@ -27,7 +27,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -56,7 +57,7 @@ in {
       storageDriver = mkOption {
         type = types.str;
         default = "hash";
-        description =  "Storage driver backend to use for dspam.";
+        description = "Storage driver backend to use for dspam.";
       };
 
       domainSocket = mkOption {

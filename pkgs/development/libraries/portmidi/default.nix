@@ -13,24 +13,26 @@ stdenv.mkDerivation rec {
     cd portmidi/trunk
   '';
 
-  cmakeFlags = let
-    #base = "${jdk}/jre/lib/${jdk.architecture}";
-  in [
-    "-DPORTMIDI_ENABLE_JAVA=0"
-    /* TODO: Fix Java support.
-    "-DJAVA_AWT_LIBRARY=${base}/libawt.so"
-    "-DJAVA_JVM_LIBRARY=${base}/server/libjvm.so"
-    */
-    "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=Release"
-    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=Release"
-    "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=Release"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_ARCHITECTURES=${if stdenv.isAarch64 then "arm64" else "x86_64"}"
-    "-DCOREAUDIO_LIB=${CoreAudio}"
-    "-DCOREFOUNDATION_LIB=${CoreFoundation}"
-    "-DCOREMIDI_LIB=${CoreMIDI}"
-    "-DCORESERVICES_LIB=${CoreServices}"
-  ];
+  cmakeFlags =
+    let
+      #base = "${jdk}/jre/lib/${jdk.architecture}";
+    in
+    [
+      "-DPORTMIDI_ENABLE_JAVA=0"
+      /* TODO: Fix Java support.
+        "-DJAVA_AWT_LIBRARY=${base}/libawt.so"
+        "-DJAVA_JVM_LIBRARY=${base}/server/libjvm.so"
+      */
+      "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=Release"
+      "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=Release"
+      "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=Release"
+    ] ++ lib.optionals stdenv.isDarwin [
+      "-DCMAKE_OSX_ARCHITECTURES=${if stdenv.isAarch64 then "arm64" else "x86_64"}"
+      "-DCOREAUDIO_LIB=${CoreAudio}"
+      "-DCOREFOUNDATION_LIB=${CoreFoundation}"
+      "-DCOREMIDI_LIB=${CoreMIDI}"
+      "-DCORESERVICES_LIB=${CoreServices}"
+    ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin [
     "-framework CoreAudio"
@@ -61,15 +63,20 @@ stdenv.mkDerivation rec {
         pm_java/CMakeLists.txt
   '';
 
-  postInstall = let ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
-    ln -s libportmidi${ext} "$out/lib/libporttime${ext}"
-  '';
+  postInstall = let ext = stdenv.hostPlatform.extensions.sharedLibrary; in
+    ''
+      ln -s libportmidi${ext} "$out/lib/libporttime${ext}"
+    '';
 
   nativeBuildInputs = [ unzip cmake ];
   buildInputs = lib.optionals stdenv.isLinux [
     alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
-    Carbon CoreAudio CoreFoundation CoreMIDI CoreServices
+    Carbon
+    CoreAudio
+    CoreFoundation
+    CoreMIDI
+    CoreServices
   ];
 
   hardeningDisable = [ "format" ];

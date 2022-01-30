@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, gmp, mpir, cddlib}:
+{ lib, stdenv, fetchurl, gmp, mpir, cddlib }:
 stdenv.mkDerivation rec {
   pname = "gfan";
   version = "0.6.2";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A software package for computing Gröbner fans and tropical varieties";
-    license = lib.licenses.gpl2 ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     homepage = "http://home.math.au.dk/jensen/software/gfan/gfan.html";
   };

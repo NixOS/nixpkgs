@@ -1,4 +1,7 @@
-{ buildPythonPackage, lib, fetchPypi, pythonOlder
+{ buildPythonPackage
+, lib
+, fetchPypi
+, pythonOlder
 , aiohttp
 , maxminddb
 , mocket

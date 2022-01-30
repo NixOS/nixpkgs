@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   # reconf needed to sucesfully cross-compile
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook
+    pkg-config
     # requires m17n-db tool at build time
     m17n_db
   ];

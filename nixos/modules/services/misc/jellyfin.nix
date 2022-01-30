@@ -92,7 +92,13 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@obsolete"
+          "~@privileged"
+          "~@setuid"
         ];
       };
     };
@@ -105,7 +111,7 @@ in
     };
 
     users.groups = mkIf (cfg.group == "jellyfin") {
-      jellyfin = {};
+      jellyfin = { };
     };
 
     networking.firewall = mkIf cfg.openFirewall {

@@ -1,10 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, nodejs-14_x, python3, callPackage
-, fixup_yarn_lock, yarn, pkg-config, libsecret, xcbuild, Security, AppKit, fetchYarnDeps }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nodejs-14_x
+, python3
+, callPackage
+, fixup_yarn_lock
+, yarn
+, pkg-config
+, libsecret
+, xcbuild
+, Security
+, AppKit
+, fetchYarnDeps
+}:
 
 let
   pinData = lib.importJSON ./pin.json;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "keytar";
   inherit (pinData) version;
 
@@ -16,7 +30,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ nodejs-14_x python3 yarn pkg-config ]
-    ++ lib.optional  stdenv.isDarwin xcbuild;
+    ++ lib.optional stdenv.isDarwin xcbuild;
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ lib.optionals stdenv.isDarwin [ Security AppKit ];
 

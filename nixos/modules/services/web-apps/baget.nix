@@ -47,7 +47,7 @@ let
 
   configAttrs = recursiveUpdate defaultConfig cfg.extraConfig;
 
-  configFormat = pkgs.formats.json {};
+  configFormat = pkgs.formats.json { };
   configFile = configFormat.generate "appsettings.json" configAttrs;
 
 in
@@ -65,7 +65,7 @@ in
 
     extraConfig = mkOption {
       type = configFormat.type;
-      default = {};
+      default = { };
       example = {
         "Database" = {
           "Type" = "PostgreSql";

@@ -1,21 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, which, m4, python3, bison, flex, llvmPackages
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, which
+, m4
+, python3
+, bison
+, flex
+, llvmPackages
 
   # the default test target is sse4, but that is not supported by all Hydra agents
 , testedTargets ? [ "sse2" ]
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "ispc";
+  pname = "ispc";
   version = "unstable-2021-04-02";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
+    owner = pname;
+    repo = pname;
     # ISPC release 1.15.0 doesn't build against LLVM 11.1, only against 11.0. So we
     # use latest ISPC main branch for now, until they support an LLVM version we have.
     # https://github.com/ispc/ispc/issues/2027#issuecomment-784470530
-    rev    = "3e8313568265d2adfbf95bd6b6e1a4c70ef59bed";
+    rev = "3e8313568265d2adfbf95bd6b6e1a4c70ef59bed";
     sha256 = "sha256-gvr+VpoacmwQlP5gT4MnfmKdACZWJduVMIpR0YRzseg=";
   };
 
@@ -30,7 +39,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.llvm.dev ];
   buildInputs = with llvmPackages; [
-    llvm llvmPackages.libclang
+    llvm
+    llvmPackages.libclang
   ];
 
   postPatch = ''
@@ -74,10 +84,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage    = "https://ispc.github.io/";
+    homepage = "https://ispc.github.io/";
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
-    license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ]; # TODO: buildable on more platforms?
+    license = licenses.bsd3;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ]; # TODO: buildable on more platforms?
     maintainers = with maintainers; [ aristid thoughtpolice ];
   };
 }

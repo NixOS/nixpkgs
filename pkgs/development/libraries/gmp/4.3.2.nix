@@ -73,4 +73,4 @@ let self = stdenv.mkDerivation rec {
     badPlatforms = [ "x86_64-darwin" ];
   };
 };
-  in self
+in self

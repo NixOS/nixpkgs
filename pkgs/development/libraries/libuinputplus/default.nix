@@ -5,12 +5,12 @@ stdenv.mkDerivation rec {
 
   # adds missing cmake install directives
   # https://github.com/YukiWorkshop/libuInputPlus/pull/7
-  patches = [ ./0001-Add-cmake-install-directives.patch];
+  patches = [ ./0001-Add-cmake-install-directives.patch ];
 
-  src  = fetchFromGitHub {
-    owner  = "YukiWorkshop";
-    repo   = "libuInputPlus";
-    rev    = "f7f18eb339bba61a43f2cad481a9b1a453a66957";
+  src = fetchFromGitHub {
+    owner = "YukiWorkshop";
+    repo = "libuInputPlus";
+    rev = "f7f18eb339bba61a43f2cad481a9b1a453a66957";
     sha256 = "0sind2ghhy4h9kfkr5hsmhcq0di4ifwqyv4gac96rgj5mwvs33lp";
   };
 

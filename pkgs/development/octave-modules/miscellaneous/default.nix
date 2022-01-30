@@ -1,7 +1,7 @@
 { buildOctavePackage
 , lib
 , fetchurl
-# Build-time dependencies
+  # Build-time dependencies
 , ncurses # >= 5
 , units
 }:

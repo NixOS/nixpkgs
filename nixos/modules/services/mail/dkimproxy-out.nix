@@ -72,22 +72,23 @@ in
   };
 
   ##### implementation
-  config = let
-    configfile = pkgs.writeText "dkimproxy_out.conf"
-      ''
-        listen ${cfg.listen}
-        relay ${cfg.relay}
+  config =
+    let
+      configfile = pkgs.writeText "dkimproxy_out.conf"
+        ''
+          listen ${cfg.listen}
+          relay ${cfg.relay}
 
-        domain ${concatStringsSep "," cfg.domains}
-        selector ${cfg.selector}
+          domain ${concatStringsSep "," cfg.domains}
+          selector ${cfg.selector}
 
-        signature dkim(c=relaxed/relaxed)
+          signature dkim(c=relaxed/relaxed)
 
-        keyfile ${privkey}
-      '';
-  in
+          keyfile ${privkey}
+        '';
+    in
     mkIf cfg.enable {
-      users.groups.dkimproxy-out = {};
+      users.groups.dkimproxy-out = { };
       users.users.dkimproxy-out = {
         description = "DKIMproxy_out daemon";
         group = "dkimproxy-out";

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, perl, zlib, bzip2, xz, zstd
-, makeWrapper, coreutils, autoreconfHook, pkg-config
+{ lib
+, stdenv
+, fetchurl
+, perl
+, zlib
+, bzip2
+, xz
+, zstd
+, makeWrapper
+, coreutils
+, autoreconfHook
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {

@@ -1,5 +1,17 @@
-{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl, runtimeShell
-, openssl, zlib, fetchFromGitHub, rustPlatform, libiconv }:
+{ stdenv
+, lib
+, runCommand
+, patchelf
+, makeWrapper
+, pkg-config
+, curl
+, runtimeShell
+, openssl
+, zlib
+, fetchFromGitHub
+, rustPlatform
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
@@ -25,18 +37,19 @@ rustPlatform.buildRustPackage rec {
   patches = lib.optionals stdenv.isLinux [
     # Run patchelf on the downloaded binaries.
     # This is necessary because Lean 4 is now dynamically linked.
-    (runCommand "0001-dynamically-patchelf-binaries.patch" {
+    (runCommand "0001-dynamically-patchelf-binaries.patch"
+      {
         CC = stdenv.cc;
         cc = "${stdenv.cc}/bin/cc";
         patchelf = patchelf;
         shell = runtimeShell;
       } ''
-     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-       --subst-var patchelf \
-       --subst-var dynamicLinker \
-       --subst-var cc \
-       --subst-var shell
+      export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+        --subst-var patchelf \
+        --subst-var dynamicLinker \
+        --subst-var cc \
+        --subst-var shell
     '')
   ];
 

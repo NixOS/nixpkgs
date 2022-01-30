@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -9,9 +9,15 @@ with pkgs.lib;
 let
 
   # The configuration to install.
-  makeConfig = { bootLoader, grubVersion, grubDevice, grubIdentifier, grubUseEfi
-               , extraConfig, forceGrubReinstallCount ? 0
-               }:
+  makeConfig =
+    { bootLoader
+    , grubVersion
+    , grubDevice
+    , grubIdentifier
+    , grubUseEfi
+    , extraConfig
+    , forceGrubReinstallCount ? 0
+    }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
 
@@ -63,14 +69,24 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
-                  , grubIdentifier, preBootCommands, postBootCommands, extraConfig
-                  , testSpecialisationConfig
-                  }:
-    let iface = if grubVersion == 1 then "ide" else "virtio";
-        isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
-        bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
-    in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then
+  testScriptFun =
+    { bootLoader
+    , createPartitions
+    , grubVersion
+    , grubDevice
+    , grubUseEfi
+    , grubIdentifier
+    , preBootCommands
+    , postBootCommands
+    , extraConfig
+    , testSpecialisationConfig
+    }:
+    let
+      iface = if grubVersion == 1 then "ide" else "virtio";
+      isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+      bios = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
+    in
+    if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then
       throw "Non-EFI boot methods are only supported on i686 / x86_64"
     else ''
       def assemble_qemu_flags():
@@ -261,11 +277,18 @@ let
 
 
   makeInstallerTest = name:
-    { createPartitions, preBootCommands ? "", postBootCommands ? "", extraConfig ? ""
-    , extraInstallerConfig ? {}
+    { createPartitions
+    , preBootCommands ? ""
+    , postBootCommands ? ""
+    , extraConfig ? ""
+    , extraInstallerConfig ? { }
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
-    , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
-    , enableOCR ? false, meta ? {}
+    , grubVersion ? 2
+    , grubDevice ? "/dev/vda"
+    , grubIdentifier ? "uuid"
+    , grubUseEfi ? false
+    , enableOCR ? false
+    , meta ? { }
     , testSpecialisationConfig ? false
     }:
     makeTest {
@@ -273,7 +296,7 @@ let
       name = "installer-" + name;
       meta = with pkgs.lib.maintainers; {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
-        maintainers = (meta.maintainers or []);
+        maintainers = (meta.maintainers or [ ]);
       };
       nodes = {
 
@@ -330,16 +353,19 @@ let
             curl
           ]
           ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
-          ++ optionals (bootLoader == "grub" && grubVersion == 2) (let
-            zfsSupport = lib.any (x: x == "zfs")
-              (extraInstallerConfig.boot.supportedFilesystems or []);
-          in [
-            (pkgs.grub2.override { inherit zfsSupport; })
-            (pkgs.grub2_efi.override { inherit zfsSupport; })
-          ]);
+          ++ optionals (bootLoader == "grub" && grubVersion == 2) (
+            let
+              zfsSupport = lib.any (x: x == "zfs")
+                (extraInstallerConfig.boot.supportedFilesystems or [ ]);
+            in
+            [
+              (pkgs.grub2.override { inherit zfsSupport; })
+              (pkgs.grub2_efi.override { inherit zfsSupport; })
+            ]
+          );
 
           nix.settings = {
-            substituters = mkForce [];
+            substituters = mkForce [ ];
             hashed-mirrors = null;
             connect-timeout = 1;
           };
@@ -349,41 +375,41 @@ let
 
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands postBootCommands
-                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
-                testSpecialisationConfig;
+          grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
+          testSpecialisationConfig;
       };
     };
 
-    makeLuksRootTest = name: luksFormatOpts: makeInstallerTest name {
-      createPartitions = ''
-        machine.succeed(
-            "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-            + " mkpart primary ext2 1M 100MB"  # /boot
-            + " mkpart primary linux-swap 100M 1024M"
-            + " mkpart primary 1024M -1s",  # LUKS
-            "udevadm settle",
-            "mkswap /dev/vda2 -L swap",
-            "swapon -L swap",
-            "modprobe dm_mod dm_crypt",
-            "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
-            "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
-            "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
-            "mount LABEL=nixos /mnt",
-            "mkfs.ext3 -L boot /dev/vda1",
-            "mkdir -p /mnt/boot",
-            "mount LABEL=boot /mnt/boot",
-        )
-      '';
-      extraConfig = ''
-        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-      '';
-      enableOCR = true;
-      preBootCommands = ''
-        machine.start()
-        machine.wait_for_text("Passphrase for")
-        machine.send_chars("supersecret\n")
-      '';
-    };
+  makeLuksRootTest = name: luksFormatOpts: makeInstallerTest name {
+    createPartitions = ''
+      machine.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          + " mkpart primary ext2 1M 100MB"  # /boot
+          + " mkpart primary linux-swap 100M 1024M"
+          + " mkpart primary 1024M -1s",  # LUKS
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "modprobe dm_mod dm_crypt",
+          "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
+          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
+          "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
+          "mount LABEL=nixos /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
+      )
+    '';
+    extraConfig = ''
+      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+    '';
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("Passphrase for")
+      machine.send_chars("supersecret\n")
+    '';
+  };
 
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
@@ -443,7 +469,8 @@ let
   };
 
 
-in {
+in
+{
 
   # !!! `parted mkpart' seems to silently create overlapping partitions.
 

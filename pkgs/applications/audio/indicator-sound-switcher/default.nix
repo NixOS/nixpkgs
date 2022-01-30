@@ -5,7 +5,9 @@
 , gettext
 , gtk3
 , gobject-introspection
-, intltool, wrapGAppsHook, glib
+, intltool
+, wrapGAppsHook
+, glib
 , librsvg
 , libayatana-appindicator-gtk3
 , libpulseaudio

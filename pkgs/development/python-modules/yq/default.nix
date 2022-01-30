@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-   pytestCheckHook
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [ "test/test.py" ];

@@ -1,9 +1,31 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook
-, libsndfile, libtool, makeWrapper, perlPackages
-, xorg, libcap, alsa-lib, glib, dconf
-, avahi, libjack2, libasyncns, lirc, dbus
-, sbc, bluez5, udev, openssl, fftwFloat
-, soxr, speexdsp, systemd, webrtc-audio-processing
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, autoreconfHook
+, libsndfile
+, libtool
+, makeWrapper
+, perlPackages
+, xorg
+, libcap
+, alsa-lib
+, glib
+, dconf
+, avahi
+, libjack2
+, libasyncns
+, lirc
+, dbus
+, sbc
+, bluez5
+, udev
+, openssl
+, fftwFloat
+, soxr
+, speexdsp
+, systemd
+, webrtc-audio-processing
 
 , x11Support ? false
 
@@ -26,7 +48,9 @@
 , # Whether to build only the library.
   libOnly ? false
 
-, AudioUnit, Cocoa, CoreServices
+, AudioUnit
+, Cocoa
+, CoreServices
 }:
 
 stdenv.mkDerivation rec {
@@ -59,8 +83,8 @@ stdenv.mkDerivation rec {
       ++ lib.optional airtunesSupport openssl
       ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
       ++ lib.optional remoteControlSupport lirc
-      ++ lib.optional zeroconfSupport  avahi
-  );
+      ++ lib.optional zeroconfSupport avahi
+    );
 
   prePatch = ''
     substituteInPlace bootstrap.sh \
@@ -83,11 +107,13 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags =
-    [ "--disable-solaris"
+    [
+      "--disable-solaris"
       "--disable-jack"
       "--disable-oss-output"
     ] ++ lib.optional (!ossWrapper) "--disable-oss-wrapper" ++
-    [ "--localstatedir=/var"
+    [
+      "--localstatedir=/var"
       "--sysconfdir=/etc"
       "--with-access-group=audio"
       "--with-bash-completion-dir=${placeholder "out"}/share/bash-completions/completions"
@@ -102,7 +128,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installFlags =
-    [ "sysconfdir=${placeholder "out"}/etc"
+    [
+      "sysconfdir=${placeholder "out"}/etc"
       "pulseconfdir=${placeholder "out"}/etc/pulse"
     ];
 
@@ -110,12 +137,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
     sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
   ''
-    + ''
+  + ''
     moveToOutput lib/cmake "$dev"
     rm -f $out/bin/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
   '';
 
-  preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
+  preFixup = lib.optionalString (stdenv.isLinux && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
@@ -127,10 +154,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";
-    homepage    = "http://www.pulseaudio.org/";
-    license     = lib.licenses.lgpl2Plus;
+    homepage = "http://www.pulseaudio.org/";
+    license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
 
     longDescription = ''
       PulseAudio is a sound server for POSIX and Win32 systems.  A

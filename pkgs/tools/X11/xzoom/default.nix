@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libX11, libXext, libXt, imake, gccmakedep}:
+{ lib, stdenv, fetchurl, libX11, libXext, libXt, imake, gccmakedep }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   };
   patches = [
     (fetchurl {
-       url = "http://http.debian.net/debian/pool/main/x/xzoom/xzoom_${version}-${patch}.diff.gz";
-       sha256 = "0zhc06whbvaz987bzzzi2bz6h9jp6rv812qs7b71drivvd820qbh";
+      url = "http://http.debian.net/debian/pool/main/x/xzoom/xzoom_${version}-${patch}.diff.gz";
+      sha256 = "0zhc06whbvaz987bzzzi2bz6h9jp6rv812qs7b71drivvd820qbh";
     })
   ];
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An X11 screen zoom tool";
-    license = lib.licenses.free ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.free;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
 }

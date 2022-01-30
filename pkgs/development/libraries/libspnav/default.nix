@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ./configure-socket-path.patch
   ];
 
-  configureFlags = [ "--disable-debug"];
+  configureFlags = [ "--disable-debug" ];
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preInstall = ''

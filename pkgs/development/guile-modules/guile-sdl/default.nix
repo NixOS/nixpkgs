@@ -30,15 +30,17 @@ stdenv.mkDerivation rec {
     SDL_ttf
   ];
 
-  makeFlags = let
-    sdl-env = buildEnv {
-      name = "sdl-env";
-      paths = buildInputs;
-    };
-  in [
-    "GUILE_AUTO_COMPILE=0"
-    "SDLMINUSI=-I${sdl-env}/include/SDL"
-  ];
+  makeFlags =
+    let
+      sdl-env = buildEnv {
+        name = "sdl-env";
+        paths = buildInputs;
+      };
+    in
+    [
+      "GUILE_AUTO_COMPILE=0"
+      "SDLMINUSI=-I${sdl-env}/include/SDL"
+    ];
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile-sdl/";

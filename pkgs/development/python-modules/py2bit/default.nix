@@ -19,7 +19,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/deeptools/py2bit";
     description = "File access to 2bit files";
     longDescription = ''
-        A python extension, written in C, for quick access to 2bit files. The extension uses lib2bit for file access.
+      A python extension, written in C, for quick access to 2bit files. The extension uses lib2bit for file access.
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ scalavision ];

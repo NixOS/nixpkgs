@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Scanner Access Now Easy";
-    homepage    = "http://www.sane-project.org/";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.linux;
+    homepage = "http://www.sane-project.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

@@ -1,5 +1,12 @@
-{ lib, runCommand, makeWrapper, lndir
-, dconf, hicolor-icon-theme, ibus, librsvg, plugins ? []
+{ lib
+, runCommand
+, makeWrapper
+, lndir
+, dconf
+, hicolor-icon-theme
+, ibus
+, librsvg
+, plugins ? [ ]
 }:
 
 let
@@ -61,4 +68,4 @@ let
     done
   '';
 in
-  runCommand name env command
+runCommand name env command

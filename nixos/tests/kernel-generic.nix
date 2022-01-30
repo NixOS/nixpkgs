@@ -6,23 +6,25 @@
 with pkgs.lib;
 
 let
-  testsForLinuxPackages = linuxPackages: (import ./make-test-python.nix ({ pkgs, ... }: {
-    name = "kernel-${linuxPackages.kernel.version}";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ nequissimus atemu ];
-    };
-
-    machine = { ... }:
-      {
-        boot.kernelPackages = linuxPackages;
+  testsForLinuxPackages = linuxPackages: (import ./make-test-python.nix
+    ({ pkgs, ... }: {
+      name = "kernel-${linuxPackages.kernel.version}";
+      meta = with pkgs.lib.maintainers; {
+        maintainers = [ nequissimus atemu ];
       };
 
-    testScript =
-      ''
-        assert "Linux" in machine.succeed("uname -s")
-        assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
-      '';
-  }) args);
+      machine = { ... }:
+        {
+          boot.kernelPackages = linuxPackages;
+        };
+
+      testScript =
+        ''
+          assert "Linux" in machine.succeed("uname -s")
+          assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
+        '';
+    })
+    args);
   kernels = pkgs.linuxKernel.vanillaPackages // {
     inherit (pkgs.linuxKernel.packages)
       linux_4_14_hardened
@@ -34,7 +36,8 @@ let
       linux_testing;
   };
 
-in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
+in
+mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
   inherit testsForLinuxPackages;
 
   testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);

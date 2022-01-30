@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , fetchpatch
 , autoconf
 , automake
@@ -23,7 +25,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { # included in > 2.3.3
+    (fetchpatch {
+      # included in > 2.3.3
       name = "restore-GD_FLIP.patch";
       url = "https://github.com/libgd/libgd/commit/f4bc1f5c26925548662946ed7cfa473c190a104a.diff";
       sha256 = "XRXR3NOkbEub3Nybaco2duQk0n8vxif5mTl2AUacn9w=";

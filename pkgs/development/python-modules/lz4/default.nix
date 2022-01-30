@@ -3,11 +3,11 @@
 , fetchFromGitHub
 , pythonOlder
 
-# native inputs
+  # native inputs
 , pkgconfig
 , setuptools-scm
 
-# tests
+  # tests
 , psutil
 , pytestCheckHook
 }:

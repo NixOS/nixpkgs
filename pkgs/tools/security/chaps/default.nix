@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitiles, fetchFromGitHub, fetchurl, trousers, leveldb, unzip
-, scons, pkg-config, glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam
+{ lib
+, stdenv
+, fetchFromGitiles
+, fetchFromGitHub
+, fetchurl
+, trousers
+, leveldb
+, unzip
+, scons
+, pkg-config
+, glib
+, dbus_cplusplus
+, dbus
+, protobuf
+, openssl
+, snappy
+, pam
 }:
 
 let
@@ -40,14 +55,14 @@ stdenv.mkDerivation rec {
     "-Wno-error=catch-value"
   ];
 
-  patches = [ ./fix_absolute_path.patch  ./fix_environment_variables.patch  ./fix_scons.patch  ./insert_prefetches.patch ];
+  patches = [ ./fix_absolute_path.patch ./fix_environment_variables.patch ./fix_scons.patch ./insert_prefetches.patch ];
 
   postPatch = ''
     substituteInPlace makefile --replace @@NIXOS_SRC_CHROMEBASE@@ ${src_chromebase}
     substituteInPlace makefile --replace @@NIXOS_SRC_GMOCK@@ ${src_gmock}
     substituteInPlace makefile --replace @@NIXOS_SRC_PLATFORM2@@ ${src_platform2}
     substituteInPlace makefile --replace @@NIXOS_LEVELDB@@ ${leveldb}
-    '';
+  '';
 
   nativeBuildInputs = [ unzip scons pkg-config ];
 
@@ -55,7 +70,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     make build
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
@@ -78,7 +93,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/usr/share/pam-configs/chaps
     mkdir -p $out/usr/share/man/man8
     cp ${pname}-${version}/man/* $out/usr/share/man/man8/.
-    '';
+  '';
 
   meta = with lib; {
     description = "PKCS #11 implementation based on trusted platform module (TPM)";
@@ -86,6 +101,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.tstrobel ];
     platforms = [ "x86_64-linux" ];
     license = licenses.bsd3;
-    broken = true;  # build failure withn openssl 1.1
+    broken = true; # build failure withn openssl 1.1
   };
 }

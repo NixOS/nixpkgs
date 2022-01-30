@@ -8,16 +8,23 @@
 , libusb1
 , zstd
 , libressl
-, enableSdl2 ? true, SDL2
-, enableQt ? true, qtbase, qtmultimedia
-, enableQtTranslation ? enableQt, qttools
+, enableSdl2 ? true
+, SDL2
+, enableQt ? true
+, qtbase
+, qtmultimedia
+, enableQtTranslation ? enableQt
+, qttools
 , enableWebService ? true
-, enableCubeb ? true, libpulseaudio
+, enableCubeb ? true
+, libpulseaudio
 , enableFfmpegAudioDecoder ? true
 , enableFfmpegVideoDumper ? true
 , ffmpeg
-, useDiscordRichPresence ? true, rapidjson
-, enableFdk ? false, fdk_aac
+, useDiscordRichPresence ? true
+, rapidjson
+, enableFdk ? false
+, fdk_aac
 }:
 assert lib.assertMsg (!enableFfmpegAudioDecoder || !enableFdk) "Can't enable both enableFfmpegAudioDecoder and enableFdk";
 
@@ -59,7 +66,7 @@ stdenv.mkDerivation {
   ++ lib.optionals enableQtTranslation [ "-DENABLE_QT_TRANSLATION=ON" ]
   ++ lib.optionals (!enableWebService) [ "-DENABLE_WEB_SERVICE=OFF" ]
   ++ lib.optionals (!enableCubeb) [ "-DENABLE_CUBEB=OFF" ]
-  ++ lib.optionals enableFfmpegAudioDecoder [ "-DENABLE_FFMPEG_AUDIO_DECODER=ON"]
+  ++ lib.optionals enableFfmpegAudioDecoder [ "-DENABLE_FFMPEG_AUDIO_DECODER=ON" ]
   ++ lib.optionals enableFfmpegVideoDumper [ "-DENABLE_FFMPEG_VIDEO_DUMPER=ON" ]
   ++ lib.optionals useDiscordRichPresence [ "-DUSE_DISCORD_PRESENCE=ON" ]
   ++ lib.optionals enableFdk [ "-DENABLE_FDK=ON" ];

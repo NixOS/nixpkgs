@@ -32,7 +32,7 @@
                     # are too many levels of indirection, the position gets lost at some point.
                     intermediatePos = builtins.unsafeGetAttrPos "modules" args;
                   in
-                    if intermediatePos == null then null else intermediatePos.file;
+                  if intermediatePos == null then null else intermediatePos.file;
 
                 # Add the invoking file as error message location for modules
                 # that don't have their own locations; presumably inline modules.

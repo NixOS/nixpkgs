@@ -32,7 +32,8 @@ let
     };
   };
 
-in {
+in
+{
   options = {
     services.rippleDataApi = {
       enable = mkEnableOption "ripple data api";
@@ -46,7 +47,7 @@ in {
       importMode = mkOption {
         description = "Ripple data api import mode.";
         default = "liveOnly";
-        type = types.enum ["live" "liveOnly"];
+        type = types.enum [ "live" "liveOnly" ];
       };
 
       minLedger = mkOption {
@@ -164,17 +165,19 @@ in {
         LOG_FILE = "/dev/null";
       };
 
-      serviceConfig = let
-        importMode =
-          if cfg.minLedger != null && cfg.maxLedger != null then
-            "${toString cfg.minLedger} ${toString cfg.maxLedger}"
-          else
-            cfg.importMode;
-      in {
-        ExecStart = "${pkgs.ripple-data-api}/bin/importer ${importMode} debug";
-        Restart = "always";
-        User = "ripple-data-api";
-      };
+      serviceConfig =
+        let
+          importMode =
+            if cfg.minLedger != null && cfg.maxLedger != null then
+              "${toString cfg.minLedger} ${toString cfg.maxLedger}"
+            else
+              cfg.importMode;
+        in
+        {
+          ExecStart = "${pkgs.ripple-data-api}/bin/importer ${importMode} debug";
+          Restart = "always";
+          User = "ripple-data-api";
+        };
 
       preStart = mkMerge [
         (mkIf (cfg.couchdb.create) ''
@@ -186,10 +189,11 @@ in {
     };
 
     users.users.ripple-data-api =
-      { description = "Ripple data api user";
+      {
+        description = "Ripple data api user";
         isSystemUser = true;
         group = "ripple-data-api";
       };
-    users.groups.ripple-data-api = {};
+    users.groups.ripple-data-api = { };
   };
 }

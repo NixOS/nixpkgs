@@ -1,5 +1,12 @@
-{ lib, stdenvNoCC, fetchFromGitHub, bash, makeWrapper, pciutils
-, x11Support ? true, ueberzug, fetchpatch
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, bash
+, makeWrapper
+, pciutils
+, x11Support ? true
+, ueberzug
+, fetchpatch
 }:
 
 stdenvNoCC.mkDerivation rec {

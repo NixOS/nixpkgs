@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   version = "2.9.4";
 
   src = fetchFromGitHub {
-    owner  = "ice-wm";
+    owner = "ice-wm";
     repo = pname;
     rev = version;
     hash = "sha256-ne2lqo9CAhGgC8dd9R03zhFXy9nPBQR0NcfAY0DeVj4=";

@@ -1,17 +1,17 @@
-{ mkDerivation,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  libarchive,
-  util-linux,
-  qtbase,
-  qtdeclarative,
-  qtsvg,
-  qttools,
-  qtquickcontrols2,
-  qtgraphicaleffects
+{ mkDerivation
+, stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, curl
+, libarchive
+, util-linux
+, qtbase
+, qtdeclarative
+, qtsvg
+, qttools
+, qtquickcontrols2
+, qtgraphicaleffects
 }:
 
 mkDerivation rec {

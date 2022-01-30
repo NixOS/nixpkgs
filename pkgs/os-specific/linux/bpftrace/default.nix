@@ -1,8 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, flex, bison
-, llvmPackages, elfutils
-, libelf, libbfd, libbpf, libopcodes, bcc
-, cereal, asciidoctor
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, flex
+, bison
+, llvmPackages
+, elfutils
+, libelf
+, libbfd
+, libbpf
+, libopcodes
+, bcc
+, cereal
+, asciidoctor
 , nixosTests
 }:
 
@@ -11,9 +22,9 @@ stdenv.mkDerivation rec {
   version = "0.14.1";
 
   src = fetchFromGitHub {
-    owner  = "iovisor";
-    repo   = "bpftrace";
-    rev    = "v${version}";
+    owner = "iovisor";
+    repo = "bpftrace";
+    rev = "v${version}";
     sha256 = "sha256-QDqHAEVM/XHCFMS0jMLdKJfDUOpkUqONOf8+Fbd5dCY=";
   };
 
@@ -23,10 +34,17 @@ stdenv.mkDerivation rec {
   patches = [ ./btf-dump-new-0.6.0.patch ];
 
   buildInputs = with llvmPackages;
-    [ llvm libclang
-      elfutils libelf bcc
-      libbpf libbfd libopcodes
-      cereal asciidoctor
+    [
+      llvm
+      libclang
+      elfutils
+      libelf
+      bcc
+      libbpf
+      libbfd
+      libopcodes
+      cereal
+      asciidoctor
     ];
 
   nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ];
@@ -37,7 +55,8 @@ stdenv.mkDerivation rec {
   #     https://github.com/iovisor/bpftrace/pull/363
   #
   cmakeFlags =
-    [ "-DBUILD_TESTING=FALSE"
+    [
+      "-DBUILD_TESTING=FALSE"
       "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
     ];
 
@@ -55,8 +74,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
-    homepage    = "https://github.com/iovisor/bpftrace";
-    license     = licenses.asl20;
+    homepage = "https://github.com/iovisor/bpftrace";
+    license = licenses.asl20;
     maintainers = with maintainers; [ rvl thoughtpolice martinetd ];
   };
 }

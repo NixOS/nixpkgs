@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
-, pythonAtLeast, fetchpatch
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, isPy3k
+, isPyPy
+, pythonAtLeast
+, fetchpatch
 , atomicwrites
 , attrs
 , hypothesis

@@ -3,7 +3,8 @@
 let
   pname = "national-park-typeface";
   version = "206464";
-in fetchzip {
+in
+fetchzip {
   name = "${pname}-${version}";
   url = "https://files.cargocollective.com/c${version}/NationalPark.zip";
 

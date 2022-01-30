@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, astring, result , version ? "1.0.0" }:
+{ lib, fetchurl, buildDunePackage, astring, result, version ? "1.0.0" }:
 
 let param = {
   "1.0.0" = {

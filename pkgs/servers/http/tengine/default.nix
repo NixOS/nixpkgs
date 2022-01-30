@@ -1,9 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
-, substituteAll, gd, geoip, gperftools, jemalloc, nixosTests
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, zlib
+, pcre
+, libxml2
+, libxslt
+, substituteAll
+, gd
+, geoip
+, gperftools
+, jemalloc
+, nixosTests
 , withDebug ? false
 , withMail ? false
 , withStream ? false
-, modules ? []
+, modules ? [ ]
 , ...
 }:
 
@@ -22,14 +34,15 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ openssl zlib pcre libxml2 libxslt gd geoip gperftools jemalloc ]
-    ++ concatMap (mod: mod.inputs or []) modules;
+    ++ concatMap (mod: mod.inputs or [ ]) modules;
 
-  patches = singleton (substituteAll {
-    src = ../nginx/nix-etag-1.15.4.patch;
-    preInstall = ''
-      export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
-    '';
-  }) ++ [
+  patches = singleton
+    (substituteAll {
+      src = ../nginx/nix-etag-1.15.4.patch;
+      preInstall = ''
+        export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
+      '';
+    }) ++ [
     ./check-resolv-conf.patch
     ../nginx/nix-skip-check-logs-path.patch
   ];
@@ -95,8 +108,8 @@ stdenv.mkDerivation rec {
     "--without-stream_upstream_random_module"
     "--without-stream_upstream_zone_module"
   ] ++ optional (gd != null) "--with-http_image_filter_module"
-    ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
-    ++ map (mod: "--add-module=${mod.src}") modules;
+  ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
+  ++ map (mod: "--add-module=${mod.src}") modules;
 
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
     + optionalString stdenv.isDarwin " -Wno-error=deprecated-declarations";
@@ -118,9 +131,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A web server based on Nginx and has many advanced features, originated by Taobao";
-    homepage    = "https://tengine.taobao.org";
-    license     = licenses.bsd2;
-    platforms   = platforms.all;
+    homepage = "https://tengine.taobao.org";
+    license = licenses.bsd2;
+    platforms = platforms.all;
     maintainers = with maintainers; [ izorkin ];
   };
 }

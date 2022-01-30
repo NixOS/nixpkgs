@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut, libX11, xorgproto
-, libXi, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libGLU
+, libGL
+, freeglut
+, libX11
+, xorgproto
+, libXi
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "box2d";
@@ -24,7 +34,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     cd Box2D
     substituteInPlace Box2D/Common/b2Settings.h \
-      --replace 'b2_maxPolygonVertices	8' 'b2_maxPolygonVertices	15'
+      --replace 'b2_maxPolygonVertices  8' 'b2_maxPolygonVertices  15'
   '';
 
   meta = with lib; {

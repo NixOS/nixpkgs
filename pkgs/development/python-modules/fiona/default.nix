@@ -1,7 +1,23 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
-, attrs, click, cligj, click-plugins, six, munch, enum34
-, pytestCheckHook, boto3, mock, giflib, pytz
-, gdal, certifi
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, pythonOlder
+, attrs
+, click
+, cligj
+, click-plugins
+, six
+, munch
+, enum34
+, pytestCheckHook
+, boto3
+, mock
+, giflib
+, pytz
+, gdal
+, certifi
 }:
 
 buildPythonPackage rec {
@@ -48,7 +64,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Some tests access network, others test packaging
-    "http" "https" "wheel"
+    "http"
+    "https"
+    "wheel"
     # Assert not true
     "test_no_append_driver_cannot_append"
   ] ++ lib.optionals stdenv.isAarch64 [

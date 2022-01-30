@@ -18,7 +18,7 @@ let
     };
 
     setupHook = writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+      addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
     '';
 
     dontStrip = true;
@@ -53,5 +53,6 @@ let
     passthru = {
       env = shell self;
     };
-};
-in lib.fix pkg
+  };
+in
+lib.fix pkg

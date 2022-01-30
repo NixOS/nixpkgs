@@ -1,14 +1,29 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkg-config, libdaemon, dbus, perlPackages
-, expat, gettext, intltool, glib, libiconv, writeShellScriptBin, libevent
+{ fetchurl
+, fetchpatch
+, lib
+, stdenv
+, pkg-config
+, libdaemon
+, dbus
+, perlPackages
+, expat
+, gettext
+, intltool
+, glib
+, libiconv
+, writeShellScriptBin
+, libevent
 , nixosTests
-, gtk3Support ? false, gtk3 ? null
+, gtk3Support ? false
+, gtk3 ? null
 , qt4 ? null
 , qt4Support ? false
 , qt5 ? null
 , qt5Support ? false
 , withLibdnssdCompat ? false
 , python ? null
-, withPython ? false }:
+, withPython ? false
+}:
 
 assert qt4Support -> qt4 != null;
 
@@ -47,15 +62,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config pkg-config-helper gettext intltool glib ];
 
   configureFlags =
-    [ "--disable-qt3" "--disable-gdbm" "--disable-mono"
-      "--disable-gtk" "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
+    [
+      "--disable-qt3"
+      "--disable-gdbm"
+      "--disable-mono"
+      "--disable-gtk"
+      "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
       (lib.enableFeature gtk3Support "gtk3")
       "--${if qt4Support then "enable" else "disable"}-qt4"
       "--${if qt5Support then "enable" else "disable"}-qt5"
       (lib.enableFeature withPython "python")
-      "--localstatedir=/var" "--with-distro=none"
+      "--localstatedir=/var"
+      "--with-distro=none"
       # A systemd unit is provided by the avahi-daemon NixOS module
-      "--with-systemdsystemunitdir=no" ]
+      "--with-systemdsystemunitdir=no"
+    ]
     ++ lib.optional withLibdnssdCompat "--enable-compat-libdns_sd"
     # autoipd won't build on darwin
     ++ lib.optional stdenv.isDarwin "--disable-autoipd";
@@ -85,9 +106,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "mDNS/DNS-SD implementation";
-    homepage    = "http://avahi.org";
-    license     = licenses.lgpl2Plus;
-    platforms   = platforms.unix;
+    homepage = "http://avahi.org";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lovek323 globin ];
 
     longDescription = ''

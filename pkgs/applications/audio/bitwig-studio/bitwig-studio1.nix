@@ -1,16 +1,37 @@
-{ stdenv, fetchurl, alsa-lib, bzip2, cairo, dpkg, freetype, gdk-pixbuf
-, wrapGAppsHook, gtk2, gtk3, harfbuzz, jdk, lib, xorg
-, libbsd, libjack2, libpng, ffmpeg
+{ stdenv
+, fetchurl
+, alsa-lib
+, bzip2
+, cairo
+, dpkg
+, freetype
+, gdk-pixbuf
+, wrapGAppsHook
+, gtk2
+, gtk3
+, harfbuzz
+, jdk
+, lib
+, xorg
+, libbsd
+, libjack2
+, libpng
+, ffmpeg
 , libxkbcommon
-, makeWrapper, pixman, autoPatchelfHook
-, xdg-utils, zenity, zlib }:
+, makeWrapper
+, pixman
+, autoPatchelfHook
+, xdg-utils
+, zenity
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
   version = "1.3.16";
 
   src = fetchurl {
-    url    = "https://downloads.bitwig.com/stable/${version}/bitwig-studio-${version}.deb";
+    url = "https://downloads.bitwig.com/stable/${version}/bitwig-studio-${version}.deb";
     sha256 = "0n0fxh9gnmilwskjcayvjsjfcs3fz9hn00wh7b3gg0cv3qqhich8";
   };
 
@@ -18,17 +39,40 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "mkdir root ; dpkg-deb -x $curSrc root";
 
-  dontBuild    = true;
+  dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
   buildInputs = with xorg; [
-    alsa-lib bzip2.out cairo freetype gdk-pixbuf gtk2 gtk3 harfbuzz libX11 libXau
-    libXcursor libXdmcp libXext libXfixes libXrender libbsd libjack2 libpng libxcb
-    libxkbfile pixman xcbutil xcbutilwm zlib
+    alsa-lib
+    bzip2.out
+    cairo
+    freetype
+    gdk-pixbuf
+    gtk2
+    gtk3
+    harfbuzz
+    libX11
+    libXau
+    libXcursor
+    libXdmcp
+    libXext
+    libXfixes
+    libXrender
+    libbsd
+    libjack2
+    libpng
+    libxcb
+    libxkbfile
+    pixman
+    xcbutil
+    xcbutilwm
+    zlib
   ];
 
   binPath = lib.makeBinPath [
-    xdg-utils zenity ffmpeg
+    xdg-utils
+    zenity
+    ffmpeg
   ];
 
   installPhase = ''

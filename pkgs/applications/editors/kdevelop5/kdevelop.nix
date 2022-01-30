@@ -1,11 +1,47 @@
-
-{ mkDerivation, lib, fetchurl, cmake, gettext, pkg-config, extra-cmake-modules
-, qtquickcontrols, qtwebkit, qttools, kde-cli-tools, qtbase
-, kconfig, kdeclarative, kdoctools, kiconthemes, ki18n, kitemmodels, kitemviews
-, kjobwidgets, kcmutils, kio, knewstuff, knotifyconfig, kparts, ktexteditor
-, threadweaver, kxmlgui, kwindowsystem, grantlee, kcrash, karchive, kguiaddons
-, plasma-framework, krunner, kdevelop-pg-qt, shared-mime-info, libkomparediff2
-, libksysguard, konsole, llvmPackages, makeWrapper, kpurpose, boost
+{ mkDerivation
+, lib
+, fetchurl
+, cmake
+, gettext
+, pkg-config
+, extra-cmake-modules
+, qtquickcontrols
+, qtwebkit
+, qttools
+, kde-cli-tools
+, qtbase
+, kconfig
+, kdeclarative
+, kdoctools
+, kiconthemes
+, ki18n
+, kitemmodels
+, kitemviews
+, kjobwidgets
+, kcmutils
+, kio
+, knewstuff
+, knotifyconfig
+, kparts
+, ktexteditor
+, threadweaver
+, kxmlgui
+, kwindowsystem
+, grantlee
+, kcrash
+, karchive
+, kguiaddons
+, plasma-framework
+, krunner
+, kdevelop-pg-qt
+, shared-mime-info
+, libkomparediff2
+, libksysguard
+, konsole
+, llvmPackages
+, makeWrapper
+, kpurpose
+, boost
 }:
 
 mkDerivation rec {
@@ -18,20 +54,51 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake gettext pkg-config extra-cmake-modules makeWrapper
+    cmake
+    gettext
+    pkg-config
+    extra-cmake-modules
+    makeWrapper
   ];
 
   buildInputs = [
     kdevelop-pg-qt
-    llvmPackages.llvm llvmPackages.libclang
+    llvmPackages.llvm
+    llvmPackages.libclang
   ];
 
   propagatedBuildInputs = [
-    qtquickcontrols qtwebkit boost libkomparediff2
-    kconfig kdeclarative kdoctools kiconthemes ki18n kitemmodels kitemviews
-    kjobwidgets kcmutils kio knewstuff knotifyconfig kparts ktexteditor
-    threadweaver kxmlgui kwindowsystem grantlee plasma-framework krunner
-    shared-mime-info libksysguard konsole kcrash karchive kguiaddons kpurpose
+    qtquickcontrols
+    qtwebkit
+    boost
+    libkomparediff2
+    kconfig
+    kdeclarative
+    kdoctools
+    kiconthemes
+    ki18n
+    kitemmodels
+    kitemviews
+    kjobwidgets
+    kcmutils
+    kio
+    knewstuff
+    knotifyconfig
+    kparts
+    ktexteditor
+    threadweaver
+    kxmlgui
+    kwindowsystem
+    grantlee
+    plasma-framework
+    krunner
+    shared-mime-info
+    libksysguard
+    konsole
+    kcrash
+    karchive
+    kguiaddons
+    kpurpose
   ];
 
   # https://cgit.kde.org/kdevelop.git/commit/?id=716372ae2e8dff9c51e94d33443536786e4bd85b

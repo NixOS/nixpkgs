@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
 , autoreconfHook
 
 , doCheck ? true # test suite depends on dejagnu which cannot be used during bootstrapping
@@ -19,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "081nx7wpzds168jbr59m34n6s3lyiq6r8zggvqxvlslsc4hvf3sl";
   };
 
-  patches = [];
+  patches = [ ];
 
   outputs = [ "out" "dev" "man" "info" ];
 

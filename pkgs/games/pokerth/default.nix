@@ -1,7 +1,24 @@
-{ lib, mkDerivation, fetchFromGitHub, runCommand, fetchpatch, patchutils, qmake, qtbase
-, SDL, SDL_mixer, boost, curl, gsasl, libgcrypt, libircclient, protobuf, sqlite
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, runCommand
+, fetchpatch
+, patchutils
+, qmake
+, qtbase
+, SDL
+, SDL_mixer
+, boost
+, curl
+, gsasl
+, libgcrypt
+, libircclient
+, protobuf
+, sqlite
 , wrapQtAppsHook
-, tinyxml2, target ? "client" }:
+, tinyxml2
+, target ? "client"
+}:
 
 let
   hiDPI = fetchpatch {
@@ -9,7 +26,7 @@ let
     sha256 = "192x3lqvd1fanasb95shdygn997qfrpk1k62k1f4j3s5chkwvjig";
   };
 
-  revertPatch = patch: runCommand "revert-${patch.name}" {} ''
+  revertPatch = patch: runCommand "revert-${patch.name}" { } ''
     ${patchutils}/bin/interdiff ${patch} /dev/null > $out
   '';
 in

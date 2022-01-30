@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-     patchShebangs src/configure
-     pushd src
+    patchShebangs src/configure
+    pushd src
   '';
 
   installPhase = ''

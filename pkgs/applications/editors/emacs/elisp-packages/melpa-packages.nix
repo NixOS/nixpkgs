@@ -1,51 +1,57 @@
 /*
 
-# Updating
+  # Updating
 
-To update the list of packages from MELPA,
+  To update the list of packages from MELPA,
 
-1. Run `./update-melpa`
-2. Check for evaluation errors:
-     env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
-     env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
-3. Run `git commit -m "melpa-packages $(date -Idate)" recipes-archive-melpa.json`
+  1. Run `./update-melpa`
+  2. Check for evaluation errors:
+  env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
+  env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
+  3. Run `git commit -m "melpa-packages $(date -Idate)" recipes-archive-melpa.json`
 
-## Update from overlay
+  ## Update from overlay
 
-Alternatively, run the following command:
+  Alternatively, run the following command:
 
-./update-from-overlay
+  ./update-from-overlay
 
-It will update both melpa and elpa packages using
-https://github.com/nix-community/emacs-overlay. It's almost instantenous and
-formats commits for you.
+  It will update both melpa and elpa packages using
+  https://github.com/nix-community/emacs-overlay. It's almost instantenous and
+  formats commits for you.
 
 */
 
 { lib, pkgs }: variant: self:
 let
   dontConfigure = pkg:
-    if pkg != null then pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        dontConfigure = true;
-      });
-    }) else null;
+    if pkg != null then
+      pkg.override
+        (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            dontConfigure = true;
+          });
+        }) else null;
 
   markBroken = pkg:
-    if pkg != null then pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        meta = (drv.meta or { }) // { broken = true; };
-      });
-    }) else null;
+    if pkg != null then
+      pkg.override
+        (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            meta = (drv.meta or { }) // { broken = true; };
+          });
+        }) else null;
 
   externalSrc = pkg: epkg:
-    if pkg != null then pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        inherit (epkg) src version;
+    if pkg != null then
+      pkg.override
+        (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            inherit (epkg) src version;
 
-        propagatedUserEnvPkgs = [ epkg ];
-      });
-    }) else null;
+            propagatedUserEnvPkgs = [ epkg ];
+          });
+        }) else null;
 
   buildWithGit = pkg: pkg.overrideAttrs (attrs: {
     nativeBuildInputs =
@@ -70,84 +76,85 @@ let
         )
       );
 
-      overrides = lib.optionalAttrs (variant == "stable") {
+      overrides = lib.optionalAttrs (variant == "stable")
+        {
 
-        # upstream issue: missing file header
-        abridge-diff =
-          if super.abridge-diff.version == "0.1"
-          then markBroken super.abridge-diff
-          else super.abridge-diff;
+          # upstream issue: missing file header
+          abridge-diff =
+            if super.abridge-diff.version == "0.1"
+            then markBroken super.abridge-diff
+            else super.abridge-diff;
 
-        # upstream issue: missing file header
-        bufshow = markBroken super.bufshow;
+          # upstream issue: missing file header
+          bufshow = markBroken super.bufshow;
 
-        # upstream issue: missing file header
-        speech-tagger = markBroken super.speech-tagger;
+          # upstream issue: missing file header
+          speech-tagger = markBroken super.speech-tagger;
 
-        # upstream issue: missing file header
-        textmate = markBroken super.textmate;
+          # upstream issue: missing file header
+          textmate = markBroken super.textmate;
 
-        # upstream issue: missing file header
-        window-numbering = markBroken super.window-numbering;
+          # upstream issue: missing file header
+          window-numbering = markBroken super.window-numbering;
 
-        # upstream issue: missing file header
-        voca-builder = markBroken super.voca-builder;
+          # upstream issue: missing file header
+          voca-builder = markBroken super.voca-builder;
 
-        # upstream issue: missing file header
-        initsplit = markBroken super.initsplit;
+          # upstream issue: missing file header
+          initsplit = markBroken super.initsplit;
 
-        # upstream issue: missing file header
-        jsfmt = markBroken super.jsfmt;
+          # upstream issue: missing file header
+          jsfmt = markBroken super.jsfmt;
 
-        # upstream issue: missing file header
-        maxframe = markBroken super.maxframe;
+          # upstream issue: missing file header
+          maxframe = markBroken super.maxframe;
 
-        # upstream issue: missing file header
-        connection = markBroken super.connection;
+          # upstream issue: missing file header
+          connection = markBroken super.connection;
 
-        # upstream issue: missing file header
-        dictionary = markBroken super.dictionary;
+          # upstream issue: missing file header
+          dictionary = markBroken super.dictionary;
 
-        # upstream issue: missing file header
-        fold-dwim =
-          if super.fold-dwim.version == "1.2"
-          then markBroken super.fold-dwim
-          else super.fold-dwim;
+          # upstream issue: missing file header
+          fold-dwim =
+            if super.fold-dwim.version == "1.2"
+            then markBroken super.fold-dwim
+            else super.fold-dwim;
 
-        # upstream issue: missing file header
-        gl-conf-mode =
-          if super.gl-conf-mode.version == "0.3"
-          then markBroken super.gl-conf-mode
-          else super.gl-conf-mode;
+          # upstream issue: missing file header
+          gl-conf-mode =
+            if super.gl-conf-mode.version == "0.3"
+            then markBroken super.gl-conf-mode
+            else super.gl-conf-mode;
 
-        # upstream issue: missing file header
-        ligo-mode =
-          if super.ligo-mode.version == "0.3"
-          then markBroken super.ligo-mode
-          else super.ligo-mode;
+          # upstream issue: missing file header
+          ligo-mode =
+            if super.ligo-mode.version == "0.3"
+            then markBroken super.ligo-mode
+            else super.ligo-mode;
 
-        # upstream issue: missing file header
-        link = markBroken super.link;
+          # upstream issue: missing file header
+          link = markBroken super.link;
 
-        # upstream issue: missing file header
-        org-dp =
-          if super.org-dp.version == "1"
-          then markBroken super.org-dp
-          else super.org-dp;
+          # upstream issue: missing file header
+          org-dp =
+            if super.org-dp.version == "1"
+            then markBroken super.org-dp
+            else super.org-dp;
 
-        # upstream issue: missing file header
-        revbufs =
-          if super.revbufs.version == "1.2"
-          then markBroken super.revbufs
-          else super.revbufs;
+          # upstream issue: missing file header
+          revbufs =
+            if super.revbufs.version == "1.2"
+            then markBroken super.revbufs
+            else super.revbufs;
 
-        # upstream issue: missing file header
-        elmine = markBroken super.elmine;
+          # upstream issue: missing file header
+          elmine = markBroken super.elmine;
 
-        # upstream issue: missing file header
-        ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
+          # upstream issue: missing file header
+          ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
 
-      } // {
+        } // {
         # Expects bash to be at /bin/bash
         ac-rtags = fix-rtags super.ac-rtags;
 
@@ -282,8 +289,8 @@ let
 
         ivy-rtags = fix-rtags super.ivy-rtags;
 
-        libgit = super.libgit.overrideAttrs(attrs: {
-          nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
+        libgit = super.libgit.overrideAttrs (attrs: {
+          nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.cmake ];
           buildInputs = attrs.buildInputs ++ [ pkgs.libgit2 ];
           dontUseCmakeBuildDir = true;
           postPatch = ''
@@ -548,7 +555,8 @@ let
         });
       };
 
-    in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
+    in
+    lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
 generateMelpa { }

@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-iNH/iBEOTkIhVlDGfI66ZYyVjyH6WrLbUSMyONPjUc4=";
 
   # Used for some of the tests.
-  checkInputs = [git];
+  checkInputs = [ git ];
 
   preBuild = lib.optionalString (!stdenv.isx86_64) ''
     # The test assumex amd64 assembly

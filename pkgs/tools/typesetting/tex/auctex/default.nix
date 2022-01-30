@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, emacs, texlive, ghostscript }:
 
-let auctex = stdenv.mkDerivation ( rec {
+let auctex = stdenv.mkDerivation (rec {
   # Make this a valid tex(live-new) package;
   # the pkgs attribute is provided with a hack below.
   pname = "auctex";

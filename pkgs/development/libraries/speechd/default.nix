@@ -13,19 +13,28 @@
 , glib
 , dotconf
 , libsndfile
-, withLibao ? true, libao
-, withPulse ? false, libpulseaudio
-, withAlsa ? false, alsa-lib
+, withLibao ? true
+, libao
+, withPulse ? false
+, libpulseaudio
+, withAlsa ? false
+, alsa-lib
 , withOss ? false
-, withFlite ? true, flite
-, withEspeak ? true, espeak, sonic, pcaudiolib
+, withFlite ? true
+, flite
+, withEspeak ? true
+, espeak
+, sonic
+, pcaudiolib
 , mbrola
-, withPico ? true, svox
+, withPico ? true
+, svox
 }:
 
 let
   inherit (python3Packages) python pyxdg wrapPython;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
   version = "0.11.1";
 
@@ -84,7 +93,7 @@ in stdenv.mkDerivation rec {
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ] ++ lib.optional withPulse [
-  "--with-pulse"
+    "--with-pulse"
   ] ++ lib.optional withAlsa [
     "--with-alsa"
   ] ++ lib.optional withLibao [

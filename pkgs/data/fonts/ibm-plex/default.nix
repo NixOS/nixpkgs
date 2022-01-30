@@ -3,7 +3,8 @@
 let
   version = "6.0.0";
 
-in fetchzip {
+in
+fetchzip {
   name = "ibm-plex-${version}";
 
   url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";

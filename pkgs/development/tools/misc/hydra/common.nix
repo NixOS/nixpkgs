@@ -1,142 +1,216 @@
-{ stdenv, nix, perlPackages, buildEnv
-, makeWrapper, autoconf, automake, libtool, unzip, pkg-config, sqlite, libpqxx_6
-, top-git, mercurial, darcs, subversion, breezy, openssl, bzip2, libxslt
-, perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
-, docbook_xsl, openssh, gnused, coreutils, findutils, gzip, xz, gnutar
-, rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook, src ? null, version ? null
-, migration ? false, patches ? []
-, tests ? {}, mdbook
+{ stdenv
+, nix
+, perlPackages
+, buildEnv
+, makeWrapper
+, autoconf
+, automake
+, libtool
+, unzip
+, pkg-config
+, sqlite
+, libpqxx_6
+, top-git
+, mercurial
+, darcs
+, subversion
+, breezy
+, openssl
+, bzip2
+, libxslt
+, perl
+, postgresql
+, nukeReferences
+, git
+, boehmgc
+, nlohmann_json
+, docbook_xsl
+, openssh
+, gnused
+, coreutils
+, findutils
+, gzip
+, xz
+, gnutar
+, rpm
+, dpkg
+, cdrkit
+, pixz
+, lib
+, boost
+, autoreconfHook
+, src ? null
+, version ? null
+, migration ? false
+, patches ? [ ]
+, tests ? { }
+, mdbook
 }:
 
 with stdenv;
 
 if lib.versions.major nix.version == "1"
-  then throw "This Hydra version doesn't support Nix 1.x"
+then throw "This Hydra version doesn't support Nix 1.x"
 else
 
-let
-  perlDeps = buildEnv {
-    name = "hydra-perl-deps";
-    paths = with perlPackages; lib.closePropagation
-      [ ModulePluggable
-        CatalystActionREST
-        CatalystAuthenticationStoreDBIxClass
-        CatalystDevel
-        CatalystDispatchTypeRegex
-        CatalystPluginAccessLog
-        CatalystPluginAuthorizationRoles
-        CatalystPluginCaptcha
-        CatalystPluginPrometheusTiny
-        CatalystPluginSessionStateCookie
-        CatalystPluginSessionStoreFastMmap
-        CatalystPluginSmartURI
-        CatalystPluginStackTrace
-        CatalystRuntime
-        CatalystTraitForRequestProxyBase
-        CatalystViewDownload
-        CatalystViewJSON
-        CatalystViewTT
-        CatalystXScriptServerStarman
-        CatalystXRoleApplicator
-        CryptPassphrase
-        CryptPassphraseArgon2
-        CryptRandPasswd
-        DBDPg
-        DBDSQLite
-        DataDump
-        DateTime
-        DigestSHA1
-        EmailMIME
-        EmailSender
-        FileSlurp
-        IOCompress
-        IPCRun
-        JSON
-        JSONAny
-        JSONXS
-        LWP
-        LWPProtocolHttps
-        NetAmazonS3
-        NetPrometheus
-        NetStatsd
-        PadWalker
-        PrometheusTinyShared
-        Readonly
-        SQLSplitStatement
-        SetScalar
-        Starman
-        StringCompareConstantTime
-        SysHostnameLong
-        TermSizeAny
-        TextDiff
-        TextTable
-        XMLSimple
-        YAML
+  let
+    perlDeps = buildEnv {
+      name = "hydra-perl-deps";
+      paths = with perlPackages; lib.closePropagation
+        [
+          ModulePluggable
+          CatalystActionREST
+          CatalystAuthenticationStoreDBIxClass
+          CatalystDevel
+          CatalystDispatchTypeRegex
+          CatalystPluginAccessLog
+          CatalystPluginAuthorizationRoles
+          CatalystPluginCaptcha
+          CatalystPluginPrometheusTiny
+          CatalystPluginSessionStateCookie
+          CatalystPluginSessionStoreFastMmap
+          CatalystPluginSmartURI
+          CatalystPluginStackTrace
+          CatalystRuntime
+          CatalystTraitForRequestProxyBase
+          CatalystViewDownload
+          CatalystViewJSON
+          CatalystViewTT
+          CatalystXScriptServerStarman
+          CatalystXRoleApplicator
+          CryptPassphrase
+          CryptPassphraseArgon2
+          CryptRandPasswd
+          DBDPg
+          DBDSQLite
+          DataDump
+          DateTime
+          DigestSHA1
+          EmailMIME
+          EmailSender
+          FileSlurp
+          IOCompress
+          IPCRun
+          JSON
+          JSONAny
+          JSONXS
+          LWP
+          LWPProtocolHttps
+          NetAmazonS3
+          NetPrometheus
+          NetStatsd
+          PadWalker
+          PrometheusTinyShared
+          Readonly
+          SQLSplitStatement
+          SetScalar
+          Starman
+          StringCompareConstantTime
+          SysHostnameLong
+          TermSizeAny
+          TextDiff
+          TextTable
+          XMLSimple
+          YAML
+          nix
+          nix.perl-bindings
+          git
+          boehmgc
+        ];
+    };
+  in
+  stdenv.mkDerivation rec {
+    pname = "hydra";
+
+    inherit stdenv src version patches;
+
+    buildInputs =
+      [
+        makeWrapper
+        autoconf
+        automake
+        libtool
+        unzip
+        nukeReferences
+        sqlite
+        libpqxx_6
+        top-git
+        mercurial /*darcs*/
+        subversion
+        breezy
+        openssl
+        bzip2
+        libxslt
+        perlDeps
+        perl
         nix
-        nix.perl-bindings
-        git
-        boehmgc
+        postgresql # for running the tests
+        nlohmann_json
+        boost
       ];
-  };
-in stdenv.mkDerivation rec {
-  pname = "hydra";
 
-  inherit stdenv src version patches;
+    hydraPath = lib.makeBinPath (
+      [
+        sqlite
+        subversion
+        openssh
+        nix
+        coreutils
+        findutils
+        pixz
+        gzip
+        bzip2
+        xz
+        gnutar
+        unzip
+        git
+        top-git
+        mercurial /*darcs*/
+        gnused
+        breezy
+      ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ]
+    );
 
-  buildInputs =
-    [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx_6
-      top-git mercurial /*darcs*/ subversion breezy openssl bzip2 libxslt
-      perlDeps perl nix
-      postgresql # for running the tests
-      nlohmann_json
-      boost
-    ];
+    nativeBuildInputs = [ autoreconfHook pkg-config mdbook ];
 
-  hydraPath = lib.makeBinPath (
-    [ sqlite subversion openssh nix coreutils findutils pixz
-      gzip bzip2 xz gnutar unzip git top-git mercurial /*darcs*/ gnused breezy
-    ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
+    configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config mdbook ];
+    NIX_CFLAGS_COMPILE = "-pthread";
 
-  configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
+    shellHook = ''
+      PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
+      PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
+    '';
 
-  NIX_CFLAGS_COMPILE = "-pthread";
+    enableParallelBuilding = true;
 
-  shellHook = ''
-    PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
-    PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
-  '';
+    preCheck = ''
+      patchShebangs .
+      export LOGNAME=''${LOGNAME:-foo}
+    '';
 
-  enableParallelBuilding = true;
+    postInstall = ''
+      mkdir -p $out/nix-support
+      for i in $out/bin/*; do
+          read -n 4 chars < $i
+          if [[ $chars =~ ELF ]]; then continue; fi
+          wrapProgram $i \
+              --prefix PERL5LIB ':' $out/libexec/hydra/lib:$PERL5LIB \
+              --prefix PATH ':' $out/bin:$hydraPath \
+              --set HYDRA_RELEASE ${version} \
+              --set HYDRA_HOME $out/libexec/hydra \
+              --set NIX_RELEASE ${nix.name or "unknown"}
+      done
+    ''; # */
 
-  preCheck = ''
-    patchShebangs .
-    export LOGNAME=''${LOGNAME:-foo}
-  '';
+    dontStrip = true;
 
-  postInstall = ''
-    mkdir -p $out/nix-support
-    for i in $out/bin/*; do
-        read -n 4 chars < $i
-        if [[ $chars =~ ELF ]]; then continue; fi
-        wrapProgram $i \
-            --prefix PERL5LIB ':' $out/libexec/hydra/lib:$PERL5LIB \
-            --prefix PATH ':' $out/bin:$hydraPath \
-            --set HYDRA_RELEASE ${version} \
-            --set HYDRA_HOME $out/libexec/hydra \
-            --set NIX_RELEASE ${nix.name or "unknown"}
-    done
-  ''; # */
+    passthru = { inherit perlDeps migration tests; };
 
-  dontStrip = true;
-
-  passthru = { inherit perlDeps migration tests; };
-
-  meta = with lib; {
-    description = "Nix-based continuous build system";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
-  };
-}
+    meta = with lib; {
+      description = "Nix-based continuous build system";
+      license = licenses.gpl3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ ma27 ];
+    };
+  }

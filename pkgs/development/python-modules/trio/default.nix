@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , attrs
 , sortedcontainers
 , async_generator
@@ -38,7 +41,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   propagatedBuildInputs = [

@@ -1,6 +1,16 @@
-{ lib, stdenv, pkg-config, autoreconfHook,
-glib, libzip, libserialport, check, libusb1, libftdi,
-systemd, alsa-lib, dsview
+{ lib
+, stdenv
+, pkg-config
+, autoreconfHook
+, glib
+, libzip
+, libserialport
+, check
+, libusb1
+, libftdi
+, systemd
+, alsa-lib
+, dsview
 }:
 
 stdenv.mkDerivation {
@@ -15,7 +25,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
-    glib libzip libserialport libusb1 libftdi systemd check alsa-lib
+    glib
+    libzip
+    libserialport
+    libusb1
+    libftdi
+    systemd
+    check
+    alsa-lib
   ];
 
   meta = with lib; {

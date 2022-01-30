@@ -2,9 +2,13 @@
 
 makeOverridable (
 
-  { pname, version, hash ? lib.fakeHash,
-
-  meta ? { }, passthru ? { }, preferLocalBuild ? true }:
+  { pname
+  , version
+  , hash ? lib.fakeHash
+  , meta ? { }
+  , passthru ? { }
+  , preferLocalBuild ? true
+  }:
   stdenv.mkDerivation {
     inherit version meta passthru preferLocalBuild;
     pname = pname + "-src";
@@ -17,4 +21,5 @@ makeOverridable (
     impureEnvVars = lib.fetchers.proxyImpureEnvVars
       ++ [ "GIT_PROXY_COMMAND" "SOCKS_SERVER" ];
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  })
+  }
+)

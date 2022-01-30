@@ -1,5 +1,11 @@
-{ lib, mkCoqDerivation, coq, mathcomp-ssreflect, mathcomp-algebra, paramcoq
-, version ? null }:
+{ lib
+, mkCoqDerivation
+, coq
+, mathcomp-ssreflect
+, mathcomp-algebra
+, paramcoq
+, version ? null
+}:
 with lib;
 
 mkCoqDerivation {
@@ -14,7 +20,8 @@ mkCoqDerivation {
   defaultVersion = with versions; switch coq.coq-version [
     { case = range "8.13" "8.14"; out = "0.5"; }
     { case = range "8.11" "8.12"; out = "0.4"; }
-  ] null;
+  ]
+    null;
 
   propagatedBuildInputs = [ mathcomp-ssreflect mathcomp-algebra paramcoq ];
 

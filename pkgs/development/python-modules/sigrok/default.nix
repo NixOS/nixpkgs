@@ -19,13 +19,13 @@ toPythonModule ((libsigrok.override {
 }).overrideAttrs (orig: {
   pname = "${python.libPrefix}-sigrok";
 
-  patches = orig.patches or [] ++ [
+  patches = orig.patches or [ ] ++ [
     # Makes libsigrok install the bindings into site-packages properly (like
     # we expect) instead of making a version-specific *.egg subdirectory.
     ./python-install.patch
   ];
 
-  nativeBuildInputs = orig.nativeBuildInputs or [] ++ [
+  nativeBuildInputs = orig.nativeBuildInputs or [ ] ++ [
     autoreconfHook
     setuptools
     swig
@@ -35,11 +35,11 @@ toPythonModule ((libsigrok.override {
     pythonCatchConflictsHook
   ];
 
-  buildInputs = orig.buildInputs or [] ++ [
+  buildInputs = orig.buildInputs or [ ] ++ [
     pygobject3 # makes headers available the configure script checks for
   ];
 
-  propagatedBuildInputs = orig.propagatedBuildInputs or [] ++ [
+  propagatedBuildInputs = orig.propagatedBuildInputs or [ ] ++ [
     pygobject3
     numpy
   ];

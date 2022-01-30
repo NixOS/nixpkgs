@@ -1,4 +1,6 @@
-{ lib, buildDunePackage, mirage-types
+{ lib
+, buildDunePackage
+, mirage-types
 }:
 
 buildDunePackage {

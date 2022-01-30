@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, eigen, zlib }:
 
 stdenv.mkDerivation rec {
-  pname   = "niftyseg";
+  pname = "niftyseg";
   version = "1.0";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "Software for medical image segmentation, bias field correction, and cortical thickness calculation";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.bsd3;
+    license = licenses.bsd3;
   };
 
 }

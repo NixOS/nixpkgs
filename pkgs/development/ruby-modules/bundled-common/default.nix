@@ -1,11 +1,16 @@
-{ stdenv, runCommand, ruby, lib, rsync
-, defaultGemConfig, buildRubyGem, buildEnv
+{ stdenv
+, runCommand
+, ruby
+, lib
+, rsync
+, defaultGemConfig
+, buildRubyGem
+, buildEnv
 , makeWrapper
 , bundler
 }@defs:
 
-{
-  name ? null
+{ name ? null
 , pname ? null
 , mainGemName ? null
 , gemdir ? null
@@ -16,11 +21,11 @@
 , copyGemFiles ? false # Copy gem files instead of symlinking
 , gemConfig ? defaultGemConfig
 , postBuild ? null
-, document ? []
-, meta ? {}
+, document ? [ ]
+, meta ? { }
 , groups ? null
 , ignoreCollisions ? false
-, buildInputs ? []
+, buildInputs ? [ ]
 , ...
 }@args:
 
@@ -31,7 +36,8 @@ with  import ./functions.nix { inherit lib gemConfig; };
 let
   gemFiles = bundlerFiles args;
 
-  importedGemset = if builtins.typeOf gemFiles.gemset != "set"
+  importedGemset =
+    if builtins.typeOf gemFiles.gemset != "set"
     then import gemFiles.gemset
     else gemFiles.gemset;
 
@@ -49,36 +55,38 @@ let
 
   gems = lib.flip lib.mapAttrs configuredGemset (name: attrs: buildGem name attrs);
 
-  name' = if name != null then
-    name
-  else
-    let
-      gem = gems.${pname};
-      version = gem.version;
-    in
+  name' =
+    if name != null then
+      name
+    else
+      let
+        gem = gems.${pname};
+        version = gem.version;
+      in
       "${pname}-${version}";
 
-  pname' = if pname != null then
-    pname
-  else
-    name;
+  pname' =
+    if pname != null then
+      pname
+    else
+      name;
 
-  copyIfBundledByPath = { bundledByPath ? false, ...}:
-  (if bundledByPath then
+  copyIfBundledByPath = { bundledByPath ? false, ... }:
+    (if bundledByPath then
       assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/" #*/
     else ""
-  );
+    );
 
   maybeCopyAll = pkgname: if pkgname == null then "" else
   let
     mainGem = gems.${pkgname} or (throw "bundlerEnv: gem ${pkgname} not found");
   in
-    copyIfBundledByPath mainGem;
+  copyIfBundledByPath mainGem;
 
   # We have to normalize the Gemfile.lock, otherwise bundler tries to be
   # helpful by doing so at run time, causing executables to immediately bail
   # out. Yes, I'm serious.
-  confFiles = runCommand "gemfile-and-lockfile" {} ''
+  confFiles = runCommand "gemfile-and-lockfile" { } ''
     mkdir -p $out
     ${maybeCopyAll mainGemName}
     cp ${gemFiles.gemfile} $out/Gemfile || ls -l $out/Gemfile
@@ -106,10 +114,11 @@ let
     paths = envPaths;
     pathsToLink = [ "/lib" ];
 
-    postBuild = genStubsScript (defs // args // {
-      inherit confFiles bundler groups;
-      binPaths = envPaths;
-    }) + lib.optionalString (postBuild != null) postBuild;
+    postBuild = genStubsScript
+      (defs // args // {
+        inherit confFiles bundler groups;
+        binPaths = envPaths;
+      }) + lib.optionalString (postBuild != null) postBuild;
 
     meta = { platforms = ruby.meta.platforms; } // meta;
 
@@ -133,15 +142,17 @@ let
         '';
       };
 
-      env = let
-        irbrc = builtins.toFile "irbrc" ''
-          if !(ENV["OLD_IRBRC"].nil? || ENV["OLD_IRBRC"].empty?)
-            require ENV["OLD_IRBRC"]
-          end
-          require 'rubygems'
-          require 'bundler/setup'
-        '';
-        in stdenv.mkDerivation {
+      env =
+        let
+          irbrc = builtins.toFile "irbrc" ''
+            if !(ENV["OLD_IRBRC"].nil? || ENV["OLD_IRBRC"].empty?)
+              require ENV["OLD_IRBRC"]
+            end
+            require 'rubygems'
+            require 'bundler/setup'
+          '';
+        in
+        stdenv.mkDerivation {
           name = "${pname'}-interactive-environment";
           nativeBuildInputs = [ wrappedRuby basicEnv ];
           shellHook = ''
@@ -170,4 +181,4 @@ let
     else
       buildEnv basicEnvArgs;
 in
-  basicEnv
+basicEnv

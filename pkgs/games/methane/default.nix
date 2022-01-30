@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     alsa-lib
   ];
 
-  installPhase  = ''
+  installPhase = ''
     runHook preInstall
     mkdir -p $out/bin/ $out/share/methane/ $out/share/docs/
     cp methane $out/bin

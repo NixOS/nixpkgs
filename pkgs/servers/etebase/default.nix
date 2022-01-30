@@ -7,7 +7,7 @@ let
     };
   };
 in
-  with py.pkgs;
+with py.pkgs;
 
 buildPythonPackage rec {
   pname = "etebase-server";

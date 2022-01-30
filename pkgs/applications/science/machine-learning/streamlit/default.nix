@@ -1,45 +1,46 @@
 {
   # Nix
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-
-  # Build inputs
-  altair,
-  astor,
-  base58,
-  blinker,
-  boto3,
-  botocore,
-  click,
-  cachetools,
-  enum-compat,
-  future,
-  GitPython,
-  jinja2,
-  pillow,
-  pyarrow,
-  pydeck,
-  pympler,
-  protobuf,
-  requests,
-  setuptools,
-  toml,
-  tornado,
-  tzlocal,
-  validators,
-  watchdog,
+  lib
+, buildPythonApplication
+, fetchPypi
+, # Build inputs
+  altair
+, astor
+, base58
+, blinker
+, boto3
+, botocore
+, click
+, cachetools
+, enum-compat
+, future
+, GitPython
+, jinja2
+, pillow
+, pyarrow
+, pydeck
+, pympler
+, protobuf
+, requests
+, setuptools
+, toml
+, tornado
+, tzlocal
+, validators
+, watchdog
+,
 }:
 
 let
-  click_7 = click.overridePythonAttrs(old: rec {
+  click_7 = click.overridePythonAttrs (old: rec {
     version = "7.1.2";
     src = old.src.override {
       inherit version;
       sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
     };
   });
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "streamlit";
   version = "1.2.0";
   format = "wheel"; # the only distribution available
@@ -77,7 +78,7 @@ in buildPythonApplication rec {
   ];
 
   postInstall = ''
-      rm $out/bin/streamlit.cmd # remove windows helper
+    rm $out/bin/streamlit.cmd # remove windows helper
   '';
 
   meta = with lib; {

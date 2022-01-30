@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication
-, colorama, decorator, psutil, pyte, six
-, go, mock, pytestCheckHook, pytest-mock
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonApplication
+, colorama
+, decorator
+, psutil
+, pyte
+, six
+, go
+, mock
+, pytestCheckHook
+, pytest-mock
 }:
 
 buildPythonApplication rec {

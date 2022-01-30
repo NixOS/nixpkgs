@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, makeWrapper
-, zlib, bzip2, libpng, lua5_1, toluapp
-, SDL, SDL_mixer, SDL_image, libGL
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, makeWrapper
+, zlib
+, bzip2
+, libpng
+, lua5_1
+, toluapp
+, SDL
+, SDL_mixer
+, SDL_image
+, libGL
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +28,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    zlib bzip2 libpng
-    lua5_1 toluapp
-    SDL.dev SDL_image SDL_mixer libGL
+    zlib
+    bzip2
+    libpng
+    lua5_1
+    toluapp
+    SDL.dev
+    SDL_image
+    SDL_mixer
+    libGL
   ];
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-Wno-error=format-overflow"

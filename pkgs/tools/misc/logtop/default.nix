@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     rev = "logtop-${version}";
     owner = "JulienPalard";
-    repo  ="logtop";
+    repo = "logtop";
     sha256 = "1f8vk9gybldxvc0kwz38jxmwvzwangsvlfslpsx8zf04nvbkqi12";
   };
 

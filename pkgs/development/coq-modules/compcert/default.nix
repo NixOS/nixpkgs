@@ -1,6 +1,15 @@
-{ lib, fetchzip, mkCoqDerivation, coq, flocq, compcert
-, ocamlPackages, fetchpatch, makeWrapper, coq2html
-, stdenv, tools ? stdenv.cc
+{ lib
+, fetchzip
+, mkCoqDerivation
+, coq
+, flocq
+, compcert
+, ocamlPackages
+, fetchpatch
+, makeWrapper
+, coq2html
+, stdenv
+, tools ? stdenv.cc
 , version ? null
 }:
 
@@ -14,10 +23,11 @@ let compcert = mkCoqDerivation rec {
   inherit version;
   releaseRev = v: "v${v}";
 
-  defaultVersion =  with versions; switch coq.version [
-      { case = range "8.8" "8.11"; out = "3.8"; }
-      { case = range "8.12" "8.14"; out = "3.10"; }
-    ] null;
+  defaultVersion = with versions; switch coq.version [
+    { case = range "8.8" "8.11"; out = "3.8"; }
+    { case = range "8.12" "8.14"; out = "3.10"; }
+  ]
+    null;
 
   release = {
     "3.8".sha256 = "1gzlyxvw64ca12qql3wnq3bidcx9ygsklv9grjma3ib4hvg7vnr7";
@@ -68,16 +78,17 @@ let compcert = mkCoqDerivation rec {
 
   meta = with lib; {
     description = "Formally verified C compiler";
-    homepage    = "https://compcert.org";
-    license     = licenses.inria-compcert;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
+    homepage = "https://compcert.org";
+    license = licenses.inria-compcert;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];
   };
 }; in
 compcert.overrideAttrs (o:
   {
     patches = with versions; switch [ coq.version o.version ] [
-      { cases = [ (range "8.12.2" "8.13.2") "3.8" ];
+      {
+        cases = [ (range "8.12.2" "8.13.2") "3.8" ];
         out = [
           # Support for Coq 8.12.2
           (fetchpatch {
@@ -106,7 +117,8 @@ compcert.overrideAttrs (o:
           })
         ];
       }
-      { cases = [ (isEq "8.14") "3.10" ];
+      {
+        cases = [ (isEq "8.14") "3.10" ];
         out = [
           # Support for Coq 8.14.1
           (fetchpatch {
@@ -115,6 +127,6 @@ compcert.overrideAttrs (o:
           })
         ];
       }
-    ] [];
+    ] [ ];
   }
 )

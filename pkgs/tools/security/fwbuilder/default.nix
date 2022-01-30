@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GUI Firewall Management Application";
-    homepage    = "https://github.com/fwbuilder/fwbuilder";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/fwbuilder/fwbuilder";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = [ maintainers.elatov ];
   };
 }

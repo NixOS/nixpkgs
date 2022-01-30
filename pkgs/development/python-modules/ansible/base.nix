@@ -16,7 +16,8 @@
 , pyyaml
 , requests
 , scp
-, windowsSupport ? false, pywinrm
+, windowsSupport ? false
+, pywinrm
 , xmltodict
 }:
 

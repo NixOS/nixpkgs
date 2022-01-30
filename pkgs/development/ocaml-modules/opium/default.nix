@@ -22,11 +22,17 @@ buildDunePackage {
   doCheck = true;
 
   buildInputs = [
-    ppx_sexp_conv ppx_fields_conv
+    ppx_sexp_conv
+    ppx_fields_conv
     alcotest
   ];
 
   propagatedBuildInputs = [
-    opium_kernel cmdliner cohttp-lwt-unix magic-mime logs stringext
+    opium_kernel
+    cmdliner
+    cohttp-lwt-unix
+    magic-mime
+    logs
+    stringext
   ];
 }

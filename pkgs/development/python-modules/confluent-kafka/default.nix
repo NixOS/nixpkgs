@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "b79e836c3554bc51c6837a8a0152f7521c9bf31342f5b8e21eba6b28044fa585";
   };
 
-  buildInputs = [ rdkafka requests ] ++ (if isPy3k then [ avro3k ] else [ enum34 avro futures ]) ;
+  buildInputs = [ rdkafka requests ] ++ (if isPy3k then [ avro3k ] else [ enum34 avro futures ]);
 
   # No tests in PyPi Tarball
   doCheck = false;

@@ -8,24 +8,30 @@ let
   defaultUser = "syncthing";
   defaultGroup = defaultUser;
 
-  devices = mapAttrsToList (name: device: {
-    deviceID = device.id;
-    inherit (device) name addresses introducer autoAcceptFolders;
-  }) cfg.devices;
+  devices = mapAttrsToList
+    (name: device: {
+      deviceID = device.id;
+      inherit (device) name addresses introducer autoAcceptFolders;
+    })
+    cfg.devices;
 
-  folders = mapAttrsToList ( _: folder: {
-    inherit (folder) path id label type;
-    devices = map (device: { deviceId = cfg.devices.${device}.id; }) folder.devices;
-    rescanIntervalS = folder.rescanInterval;
-    fsWatcherEnabled = folder.watch;
-    fsWatcherDelayS = folder.watchDelay;
-    ignorePerms = folder.ignorePerms;
-    ignoreDelete = folder.ignoreDelete;
-    versioning = folder.versioning;
-  }) (filterAttrs (
-    _: folder:
-    folder.enable
-  ) cfg.folders);
+  folders = mapAttrsToList
+    (_: folder: {
+      inherit (folder) path id label type;
+      devices = map (device: { deviceId = cfg.devices.${device}.id; }) folder.devices;
+      rescanIntervalS = folder.rescanInterval;
+      fsWatcherEnabled = folder.watch;
+      fsWatcherDelayS = folder.watchDelay;
+      ignorePerms = folder.ignorePerms;
+      ignoreDelete = folder.ignoreDelete;
+      versioning = folder.versioning;
+    })
+    (filterAttrs
+      (
+        _: folder:
+          folder.enable
+      )
+      cfg.folders);
 
   updateConfig = pkgs.writers.writeDash "merge-syncthing-config" ''
     set -efu
@@ -61,7 +67,8 @@ let
         curl -X POST ${cfg.guiAddress}/rest/system/restart
     fi
   '';
-in {
+in
+{
   ###### interface
   options = {
     services.syncthing = {
@@ -99,7 +106,7 @@ in {
       };
 
       devices = mkOption {
-        default = {};
+        default = { };
         description = ''
           Peers/devices which Syncthing should communicate with.
 
@@ -126,7 +133,7 @@ in {
 
             addresses = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               description = ''
                 The addresses used to connect to the device.
                 If this is left empty, dynamic configuration is attempted.
@@ -175,7 +182,7 @@ in {
       };
 
       folders = mkOption {
-        default = {};
+        default = { };
         description = ''
           Folders which should be shared by Syncthing.
 
@@ -230,7 +237,7 @@ in {
 
             devices = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               description = ''
                 The devices this folder should be shared with. Each device must
                 be defined in the <link linkend="opt-services.syncthing.devices">devices</link> option.
@@ -355,8 +362,8 @@ in {
       };
 
       extraOptions = mkOption {
-        type = types.addCheck (pkgs.formats.json {}).type isAttrs;
-        default = {};
+        type = types.addCheck (pkgs.formats.json { }).type isAttrs;
+        default = { };
         description = ''
           Extra configuration options for Syncthing.
           See <link xlink:href="https://docs.syncthing.net/users/config.html"/>.
@@ -424,39 +431,41 @@ in {
         '';
       };
 
-      configDir = let
-        cond = versionAtLeast config.system.stateVersion "19.03";
-      in mkOption {
-        type = types.path;
-        description = ''
-          The path where the settings and keys will exist.
-        '';
-        default = cfg.dataDir + optionalString cond "/.config/syncthing";
-        defaultText = literalDocBook ''
-          <variablelist>
-            <varlistentry>
-              <term><literal>stateVersion >= 19.03</literal></term>
-              <listitem>
-                <programlisting>
-                  config.${opt.dataDir} + "/.config/syncthing"
-                </programlisting>
-              </listitem>
-            </varlistentry>
-            <varlistentry>
-              <term>otherwise</term>
-              <listitem>
-                <programlisting>
-                  config.${opt.dataDir}
-                </programlisting>
-              </listitem>
-            </varlistentry>
-          </variablelist>
-        '';
-      };
+      configDir =
+        let
+          cond = versionAtLeast config.system.stateVersion "19.03";
+        in
+        mkOption {
+          type = types.path;
+          description = ''
+            The path where the settings and keys will exist.
+          '';
+          default = cfg.dataDir + optionalString cond "/.config/syncthing";
+          defaultText = literalDocBook ''
+            <variablelist>
+              <varlistentry>
+                <term><literal>stateVersion >= 19.03</literal></term>
+                <listitem>
+                  <programlisting>
+                    config.${opt.dataDir} + "/.config/syncthing"
+                  </programlisting>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>otherwise</term>
+                <listitem>
+                  <programlisting>
+                    config.${opt.dataDir}
+                  </programlisting>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          '';
+        };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "--reset-deltas" ];
         description = ''
           Extra flags passed to the syncthing command in the service definition.
@@ -494,9 +503,10 @@ in {
       This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
       It can be enabled on a per-folder basis through the web interface.
     '')
-  ] ++ map (o:
-    mkRenamedOptionModule [ "services" "syncthing" "declarative" o ] [ "services" "syncthing" o ]
-  ) [ "cert" "key" "devices" "folders" "overrideDevices" "overrideFolders" "extraOptions"];
+  ] ++ map
+    (o:
+      mkRenamedOptionModule [ "services" "syncthing" "declarative" o ] [ "services" "syncthing" o ]
+    ) [ "cert" "key" "devices" "folders" "overrideDevices" "overrideFolders" "extraOptions" ];
 
   ###### implementation
 
@@ -511,8 +521,9 @@ in {
 
     users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
       ${defaultUser} =
-        { group = cfg.group;
-          home  = cfg.dataDir;
+        {
+          group = cfg.group;
+          home = cfg.dataDir;
           createHome = true;
           uid = config.ids.uids.syncthing;
           description = "Syncthing daemon user";
@@ -537,7 +548,7 @@ in {
         serviceConfig = {
           Restart = "on-failure";
           SuccessExitStatus = "2 3 4";
-          RestartForceExitStatus="3 4";
+          RestartForceExitStatus = "3 4";
           User = cfg.user;
           Group = cfg.group;
           ExecStartPre = mkIf (cfg.cert != null || cfg.key != null)
@@ -571,27 +582,33 @@ in {
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           CapabilityBoundingSet = [
-            "~CAP_SYS_PTRACE" "~CAP_SYS_ADMIN"
-            "~CAP_SETGID" "~CAP_SETUID" "~CAP_SETPCAP"
-            "~CAP_SYS_TIME" "~CAP_KILL"
+            "~CAP_SYS_PTRACE"
+            "~CAP_SYS_ADMIN"
+            "~CAP_SETGID"
+            "~CAP_SETUID"
+            "~CAP_SETPCAP"
+            "~CAP_SYS_TIME"
+            "~CAP_KILL"
           ];
         };
       };
-      syncthing-init = mkIf (
-        cfg.devices != {} || cfg.folders != {} || cfg.extraOptions != {}
-      ) {
-        description = "Syncthing configuration updater";
-        requisite = [ "syncthing.service" ];
-        after = [ "syncthing.service" ];
-        wantedBy = [ "multi-user.target" ];
+      syncthing-init = mkIf
+        (
+          cfg.devices != { } || cfg.folders != { } || cfg.extraOptions != { }
+        )
+        {
+          description = "Syncthing configuration updater";
+          requisite = [ "syncthing.service" ];
+          after = [ "syncthing.service" ];
+          wantedBy = [ "multi-user.target" ];
 
-        serviceConfig = {
-          User = cfg.user;
-          RemainAfterExit = true;
-          Type = "oneshot";
-          ExecStart = updateConfig;
+          serviceConfig = {
+            User = cfg.user;
+            RemainAfterExit = true;
+            Type = "oneshot";
+            ExecStart = updateConfig;
+          };
         };
-      };
 
       syncthing-resume = {
         wantedBy = [ "suspend.target" ];

@@ -14,10 +14,12 @@ buildPythonPackage rec {
   format = "wheel";
 
   src =
-    let pyVerNoDot = lib.replaceStrings [ "." ] [ "" ] python.pythonVersion;
-        unsupported = throw "Unsupported system";
-        srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
-    in fetchurl srcs;
+    let
+      pyVerNoDot = lib.replaceStrings [ "." ] [ "" ] python.pythonVersion;
+      unsupported = throw "Unsupported system";
+      srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
+    in
+    fetchurl srcs;
 
   disabled = ! (pythonAtLeast "3.7" && pythonOlder "3.10");
 

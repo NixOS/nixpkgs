@@ -1,11 +1,15 @@
-{ stdenv, stdenvNoCC, lib, fetchzip, pkgs
+{ stdenv
+, stdenvNoCC
+, lib
+, fetchzip
+, pkgs
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 let
 
   prebuilt_crt = fetchzip {
-    url =  "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/98dce673ad97a9640c5d90bbb1c718e75c21e071/lib/gcc/aarch64-linux-android/4.9.x.tar.gz";
+    url = "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/98dce673ad97a9640c5d90bbb1c718e75c21e071/lib/gcc/aarch64-linux-android/4.9.x.tar.gz";
     sha256 = "sha256-LLD2OJi78sNN5NulOsJZl7Ei4F1EUYItGG6eUsKWULc=";
     stripRoot = false;
   };
@@ -23,7 +27,7 @@ let
   };
 
   ndk_support_headers = fetchzip {
-    url ="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/0e7f808fa26cce046f444c9616d9167dafbfb272/clang-r416183b/include/c++/v1/support.tar.gz";
+    url = "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/0e7f808fa26cce046f444c9616d9167dafbfb272/clang-r416183b/include/c++/v1/support.tar.gz";
     sha256 = "sha256-NBv7Pk1CEaz8ns9moleEERr3x/rFmVmG33LgFSeO6fY=";
     stripRoot = false;
   };
@@ -64,7 +68,7 @@ stdenvNoCC.mkDerivation rec {
       "!defined(BIONIC_IOCTL_NO_SIGNEDNESS_OVERLOAD)" "0"
   '';
 
-  installPhase= ''
+  installPhase = ''
     # copy the bionic headers
     mkdir -p $out/include/support $out/include/android
     cp -vr libc/include/* $out/include
@@ -80,8 +84,8 @@ stdenvNoCC.mkDerivation rec {
     sed -i 's,union semun {,union Xsemun {,' $out/include/linux/sem.h
     sed -i 's,struct __kernel_sockaddr_storage,#define sockaddr_storage __kernel_sockaddr_storage\nstruct __kernel_sockaddr_storage,' $out/include/linux/socket.h
     sed -i 's,#ifndef __UAPI_DEF_.*$,#if 1,' $out/include/linux/libc-compat.h
-    substituteInPlace $out/include/linux/in.h --replace "__be32		imr_" "struct in_addr		imr_"
-    substituteInPlace $out/include/linux/in.h --replace "__be32		imsf_" "struct in_addr		imsf_"
+    substituteInPlace $out/include/linux/in.h --replace "__be32    imr_" "struct in_addr    imr_"
+    substituteInPlace $out/include/linux/in.h --replace "__be32    imsf_" "struct in_addr    imsf_"
     substituteInPlace $out/include/linux/sysctl.h --replace "__unused" "_unused"
 
     # what could possibly live in <linux/compiler.h>
@@ -114,9 +118,9 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "The Android libc implementation";
-    homepage    = "https://android.googlesource.com/platform/bionic/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://android.googlesource.com/platform/bionic/";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ s1341 ];
   };
 }

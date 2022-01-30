@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc
-, systemd, pango, cairo, gdk-pixbuf
-, wayland, wayland-protocols
-, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, systemd
+, pango
+, cairo
+, gdk-pixbuf
+, wayland
+, wayland-protocols
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "mako";

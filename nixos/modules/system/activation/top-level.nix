@@ -22,7 +22,8 @@ let
         "${config.system.boot.loader.kernelFile}";
       initrdPath = "${config.system.build.initialRamdisk}/" +
         "${config.system.boot.loader.initrdFile}";
-    in ''
+    in
+    ''
       mkdir $out
 
       # Containers don't have their own kernel or initrd.  They boot
@@ -124,22 +125,26 @@ let
 
   failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
 
-  baseSystemAssertWarn = if failedAssertions != []
+  baseSystemAssertWarn =
+    if failedAssertions != [ ]
     then throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
     else showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
-  system = foldr ({ oldDependency, newDependency }: drv:
+  system = foldr
+    ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
-    ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
+    )
+    baseSystemAssertWarn
+    config.system.replaceRuntimeDependencies;
 
   /* Workaround until https://github.com/NixOS/nixpkgs/pull/156533
-     Call can be replaced by argument when that's merged.
+    Call can be replaced by argument when that's merged.
   */
   tmpFixupSubmoduleBoundary = subopts:
     lib.mkOption {
       type = lib.types.submoduleWith {
-        modules = [ { options = subopts; } ];
+        modules = [{ options = subopts; }];
       };
     };
 
@@ -155,7 +160,7 @@ in
   options = {
 
     specialisation = mkOption {
-      default = {};
+      default = { };
       example = lib.literalExpression "{ fewJobsManyCores.configuration = { nix.settings = { core = 0; max-jobs = 1; }; }";
       description = ''
         Additional configurations to build. If
@@ -170,11 +175,14 @@ in
         </screen>
       '';
       type = types.attrsOf (types.submodule (
-        local@{ ... }: let
-          extend = if local.config.inheritParentConfig
+        local@{ ... }:
+        let
+          extend =
+            if local.config.inheritParentConfig
             then extendModules
             else noUserModules.extendModules;
-        in {
+        in
+        {
           options.inheritParentConfig = mkOption {
             type = types.bool;
             default = true;
@@ -182,7 +190,7 @@ in
           };
 
           options.configuration = mkOption {
-            default = {};
+            default = { };
             description = ''
               Arbitrary NixOS configuration.
 
@@ -193,7 +201,8 @@ in
             visible = "shallow";
             inherit (extend { modules = [ ./no-clone.nix ]; }) type;
           };
-        })
+        }
+      )
       );
     };
 
@@ -236,13 +245,15 @@ in
 
           See <literal>nixos/modules/system/activation/switch-to-configuration.pl</literal>.
         '';
-        type = types.unique {
-          message = ''
-            Only one bootloader can be enabled at a time. This requirement has not
-            been checked until NixOS 22.05. Earlier versions defaulted to the last
-            definition. Change your configuration to enable only one bootloader.
-          '';
-        } (types.either types.str types.package);
+        type = types.unique
+          {
+            message = ''
+              Only one bootloader can be enabled at a time. This requirement has not
+              been checked until NixOS 22.05. Earlier versions defaulted to the last
+              definition. Change your configuration to enable only one bootloader.
+            '';
+          }
+          (types.either types.str types.package);
       };
 
       toplevel = mkOption {
@@ -280,7 +291,7 @@ in
 
     system.extraDependencies = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = ''
         A list of packages that should be included in the system
         closure but not otherwise made available to users. This is
@@ -289,7 +300,7 @@ in
     };
 
     system.replaceRuntimeDependencies = mkOption {
-      default = [];
+      default = [ ];
       example = lib.literalExpression "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
       type = types.listOf (types.submodule (
         { ... }: {
@@ -302,7 +313,8 @@ in
             type = types.package;
             description = "The replacement package.";
           };
-        })
+        }
+      )
       );
       apply = map ({ original, replacement, ... }: {
         oldDependency = original;

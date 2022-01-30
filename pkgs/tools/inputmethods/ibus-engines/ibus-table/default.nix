@@ -1,16 +1,25 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, docbook2x, pkg-config
-, gtk3, dconf, gobject-introspection
-, ibus, python3, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, docbook2x
+, pkg-config
+, gtk3
+, dconf
+, gobject-introspection
+, ibus
+, python3
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "ibus-table";
   version = "1.14.1";
 
   src = fetchFromGitHub {
-    owner  = "kaio";
-    repo   = "ibus-table";
-    rev    = version;
+    owner = "kaio";
+    repo = "ibus-table";
+    rev = version;
     sha256 = "sha256-PO5OOIOyolx6PRQ36u0s+oz3elgZzGBZGgOLTxGWbGo=";
   };
 
@@ -58,10 +67,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     isIbusEngine = true;
-    description  = "An IBus framework for table-based input methods";
-    homepage     = "https://github.com/kaio/ibus-table/wiki";
-    license      = licenses.lgpl21;
-    platforms    = platforms.linux;
-    maintainers  = with maintainers; [ mudri ];
+    description = "An IBus framework for table-based input methods";
+    homepage = "https://github.com/kaio/ibus-table/wiki";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mudri ];
   };
 }

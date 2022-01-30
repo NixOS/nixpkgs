@@ -10,9 +10,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib menhir
-    ocaml_pcre parmap stdcompat
-    python3 ncurses pkg-config
+    ocaml
+    findlib
+    menhir
+    ocaml_pcre
+    parmap
+    stdcompat
+    python3
+    ncurses
+    pkg-config
   ];
 
   doCheck = false;

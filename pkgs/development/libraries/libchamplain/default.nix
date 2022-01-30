@@ -1,5 +1,22 @@
-{ fetchurl, lib, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkg-config, glib, gtk3, cairo, sqlite, gnome
-, clutter-gtk, libsoup, gobject-introspection /*, libmemphis */ }:
+{ fetchurl
+, lib
+, stdenv
+, meson
+, ninja
+, vala
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, pkg-config
+, glib
+, gtk3
+, cairo
+, sqlite
+, gnome
+, clutter-gtk
+, libsoup
+, gobject-introspection /*, libmemphis */
+}:
 
 stdenv.mkDerivation rec {
   pname = "libchamplain";
@@ -44,7 +61,7 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-     maintainers = teams.gnome.members;
-     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    maintainers = teams.gnome.members;
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }

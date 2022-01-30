@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub, ppxlib, ounit
-, ppx_deriving, yojson
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, ppxlib
+, ounit
+, ppx_deriving
+, yojson
 }:
 
 buildDunePackage rec {

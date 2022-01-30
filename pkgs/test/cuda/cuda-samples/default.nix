@@ -1,6 +1,12 @@
 { callPackage
-, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2
-, cudatoolkit_11_0, cudatoolkit_11_1, cudatoolkit_11_2, cudatoolkit_11_3, cudatoolkit_11_4
+, cudatoolkit_10_0
+, cudatoolkit_10_1
+, cudatoolkit_10_2
+, cudatoolkit_11_0
+, cudatoolkit_11_1
+, cudatoolkit_11_2
+, cudatoolkit_11_3
+, cudatoolkit_11_4
 }:
 
 rec {

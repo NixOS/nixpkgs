@@ -14,7 +14,9 @@ buildGo117Module rec {
   vendorSha256 = "0hynxj3q4aa1gx3w4ak56z6j5iplxi2hzqzsjkgz20fy34nfd41s";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/rikatz/kubepug/version.Version=${src.rev}"
+    "-s"
+    "-w"
+    "-X=github.com/rikatz/kubepug/version.Version=${src.rev}"
   ];
 
   patches = [

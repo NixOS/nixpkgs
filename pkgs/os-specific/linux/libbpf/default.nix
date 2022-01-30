@@ -21,10 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/MLPflnfooe7Wjy8M3CTowAi5oYpscruSkDsaVzhmYQ=";
   };
 
-  patches = [(fetchpatch {
-    url = "https://github.com/libbpf/libbpf/pull/41.diff";
-    sha256 = "sha256-pg5WARqh6z0nkTHMBhftxwdV2SyswC2lfaCXCpez0VA=";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/libbpf/libbpf/pull/41.diff";
+      sha256 = "sha256-pg5WARqh6z0nkTHMBhftxwdV2SyswC2lfaCXCpez0VA=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libelf zlib ];

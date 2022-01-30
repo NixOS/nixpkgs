@@ -9,17 +9,25 @@
 #    https://github.com/rust-lang/rust/blob/<version-tag>/.gitmodules
 # 3. Firefox and Thunderbird should still build on x86_64-linux.
 
-{ stdenv, lib
+{ stdenv
+, lib
 , buildPackages
-, newScope, callPackage
-, CoreFoundation, Security, SystemConfiguration
-, pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
+, newScope
+, callPackage
+, CoreFoundation
+, Security
+, SystemConfiguration
+, pkgsBuildTarget
+, pkgsBuildBuild
+, pkgsBuildHost
 , makeRustPlatform
 , llvmPackages_11
-, llvmPackages_13, llvm_13
+, llvmPackages_13
+, llvm_13
 } @ args:
 
-import ./default.nix {
+import ./default.nix
+{
   rustcVersion = "1.57.0";
   rustcSha256 = "06jw8ka2p3kls8p0gd4p0chhhb1ia1mlvj96zn78n7qvp71zjiim";
 
@@ -60,4 +68,4 @@ import ./default.nix {
   ];
 }
 
-(builtins.removeAttrs args [ "fetchpatch" "pkgsBuildHost" "llvmPackages_11" "llvmPackages_13" "llvm_13"])
+  (builtins.removeAttrs args [ "fetchpatch" "pkgsBuildHost" "llvmPackages_11" "llvmPackages_13" "llvm_13" ])

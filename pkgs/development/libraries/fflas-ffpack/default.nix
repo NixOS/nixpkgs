@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, givaro, pkg-config, blas, lapack
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, givaro
+, pkg-config
+, blas
+, lapack
 , gmpxx
 }:
 

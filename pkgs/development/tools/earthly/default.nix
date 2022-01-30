@@ -14,7 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-0wyefhY/KR79K9DDI4/8EaA/DFI1rf6wxsBIAZo+rUI=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.Version=v${version}"
     "-X main.DefaultBuildkitdImage=earthly/buildkitd:v${version}"
   ];

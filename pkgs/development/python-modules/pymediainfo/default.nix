@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
 , libmediainfo
 , setuptools-scm
-, pytest, glibcLocales }:
+, pytest
+, glibcLocales
+}:
 
 buildPythonPackage rec {
   pname = "pymediainfo";

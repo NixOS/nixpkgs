@@ -1,4 +1,9 @@
-{ lib, stdenv, llvm_meta, version, src, cmake
+{ lib
+, stdenv
+, llvm_meta
+, version
+, src
+, cmake
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 

@@ -1,8 +1,17 @@
-{ lib, stdenv, fetchurl, openssl, pkg-config, libnl
-, nixosTests, wpa_supplicant_gui
-, withDbus ? true, dbus
-, withReadline ? true, readline
-, withPcsclite ? true, pcsclite
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, pkg-config
+, libnl
+, nixosTests
+, wpa_supplicant_gui
+, withDbus ? true
+, dbus
+, withReadline ? true
+, readline
+, withPcsclite ? true
+, pcsclite
 , readOnlyModeSSIDs ? false
 }:
 

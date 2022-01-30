@@ -53,7 +53,8 @@ let generic = { version, sha256 }:
     };
   };
 
-in rec {
+in
+rec {
   alloy5 = generic rec {
     version = "5.1.0";
     sha256 = "02k9khs4k5nc86x9pp5k3vcb0kiwdgcin46mlap4fycnr673xd53";

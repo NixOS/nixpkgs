@@ -56,8 +56,8 @@ let
         };
 
         cmd = mkOption {
-          type =  with types; listOf str;
-          default = [];
+          type = with types; listOf str;
+          default = [ ];
           description = "Commandline arguments to pass to the image's entrypoint.";
           example = literalExpression ''
             ["--port=9000"]
@@ -73,26 +73,26 @@ let
 
         environment = mkOption {
           type = with types; attrsOf str;
-          default = {};
+          default = { };
           description = "Environment variables to set for this container.";
           example = literalExpression ''
             {
               DATABASE_HOST = "db.example.com";
               DATABASE_PORT = "3306";
             }
-        '';
+          '';
         };
 
         environmentFiles = mkOption {
           type = with types; listOf path;
-          default = [];
+          default = [ ];
           description = "Environment files for this container.";
           example = literalExpression ''
             [
               /path/to/.env
               /path/to/.env.secret
             ]
-        '';
+          '';
         };
 
         log-driver = mkOption {
@@ -115,7 +115,7 @@ let
 
         ports = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = ''
             Network ports to publish from the container to the outer host.
 
@@ -179,7 +179,7 @@ let
 
         volumes = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = ''
             List of volumes to attach to this container.
 
@@ -208,7 +208,7 @@ let
 
         dependsOn = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = ''
             Define which other containers this one depends on. They will be added to both After and Requires for the unit.
 
@@ -226,7 +226,7 @@ let
 
         extraOptions = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = "Extra options for <command>${defaultBackend} run</command>.";
           example = literalExpression ''
             ["--network=host"]
@@ -246,40 +246,42 @@ let
 
   isValidLogin = login: login.username != null && login.passwordFile != null && login.registry != null;
 
-  mkService = name: container: let
-    dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
-  in {
-    wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
-    after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ] ++ dependsOn;
-    requires = dependsOn;
-    environment = proxy_env;
+  mkService = name: container:
+    let
+      dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
+    in
+    {
+      wantedBy = [ ] ++ optional (container.autoStart) "multi-user.target";
+      after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ] ++ dependsOn;
+      requires = dependsOn;
+      environment = proxy_env;
 
-    path =
-      if cfg.backend == "docker" then [ config.virtualisation.docker.package ]
-      else if cfg.backend == "podman" then [ config.virtualisation.podman.package ]
-      else throw "Unhandled backend: ${cfg.backend}";
+      path =
+        if cfg.backend == "docker" then [ config.virtualisation.docker.package ]
+        else if cfg.backend == "podman" then [ config.virtualisation.podman.package ]
+        else throw "Unhandled backend: ${cfg.backend}";
 
-    preStart = ''
-      ${cfg.backend} rm -f ${name} || true
-      ${optionalString (isValidLogin container.login) ''
-        cat ${container.login.passwordFile} | \
-          ${cfg.backend} login \
-            ${container.login.registry} \
-            --username ${container.login.username} \
-            --password-stdin
-        ''}
-      ${optionalString (container.imageFile != null) ''
-        ${cfg.backend} load -i ${container.imageFile}
-        ''}
+      preStart = ''
+        ${cfg.backend} rm -f ${name} || true
+        ${optionalString (isValidLogin container.login) ''
+          cat ${container.login.passwordFile} | \
+            ${cfg.backend} login \
+              ${container.login.registry} \
+              --username ${container.login.username} \
+              --password-stdin
+          ''}
+        ${optionalString (container.imageFile != null) ''
+          ${cfg.backend} load -i ${container.imageFile}
+          ''}
       '';
 
-    script = concatStringsSep " \\\n  " ([
-      "exec ${cfg.backend} run"
-      "--rm"
-      "--name=${escapeShellArg name}"
-      "--log-driver=${container.log-driver}"
-    ] ++ optional (container.entrypoint != null)
-      "--entrypoint=${escapeShellArg container.entrypoint}"
+      script = concatStringsSep " \\\n  " ([
+        "exec ${cfg.backend} run"
+        "--rm"
+        "--name=${escapeShellArg name}"
+        "--log-driver=${container.log-driver}"
+      ] ++ optional (container.entrypoint != null)
+        "--entrypoint=${escapeShellArg container.entrypoint}"
       ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
       ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
       ++ map (p: "-p ${escapeShellArg p}") container.ports
@@ -287,48 +289,52 @@ let
       ++ map (v: "-v ${escapeShellArg v}") container.volumes
       ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
       ++ map escapeShellArg container.extraOptions
-      ++ [container.image]
+      ++ [ container.image ]
       ++ map escapeShellArg container.cmd
-    );
+      );
 
-    preStop = "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}";
-    postStop = "${cfg.backend} rm -f ${name} || true";
+      preStop = "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}";
+      postStop = "${cfg.backend} rm -f ${name} || true";
 
-    serviceConfig = {
-      ### There is no generalized way of supporting `reload` for docker
-      ### containers. Some containers may respond well to SIGHUP sent to their
-      ### init process, but it is not guaranteed; some apps have other reload
-      ### mechanisms, some don't have a reload signal at all, and some docker
-      ### images just have broken signal handling.  The best compromise in this
-      ### case is probably to leave ExecReload undefined, so `systemctl reload`
-      ### will at least result in an error instead of potentially undefined
-      ### behaviour.
-      ###
-      ### Advanced users can still override this part of the unit to implement
-      ### a custom reload handler, since the result of all this is a normal
-      ### systemd service from the perspective of the NixOS module system.
-      ###
-      # ExecReload = ...;
-      ###
+      serviceConfig = {
+        ### There is no generalized way of supporting `reload` for docker
+        ### containers. Some containers may respond well to SIGHUP sent to their
+        ### init process, but it is not guaranteed; some apps have other reload
+        ### mechanisms, some don't have a reload signal at all, and some docker
+        ### images just have broken signal handling.  The best compromise in this
+        ### case is probably to leave ExecReload undefined, so `systemctl reload`
+        ### will at least result in an error instead of potentially undefined
+        ### behaviour.
+        ###
+        ### Advanced users can still override this part of the unit to implement
+        ### a custom reload handler, since the result of all this is a normal
+        ### systemd service from the perspective of the NixOS module system.
+        ###
+        # ExecReload = ...;
+        ###
 
-      TimeoutStartSec = 0;
-      TimeoutStopSec = 120;
-      Restart = "always";
+        TimeoutStartSec = 0;
+        TimeoutStopSec = 120;
+        Restart = "always";
+      };
     };
-  };
 
-in {
+in
+{
   imports = [
     (
       lib.mkChangedOptionModule
-      [ "docker-containers"  ]
-      [ "virtualisation" "oci-containers" ]
-      (oldcfg: {
-        backend = "docker";
-        containers = lib.mapAttrs (n: v: builtins.removeAttrs (v // {
-          extraOptions = v.extraDockerOptions or [];
-        }) [ "extraDockerOptions" ]) oldcfg.docker-containers;
-      })
+        [ "docker-containers" ]
+        [ "virtualisation" "oci-containers" ]
+        (oldcfg: {
+          backend = "docker";
+          containers = lib.mapAttrs
+            (n: v: builtins.removeAttrs
+              (v // {
+                extraOptions = v.extraDockerOptions or [ ];
+              }) [ "extraDockerOptions" ])
+            oldcfg.docker-containers;
+        })
     )
   ];
 
@@ -345,14 +351,14 @@ in {
     };
 
     containers = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf (types.submodule containerOptions);
       description = "OCI (Docker) containers to run as systemd services.";
     };
 
   };
 
-  config = lib.mkIf (cfg.containers != {}) (lib.mkMerge [
+  config = lib.mkIf (cfg.containers != { }) (lib.mkMerge [
     {
       systemd.services = mapAttrs' (n: v: nameValuePair "${cfg.backend}-${n}" (mkService n v)) cfg.containers;
     }

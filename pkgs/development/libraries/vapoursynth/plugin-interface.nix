@@ -1,14 +1,25 @@
-{ lib, python3, buildEnv, writeText, runCommandCC, stdenv, runCommand
-, vapoursynth, makeWrapper, withPlugins }:
+{ lib
+, python3
+, buildEnv
+, writeText
+, runCommandCC
+, stdenv
+, runCommand
+, vapoursynth
+, makeWrapper
+, withPlugins
+}:
 
-plugins: let
+plugins:
+let
   pythonEnvironment = python3.buildEnv.override {
     extraLibs = plugins;
   };
 
   getRecursivePropagatedBuildInputs = pkgs: lib.flatten
     (map
-      (pkg: let cleanPropagatedBuildInputs = lib.filter lib.isDerivation pkg.propagatedBuildInputs;
+      (pkg:
+        let cleanPropagatedBuildInputs = lib.filter lib.isDerivation pkg.propagatedBuildInputs;
         in cleanPropagatedBuildInputs ++ (getRecursivePropagatedBuildInputs cleanPropagatedBuildInputs))
       pkgs);
 
@@ -20,25 +31,28 @@ plugins: let
     paths = deepPlugins;
   };
 
-  pluginLoader = let
-    source = writeText "vapoursynth-nix-plugins.c" ''
-      void VSLoadPluginsNix(void (*load)(void *data, const char *path), void *data) {
-      ${lib.concatMapStringsSep "" (path: "load(data, \"${path}/lib/vapoursynth\");") deepPlugins}
-      }
+  pluginLoader =
+    let
+      source = writeText "vapoursynth-nix-plugins.c" ''
+        void VSLoadPluginsNix(void (*load)(void *data, const char *path), void *data) {
+        ${lib.concatMapStringsSep "" (path: "load(data, \"${path}/lib/vapoursynth\");") deepPlugins}
+        }
+      '';
+    in
+    runCommandCC "vapoursynth-plugin-loader"
+      {
+        executable = true;
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+      } ''
+      mkdir -p $out/lib
+      $CC -shared -fPIC ${source} -o "$out/lib/libvapoursynth-nix-plugins${ext}"
     '';
-  in
-  runCommandCC "vapoursynth-plugin-loader" {
-    executable = true;
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-  } ''
-    mkdir -p $out/lib
-    $CC -shared -fPIC ${source} -o "$out/lib/libvapoursynth-nix-plugins${ext}"
-  '';
 
   ext = stdenv.targetPlatform.extensions.sharedLibrary;
 in
-runCommand "${vapoursynth.name}-with-plugins" {
+runCommand "${vapoursynth.name}-with-plugins"
+{
   nativeBuildInputs = [ makeWrapper ];
   passthru = {
     inherit python3;

@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config
-, cairo, doctest, libdrm, libexecinfo, libinput, libjpeg, libxkbcommon, wayland
-, wayland-protocols, wf-config, wlroots, mesa
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, meson
+, ninja
+, pkg-config
+, cairo
+, doctest
+, libdrm
+, libexecinfo
+, libinput
+, libjpeg
+, libxkbcommon
+, wayland
+, wayland-protocols
+, wf-config
+, wlroots
+, mesa
 }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +30,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake meson ninja pkg-config wayland ];
   buildInputs = [
-    cairo doctest libdrm libexecinfo libinput libjpeg libxkbcommon wayland
-    wayland-protocols wf-config wlroots mesa
+    cairo
+    doctest
+    libdrm
+    libexecinfo
+    libinput
+    libjpeg
+    libxkbcommon
+    wayland
+    wayland-protocols
+    wf-config
+    wlroots
+    mesa
   ];
 
   # CMake is just used for finding doctest.

@@ -1,5 +1,11 @@
-{ lib, buildDunePackage, alcotest, logs, ocaml_lwt, fmt
-, re, cmdliner
+{ lib
+, buildDunePackage
+, alcotest
+, logs
+, ocaml_lwt
+, fmt
+, re
+, cmdliner
 }:
 
 buildDunePackage {

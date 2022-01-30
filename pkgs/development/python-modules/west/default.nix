@@ -1,5 +1,12 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
-, colorama, configobj, packaging, pyyaml, pykwalify
+{ lib
+, fetchPypi
+, buildPythonPackage
+, isPy3k
+, colorama
+, configobj
+, packaging
+, pyyaml
+, pykwalify
 }:
 
 buildPythonPackage rec {

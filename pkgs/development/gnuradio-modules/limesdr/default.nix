@@ -30,7 +30,8 @@ let
       "3.8" = "ffs+8TU0yr6IW1xZJ/abQ1CQWGZM+zYqPRJxy3ZvM9U=";
     }.${gnuradio.versionAttr.major};
   };
-in mkDerivation {
+in
+mkDerivation {
   pname = "gr-limesdr";
   inherit version src;
   disabledForGRafter = "3.9";

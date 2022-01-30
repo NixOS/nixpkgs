@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" "format" ];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   prePatch = ''
     substituteInPlace ./Makefile \

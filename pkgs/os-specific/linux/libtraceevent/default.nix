@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl ];
   makeFlags = [
     "prefix=${placeholder "out"}"
-    "doc"                       # build docs
+    "doc" # build docs
   ];
   installFlags = [
     "pkgconfig_dir=${placeholder "out"}/lib/pkgconfig"
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux kernel trace event library";
-    homepage    = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/";
-    license     = licenses.lgpl21Only;
-    platforms   = platforms.linux;
+    homepage = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/";
+    license = licenses.lgpl21Only;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wentasah ];
   };
 }

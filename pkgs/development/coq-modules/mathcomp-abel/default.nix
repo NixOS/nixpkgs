@@ -7,10 +7,11 @@ mkCoqDerivation {
   owner = "math-comp";
 
   inherit version;
-  defaultVersion = with lib; with versions; switch [ coq.version mathcomp.version ]  [
-      { cases = [ (range "8.10" "8.14") (range "1.12.0" "1.13.0") ]; out = "1.2.0"; }
-      { cases = [ (range "8.10" "8.14") (range "1.11.0" "1.12.0") ]; out = "1.1.2"; }
-    ] null;
+  defaultVersion = with lib; with versions; switch [ coq.version mathcomp.version ] [
+    { cases = [ (range "8.10" "8.14") (range "1.12.0" "1.13.0") ]; out = "1.2.0"; }
+    { cases = [ (range "8.10" "8.14") (range "1.11.0" "1.12.0") ]; out = "1.1.2"; }
+  ]
+    null;
 
   release."1.2.0".sha256 = "1picd4m85ipj22j3b84cv8ab3330radzrhd6kp0gpxq14dhv02c2";
   release."1.1.2".sha256 = "0565w713z1cwxvvdlqws2z5lgdys8lddf0vpwfdj7bpd7pq9hwxg";

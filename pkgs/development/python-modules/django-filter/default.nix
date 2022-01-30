@@ -2,7 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , django
-, djangorestframework, python, mock
+, djangorestframework
+, python
+, mock
 }:
 
 buildPythonPackage rec {

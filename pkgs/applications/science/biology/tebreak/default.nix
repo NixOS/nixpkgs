@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, last, exonerate, minia, python3, bwa
-, samtools, findutils }:
+{ lib
+, fetchFromGitHub
+, last
+, exonerate
+, minia
+, python3
+, bwa
+, samtools
+, findutils
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tebreak";

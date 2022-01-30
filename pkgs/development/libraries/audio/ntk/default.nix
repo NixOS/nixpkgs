@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config wafHook ];
   buildInputs = [
-    cairo libjpeg libXft python3
+    cairo
+    libjpeg
+    libXft
+    python3
   ];
 
   meta = {

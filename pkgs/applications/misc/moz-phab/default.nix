@@ -2,7 +2,7 @@
 , buildPythonApplication
 , fetchPypi
 , mercurial
-# build inputs
+  # build inputs
 , distro
 , glean-sdk
 , python-hglib

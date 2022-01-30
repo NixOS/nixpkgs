@@ -1,6 +1,18 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
-, scripttest, pytz, pbr, tempita, decorator, sqlalchemy
-, six, sqlparse, testrepository
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, python
+, scripttest
+, pytz
+, pbr
+, tempita
+, decorator
+, sqlalchemy
+, six
+, sqlparse
+, testrepository
 }:
 
 buildPythonPackage rec {

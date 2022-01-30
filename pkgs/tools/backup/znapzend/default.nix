@@ -22,7 +22,8 @@ let
   };
 
   perl' = perl.withPackages (p:
-    [ MojoIOLoopForkCall'
+    [
+      MojoIOLoopForkCall'
       p.TAPParserSourceHandlerpgTAP
     ]);
 
@@ -60,9 +61,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "High performance open source ZFS backup with mbuffer and ssh support";
-    homepage    = "https://www.znapzend.org";
-    license     = licenses.gpl3;
+    homepage = "https://www.znapzend.org";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ otwieracz ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

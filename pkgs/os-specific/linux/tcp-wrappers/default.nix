@@ -3,7 +3,8 @@
 let
   vanillaVersion = "7.6.q";
   patchLevel = "26";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tcp-wrappers";
   version = "${vanillaVersion}-${patchLevel}";
 

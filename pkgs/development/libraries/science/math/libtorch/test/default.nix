@@ -22,7 +22,8 @@ let
     path = "${cudatoolkit}/lib/stubs/libcuda.so";
   }];
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libtorch-test";
   version = libtorch-bin.version;
 

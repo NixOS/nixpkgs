@@ -4,7 +4,7 @@ with lib;
 let
   cfg = config.services.greetd;
   tty = "tty${toString cfg.vt}";
-  settingsFormat = pkgs.formats.toml {};
+  settingsFormat = pkgs.formats.toml { };
 in
 {
   options.services.greetd = {
@@ -32,7 +32,7 @@ in
       '';
     };
 
-    vt = mkOption  {
+    vt = mkOption {
       type = types.int;
       default = 1;
       description = ''
@@ -104,7 +104,7 @@ in
       group = "greeter";
     };
 
-    users.groups.greeter = {};
+    users.groups.greeter = { };
   };
 
   meta.maintainers = with maintainers; [ queezle ];

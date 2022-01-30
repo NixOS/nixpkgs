@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
-, clikit }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, clikit
+}:
 
 buildPythonPackage rec {
   pname = "cleo";

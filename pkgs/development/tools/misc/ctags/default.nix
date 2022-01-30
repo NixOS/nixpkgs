@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   # don't use $T(E)MP which is set to the build directory
-  configureFlags= [ "--enable-tmpdir=/tmp" ];
+  configureFlags = [ "--enable-tmpdir=/tmp" ];
 
   patches = [
     # Library defines an `__unused__` which is a reserved name, and may

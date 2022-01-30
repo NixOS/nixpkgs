@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libGLU libGL libXrandr libX11 libXxf86vm
+    libGLU
+    libGL
+    libXrandr
+    libX11
+    libXxf86vm
   ] ++ lib.optional stdenv.isAarch64 zlib;
 
   meta = {

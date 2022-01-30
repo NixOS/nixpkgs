@@ -14,15 +14,15 @@
 , abseil-cpp
 , libnsl
 
-# tests
+  # tests
 , python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "grpc";
   version = "1.43.0"; # N.B: if you change this, please update:
-    # pythonPackages.grpcio-tools
-    # pythonPackages.grpcio-status
+  # pythonPackages.grpcio-tools
+  # pythonPackages.grpcio-status
 
   src = fetchFromGitHub {
     owner = "grpc";

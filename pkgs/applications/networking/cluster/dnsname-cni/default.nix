@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  dnsmasq,
-  fetchFromGitHub,
-  lib,
-  nixosTests,
-  makeWrapper,
+{ buildGoModule
+, dnsmasq
+, fetchFromGitHub
+, lib
+, nixosTests
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

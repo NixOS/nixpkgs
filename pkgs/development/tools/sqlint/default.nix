@@ -10,9 +10,9 @@ bundlerApp {
 
   meta = with lib; {
     description = "Simple SQL linter";
-    homepage    = "https://github.com/purcell/sqlint";
-    license     = licenses.mit;
+    homepage = "https://github.com/purcell/sqlint";
+    license = licenses.mit;
     maintainers = with maintainers; [ ariutta nicknovitski purcell ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

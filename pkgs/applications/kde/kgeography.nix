@@ -1,6 +1,12 @@
-{ mkDerivation, lib
-, cmake, extra-cmake-modules, qtbase
-, kconfigwidgets, kxmlgui, kcrash, kdoctools
+{ mkDerivation
+, lib
+, cmake
+, extra-cmake-modules
+, qtbase
+, kconfigwidgets
+, kxmlgui
+, kcrash
+, kdoctools
 , kitemviews
 }:
 

@@ -21,7 +21,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1y87agr324p6x5gvhziymxjlw54pyn4gqnd49papbl941djpkp5g";
   };
-  patches = [ (fetchpatch {
+  patches = [
+    (fetchpatch {
       url = "https://github.com/astropy/pytest-astropy-header/pull/16.patch";
       sha256 = "11ln63zq0kgsdx1jw3prlzpcdbxmc99p9cwr18s0x6apy0k6df31";
     })

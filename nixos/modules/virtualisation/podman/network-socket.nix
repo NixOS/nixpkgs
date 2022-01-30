@@ -31,7 +31,7 @@ in
     };
 
     server = mkOption {
-      type = types.enum [];
+      type = types.enum [ ];
       description = ''
         Choice of TLS proxy server.
       '';

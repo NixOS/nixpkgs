@@ -1,6 +1,17 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
-, makeDesktopItem, copyDesktopItems, cmake
-, boost, libvorbis, libsndfile, minizip, gtest, qtwebkit }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, cmake
+, boost
+, libvorbis
+, libsndfile
+, minizip
+, gtest
+, qtwebkit
+}:
 
 mkDerivation rec {
   pname = "lsd2dsl";

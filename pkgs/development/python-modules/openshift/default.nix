@@ -36,7 +36,7 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = ["openshift"];
+  pythonImportsCheck = [ "openshift" ];
 
   checkInputs = [
     pytest-bdd

@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libbtbb, libpcap , libusb1, bluez
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libbtbb
+, libpcap
+, libusb1
+, bluez
 , udevGroup ? "ubertooth"
 }:
 

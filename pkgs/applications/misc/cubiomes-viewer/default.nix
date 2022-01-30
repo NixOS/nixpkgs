@@ -30,14 +30,16 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  desktopItems = [ (makeDesktopItem {
-    name = pname;
-    desktopName = "Cubiomes Viewer";
-    exec = pname;
-    icon = pname;
-    categories = "Game";
-    comment = meta.description;
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "Cubiomes Viewer";
+      exec = pname;
+      icon = pname;
+      categories = "Game";
+      comment = meta.description;
+    })
+  ];
 
   preBuild = ''
     # QMAKE_PRE_LINK is not executed (I dont know why)

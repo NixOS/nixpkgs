@@ -1,17 +1,17 @@
 /* Build configuration used to build glibc, Info files, and locale
-   information.
+  information.
 
-   Note that this derivation has multiple outputs and does not respect the
-   standard convention of putting the executables into the first output. The
-   first output is `lib` so that the libraries provided by this derivation
-   can be accessed directly, e.g.
+  Note that this derivation has multiple outputs and does not respect the
+  standard convention of putting the executables into the first output. The
+  first output is `lib` so that the libraries provided by this derivation
+  can be accessed directly, e.g.
 
-     "${pkgs.glibc}/lib/ld-linux-x86_64.so.2"
+  "${pkgs.glibc}/lib/ld-linux-x86_64.so.2"
 
-   The executables are put into `bin` output and need to be referenced via
-   the `bin` attribute of the main package, e.g.
+  The executables are put into `bin` output and need to be referenced via
+  the `bin` attribute of the main package, e.g.
 
-     "${pkgs.glibc.bin}/bin/ldd".
+  "${pkgs.glibc.bin}/bin/ldd".
 
   The executables provided by glibc typically include `ldd`, `locale`, `iconv`
   but the exact set depends on the library version and the configuration.
@@ -22,11 +22,13 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-{ stdenv, lib
+{ stdenv
+, lib
 , buildPackages
 , fetchurl
 , linuxHeaders ? null
-, gd ? null, libpng ? null
+, gd ? null
+, libpng ? null
 , libidn2
 , bison
 , python3Minimal
@@ -37,8 +39,8 @@
 , profilingLibraries ? false
 , withGd ? false
 , meta
-, extraBuildInputs ? []
-, extraNativeBuildInputs ? []
+, extraBuildInputs ? [ ]
+, extraNativeBuildInputs ? [ ]
 , ...
 } @ args:
 
@@ -62,13 +64,13 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.33/master && git describe
-          glibc-2.33-62-gc493f6a0e4
-          $ git show --minimal --reverse glibc-2.33.. | gzip -9n --rsyncable - > 2.33-master.patch.gz
+        $ git fetch --all -p && git checkout origin/release/2.33/master && git describe
+        glibc-2.33-62-gc493f6a0e4
+        $ git show --minimal --reverse glibc-2.33.. | gzip -9n --rsyncable - > 2.33-master.patch.gz
 
-         To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.33-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.33-master.patch.gz
-       */
+        To compare the archive contents zdiff can be used.
+        $ zdiff -u 2.33-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.33-master.patch.gz
+      */
       ./2.33-master.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
@@ -81,8 +83,8 @@ stdenv.mkDerivation ({
       ./dont-use-system-ld-so-preload.patch
 
       /* The command "getconf CS_PATH" returns the default search path
-         "/bin:/usr/bin", which is inappropriate on NixOS machines. This
-         patch extends the search path by "/run/current-system/sw/bin". */
+        "/bin:/usr/bin", which is inappropriate on NixOS machines. This
+        patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
 
       /* Allow running with RHEL 6 -like kernels.  The patch adds an exception
@@ -101,15 +103,15 @@ stdenv.mkDerivation ({
         tar xf linux-*.bz2
         # check syscall presence, for example
         less linux-*?/arch/x86/kernel/syscall_table_32.S
-       */
+      */
       ./allow-kernel-2.6.32.patch
 
       /* Provide a fallback for missing prlimit64 syscall on RHEL 6 -like
-         kernels.
+        kernels.
 
-         This patch is maintained by @veprbl. If it gives you trouble, feel
-         free to ping me, I'd be happy to help.
-       */
+        This patch is maintained by @veprbl. If it gives you trouble, feel
+        free to ping me, I'd be happy to help.
+      */
       (fetchurl {
         url = "https://git.savannah.gnu.org/cgit/guix.git/plain/gnu/packages/patches/glibc-reinstate-prlimit64-fallback.patch?id=eab07e78b691ae7866267fc04d31c7c3ad6b0eeb";
         sha256 = "091bk3kyrx1gc380gryrxjzgcmh1ajcj8s2rjhp2d2yzd5mpd5ps";
@@ -154,7 +156,8 @@ stdenv.mkDerivation ({
     '';
 
   configureFlags =
-    [ "-C"
+    [
+      "-C"
       "--enable-add-ons"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
@@ -171,7 +174,7 @@ stdenv.mkDerivation ({
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       (lib.flip lib.withFeature "fp"
-         (stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
+        (stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
       "--with-__thread"
     ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
       "--host=arm-linux-gnueabi"

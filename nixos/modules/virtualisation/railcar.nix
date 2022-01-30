@@ -12,16 +12,16 @@ let
         ];
       };
     in
-      nameValuePair "railcar-${name}" {
-        enable = true;
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-            ExecStart = ''
-              ${cfg.package}/bin/railcar -r ${cfg.stateDir} run ${name} -b ${container}
-            '';
-            Type = containerConfig.runType;
-          };
+    nameValuePair "railcar-${name}" {
+      enable = true;
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = ''
+          ${cfg.package}/bin/railcar -r ${cfg.stateDir} run ${name} -b ${container}
+        '';
+        Type = containerConfig.runType;
       };
+    };
   mount = with types; (submodule {
     options = {
       type = mkOption {
@@ -59,7 +59,7 @@ in
     enable = mkEnableOption "railcar";
 
     containers = mkOption {
-      default = {};
+      default = { };
       description = "Declarative container configuration";
       type = with types; attrsOf (submodule ({ name, config, ... }: {
         options = {
@@ -70,7 +70,7 @@ in
 
           mounts = mkOption {
             type = with types; attrsOf mount;
-            default = {};
+            default = { };
             description = ''
               A set of mounts inside the container.
 

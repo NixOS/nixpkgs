@@ -3,7 +3,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
     client = { config, pkgs, ... }: {
       environment.systemPackages = [ pkgs.seafile-shared pkgs.curl ];
     };
-  in {
+  in
+  {
     name = "seafile";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ kampfschlaefer schmittlauch ];

@@ -17,7 +17,9 @@ buildGoModule rec {
   vendorSha256 = "sha256-aPL3npryiCv+SiSyEUNhdPCDmM/hJDMspCbSNy+SuoA=";
 
   ldflags = [
-    "-s" "-w" "-X github.com/achannarasappa/ticker/cmd.Version=v${version}"
+    "-s"
+    "-w"
+    "-X github.com/achannarasappa/ticker/cmd.Version=v${version}"
   ];
 
   # Tests require internet

@@ -1,4 +1,7 @@
-{ lib, mkCoqDerivation, coq, version ? null
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
 , ssreflect
 , deriving
 }:
@@ -9,10 +12,11 @@ with lib;
   owner = "arthuraa";
 
   inherit version;
-  defaultVersion = with versions; switch [coq.coq-version ssreflect.version] [
-    { cases = [(range "8.11" "8.14") (isLe "1.12.0") ]; out = "0.3.0"; }
-    { cases = [(range "8.10" "8.12") (isLe "1.12.0") ]; out = "0.2.2"; }
-  ] null;
+  defaultVersion = with versions; switch [ coq.coq-version ssreflect.version ] [
+    { cases = [ (range "8.11" "8.14") (isLe "1.12.0") ]; out = "0.3.0"; }
+    { cases = [ (range "8.10" "8.12") (isLe "1.12.0") ]; out = "0.2.2"; }
+  ]
+    null;
 
   releaseRev = v: "v${v}";
 
@@ -29,5 +33,5 @@ with lib;
 
 }).overrideAttrs (o: {
   propagatedBuildInputs = o.propagatedBuildInputs
-  ++ optional (versionAtLeast o.version "0.3.0") deriving;
+    ++ optional (versionAtLeast o.version "0.3.0") deriving;
 })

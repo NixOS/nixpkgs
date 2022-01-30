@@ -17,15 +17,15 @@ buildPythonPackage rec {
 
   # https://github.com/pysathq/pysat/pull/102
   postPatch = ''
-    # Fix for case-insensitive filesystem
-    cat >>solvers/patches/cadical.patch <<EOF
-diff --git solvers/cadical/VERSION solvers/cdc/VERSION
-deleted file mode 100644
---- solvers/cadical/VERSION
-+++ /dev/null
-@@ -1 +0,0 @@
--1.0.3
-EOF
+        # Fix for case-insensitive filesystem
+        cat >>solvers/patches/cadical.patch <<EOF
+    diff --git solvers/cadical/VERSION solvers/cdc/VERSION
+    deleted file mode 100644
+    --- solvers/cadical/VERSION
+    +++ /dev/null
+    @@ -1 +0,0 @@
+    -1.0.3
+    EOF
   '';
 
   meta = with lib; {

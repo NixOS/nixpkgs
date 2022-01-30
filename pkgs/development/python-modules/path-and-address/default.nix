@@ -25,7 +25,7 @@ buildPythonPackage rec {
     description = "Functions for server CLI applications used by humans";
     homepage = "https://github.com/joeyespo/path-and-address";
     license = licenses.mit;
-    maintainers = with maintainers; [ koral];
+    maintainers = with maintainers; [ koral ];
   };
 
 }

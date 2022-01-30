@@ -5,9 +5,9 @@ buildOasisPackage rec {
   version = "4.1";
 
   src = fetchFromGitHub {
-    owner  = "tcsprojects";
-    repo   = "pgsolver";
-    rev    = "v${version}";
+    owner = "tcsprojects";
+    repo = "pgsolver";
+    rev = "v${version}";
     sha256 = "16skrn8qql9djpray25xv66rjgfl20js5wqnxyq1763nmyizyj8a";
   };
 

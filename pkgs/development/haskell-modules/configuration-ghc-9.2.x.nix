@@ -43,32 +43,42 @@ self: super: {
   xhtml = null;
 
   # Workaround for https://gitlab.haskell.org/ghc/ghc/-/issues/20594
-  tf-random = overrideCabal {
-    doHaddock = !pkgs.stdenv.isAarch64;
-  } super.tf-random;
+  tf-random = overrideCabal
+    {
+      doHaddock = !pkgs.stdenv.isAarch64;
+    }
+    super.tf-random;
 
-  aeson = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/aeson-1.5.6.0.patch";
-    sha256 = "07rk7f0lhgilxvbg2grpl1p5x25wjf9m7a0wqmi2jr0q61p9a0nl";
-    # The revision information is newer than that included in the patch
-    excludes = ["*.cabal"];
-  }) (doJailbreak super.aeson);
+  aeson = appendPatch
+    (pkgs.fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/aeson-1.5.6.0.patch";
+      sha256 = "07rk7f0lhgilxvbg2grpl1p5x25wjf9m7a0wqmi2jr0q61p9a0nl";
+      # The revision information is newer than that included in the patch
+      excludes = [ "*.cabal" ];
+    })
+    (doJailbreak super.aeson);
 
-  basement = overrideCabal (drv: {
-    # This is inside a conditional block so `doJailbreak` doesn't work
-    postPatch = "sed -i -e 's,<4.16,<4.17,' basement.cabal";
-  }) (appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/basement-0.0.12.patch";
-    sha256 = "0c8n2krz827cv87p3vb1vpl3v0k255aysjx9lq44gz3z1dhxd64z";
-  }) super.basement);
+  basement = overrideCabal
+    (drv: {
+      # This is inside a conditional block so `doJailbreak` doesn't work
+      postPatch = "sed -i -e 's,<4.16,<4.17,' basement.cabal";
+    })
+    (appendPatch
+      (pkgs.fetchpatch {
+        url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/basement-0.0.12.patch";
+        sha256 = "0c8n2krz827cv87p3vb1vpl3v0k255aysjx9lq44gz3z1dhxd64z";
+      })
+      super.basement);
 
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
-  cryptonite = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cryptonite-0.29.patch";
-    sha256 = "1g48lrmqgd88hqvfq3klz7lsrpwrir2v1931myrhh6dy0d9pqj09";
-  }) super.cryptonite;
+  cryptonite = appendPatch
+    (pkgs.fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cryptonite-0.29.patch";
+      sha256 = "1g48lrmqgd88hqvfq3klz7lsrpwrir2v1931myrhh6dy0d9pqj09";
+    })
+    super.cryptonite;
 
   # cabal-install needs more recent versions of Cabal
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
@@ -91,7 +101,7 @@ self: super: {
   binary-orphans = super.binary-orphans_1_0_2;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   constraints = doJailbreak super.constraints;
-  cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
+  cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal"; }) super.cpphs;
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
   cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
   data-fix = doJailbreak super.data-fix;
@@ -101,19 +111,22 @@ self: super: {
   genvalidity-property = self.genvalidity-property_1_0_0_0;
   genvalidity-hspec = self.genvalidity-hspec_1_0_0_0;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-exactprint = overrideCabal (drv: {
-    # HACK: ghc-exactprint 1.4.1 is not buildable for GHC < 9.2,
-    # but hackage2nix evaluates the cabal file with GHC 8.10.*,
-    # causing the build-depends to be skipped. Since the dependency
-    # list hasn't changed much since 0.6.4, we can just reuse the
-    # normal expression.
-    inherit (self.ghc-exactprint_1_4_1) src version;
-    revision = null; editedCabalFile = null;
-    libraryHaskellDepends = [
-      self.fail
-      self.ordered-containers
-    ] ++ drv.libraryHaskellDepends or [];
-  }) super.ghc-exactprint;
+  ghc-exactprint = overrideCabal
+    (drv: {
+      # HACK: ghc-exactprint 1.4.1 is not buildable for GHC < 9.2,
+      # but hackage2nix evaluates the cabal file with GHC 8.10.*,
+      # causing the build-depends to be skipped. Since the dependency
+      # list hasn't changed much since 0.6.4, we can just reuse the
+      # normal expression.
+      inherit (self.ghc-exactprint_1_4_1) src version;
+      revision = null;
+      editedCabalFile = null;
+      libraryHaskellDepends = [
+        self.fail
+        self.ordered-containers
+      ] ++ drv.libraryHaskellDepends or [ ];
+    })
+    super.ghc-exactprint;
   ghc-lib = self.ghc-lib_9_2_1_20220109;
   ghc-lib-parser = self.ghc-lib-parser_9_2_1_20220109;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
@@ -158,13 +171,15 @@ self: super: {
   witherable = doJailbreak super.witherable;
   zlib = doJailbreak super.zlib;
 
-  hpack = overrideCabal (drv: {
-    # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
-    # 2021-10-10: 9.2.1 is not yet supported (also no issue)
-    testFlags = [
-      "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
-    ] ++ drv.testFlags or [];
-  }) (doJailbreak super.hpack);
+  hpack = overrideCabal
+    (drv: {
+      # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
+      # 2021-10-10: 9.2.1 is not yet supported (also no issue)
+      testFlags = [
+        "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
+      ] ++ drv.testFlags or [ ];
+    })
+    (doJailbreak super.hpack);
 
   validity = pkgs.lib.pipe super.validity_0_12_0_0 [
     # head.hackage patch
@@ -183,15 +198,19 @@ self: super: {
   alex = dontCheck super.alex;
 
   # Apply patches from head.hackage.
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
-    sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
-  }) (doJailbreak super.language-haskell-extract);
+  language-haskell-extract = appendPatch
+    (pkgs.fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
+      sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
+    })
+    (doJailbreak super.language-haskell-extract);
 
-  haskell-src-meta = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/haskell-src-meta-0.8.7.patch";
-    sha256 = "013k8hpxac226j47cdzgdf9a1j91kmm0cvv7n8zwlajbj3y9bzjp";
-  }) (doJailbreak super.haskell-src-meta);
+  haskell-src-meta = appendPatch
+    (pkgs.fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/haskell-src-meta-0.8.7.patch";
+      sha256 = "013k8hpxac226j47cdzgdf9a1j91kmm0cvv7n8zwlajbj3y9bzjp";
+    })
+    (doJailbreak super.haskell-src-meta);
 
   # Tests depend on `parseTime` which is no longer available
   hourglass = dontCheck super.hourglass;
@@ -201,13 +220,17 @@ self: super: {
   random = dontCheck super.random_1_2_1;
 
   # 0.16.0 introduced support for GHC 9.0.x, stackage has 0.15.0
-  memory = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/memory-0.16.0.patch";
-    sha256 = "1kjganx729a6xfgfnrb3z7q6mvnidl042zrsd9n5n5a3i76nl5nl";
-  }) (overrideCabal {
-    editedCabalFile = null;
-    revision = null;
-  } super.memory_0_16_0);
+  memory = appendPatch
+    (pkgs.fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/memory-0.16.0.patch";
+      sha256 = "1kjganx729a6xfgfnrb3z7q6mvnidl042zrsd9n5n5a3i76nl5nl";
+    })
+    (overrideCabal
+      {
+        editedCabalFile = null;
+        revision = null;
+      }
+      super.memory_0_16_0);
 
   # GHC 9.0.x doesn't like `import Spec (main)` in Main.hs
   # https://github.com/snoyberg/mono-traversable/issues/192
@@ -218,25 +241,27 @@ self: super: {
   retry = dontCheck super.retry;
 
   # Upper bound on `hashable` is too restrictive
-  semigroupoids = overrideCabal (drv: { postPatch = "sed -i -e 's,hashable >= 1.2.7.0  && < 1.4,hashable >= 1.2.7.0  \\&\\& < 1.5,' semigroupoids.cabal";}) super.semigroupoids;
+  semigroupoids = overrideCabal (drv: { postPatch = "sed -i -e 's,hashable >= 1.2.7.0  && < 1.4,hashable >= 1.2.7.0  \\&\\& < 1.5,' semigroupoids.cabal"; }) super.semigroupoids;
 
   # Tests have a circular dependency on quickcheck-instances
   text-short = dontCheck super.text-short_0_1_5;
 
   # Use hlint from git for GHC 9.2.1 support
   hlint = doDistribute (
-    overrideSrc {
-      version = "unstable-2021-12-12";
-      src = pkgs.fetchFromGitHub {
-        owner = "ndmitchell";
-        repo = "hlint";
-        rev = "77a9702e10b772a7695c08682cd4f450fd0e9e46";
-        sha256 = "0hpp3iw7m7w2abr8vb86gdz3x6c8lj119zxln933k90ia7bmk8jc";
-      };
-    } (super.hlint_3_3_6.overrideScope (self: super: {
-      ghc-lib-parser = self.ghc-lib-parser_9_2_1_20220109;
-      ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
-    }))
+    overrideSrc
+      {
+        version = "unstable-2021-12-12";
+        src = pkgs.fetchFromGitHub {
+          owner = "ndmitchell";
+          repo = "hlint";
+          rev = "77a9702e10b772a7695c08682cd4f450fd0e9e46";
+          sha256 = "0hpp3iw7m7w2abr8vb86gdz3x6c8lj119zxln933k90ia7bmk8jc";
+        };
+      }
+      (super.hlint_3_3_6.overrideScope (self: super: {
+        ghc-lib-parser = self.ghc-lib-parser_9_2_1_20220109;
+        ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
+      }))
   );
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38

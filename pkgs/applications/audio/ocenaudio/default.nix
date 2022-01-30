@@ -7,7 +7,8 @@
 , libjack2
 , alsa-lib
 , bzip2
-, libpulseaudio }:
+, libpulseaudio
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocenaudio";

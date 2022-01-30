@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "pyxdg";
   version = "0.27";
 
-  src =  fetchFromGitLab {
+  src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = pname;

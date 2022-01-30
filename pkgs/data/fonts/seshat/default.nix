@@ -1,4 +1,4 @@
-{ lib,  fetchzip }:
+{ lib, fetchzip }:
 
 let
   majorVersion = "0";

@@ -4,7 +4,8 @@ buildPythonPackage rec {
   pname = "django-widget-tweaks";
   version = "1.4.8";
 
-  src = fetchFromGitHub { # package from Pypi missing runtests.py
+  src = fetchFromGitHub {
+    # package from Pypi missing runtests.py
     owner = "jazzband";
     repo = pname;
     rev = version;
@@ -15,11 +16,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ django ];
 
   meta = with lib; {
-      description = "Tweak the form field rendering in templates, not in python-level form definitions.";
-      homepage = "https://github.com/jazzband/django-widget-tweaks";
-      license = licenses.mit;
-      maintainers = with maintainers; [
-          maxxk
-      ];
+    description = "Tweak the form field rendering in templates, not in python-level form definitions.";
+    homepage = "https://github.com/jazzband/django-widget-tweaks";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      maxxk
+    ];
   };
 }

@@ -25,11 +25,13 @@ buildGoModule rec {
 
   postInstall =
     lib.concatStringsSep "\n" (
-      map (bin: ''
-        mkdir -p ''$${bin}/bin &&
-        mv $out/bin/${bin} ''$${bin}/bin/ &&
-        ln -s ''$${bin}/bin/${bin} $out/bin/
-      '') bins
+      map
+        (bin: ''
+          mkdir -p ''$${bin}/bin &&
+          mv $out/bin/${bin} ''$${bin}/bin/ &&
+          ln -s ''$${bin}/bin/${bin} $out/bin/
+        '')
+        bins
     );
 
   meta = with lib; {

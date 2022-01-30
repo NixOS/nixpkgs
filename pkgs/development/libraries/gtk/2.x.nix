@@ -1,10 +1,27 @@
-{ config, lib, substituteAll, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
-, gdk-pixbuf, xlibsWrapper, gobject-introspection
+{ config
+, lib
+, substituteAll
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, atk
+, pango
+, cairo
+, perl
+, xorg
+, gdk-pixbuf
+, xlibsWrapper
+, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
-, cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups
+, cupsSupport ? config.gtk2.cups or stdenv.isLinux
+, cups
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
-, AppKit, Cocoa
-, fetchpatch, buildPackages
+, AppKit
+, Cocoa
+, fetchpatch
+, buildPackages
 }:
 
 with lib;
@@ -33,7 +50,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  setupHooks =  [
+  setupHooks = [
     ./hooks/drop-icon-theme-cache.sh
     gtkCleanImmodulesCache
   ];
@@ -55,16 +72,21 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with xorg;
     [ glib cairo pango gdk-pixbuf atk ]
     ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
-         libXrandr libXrender libXcomposite libXi libXcursor
-       ]
+      libXrandr
+      libXrender
+      libXcomposite
+      libXi
+      libXcursor
+    ]
     ++ optionals stdenv.isDarwin [ xlibsWrapper libXdamage ]
     ++ optional xineramaSupport libXinerama
     ++ optionals cupsSupport [ cups ]
     ++ optionals stdenv.isDarwin [ AppKit Cocoa ];
 
-  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
-    MACOSX_DEPLOYMENT_TARGET=10.16
-  '' else null;
+  preConfigure =
+    if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+      MACOSX_DEPLOYMENT_TARGET=10.16
+    '' else null;
 
   configureFlags = [
     "--with-gdktarget=${gdktarget}"
@@ -96,10 +118,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
-    homepage    = "https://www.gtk.org/";
-    license     = licenses.lgpl2Plus;
+    homepage = "https://www.gtk.org/";
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 raskin ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
 
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating

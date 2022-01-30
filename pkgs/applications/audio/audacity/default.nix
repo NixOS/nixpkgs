@@ -27,7 +27,7 @@
 , ffmpeg
 , soundtouch
 , pcre
-/*, portaudio - given up fighting their portaudio.patch */
+  /*, portaudio - given up fighting their portaudio.patch */
 , linuxHeaders
 , alsa-lib
 , at-spi2-core
@@ -162,7 +162,11 @@ stdenv.mkDerivation rec {
     AppKit
     Cocoa
     CoreAudioKit
-    AudioUnit AudioToolbox CoreAudio CoreServices Carbon # for portaudio
+    AudioUnit
+    AudioToolbox
+    CoreAudio
+    CoreServices
+    Carbon # for portaudio
   ];
 
   cmakeFlags = [

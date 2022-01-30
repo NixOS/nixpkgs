@@ -214,13 +214,13 @@ in
         Restart = "on-failure";
 
         /* TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME"
-        DynamicUser = true;
-        LoadCredential = [] ++
+          DynamicUser = true;
+          LoadCredential = [] ++
           optionals (cfg.accessTokenFile != null) [
-            "access_token:${cfg.accessTokenFile}"
+          "access_token:${cfg.accessTokenFile}"
           ] ++
           optionals (cfg.pantalaimon.passwordFile != null) [
-            "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
+          "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
           ];
         */
       };

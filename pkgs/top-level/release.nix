@@ -1,12 +1,12 @@
 /* This file defines the builds that constitute the Nixpkgs.
-   Everything defined here ends up in the Nixpkgs channel.  Individual
-   jobs can be tested by running:
+  Everything defined here ends up in the Nixpkgs channel.  Individual
+  jobs can be tested by running:
 
-   $ nix-build pkgs/top-level/release.nix -A <jobname>.<system>
+  $ nix-build pkgs/top-level/release.nix -A <jobname>.<system>
 
-   e.g.
+  e.g.
 
-   $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
+  $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
 , officialRelease ? false
@@ -28,10 +28,12 @@ let
   supportDarwin = lib.genAttrs [
     "x86_64"
     "aarch64"
-  ] (arch: builtins.elem "${arch}-darwin" systemsWithAnySupport);
+  ]
+    (arch: builtins.elem "${arch}-darwin" systemsWithAnySupport);
 
   jobs =
-    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
+    {
+      tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
@@ -39,60 +41,66 @@ let
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
       pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
-      darwin-tested = if supportDarwin.x86_64 then pkgs.releaseTools.aggregate
-        { name = "nixpkgs-darwin-${jobs.tarball.version}";
-          meta.description = "Release-critical builds for the Nixpkgs darwin channel";
-          constituents =
-            [ jobs.tarball
-              jobs.cabal2nix.x86_64-darwin
-              jobs.ghc.x86_64-darwin
-              jobs.git.x86_64-darwin
-              jobs.go.x86_64-darwin
-              jobs.mariadb.x86_64-darwin
-              jobs.nix.x86_64-darwin
-              jobs.nixpkgs-review.x86_64-darwin
-              jobs.nix-info.x86_64-darwin
-              jobs.nix-info-tested.x86_64-darwin
-              jobs.openssh.x86_64-darwin
-              jobs.openssl.x86_64-darwin
-              jobs.pandoc.x86_64-darwin
-              jobs.postgresql.x86_64-darwin
-              jobs.python2.x86_64-darwin
-              jobs.python3.x86_64-darwin
-              jobs.ruby.x86_64-darwin
-              jobs.rustc.x86_64-darwin
-              # blocking ofBorg CI 2020-02-28
-              # jobs.stack.x86_64-darwin
-              jobs.stdenv.x86_64-darwin
-              jobs.vim.x86_64-darwin
-              jobs.cachix.x86_64-darwin
+      darwin-tested =
+        if supportDarwin.x86_64 then
+          pkgs.releaseTools.aggregate
+            {
+              name = "nixpkgs-darwin-${jobs.tarball.version}";
+              meta.description = "Release-critical builds for the Nixpkgs darwin channel";
+              constituents =
+                [
+                  jobs.tarball
+                  jobs.cabal2nix.x86_64-darwin
+                  jobs.ghc.x86_64-darwin
+                  jobs.git.x86_64-darwin
+                  jobs.go.x86_64-darwin
+                  jobs.mariadb.x86_64-darwin
+                  jobs.nix.x86_64-darwin
+                  jobs.nixpkgs-review.x86_64-darwin
+                  jobs.nix-info.x86_64-darwin
+                  jobs.nix-info-tested.x86_64-darwin
+                  jobs.openssh.x86_64-darwin
+                  jobs.openssl.x86_64-darwin
+                  jobs.pandoc.x86_64-darwin
+                  jobs.postgresql.x86_64-darwin
+                  jobs.python2.x86_64-darwin
+                  jobs.python3.x86_64-darwin
+                  jobs.ruby.x86_64-darwin
+                  jobs.rustc.x86_64-darwin
+                  # blocking ofBorg CI 2020-02-28
+                  # jobs.stack.x86_64-darwin
+                  jobs.stdenv.x86_64-darwin
+                  jobs.vim.x86_64-darwin
+                  jobs.cachix.x86_64-darwin
 
-              # UI apps
-              # jobs.firefox-unwrapped.x86_64-darwin
-              jobs.qt5.qtmultimedia.x86_64-darwin
-              jobs.inkscape.x86_64-darwin
-              jobs.gimp.x86_64-darwin
-              jobs.emacs.x86_64-darwin
-              jobs.wireshark.x86_64-darwin
-              jobs.transmission-gtk.x86_64-darwin
+                  # UI apps
+                  # jobs.firefox-unwrapped.x86_64-darwin
+                  jobs.qt5.qtmultimedia.x86_64-darwin
+                  jobs.inkscape.x86_64-darwin
+                  jobs.gimp.x86_64-darwin
+                  jobs.emacs.x86_64-darwin
+                  jobs.wireshark.x86_64-darwin
+                  jobs.transmission-gtk.x86_64-darwin
 
-              # Tests
-              /*
-              jobs.tests.cc-wrapper.x86_64-darwin
-              jobs.tests.cc-wrapper-clang.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx.x86_64-darwin
-              jobs.tests.stdenv-inputs.x86_64-darwin
-              jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.patch-shebangs.x86_64-darwin
-              */
-            ];
-        } else null;
+                  # Tests
+                  /*
+                    jobs.tests.cc-wrapper.x86_64-darwin
+                    jobs.tests.cc-wrapper-clang.x86_64-darwin
+                    jobs.tests.cc-wrapper-libcxx.x86_64-darwin
+                    jobs.tests.stdenv-inputs.x86_64-darwin
+                    jobs.tests.macOSSierraShared.x86_64-darwin
+                    jobs.tests.patch-shebangs.x86_64-darwin
+                  */
+                ];
+            } else null;
 
       unstable = pkgs.releaseTools.aggregate
-        { name = "nixpkgs-${jobs.tarball.version}";
+        {
+          name = "nixpkgs-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
-            [ jobs.tarball
+            [
+              jobs.tarball
               jobs.metrics
               jobs.manual
               jobs.lib-tests
@@ -114,22 +122,22 @@ let
               jobs.cachix.x86_64-linux
 
               /*
-              jobs.tests.cc-wrapper.x86_64-linux
-              jobs.tests.cc-wrapper-gcc7.x86_64-linux
-              jobs.tests.cc-wrapper-gcc8.x86_64-linux
+                jobs.tests.cc-wrapper.x86_64-linux
+                jobs.tests.cc-wrapper-gcc7.x86_64-linux
+                jobs.tests.cc-wrapper-gcc8.x86_64-linux
 
-              # broken see issue #40038
+                # broken see issue #40038
 
-              jobs.tests.cc-wrapper-clang.x86_64-linux
-              jobs.tests.cc-wrapper-libcxx.x86_64-linux
-              jobs.tests.cc-wrapper-clang-5.x86_64-linux
-              jobs.tests.cc-wrapper-libcxx-5.x86_64-linux
-              jobs.tests.cc-wrapper-clang-6.x86_64-linux
-              jobs.tests.cc-wrapper-libcxx-6.x86_64-linux
-              jobs.tests.cc-multilib-gcc.x86_64-linux
-              jobs.tests.cc-multilib-clang.x86_64-linux
-              jobs.tests.stdenv-inputs.x86_64-linux
-              jobs.tests.patch-shebangs.x86_64-linux
+                jobs.tests.cc-wrapper-clang.x86_64-linux
+                jobs.tests.cc-wrapper-libcxx.x86_64-linux
+                jobs.tests.cc-wrapper-clang-5.x86_64-linux
+                jobs.tests.cc-wrapper-libcxx-5.x86_64-linux
+                jobs.tests.cc-wrapper-clang-6.x86_64-linux
+                jobs.tests.cc-wrapper-libcxx-6.x86_64-linux
+                jobs.tests.cc-multilib-gcc.x86_64-linux
+                jobs.tests.cc-multilib-clang.x86_64-linux
+                jobs.tests.stdenv-inputs.x86_64-linux
+                jobs.tests.patch-shebangs.x86_64-linux
               */
             ]
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
@@ -148,18 +156,18 @@ let
               jobs.inkscape.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
               /*
-              jobs.tests.cc-wrapper.x86_64-darwin
-              jobs.tests.cc-wrapper-gcc7.x86_64-darwin
-              # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
-              jobs.tests.cc-wrapper-clang.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-5.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-6.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
-              jobs.tests.stdenv-inputs.x86_64-darwin
-              jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.patch-shebangs.x86_64-darwin
+                jobs.tests.cc-wrapper.x86_64-darwin
+                jobs.tests.cc-wrapper-gcc7.x86_64-darwin
+                # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
+                jobs.tests.cc-wrapper-clang.x86_64-darwin
+                jobs.tests.cc-wrapper-libcxx.x86_64-darwin
+                jobs.tests.cc-wrapper-clang-5.x86_64-darwin
+                jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+                jobs.tests.cc-wrapper-clang-6.x86_64-darwin
+                jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+                jobs.tests.stdenv-inputs.x86_64-darwin
+                jobs.tests.macOSSierraShared.x86_64-darwin
+                jobs.tests.patch-shebangs.x86_64-darwin
               */
             ];
         };
@@ -178,7 +186,8 @@ let
           x86_64-darwin =
             let
               bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
-            in {
+            in
+            {
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
               # Test a full stdenv bootstrap from the bootstrap tools definition
@@ -189,11 +198,12 @@ let
           aarch64-darwin =
             let
               bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; crossSystem = "aarch64-darwin"; };
-            in {
+            in
+            {
               # Distribution only for now
               inherit (bootstrap) dist;
             };
-          };
+        };
 
     } // (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
@@ -215,9 +225,10 @@ let
       perlPackages = { };
 
       darwin = packagePlatforms pkgs.darwin // {
-        cf-private = {};
-        xcode = {};
+        cf-private = { };
+        xcode = { };
       };
-    } ));
+    }));
 
-in jobs
+in
+jobs

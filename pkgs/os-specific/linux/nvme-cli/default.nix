@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
 , libuuid
 }:
 

@@ -24,7 +24,8 @@ buildGoPackage rec {
   ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X ${goPackagePath}/pkg/version.appVersionTag=${version}"
     "-X ${goPackagePath}/pkg/version.appVersionRev=${src.rev}"
   ];

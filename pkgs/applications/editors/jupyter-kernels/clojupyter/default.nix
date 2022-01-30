@@ -13,7 +13,7 @@
 
 let
   cljdeps = import ./deps.nix { inherit pkgs; };
-  classp  = cljdeps.makeClasspaths {};
+  classp = cljdeps.makeClasspaths { };
 
   shellScript = writeShellScript "clojupyter" ''
     ${jre}/bin/java -cp ${classp} clojupyter.kernel.core "$@"

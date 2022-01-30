@@ -15,7 +15,8 @@ mkCoqDerivation {
     { case = "8.13.2"; out = "8.13"; }
     { case = "8.12.2"; out = "8.12"; }
     { case = "8.10.2"; out = "8.10.2"; }
-  ] null;
+  ]
+    null;
 
   mlPlugin = true;
 

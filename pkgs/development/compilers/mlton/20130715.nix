@@ -13,18 +13,21 @@ stdenv.mkDerivation rec {
   inherit version;
 
   binSrc =
-    if stdenv.hostPlatform.system == "i686-linux" then (fetchurl {
-      url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.x86-linux.tgz";
-      sha256 = "1kxjjmnw4xk2d9hpvz43w9dvyhb3025k4zvjx785c33nrwkrdn4j";
-    })
-    else if stdenv.hostPlatform.system == "x86_64-linux" then (fetchurl {
+    if stdenv.hostPlatform.system == "i686-linux" then
+      (fetchurl {
+        url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.x86-linux.tgz";
+        sha256 = "1kxjjmnw4xk2d9hpvz43w9dvyhb3025k4zvjx785c33nrwkrdn4j";
+      })
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
+      (fetchurl {
         url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-linux.tgz";
         sha256 = "0fyhwxb4nmpirjbjcvk9f6w67gmn2gkz7xcgz0xbfih9kc015ygn";
-    })
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then (fetchurl {
+      })
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then
+      (fetchurl {
         url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-darwin.gmp-macports.tgz";
         sha256 = "044wnh9hhg6if886xy805683k0as347xd37r0r1yi4x7qlxzzgx9";
-    })
+      })
     else throw "Architecture not supported";
 
   codeSrc =
@@ -62,7 +65,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $(pwd)/../${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $(pwd)/../${usr_prefix}/lib/mlton
   '' + lib.optionalString stdenv.cc.isClang ''
-    sed -i "s_	patch -s -p0 <gdtoa.hide-public-fns.patch_	patch -s -p0 <gdtoa.hide-public-fns.patch\n\tsed -i 's|printf(emptyfmt|printf(\"\"|g' ./gdtoa/arithchk.c_" ./runtime/Makefile
+    sed -i "s_  patch -s -p0 <gdtoa.hide-public-fns.patch_  patch -s -p0 <gdtoa.hide-public-fns.patch\n\tsed -i 's|printf(emptyfmt|printf(\"\"|g' ./gdtoa/arithchk.c_" ./runtime/Makefile
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's|XCFLAGS += -I/usr/local/include -I/sw/include -I/opt/local/include||' ./runtime/Makefile
   '';

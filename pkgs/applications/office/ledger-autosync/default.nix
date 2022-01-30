@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     secretstorage
     six
   ] ++ lib.optional useLedger ledger
-    ++ lib.optional useHledger hledger;
+  ++ lib.optional useHledger hledger;
 
   # Checks require ledger as a python package,
   # ledger does not support python3 while ledger-autosync requires it.

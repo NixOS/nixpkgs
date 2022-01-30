@@ -6,7 +6,8 @@ let
   cfg = config.services.netatalk;
   settingsFormat = pkgs.formats.ini { };
   afpConfFile = settingsFormat.generate "afp.conf" cfg.settings;
-in {
+in
+{
   options = {
     services.netatalk = {
 
@@ -52,13 +53,14 @@ in {
     };
   };
 
-  imports = (map (option:
-    mkRemovedOptionModule [ "services" "netatalk" option ]
-    "This option was removed in favor of `services.netatalk.settings`.") [
-      "extraConfig"
-      "homes"
-      "volumes"
-    ]);
+  imports = (map
+    (option:
+      mkRemovedOptionModule [ "services" "netatalk" option ]
+        "This option was removed in favor of `services.netatalk.settings`.") [
+    "extraConfig"
+    "homes"
+    "volumes"
+  ]);
 
   config = mkIf cfg.enable {
 

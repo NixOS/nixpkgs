@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, electron_10, makeDesktopItem, makeWrapper, nodePackages, autoPatchelfHook}:
+{ lib, stdenv, fetchurl, electron_10, makeDesktopItem, makeWrapper, nodePackages, autoPatchelfHook }:
 
 let
   electron = electron_10;
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
   '';
 
   desktopItem = makeDesktopItem {
-     name = "teleprompter";
-     exec = "teleprompter";
-     type = "Application";
-     desktopName = "Teleprompter";
+    name = "teleprompter";
+    exec = "teleprompter";
+    type = "Application";
+    desktopName = "Teleprompter";
   };
 
   meta = with lib; {

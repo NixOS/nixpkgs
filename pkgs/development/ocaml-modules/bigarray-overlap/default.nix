@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, fetchurl
-, bigarray-compat, alcotest, astring, fpath, bos, findlib, pkg-config
+{ lib
+, buildDunePackage
+, fetchurl
+, bigarray-compat
+, alcotest
+, astring
+, fpath
+, bos
+, findlib
+, pkg-config
 }:
 
 buildDunePackage rec {

@@ -1,6 +1,29 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, dbus-glib, glib, gtk3, gtksourceview3
-, gucharmap, libmateweather, libnl, libwnck, libgtop, libxml2, libnotify, mate-panel, polkit
-, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, dbus-glib
+, glib
+, gtk3
+, gtksourceview3
+, gucharmap
+, libmateweather
+, libnl
+, libwnck
+, libgtop
+, libxml2
+, libnotify
+, mate-panel
+, polkit
+, upower
+, wirelesstools
+, mate
+, hicolor-icon-theme
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-applets";

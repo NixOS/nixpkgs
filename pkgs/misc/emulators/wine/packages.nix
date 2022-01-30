@@ -1,13 +1,19 @@
-{ stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsCross, callPackage,
-  wineRelease ? "stable",
-  supportFlags
+{ stdenv_32bit
+, lib
+, pkgs
+, pkgsi686Linux
+, pkgsCross
+, callPackage
+, wineRelease ? "stable"
+, supportFlags
 }:
 
 let
-  src = lib.getAttr wineRelease (callPackage ./sources.nix {});
-  vkd3d = pkgs.callPackage ./vkd3d.nix {};
-  vkd3d_i686 = pkgsi686Linux.callPackage ./vkd3d.nix {};
-in with src; {
+  src = lib.getAttr wineRelease (callPackage ./sources.nix { });
+  vkd3d = pkgs.callPackage ./vkd3d.nix { };
+  vkd3d_i686 = pkgsi686Linux.callPackage ./vkd3d.nix { };
+in
+with src; {
   wine32 = pkgsi686Linux.callPackage ./base.nix {
     name = "wine-${version}";
     inherit src version supportFlags patches;
@@ -15,7 +21,7 @@ in with src; {
     vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d_i686 ];
     geckos = [ gecko32 ];
     mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc ];
-    monos =  [ mono ];
+    monos = [ mono ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
   wine64 = callPackage ./base.nix {
@@ -25,7 +31,7 @@ in with src; {
     vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d ];
     mingwGccs = with pkgsCross; [ mingwW64.buildPackages.gcc ];
     geckos = [ gecko64 ];
-    monos =  [ mono ];
+    monos = [ mono ];
     configureFlags = [ "--enable-win64" ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
@@ -37,7 +43,7 @@ in with src; {
     vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d vkd3d_i686 ];
     geckos = [ gecko32 gecko64 ];
     mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc mingwW64.buildPackages.gcc ];
-    monos =  [ mono ];
+    monos = [ mono ];
     buildScript = ./builder-wow.sh;
     platforms = [ "x86_64-linux" ];
   };

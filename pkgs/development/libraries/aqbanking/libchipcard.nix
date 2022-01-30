@@ -2,7 +2,8 @@
 
 let
   inherit ((import ./sources.nix).libchipcard) sha256 releaseId version;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libchipcard";
   inherit version;
 

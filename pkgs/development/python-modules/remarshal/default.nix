@@ -2,17 +2,17 @@
 , buildPythonApplication
 , fetchFromGitHub
 
-# build deps
+  # build deps
 , poetry-core
 
-# propagates
+  # propagates
 , cbor2
 , python-dateutil
 , pyyaml
 , tomlkit
 , u-msgpack-python
 
-# tested using
+  # tested using
 , pytestCheckHook
 }:
 

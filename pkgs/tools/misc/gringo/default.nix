@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl,
-  bison, re2c, sconsPackages,
-  libcxx
+{ lib
+, stdenv
+, fetchurl
+, bison
+, re2c
+, sconsPackages
+, libcxx
 }:
 
 stdenv.mkDerivation rec {

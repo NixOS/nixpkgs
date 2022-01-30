@@ -33,8 +33,14 @@ python3.pkgs.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
 
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${lib.concatStringsSep ":" (map (p: p + "/lib/${python3.libPrefix}/site-packages") (python3.pkgs.requiredPythonModules python3.pkgs.maestral.propagatedBuildInputs))}"
-    "--prefix" "PYTHONPATH" ":" "${python3.pkgs.maestral}/lib/${python3.libPrefix}/site-packages"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${lib.concatStringsSep ":" (map (p: p + "/lib/${python3.libPrefix}/site-packages") (python3.pkgs.requiredPythonModules python3.pkgs.maestral.propagatedBuildInputs))}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${python3.pkgs.maestral}/lib/${python3.libPrefix}/site-packages"
   ];
 
   # no tests

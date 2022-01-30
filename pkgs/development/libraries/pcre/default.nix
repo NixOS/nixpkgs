@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl
-, pcre, windows ? null
+{ lib
+, stdenv
+, fetchurl
+, pcre
+, windows ? null
 , variant ? null
 }:
 
@@ -35,8 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
-    # XXX: test failure on Cygwin
-    # we are running out of stack on both freeBSDs on Hydra
+  # XXX: test failure on Cygwin
+  # we are running out of stack on both freeBSDs on Hydra
 
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"

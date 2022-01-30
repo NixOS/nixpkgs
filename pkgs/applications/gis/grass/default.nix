@@ -1,7 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK30, wxmac, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, libLAS, proj-datumgrid
-, zstd, pdal, wrapGAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, flex
+, bison
+, pkg-config
+, zlib
+, libtiff
+, libpng
+, fftw
+, cairo
+, readline
+, ffmpeg
+, makeWrapper
+, wxGTK30
+, wxmac
+, netcdf
+, blas
+, proj
+, gdal
+, geos
+, sqlite
+, postgresql
+, libmysqlclient
+, python3Packages
+, libLAS
+, proj-datumgrid
+, zstd
+, pdal
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -16,14 +42,34 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite
-  readline ffmpeg makeWrapper netcdf geos postgresql libmysqlclient blas
-  libLAS proj-datumgrid zstd wrapGAppsHook ]
-    ++ lib.optionals stdenv.isLinux [ cairo pdal wxGTK30 ]
-    ++ lib.optional stdenv.isDarwin wxmac
-    ++ (with python3Packages; [ python python-dateutil numpy ]
-      ++ lib.optional stdenv.isDarwin wxPython_4_0
-      ++ lib.optional stdenv.isLinux wxPython_4_1);
+  buildInputs = [
+    flex
+    bison
+    zlib
+    proj
+    gdal
+    libtiff
+    libpng
+    fftw
+    sqlite
+    readline
+    ffmpeg
+    makeWrapper
+    netcdf
+    geos
+    postgresql
+    libmysqlclient
+    blas
+    libLAS
+    proj-datumgrid
+    zstd
+    wrapGAppsHook
+  ]
+  ++ lib.optionals stdenv.isLinux [ cairo pdal wxGTK30 ]
+  ++ lib.optional stdenv.isDarwin wxmac
+  ++ (with python3Packages; [ python python-dateutil numpy ]
+    ++ lib.optional stdenv.isDarwin wxPython_4_0
+    ++ lib.optional stdenv.isLinux wxPython_4_1);
 
   # On Darwin the installer tries to symlink the help files into a system
   # directory
@@ -31,7 +77,7 @@ stdenv.mkDerivation rec {
 
   # Correct mysql_config query
   patchPhase = ''
-      substituteInPlace configure --replace "--libmysqld-libs" "--libs"
+    substituteInPlace configure --replace "--libmysqld-libs" "--libs"
   '';
 
   configureFlags = [
@@ -66,7 +112,7 @@ stdenv.mkDerivation rec {
   makeFlags = lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
 
   /* Ensures that the python script run at build time are actually executable;
-   * otherwise, patchShebangs ignores them.  */
+    * otherwise, patchShebangs ignores them.  */
   postConfigure = ''
     chmod +x scripts/d.out.file/d.out.file.py \
       scripts/d.to.rast/d.to.rast.py \
@@ -117,6 +163,6 @@ stdenv.mkDerivation rec {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [mpickering];
+    maintainers = with lib.maintainers; [ mpickering ];
   };
 }

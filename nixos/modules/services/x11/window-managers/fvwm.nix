@@ -28,7 +28,8 @@ in
 
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton
-      { name = "fvwm";
+      {
+        name = "fvwm";
         start =
           ''
             ${fvwm}/bin/fvwm &

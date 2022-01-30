@@ -1,4 +1,4 @@
-{lib, stdenvNoCC, haskellPackages, fetchurl, writers}:
+{ lib, stdenvNoCC, haskellPackages, fetchurl, writers }:
 
 let
   hledger-lib = haskellPackages.hledger-lib_1_24_1;
@@ -23,8 +23,16 @@ stdenvNoCC.mkDerivation rec {
       libraries = [
         hledger-lib
       ] ++ (with haskellPackages; [
-        base base-compat base-compat-batteries filepath
-        megaparsec microlens optparse-applicative string-qq text time
+        base
+        base-compat
+        base-compat-batteries
+        filepath
+        megaparsec
+        microlens
+        optparse-applicative
+        string-qq
+        text
+        time
         transformers
       ]);
       inherit (haskellPackages) ghc;

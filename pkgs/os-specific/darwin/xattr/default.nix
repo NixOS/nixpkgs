@@ -60,7 +60,10 @@ buildPythonPackage rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix" "PYTHONPATH" ":" "${placeholder "python"}/${python.sitePackages}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${placeholder "python"}/${python.sitePackages}"
   ];
 
   meta = with lib; {

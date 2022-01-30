@@ -17,7 +17,8 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit name src meta;
   profile = ''
     export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS

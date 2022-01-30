@@ -1,38 +1,92 @@
-{ stdenv, bazel_3, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
-, addOpenGLRunpath, fetchpatch, patchelfUnstable
-# Python deps
-, buildPythonPackage, pythonOlder, python
-# Python libraries
-, numpy, tensorflow-tensorboard, absl-py
-, setuptools, wheel, keras, keras-preprocessing, google-pasta
-, opt-einsum, astunparse, h5py
-, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
-, dill, flatbuffers-python, tblib, typing-extensions
-# Common deps
-, git, pybind11, which, binutils, glibcLocales, cython, perl
-# Common libraries
-, jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp
-, curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib, protobuf-core
-# Upsteam by default includes cuda support since tensorflow 1.15. We could do
-# that in nix as well. It would make some things easier and less confusing, but
-# it would also make the default tensorflow package unfree. See
-# https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
-, cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null
-, mklSupport ? false, mkl ? null
+{ stdenv
+, bazel_3
+, buildBazelPackage
+, isPy3k
+, lib
+, fetchFromGitHub
+, symlinkJoin
+, addOpenGLRunpath
+, fetchpatch
+, patchelfUnstable
+  # Python deps
+, buildPythonPackage
+, pythonOlder
+, python
+  # Python libraries
+, numpy
+, tensorflow-tensorboard
+, absl-py
+, setuptools
+, wheel
+, keras
+, keras-preprocessing
+, google-pasta
+, opt-einsum
+, astunparse
+, h5py
+, termcolor
+, grpcio
+, six
+, wrapt
+, protobuf-python
+, tensorflow-estimator
+, dill
+, flatbuffers-python
+, tblib
+, typing-extensions
+  # Common deps
+, git
+, pybind11
+, which
+, binutils
+, glibcLocales
+, cython
+, perl
+  # Common libraries
+, jemalloc
+, mpi
+, gast
+, grpc
+, sqlite
+, boringssl
+, jsoncpp
+, curl
+, snappy
+, flatbuffers-core
+, lmdb-core
+, icu
+, double-conversion
+, libpng
+, libjpeg_turbo
+, giflib
+, protobuf-core
+  # Upsteam by default includes cuda support since tensorflow 1.15. We could do
+  # that in nix as well. It would make some things easier and less confusing, but
+  # it would also make the default tensorflow package unfree. See
+  # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
+, cudaSupport ? false
+, cudatoolkit ? null
+, cudnn ? null
+, nccl ? null
+, mklSupport ? false
+, mkl ? null
 , tensorboardSupport ? true
-# XLA without CUDA is broken
+  # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
-# Default from ./configure script
+  # Default from ./configure script
 , cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
-, avx2Support  ? stdenv.hostPlatform.avx2Support
-, fmaSupport   ? stdenv.hostPlatform.fmaSupport
-# Darwin deps
-, Foundation, Security, cctools, llvmPackages_11
+, avx2Support ? stdenv.hostPlatform.avx2Support
+, fmaSupport ? stdenv.hostPlatform.fmaSupport
+  # Darwin deps
+, Foundation
+, Security
+, cctools
+, llvmPackages_11
 }:
 
 assert cudaSupport -> cudatoolkit != null
-                   && cudnn != null;
+  && cudnn != null;
 
 # unsupported combination
 assert ! (stdenv.isDarwin && cudaSupport);
@@ -77,7 +131,8 @@ let
   pname = "tensorflow${variant}";
 
   pythonEnv = python.withPackages (_:
-    [ # python deps needed during wheel build time (not runtime, see the buildPythonPackage part for that)
+    [
+      # python deps needed during wheel build time (not runtime, see the buildPythonPackage part for that)
       # This list can likely be shortened, but each trial takes multiple hours so won't bother for now.
       absl-py
       astunparse
@@ -100,7 +155,7 @@ let
       typing-extensions
       wheel
       wrapt
-  ]);
+    ]);
 
   rules_cc_darwin_patched = stdenv.mkDerivation {
     name = "rules_cc-${pname}-${version}";
@@ -162,15 +217,18 @@ let
       runHook postInstall
     '';
   };
-  bazel-build = if stdenv.isDarwin then _bazel-build.overrideAttrs (prev: {
-    bazelBuildFlags = prev.bazelBuildFlags ++ [
-      "--override_repository=rules_cc=${rules_cc_darwin_patched}"
-      "--override_repository=llvm-raw=${llvm-raw_darwin_patched}"
-    ];
-    preBuild = ''
-      export AR="${cctools}/bin/libtool"
-    '';
-  }) else _bazel-build;
+  bazel-build =
+    if stdenv.isDarwin then
+      _bazel-build.overrideAttrs
+        (prev: {
+          bazelBuildFlags = prev.bazelBuildFlags ++ [
+            "--override_repository=rules_cc=${rules_cc_darwin_patched}"
+            "--override_repository=llvm-raw=${llvm-raw_darwin_patched}"
+          ];
+          preBuild = ''
+            export AR="${cctools}/bin/libtool"
+          '';
+        }) else _bazel-build;
 
   _bazel-build = (buildBazelPackage.override (lib.optionalAttrs stdenv.isDarwin {
     # clang 7 fails to emit a symbol for
@@ -197,7 +255,11 @@ let
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
 
     nativeBuildInputs = [
-      which pythonEnv cython perl protobuf-core
+      which
+      pythonEnv
+      cython
+      perl
+      protobuf-core
     ] ++ lib.optional cudaSupport addOpenGLRunpath;
 
     buildInputs = [
@@ -316,27 +378,29 @@ let
     # https://github.com/tensorflow/tensorflow/pull/39470
     NIX_CFLAGS_COMPILE = [ "-Wno-stringop-truncation" ];
 
-    preConfigure = let
-      opt_flags = []
-        ++ lib.optionals sse42Support ["-msse4.2"]
-        ++ lib.optionals avx2Support ["-mavx2"]
-        ++ lib.optionals fmaSupport ["-mfma"];
-    in ''
-      patchShebangs configure
+    preConfigure =
+      let
+        opt_flags = [ ]
+          ++ lib.optionals sse42Support [ "-msse4.2" ]
+          ++ lib.optionals avx2Support [ "-mavx2" ]
+          ++ lib.optionals fmaSupport [ "-mfma" ];
+      in
+      ''
+        patchShebangs configure
 
-      # dummy ldconfig
-      mkdir dummy-ldconfig
-      echo "#!${stdenv.shell}" > dummy-ldconfig/ldconfig
-      chmod +x dummy-ldconfig/ldconfig
-      export PATH="$PWD/dummy-ldconfig:$PATH"
+        # dummy ldconfig
+        mkdir dummy-ldconfig
+        echo "#!${stdenv.shell}" > dummy-ldconfig/ldconfig
+        chmod +x dummy-ldconfig/ldconfig
+        export PATH="$PWD/dummy-ldconfig:$PATH"
 
-      export PYTHON_LIB_PATH="$NIX_BUILD_TOP/site-packages"
-      export CC_OPT_FLAGS="${lib.concatStringsSep " " opt_flags}"
-      mkdir -p "$PYTHON_LIB_PATH"
+        export PYTHON_LIB_PATH="$NIX_BUILD_TOP/site-packages"
+        export CC_OPT_FLAGS="${lib.concatStringsSep " " opt_flags}"
+        mkdir -p "$PYTHON_LIB_PATH"
 
-      # To avoid mixing Python 2 and Python 3
-      unset PYTHONPATH
-    '';
+        # To avoid mixing Python 2 and Python 3
+        unset PYTHONPATH
+      '';
 
     configurePhase = ''
       runHook preConfigure
@@ -360,13 +424,14 @@ let
 
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
-      sha256 = if cudaSupport then
-        "sha256-+szc2mRoImwijzbj3nw6HmZp3DeRjjPRU5yC+5AEbkg="
-      else
-        if stdenv.isDarwin then
-          "sha256-+bwIzp6t7gRJPcI8B5oyuf9z0AjCAyggUR7x+vv5kFs="
+      sha256 =
+        if cudaSupport then
+          "sha256-+szc2mRoImwijzbj3nw6HmZp3DeRjjPRU5yC+5AEbkg="
         else
-          "sha256-5yOYmeGpJq4Chi55H7iblxyRXVktgnePtpYTPvBs538=";
+          if stdenv.isDarwin then
+            "sha256-+bwIzp6t7gRJPcI8B5oyuf9z0AjCAyggUR7x+vv5kFs="
+          else
+            "sha256-5yOYmeGpJq4Chi55H7iblxyRXVktgnePtpYTPvBs538=";
     };
 
     buildAttrs = {
@@ -418,7 +483,8 @@ let
     };
   };
 
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit version pname;
   disabled = !isPy3k;
 

@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "test_async_discover_hosts"
   ];
 
-  pythonImportsCheck = ["aiodiscover"];
+  pythonImportsCheck = [ "aiodiscover" ];
 
   meta = with lib; {
     description = "Python module to discover hosts via ARP and PTR lookup";

@@ -9,7 +9,7 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "kubernetes" "proxy" "address" ] ["services" "kubernetes" "proxy" "bindAddress"])
+    (mkRenamedOptionModule [ "services" "kubernetes" "proxy" "address" ] [ "services" "kubernetes" "proxy" "bindAddress" ])
   ];
 
   ###### interface

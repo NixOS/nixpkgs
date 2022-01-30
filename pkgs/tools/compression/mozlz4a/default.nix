@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A script to handle Mozilla's mozlz4 files";
     license = lib.licenses.bsd2;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "https://gist.githubusercontent.com/Tblue/62ff47bef7f894e92ed5";
   };

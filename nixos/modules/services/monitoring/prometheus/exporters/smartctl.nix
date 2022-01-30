@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.prometheus.exporters.smartctl;
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
   configFile = format.generate "smartctl-exporter.yml" {
     smartctl_exporter = {
       bind_to = "${cfg.listenAddress}:${toString cfg.port}";
@@ -14,13 +14,14 @@ let
       devices = cfg.devices;
     };
   };
-in {
+in
+{
   port = 9633;
 
   extraOpts = {
     devices = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [ "/dev/sda", "/dev/nvme0n1" ];
       '';
@@ -51,7 +52,7 @@ in {
       ];
       DevicePolicy = "closed";
       DeviceAllow = lib.mkOverride 100 (
-        if cfg.devices != [] then
+        if cfg.devices != [ ] then
           cfg.devices
         else [
           "block-blkext rw"

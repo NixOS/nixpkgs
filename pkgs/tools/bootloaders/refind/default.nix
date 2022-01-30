@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "stackprotector" ];
 
   makeFlags =
-    [ "prefix="
+    [
+      "prefix="
       "EFIINC=${gnu-efi}/include/efi"
       "EFILIB=${gnu-efi}/lib"
       "GNUEFILIB=${gnu-efi}/lib"

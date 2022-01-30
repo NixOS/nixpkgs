@@ -28,22 +28,22 @@ in
     programs.bash = {
 
       /*
-      enable = mkOption {
+        enable = mkOption {
         default = true;
         description = ''
-          Whenever to configure Bash as an interactive shell.
-          Note that this tries to make Bash the default
-          <option>users.defaultUserShell</option>,
-          which in turn means that you might need to explicitly
-          set this variable if you have another shell configured
-          with NixOS.
+        Whenever to configure Bash as an interactive shell.
+        Note that this tries to make Bash the default
+        <option>users.defaultUserShell</option>,
+        which in turn means that you might need to explicitly
+        set this variable if you have another shell configured
+        with NixOS.
         '';
         type = types.bool;
-      };
+        };
       */
 
       shellAliases = mkOption {
-        default = {};
+        default = { };
         description = ''
           Set of aliases for bash shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
@@ -206,7 +206,8 @@ in
     ];
 
     environment.shells =
-      [ "/run/current-system/sw/bin/bash"
+      [
+        "/run/current-system/sw/bin/bash"
         "/run/current-system/sw/bin/sh"
         "${pkgs.bashInteractive}/bin/bash"
         "${pkgs.bashInteractive}/bin/sh"

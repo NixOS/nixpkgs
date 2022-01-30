@@ -1,5 +1,13 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools
-, kcrash, kguiaddons, ki18n, kparts, kwidgetsaddons, kdbusaddons
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, kcrash
+, kguiaddons
+, ki18n
+, kparts
+, kwidgetsaddons
+, kdbusaddons
 }:
 
 mkDerivation {
@@ -12,6 +20,11 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kcrash kguiaddons ki18n kparts kwidgetsaddons kdbusaddons
+    kcrash
+    kguiaddons
+    ki18n
+    kparts
+    kwidgetsaddons
+    kdbusaddons
   ];
 }

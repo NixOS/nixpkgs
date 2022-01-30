@@ -12,7 +12,7 @@ let
   );
 
   riemannConfig = concatStringsSep "\n" (
-    [cfg.config] ++ (map (f: ''(load-file "${f}")'') cfg.configFiles)
+    [ cfg.config ] ++ (map (f: ''(load-file "${f}")'') cfg.configFiles)
   );
 
   launcher = writeScriptBin "riemann" ''
@@ -22,7 +22,8 @@ let
       riemann.bin ${cfg.configFile}
   '';
 
-in {
+in
+{
 
   options = {
 
@@ -43,7 +44,7 @@ in {
       };
       configFiles = mkOption {
         type = with types; listOf path;
-        default = [];
+        default = [ ];
         description = ''
           Extra files containing Riemann configuration. These files will be
           loaded at runtime by Riemann (with Clojure's
@@ -61,14 +62,14 @@ in {
       };
       extraClasspathEntries = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Extra entries added to the Java classpath when running Riemann.
         '';
       };
       extraJavaOpts = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Extra Java options used when launching Riemann.
         '';

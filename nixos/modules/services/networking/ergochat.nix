@@ -1,6 +1,8 @@
-{ config, lib, options, pkgs, ... }: let
+{ config, lib, options, pkgs, ... }:
+let
   cfg = config.services.ergochat;
-in {
+in
+{
   options = {
     services.ergochat = {
 
@@ -16,7 +18,7 @@ in {
 
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = (pkgs.formats.yaml {}).generate "ergo.conf" cfg.settings;
+        default = (pkgs.formats.yaml { }).generate "ergo.conf" cfg.settings;
         defaultText = "generated config file from <literal>.settings</literal>";
         description = ''
           Path to configuration file.
@@ -25,7 +27,7 @@ in {
       };
 
       settings = lib.mkOption {
-        type = (pkgs.formats.yaml {}).type;
+        type = (pkgs.formats.yaml { }).type;
         description = ''
           Ergo IRC daemon configuration file.
           https://raw.githubusercontent.com/ergochat/ergo/master/default.yaml
@@ -37,7 +39,7 @@ in {
           server = {
             name = "example.com";
             listeners = {
-              ":6667" = {};
+              ":6667" = { };
             };
             casemapping = "permissive";
             enforce-utf = true;

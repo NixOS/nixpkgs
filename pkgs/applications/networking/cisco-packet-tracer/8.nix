@@ -107,7 +107,8 @@ let
       cp "${desktopItem}"/share/applications/* "$out/share/applications/"
     '';
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ciscoPacketTracer8";
   inherit version;
 

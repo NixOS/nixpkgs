@@ -1,7 +1,27 @@
-{ stdenv, lib, fetchFromGitHub, makeDesktopItem, cmake, pkg-config
-, freefont_ttf, spice-protocol, nettle, libbfd, fontconfig, libffi, expat
-, libxkbcommon, libGL, libXext, libXrandr, libXi, libXScrnSaver, libXinerama
-, libXcursor, libXpresent, wayland, wayland-protocols
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeDesktopItem
+, cmake
+, pkg-config
+, freefont_ttf
+, spice-protocol
+, nettle
+, libbfd
+, fontconfig
+, libffi
+, expat
+, libxkbcommon
+, libGL
+, libXext
+, libXrandr
+, libXi
+, libXScrnSaver
+, libXinerama
+, libXcursor
+, libXpresent
+, wayland
+, wayland-protocols
 }:
 
 let

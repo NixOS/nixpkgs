@@ -1,7 +1,17 @@
-{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
-, bundlerEnv, pkg-config
-# libgit2 + dependencies
-, libgit2, openssl, zlib, pcre, http-parser }:
+{ lib
+, fetchFromGitLab
+, fetchFromGitHub
+, buildGoModule
+, ruby
+, bundlerEnv
+, pkg-config
+  # libgit2 + dependencies
+, libgit2
+, openssl
+, zlib
+, pcre
+, http-parser
+}:
 
 let
   # git2go 32.0.5 does not support libgit2 1.2.0 or 1.3.0.

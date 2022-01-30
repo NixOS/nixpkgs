@@ -13,8 +13,9 @@
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-fsguard-plugin";
+in
+stdenv.mkDerivation rec {
+  pname = "xfce4-fsguard-plugin";
   version = "1.1.2";
 
   src = fetchurl {

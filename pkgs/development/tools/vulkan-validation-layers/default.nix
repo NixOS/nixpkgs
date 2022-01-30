@@ -26,16 +26,18 @@ stdenv.mkDerivation rec {
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
-  outputs = ["out" "headers"];
+  outputs = [ "out" "headers" ];
   outputInclude = "headers";
 
-  src = (assert (lib.all (pkg: pkg.version == version) [vulkan-headers glslang spirv-tools spirv-headers]);
+  src = (
+    assert (lib.all (pkg: pkg.version == version) [ vulkan-headers glslang spirv-tools spirv-headers ]);
     fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "Vulkan-ValidationLayers";
       rev = "sdk-${version}";
       sha256 = "sha256-/pnXT55EQZcnjOzY2vBwp+gM6l2hktZHwB9yKP8vVTU=";
-    });
+    }
+  );
 
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.
@@ -70,9 +72,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The official Khronos Vulkan validation layers";
-    homepage    = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
+    homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
+    platforms = platforms.linux;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };
 }

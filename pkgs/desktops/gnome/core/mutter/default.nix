@@ -139,7 +139,7 @@ let self = stdenv.mkDerivation rec {
     libdir = "${self}/lib/mutter-9";
 
     tests = {
-      libdirExists = runCommand "mutter-libdir-exists" {} ''
+      libdirExists = runCommand "mutter-libdir-exists" { } ''
         if [[ ! -d ${self.libdir} ]]; then
           echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
           exit 1

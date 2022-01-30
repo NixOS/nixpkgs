@@ -10,7 +10,7 @@
 , importlib-metadata
 , git
 
-# for tests
+  # for tests
 , pytestCheckHook
 , symbiyosys
 , yices
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     sha256 = "P9AG3t30eGeeCN5+t7mjhRoOWIGZVzWQji9eYXphjA0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}";
+  SETUPTOOLS_SCM_PRETEND_VERSION = "${realVersion}";
 
   nativeBuildInputs = [
     git
@@ -43,8 +43,8 @@ buildPythonPackage rec {
     pyvcd
     setuptools
   ] ++
-    lib.optional (pythonOlder "3.9") importlib-resources ++
-    lib.optional (pythonOlder "3.8") importlib-metadata;
+  lib.optional (pythonOlder "3.9") importlib-resources ++
+  lib.optional (pythonOlder "3.8") importlib-metadata;
 
   checkInputs = [
     pytestCheckHook

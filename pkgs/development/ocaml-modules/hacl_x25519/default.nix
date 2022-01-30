@@ -1,5 +1,16 @@
-{ lib, buildDunePackage, fetchurl, benchmark, cstruct
-, alcotest , eqaf, hex, ppx_blob, ppx_deriving_yojson, stdlib-shims, yojson }:
+{ lib
+, buildDunePackage
+, fetchurl
+, benchmark
+, cstruct
+, alcotest
+, eqaf
+, hex
+, ppx_blob
+, ppx_deriving_yojson
+, stdlib-shims
+, yojson
+}:
 
 buildDunePackage rec {
   pname = "hacl_x25519";

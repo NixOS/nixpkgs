@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub
+{ lib
+, fetchFromGitHub
 , version
 , suffix ? ""
 , sha256 ? null
@@ -46,8 +47,10 @@ in
 
 , enableDocumentation ? atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
 , enableStatic ? stdenv.hostPlatform.isStatic
-, withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
-, withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
+, withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin)
+, aws-sdk-cpp
+, withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp
+, libseccomp
 
 , confDir
 , stateDir
@@ -203,6 +206,6 @@ stdenv.mkDerivation {
   passthru = {
     inherit boehmgc;
 
-    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { inherit src version;  });
+    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { inherit src version; });
   };
 }

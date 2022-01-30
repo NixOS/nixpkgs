@@ -1,4 +1,4 @@
-{lib, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch, pytest, flake8}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch, pytest, flake8 }:
 
 buildPythonPackage rec {
   pname = "pytest-flake8";

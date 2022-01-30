@@ -15,7 +15,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    libX11 libXrandr libXinerama libXext libXcursor freetype alsa-lib libjack2
+    libX11
+    libXrandr
+    libXinerama
+    libXext
+    libXcursor
+    freetype
+    alsa-lib
+    libjack2
   ];
 
   installPhase = ''

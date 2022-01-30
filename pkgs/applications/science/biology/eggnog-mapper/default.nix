@@ -23,7 +23,7 @@ python27Packages.buildPythonApplication rec {
   makeWrapperArgs = [
     ''--prefix PATH ':' "${diamond}/bin"''
     ''--prefix PATH ':' "${hmmer}/bin"''
-    ];
+  ];
 
   # Tests rely on some of the databases being available, which is not bundled
   # with this package as (1) in total, they represent >100GB of data, and (2)

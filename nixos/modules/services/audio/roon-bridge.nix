@@ -5,7 +5,8 @@ with lib;
 let
   name = "roon-bridge";
   cfg = config.services.roon-bridge;
-in {
+in
+{
   options = {
     services.roon-bridge = {
       enable = mkEnableOption "Roon Bridge";
@@ -63,7 +64,7 @@ in {
     };
 
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
     users.users.${cfg.user} =
       if cfg.user == "roon-bridge" then {
         isSystemUser = true;
@@ -71,6 +72,6 @@ in {
         group = cfg.group;
         extraGroups = [ "audio" ];
       }
-      else {};
+      else { };
   };
 }

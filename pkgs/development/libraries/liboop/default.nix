@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   pname = "liboop";

@@ -1,6 +1,6 @@
 /* An environment for development that bundles ruby, bundler and bundix
-   together. This avoids version conflicts where each is using a diferent
-   version of each-other.
+  together. This avoids version conflicts where each is using a diferent
+  version of each-other.
 */
 { buildEnv, ruby, bundler, bundix }:
 let

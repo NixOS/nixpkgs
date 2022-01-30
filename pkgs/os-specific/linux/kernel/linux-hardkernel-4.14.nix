@@ -30,4 +30,4 @@ buildLinux (args // rec {
 
   extraMeta.platforms = [ "armv7l-linux" ];
 
-} // (args.argsOverride or {}))
+} // (args.argsOverride or { }))

@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/falsovsky/FiSH-irssi";
     license = lib.licenses.unfree; # I can't find any mention of license
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
   };
 }

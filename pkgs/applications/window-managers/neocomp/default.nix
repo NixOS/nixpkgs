@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , asciidoc
 , docbook_xml_dtd_45
@@ -74,11 +75,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage        = "https://github.com/DelusionalLogic/NeoComp";
-    license         = licenses.gpl3Only;
-    maintainers     = with maintainers; [ twey fortuneteller2k ];
-    platforms       = platforms.linux;
-    description     = "A fork of Compton, a compositor for X11";
+    homepage = "https://github.com/DelusionalLogic/NeoComp";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ twey fortuneteller2k ];
+    platforms = platforms.linux;
+    description = "A fork of Compton, a compositor for X11";
     longDescription = ''
       NeoComp is a (hopefully) fast and (hopefully) simple compositor
       for X11, focused on delivering frames from the window to the

@@ -59,7 +59,7 @@ let
 
     # print available tags
     for tag in $tags; do
-        echo "#	found $pname version: $tag" >> ${fileForGitCommands}
+        echo "#  found $pname version: $tag" >> ${fileForGitCommands}
     done
 
     # cut any revision prefix not used in the NixOS package version

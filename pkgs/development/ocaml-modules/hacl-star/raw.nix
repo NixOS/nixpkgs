@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   buildInputs = [
     which

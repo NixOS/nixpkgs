@@ -4,7 +4,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   machine =
     { ... }:
-    { services.moodle.enable = true;
+    {
+      services.moodle.enable = true;
       services.moodle.virtualHost.hostName = "localhost";
       services.moodle.virtualHost.adminAddr = "root@example.com";
       services.moodle.initialPassword = "correcthorsebatterystaple";

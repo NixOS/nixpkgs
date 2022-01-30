@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "3.0.3";
 
   src = fetchFromGitHub {
-    owner  = "sekrit-twc";
-    repo   = "zimg";
-    rev    = "release-${version}";
+    owner = "sekrit-twc";
+    repo = "zimg";
+    rev = "release-${version}";
     sha256 = "0pwgf1mybpa3fs13p6jryzm32vfldyql9biwaypqdcimlnlmyk20";
   };
 
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Scaling, colorspace conversion and dithering library";
-    homepage    = "https://github.com/sekrit-twc/zimg";
-    license     = licenses.wtfpl;
-    platforms   = platforms.linux ++ platforms.darwin;
+    homepage = "https://github.com/sekrit-twc/zimg";
+    license = licenses.wtfpl;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

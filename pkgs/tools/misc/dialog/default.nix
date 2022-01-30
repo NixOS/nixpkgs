@@ -2,7 +2,8 @@
 , stdenv
 , fetchurl
 , ncurses
-, withLibrary ? false, libtool
+, withLibrary ? false
+, libtool
 , unicodeSupport ? true
 , enableShared ? !stdenv.isDarwin
 }:

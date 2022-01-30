@@ -5,10 +5,11 @@ with lib;
 let
   cfg = config.services.mbpfan;
   verbose = if cfg.verbose then "v" else "";
-  settingsFormat = pkgs.formats.ini {};
+  settingsFormat = pkgs.formats.ini { };
   settingsFile = settingsFormat.generate "config.conf" cfg.settings;
 
-in {
+in
+{
   options.services.mbpfan = {
     enable = mkEnableOption "mbpfan, fan controller daemon for Apple Macs and MacBooks";
 
@@ -30,7 +31,7 @@ in {
     };
 
     settings = mkOption {
-      default = {};
+      default = { };
       description = "The INI configuration for Mbpfan.";
       type = types.submodule {
         freeformType = settingsFormat.type;

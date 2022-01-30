@@ -8,7 +8,8 @@ let
   # on the derivations likely to be used as `cfgc.package`.
   # This middle-ground solution ensures *an* sshd can do their basic validation
   # on the configuration.
-  validationPackage = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
+  validationPackage =
+    if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
     then cfgc.package
     else pkgs.buildPackages.openssh;
 
@@ -21,7 +22,7 @@ let
     sshd -t -f $out -h mock-hostkey
   '';
 
-  cfg  = config.services.openssh;
+  cfg = config.services.openssh;
   cfgc = config.programs.ssh;
 
   nssModulesPath = config.system.nssModules.path;
@@ -31,7 +32,7 @@ let
     options.openssh.authorizedKeys = {
       keys = mkOption {
         type = types.listOf types.singleLineStr;
-        default = [];
+        default = [ ];
         description = ''
           A list of verbatim OpenSSH public keys that should be added to the
           user's authorized keys. The keys are added to a file that the SSH
@@ -49,7 +50,7 @@ let
 
       keyFiles = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of files each containing one OpenSSH public key that should be
           added to the user's authorized keys. The contents of the files are
@@ -62,18 +63,20 @@ let
 
   };
 
-  authKeysFiles = let
-    mkAuthKeyFile = u: nameValuePair "ssh/authorized_keys.d/${u.name}" {
-      mode = "0444";
-      source = pkgs.writeText "${u.name}-authorized_keys" ''
-        ${concatStringsSep "\n" u.openssh.authorizedKeys.keys}
-        ${concatMapStrings (f: readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
-      '';
-    };
-    usersWithKeys = attrValues (flip filterAttrs config.users.users (n: u:
-      length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
-    ));
-  in listToAttrs (map mkAuthKeyFile usersWithKeys);
+  authKeysFiles =
+    let
+      mkAuthKeyFile = u: nameValuePair "ssh/authorized_keys.d/${u.name}" {
+        mode = "0444";
+        source = pkgs.writeText "${u.name}-authorized_keys" ''
+          ${concatStringsSep "\n" u.openssh.authorizedKeys.keys}
+          ${concatMapStrings (f: readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
+        '';
+      };
+      usersWithKeys = attrValues (flip filterAttrs config.users.users (n: u:
+        length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
+      ));
+    in
+    listToAttrs (map mkAuthKeyFile usersWithKeys);
 
 in
 
@@ -138,7 +141,7 @@ in
 
       sftpFlags = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         example = [ "-f AUTHPRIV" "-l INFO" ];
         description = ''
           Commandline flags to add to sftp-server.
@@ -147,7 +150,7 @@ in
 
       permitRootLogin = mkOption {
         default = "prohibit-password";
-        type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
+        type = types.enum [ "yes" "without-password" "prohibit-password" "forced-commands-only" "no" ];
         description = ''
           Whether the root user can login using ssh.
         '';
@@ -166,7 +169,7 @@ in
 
       ports = mkOption {
         type = types.listOf types.port;
-        default = [22];
+        default = [ 22 ];
         description = ''
           Specifies on which ports the SSH daemon listens.
         '';
@@ -199,8 +202,8 @@ in
             };
           };
         });
-        default = [];
-        example = [ { addr = "192.168.3.1"; port = 22; } { addr = "0.0.0.0"; port = 64022; } ];
+        default = [ ];
+        example = [{ addr = "192.168.3.1"; port = 22; } { addr = "0.0.0.0"; port = 64022; }];
         description = ''
           List of addresses and ports to listen on (ListenAddress directive
           in config). If port is not specified for address sshd will listen
@@ -230,13 +233,11 @@ in
       hostKeys = mkOption {
         type = types.listOf types.attrs;
         default =
-          [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
-            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
-          ];
+          [{ type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
+            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }];
         example =
-          [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; rounds = 100; openSSHFormat = true; }
-            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; rounds = 100; comment = "key comment"; }
-          ];
+          [{ type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; rounds = 100; openSSHFormat = true; }
+            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; rounds = 100; comment = "key comment"; }];
         description = ''
           NixOS can automatically generate SSH host keys.  This option
           specifies the path, type and size of each key.  See
@@ -256,7 +257,7 @@ in
 
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Specify the rules for which files to read on the host.
 
@@ -407,20 +408,22 @@ in
         group = "sshd";
         description = "SSH privilege separation user";
       };
-    users.groups.sshd = {};
+    users.groups.sshd = { };
 
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
     services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
 
     environment.etc = authKeysFiles //
-      { "ssh/moduli".source = cfg.moduliFile;
+      {
+        "ssh/moduli".source = cfg.moduliFile;
         "ssh/sshd_config".source = sshconf;
       };
 
     systemd =
       let
         service =
-          { description = "SSH Daemon";
+          {
+            description = "SSH Daemon";
             wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
             after = [ "network.target" ];
             stopIfChanged = false;
@@ -454,10 +457,11 @@ in
               '';
 
             serviceConfig =
-              { ExecStart =
+              {
+                ExecStart =
                   (optionalString cfg.startWhenNeeded "-") +
                   "${cfgc.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
-                  "-D " +  # don't detach into a daemon process
+                  "-D " + # don't detach into a daemon process
                   "-f /etc/ssh/sshd_config";
                 KillMode = "process";
               } // (if cfg.startWhenNeeded then {
@@ -474,12 +478,14 @@ in
       if cfg.startWhenNeeded then {
 
         sockets.sshd =
-          { description = "SSH Socket";
+          {
+            description = "SSH Socket";
             wantedBy = [ "sockets.target" ];
-            socketConfig.ListenStream = if cfg.listenAddresses != [] then
-              map (l: "${l.addr}:${toString (if l.port != null then l.port else 22)}") cfg.listenAddresses
-            else
-              cfg.ports;
+            socketConfig.ListenStream =
+              if cfg.listenAddresses != [ ] then
+                map (l: "${l.addr}:${toString (if l.port != null then l.port else 22)}") cfg.listenAddresses
+              else
+                cfg.ports;
             socketConfig.Accept = true;
             # Prevent brute-force attacks from shutting down socket
             socketConfig.TriggerLimitIntervalSec = 0;
@@ -493,10 +499,11 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
+    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [ ];
 
     security.pam.services.sshd =
-      { startSession = true;
+      {
+        startSession = true;
         showMotd = true;
         unixAuth = cfg.passwordAuthentication;
       };
@@ -559,12 +566,14 @@ in
 
       '';
 
-    assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
-                    message = "cannot enable X11 forwarding without setting xauth location";}]
-      ++ forEach cfg.listenAddresses ({ addr, ... }: {
-        assertion = addr != null;
-        message = "addr must be specified in each listenAddresses entry";
-      });
+    assertions = [{
+      assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
+      message = "cannot enable X11 forwarding without setting xauth location";
+    }]
+    ++ forEach cfg.listenAddresses ({ addr, ... }: {
+      assertion = addr != null;
+      message = "addr must be specified in each listenAddresses entry";
+    });
 
   };
 

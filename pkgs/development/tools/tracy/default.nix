@@ -2,7 +2,8 @@
 
 let
   disableLTO = stdenv.cc.isClang && stdenv.isDarwin;  # workaround issue #19098
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tracy";
   version = "0.7.8";
 

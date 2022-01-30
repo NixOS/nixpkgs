@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , coreutils
 , sharutils
@@ -14,9 +15,9 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     inherit sha256;
 
-    owner  = "rkitover";
-    repo   = "vimpager";
-    rev    = version;
+    owner = "rkitover";
+    repo = "vimpager";
+    rev = version;
   };
 
   nativeBuildInputs = [ sharutils ]; # for uuencode
@@ -34,8 +35,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Use Vim as PAGER";
-    homepage    = "https://www.vim.org/scripts/script.php?script_id=1723";
-    license     = with licenses; [ bsd2 mit vim ];
-    platforms   = platforms.unix;
+    homepage = "https://www.vim.org/scripts/script.php?script_id=1723";
+    license = with licenses; [ bsd2 mit vim ];
+    platforms = platforms.unix;
   };
 }

@@ -3,7 +3,20 @@
 , fetchFromGitHub
 , pythonOlder
 , python
-, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
+, click
+, desktop-notifier
+, dropbox
+, fasteners
+, keyring
+, keyrings-alt
+, packaging
+, pathspec
+, Pyro5
+, requests
+, setuptools
+, sdnotify
+, survey
+, watchdog
 , importlib-metadata
 , pytestCheckHook
 }:
@@ -41,8 +54,14 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
-    "--prefix" "PYTHONPATH" ":" "$out/lib/${python.libPrefix}/site-packages"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/lib/${python.libPrefix}/site-packages"
   ];
 
   checkInputs = [

@@ -9,7 +9,8 @@ let
     platforms = platforms.unix;
   };
 
-in rec {
+in
+rec {
 
   # Suma library
   sumalibs = stdenv.mkDerivation rec {

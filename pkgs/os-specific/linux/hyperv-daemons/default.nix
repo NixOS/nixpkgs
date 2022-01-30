@@ -1,5 +1,13 @@
-{ stdenv, lib, python2, python3, kernel, makeWrapper, writeText
-, gawk, iproute2 }:
+{ stdenv
+, lib
+, python2
+, python3
+, kernel
+, makeWrapper
+, writeText
+, gawk
+, iproute2
+}:
 
 let
   libexec = "libexec/hypervkvpd";
@@ -61,7 +69,8 @@ let
       WantedBy=hyperv-daemons.target
     '';
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "hyperv-daemons";
   inherit (kernel) version;
 

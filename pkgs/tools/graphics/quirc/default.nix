@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, SDL_gfx, SDL, libjpeg, libpng, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL_gfx
+, SDL
+, libjpeg
+, libpng
+, pkg-config
 }:
 
 stdenv.mkDerivation {
@@ -37,7 +43,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A small QR code decoding library";
     license = lib.licenses.isc;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
 }

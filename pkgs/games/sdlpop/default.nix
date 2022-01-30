@@ -1,9 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , makeWrapper
-, makeDesktopItem, copyDesktopItems
+, makeDesktopItem
+, copyDesktopItems
 , fetchFromGitHub
 , pkg-config
-, SDL2, SDL2_image
+, SDL2
+, SDL2_image
 }:
 
 stdenv.mkDerivation rec {
@@ -51,14 +54,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItems = [ (makeDesktopItem {
-    name = "sdlpop";
-    icon = "sdlpop";
-    exec = "prince";
-    desktopName = "SDLPoP";
-    comment = "An open-source port of Prince of Persia";
-    categories = "Game;AdventureGame;";
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "sdlpop";
+      icon = "sdlpop";
+      exec = "prince";
+      desktopName = "SDLPoP";
+      comment = "An open-source port of Prince of Persia";
+      categories = "Game;AdventureGame;";
+    })
+  ];
 
   meta = with lib; {
     description = "Open-source port of Prince of Persia";

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, validatePkgConfig
-, tinyxml, boost, urdfdom-headers, console-bridge }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, validatePkgConfig
+, tinyxml
+, boost
+, urdfdom-headers
+, console-bridge
+}:
 
 stdenv.mkDerivation rec {
   pname = "urdfdom";

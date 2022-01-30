@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc, wayland-scanner
-, wayland, wayland-protocols, systemd
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wayland-scanner
+, wayland
+, wayland-protocols
+, systemd
 }:
 
 stdenv.mkDerivation rec {

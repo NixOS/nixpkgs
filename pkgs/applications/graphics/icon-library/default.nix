@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook
-, cargo, desktop-file-utils, meson, ninja, pkg-config, python3, rustc
-, dbus, gdk-pixbuf, glib, gtk3, gtksourceview4, libhandy
+{ lib
+, stdenv
+, fetchurl
+, wrapGAppsHook
+, cargo
+, desktop-file-utils
+, meson
+, ninja
+, pkg-config
+, python3
+, rustc
+, dbus
+, gdk-pixbuf
+, glib
+, gtk3
+, gtksourceview4
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +27,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cargo desktop-file-utils meson ninja pkg-config python3 rustc wrapGAppsHook
+    cargo
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    python3
+    rustc
+    wrapGAppsHook
   ];
   buildInputs = [ dbus gdk-pixbuf glib gtk3 gtksourceview4 libhandy ];
 

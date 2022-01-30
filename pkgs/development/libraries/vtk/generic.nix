@@ -1,11 +1,38 @@
-{ majorVersion, minorVersion, sourceSha256, patchesToFetch ? [] }:
-{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng, libtiff
+{ majorVersion, minorVersion, sourceSha256, patchesToFetch ? [ ] }:
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, libGLU
+, libGL
+, libX11
+, xorgproto
+, libXt
+, libpng
+, libtiff
 , fetchpatch
-, enableQt ? false, wrapQtAppsHook, qtbase, qtx11extras, qttools
-, enablePython ? false, pythonInterpreter ? throw "vtk: Python support requested, but no python interpreter was given."
-# Darwin support
-, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
-, ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc
+, enableQt ? false
+, wrapQtAppsHook
+, qtbase
+, qtx11extras
+, qttools
+, enablePython ? false
+, pythonInterpreter ? throw "vtk: Python support requested, but no python interpreter was given."
+  # Darwin support
+, Cocoa
+, CoreServices
+, DiskArbitration
+, IOKit
+, CFNetwork
+, Security
+, GLUT
+, OpenGL
+, ApplicationServices
+, CoreText
+, IOSurface
+, ImageIO
+, xpc
+, libobjc
 }:
 
 let
@@ -13,7 +40,8 @@ let
 
   pythonMajor = lib.substring 0 1 pythonInterpreter.pythonVersion;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "vtk${optionalString enableQt "-qvtk"}";
   version = "${majorVersion}.${minorVersion}";
 
@@ -27,28 +55,28 @@ in stdenv.mkDerivation rec {
   buildInputs = [ libpng libtiff ]
     ++ optionals enableQt [ qtbase qtx11extras qttools ]
     ++ optionals stdenv.isLinux [
-      libGLU
-      libGL
-      libX11
-      xorgproto
-      libXt
-    ] ++ optionals stdenv.isDarwin [
-      xpc
-      Cocoa
-      CoreServices
-      DiskArbitration
-      IOKit
-      CFNetwork
-      Security
-      ApplicationServices
-      CoreText
-      IOSurface
-      ImageIO
-      OpenGL
-      GLUT
-    ] ++ optional enablePython [
-      pythonInterpreter
-    ];
+    libGLU
+    libGL
+    libX11
+    xorgproto
+    libXt
+  ] ++ optionals stdenv.isDarwin [
+    xpc
+    Cocoa
+    CoreServices
+    DiskArbitration
+    IOKit
+    CFNetwork
+    Security
+    ApplicationServices
+    CoreText
+    IOSurface
+    ImageIO
+    OpenGL
+    GLUT
+  ] ++ optional enablePython [
+    pythonInterpreter
+  ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ];
 
   patches = map fetchpatch patchesToFetch;
@@ -78,11 +106,11 @@ in stdenv.mkDerivation rec {
   ] ++ optionals (enableQt && lib.versionOlder version "8.0") [
     "-DVTK_QT_VERSION=5"
   ]
-    ++ optionals stdenv.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
-    ++ optionals enablePython [
-      "-DVTK_WRAP_PYTHON:BOOL=ON"
-      "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
-    ];
+  ++ optionals stdenv.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
+  ++ optionals enablePython [
+    "-DVTK_WRAP_PYTHON:BOOL=ON"
+    "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt

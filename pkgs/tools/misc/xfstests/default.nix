@@ -1,7 +1,35 @@
-{ stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
-, fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
-, libuuid, libxfs, lvm2, openssl, perl, procps, quota
-, time, util-linux, which, writeScript, xfsprogs, runtimeShell }:
+{ stdenv
+, acl
+, attr
+, autoconf
+, automake
+, bash
+, bc
+, coreutils
+, e2fsprogs
+, fetchgit
+, fio
+, gawk
+, keyutils
+, killall
+, lib
+, libaio
+, libcap
+, libtool
+, libuuid
+, libxfs
+, lvm2
+, openssl
+, perl
+, procps
+, quota
+, time
+, util-linux
+, which
+, writeScript
+, xfsprogs
+, runtimeShell
+}:
 
 stdenv.mkDerivation {
   pname = "xfstests";
@@ -14,10 +42,19 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    autoconf automake libtool
+    autoconf
+    automake
+    libtool
   ];
   buildInputs = [
-    acl attr gawk libaio libuuid libxfs openssl perl
+    acl
+    attr
+    gawk
+    libaio
+    libuuid
+    libxfs
+    openssl
+    perl
   ];
 
   hardeningDisable = [ "format" ];

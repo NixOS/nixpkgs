@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchurl, unzip, makeDesktopItem, copyDesktopItems
-, makeWrapper, electron }:
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, electron
+}:
 
 stdenv.mkDerivation rec {
   pname = "indigenous-desktop";

@@ -2,7 +2,10 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, pythonOlder, pythonAtLeast, astor
+, isPy3k
+, pythonOlder
+, pythonAtLeast
+, astor
 , gast
 , google-pasta
 , wrapt
@@ -43,19 +46,22 @@ assert ! (stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
-in buildPythonPackage {
+in
+buildPythonPackage {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
   format = "wheel";
 
   disabled = pythonAtLeast "3.10";
 
-  src = let
-    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
-    platform = if stdenv.isDarwin then "mac" else "linux";
-    unit = if cudaSupport then "gpu" else "cpu";
-    key = "${platform}_py_${pyVerNoDot}_${unit}";
-  in fetchurl packages.${key};
+  src =
+    let
+      pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
+      platform = if stdenv.isDarwin then "mac" else "linux";
+      unit = if cudaSupport then "gpu" else "cpu";
+      key = "${platform}_py_${pyVerNoDot}_${unit}";
+    in
+    fetchurl packages.${key};
 
   propagatedBuildInputs = [
     astunparse
@@ -79,7 +85,7 @@ in buildPythonPackage {
     keras-preprocessing
     h5py
   ] ++ lib.optional (!isPy3k) mock
-    ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
+  ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
   # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
   nativeBuildInputs = [ wheel ] ++ lib.optional cudaSupport [ addOpenGLRunpath patchelfUnstable ];

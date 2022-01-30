@@ -38,7 +38,10 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "nimbo" ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ awscli ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ awscli ])
   ];
 
   postInstall = ''

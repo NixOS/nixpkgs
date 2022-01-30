@@ -23,7 +23,8 @@ let
   };
   updateScript = builtins.elemAt updater 0;
   updateArgs = map (lib.escapeShellArg) (builtins.tail updater);
-in writers.writeBash "update-mirakurun" ''
+in
+writers.writeBash "update-mirakurun" ''
   set -euxo pipefail
 
   WORKDIR="$(mktemp -d)"

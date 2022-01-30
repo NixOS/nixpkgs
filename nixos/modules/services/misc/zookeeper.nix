@@ -21,7 +21,8 @@ let
     ];
   };
 
-in {
+in
+{
 
   options.services.zookeeper = {
     enable = mkOption {
@@ -118,7 +119,7 @@ in {
 
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [cfg.package];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0700 zookeeper - - -"
@@ -153,6 +154,6 @@ in {
       description = "Zookeeper daemon user";
       home = cfg.dataDir;
     };
-    users.groups.zookeeper = {};
+    users.groups.zookeeper = { };
   };
 }

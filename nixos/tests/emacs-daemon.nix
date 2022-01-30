@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "emacs-daemon";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ ];
@@ -9,7 +9,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   machine =
     { ... }:
 
-    { imports = [ ./common/x11.nix ];
+    {
+      imports = [ ./common/x11.nix ];
       services.emacs = {
         enable = true;
         defaultEditor = true;
@@ -22,27 +23,27 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
 
   testScript = ''
-      machine.wait_for_unit("multi-user.target")
+    machine.wait_for_unit("multi-user.target")
 
-      # checks that the EDITOR environment variable is set
-      machine.succeed('test $(basename "$EDITOR") = emacseditor')
+    # checks that the EDITOR environment variable is set
+    machine.succeed('test $(basename "$EDITOR") = emacseditor')
 
-      # waits for the emacs service to be ready
-      machine.wait_until_succeeds(
-          "systemctl --user status emacs.service | grep 'Active: active'"
-      )
+    # waits for the emacs service to be ready
+    machine.wait_until_succeeds(
+        "systemctl --user status emacs.service | grep 'Active: active'"
+    )
 
-      # connects to the daemon
-      machine.succeed("emacsclient --create-frame $EDITOR >&2 &")
+    # connects to the daemon
+    machine.succeed("emacsclient --create-frame $EDITOR >&2 &")
 
-      # checks that Emacs shows the edited filename
-      machine.wait_for_text("emacseditor")
+    # checks that Emacs shows the edited filename
+    machine.wait_for_text("emacseditor")
 
-      # makes sure environment variables are accessible from Emacs
-      machine.succeed(
-          "emacsclient --eval '(getenv \"TEST_SYSTEM_VARIABLE\")' | grep -q 'system variable'"
-      )
+    # makes sure environment variables are accessible from Emacs
+    machine.succeed(
+        "emacsclient --eval '(getenv \"TEST_SYSTEM_VARIABLE\")' | grep -q 'system variable'"
+    )
 
-      machine.screenshot("emacsclient")
-    '';
+    machine.screenshot("emacsclient")
+  '';
 })

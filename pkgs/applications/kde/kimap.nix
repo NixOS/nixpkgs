@@ -1,7 +1,13 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  cyrus_sasl, kcoreaddons, ki18n, kio, kmime
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, cyrus_sasl
+, kcoreaddons
+, ki18n
+, kio
+, kmime
 }:
 
 mkDerivation {

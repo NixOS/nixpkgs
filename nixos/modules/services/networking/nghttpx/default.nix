@@ -1,4 +1,4 @@
-{config, pkgs, lib, ...}:
+{ config, pkgs, lib, ... }:
 let
   cfg = config.services.nghttpx;
 
@@ -43,15 +43,15 @@ let
         builtins.filter (e: "" != e) ([
           host
           patterns
-        ]++params);
+        ] ++ params);
       formattedSections = lib.concatStringsSep ";" sections;
     in
-      "backend=${formattedSections}";
+    "backend=${formattedSections}";
 
   # renderFrontend :: FrontendSubmodule -> String
   renderFrontend = frontend:
     let
-      host   = renderHost frontend.server;
+      host = renderHost frontend.server;
       params0 =
         lib.mapAttrsToList
           (n: v: if builtins.isBool v then n else v)
@@ -61,10 +61,10 @@ let
       # the default behavior of turning on TLS.
       params1 = lib.remove "tls" params0;
 
-      sections          = [ host] ++ params1;
+      sections = [ host ] ++ params1;
       formattedSections = lib.concatStringsSep ";" sections;
     in
-      "frontend=${formattedSections}";
+    "frontend=${formattedSections}";
 
   configurationFile = pkgs.writeText "nghttpx.conf" ''
     ${lib.optionalString (null != cfg.tls) ("private-key-file="+cfg.tls.key)}
@@ -87,7 +87,8 @@ let
     ${cfg.extraConfig}
   '';
 in
-{ imports = [
+{
+  imports = [
     ./nghttpx-options.nix
   ];
 
@@ -103,13 +104,13 @@ in
     systemd.services = {
       nghttpx = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" ];
-        script   = ''
+        after = [ "network.target" ];
+        script = ''
           ${pkgs.nghttp2}/bin/nghttpx --conf=${configurationFile}
         '';
 
         serviceConfig = {
-          Restart    = "on-failure";
+          Restart = "on-failure";
           RestartSec = 60;
         };
       };

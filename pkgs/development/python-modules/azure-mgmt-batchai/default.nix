@@ -22,7 +22,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     azure-mgmt-nspkg
- ];
+  ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

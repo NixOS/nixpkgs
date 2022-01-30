@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    tests = callPackage ./tests.nix {};
+    tests = callPackage ./tests.nix { };
   };
 
   pythonImportsCheck = [ "oslotest" ];

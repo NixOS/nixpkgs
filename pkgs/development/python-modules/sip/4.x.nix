@@ -21,24 +21,26 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  installCheckPhase = let
-    modules = [
-      sip-module
-      "sipconfig"
-    ];
-    imports = lib.concatMapStrings (module: "import ${module};") modules;
-  in ''
-    echo "Checking whether modules can be imported..."
-    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH ${python.interpreter} -c "${imports}"
-  '';
+  installCheckPhase =
+    let
+      modules = [
+        sip-module
+        "sipconfig"
+      ];
+      imports = lib.concatMapStrings (module: "import ${module};") modules;
+    in
+    ''
+      echo "Checking whether modules can be imported..."
+      PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH ${python.interpreter} -c "${imports}"
+    '';
 
   doCheck = true;
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl2Plus;
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 sander ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

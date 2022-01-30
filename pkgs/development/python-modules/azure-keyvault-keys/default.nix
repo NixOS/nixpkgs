@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
 , aiohttp
 , azure-common
 , azure-core

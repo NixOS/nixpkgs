@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config meson ninja ];
   propagatedBuildInputs = [ cairo libsigcxx ];
   buildInputs = [ fontconfig freetype ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
   ]);
 

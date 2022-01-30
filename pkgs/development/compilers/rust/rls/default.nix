@@ -1,6 +1,19 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, rustPlatform
-, openssh, openssl, pkg-config, cmake, zlib, curl, libiconv
-, CoreFoundation, Security, SystemConfiguration }:
+{ lib
+, stdenv
+, makeWrapper
+, fetchFromGitHub
+, rustPlatform
+, openssh
+, openssl
+, pkg-config
+, cmake
+, zlib
+, curl
+, libiconv
+, CoreFoundation
+, Security
+, SystemConfiguration
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rls";
@@ -18,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # a nightly compiler is required unless we use this cheat code.
-  RUSTC_BOOTSTRAP=1;
+  RUSTC_BOOTSTRAP = 1;
 
   # As of rustc 1.45.0, these env vars are required to build rls
   # (due to https://github.com/rust-lang/rust/pull/72001)

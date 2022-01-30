@@ -8,7 +8,7 @@ buildDunePackage {
   inherit (lsp) preBuild;
 
   buildInputs = lsp.buildInputs ++ [ lsp re ]
-  ++ lib.optional (lib.versionAtLeast jsonrpc.version "1.9") spawn;
+    ++ lib.optional (lib.versionAtLeast jsonrpc.version "1.9") spawn;
 
   nativeBuildInputs = [ makeWrapper ];
 

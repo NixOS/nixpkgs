@@ -16,8 +16,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Gitea official CLI client";
-    homepage    = "https://gitea.com/gitea/tea";
-    license     = licenses.mit;
+    homepage = "https://gitea.com/gitea/tea";
+    license = licenses.mit;
     maintainers = [ maintainers.j4m3s ];
   };
 }

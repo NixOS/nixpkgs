@@ -45,7 +45,7 @@ in
 
     extraConfig = mkOption {
       type = with types; attrsOf str;
-      default = {};
+      default = { };
       description = "Attribute set with additional configuration values";
       example = literalExpression ''
         {

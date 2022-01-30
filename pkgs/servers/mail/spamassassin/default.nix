@@ -18,9 +18,24 @@ perlPackages.buildPerlPackage rec {
   #   perl -e 'use ExtUtils::MakeMaker qw($VERSION); print "$VERSION\n"'
   nativeBuildInputs = [ makeWrapper perlPackages.ExtUtilsMakeMaker ];
   buildInputs = (with perlPackages; [
-    HTMLParser NetCIDRLite NetDNS NetAddrIP DBFile HTTPDate MailDKIM LWP
-    LWPProtocolHttps IOSocketSSL DBI EncodeDetect IPCountry NetIdent
-    Razor2ClientAgent MailSPF NetDNSResolverProgrammable Socket6
+    HTMLParser
+    NetCIDRLite
+    NetDNS
+    NetAddrIP
+    DBFile
+    HTTPDate
+    MailDKIM
+    LWP
+    LWPProtocolHttps
+    IOSocketSSL
+    DBI
+    EncodeDetect
+    IPCountry
+    NetIdent
+    Razor2ClientAgent
+    MailSPF
+    NetDNSResolverProgrammable
+    Socket6
   ]);
 
   # Enabling 'taint' mode is desirable, but that flag disables support

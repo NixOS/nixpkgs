@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchurl, ncurses, perl, help2man
+{ stdenv
+, lib
+, fetchurl
+, ncurses
+, perl
+, help2man
 , apparmorRulesFromClosure
 }:
 
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1Uf2kXLfc6/vaRoPeIYoD9eBrOoo3vT/S0shIIaonYA";
   };
 
-  outputs = ["out" "apparmor"];
+  outputs = [ "out" "apparmor" ];
 
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
@@ -24,19 +29,22 @@ stdenv.mkDerivation rec {
   # Don't use help2man if cross-compiling
   # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html
   # https://git.congatec.com/yocto/meta-openembedded/blob/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3/meta-networking/recipes-connectivity/inetutils/inetutils_1.9.1.bb#L44
-  preConfigure = let
-    isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-  in lib.optionalString isCross ''
-    export HELP2MAN=true
-  '';
+  preConfigure =
+    let
+      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+    in
+    lib.optionalString isCross ''
+      export HELP2MAN=true
+    '';
 
   configureFlags = [ "--with-ncurses-include-dir=${ncurses.dev}/include" ]
-  ++ lib.optionals stdenv.hostPlatform.isMusl [ # Musl doesn't define rcmd
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # Musl doesn't define rcmd
     "--disable-rcp"
     "--disable-rsh"
     "--disable-rlogin"
     "--disable-rexec"
-  ] ++ lib.optional stdenv.isDarwin  "--disable-servers";
+  ] ++ lib.optional stdenv.isDarwin "--disable-servers";
 
   # Test fails with "UNIX socket name too long", probably because our
   # $TMPDIR is too long.

@@ -1,8 +1,25 @@
-{ lib, stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkg-config
-, appstream-glib, desktop-file-utils, python3
-, gtk, girara, gettext, libxml2, check
-, sqlite, glib, texlive, libintl, libseccomp
-, file, librsvg
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, wrapGAppsHook
+, pkg-config
+, appstream-glib
+, desktop-file-utils
+, python3
+, gtk
+, girara
+, gettext
+, libxml2
+, check
+, sqlite
+, glib
+, texlive
+, libintl
+, libseccomp
+, file
+, librsvg
 , gtk-mac-integration
 }:
 
@@ -32,15 +49,29 @@ stdenv.mkDerivation rec {
   ] ++ optional (!stdenv.isLinux) "-Dseccomp=disabled";
 
   nativeBuildInputs = [
-    meson ninja pkg-config desktop-file-utils python3.pkgs.sphinx
-    gettext wrapGAppsHook libxml2 check appstream-glib
+    meson
+    ninja
+    pkg-config
+    desktop-file-utils
+    python3.pkgs.sphinx
+    gettext
+    wrapGAppsHook
+    libxml2
+    check
+    appstream-glib
   ];
 
   buildInputs = [
-    gtk girara libintl sqlite glib file librsvg
+    gtk
+    girara
+    libintl
+    sqlite
+    glib
+    file
+    librsvg
     texlive.bin.core
   ] ++ optional stdenv.isLinux libseccomp
-    ++ optional stdenv.isDarwin gtk-mac-integration;
+  ++ optional stdenv.isDarwin gtk-mac-integration;
 
   doCheck = !stdenv.isDarwin;
 

@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook, bison, flex, pkg-config
-, bzip2, check, ncurses, util-linux, zlib
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, bison
+, flex
+, pkg-config
+, bzip2
+, check
+, ncurses
+, util-linux
+, zlib
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, installShellFiles }:
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "upterm";

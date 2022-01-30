@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gtk-doc, gettext
-, pkg-config, glib, libxml2, gobject-introspection, gnome-common, unzip
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, gtk-doc
+, gettext
+, pkg-config
+, glib
+, libxml2
+, gobject-introspection
+, gnome-common
+, unzip
 }:
 
 stdenv.mkDerivation rec {

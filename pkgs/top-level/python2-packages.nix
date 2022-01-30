@@ -8,9 +8,9 @@ with self; with super; {
 
   bootstrapped-pip = callPackage ../development/python2-modules/bootstrapped-pip { };
 
-  boto3 = callPackage ../development/python2-modules/boto3 {};
+  boto3 = callPackage ../development/python2-modules/boto3 { };
 
-  botocore = callPackage ../development/python2-modules/botocore {};
+  botocore = callPackage ../development/python2-modules/botocore { };
 
   certifi = callPackage ../development/python2-modules/certifi { };
 
@@ -34,7 +34,7 @@ with self; with super; {
 
   enum = callPackage ../development/python2-modules/enum { };
 
-  filelock =  callPackage ../development/python2-modules/filelock { };
+  filelock = callPackage ../development/python2-modules/filelock { };
 
   flask = callPackage ../development/python2-modules/flask { };
 
@@ -121,7 +121,8 @@ with self; with super; {
   pytest = pytest_4;
 
   pytest_4 = callPackage
-    ../development/python2-modules/pytest {
+    ../development/python2-modules/pytest
+    {
       # hypothesis tests require pytest that causes dependency cycle
       hypothesis = self.hypothesis.override {
         doCheck = false;

@@ -5,7 +5,7 @@
 , rustc
 , cargo
 , setuptools-rust
-# build inputs
+  # build inputs
 , cffi
 , glean-parser
 }:

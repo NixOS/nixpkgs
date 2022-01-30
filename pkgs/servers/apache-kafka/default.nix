@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, jdk8_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
-  majorVersion ? "1.0" }:
+{ lib
+, stdenv
+, fetchurl
+, jdk8_headless
+, jdk11_headless
+, makeWrapper
+, bash
+, coreutils
+, gnugrep
+, gnused
+, ps
+, majorVersion ? "1.0"
+}:
 
 let
   jre8 = jdk8_headless;

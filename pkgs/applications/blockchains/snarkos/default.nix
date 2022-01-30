@@ -28,9 +28,9 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
   OPENSSL_LIB_DIR = "${openssl.out}/lib";
-  OPENSSL_DIR="${lib.getDev openssl}";
+  OPENSSL_DIR = "${lib.getDev openssl}";
 
-  LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   # TODO check why rust compilation fails by including the rocksdb from nixpkgs
   # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would

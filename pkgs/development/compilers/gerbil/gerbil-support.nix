@@ -15,22 +15,28 @@ rec {
 
   # Use this function in any package that uses Gerbil libraries, to define the GERBIL_LOADPATH.
   gerbilLoadPath =
-    gerbilInputs : builtins.concatStringsSep ":" (map (x : x + "/gerbil/lib") gerbilInputs);
+    gerbilInputs: builtins.concatStringsSep ":" (map (x: x + "/gerbil/lib") gerbilInputs);
 
   # Use this function to create a Gerbil library. See gerbil-utils as an example.
-  gerbilPackage = {
-    pname, version, src, meta, gerbil-package,
-    git-version ? "", version-path ? "",
-    gerbil ? pkgs.gerbil-unstable,
-    gambit-params ? pkgs.gambit-support.stable-params,
-    gerbilInputs ? [],
-    buildInputs ? [],
-    buildScript ? "./build.ss",
-    softwareName ? ""} :
+  gerbilPackage =
+    { pname
+    , version
+    , src
+    , meta
+    , gerbil-package
+    , git-version ? ""
+    , version-path ? ""
+    , gerbil ? pkgs.gerbil-unstable
+    , gambit-params ? pkgs.gambit-support.stable-params
+    , gerbilInputs ? [ ]
+    , buildInputs ? [ ]
+    , buildScript ? "./build.ss"
+    , softwareName ? ""
+    }:
     let buildInputs_ = buildInputs; in
     gccStdenv.mkDerivation rec {
       inherit src meta pname version;
-      passthru = { inherit gerbil-package version-path ;};
+      passthru = { inherit gerbil-package version-path; };
       buildInputs = [ gerbil ] ++ gerbilInputs ++ buildInputs_;
       postPatch = ''
         set -e ;

@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ];
 
   meta = with lib; {
-    homepage    = "https://knightos.org/";
+    homepage = "https://knightos.org/";
     description = "A tool to create or extract KnightOS packages";
-    license     = licenses.lgpl2Only;
+    license = licenses.lgpl2Only;
     maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

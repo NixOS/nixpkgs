@@ -1,6 +1,13 @@
-{ stdenv, lib, fetchFromGitLab
-, autoreconfHook, pkg-config, python3, addOpenGLRunpath
-, libX11, libXext, xorgproto
+{ stdenv
+, lib
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, python3
+, addOpenGLRunpath
+, libX11
+, libXext
+, xorgproto
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +42,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=array-bounds"
   ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
 
-  configureFlags  = []
+  configureFlags = [ ]
     # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-tls"
     # Remove when aarch64-darwin asm support is upstream: https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/216

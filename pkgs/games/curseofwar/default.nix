@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , ncurses
 , SDL
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     SDL
   ];
 
-  makeFlags = (if isNull SDL then [] else [ "SDL=yes" ]) ++ [
+  makeFlags = (if isNull SDL then [ ] else [ "SDL=yes" ]) ++ [
     "PREFIX=$(out)"
     # force platform's cc on darwin, otherwise gcc is used
     "CC=${stdenv.cc.targetPrefix}cc"

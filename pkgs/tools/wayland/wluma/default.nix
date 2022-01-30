@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     v4l-utils.lib
   ];
 
-  LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   # Works around the issue with rust-bindgen and the Nix gcc wrapper:
   # https://hoverbear.org/blog/rust-bindgen-in-nix/

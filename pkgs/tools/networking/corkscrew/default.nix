@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "http://agroman.net/corkscrew/";
+    homepage = "http://agroman.net/corkscrew/";
     description = "A tool for tunneling SSH through HTTP proxies";
     license = lib.licenses.gpl2;
     platforms = platforms.unix;

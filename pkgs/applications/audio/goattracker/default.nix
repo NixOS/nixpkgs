@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , unzip
 , copyDesktopItems
@@ -16,7 +17,8 @@ let
     name = pname;
     desktopName = "GoatTracker 2" + optionalString isStereo " Stereo";
     genericName = "Music Tracker";
-    exec = if isStereo
+    exec =
+      if isStereo
       then "gt2stereo"
       else "goattrk2";
     icon = "goattracker";
@@ -24,15 +26,18 @@ let
     extraEntries = "Keywords=tracker;music;";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname;
-  version = if isStereo
+  version =
+    if isStereo
     then "2.77"  # stereo
     else "2.76"; # normal
 
   src = fetchurl {
     url = "mirror://sourceforge/goattracker2/GoatTracker_${version}${optionalString isStereo "_Stereo"}.zip";
-    sha256 = if isStereo
+    sha256 =
+      if isStereo
       then "1hiig2d152sv9kazwz33i56x1c54h5sh21ipkqnp6qlnwj8x1ksy"  # stereo
       else "0d7a3han4jw4bwiba3j87racswaajgl3pj4sb5lawdqdxicv3dn1"; # normal
   };

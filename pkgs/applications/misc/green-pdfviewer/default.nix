@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     description = "Viewer for PDF files, uses SDL and libpoppler";
 
     platforms = platforms.unix;
-    license  = licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ maintainers.vrthra ];
   };
 }

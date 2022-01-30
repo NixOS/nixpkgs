@@ -51,7 +51,8 @@ let newPython = python3.override {
   };
 };
 
-in newPython.pkgs.buildPythonApplication rec {
+in
+newPython.pkgs.buildPythonApplication rec {
   version = "1.43.1";
   pname = "conan";
 

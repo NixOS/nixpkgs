@@ -1,6 +1,9 @@
-{
-  mkDerivation, propagate,
-  extra-cmake-modules, kcoreaddons, polkit-qt, qttools
+{ mkDerivation
+, propagate
+, extra-cmake-modules
+, kcoreaddons
+, polkit-qt
+, qttools
 }:
 
 mkDerivation {

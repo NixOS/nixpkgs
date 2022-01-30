@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Advanced disassembly library";
-    homepage    = "http://www.capstone-engine.org";
-    license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.unix;
+    homepage = "http://www.capstone-engine.org";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ris ];
   };
 }

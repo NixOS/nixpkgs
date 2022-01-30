@@ -26,26 +26,30 @@ let
   originalEtc =
     let
       mkEtcFile = n: nameValuePair n { source = "${cfg.package}/etc/${n}"; };
-    in listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
+    in
+    listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
   extraTrustedKeys =
     let
       mkName = p: "pki/fwupd/${baseNameOf (toString p)}";
       mkEtcFile = p: nameValuePair (mkName p) { source = p; };
-    in listToAttrs (map mkEtcFile cfg.extraTrustedKeys);
+    in
+    listToAttrs (map mkEtcFile cfg.extraTrustedKeys);
 
   # We cannot include the file in $out and rely on filesInstalledToEtc
   # to install it because it would create a cyclic dependency between
   # the outputs. We also need to enable the remote,
   # which should not be done by default.
-  testRemote = if cfg.enableTestRemote then {
-    "fwupd/remotes.d/fwupd-tests.conf" = {
-      source = pkgs.runCommand "fwupd-tests-enabled.conf" {} ''
-        sed "s,^Enabled=false,Enabled=true," \
-        "${cfg.package.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
-      '';
-    };
-  } else {};
-in {
+  testRemote =
+    if cfg.enableTestRemote then {
+      "fwupd/remotes.d/fwupd-tests.conf" = {
+        source = pkgs.runCommand "fwupd-tests-enabled.conf" { } ''
+          sed "s,^Enabled=false,Enabled=true," \
+          "${cfg.package.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
+        '';
+      };
+    } else { };
+in
+{
 
   ###### interface
   options = {
@@ -61,7 +65,7 @@ in {
 
       disabledDevices = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
         description = ''
           Allow disabling specific devices by their GUID
@@ -70,7 +74,7 @@ in {
 
       disabledPlugins = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "udev" ];
         description = ''
           Allow disabling specific plugins
@@ -79,7 +83,7 @@ in {
 
       extraTrustedKeys = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         example = literalExpression "[ /etc/nixos/fwupd/myfirmware.pem ]";
         description = ''
           Installing a public key allows firmware signed with a matching private key to be recognized as trusted, which may require less authentication to install than for untrusted files. By default trusted firmware can be upgraded (but not downgraded) without the user or administrator password. Only very few keys are installed by default.
@@ -107,8 +111,8 @@ in {
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "fwupd" "blacklistDevices"] [ "services" "fwupd" "disabledDevices" ])
-    (mkRenamedOptionModule [ "services" "fwupd" "blacklistPlugins"] [ "services" "fwupd" "disabledPlugins" ])
+    (mkRenamedOptionModule [ "services" "fwupd" "blacklistDevices" ] [ "services" "fwupd" "disabledDevices" ])
+    (mkRenamedOptionModule [ "services" "fwupd" "blacklistPlugins" ] [ "services" "fwupd" "disabledPlugins" ])
   ];
 
   ###### implementation

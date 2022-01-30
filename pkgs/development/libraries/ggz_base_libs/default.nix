@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GGZ Gaming zone libraries";
     maintainers = with maintainers;
-    [
-      raskin
-    ];
+      [
+        raskin
+      ];
     platforms = platforms.linux;
     license = licenses.gpl2;
     downloadPage = "http://www.ggzgamingzone.org/releases/";

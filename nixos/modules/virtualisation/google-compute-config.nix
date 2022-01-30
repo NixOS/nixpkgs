@@ -101,7 +101,7 @@ in
     path = with pkgs; [ coreutils ethtool openssh ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_instance_setup";
-      StandardOutput="journal+console";
+      StandardOutput = "journal+console";
       Type = "oneshot";
     };
     wantedBy = [ "sshd.service" "multi-user.target" ];
@@ -113,8 +113,8 @@ in
     path = with pkgs; [ iproute2 ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_network_daemon";
-      StandardOutput="journal+console";
-      Type="simple";
+      StandardOutput = "journal+console";
+      Type = "simple";
     };
     wantedBy = [ "multi-user.target" ];
   };
@@ -124,10 +124,10 @@ in
     after = [ "network.target" "google-instance-setup.service" "google-network-daemon.service" ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_clock_skew_daemon";
-      StandardOutput="journal+console";
+      StandardOutput = "journal+console";
       Type = "simple";
     };
-    wantedBy = ["multi-user.target"];
+    wantedBy = [ "multi-user.target" ];
   };
 
 
@@ -144,7 +144,7 @@ in
       ExecStart = "${pkgs.coreutils}/bin/true";
       ExecStop = "${gce}/bin/google_metadata_script_runner --script-type shutdown";
       RemainAfterExit = true;
-      StandardOutput="journal+console";
+      StandardOutput = "journal+console";
       TimeoutStopSec = "0";
       Type = "oneshot";
     };

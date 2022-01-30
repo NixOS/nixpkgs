@@ -10,7 +10,8 @@
 let
   mcVersion = builtins.head (lib.splitString "_" version);
 in
-runCommand "optifine-${mcVersion}" {
+runCommand "optifine-${mcVersion}"
+{
   pname = "optifine";
   inherit version;
 

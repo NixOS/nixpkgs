@@ -1,4 +1,6 @@
-{ lib, buildPythonApplication, fetchPypi
+{ lib
+, buildPythonApplication
+, fetchPypi
 , argcomplete
 , boto3
 , botocore

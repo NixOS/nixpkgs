@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $man/share/man/man8 dnstracer.8
   '';
 
-  buildInputs = [] ++ lib.optionals stdenv.isDarwin [ libresolv ];
+  buildInputs = [ ] ++ lib.optionals stdenv.isDarwin [ libresolv ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lresolv";
 

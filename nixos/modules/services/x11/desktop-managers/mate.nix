@@ -34,7 +34,7 @@ in
     };
 
     environment.mate.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.mate.mate-terminal pkgs.mate.pluma ]";
       type = types.listOf types.package;
       description = "Which MATE packages to exclude from the default environment";

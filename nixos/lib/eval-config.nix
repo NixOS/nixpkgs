@@ -9,7 +9,8 @@
 # expressions are ever made modular at the top level) can just use
 # types.submodule instead of using eval-config.nix
 evalConfigArgs@
-{ # !!! system can be set modularly, would be nice to remove
+{
+  # !!! system can be set modularly, would be nice to remove
   system ? builtins.currentSystem
 , # !!! is this argument needed any more? The pkgs argument can
   # be set modularly anyway.
@@ -17,16 +18,16 @@ evalConfigArgs@
 , # !!! what do we gain by making this configurable?
   baseModules ? import ../modules/module-list.nix
 , # !!! See comment about args in lib/modules.nix
-  extraArgs ? {}
+  extraArgs ? { }
 , # !!! See comment about args in lib/modules.nix
-  specialArgs ? {}
+  specialArgs ? { }
 , modules
 , # !!! See comment about check in lib/modules.nix
   check ? true
-, prefix ? []
+, prefix ? [ ]
 , lib ? import ../../lib
 , extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-                 in if e == "" then [] else [(import e)]
+  in if e == "" then [ ] else [ (import e) ]
 }:
 
 let pkgs_ = pkgs;
@@ -60,15 +61,17 @@ let
 
   withWarnings = x:
     lib.warnIf (evalConfigArgs?extraArgs) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
-    lib.warnIf (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
-    x;
+      lib.warnIf
+      (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
+      x;
 
   legacyModules =
-    lib.optional (evalConfigArgs?extraArgs) {
-      config = {
-        _module.args = extraArgs;
-      };
-    }
+    lib.optional (evalConfigArgs?extraArgs)
+      {
+        config = {
+          _module.args = extraArgs;
+        };
+      }
     ++ lib.optional (evalConfigArgs?check) {
       config = {
         _module.check = lib.mkDefault check;

@@ -2,7 +2,8 @@
 
 let
   version = "0.52";
-in fetchurl {
+in
+fetchurl {
   name = "edwin-${version}";
 
   url = "https://github.com/MuseScoreFonts/Edwin/archive/refs/tags/v${version}.tar.gz";

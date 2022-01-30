@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, gtk3, libxshmfence, mesa, nss }:
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeWrapper
+, electron
+, alsa-lib
+, gtk3
+, libxshmfence
+, mesa
+, nss
+}:
 
 stdenv.mkDerivation rec {
   pname = "thedesk";

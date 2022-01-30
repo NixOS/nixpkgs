@@ -24,4 +24,4 @@ let
     };
   };
 in
-  combined
+combined

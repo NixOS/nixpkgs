@@ -18,7 +18,7 @@
 , libuuid
 , wayland-protocols
 , Carbon
-# optionals
+  # optionals
 , opencl-headers
 , OpenCL
 
@@ -37,7 +37,8 @@ let cmake3_22 = cmake.overrideAttrs (old: {
   };
 });
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "vengi-tools";
   version = "0.0.14";
 
@@ -69,8 +70,8 @@ in stdenv.mkDerivation rec {
     #libpqxx
     #mosquitto
   ] ++ lib.optional stdenv.isLinux wayland-protocols
-    ++ lib.optionals stdenv.isDarwin [ Carbon OpenCL ]
-    ++ lib.optional (!stdenv.isDarwin) opencl-headers;
+  ++ lib.optionals stdenv.isDarwin [ Carbon OpenCL ]
+  ++ lib.optional (!stdenv.isDarwin) opencl-headers;
 
   cmakeFlags = [
     # Disable tests due to a problem in linking gtest:
@@ -97,7 +98,7 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix {};
+    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix { };
     run-voxedit = nixosTests.vengi-tools;
   };
 

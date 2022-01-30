@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, autoreconfHook, bison, flex, ghostscript, groff, netpbm
-, fltk, libXinerama, libXpm, libjpeg
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, bison
+, flex
+, ghostscript
+, groff
+, netpbm
+, fltk
+, libXinerama
+, libXpm
+, libjpeg
 }:
 
 stdenv.mkDerivation rec {

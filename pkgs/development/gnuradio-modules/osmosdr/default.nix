@@ -34,7 +34,8 @@ let
       "3.8" = "sha256-ZfI8MshhZOdJ1U5FlnZKXsg2Rsvb6oKg943ZVYd/IWo=";
     }.${gnuradio.versionAttr.major};
   };
-in mkDerivation {
+in
+mkDerivation {
   pname = "gr-osmosdr";
   inherit version src;
   disabledForGRafter = "3.9";
@@ -69,13 +70,13 @@ in mkDerivation {
     pkg-config
     swig
   ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
-      (if (gnuradio.versionAttr.major == "3.7") then
-        python.pkgs.cheetah
-      else
-        python.pkgs.Mako
-      )
-      python
-    ]
+    (if (gnuradio.versionAttr.major == "3.7") then
+      python.pkgs.cheetah
+    else
+      python.pkgs.Mako
+    )
+    python
+  ]
   ;
 
   meta = with lib; {

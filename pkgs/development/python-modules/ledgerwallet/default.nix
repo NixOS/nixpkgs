@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , buildPythonPackage
@@ -37,7 +38,16 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
   propagatedBuildInputs = [
-    cryptography click construct ecdsa hidapi intelhex pillow protobuf requests tabulate
+    cryptography
+    click
+    construct
+    ecdsa
+    hidapi
+    intelhex
+    pillow
+    protobuf
+    requests
+    tabulate
   ];
 
   pythonImportsCheck = [ "ledgerwallet" ];

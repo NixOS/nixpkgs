@@ -21,7 +21,8 @@ let
   sources = system:
     data.googleCloudSdkPkgs.${system} or (throw "Unsupported system: ${system}");
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
   inherit (data) version;
 

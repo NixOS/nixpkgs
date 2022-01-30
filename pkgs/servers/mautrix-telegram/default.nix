@@ -1,4 +1,7 @@
-{ lib, python3, mautrix-telegram, fetchFromGitHub
+{ lib
+, python3
+, mautrix-telegram
+, fetchFromGitHub
 , withE2BE ? true
 }:
 
@@ -23,7 +26,8 @@ let
     # sqlite driver is already shipped with python by default
   ];
 
-in python.pkgs.buildPythonPackage rec {
+in
+python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
   version = "0.11.1";
   disabled = python.pythonOlder "3.7";

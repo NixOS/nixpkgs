@@ -1,6 +1,25 @@
-{ lib, stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
-  docbook_xsl, fftw, fftwFloat, gfortran, libtool, libusb1, qtbase,
-  qtmultimedia, qtserialport, qttools, boost, texinfo, wrapQtAppsHook }:
+{ lib
+, stdenv
+, fetchurl
+, asciidoc
+, asciidoctor
+, autoconf
+, automake
+, cmake
+, docbook_xsl
+, fftw
+, fftwFloat
+, gfortran
+, libtool
+, libusb1
+, qtbase
+, qtmultimedia
+, qtserialport
+, qttools
+, boost
+, texinfo
+, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "wsjtx";
@@ -15,8 +34,17 @@ stdenv.mkDerivation rec {
   # Hamlib builds with autotools, wsjtx builds with cmake
   # Omitting pkg-config because it causes issues locating the built hamlib
   nativeBuildInputs = [
-    asciidoc asciidoctor autoconf automake cmake docbook_xsl gfortran libtool
-    qttools texinfo wrapQtAppsHook
+    asciidoc
+    asciidoctor
+    autoconf
+    automake
+    cmake
+    docbook_xsl
+    gfortran
+    libtool
+    qttools
+    texinfo
+    wrapQtAppsHook
   ];
   buildInputs = [ fftw fftwFloat libusb1 qtbase qtmultimedia qtserialport boost ];
 

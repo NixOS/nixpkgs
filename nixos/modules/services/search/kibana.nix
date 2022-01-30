@@ -10,7 +10,7 @@ let
   lt6_6 = builtins.compareVersions cfg.package.version "6.6" < 0;
 
   cfgFile = pkgs.writeText "kibana.json" (builtins.toJSON (
-    (filterAttrsRecursive (n: v: v != null && v != []) ({
+    (filterAttrsRecursive (n: v: v != null && v != [ ]) ({
       server.host = cfg.listenAddress;
       server.port = cfg.port;
       server.ssl.certificate = cfg.cert;
@@ -28,9 +28,11 @@ let
       elasticsearch.ssl.key = cfg.elasticsearch.key;
       elasticsearch.ssl.certificateAuthorities = cfg.elasticsearch.certificateAuthorities;
     } // cfg.extraConf)
-  )));
+    )
+  ));
 
-in {
+in
+{
   options.services.kibana = {
     enable = mkEnableOption "kibana service";
 
@@ -130,7 +132,7 @@ in {
 
           This defaults to the singleton list [ca] when the <option>ca</option> option is defined.
         '';
-        default = if cfg.elasticsearch.ca == null then [] else [ca];
+        default = if cfg.elasticsearch.ca == null then [ ] else [ ca ];
         defaultText = literalExpression ''
           if config.${opt.elasticsearch.ca} == null then [ ] else [ ca ]
         '';
@@ -165,7 +167,7 @@ in {
 
     extraConf = mkOption {
       description = "Kibana extra configuration";
-      default = {};
+      default = { };
       type = types.attrs;
     };
   };
@@ -208,6 +210,6 @@ in {
       createHome = true;
       group = "kibana";
     };
-    users.groups.kibana = {};
+    users.groups.kibana = { };
   };
 }

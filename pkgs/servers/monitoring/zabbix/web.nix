@@ -11,9 +11,9 @@ import ./versions.nix ({ version, sha256 }:
     };
 
     phpConfig = writeText "zabbix.conf.php" ''
-    <?php
-      return require(getenv('ZABBIX_CONFIG'));
-    ?>
+      <?php
+        return require(getenv('ZABBIX_CONFIG'));
+      ?>
     '';
 
     installPhase = ''

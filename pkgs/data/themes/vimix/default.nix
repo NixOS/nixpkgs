@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gnome-shell  # needed to determine the gnome-shell version
+    gnome-shell # needed to determine the gnome-shell version
   ];
 
   buildInputs = [

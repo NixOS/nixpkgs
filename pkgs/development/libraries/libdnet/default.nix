@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, automake, autoconf, libtool}:
+{ lib, stdenv, fetchurl, automake, autoconf, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "libdnet";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Provides a simplified, portable interface to several low-level networking routines";
     homepage = "https://github.com/dugsong/libdnet";
     license = lib.licenses.bsd3;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
 }

@@ -2,14 +2,14 @@
 , lib
 , fetchFromGitHub
 
-# build time
+  # build time
 , cmake
 , pkg-config
 
-# run time
+  # run time
 , pcre2
 
-# update script
+  # update script
 , genericUpdater
 , common-updater-scripts
 }:

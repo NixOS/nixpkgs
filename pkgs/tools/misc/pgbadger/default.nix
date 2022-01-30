@@ -1,5 +1,12 @@
-{ buildPerlPackage, lib, fetchFromGitHub, which, bzip2, PodMarkdown, JSONXS
-, TextCSV }:
+{ buildPerlPackage
+, lib
+, fetchFromGitHub
+, which
+, bzip2
+, PodMarkdown
+, JSONXS
+, TextCSV
+}:
 buildPerlPackage rec {
   pname = "pgbadger";
   version = "11.5";

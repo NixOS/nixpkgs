@@ -1,4 +1,4 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgs_i686}:
+{ deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgs_i686 }:
 
 deployAndroidPackage {
   inherit package os;

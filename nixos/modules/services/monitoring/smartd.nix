@@ -5,7 +5,7 @@ with lib;
 let
 
   host = config.networking.hostName or "unknown"
-       + optionalString (config.networking.domain != null) ".${config.networking.domain}";
+    + optionalString (config.networking.domain != null) ".${config.networking.domain}";
 
   cfg = config.services.smartd;
   opt = options.services.smartd;
@@ -110,9 +110,9 @@ in
       };
 
       extraOptions = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
-        example = ["-A /var/log/smartd/" "--interval=3600"];
+        example = [ "-A /var/log/smartd/" "--interval=3600" ];
         description = ''
           Extra command-line options passed to the <literal>smartd</literal>
           daemon on startup.
@@ -222,8 +222,8 @@ in
       };
 
       devices = mkOption {
-        default = [];
-        example = [ { device = "/dev/sda"; } { device = "/dev/sdb"; options = "-d sat"; } ];
+        default = [ ];
+        example = [{ device = "/dev/sda"; } { device = "/dev/sdb"; options = "-d sat"; }];
         type = with types; listOf (submodule smartdDeviceOpts);
         description = "List of devices to monitor.";
       };
@@ -237,10 +237,10 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [ {
-      assertion = cfg.autodetect || cfg.devices != [];
+    assertions = [{
+      assertion = cfg.autodetect || cfg.devices != [ ];
       message = "smartd can't run with both disabled autodetect and an empty list of devices to monitor.";
-    } ];
+    }];
 
     systemd.services.smartd = {
       description = "S.M.A.R.T. Daemon";

@@ -31,7 +31,8 @@ in
 
   config = mkIf config.services.xfs.enable {
     assertions = singleton
-      { assertion = config.fonts.enableFontDir;
+      {
+        assertion = config.fonts.enableFontDir;
         message = "Please enable fonts.enableFontDir to use the X Font Server.";
       };
 

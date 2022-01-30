@@ -1,11 +1,13 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv
+, lib
+, fetchFromGitHub
 , which
 , python3
 , help2man
 }:
 
 let
-  pyEnv = python3.withPackages(ps: [ ps.setuptools ]);
+  pyEnv = python3.withPackages (ps: [ ps.setuptools ]);
 in
 stdenv.mkDerivation rec {
   pname = "mininet";

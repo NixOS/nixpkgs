@@ -21,10 +21,14 @@
 , scribusUnstable
 , texlive
 , zlib
-, withData ? true, poppler_data
-, qt5Support ? false, qtbase ? null
-, introspectionSupport ? false, gobject-introspection ? null
-, utils ? false, nss ? null
+, withData ? true
+, poppler_data
+, qt5Support ? false
+, qtbase ? null
+, introspectionSupport ? false
+, gobject-introspection ? null
+, utils ? false
+, nss ? null
 , minimal ? false
 , suffix ? "glib"
 }:

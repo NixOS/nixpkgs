@@ -63,81 +63,84 @@ let
     hash = "sha256-K1BvhGoGVU2Zwy5vg2ZvJWBrSdh5uQwo0znt5039X0A=";
   };
 
-in stdenvNoCC.mkDerivation ({
+in
+stdenvNoCC.mkDerivation ({
   pname = "mkl";
   inherit version;
 
   dontUnpack = stdenvNoCC.isLinux;
 
   nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin
-    then
-      [ undmg darwin.cctools ]
-    else
-      [ rpmextract ]);
+  then
+    [ undmg darwin.cctools ]
+  else
+    [ rpmextract ]);
 
-  buildPhase = if stdenvNoCC.isDarwin then ''
-    for f in Contents/Resources/pkg/*.tgz; do
-      tar xzvf $f
-    done
-  '' else ''
-    rpmextract ${oneapi-mkl}
-    rpmextract ${oneapi-mkl-common}
-    rpmextract ${oneapi-mkl-common-devel}
-    rpmextract ${oneapi-mkl-devel}
-    rpmextract ${oneapi-openmp}
-    rpmextract ${oneapi-tbb}
-  '';
+  buildPhase =
+    if stdenvNoCC.isDarwin then ''
+      for f in Contents/Resources/pkg/*.tgz; do
+        tar xzvf $f
+      done
+    '' else ''
+      rpmextract ${oneapi-mkl}
+      rpmextract ${oneapi-mkl-common}
+      rpmextract ${oneapi-mkl-common-devel}
+      rpmextract ${oneapi-mkl-devel}
+      rpmextract ${oneapi-openmp}
+      rpmextract ${oneapi-tbb}
+    '';
 
-  installPhase = if stdenvNoCC.isDarwin then ''
-    for f in $(find . -name 'mkl*.pc') ; do
-      bn=$(basename $f)
-      substituteInPlace $f \
-        --replace "prefix=<INSTALLDIR>/mkl" "prefix=$out" \
-        --replace $\{MKLROOT} "$out" \
-        --replace "lib/intel64_lin" "lib" \
-        --replace "lib/intel64" "lib"
-    done
-    for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
-      substituteInPlace $f \
-        --replace "../compiler/lib" "lib"
-    done
+  installPhase =
+    if stdenvNoCC.isDarwin then ''
+      for f in $(find . -name 'mkl*.pc') ; do
+        bn=$(basename $f)
+        substituteInPlace $f \
+          --replace "prefix=<INSTALLDIR>/mkl" "prefix=$out" \
+          --replace $\{MKLROOT} "$out" \
+          --replace "lib/intel64_lin" "lib" \
+          --replace "lib/intel64" "lib"
+      done
+      for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
+        substituteInPlace $f \
+          --replace "../compiler/lib" "lib"
+      done
 
-    mkdir -p $out/lib
+      mkdir -p $out/lib
 
-    cp -r compilers_and_libraries_${version}/mac/mkl/include $out/
+      cp -r compilers_and_libraries_${version}/mac/mkl/include $out/
 
-    cp -r compilers_and_libraries_${version}/licensing/mkl/en/license.txt $out/lib/
-    cp -r compilers_and_libraries_${version}/mac/compiler/lib/* $out/lib/
-    cp -r compilers_and_libraries_${version}/mac/mkl/lib/* $out/lib/
-    cp -r compilers_and_libraries_${version}/mac/tbb/lib/* $out/lib/
+      cp -r compilers_and_libraries_${version}/licensing/mkl/en/license.txt $out/lib/
+      cp -r compilers_and_libraries_${version}/mac/compiler/lib/* $out/lib/
+      cp -r compilers_and_libraries_${version}/mac/mkl/lib/* $out/lib/
+      cp -r compilers_and_libraries_${version}/mac/tbb/lib/* $out/lib/
 
-    mkdir -p $out/lib/pkgconfig
-    cp -r compilers_and_libraries_${version}/mac/mkl/bin/pkgconfig/* $out/lib/pkgconfig
-  '' else ''
-    for f in $(find . -name 'mkl*.pc') ; do
-      bn=$(basename $f)
-      substituteInPlace $f \
-        --replace $\{MKLROOT} "$out" \
-        --replace "lib/intel64" "lib"
+      mkdir -p $out/lib/pkgconfig
+      cp -r compilers_and_libraries_${version}/mac/mkl/bin/pkgconfig/* $out/lib/pkgconfig
+    '' else ''
+      for f in $(find . -name 'mkl*.pc') ; do
+        bn=$(basename $f)
+        substituteInPlace $f \
+          --replace $\{MKLROOT} "$out" \
+          --replace "lib/intel64" "lib"
 
-      sed -r -i "s|^prefix=.*|prefix=$out|g" $f
-    done
+        sed -r -i "s|^prefix=.*|prefix=$out|g" $f
+      done
 
-    for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
-      substituteInPlace $f --replace "../compiler/lib" "lib"
-    done
+      for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
+        substituteInPlace $f --replace "../compiler/lib" "lib"
+      done
 
-    # License
-    install -Dm0655 -t $out/share/doc/mkl opt/intel/oneapi/mkl/2021.1.1/licensing/en/license.txt
+      # License
+      install -Dm0655 -t $out/share/doc/mkl opt/intel/oneapi/mkl/2021.1.1/licensing/en/license.txt
 
-    # Dynamic libraries
-    install -Dm0755 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.so*
-    install -Dm0755 -t $out/lib opt/intel/oneapi/compiler/2021.1.1/linux/compiler/lib/intel64_lin/*.so*
-    install -Dm0755 -t $out/lib opt/intel/oneapi/tbb/2021.1.1/lib/intel64/gcc4.8/*.so*
+      # Dynamic libraries
+      install -Dm0755 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.so*
+      install -Dm0755 -t $out/lib opt/intel/oneapi/compiler/2021.1.1/linux/compiler/lib/intel64_lin/*.so*
+      install -Dm0755 -t $out/lib opt/intel/oneapi/tbb/2021.1.1/lib/intel64/gcc4.8/*.so*
 
-    # Headers
-    cp -r opt/intel/oneapi/mkl/${mklVersion}/include $out/
-  '' +
+      # Headers
+      cp -r opt/intel/oneapi/mkl/${mklVersion}/include $out/
+    '' +
     (if enableStatic then ''
       install -Dm0644 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.a
       install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/2021.1.1/tools/pkgconfig/*.pc
@@ -145,17 +148,17 @@ in stdenvNoCC.mkDerivation ({
       cp opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.so* $out/lib
       install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/2021.1.1/tools/pkgconfig/*dynamic*.pc
     '') + ''
-    # Setup symlinks for blas / lapack
-    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}
-    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}
-    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}
-    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}
-  '' + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}".3"
-    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}".3"
-    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}".3"
-    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}".3"
-  '';
+      # Setup symlinks for blas / lapack
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}
+    '' + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}".3"
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}".3"
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}".3"
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}".3"
+    '';
 
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the
   # larger updated load commands do not fit. Use install_name_tool

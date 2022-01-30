@@ -6,15 +6,17 @@ let
   cfg = config.services.dex;
   fixClient = client: if client ? secretFile then ((builtins.removeAttrs client [ "secretFile" ]) // { secret = client.secretFile; }) else client;
   filteredSettings = mapAttrs (n: v: if n == "staticClients" then (builtins.map fixClient v) else v) cfg.settings;
-  secretFiles = flatten (builtins.map (c: if c ? secretFile then [ c.secretFile ] else []) (cfg.settings.staticClients or []));
+  secretFiles = flatten (builtins.map (c: if c ? secretFile then [ c.secretFile ] else [ ]) (cfg.settings.staticClients or [ ]));
 
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "config.yaml" filteredSettings;
 
   startPreScript = pkgs.writeShellScript "dex-start-pre" (''
-  '' + (concatStringsSep "\n" (builtins.map (file: ''
-    ${pkgs.replace-secret}/bin/replace-secret '${file}' '${file}' /run/dex/config.yaml
-  '') secretFiles)));
+  '' + (concatStringsSep "\n" (builtins.map
+    (file: ''
+      ${pkgs.replace-secret}/bin/replace-secret '${file}' '${file}' /run/dex/config.yaml
+    '')
+    secretFiles)));
 in
 {
   options.services.dex = {
@@ -22,7 +24,7 @@ in
 
     settings = mkOption {
       type = settingsFormat.type;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           # External url

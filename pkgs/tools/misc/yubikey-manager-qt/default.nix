@@ -50,7 +50,10 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ pcsclite yubikey-personalization ])
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ pcsclite yubikey-personalization ])
   ];
 
   preFixup = ''

@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, cython, numpy
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, cython
+, numpy
 , pytestCheckHook
 }:
 

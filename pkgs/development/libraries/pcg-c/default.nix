@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./prefix-variable.patch
-    ];
+  ];
 
   preInstall = ''
     sed -i s,/usr/local,$out, Makefile

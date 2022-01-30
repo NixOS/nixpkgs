@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python3Packages
+, makeWrapper
+, gettext
+, installShellFiles
 , re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
+, rustSupport ? stdenv.hostPlatform.isLinux
+, rustPlatform
 , fullBuild ? false
 , gitSupport ? fullBuild
-, guiSupport ? fullBuild, tk
+, guiSupport ? fullBuild
+, tk
 , highlightSupport ? fullBuild
 , ApplicationServices
-# test dependencies
+  # test dependencies
 , runCommand
 , unzip
 , which
@@ -32,12 +41,15 @@ let
 
     passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
-    cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
-      inherit src;
-      name = "${pname}-${version}";
-      sha256 = "sha256-leyLb6RqntiuEhmJSUkZRUuO8ah0BZI5OhKkGbWRjxs=";
-      sourceRoot = "${pname}-${version}/rust";
-    } else null;
+    cargoDeps =
+      if rustSupport then
+        rustPlatform.fetchCargoTarball
+          {
+            inherit src;
+            name = "${pname}-${version}";
+            sha256 = "sha256-leyLb6RqntiuEhmJSUkZRUuO8ah0BZI5OhKkGbWRjxs=";
+            sourceRoot = "${pname}-${version}/rust";
+          } else null;
     cargoRoot = if rustSupport then "rust" else null;
 
     propagatedBuildInputs = lib.optional re2Support fb-re2
@@ -45,10 +57,10 @@ let
       ++ lib.optional highlightSupport pygments;
     nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
       ++ lib.optionals rustSupport (with rustPlatform; [
-           cargoSetupHook
-           rust.cargo
-           rust.rustc
-         ]);
+      cargoSetupHook
+      rust.cargo
+      rust.rustc
+    ]);
     buildInputs = [ docutils ]
       ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
@@ -96,41 +108,42 @@ let
     };
   };
 
-  makeTests = { mercurial ? self, nameSuffix ? "", flags ? "" }: runCommand "${mercurial.pname}${nameSuffix}-tests" {
-    inherit (mercurial) src;
+  makeTests = { mercurial ? self, nameSuffix ? "", flags ? "" }: runCommand "${mercurial.pname}${nameSuffix}-tests"
+    {
+      inherit (mercurial) src;
 
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";  # needed for git
-    MERCURIAL_BASE = mercurial;
-    nativeBuildInputs = [
-      python
-      unzip
-      which
-      sqlite
-      git
-      gnupg
-    ];
+      SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt"; # needed for git
+      MERCURIAL_BASE = mercurial;
+      nativeBuildInputs = [
+        python
+        unzip
+        which
+        sqlite
+        git
+        gnupg
+      ];
 
-    postPatch = ''
-      patchShebangs .
+      postPatch = ''
+        patchShebangs .
 
-      for f in **/*.{py,c,t}; do
-        # not only used in shebangs
-        substituteAllInPlace "$f" '/bin/sh' '${stdenv.shell}'
-      done
+        for f in **/*.{py,c,t}; do
+          # not only used in shebangs
+          substituteAllInPlace "$f" '/bin/sh' '${stdenv.shell}'
+        done
 
-      for f in **/*.t; do
-        substituteInPlace 2>/dev/null "$f" \
-          --replace '*/hg:' '*/*hg*:' \${/* paths emitted by our wrapped hg look like ..hg-wrapped-wrapped */""}
-          --replace '"$PYTHON" "$BINDIR"/hg' '"$BINDIR"/hg' ${/* 'hg' is a wrapper; don't run using python directly */""}
-      done
-    '';
+        for f in **/*.t; do
+          substituteInPlace 2>/dev/null "$f" \
+            --replace '*/hg:' '*/*hg*:' \${/* paths emitted by our wrapped hg look like ..hg-wrapped-wrapped */""}
+            --replace '"$PYTHON" "$BINDIR"/hg' '"$BINDIR"/hg' ${/* 'hg' is a wrapper; don't run using python directly */""}
+        done
+      '';
 
-    # This runs Mercurial _a lot_ of times.
-    requiredSystemFeatures = [ "big-parallel" ];
+      # This runs Mercurial _a lot_ of times.
+      requiredSystemFeatures = [ "big-parallel" ];
 
-    # Don't run tests if not-Linux or if cross-compiling.
-    meta.broken = !stdenv.hostPlatform.isLinux || stdenv.buildPlatform != stdenv.hostPlatform;
-  } ''
+      # Don't run tests if not-Linux or if cross-compiling.
+      meta.broken = !stdenv.hostPlatform.isLinux || stdenv.buildPlatform != stdenv.hostPlatform;
+    } ''
     addToSearchPathWithCustomDelimiter : PYTHONPATH "${mercurial}/${python.sitePackages}"
 
     unpackPhase
@@ -157,13 +170,14 @@ let
     touch $out
   '';
 in
-  self.overridePythonAttrs (origAttrs: {
-    passthru = origAttrs.passthru // rec {
-      # withExtensions takes a function which takes the python packages set and
-      # returns a list of extensions to install.
-      #
-      # for instance: mercurial.withExtension (pm: [ pm.hg-evolve ])
-      withExtensions = f: let
+self.overridePythonAttrs (origAttrs: {
+  passthru = origAttrs.passthru // rec {
+    # withExtensions takes a function which takes the python packages set and
+    # returns a list of extensions to install.
+    #
+    # for instance: mercurial.withExtension (pm: [ pm.hg-evolve ])
+    withExtensions = f:
+      let
         python = self.python;
         mercurialHighPrio = ps: (ps.toPythonModule self).overrideAttrs (oldAttrs: {
           meta = oldAttrs.meta // {
@@ -172,7 +186,8 @@ in
         });
         plugins = (f python.pkgs) ++ [ (mercurialHighPrio python.pkgs) ];
         env = python.withPackages (ps: plugins);
-      in stdenv.mkDerivation {
+      in
+      stdenv.mkDerivation {
         pname = "${self.pname}-with-extensions";
 
         inherit (self) src version meta;
@@ -207,8 +222,8 @@ in
         '';
       };
 
-      tests = origAttrs.passthru.tests // {
-        withExtensions = withExtensions (pm: [ pm.hg-evolve ]);
-      };
+    tests = origAttrs.passthru.tests // {
+      withExtensions = withExtensions (pm: [ pm.hg-evolve ]);
     };
-  })
+  };
+})

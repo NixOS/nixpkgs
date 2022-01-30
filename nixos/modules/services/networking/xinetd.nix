@@ -55,7 +55,7 @@ in
     };
 
     services.xinetd.services = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         A list of services provided by xinetd.
       '';

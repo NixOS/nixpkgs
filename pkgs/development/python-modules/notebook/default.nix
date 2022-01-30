@@ -41,9 +41,21 @@ buildPythonPackage rec {
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [
-    jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
-    jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus-client argon2_cffi
+    jinja2
+    tornado
+    ipython_genutils
+    traitlets
+    jupyter_core
+    send2trash
+    jupyter-client
+    nbformat
+    nbconvert
+    ipykernel
+    terminado
+    requests
+    pexpect
+    prometheus-client
+    argon2_cffi
   ];
 
   # disable warning_filters

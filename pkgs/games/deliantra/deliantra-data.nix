@@ -16,6 +16,6 @@ symlinkJoin rec {
     license = with licenses; [ gpl2Plus agpl3Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ ToxicFrog ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

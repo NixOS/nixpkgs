@@ -79,7 +79,7 @@ in
 
       mailLists = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "The collection of hosted maillists";
       };
 
@@ -116,7 +116,7 @@ in
 
     services.postfix = {
       enable = true;
-      recipientDelimiter= "+";
+      recipientDelimiter = "+";
       masterConfig.mlmmj = {
         type = "unix";
         private = true;
@@ -145,12 +145,12 @@ in
     environment.systemPackages = [ pkgs.mlmmj ];
 
     system.activationScripts.mlmmj = ''
-          ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
-          ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
-          ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
-          ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
-          ${pkgs.postfix}/bin/postmap /etc/postfix/transport
-      '';
+      ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
+      ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
+      ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
+      ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
+      ${pkgs.postfix}/bin/postmap /etc/postfix/transport
+    '';
 
     systemd.services.mlmmj-maintd = {
       description = "mlmmj maintenance daemon";

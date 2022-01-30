@@ -1,6 +1,11 @@
-{ lib, fetchurl, python3Packages
-, gobject-introspection, gsettings-desktop-schemas, gtk3
-, wrapGAppsHook, xrandr
+{ lib
+, fetchurl
+, python3Packages
+, gobject-introspection
+, gsettings-desktop-schemas
+, gtk3
+, wrapGAppsHook
+, xrandr
 }:
 
 let
@@ -8,7 +13,8 @@ let
   pname = "arandr";
   version = "0.1.10";
   name = "${pname}-${version}";
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   inherit pname version;
 
   src = fetchurl {

@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, cmake, bash-completion, pkg-config, libconfig
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, bash-completion
+, pkg-config
+, libconfig
 , asciidoc
 , libusbgx
 }:
@@ -18,7 +24,7 @@ stdenv.mkDerivation {
     cmakeFlagsArray+=("-DBASH_COMPLETION_COMPLETIONSDIR=$out/share/bash-completions/completions")
   '';
   nativeBuildInputs = [ cmake pkg-config asciidoc ];
-  buildInputs = [ bash-completion libconfig libusbgx];
+  buildInputs = [ bash-completion libconfig libusbgx ];
 
   meta = {
     description = "Linux command line tool for setting up USB gadgets using configfs";

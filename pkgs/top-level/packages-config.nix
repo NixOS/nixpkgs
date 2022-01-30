@@ -29,7 +29,7 @@
       zabbix40
       zabbix50
       zeroadPackages
-    ;
+      ;
 
     # Make sure haskell.compiler is included, so alternative GHC versions show up,
     # but don't add haskell.packages.* since they contain the same packages (at

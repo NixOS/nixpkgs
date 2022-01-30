@@ -66,7 +66,8 @@ let
     owslib
     six
   ];
-in mkDerivation rec {
+in
+mkDerivation rec {
   version = "3.16.16";
   pname = "qgis-ltr-unwrapped";
 
@@ -109,8 +110,8 @@ in mkDerivation rec {
     qtxmlpatterns
     qt3d
   ] ++ lib.optional withGrass grass
-    ++ lib.optional withWebKit qtwebkit
-    ++ pythonBuildInputs;
+  ++ lib.optional withWebKit qtwebkit
+  ++ pythonBuildInputs;
 
   nativeBuildInputs = [ makeWrapper cmake flex bison ninja ];
 
@@ -129,7 +130,7 @@ in mkDerivation rec {
     "-DPYQT5_SIP_DIR=${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"
     "-DQSCI_SIP_DIR=${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/grass78";
+  ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/grass78";
 
   postFixup = lib.optionalString withGrass ''
     # grass has to be availble on the command line even though we baked in

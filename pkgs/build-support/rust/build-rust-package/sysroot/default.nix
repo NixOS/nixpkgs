@@ -6,11 +6,12 @@ let
   cargoSrc = import ../../sysroot/src.nix {
     inherit stdenv rustPlatform buildPackages originalCargoToml;
   };
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   inherit target RUSTFLAGS;
 
   name = "custom-sysroot";
-  src =  cargoSrc;
+  src = cargoSrc;
 
   RUSTC_BOOTSTRAP = 1;
   __internal_dontAddSysroot = true;

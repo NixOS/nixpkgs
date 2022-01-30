@@ -1,16 +1,32 @@
-{ stdenv, lib
+{ stdenv
+, lib
 , kernel
 , fetchurl
-, pkg-config, meson, ninja, makeWrapper
-, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap, rdma-core
-, doxygen, python3, pciutils
-, withExamples ? []
-, shared ? false }:
+, pkg-config
+, meson
+, ninja
+, makeWrapper
+, libbsd
+, numactl
+, libbpf
+, zlib
+, libelf
+, jansson
+, openssl
+, libpcap
+, rdma-core
+, doxygen
+, python3
+, pciutils
+, withExamples ? [ ]
+, shared ? false
+}:
 
 let
   mod = kernel != null;
   dpdkVersion = "21.11";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dpdk";
   version = "${dpdkVersion}" + lib.optionalString mod "-${kernel.version}";
 
@@ -66,7 +82,7 @@ in stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"
   ++ lib.optional stdenv.isAarch64 "-Dmachine=generic"
   ++ lib.optional mod "-Dkernel_dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
+  ++ lib.optional (withExamples != [ ]) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 
   postInstall = ''
     # Remove Sphinx cache files. Not only are they not useful, but they also
@@ -75,7 +91,7 @@ in stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/dpdk-devbind.py \
       --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
-  '' + lib.optionalString (withExamples != []) ''
+  '' + lib.optionalString (withExamples != [ ]) ''
     mkdir -p $examples/bin
     find examples -type f -executable -exec install {} $examples/bin \;
   '';
@@ -83,13 +99,13 @@ in stdenv.mkDerivation rec {
   outputs =
     [ "out" "doc" ]
     ++ lib.optional mod "kmod"
-    ++ lib.optional (withExamples != []) "examples";
+    ++ lib.optional (withExamples != [ ]) "examples";
 
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = "http://dpdk.org/";
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
-    platforms =  platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
   };
 }

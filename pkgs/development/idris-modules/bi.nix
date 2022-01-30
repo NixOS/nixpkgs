@@ -4,7 +4,7 @@
 , pruviloj
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "bi";
   version = "2018-06-25";
 

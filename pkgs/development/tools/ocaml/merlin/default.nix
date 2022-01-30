@@ -1,5 +1,13 @@
-{ lib, fetchurl, buildDunePackage, substituteAll
-, dot-merlin-reader, dune_2, yojson, csexp, result }:
+{ lib
+, fetchurl
+, buildDunePackage
+, substituteAll
+, dot-merlin-reader
+, dune_2
+, yojson
+, csexp
+, result
+}:
 
 buildDunePackage rec {
   pname = "merlin";

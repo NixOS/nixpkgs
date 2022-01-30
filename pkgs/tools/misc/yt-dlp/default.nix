@@ -52,7 +52,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postInstall = lib.optionalString withAlias ''
-      ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+    ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
   meta = with lib; {

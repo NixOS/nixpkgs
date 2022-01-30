@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ qtbase qtquick1 qtmultimedia ]
-                ++ lib.optional stdenv.isDarwin utmp;
+    ++ lib.optional stdenv.isDarwin utmp;
   nativeBuildInputs = [ qmake ];
 
   patches = [

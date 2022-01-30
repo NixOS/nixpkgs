@@ -1,5 +1,16 @@
-{ fetchurl, lib, stdenv, gettext, perl, pkg-config, libxml2, pango, cairo, groff
-, tcl-8_5, darwin }:
+{ fetchurl
+, lib
+, stdenv
+, gettext
+, perl
+, pkg-config
+, libxml2
+, pango
+, cairo
+, groff
+, tcl-8_5
+, darwin
+}:
 
 perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
   pname = "rrdtool";

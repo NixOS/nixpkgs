@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "pekdon";
     repo = "pekwm";
     rev = "release-${version}";
-    hash= "sha256-voHPstdcd4CHnAdD3PMxca0A6MyMYJi8Ik0UlFB0vG0=";
+    hash = "sha256-voHPstdcd4CHnAdD3PMxca0A6MyMYJi8Ik0UlFB0vG0=";
   };
 
   nativeBuildInputs = [

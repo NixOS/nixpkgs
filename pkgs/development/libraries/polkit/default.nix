@@ -23,14 +23,14 @@
 , useSystemd ? stdenv.isLinux
 , systemd
 , elogind
-# needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
+  # needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
 , withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
-# cross build fails on polkit-1-scan (https://github.com/NixOS/nixpkgs/pull/152704)
+  # cross build fails on polkit-1-scan (https://github.com/NixOS/nixpkgs/pull/152704)
 , withGtkDoc ? (stdenv.buildPlatform == stdenv.hostPlatform)
-# A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
-# Not yet investigated; it may be due to the "Make netgroup support optional"
-# patch not updating the tests correctly yet, or doing something wrong,
-# or being unrelated to that.
+  # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
+  # Not yet investigated; it may be due to the "Make netgroup support optional"
+  # patch not updating the tests correctly yet, or doing something wrong,
+  # or being unrelated to that.
 , doCheck ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl)
 }:
 

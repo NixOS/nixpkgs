@@ -6,7 +6,7 @@ in
   options = {
 
     system.build = mkOption {
-      default = {};
+      default = { };
       description = ''
         Attribute set of derivations used to set up the system.
       '';

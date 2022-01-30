@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   subdir = "7-2018q2";
 
   suffix = {
-    aarch64-darwin = "mac";  # use intel binaries via rosetta
+    aarch64-darwin = "mac"; # use intel binaries via rosetta
     x86_64-darwin = "mac";
-    x86_64-linux  = "linux";
+    x86_64-linux = "linux";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = {
       aarch64-darwin = "0nc7m0mpa39qyhfyydxkkyqm7spfc27xf6ygi2vd2aym4r9azi61";
       x86_64-darwin = "0nc7m0mpa39qyhfyydxkkyqm7spfc27xf6ygi2vd2aym4r9azi61";
-      x86_64-linux  = "0sgysp3hfpgrkcbfiwkp0a7ymqs02khfbrjabm52b5z61sgi05xv";
+      x86_64-linux = "0sgysp3hfpgrkcbfiwkp0a7ymqs02khfbrjabm52b5z61sgi05xv";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 

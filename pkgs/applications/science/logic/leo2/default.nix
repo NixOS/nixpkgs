@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ eprover ocaml camlp4 perl zlib ];
 
-  patches = [ (fetchpatch {
+  patches = [
+    (fetchpatch {
       url = "https://github.com/niklasso/minisat/commit/7eb6015313561a2586032574788fcb133eeaa19f.patch";
       stripLen = 1;
       extraPrefix = "lib/";

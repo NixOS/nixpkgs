@@ -1,4 +1,3 @@
-
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -6,15 +5,16 @@ with lib;
 let
   cfg = config.console;
 
-  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2*i) 2 x);
+  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2 * i) 2 x);
 
   isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
 
-  optimizedKeymap = pkgs.runCommand "keymap" {
-    nativeBuildInputs = [ pkgs.buildPackages.kbd ];
-    LOADKEYS_KEYMAP_PATH = "${consoleEnv}/share/keymaps/**";
-    preferLocalBuild = true;
-  } ''
+  optimizedKeymap = pkgs.runCommand "keymap"
+    {
+      nativeBuildInputs = [ pkgs.buildPackages.kbd ];
+      LOADKEYS_KEYMAP_PATH = "${consoleEnv}/share/keymaps/**";
+      preferLocalBuild = true;
+    } ''
     loadkeys -b ${optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
   '';
 
@@ -41,7 +41,7 @@ in
 {
   ###### interface
 
-  options.console  = {
+  options.console = {
     font = mkOption {
       type = with types; either str path;
       default = "Lat2-Terminus16";
@@ -65,12 +65,24 @@ in
 
     colors = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
-        "002b36" "dc322f" "859900" "b58900"
-        "268bd2" "d33682" "2aa198" "eee8d5"
-        "002b36" "cb4b16" "586e75" "657b83"
-        "839496" "6c71c4" "93a1a1" "fdf6e3"
+        "002b36"
+        "dc322f"
+        "859900"
+        "b58900"
+        "268bd2"
+        "d33682"
+        "2aa198"
+        "eee8d5"
+        "002b36"
+        "cb4b16"
+        "586e75"
+        "657b83"
+        "839496"
+        "6c71c4"
+        "93a1a1"
+        "fdf6e3"
       ];
       description = ''
         The 16 colors palette used by the virtual consoles.
@@ -113,7 +125,8 @@ in
   ###### implementation
 
   config = mkMerge [
-    { console.keyMap = with config.services.xserver;
+    {
+      console.keyMap = with config.services.xserver;
         mkIf cfg.useXkbConfig
           (pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
             '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
@@ -130,7 +143,8 @@ in
     })
 
     (mkIf setVconsole (mkMerge [
-      { environment.systemPackages = [ pkgs.kbd ];
+      {
+        environment.systemPackages = [ pkgs.kbd ];
 
         # Let systemd-vconsole-setup.service do the work of setting up the
         # virtual consoles.
@@ -149,19 +163,21 @@ in
         '';
 
         systemd.services.reload-systemd-vconsole-setup =
-          { description = "Reset console on configuration changes";
+          {
+            description = "Reset console on configuration changes";
             wantedBy = [ "multi-user.target" ];
             restartTriggers = [ vconsoleConf consoleEnv ];
             reloadIfChanged = true;
             serviceConfig =
-              { RemainAfterExit = true;
+              {
+                RemainAfterExit = true;
                 ExecStart = "${pkgs.coreutils}/bin/true";
                 ExecReload = "/run/current-system/systemd/bin/systemctl restart systemd-vconsole-setup";
               };
           };
       }
 
-      (mkIf (cfg.colors != []) {
+      (mkIf (cfg.colors != [ ]) {
         boot.kernelParams = [
           "vt.default_red=${makeColor 0 cfg.colors}"
           "vt.default_grn=${makeColor 1 cfg.colors}"

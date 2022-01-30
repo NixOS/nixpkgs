@@ -4,7 +4,8 @@ let
   inherit (lib) mkEnableOption mkIf mkOption types literalExpression;
 
   cfg = config.services.timetagger;
-in {
+in
+{
 
   options = {
     services.timetagger = {

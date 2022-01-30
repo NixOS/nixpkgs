@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , attrs
 , jsonpickle
 , pbr
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     jsonpickle
   ];
 
-  checkInputs =[
+  checkInputs = [
     pytestCheckHook
   ];
 

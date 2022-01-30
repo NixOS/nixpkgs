@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, dpkg, buildFHSUserEnv
-, glibc, glib, openssl, tpm2-tss
-, gtk3, gnome, polkit, polkit_gnome
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, buildFHSUserEnv
+, glibc
+, glib
+, openssl
+, tpm2-tss
+, gtk3
+, gnome
+, polkit
+, polkit_gnome
 }:
 
 let
@@ -68,22 +78,28 @@ let
         $out/bin/byndid
     '';
   };
-# /usr/bin/pkcheck is hardcoded in binary - we need FHS
-in buildFHSUserEnv {
-   inherit meta;
-   name = pname;
+  # /usr/bin/pkcheck is hardcoded in binary - we need FHS
+in
+buildFHSUserEnv {
+  inherit meta;
+  name = pname;
 
-   targetPkgs = pkgs: [
-     beyond-identity
-     glib glibc openssl tpm2-tss
-     gtk3 gnome.gnome-keyring
-     polkit polkit_gnome
-   ];
+  targetPkgs = pkgs: [
+    beyond-identity
+    glib
+    glibc
+    openssl
+    tpm2-tss
+    gtk3
+    gnome.gnome-keyring
+    polkit
+    polkit_gnome
+  ];
 
-   extraInstallCommands = ''
-     ln -s ${beyond-identity}/share $out
-   '';
+  extraInstallCommands = ''
+    ln -s ${beyond-identity}/share $out
+  '';
 
-   runScript = "beyond-identity";
+  runScript = "beyond-identity";
 }
 

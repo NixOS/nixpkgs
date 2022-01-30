@@ -2,10 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# propagated
+  # propagated
 , aiohttp
 
-# tests
+  # tests
 , pytest-asyncio
 , pytestCheckHook
 }:
@@ -42,6 +42,6 @@ buildPythonPackage {
     description = "Simple async wrapper around the Octoprint API";
     homepage = "https://github.com/rfleming71/pyoctoprintapi";
     license = licenses.mit;
-    maintainers= with maintainers; [ hexa ];
+    maintainers = with maintainers; [ hexa ];
   };
 }

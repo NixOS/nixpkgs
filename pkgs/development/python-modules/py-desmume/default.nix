@@ -1,6 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, GitPython
-, libpcap, meson, ninja, pillow, pkg-config, pygobject3, SDL2
-, alsa-lib, soundtouch, openal
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, GitPython
+, libpcap
+, meson
+, ninja
+, pillow
+, pkg-config
+, pygobject3
+, SDL2
+, alsa-lib
+, soundtouch
+, openal
 }:
 
 let

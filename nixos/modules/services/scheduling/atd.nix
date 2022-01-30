@@ -32,7 +32,7 @@ in
         writeable by everyone (and sticky).  This is normally not
         needed since the <command>at</command> commands are
         setuid/setgid <literal>atd</literal>.
-     '';
+      '';
     };
 
   };
@@ -45,17 +45,21 @@ in
     # Not wrapping "batch" because it's a shell script (kernel drops perms
     # anyway) and it's patched to invoke the "at" setuid wrapper.
     security.wrappers = builtins.listToAttrs (
-      map (program: { name = "${program}"; value = {
-      source = "${at}/bin/${program}";
-      owner = "atd";
-      group = "atd";
-      setuid = true;
-      setgid = true;
-    };}) [ "at" "atq" "atrm" ]);
+      map
+        (program: {
+          name = "${program}";
+          value = {
+            source = "${at}/bin/${program}";
+            owner = "atd";
+            group = "atd";
+            setuid = true;
+            setgid = true;
+          };
+        }) [ "at" "atq" "atrm" ]);
 
     environment.systemPackages = [ at ];
 
-    security.pam.services.atd = {};
+    security.pam.services.atd = { };
 
     users.users.atd =
       {

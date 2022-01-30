@@ -9,7 +9,8 @@ let
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];

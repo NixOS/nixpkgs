@@ -28,7 +28,10 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    poetry-core copyDesktopItems gobject-introspection wrapGAppsHook
+    poetry-core
+    copyDesktopItems
+    gobject-introspection
+    wrapGAppsHook
   ];
 
   # Setting gobject-introspection on booth nativeBuildInputs and

@@ -23,6 +23,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/trhodeos/spicy";
     license = licenses.mit;
-    maintainers = [ maintainers._414owen];
+    maintainers = [ maintainers._414owen ];
   };
 }

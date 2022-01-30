@@ -1,4 +1,4 @@
-{stdenv, fetchurl, flex, bison, pkg-config, glib, gettext}:
+{ stdenv, fetchurl, flex, bison, pkg-config, glib, gettext }:
 
 stdenv.mkDerivation rec {
   name = "libIDL-${minVer}.14";

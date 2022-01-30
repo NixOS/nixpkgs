@@ -1,9 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage
-, requests, chardet, cssselect, lxml
+{ lib
+, fetchPypi
+, buildPythonPackage
+, requests
+, chardet
+, cssselect
+, lxml
 }:
 
 buildPythonPackage rec {
-  pname   = "PyReadability";
+  pname = "PyReadability";
   version = "0.4.0";
 
   src = fetchPypi {

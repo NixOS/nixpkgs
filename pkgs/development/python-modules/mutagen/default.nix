@@ -23,8 +23,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
   checkInputs = [
-    pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
-    pkgs.glibcLocales pycodestyle pyflakes pytest hypothesis flake8
+    pkgs.faad2
+    pkgs.flac
+    pkgs.vorbis-tools
+    pkgs.liboggz
+    pkgs.glibcLocales
+    pycodestyle
+    pyflakes
+    pytest
+    hypothesis
+    flake8
   ];
   LC_ALL = "en_US.UTF-8";
 

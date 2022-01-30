@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, jre, makeWrapper}:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "picard-tools";

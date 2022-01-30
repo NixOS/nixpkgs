@@ -29,7 +29,7 @@
 
 # Helper function for building a derivation for Franz and forks.
 
-{ pname, name, version, src, meta, extraBuildInputs ? [] }:
+{ pname, name, version, src, meta, extraBuildInputs ? [ ] }:
 
 stdenv.mkDerivation rec {
   inherit pname version src meta;

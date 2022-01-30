@@ -8,8 +8,10 @@
 , pandoc
 , pkg-config
 , zlib
-, multimediaSupport ? true, ffmpeg
-, qrcodegenSupport ? true, qrcodegen
+, multimediaSupport ? true
+, ffmpeg
+, qrcodegenSupport ? true
+, qrcodegen
 }:
 
 stdenv.mkDerivation rec {

@@ -14,7 +14,9 @@ buildGoModule rec {
   vendorSha256 = "xGghTP9thICOGIfc5VPJK06DeXfLiTckwa4nXv83/P8=";
 
   ldflags = [
-    "-s" "-w" "-X golang.stackrox.io/kube-linter/internal/version.version=${version}"
+    "-s"
+    "-w"
+    "-X golang.stackrox.io/kube-linter/internal/version.version=${version}"
   ];
 
   passthru.tests.version = testVersion {

@@ -1,8 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
-# python dependencies
+  # python dependencies
 , click
 , python-dateutil
 , etelemetry
@@ -29,21 +30,21 @@
 , pytest-cov
 , codecov
 , sphinx
-# other dependencies
+  # other dependencies
 , which
 , bash
 , glibcLocales
 , callPackage
-# causes Python packaging conflict with any package requiring rdflib,
-# so use the unpatched rdflib by default (disables Nipype provenance tracking);
-# see https://github.com/nipy/nipype/issues/2888:
+  # causes Python packaging conflict with any package requiring rdflib,
+  # so use the unpatched rdflib by default (disables Nipype provenance tracking);
+  # see https://github.com/nipy/nipype/issues/2888:
 , useNeurdflib ? false
 }:
 
 let
 
- # This is a temporary convenience package for changes waiting to be merged into the primary rdflib repo.
- neurdflib = callPackage ./neurdflib.nix { };
+  # This is a temporary convenience package for changes waiting to be merged into the primary rdflib repo.
+  neurdflib = callPackage ./neurdflib.nix { };
 
 in
 

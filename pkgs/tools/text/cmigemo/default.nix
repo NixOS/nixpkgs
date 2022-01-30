@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, buildPackages
-, gzip, libiconv, nkf, perl, which
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, buildPackages
+, gzip
+, libiconv
+, nkf
+, perl
+, which
 , skk-dicts
 }:
 
 let
-  iconvBin = if stdenv.isDarwin then libiconv else  buildPackages.stdenv.cc.libc;
+  iconvBin = if stdenv.isDarwin then libiconv else buildPackages.stdenv.cc.libc;
 in
 stdenv.mkDerivation {
   pname = "cmigemo";

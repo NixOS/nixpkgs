@@ -3,27 +3,29 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   nodes = {
     webserver = { pkgs, lib, ... }: {
-      services.nginx = let
-        root = pkgs.runCommand "testdir" {} ''
-          mkdir "$out"
-          echo hello world > "$out/index.html"
-        '';
-      in {
-        enable = true;
+      services.nginx =
+        let
+          root = pkgs.runCommand "testdir" { } ''
+            mkdir "$out"
+            echo hello world > "$out/index.html"
+          '';
+        in
+        {
+          enable = true;
 
-        virtualHosts.lockedroot = {
-          inherit root;
-          basicAuth.alice = "jane";
-        };
+          virtualHosts.lockedroot = {
+            inherit root;
+            basicAuth.alice = "jane";
+          };
 
-        virtualHosts.lockedsubdir = {
-          inherit root;
-          locations."/sublocation/" = {
-            alias = "${root}/";
-            basicAuth.bob = "john";
+          virtualHosts.lockedsubdir = {
+            inherit root;
+            locations."/sublocation/" = {
+              alias = "${root}/";
+              basicAuth.bob = "john";
+            };
           };
         };
-      };
     };
   };
 

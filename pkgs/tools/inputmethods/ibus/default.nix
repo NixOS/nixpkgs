@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , substituteAll
 , fetchurl
 , fetchFromGitHub
@@ -50,11 +51,12 @@ let
   };
   # make-dconf-override-db.sh needs to execute dbus-launch in the sandbox,
   # it will fail to read /etc/dbus-1/session.conf unless we add this flag
-  dbus-launch = runCommand "sandbox-dbus-launch" {
-    nativeBuildInputs = [ makeWrapper ];
-  } ''
-      makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
-        --add-flags --config-file=${dbus.daemon}/share/dbus-1/session.conf
+  dbus-launch = runCommand "sandbox-dbus-launch"
+    {
+      nativeBuildInputs = [ makeWrapper ];
+    } ''
+    makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
+      --add-flags --config-file=${dbus.daemon}/share/dbus-1/session.conf
   '';
 in
 

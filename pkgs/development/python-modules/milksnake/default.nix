@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-   cffi
+    cffi
   ];
 
   # tests rely on pip/venv

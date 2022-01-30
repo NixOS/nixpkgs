@@ -59,7 +59,7 @@ buildPythonPackage rec {
       There are official SWIG-based Python bindings included in C++ library distribution.
       This package provides alternative Cython-based pip-installable Python bindings.
     '';
-    homepage =  "https://github.com/kmike/marisa-trie";
+    homepage = "https://github.com/kmike/marisa-trie";
     license = licenses.mit;
     maintainers = with maintainers; [ ixxie ];
   };

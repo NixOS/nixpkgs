@@ -27,7 +27,7 @@ buildPythonPackage rec {
     lxml
   ];
 
-  doCheck = false;  # Tests require internet access
+  doCheck = false; # Tests require internet access
   pythonImportsCheck = [ "yfinance" ];
 
   meta = with lib; {

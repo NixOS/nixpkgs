@@ -1,6 +1,15 @@
-{ stdenv, lib, buildPythonPackage, buildPythonApplication, fetchFromGitHub
-, pkg-config, cmake, setuptools
-, rtl-sdr, soapysdr-with-plugins, csdr, direwolf
+{ stdenv
+, lib
+, buildPythonPackage
+, buildPythonApplication
+, fetchFromGitHub
+, pkg-config
+, cmake
+, setuptools
+, rtl-sdr
+, soapysdr-with-plugins
+, csdr
+, direwolf
 }:
 
 let

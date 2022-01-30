@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , cmake
@@ -19,7 +20,8 @@
 
 let
   jsRuntime = if stdenv.hostPlatform.isDarwin then JavaScriptCore else spidermonkey_68;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libproxy";
   version = "0.4.17";
 

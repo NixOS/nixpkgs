@@ -1,5 +1,11 @@
-{ lib, fetchFromGitHub, python27Packages, python3Packages, wmctrl,
-  qtbase, mkDerivationWith }:
+{ lib
+, fetchFromGitHub
+, python27Packages
+, python3Packages
+, wmctrl
+, qtbase
+, mkDerivationWith
+}:
 
 {
   stable = with python27Packages; buildPythonPackage rec {
@@ -9,7 +15,7 @@
     meta = with lib; {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
-      license     = licenses.gpl2;
+      license = licenses.gpl2;
     };
 
     src = fetchFromGitHub {
@@ -19,10 +25,18 @@
       sha256 = "sha256-LIhTwHMphg+xTR9NKvjAZ6p0mmqPNcZd9C4cgnenmYQ=";
     };
 
-    nativeBuildInputs     = [ setuptools-scm ];
-    buildInputs           = [ pytest mock ];
+    nativeBuildInputs = [ setuptools-scm ];
+    buildInputs = [ pytest mock ];
     propagatedBuildInputs = [
-      six setuptools pyserial appdirs hidapi wxPython xlib wmctrl dbus-python
+      six
+      setuptools
+      pyserial
+      appdirs
+      hidapi
+      wxPython
+      xlib
+      wmctrl
+      dbus-python
     ];
   };
 
@@ -33,7 +47,7 @@
     meta = with lib; {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
-      license     = licenses.gpl2;
+      license = licenses.gpl2;
     };
 
     src = fetchFromGitHub {
@@ -47,7 +61,7 @@
     # sed on many of the platforms Plover builds for
     postPatch = "sed -i /PyQt5/d setup.cfg";
 
-    checkInputs           = [ pytest mock ];
+    checkInputs = [ pytest mock ];
     propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
 
     dontWrapQtApps = true;

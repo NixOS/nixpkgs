@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config
-, yosys, readline, zlib, ghdl
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, yosys
+, readline
+, zlib
+, ghdl
 }:
 
 stdenv.mkDerivation {
@@ -8,9 +14,9 @@ stdenv.mkDerivation {
   plugin = "ghdl";
 
   src = fetchFromGitHub {
-    owner  = "ghdl";
-    repo   = "ghdl-yosys-plugin";
-    rev    = "cba859cacf8c6631146dbdaa0f297c060b5a68cd";
+    owner = "ghdl";
+    repo = "ghdl-yosys-plugin";
+    rev = "cba859cacf8c6631146dbdaa0f297c060b5a68cd";
     sha256 = "01d9wb7sqkmkf2y9bnn3pmhy08khzs5m1d06whxsiwgwnjzfk9mx";
   };
 
@@ -25,8 +31,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "GHDL plugin for Yosys";
-    license     = licenses.isc;
-    platforms   = platforms.all;
+    license = licenses.isc;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

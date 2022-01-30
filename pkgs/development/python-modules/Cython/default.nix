@@ -23,7 +23,8 @@ let
     ++ lib.optionals stdenv.isi686 [ "future_division" "overflow_check_longlong" ]
   ;
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "Cython";
   version = "0.29.24";
 
@@ -37,7 +38,9 @@ in buildPythonPackage rec {
   ];
 
   checkInputs = [
-    gdb numpy ncurses
+    gdb
+    numpy
+    ncurses
   ];
 
   buildInputs = [ glibcLocales ];

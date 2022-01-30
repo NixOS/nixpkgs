@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   buildFlags =
     [ "doc" ] ++
     (if stdenv.isDarwin
-     then [ "blahtex-mac" "blahtexml-mac" ]
-     else [ "blahtex-linux" "blahtexml-linux" ]);
+    then [ "blahtex-mac" "blahtexml-mac" ]
+    else [ "blahtex-linux" "blahtexml-linux" ]);
 
   installPhase = ''
     install -D -t "$out/bin" blahtex blahtexml

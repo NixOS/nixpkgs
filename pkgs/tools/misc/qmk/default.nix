@@ -36,7 +36,8 @@ python3.pkgs.buildPythonApplication rec {
     milc
     pygments
     pyusb
-  ] ++ [ # Binaries need to be in the path so this is in propagatedBuildInputs
+  ] ++ [
+    # Binaries need to be in the path so this is in propagatedBuildInputs
     avrdude
     dfu-programmer
     dfu-util

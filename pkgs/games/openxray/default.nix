@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, glew, freeimage,  liblockfile
-, openal, libtheora, SDL2, lzo, libjpeg, libogg, tbb
-, pcre, makeWrapper, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, glew
+, freeimage
+, liblockfile
+, openal
+, libtheora
+, SDL2
+, lzo
+, libjpeg
+, libogg
+, tbb
+, pcre
+, makeWrapper
+, fetchpatch
+}:
 
 let
   version = "822-december-preview";
@@ -34,7 +49,8 @@ let
       platforms = platforms.all;
     };
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "openxray";
   inherit version src;
 
@@ -52,8 +68,18 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCMAKE_INCLUDE_PATH=${cryptopp}/include/cryptopp" ];
 
   buildInputs = [
-    glew freeimage liblockfile openal cryptopp libtheora SDL2 lzo
-    libjpeg libogg tbb pcre
+    glew
+    freeimage
+    liblockfile
+    openal
+    cryptopp
+    libtheora
+    SDL2
+    lzo
+    libjpeg
+    libogg
+    tbb
+    pcre
   ];
 
   nativeBuildInputs = [ cmake makeWrapper ];

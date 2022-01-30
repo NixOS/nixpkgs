@@ -60,9 +60,11 @@ buildPythonPackage rec {
     networkx
   ] ++ lib.optionals (pythonOlder "3.7") [
     dataclasses
-  ] ++ (map (lang: callPackage ./language-pack.nix {
-    inherit lang version format src;
-  }) langPkgs);
+  ] ++ (map
+    (lang: callPackage ./language-pack.nix {
+      inherit lang version format src;
+    })
+    langPkgs);
 
   checkInputs = [ glibcLocales pytestCheckHook ];
 

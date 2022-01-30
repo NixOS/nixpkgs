@@ -4,7 +4,8 @@ let
   version = "0.4.0";
   repo = "git-secret";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${repo}-${version}";
 
   src = fetchFromGitHub {

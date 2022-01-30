@@ -1,4 +1,8 @@
-{ stdenv, closureInfo, xorriso, syslinux, libossp_uuid
+{ stdenv
+, closureInfo
+, xorriso
+, syslinux
+, libossp_uuid
 
 , # The file name of the resulting ISO image.
   isoName ? "cd.iso"
@@ -14,7 +18,7 @@
   # This is a list of attribute sets {object, symlink} where `object'
   # is a store path whose closure will be copied, and `symlink' is a
   # symlink to `object' that will be added to the CD.
-  storeContents ? []
+  storeContents ? [ ]
 
 , # Whether this should be an El-Torito bootable CD.
   bootable ? false
@@ -35,7 +39,8 @@
   isohybridMbrImage ? ""
 
 , # Whether to compress the resulting ISO image with zstd.
-  compressImage ? false, zstd
+  compressImage ? false
+, zstd
 
 , # The volume ID.
   volumeID ? ""

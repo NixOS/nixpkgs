@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchzip, makeWrapper, perlPackages,
-... }:
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, perlPackages
+, ...
+}:
 
 stdenv.mkDerivation rec {
   appname = "popfile";

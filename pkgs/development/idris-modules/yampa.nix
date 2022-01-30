@@ -3,7 +3,7 @@
 , bifunctors
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "yampa";
   version = "2016-07-05";
 

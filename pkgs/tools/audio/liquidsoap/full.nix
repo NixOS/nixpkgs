@@ -1,9 +1,31 @@
-{ lib, stdenv, makeWrapper, fetchurl, which, pkg-config
+{ lib
+, stdenv
+, makeWrapper
+, fetchurl
+, which
+, pkg-config
 , ocamlPackages
-, libao, portaudio, alsa-lib, libpulseaudio, libjack2
-, libsamplerate, libmad, taglib, lame, libogg
-, libvorbis, speex, libtheora, libopus, zlib
-, faad2, flac, ladspaH, ffmpeg, frei0r, dssi
+, libao
+, portaudio
+, alsa-lib
+, libpulseaudio
+, libjack2
+, libsamplerate
+, libmad
+, taglib
+, lame
+, libogg
+, libvorbis
+, speex
+, libtheora
+, libopus
+, zlib
+, faad2
+, flac
+, ladspaH
+, ffmpeg
+, frei0r
+, dssi
 }:
 
 let
@@ -15,9 +37,16 @@ let
     sha256 = "1lx5s1avds9fsh77828ifn71r2g89rxakhs8pp995a675phm9viw";
   };
 
-  packageFilters = map (p: "-e '/ocaml-${p}/d'" )
-    [ "gstreamer" "shine" "aacplus" "schroedinger"
-      "voaacenc" "soundtouch" "gavl" "lo"
+  packageFilters = map (p: "-e '/ocaml-${p}/d'")
+    [
+      "gstreamer"
+      "shine"
+      "aacplus"
+      "schroedinger"
+      "voaacenc"
+      "soundtouch"
+      "gavl"
+      "lo"
     ];
 in
 stdenv.mkDerivation {
@@ -51,15 +80,39 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs =
-    [ which ocamlPackages.ocaml ocamlPackages.findlib
-      libao portaudio alsa-lib libpulseaudio libjack2
-      libsamplerate libmad taglib lame libogg
-      libvorbis speex libtheora libopus zlib
-      faad2 flac ladspaH ffmpeg frei0r dssi
-      ocamlPackages.xmlm ocamlPackages.ocaml_pcre
+    [
+      which
+      ocamlPackages.ocaml
+      ocamlPackages.findlib
+      libao
+      portaudio
+      alsa-lib
+      libpulseaudio
+      libjack2
+      libsamplerate
+      libmad
+      taglib
+      lame
+      libogg
+      libvorbis
+      speex
+      libtheora
+      libopus
+      zlib
+      faad2
+      flac
+      ladspaH
+      ffmpeg
+      frei0r
+      dssi
+      ocamlPackages.xmlm
+      ocamlPackages.ocaml_pcre
       ocamlPackages.camomile
       ocamlPackages.fdkaac
-      ocamlPackages.srt ocamlPackages.sedlex_2 ocamlPackages.menhir ocamlPackages.menhirLib
+      ocamlPackages.srt
+      ocamlPackages.sedlex_2
+      ocamlPackages.menhir
+      ocamlPackages.menhirLib
     ];
 
   hardeningDisable = [ "format" "fortify" ];
@@ -69,6 +122,6 @@ stdenv.mkDerivation {
     homepage = "https://www.liquidsoap.info/";
     maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
-    platforms = ocamlPackages.ocaml.meta.platforms or [];
+    platforms = ocamlPackages.ocaml.meta.platforms or [ ];
   };
 }

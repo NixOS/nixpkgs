@@ -1,6 +1,28 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkg-config, qmake
-, curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
-, qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, autoreconfHook
+, cmake
+, wrapQtAppsHook
+, pkg-config
+, qmake
+, curl
+, grantlee
+, libgit2
+, libusb-compat-0_1
+, libssh2
+, libxml2
+, libxslt
+, libzip
+, zlib
+, qtbase
+, qtconnectivity
+, qtlocation
+, qtsvg
+, qttools
+, qtwebkit
+, libXcomposite
 , bluez
 }:
 
@@ -73,16 +95,29 @@ let
     };
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "subsurface";
   inherit version;
 
   src = subsurfaceSrc;
 
   buildInputs = [
-    libdc googlemaps
-    curl grantlee libgit2 libssh2 libusb-compat-0_1 libxml2 libxslt libzip
-    qtbase qtconnectivity qtsvg qttools qtwebkit
+    libdc
+    googlemaps
+    curl
+    grantlee
+    libgit2
+    libssh2
+    libusb-compat-0_1
+    libxml2
+    libxslt
+    libzip
+    qtbase
+    qtconnectivity
+    qtsvg
+    qttools
+    qtwebkit
     bluez
   ];
 

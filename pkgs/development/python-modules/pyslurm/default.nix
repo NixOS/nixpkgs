@@ -23,6 +23,6 @@ buildPythonPackage rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ bhipple ];
     platforms = platforms.linux;
-    broken = true;  # still needs slurm-19.05, but nixpkgs has slurm-20+ now
+    broken = true; # still needs slurm-19.05, but nixpkgs has slurm-20+ now
   };
 }

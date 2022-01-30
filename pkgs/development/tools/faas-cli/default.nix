@@ -1,11 +1,12 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub }:
 let
   faasPlatform = platform:
-    let cpuName = platform.parsed.cpu.name; in {
-      "aarch64" = "arm64";
-      "armv7l" = "armhf";
-      "armv6l" = "armhf";
-    }.${cpuName} or cpuName;
+    let cpuName = platform.parsed.cpu.name; in
+      {
+        "aarch64" = "arm64";
+        "armv7l" = "armhf";
+        "armv6l" = "armhf";
+      }.${cpuName} or cpuName;
 in
 buildGoModule rec {
   pname = "faas-cli";
@@ -27,7 +28,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/openfaas/faas-cli/version.GitCommit=${rev}"
     "-X github.com/openfaas/faas-cli/version.Version=${version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.targetPlatform}"

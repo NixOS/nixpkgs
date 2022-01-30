@@ -86,15 +86,19 @@ self: super: {
   generic-lens_2_2_0_0 = dontCheck super.generic-lens_2_2_0_0;
 
   # Apply patches from head.hackage.
-  alex = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/fe192e12b88b09499d4aff0e562713e820544bd6/patches/alex-3.2.6.patch";
-    sha256 = "1rzs764a0nhx002v4fadbys98s6qblw4kx4g46galzjf5f7n2dn4";
-  }) (dontCheck super.alex);
+  alex = appendPatch
+    (pkgs.fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/fe192e12b88b09499d4aff0e562713e820544bd6/patches/alex-3.2.6.patch";
+      sha256 = "1rzs764a0nhx002v4fadbys98s6qblw4kx4g46galzjf5f7n2dn4";
+    })
+    (dontCheck super.alex);
   doctest = dontCheck (doJailbreak super.doctest_0_18_2);
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";
-    sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
-  }) (doJailbreak super.language-haskell-extract);
+  language-haskell-extract = appendPatch
+    (pkgs.fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";
+      sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
+    })
+    (doJailbreak super.language-haskell-extract);
 
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
   unordered-containers = dontCheck super.unordered-containers;
@@ -129,9 +133,11 @@ self: super: {
   semialign = super.semialign_1_2_0_1;
 
   # 2021-09-18: cabal2nix does not detect the need for ghc-api-compat.
-  hiedb = overrideCabal (old: {
-    libraryHaskellDepends = old.libraryHaskellDepends ++ [self.ghc-api-compat];
-  }) super.hiedb;
+  hiedb = overrideCabal
+    (old: {
+      libraryHaskellDepends = old.libraryHaskellDepends ++ [ self.ghc-api-compat ];
+    })
+    super.hiedb;
 
   # 2021-09-18: Need path >= 0.9.0 for ghc 9 compat
   path = self.path_0_9_0;
@@ -159,14 +165,15 @@ self: super: {
     "-f-fourmolu"
     "-f-brittany"
     "-f-stylishhaskell"
-  ] (super.haskell-language-server.override {
-    hls-tactics-plugin = null; # No upstream support, generic-lens-core fail
-    hls-splice-plugin = null; # No upstream support in hls 1.4.0, should be fixed in 1.5
-    hls-refine-imports-plugin = null; # same issue es splice-plugin
-    hls-class-plugin = null; # No upstream support
+  ]
+    (super.haskell-language-server.override {
+      hls-tactics-plugin = null; # No upstream support, generic-lens-core fail
+      hls-splice-plugin = null; # No upstream support in hls 1.4.0, should be fixed in 1.5
+      hls-refine-imports-plugin = null; # same issue es splice-plugin
+      hls-class-plugin = null; # No upstream support
 
-    hls-fourmolu-plugin = null; # No upstream support, needs new fourmolu release
-    hls-stylish-haskell-plugin = null; # No upstream support
-    hls-brittany-plugin = null; # Dependencies don't build with 9.0.1
-  });
+      hls-fourmolu-plugin = null; # No upstream support, needs new fourmolu release
+      hls-stylish-haskell-plugin = null; # No upstream support
+      hls-brittany-plugin = null; # Dependencies don't build with 9.0.1
+    });
 }

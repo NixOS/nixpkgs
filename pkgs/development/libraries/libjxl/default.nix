@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv
+, lib
+, fetchFromGitHub
 , fetchpatch
 , asciidoc
 , brotli
@@ -117,11 +119,12 @@ stdenv.mkDerivation rec {
   # LD_LIBRARY_PATH setting errors with:
   #     /build/source/build/tools/tests/libjxl_test: error while loading shared libraries: libjxl.so.0
   # The required file is in the build directory (`$PWD`).
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD
-  '' else ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
-  '';
+  preCheck =
+    if stdenv.isDarwin then ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD
+    '' else ''
+      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";

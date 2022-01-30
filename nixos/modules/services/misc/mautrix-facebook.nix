@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.mautrix-facebook;
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   settingsFile = settingsFormat.generate "mautrix-facebook-config.json" cfg.settings;
 
   puppetRegex = concatStringsSep
@@ -14,7 +14,8 @@ let
       (splitString
         "{userid}"
         cfg.settings.bridge.username_template));
-in {
+in
+{
   options = {
     services.mautrix-facebook = {
       enable = mkEnableOption "Mautrix-Facebook, a Matrix-Facebook hybrid puppeting/relaybot bridge";
@@ -58,7 +59,7 @@ in {
             };
             root = {
               level = "INFO";
-              handlers = ["journal"];
+              handlers = [ "journal" ];
             };
           };
         };
@@ -108,7 +109,7 @@ in {
 
       registrationData = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = ''
           Output data for appservice registration. Simply make any desired changes and serialize to JSON. Note that this data contains secrets so think twice before putting it into the nix store.
 
@@ -125,7 +126,7 @@ in {
     };
 
     services.postgresql = mkIf cfg.configurePostgresql {
-      ensureDatabases = ["mautrix-facebook"];
+      ensureDatabases = [ "mautrix-facebook" ];
       ensureUsers = [{
         name = "mautrix-facebook";
         ensurePermissions = {
@@ -139,7 +140,7 @@ in {
       wants = [
         "network-online.target"
       ] ++ optional config.services.matrix-synapse.enable "matrix-synapse.service"
-        ++ optional cfg.configurePostgresql "postgresql.service";
+      ++ optional cfg.configurePostgresql "postgresql.service";
       after = wants;
 
       serviceConfig = {
@@ -178,7 +179,7 @@ in {
               regex = "@${puppetRegex}:${escapeRegex cfg.settings.homeserver.domain}";
             }
           ];
-          aliases = [];
+          aliases = [ ];
         };
 
         url = cfg.settings.appservice.address;

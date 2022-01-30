@@ -70,10 +70,11 @@ buildPythonPackage rec {
     typing
   ];
 
-  configurePhase = if !(pythonOlder "3.5") then ''
-    substituteInPlace setup.py \
-      --replace "'typing'," ""
-  '' else "";
+  configurePhase =
+    if !(pythonOlder "3.5") then ''
+      substituteInPlace setup.py \
+        --replace "'typing'," ""
+    '' else "";
 
   checkPhase = ''
     pytest --ignore tests/test_cli.py \
@@ -84,7 +85,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    broken = true;  # Dashboard broken, other build failures.
+    broken = true; # Dashboard broken, other build failures.
     description = "A hyperparameter optimization framework";
     homepage = "https://optuna.org/";
     license = licenses.mit;

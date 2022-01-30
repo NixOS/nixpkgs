@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.0.3";
 
   src = fetchFromGitHub
-    { owner = "fasseg";
+    {
+      owner = "fasseg";
       repo = "crumbs";
       rev = version;
       sha256 = "0jjvydn4i4n9xv8vsal2jxpa95mk2lw6myv0gx9wih242k9vy0l7";
@@ -24,10 +25,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib;
-    { description = "Bookmarks for the command line";
-      homepage    = "https://github.com/fasseg/crumbs";
-      license     = licenses.wtfpl;
-      platforms   = platforms.all;
+    {
+      description = "Bookmarks for the command line";
+      homepage = "https://github.com/fasseg/crumbs";
+      license = licenses.wtfpl;
+      platforms = platforms.all;
       maintainers = with maintainers; [ thesola10 ];
     };
 }

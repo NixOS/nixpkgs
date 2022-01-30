@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       raskin
     ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = lib.licenses.free;
     platforms = with lib.platforms; unix;
   };

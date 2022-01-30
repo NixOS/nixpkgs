@@ -1,6 +1,29 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
-, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, qtwebsockets, xkeyboard_config
-, alsa-lib, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, zlib
+, glib
+, libpng
+, freetype
+, openssl
+, xorg
+, fontconfig
+, qtbase
+, qtwebengine
+, qtwebchannel
+, qtsvg
+, qtwebsockets
+, xkeyboard_config
+, alsa-lib
+, libpulseaudio ? null
+, libredirect
+, quazip
+, which
+, unzip
+, llvmPackages
+, writeShellScriptBin
 }:
 
 let
@@ -10,10 +33,33 @@ let
   libDir = if stdenv.is64bit then "lib64" else "lib";
 
   deps =
-    [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
-      xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsa-lib qtbase qtwebengine qtwebchannel qtsvg
-      qtwebsockets libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
+    [
+      zlib
+      glib
+      libpng
+      freetype
+      xorg.libSM
+      xorg.libICE
+      xorg.libXrender
+      openssl
+      xorg.libXrandr
+      xorg.libXfixes
+      xorg.libXcursor
+      xorg.libXinerama
+      xorg.libxcb
+      fontconfig
+      xorg.libXext
+      xorg.libX11
+      alsa-lib
+      qtbase
+      qtwebengine
+      qtwebchannel
+      qtsvg
+      qtwebsockets
+      libpulseaudio
+      quazip
+      llvmPackages.libcxx
+      llvmPackages.libcxxabi
     ];
 
   desktopItem = makeDesktopItem {
@@ -37,9 +83,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
-    sha256 = if stdenv.is64bit
-                then "sha256:0hjai1bd4mq3g2dlyi0zkn8s4zlgxd38skw77mb78nc4di5gvgpg"
-                else "sha256:1y1c65nap91nv9xkvd96fagqbfl56p9n0rl6iac0i29bkysdmija";
+    sha256 =
+      if stdenv.is64bit
+      then "sha256:0hjai1bd4mq3g2dlyi0zkn8s4zlgxd38skw77mb78nc4di5gvgpg"
+      else "sha256:1y1c65nap91nv9xkvd96fagqbfl56p9n0rl6iac0i29bkysdmija";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -113,36 +160,36 @@ stdenv.mkDerivation rec {
 }
 
 /*
-License issues:
-Date: Mon, 10 Dec 2007 19:55:16 -0500
-From: TeamSpeak Sales <sales@tritoncia.com>
-To: 'Marc Weber' <marco-oweber@gmx.de>
-Subject: RE: teamspeak on nix?
+  License issues:
+  Date: Mon, 10 Dec 2007 19:55:16 -0500
+  From: TeamSpeak Sales <sales@tritoncia.com>
+  To: 'Marc Weber' <marco-oweber@gmx.de>
+  Subject: RE: teamspeak on nix?
 
-Yes, that would be fine.  As long as you are not renting servers or selling
-TeamSpeak then you are more than welcome to distribute it.
+  Yes, that would be fine.  As long as you are not renting servers or selling
+  TeamSpeak then you are more than welcome to distribute it.
 
-Thank you,
+  Thank you,
 
-TeamSpeak Sales Team
-________________________________
-e-Mail: sales@tritoncia.com
-TeamSpeak: http://www.TeamSpeak.com
-Account Login: https://sales.TritonCIA.com/users
+  TeamSpeak Sales Team
+  ________________________________
+  e-Mail: sales@tritoncia.com
+  TeamSpeak: http://www.TeamSpeak.com
+  Account Login: https://sales.TritonCIA.com/users
 
 
 
------Original Message-----
-From: Marc Weber [mailto:marco-oweber@gmx.de]
-Sent: Monday, December 10, 2007 5:03 PM
-To: sales@tritoncia.com
-Subject: teamspeak on nix?
+  -----Original Message-----
+  From: Marc Weber [mailto:marco-oweber@gmx.de]
+  Sent: Monday, December 10, 2007 5:03 PM
+  To: sales@tritoncia.com
+  Subject: teamspeak on nix?
 
-Hello,
+  Hello,
 
-nix is very young software distribution system (http://nix.cs.uu.nl/)
-I'd like to ask wether you permit us to add teamspeak (server/ client?)
+  nix is very young software distribution system (http://nix.cs.uu.nl/)
+  I'd like to ask wether you permit us to add teamspeak (server/ client?)
 
-Sincerly
-Marc Weber (small nix contributor)
+  Sincerly
+  Marc Weber (small nix contributor)
 */

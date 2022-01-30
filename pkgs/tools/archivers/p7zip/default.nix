@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "17.04";
 
   src = fetchFromGitHub {
-    owner  = "jinfeihan57";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "jinfeihan57";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "sha256-19F4hPV0nKVuFZNbOcXrcA1uW6Y3HQolaHVIYXGmh18=";
   };
 

@@ -23,18 +23,19 @@ rustPlatform.buildRustPackage rec {
 
   patches =
     let
-      patchelfPatch = runCommand "0001-dynamically-patchelf-binaries.patch" {
-        CC = stdenv.cc;
-        patchelf = patchelf;
-        libPath = "$ORIGIN/../lib:${lib.makeLibraryPath [ zlib ]}";
-      }
-      ''
-        export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-        substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-          --subst-var patchelf \
-          --subst-var dynamicLinker \
-          --subst-var libPath
-      '';
+      patchelfPatch = runCommand "0001-dynamically-patchelf-binaries.patch"
+        {
+          CC = stdenv.cc;
+          patchelf = patchelf;
+          libPath = "$ORIGIN/../lib:${lib.makeLibraryPath [ zlib ]}";
+        }
+        ''
+          export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+          substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+            --subst-var patchelf \
+            --subst-var dynamicLinker \
+            --subst-var libPath
+        '';
     in
     lib.optionals stdenv.isLinux [ patchelfPatch ];
 

@@ -1,6 +1,15 @@
-{ stdenv, substituteAll, lib, buildGoPackage, fetchFromGitHub
-, AVFoundation, AudioToolbox, ImageIO, CoreMedia
-, Foundation, CoreGraphics, MediaToolbox
+{ stdenv
+, substituteAll
+, lib
+, buildGoPackage
+, fetchFromGitHub
+, AVFoundation
+, AudioToolbox
+, ImageIO
+, CoreMedia
+, Foundation
+, CoreGraphics
+, MediaToolbox
 , gnupg
 }:
 

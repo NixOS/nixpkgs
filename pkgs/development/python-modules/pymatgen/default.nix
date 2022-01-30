@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , enum34
 , glibcLocales
 , matplotlib

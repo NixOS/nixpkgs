@@ -1,8 +1,9 @@
-{lib, stdenv, fetchurl, pkg-config, perlPackages, libxml2, libxslt, docbook_xml_dtd_42, gnome}:
+{ lib, stdenv, fetchurl, pkg-config, perlPackages, libxml2, libxslt, docbook_xml_dtd_42, gnome }:
 let
   pname = "rarian";
   version = "0.8.1";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

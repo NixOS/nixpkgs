@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "postgis";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ lsix ];
@@ -9,13 +9,14 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       { pkgs, ... }:
 
       {
-        services.postgresql = let mypg = pkgs.postgresql_11; in {
+        services.postgresql = let mypg = pkgs.postgresql_11; in
+          {
             enable = true;
             package = mypg;
             extraPlugins = with mypg.pkgs; [
               postgis
             ];
-        };
+          };
       };
   };
 

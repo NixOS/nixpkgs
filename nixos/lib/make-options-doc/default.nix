@@ -1,19 +1,19 @@
 /* Generate JSON, XML and DocBook documentation for given NixOS options.
 
-   Minimal example:
+  Minimal example:
 
-    { pkgs,  }:
+  { pkgs,  }:
 
-    let
-      eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
-        baseModules = [
-          ../module.nix
-        ];
-        modules = [];
-      };
-    in pkgs.nixosOptionsDoc {
-      options = eval.options;
-    }
+  let
+  eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
+  baseModules = [
+  ../module.nix
+  ];
+  modules = [];
+  };
+  in pkgs.nixosOptionsDoc {
+  options = eval.options;
+  }
 
 */
 { pkgs
@@ -21,12 +21,12 @@
 , options
 , transformOptions ? lib.id  # function for additional tranformations of the options
 , revision ? "" # Specify revision for the options
-# a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
-# used to split the options doc build into a static part (nixos/modules) and a dynamic part
-# (non-nixos modules imported via configuration.nix, other module sources).
+  # a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
+  # used to split the options doc build into a static part (nixos/modules) and a dynamic part
+  # (non-nixos modules imported via configuration.nix, other module sources).
 , baseOptionsJSON ? null
-# instead of printing warnings for eg options with missing descriptions (which may be lost
-# by nix build unless -L is given), emit errors instead and fail the build
+  # instead of printing warnings for eg options with missing descriptions (which may be lost
+  # by nix build unless -L is given), emit errors instead and fail the build
 , warningsAreErrors ? true
 }:
 
@@ -46,12 +46,12 @@ let
     else x;
 
   optionsList = lib.flip map optionsListVisible
-   (opt: transformOptions opt
-    // lib.optionalAttrs (opt ? example) { example = substSpecial opt.example; }
-    // lib.optionalAttrs (opt ? default) { default = substSpecial opt.default; }
-    // lib.optionalAttrs (opt ? type) { type = substSpecial opt.type; }
-    // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
-   );
+    (opt: transformOptions opt
+      // lib.optionalAttrs (opt ? example) { example = substSpecial opt.example; }
+      // lib.optionalAttrs (opt ? default) { default = substSpecial opt.default; }
+      // lib.optionalAttrs (opt ? type) { type = substSpecial opt.type; }
+      // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != [ ]) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
+    );
 
   # Generate DocBook documentation for a list of packages. This is
   # what `relatedPackages` option of `mkOption` from
@@ -69,14 +69,16 @@ let
   # Such checks are not compatible with option docs caching.
   genRelatedPackages = packages: optName:
     let
-      unpack = p: if lib.isString p then { name = p; }
-                  else if lib.isList p then { path = p; }
-                  else p;
+      unpack = p:
+        if lib.isString p then { name = p; }
+        else if lib.isList p then { path = p; }
+        else p;
       describe = args:
         let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
-        in ''
+        in
+        ''
           <listitem>
             <para>
               <link xlink:href="https://search.nixos.org/packages?show=${name}&amp;sort=relevance&amp;query=${name}">
@@ -86,30 +88,33 @@ let
             ${lib.optionalString (args ? comment) "<para>${args.comment}</para>"}
           </listitem>
         '';
-    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
+    in
+    "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
 
   # Remove invisible and internal options.
   optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
 
-  optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
+  optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o [ "name" "visible" "internal" ]; }) optionsList);
 
-in rec {
+in
+rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = pkgs.runCommand "options.adoc" {} ''
+  optionsAsciiDoc = pkgs.runCommand "options.adoc" { } ''
     ${pkgs.python3Minimal}/bin/python ${./generateAsciiDoc.py} \
       < ${optionsJSON}/share/doc/nixos/options.json \
       > $out
   '';
 
-  optionsCommonMark = pkgs.runCommand "options.md" {} ''
+  optionsCommonMark = pkgs.runCommand "options.md" { } ''
     ${pkgs.python3Minimal}/bin/python ${./generateCommonMark.py} \
       < ${optionsJSON}/share/doc/nixos/options.json \
       > $out
   '';
 
   optionsJSON = pkgs.runCommand "options.json"
-    { meta.description = "List of NixOS options in JSON format";
+    {
+      meta.description = "List of NixOS options in JSON format";
       buildInputs = [ pkgs.brotli ];
       options = builtins.toFile "options.json"
         (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));
@@ -140,7 +145,7 @@ in rec {
   # Convert options.json into an XML file.
   # The actual generation of the xml file is done in nix purely for the convenience
   # of not having to generate the xml some other way
-  optionsXML = pkgs.runCommand "options.xml" {} ''
+  optionsXML = pkgs.runCommand "options.xml" { } ''
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state
     ${pkgs.nix}/bin/nix-instantiate \
@@ -149,7 +154,7 @@ in rec {
       > "$out"
   '';
 
-  optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''
+  optionsDocBook = pkgs.runCommand "options-docbook.xml" { } ''
     optionsXML=${optionsXML}
     if grep /nixpkgs/nixos/modules $optionsXML; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"

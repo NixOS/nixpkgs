@@ -1,6 +1,11 @@
-{ lib, stdenv, buildPackages
-, autoreconfHook, bison, binutils-unwrapped
-, libiberty, libbfd
+{ lib
+, stdenv
+, buildPackages
+, autoreconfHook
+, bison
+, binutils-unwrapped
+, libiberty
+, libbfd
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +32,8 @@ stdenv.mkDerivation {
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-targets=all"
+    "--enable-64-bit-bfd"
     "--enable-install-libbfd"
     "--enable-shared"
   ];

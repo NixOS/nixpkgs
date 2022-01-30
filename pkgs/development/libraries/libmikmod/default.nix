@@ -3,7 +3,8 @@
 let
   inherit (lib) optional optionalString;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libmikmod";
   version = "3.3.11.1";
 
@@ -22,10 +23,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A library for playing tracker music module files";
-    homepage    = "https://mikmod.shlomifish.org/";
-    license     = licenses.lgpl2Plus;
+    homepage = "https://mikmod.shlomifish.org/";
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ astsmtl lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
 
     longDescription = ''
       A library for playing tracker music module files supporting many formats,

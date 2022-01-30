@@ -24,7 +24,7 @@ let
   # unusable. this causes documentation attributes depending on `config` to fail.
   config = {
     _module.check = false;
-    _module.args = {};
+    _module.args = { };
     system.stateVersion = stateVersion;
   };
   eval = lib.evalModules {
@@ -50,4 +50,4 @@ let
     prefix = modulesPath;
   };
 in
-  docs.optionsNix
+docs.optionsNix

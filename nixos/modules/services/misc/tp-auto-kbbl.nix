@@ -4,7 +4,8 @@ with lib;
 
 let cfg = config.services.tp-auto-kbbl;
 
-in {
+in
+{
   meta.maintainers = with maintainers; [ sebtm ];
 
   options = {

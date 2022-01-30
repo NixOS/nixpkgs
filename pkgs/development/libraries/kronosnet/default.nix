@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, libqb, libxml2, libnl, lksctp-tools
-, nss, openssl, bzip2, lzo, lz4, xz, zlib, zstd
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libqb
+, libxml2
+, libnl
+, lksctp-tools
+, nss
+, openssl
+, bzip2
+, lzo
+, lz4
+, xz
+, zlib
+, zstd
 , doxygen
 }:
 
@@ -19,9 +32,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
 
   buildInputs = [
-    libqb libxml2 libnl lksctp-tools
-    nss openssl
-    bzip2 lzo lz4 xz zlib zstd
+    libqb
+    libxml2
+    libnl
+    lksctp-tools
+    nss
+    openssl
+    bzip2
+    lzo
+    lz4
+    xz
+    zlib
+    zstd
   ];
 
   meta = with lib; {

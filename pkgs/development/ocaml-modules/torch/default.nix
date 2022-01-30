@@ -25,8 +25,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "LaurentMazare";
-    repo   = "ocaml-${pname}";
-    rev    = version;
+    repo = "ocaml-${pname}";
+    rev = version;
     sha256 = "0528h1mkrqbmbf7hy91dsnxcg0k55m3jgharr71c652xyd847yz7";
   };
 

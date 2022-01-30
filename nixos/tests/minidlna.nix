@@ -11,29 +11,29 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           enable = true;
           loglevel = "error";
           mediaDirs = [
-           "PV,/tmp/stuff"
+            "PV,/tmp/stuff"
           ];
           friendlyName = "rpi3";
           rootContainer = "B";
           extraConfig =
-          ''
-            album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg
-            album_art_names=AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg
-            album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg
-            notify_interval=60
-          '';
+            ''
+              album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg
+              album_art_names=AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg
+              album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg
+              notify_interval=60
+            '';
         };
       };
-      client = { ... }: { };
+    client = { ... }: { };
   };
 
   testScript =
-  ''
-    start_all()
-    server.succeed("mkdir -p /tmp/stuff && chown minidlna: /tmp/stuff")
-    server.wait_for_unit("minidlna")
-    server.wait_for_open_port("8200")
-    server.succeed("curl --fail http://localhost:8200/")
-    client.succeed("curl --fail http://server:8200/")
-  '';
+    ''
+      start_all()
+      server.succeed("mkdir -p /tmp/stuff && chown minidlna: /tmp/stuff")
+      server.wait_for_unit("minidlna")
+      server.wait_for_open_port("8200")
+      server.succeed("curl --fail http://localhost:8200/")
+      client.succeed("curl --fail http://server:8200/")
+    '';
 })

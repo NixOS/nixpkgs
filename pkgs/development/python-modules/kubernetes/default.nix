@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 
-# propgatedBuildInputs
+  # propgatedBuildInputs
 , adal
 , certifi
 , google-auth
@@ -14,7 +14,7 @@
 , urllib3
 , websocket-client
 
-# tests
+  # tests
 , pytestCheckHook
 , mock
 }:

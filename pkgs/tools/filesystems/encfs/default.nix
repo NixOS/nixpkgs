@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, perl
-, gettext, fuse, openssl, tinyxml2
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, perl
+, gettext
+, fuse
+, openssl
+, tinyxml2
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config perl ];
 
   cmakeFlags =
-    [ "-DUSE_INTERNAL_TINYXML=OFF"
+    [
+      "-DUSE_INTERNAL_TINYXML=OFF"
       "-DBUILD_SHARED_LIBS=ON"
       "-DINSTALL_LIBENCFS=ON"
     ];

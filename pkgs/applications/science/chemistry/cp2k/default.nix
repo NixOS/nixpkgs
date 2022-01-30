@@ -1,15 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, python3, gfortran, blas, lapack
-, fftw, libint, libvori, libxc, mpi, gsl, scalapack, openssh, makeWrapper
-, libxsmm, spglib, which, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, gfortran
+, blas
+, lapack
+, fftw
+, libint
+, libvori
+, libxc
+, mpi
+, gsl
+, scalapack
+, openssh
+, makeWrapper
+, libxsmm
+, spglib
+, which
+, pkg-config
 , enableElpa ? false
 , elpa
-} :
+}:
 
 let
   cp2kVersion = "psmp";
   arch = "Linux-x86-64-gfortran";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "cp2k";
   version = "9.1.0";
 

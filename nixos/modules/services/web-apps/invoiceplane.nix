@@ -123,7 +123,7 @@ let
 
         invoiceTemplates = mkOption {
           type = types.listOf types.path;
-          default = [];
+          default = [ ];
           description = ''
             List of path(s) to respective template(s) which are copied from the 'invoice_templates/pdf' directory.
             <note><para>These templates need to be packaged before use, see example.</para></note>
@@ -193,7 +193,7 @@ in
 
         options.sites = mkOption {
           type = types.attrsOf (types.submodule siteOpts);
-          default = {};
+          default = { };
           description = "Specification of one or more WordPress sites to serve";
         };
 
@@ -206,100 +206,112 @@ in
           '';
         };
       };
-      default = {};
+      default = { };
       description = "InvoicePlane configuration.";
     };
 
   };
 
   # implementation
-  config = mkIf (eachSite != {}) (mkMerge [{
+  config = mkIf (eachSite != { }) (mkMerge [{
 
-    assertions = flatten (mapAttrsToList (hostName: cfg:
-      [{ assertion = cfg.database.createLocally -> cfg.database.user == user;
-        message = ''services.invoiceplane.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
-      }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
-        message = ''services.invoiceplane.sites."${hostName}".database.passwordFile cannot be specified if services.invoiceplane.sites."${hostName}".database.createLocally is set to true.'';
-      }]
-    ) eachSite);
+    assertions = flatten (mapAttrsToList
+      (hostName: cfg:
+        [{
+          assertion = cfg.database.createLocally -> cfg.database.user == user;
+          message = ''services.invoiceplane.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
+        }
+          {
+            assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+            message = ''services.invoiceplane.sites."${hostName}".database.passwordFile cannot be specified if services.invoiceplane.sites."${hostName}".database.createLocally is set to true.'';
+          }]
+      )
+      eachSite);
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
       package = mkDefault pkgs.mariadb;
       ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
-      ensureUsers = mapAttrsToList (hostName: cfg:
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ) eachSite;
+      ensureUsers = mapAttrsToList
+        (hostName: cfg:
+          {
+            name = cfg.database.user;
+            ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+          }
+        )
+        eachSite;
     };
 
     services.phpfpm = {
       phpPackage = pkgs.php74;
-      pools = mapAttrs' (hostName: cfg: (
-        nameValuePair "invoiceplane-${hostName}" {
-          inherit user;
-          group = webserver.group;
-          settings = {
-            "listen.owner" = webserver.user;
-            "listen.group" = webserver.group;
-          } // cfg.poolConfig;
-        }
-      )) eachSite;
+      pools = mapAttrs'
+        (hostName: cfg: (
+          nameValuePair "invoiceplane-${hostName}" {
+            inherit user;
+            group = webserver.group;
+            settings = {
+              "listen.owner" = webserver.user;
+              "listen.group" = webserver.group;
+            } // cfg.poolConfig;
+          }
+        ))
+        eachSite;
     };
 
   }
 
-  {
-    systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
-      "d ${cfg.stateDir} 0750 ${user} ${webserver.group} - -"
-      "f ${cfg.stateDir}/ipconfig.php 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/logs 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/uploads 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/uploads/archive 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/uploads/customer_files 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/uploads/temp 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/uploads/temp/mpdf 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/tmp 0750 ${user} ${webserver.group} - -"
-    ]) eachSite);
+    {
+      systemd.tmpfiles.rules = flatten (mapAttrsToList
+        (hostName: cfg: [
+          "d ${cfg.stateDir} 0750 ${user} ${webserver.group} - -"
+          "f ${cfg.stateDir}/ipconfig.php 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/logs 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/uploads 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/uploads/archive 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/uploads/customer_files 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/uploads/temp 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/uploads/temp/mpdf 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/tmp 0750 ${user} ${webserver.group} - -"
+        ])
+        eachSite);
 
-    systemd.services.invoiceplane-config = {
-      serviceConfig.Type = "oneshot";
-      script = concatStrings (mapAttrsToList (hostName: cfg:
-        ''
-          mkdir -p ${cfg.stateDir}/logs \
-                   ${cfg.stateDir}/uploads
-          if ! grep -q IP_URL "${cfg.stateDir}/ipconfig.php"; then
-            cp "${invoiceplane-config hostName cfg}" "${cfg.stateDir}/ipconfig.php"
-          fi
-        '') eachSite);
-      wantedBy = [ "multi-user.target" ];
-    };
+      systemd.services.invoiceplane-config = {
+        serviceConfig.Type = "oneshot";
+        script = concatStrings (mapAttrsToList
+          (hostName: cfg:
+            ''
+              mkdir -p ${cfg.stateDir}/logs \
+                       ${cfg.stateDir}/uploads
+              if ! grep -q IP_URL "${cfg.stateDir}/ipconfig.php"; then
+                cp "${invoiceplane-config hostName cfg}" "${cfg.stateDir}/ipconfig.php"
+              fi
+            '')
+          eachSite);
+        wantedBy = [ "multi-user.target" ];
+      };
 
-    users.users.${user} = {
-      group = webserver.group;
-      isSystemUser = true;
-    };
-  }
+      users.users.${user} = {
+        group = webserver.group;
+        isSystemUser = true;
+      };
+    }
 
-  (mkIf (cfg.webserver == "caddy") {
-    services.caddy = {
-      enable = true;
-      virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair "http://${hostName}" {
-          extraConfig = ''
-            root    * ${pkg hostName cfg}
-            file_server
+    (mkIf (cfg.webserver == "caddy") {
+      services.caddy = {
+        enable = true;
+        virtualHosts = mapAttrs'
+          (hostName: cfg: (
+            nameValuePair "http://${hostName}" {
+              extraConfig = ''
+                root    * ${pkg hostName cfg}
+                file_server
 
-            php_fastcgi unix/${config.services.phpfpm.pools."invoiceplane-${hostName}".socket}
-          '';
-        }
-      )) eachSite;
-    };
-  })
-
-
-  ]);
+                php_fastcgi unix/${config.services.phpfpm.pools."invoiceplane-${hostName}".socket}
+              '';
+            }
+          ))
+          eachSite;
+      };
+    })]);
 }
 

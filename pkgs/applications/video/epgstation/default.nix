@@ -50,43 +50,44 @@ let
       patch -p1 ${./use-mysql-over-domain-socket.patch}
     '';
 
-    postInstall = let
-      runtimeDeps = [ nodejs bash ];
-    in
-    ''
-      mkdir -p $out/{bin,libexec,share/doc/epgstation,share/man/man1}
+    postInstall =
+      let
+        runtimeDeps = [ nodejs bash ];
+      in
+      ''
+        mkdir -p $out/{bin,libexec,share/doc/epgstation,share/man/man1}
 
-      pushd $out/lib/node_modules/EPGStation
+        pushd $out/lib/node_modules/EPGStation
 
-      npm run build
-      npm prune --production
+        npm run build
+        npm prune --production
 
-      mv config/{enc.sh,enc.js} $out/libexec
-      mv LICENSE Readme.md $out/share/doc/epgstation
-      mv doc/* $out/share/doc/epgstation
-      sed 's/@DESCRIPTION@/${drv.meta.description}/g' ${./epgstation.1} \
-        | ${gzip}/bin/gzip > $out/share/man/man1/epgstation.1.gz
-      rm -rf doc
+        mv config/{enc.sh,enc.js} $out/libexec
+        mv LICENSE Readme.md $out/share/doc/epgstation
+        mv doc/* $out/share/doc/epgstation
+        sed 's/@DESCRIPTION@/${drv.meta.description}/g' ${./epgstation.1} \
+          | ${gzip}/bin/gzip > $out/share/man/man1/epgstation.1.gz
+        rm -rf doc
 
-      # just log to stdout and let journald do its job
-      rm -rf logs
+        # just log to stdout and let journald do its job
+        rm -rf logs
 
-      # Replace the existing configuration and runtime state directories with
-      # symlinks. Without this, they would all be non-writable because they
-      # reside in the Nix store. Note that the source path won't be accessible
-      # at build time.
-      rm -r config data recorded thumbnail
-      ln -sfT /etc/epgstation config
-      ln -sfT /var/lib/epgstation data
-      ln -sfT /var/lib/epgstation/recorded recorded
-      ln -sfT /var/lib/epgstation/thumbnail thumbnail
+        # Replace the existing configuration and runtime state directories with
+        # symlinks. Without this, they would all be non-writable because they
+        # reside in the Nix store. Note that the source path won't be accessible
+        # at build time.
+        rm -r config data recorded thumbnail
+        ln -sfT /etc/epgstation config
+        ln -sfT /var/lib/epgstation data
+        ln -sfT /var/lib/epgstation/recorded recorded
+        ln -sfT /var/lib/epgstation/thumbnail thumbnail
 
-      makeWrapper ${nodejs}/bin/npm $out/bin/epgstation \
-       --run "cd $out/lib/node_modules/EPGStation" \
-       --prefix PATH : ${lib.makeBinPath runtimeDeps}
+        makeWrapper ${nodejs}/bin/npm $out/bin/epgstation \
+         --run "cd $out/lib/node_modules/EPGStation" \
+         --prefix PATH : ${lib.makeBinPath runtimeDeps}
 
-      popd
-    '';
+        popd
+      '';
 
     # NOTE: this may take a while since it has to update all packages in
     # nixpkgs.nodePackages

@@ -6,7 +6,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/devlocker/tychus";
   goDeps = ./deps.nix;
-  subPackages = [];
+  subPackages = [ ];
 
   src = fetchFromGitHub {
     owner = "devlocker";

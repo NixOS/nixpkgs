@@ -3,7 +3,8 @@
 let
   pname = "atkinson-hyperlegible";
   version = "unstable-2021-04-29";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
 
   owner = "googlefonts";

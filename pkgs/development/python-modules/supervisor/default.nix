@@ -1,4 +1,7 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
 , mock
 , pytest
 , setuptools

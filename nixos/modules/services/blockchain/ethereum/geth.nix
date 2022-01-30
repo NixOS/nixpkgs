@@ -5,7 +5,7 @@ with lib;
 let
   eachGeth = config.services.geth;
 
-  gethOpts = { config, lib, name, ...}: {
+  gethOpts = { config, lib, name, ... }: {
 
     options = {
 
@@ -35,7 +35,7 @@ let
           type = types.nullOr (types.listOf types.str);
           default = null;
           description = "APIs to enable over WebSocket";
-          example = ["net" "eth"];
+          example = [ "net" "eth" ];
         };
       };
 
@@ -57,7 +57,7 @@ let
           type = types.nullOr (types.listOf types.str);
           default = null;
           description = "APIs to enable over WebSocket";
-          example = ["net" "eth"];
+          example = [ "net" "eth" ];
         };
       };
 
@@ -103,7 +103,7 @@ let
       extraArgs = mkOption {
         type = types.listOf types.str;
         description = "Additional arguments passed to Go Ethereum.";
-        default = [];
+        default = [ ];
       };
 
       package = mkOption {
@@ -123,56 +123,61 @@ in
   options = {
     services.geth = mkOption {
       type = types.attrsOf (types.submodule gethOpts);
-      default = {};
+      default = { };
       description = "Specification of one or more geth instances.";
     };
   };
 
   ###### implementation
 
-  config = mkIf (eachGeth != {}) {
+  config = mkIf (eachGeth != { }) {
 
-    environment.systemPackages = flatten (mapAttrsToList (gethName: cfg: [
-      cfg.package
-    ]) eachGeth);
+    environment.systemPackages = flatten (mapAttrsToList
+      (gethName: cfg: [
+        cfg.package
+      ])
+      eachGeth);
 
-    systemd.services = mapAttrs' (gethName: cfg: (
-      nameValuePair "geth-${gethName}" (mkIf cfg.enable {
-      description = "Go Ethereum node (${gethName})";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+    systemd.services = mapAttrs'
+      (gethName: cfg: (
+        nameValuePair "geth-${gethName}" (mkIf cfg.enable {
+          description = "Go Ethereum node (${gethName})";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
 
-      serviceConfig = {
-        DynamicUser = true;
-        Restart = "always";
-        StateDirectory = "goethereum/${gethName}/${if (cfg.network == null) then "mainnet" else cfg.network}";
+          serviceConfig = {
+            DynamicUser = true;
+            Restart = "always";
+            StateDirectory = "goethereum/${gethName}/${if (cfg.network == null) then "mainnet" else cfg.network}";
 
-        # Hardening measures
-        PrivateTmp = "true";
-        ProtectSystem = "full";
-        NoNewPrivileges = "true";
-        PrivateDevices = "true";
-        MemoryDenyWriteExecute = "true";
-      };
+            # Hardening measures
+            PrivateTmp = "true";
+            ProtectSystem = "full";
+            NoNewPrivileges = "true";
+            PrivateDevices = "true";
+            MemoryDenyWriteExecute = "true";
+          };
 
-      script = ''
-        ${cfg.package}/bin/geth \
-          --nousb \
-          --ipcdisable \
-          ${optionalString (cfg.network != null) ''--${cfg.network}''} \
-          --syncmode ${cfg.syncmode} \
-          --gcmode ${cfg.gcmode} \
-          --port ${toString cfg.port} \
-          --maxpeers ${toString cfg.maxpeers} \
-          ${if cfg.http.enable then ''--http --http.addr ${cfg.http.address} --http.port ${toString cfg.http.port}'' else ""} \
-          ${optionalString (cfg.http.apis != null) ''--http.api ${lib.concatStringsSep "," cfg.http.apis}''} \
-          ${if cfg.websocket.enable then ''--ws --ws.addr ${cfg.websocket.address} --ws.port ${toString cfg.websocket.port}'' else ""} \
-          ${optionalString (cfg.websocket.apis != null) ''--ws.api ${lib.concatStringsSep "," cfg.websocket.apis}''} \
-          ${optionalString cfg.metrics.enable ''--metrics --metrics.addr ${cfg.metrics.address} --metrics.port ${toString cfg.metrics.port}''} \
-          ${lib.escapeShellArgs cfg.extraArgs} \
-          --datadir /var/lib/goethereum/${gethName}/${if (cfg.network == null) then "mainnet" else cfg.network}
-      '';
-    }))) eachGeth;
+          script = ''
+            ${cfg.package}/bin/geth \
+              --nousb \
+              --ipcdisable \
+              ${optionalString (cfg.network != null) ''--${cfg.network}''} \
+              --syncmode ${cfg.syncmode} \
+              --gcmode ${cfg.gcmode} \
+              --port ${toString cfg.port} \
+              --maxpeers ${toString cfg.maxpeers} \
+              ${if cfg.http.enable then ''--http --http.addr ${cfg.http.address} --http.port ${toString cfg.http.port}'' else ""} \
+              ${optionalString (cfg.http.apis != null) ''--http.api ${lib.concatStringsSep "," cfg.http.apis}''} \
+              ${if cfg.websocket.enable then ''--ws --ws.addr ${cfg.websocket.address} --ws.port ${toString cfg.websocket.port}'' else ""} \
+              ${optionalString (cfg.websocket.apis != null) ''--ws.api ${lib.concatStringsSep "," cfg.websocket.apis}''} \
+              ${optionalString cfg.metrics.enable ''--metrics --metrics.addr ${cfg.metrics.address} --metrics.port ${toString cfg.metrics.port}''} \
+              ${lib.escapeShellArgs cfg.extraArgs} \
+              --datadir /var/lib/goethereum/${gethName}/${if (cfg.network == null) then "mainnet" else cfg.network}
+          '';
+        })
+      ))
+      eachGeth;
 
   };
 

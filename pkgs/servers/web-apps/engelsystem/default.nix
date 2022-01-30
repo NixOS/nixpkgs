@@ -3,7 +3,8 @@
 let
   phpExt = php.withExtensions
     ({ enabled, all }: with all; [ json filter mysqlnd mysqli pdo pdo_mysql ]);
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "engelsystem";
   version = "3.1.0";
 

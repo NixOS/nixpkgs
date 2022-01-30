@@ -1,22 +1,98 @@
-{ stdenv, lib, fetchurl, makeWrapper, file, getopt
-, gtk2, gtk3, gdk-pixbuf, glib, libGL, libGLU, nss, nspr, udev, tbb
-, alsa-lib, GConf, cups, libcap, fontconfig, freetype, pango
-, cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
-, libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
-, libXcomposite, libXext, libXrandr, libXtst, libSM, libICE, libxcb, chromium
-, libpqxx, libselinux, pciutils, libpulseaudio
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, file
+, getopt
+, gtk2
+, gtk3
+, gdk-pixbuf
+, glib
+, libGL
+, libGLU
+, nss
+, nspr
+, udev
+, tbb
+, alsa-lib
+, GConf
+, cups
+, libcap
+, fontconfig
+, freetype
+, pango
+, cairo
+, dbus
+, expat
+, zlib
+, libpng12
+, nodejs
+, gnutar
+, gcc
+, gcc_32bit
+, libX11
+, libXcursor
+, libXdamage
+, libXfixes
+, libXrender
+, libXi
+, libXcomposite
+, libXext
+, libXrandr
+, libXtst
+, libSM
+, libICE
+, libxcb
+, chromium
+, libpqxx
+, libselinux
+, pciutils
+, libpulseaudio
 }:
 
 let
   libPath64 = lib.makeLibraryPath [
-    gcc.cc gtk2 gdk-pixbuf glib libGL libGLU nss nspr
-    alsa-lib GConf cups libcap fontconfig freetype pango
-    cairo dbus expat zlib libpng12 udev tbb
-    libX11 libXcursor libXdamage libXfixes libXrender libXi
-    libXcomposite libXext libXrandr libXtst libSM libICE libxcb
-    libpqxx gtk3
+    gcc.cc
+    gtk2
+    gdk-pixbuf
+    glib
+    libGL
+    libGLU
+    nss
+    nspr
+    alsa-lib
+    GConf
+    cups
+    libcap
+    fontconfig
+    freetype
+    pango
+    cairo
+    dbus
+    expat
+    zlib
+    libpng12
+    udev
+    tbb
+    libX11
+    libXcursor
+    libXdamage
+    libXfixes
+    libXrender
+    libXi
+    libXcomposite
+    libXext
+    libXrandr
+    libXtst
+    libSM
+    libICE
+    libxcb
+    libpqxx
+    gtk3
 
-    libselinux pciutils libpulseaudio
+    libselinux
+    pciutils
+    libpulseaudio
   ];
   libPath32 = lib.makeLibraryPath [ gcc_32bit.cc ];
   binPath = lib.makeBinPath [ nodejs gnutar ];
@@ -24,7 +100,8 @@ let
   ver = "2018.3.0";
   build = "f2";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "unity-editor";
   version = "${ver}x${build}";
 

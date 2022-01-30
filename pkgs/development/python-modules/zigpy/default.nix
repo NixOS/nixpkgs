@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-timeout
     pytestCheckHook
-  ]  ++ lib.optionals (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     asynctest
   ];
 

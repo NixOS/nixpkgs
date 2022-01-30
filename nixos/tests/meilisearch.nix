@@ -5,10 +5,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     apiUrl = "http://${listenAddress}:${toString listenPort}";
     uid = "movies";
     indexJSON = pkgs.writeText "index.json" (builtins.toJSON { inherit uid; });
-    moviesJSON = pkgs.runCommand "movies.json" {} ''
+    moviesJSON = pkgs.runCommand "movies.json" { } ''
       sed -n '1,5p;$p' ${pkgs.meilisearch.src}/datasets/movies/movies.json > $out
     '';
-  in {
+  in
+  {
     name = "meilisearch";
     meta.maintainers = with lib.maintainers; [ Br1ght0ne ];
 

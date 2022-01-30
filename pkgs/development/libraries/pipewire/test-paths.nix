@@ -11,7 +11,8 @@ let
   '';
 
   check-output = output: lib.concatMapStringsSep "\n" (check-path output);
-in runCommand "pipewire-test-paths" { } ''
+in
+runCommand "pipewire-test-paths" { } ''
   touch $out
 
   ${check-output package.lib paths-lib}

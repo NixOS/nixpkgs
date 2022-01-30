@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, python, packaging, numpy
-, cython, scipy, matplotlib, pytestCheckHook, pytest-rerunfailures }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, python
+, packaging
+, numpy
+, cython
+, scipy
+, matplotlib
+, pytestCheckHook
+, pytest-rerunfailures
+}:
 
 buildPythonPackage rec {
   pname = "qutip";

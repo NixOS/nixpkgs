@@ -10,11 +10,11 @@
 , optipng
 , sassc
 , which
-, buttonSizeVariants ? [] # default to standard
-, buttonVariants ? [] # default to all
-, colorVariants ? [] # default to all
-, opacityVariants ? [] # default to all
-, themeVariants ? [] # default to MacOS blue
+, buttonSizeVariants ? [ ] # default to standard
+, buttonVariants ? [ ] # default to all
+, colorVariants ? [ ] # default to all
+, opacityVariants ? [ ] # default to all
+, themeVariants ? [ ] # default to MacOS blue
 , wallpapers ? false
 }:
 
@@ -22,12 +22,17 @@ let
   pname = "mojave-gtk-theme";
 in
 lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] buttonSizeVariants
-lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVariants
-lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
-lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityVariants
-lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
+  lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ]
+  buttonVariants
+  lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ]
+  colorVariants
+  lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ]
+  opacityVariants
+  lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ]
+  themeVariants
 
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation
+rec {
   inherit pname;
   version = "unstable-2021-12-20";
 

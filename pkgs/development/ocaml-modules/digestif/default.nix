@@ -1,6 +1,15 @@
-{ lib, ocaml, fetchurl, buildDunePackage
-, bigarray-compat, eqaf, stdlib-shims
-, alcotest, astring, bos, findlib, fpath
+{ lib
+, ocaml
+, fetchurl
+, buildDunePackage
+, bigarray-compat
+, eqaf
+, stdlib-shims
+, alcotest
+, astring
+, bos
+, findlib
+, fpath
 }:
 
 buildDunePackage rec {

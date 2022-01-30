@@ -1,5 +1,6 @@
 { lib, ... }:
-{ options = {
+{
+  options = {
     server = lib.mkOption {
       type =
         lib.types.either
@@ -23,11 +24,11 @@
     };
 
     params = lib.mkOption {
-      type    = lib.types.nullOr (lib.types.submodule (import ./frontend-params-submodule.nix));
+      type = lib.types.nullOr (lib.types.submodule (import ./frontend-params-submodule.nix));
       example = {
-        tls   = "tls";
+        tls = "tls";
       };
-      default     = null;
+      default = null;
       description = ''
         Parameters to configure a backend.
       '';

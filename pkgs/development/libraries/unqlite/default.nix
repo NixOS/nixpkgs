@@ -1,6 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, cmake }:
+, cmake
+}:
 
 stdenv.mkDerivation rec {
   pname = "unqlite";

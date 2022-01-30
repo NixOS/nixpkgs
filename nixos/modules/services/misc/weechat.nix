@@ -30,7 +30,7 @@ in
 
   config = mkIf cfg.enable {
     users = {
-      groups.weechat = {};
+      groups.weechat = { };
       users.weechat = {
         createHome = true;
         group = "weechat";
@@ -52,7 +52,8 @@ in
     };
 
     security.wrappers.screen =
-      { setuid = true;
+      {
+        setuid = true;
         owner = "root";
         group = "root";
         source = "${pkgs.screen}/bin/screen";

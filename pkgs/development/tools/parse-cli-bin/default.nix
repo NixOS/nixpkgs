@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Parse Command Line Interface";
-    homepage    = "https://parse.com";
-    platforms   = platforms.linux;
-    license     = licenses.bsd3;
+    homepage = "https://parse.com";
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
 
   dontUnpack = true;

@@ -13,9 +13,9 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage    = "http://jsbeautifier.org";
+    homepage = "http://jsbeautifier.org";
     description = "JavaScript unobfuscator and beautifier.";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ apeyroux ];
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , buildGoPackage
-, fetchFromGitHub }:
+, fetchFromGitHub
+}:
 
 buildGoPackage rec {
   pname = "nixops-dns";

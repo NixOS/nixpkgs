@@ -2,13 +2,15 @@
 
 let
 
-  python = let
-    packageOverrides = self: super: {
-      typeddep = self.callPackage ./typeddep {};
-    };
-  in interpreter.override {inherit packageOverrides; self = python;};
+  python =
+    let
+      packageOverrides = self: super: {
+        typeddep = self.callPackage ./typeddep { };
+      };
+    in
+    interpreter.override { inherit packageOverrides; self = python; };
 
-  pythonEnv = python.withPackages(ps: [
+  pythonEnv = python.withPackages (ps: [
     ps.typeddep
     ps.mypy
   ]);
@@ -19,7 +21,8 @@ let
     print(s)
   '';
 
-in runCommand "${interpreter.name}-site-prefix-mypy-test" {} ''
+in
+runCommand "${interpreter.name}-site-prefix-mypy-test" { } ''
   ${pythonEnv}/bin/mypy ${pythonScript}
   touch $out
 ''

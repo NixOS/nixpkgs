@@ -35,8 +35,9 @@ let
     let
       scfg = cfg.${service};
     in
-      if scfg.configFile != null then scfg.configFile
-      else pkgs.writeText "${daemonName service}.conf"
+    if scfg.configFile != null then scfg.configFile
+    else
+      pkgs.writeText "${daemonName service}.conf"
         ''
           ! FRR ${daemonName service} configuration
           !
@@ -148,19 +149,20 @@ in
     };
 
     users.groups = {
-      frr = {};
+      frr = { };
       # Members of the frrvty group can use vtysh to inspect the FRR daemons
       frrvty = { members = [ "frr" ]; };
     };
 
-    environment.etc = let
-      mkEtcLink = service: {
-        name = "frr/${service}.conf";
-        value.source = configFile service;
-      };
-    in
+    environment.etc =
+      let
+        mkEtcLink = service: {
+          name = "frr/${service}.conf";
+          value.source = configFile service;
+        };
+      in
       (builtins.listToAttrs
-      (map mkEtcLink (filter isEnabled allServices))) // {
+        (map mkEtcLink (filter isEnabled allServices))) // {
         "frr/vtysh.conf".text = "";
       };
 
@@ -175,34 +177,36 @@ in
             scfg = cfg.${service};
             daemon = daemonName service;
           in
-            nameValuePair daemon ({
-              wantedBy = [ "multi-user.target" ];
-              after = [ "network-pre.target" "systemd-sysctl.service" ] ++ lib.optionals (service != "zebra") [ "zebra.service" ];
-              bindsTo = lib.optionals (service != "zebra") [ "zebra.service" ];
-              wants = [ "network.target" ];
+          nameValuePair daemon ({
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network-pre.target" "systemd-sysctl.service" ] ++ lib.optionals (service != "zebra") [ "zebra.service" ];
+            bindsTo = lib.optionals (service != "zebra") [ "zebra.service" ];
+            wants = [ "network.target" ];
 
-              description = if service == "zebra" then "FRR Zebra routing manager"
-                else "FRR ${toUpper service} routing daemon";
+            description =
+              if service == "zebra" then "FRR Zebra routing manager"
+              else "FRR ${toUpper service} routing daemon";
 
-              unitConfig.Documentation = if service == "zebra" then "man:zebra(8)"
-                else "man:${daemon}(8) man:zebra(8)";
+            unitConfig.Documentation =
+              if service == "zebra" then "man:zebra(8)"
+              else "man:${daemon}(8) man:zebra(8)";
 
-              restartTriggers = [
-                (configFile service)
-              ];
-              reloadIfChanged = true;
+            restartTriggers = [
+              (configFile service)
+            ];
+            reloadIfChanged = true;
 
-              serviceConfig = {
-                PIDFile = "frr/${daemon}.pid";
-                ExecStart = "${pkgs.frr}/libexec/frr/${daemon} -f /etc/frr/${service}.conf"
-                  + optionalString (scfg.vtyListenAddress != "") " -A ${scfg.vtyListenAddress}"
-                  + optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}";
-                ExecReload = "${pkgs.python3.interpreter} ${pkgs.frr}/libexec/frr/frr-reload.py --reload --daemon ${daemonName service} --bindir ${pkgs.frr}/bin --rundir /run/frr /etc/frr/${service}.conf";
-                Restart = "on-abnormal";
-              };
-            });
-       in
-         listToAttrs (map frrService (filter isEnabled allServices));
+            serviceConfig = {
+              PIDFile = "frr/${daemon}.pid";
+              ExecStart = "${pkgs.frr}/libexec/frr/${daemon} -f /etc/frr/${service}.conf"
+                + optionalString (scfg.vtyListenAddress != "") " -A ${scfg.vtyListenAddress}"
+                + optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}";
+              ExecReload = "${pkgs.python3.interpreter} ${pkgs.frr}/libexec/frr/frr-reload.py --reload --daemon ${daemonName service} --bindir ${pkgs.frr}/bin --rundir /run/frr /etc/frr/${service}.conf";
+              Restart = "on-abnormal";
+            };
+          });
+      in
+      listToAttrs (map frrService (filter isEnabled allServices));
 
   };
 

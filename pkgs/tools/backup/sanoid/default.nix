@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, nixosTests, makeWrapper, zfs
-, perlPackages, procps, which, openssh, mbuffer, pv, lzop, gzip, pigz }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, makeWrapper
+, zfs
+, perlPackages
+, procps
+, which
+, openssh
+, mbuffer
+, pv
+, lzop
+, gzip
+, pigz
+}:
 
 stdenv.mkDerivation rec {
   pname = "sanoid";

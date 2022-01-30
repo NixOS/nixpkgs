@@ -2,7 +2,8 @@
 
 let
   pythonPackages = python3Packages;
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   version = "2.1.0";
   pname = "nvpy";
 

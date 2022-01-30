@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # 6.3 GiB of data. Installation is unpacking and editing a few files.
     # No sense in letting Hydra build it.
     # Also, it is unclear what is covered by "verbatim" - we will edit configs
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     platforms = platforms.all;
     license = licenses.unfreeRedistributable;
   };

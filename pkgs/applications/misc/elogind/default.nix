@@ -19,9 +19,9 @@
 , docbook_xml_dtd_42
 , docbook_xml_dtd_45
 
-# Defaulting to false because usually the rationale for using elogind is to
-# use it in situation where a systemd dependency does not work (especially
-# when building with musl, which elogind explicitly supports).
+  # Defaulting to false because usually the rationale for using elogind is to
+  # use it in situation where a systemd dependency does not work (especially
+  # when building with musl, which elogind explicitly supports).
 , enableSystemd ? false
 }:
 
@@ -48,8 +48,12 @@ stdenv.mkDerivation rec {
     libcap
     gettext
     libxslt.bin # xsltproc
-    docbook5 docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 docbook_xml_dtd_45 # needed for docbook without Internet
-    (python3.withPackages (p: with p; [ lxml ]))  # fixes: man/meson.build:111:0: ERROR: Could not execute command "/build/source/tools/xml_helper.py".
+    docbook5
+    docbook_xsl
+    docbook_xsl_ns
+    docbook_xml_dtd_42
+    docbook_xml_dtd_45 # needed for docbook without Internet
+    (python3.withPackages (p: with p; [ lxml ])) # fixes: man/meson.build:111:0: ERROR: Could not execute command "/build/source/tools/xml_helper.py".
   ];
 
   buildInputs =

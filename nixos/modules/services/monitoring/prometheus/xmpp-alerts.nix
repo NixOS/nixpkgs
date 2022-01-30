@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.prometheus.xmpp-alerts;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "prometheus-xmpp-alerts.yml" cfg.settings;
 in
 {
@@ -19,7 +19,7 @@ in
 
     settings = mkOption {
       type = settingsFormat.type;
-      default = {};
+      default = { };
 
       description = ''
         Configuration for prometheus xmpp-alerts, see

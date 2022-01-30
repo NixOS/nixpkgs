@@ -5,10 +5,10 @@ buildGo117Module rec {
   version = "2022.1.2";
 
   src = fetchFromGitHub {
-    owner  = "cloudflare";
-    repo   = "cloudflared";
-    rev    = version;
-    hash   = "sha256-PdmYOFy6CWMqHlcK0PeHPGCVSLhIJOIDnXOAh/qYt+8=";
+    owner = "cloudflare";
+    repo = "cloudflared";
+    rev = version;
+    hash = "sha256-PdmYOFy6CWMqHlcK0PeHPGCVSLhIJOIDnXOAh/qYt+8=";
   };
 
   vendorSha256 = null;
@@ -19,9 +19,9 @@ buildGo117Module rec {
 
   meta = with lib; {
     description = "CloudFlare Argo Tunnel daemon (and DNS-over-HTTPS client)";
-    homepage    = "https://www.cloudflare.com/products/argo-tunnel";
-    license     = licenses.unfree;
-    platforms   = platforms.unix;
+    homepage = "https://www.cloudflare.com/products/argo-tunnel";
+    license = licenses.unfree;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ bbigras enorris thoughtpolice ];
   };
 }

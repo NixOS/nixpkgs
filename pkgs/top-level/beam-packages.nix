@@ -1,4 +1,8 @@
-{ beam, callPackage, wxGTK30, buildPackages, stdenv
+{ beam
+, callPackage
+, wxGTK30
+, buildPackages
+, stdenv
 , wxSupport ? true
 , systemdSupport ? stdenv.isLinux
 }:

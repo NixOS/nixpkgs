@@ -1,5 +1,18 @@
-{ lib, buildDunePackage, fetchFromGitHub, lwt_ppx, ppx_cstruct, optint
-, checkseum, diet, bitv, nocrypto, logs, lru, io-page, mirage-block }:
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, lwt_ppx
+, ppx_cstruct
+, optint
+, checkseum
+, diet
+, bitv
+, nocrypto
+, logs
+, lru
+, io-page
+, mirage-block
+}:
 
 buildDunePackage rec {
   pname = "wodan";

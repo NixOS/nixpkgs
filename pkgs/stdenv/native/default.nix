@@ -1,5 +1,9 @@
 { lib
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
+, localSystem
+, crossSystem
+, config
+, overlays
+, crossOverlays ? [ ]
 }:
 
 assert crossSystem == localSystem;
@@ -12,10 +16,10 @@ let
     else "/bin/bash";
 
   path =
-    (if system == "i686-solaris" then [ "/usr/gnu" ] else []) ++
-    (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
-    (if system == "x86_64-solaris" then [ "/opt/local/gnu" ] else []) ++
-    ["/" "/usr" "/usr/local"];
+    (if system == "i686-solaris" then [ "/usr/gnu" ] else [ ]) ++
+    (if system == "i686-netbsd" then [ "/usr/pkg" ] else [ ]) ++
+    (if system == "x86_64-solaris" then [ "/opt/local/gnu" ] else [ ]) ++
+    [ "/" "/usr" "/usr/local" ];
 
   prehookBase = ''
     # Disable purity tests; it's allowed (even needed) to link to
@@ -73,12 +77,12 @@ let
     ../cygwin/rebase-i686.sh
   ] else if system == "x86_64-cygwin" then [
     ../cygwin/rebase-x86_64.sh
-  ] else []);
+  ] else [ ]);
 
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }), extraNativeBuildInputs ? [] }:
+    { cc, fetchurl, extraPath ? [ ], overrides ? (self: super: { }), extraNativeBuildInputs ? [ ] }:
 
     import ../generic {
       buildPlatform = localSystem;
@@ -97,7 +101,7 @@ let
       extraNativeBuildInputs = extraNativeBuildInputs ++
         (if system == "i686-cygwin" then extraNativeBuildInputsCygwin else
         if system == "x86_64-cygwin" then extraNativeBuildInputsCygwin else
-        []);
+        [ ]);
 
       initialPath = extraPath ++ path;
 
@@ -119,25 +123,27 @@ in
     };
     stdenvNoCC = stdenv;
 
-    cc = let
-      nativePrefix = { # switch
-        i686-solaris = "/usr/gnu";
-        x86_64-solaris = "/opt/local/gcc47";
-      }.${system} or "/usr";
-    in
-    import ../../build-support/cc-wrapper {
-      name = "cc-native";
-      nativeTools = true;
-      nativeLibc = true;
-      inherit lib nativePrefix;
-      bintools = import ../../build-support/bintools-wrapper {
-        name = "bintools";
-        inherit lib stdenvNoCC nativePrefix;
+    cc =
+      let
+        nativePrefix = {
+          # switch
+          i686-solaris = "/usr/gnu";
+          x86_64-solaris = "/opt/local/gcc47";
+        }.${system} or "/usr";
+      in
+      import ../../build-support/cc-wrapper {
+        name = "cc-native";
         nativeTools = true;
         nativeLibc = true;
+        inherit lib nativePrefix;
+        bintools = import ../../build-support/bintools-wrapper {
+          name = "bintools";
+          inherit lib stdenvNoCC nativePrefix;
+          nativeTools = true;
+          nativeLibc = true;
+        };
+        inherit stdenvNoCC;
       };
-      inherit stdenvNoCC;
-    };
 
     fetchurl = import ../../build-support/fetchurl {
       inherit lib stdenvNoCC;
@@ -150,9 +156,10 @@ in
   # First build a stdenv based only on tools outside the store.
   (prevStage: {
     inherit config overlays;
-    stdenv = makeStdenv {
-      inherit (prevStage) cc fetchurl;
-    } // { inherit (prevStage) fetchurl; };
+    stdenv = makeStdenv
+      {
+        inherit (prevStage) cc fetchurl;
+      } // { inherit (prevStage) fetchurl; };
   })
 
   # Using that, build a stdenv that adds the ‘xz’ command (which most systems
@@ -163,7 +170,7 @@ in
       inherit (prevStage.stdenv) cc fetchurl;
       extraPath = [ prevStage.xz ];
       overrides = self: super: { inherit (prevStage) xz; };
-      extraNativeBuildInputs = if localSystem.isLinux then [ prevStage.patchelf ] else [];
+      extraNativeBuildInputs = if localSystem.isLinux then [ prevStage.patchelf ] else [ ];
     };
   })
 

@@ -4,7 +4,8 @@ with lib;
 
 let
   np = nodePackages.override { generated = ./package.nix; self = np; };
-in nodePackages.buildNodePackage rec {
+in
+nodePackages.buildNodePackage rec {
   pname = "ripple-data-api";
   version = lib.strings.substring 0 7 rev;
   rev = "c56b860105f36c1c44ae011189d495272648c589";

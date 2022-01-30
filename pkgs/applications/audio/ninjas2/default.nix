@@ -18,7 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libjack2 xorg.libX11 libGL mesa libsndfile libsamplerate
+    libjack2
+    xorg.libX11
+    libGL
+    mesa
+    libsndfile
+    libsamplerate
   ];
 
   installPhase = ''

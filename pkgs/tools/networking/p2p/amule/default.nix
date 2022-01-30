@@ -34,9 +34,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
 
   buildInputs = [
-    zlib wxGTK30-gtk3 perl cryptopp.dev libupnp boost
+    zlib
+    wxGTK30-gtk3
+    perl
+    cryptopp.dev
+    libupnp
+    boost
   ] ++ lib.optional httpServer libpng
-    ++ lib.optional client libX11;
+  ++ lib.optional client libX11;
 
   cmakeFlags = [
     "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"

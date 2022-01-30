@@ -1,6 +1,14 @@
-{ lib, fetchFromGitHub, makeWrapper, gawk
-, makeFontsConf, freefont_ttf, gnuplot, perl, perlPackages
-, stdenv, shortenPerlShebang
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, gawk
+, makeFontsConf
+, freefont_ttf
+, gnuplot
+, perl
+, perlPackages
+, stdenv
+, shortenPerlShebang
 }:
 
 let

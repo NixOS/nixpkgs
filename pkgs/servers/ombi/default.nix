@@ -15,7 +15,8 @@ let
     x64-osx_hash = "sha256-woXFYmX+499NTtWmmGBpZ12PxTUazJ8klA6IPQIDjLE=";
   }."${arch}-${os}_hash";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ombi";
   version = "4.3.3";
 

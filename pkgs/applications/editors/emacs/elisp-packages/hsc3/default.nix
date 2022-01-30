@@ -5,7 +5,8 @@
 
 let version = "0.15";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "hsc3-mode";
   inherit version;
   src = fetchurl {

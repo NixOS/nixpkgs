@@ -2,7 +2,8 @@
 
 let
   version = "14.000";
-in fetchurl {
+in
+fetchurl {
   name = "last-resort-${version}";
 
   url = "https://github.com/unicode-org/last-resort-font/releases/download/${version}/LastResortHE-Regular.ttf";

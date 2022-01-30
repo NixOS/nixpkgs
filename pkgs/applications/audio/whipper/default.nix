@@ -12,7 +12,8 @@
 
 let
   bins = [ libcdio-paranoia cdrdao flac sox util-linux ];
-in python3.pkgs.buildPythonApplication rec {
+in
+python3.pkgs.buildPythonApplication rec {
   pname = "whipper";
   version = "0.10.0";
 
@@ -54,7 +55,10 @@ in python3.pkgs.buildPythonApplication rec {
   ] ++ bins;
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath bins)
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath bins)
   ];
 
   preBuild = ''

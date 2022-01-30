@@ -51,7 +51,7 @@ in
     dysnomia.enable = true;
 
     environment.systemPackages = [ pkgs.disnix ] ++ optional cfg.useWebServiceInterface pkgs.DisnixWebService;
-    environment.variables.PATH = lib.optionals cfg.enableProfilePath (map (profileName: "/nix/var/nix/profiles/disnix/${profileName}/bin" ) cfg.profiles);
+    environment.variables.PATH = lib.optionals cfg.enableProfilePath (map (profileName: "/nix/var/nix/profiles/disnix/${profileName}/bin") cfg.profiles);
     environment.variables.DISNIX_REMOTE_CLIENT = lib.optionalString (cfg.enableMultiUser) "disnix-client";
 
     services.dbus.enable = true;
@@ -87,8 +87,8 @@ in
         environment = {
           HOME = "/root";
         }
-        // (if config.environment.variables ? DYSNOMIA_CONTAINERS_PATH then { inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH; } else {})
-        // (if config.environment.variables ? DYSNOMIA_MODULES_PATH then { inherit (config.environment.variables) DYSNOMIA_MODULES_PATH; } else {});
+        // (if config.environment.variables ? DYSNOMIA_CONTAINERS_PATH then { inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH; } else { })
+        // (if config.environment.variables ? DYSNOMIA_MODULES_PATH then { inherit (config.environment.variables) DYSNOMIA_MODULES_PATH; } else { });
 
         serviceConfig.ExecStart = "${cfg.package}/bin/disnix-service";
       };

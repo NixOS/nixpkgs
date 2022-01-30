@@ -41,12 +41,13 @@ let
       "use unified cgroups" = "yes";
     };
   };
-  mkConfig = generators.toINI {} (recursiveUpdate localConfig cfg.config);
+  mkConfig = generators.toINI { } (recursiveUpdate localConfig cfg.config);
   configFile = pkgs.writeText "netdata.conf" (if cfg.configText != null then cfg.configText else mkConfig);
 
   defaultUser = "netdata";
 
-in {
+in
+{
   options = {
     services.netdata = {
       enable = mkEnableOption "netdata";
@@ -92,7 +93,7 @@ in {
         };
         extraPackages = mkOption {
           type = types.functionTo (types.listOf types.package);
-          default = ps: [];
+          default = ps: [ ];
           defaultText = literalExpression "ps: []";
           example = literalExpression ''
             ps: [
@@ -128,7 +129,7 @@ in {
 
       config = mkOption {
         type = types.attrsOf types.attrs;
-        default = {};
+        default = { };
         description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
         example = literalExpression ''
           global = {
@@ -141,7 +142,7 @@ in {
 
       configDir = mkOption {
         type = types.attrsOf types.path;
-        default = {};
+        default = { };
         description = ''
           Complete netdata config directory except netdata.conf.
           The default configuration is merged with changes
@@ -174,10 +175,10 @@ in {
 
   config = mkIf cfg.enable {
     assertions =
-      [ { assertion = cfg.config != {} -> cfg.configText == null ;
-          message = "Cannot specify both config and configText";
-        }
-      ];
+      [{
+        assertion = cfg.config != { } -> cfg.configText == null;
+        message = "Cannot specify both config and configText";
+      }];
 
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
@@ -225,16 +226,16 @@ in {
         ConfigurationDirectoryMode = "0755";
         # Capabilities
         CapabilityBoundingSet = [
-          "CAP_DAC_OVERRIDE"      # is required for freeipmi and slabinfo plugins
-          "CAP_DAC_READ_SEARCH"   # is required for apps plugin
-          "CAP_FOWNER"            # is required for freeipmi plugin
-          "CAP_SETPCAP"           # is required for apps, perf and slabinfo plugins
-          "CAP_SYS_ADMIN"         # is required for perf plugin
-          "CAP_SYS_PTRACE"        # is required for apps plugin
-          "CAP_SYS_RESOURCE"      # is required for ebpf plugin
-          "CAP_NET_RAW"           # is required for fping app
-          "CAP_SYS_CHROOT"        # is required for cgroups plugin
-          "CAP_SETUID"            # is required for cgroups and cgroups-network plugins
+          "CAP_DAC_OVERRIDE" # is required for freeipmi and slabinfo plugins
+          "CAP_DAC_READ_SEARCH" # is required for apps plugin
+          "CAP_FOWNER" # is required for freeipmi plugin
+          "CAP_SETPCAP" # is required for apps, perf and slabinfo plugins
+          "CAP_SYS_ADMIN" # is required for perf plugin
+          "CAP_SYS_PTRACE" # is required for apps plugin
+          "CAP_SYS_RESOURCE" # is required for ebpf plugin
+          "CAP_NET_RAW" # is required for fping app
+          "CAP_SYS_CHROOT" # is required for cgroups plugin
+          "CAP_SETUID" # is required for cgroups and cgroups-network plugins
         ];
         # Sandboxing
         ProtectSystem = "full";

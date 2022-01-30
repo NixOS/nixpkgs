@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "http://people.cs.ubc.ca/~mariusm/flann/";
     license = lib.licenses.bsd3;
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

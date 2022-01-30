@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libpng, perl, gettext }:
+{ lib, stdenv, fetchurl, libpng, perl, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "xcftools";

@@ -1,9 +1,20 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch
-, cmake, pkg-config
-, boost, openssl, unbound
-, pcsclite, readline, libsodium, hidapi
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, boost
+, openssl
+, unbound
+, pcsclite
+, readline
+, libsodium
+, hidapi
 , rapidjson
-, curl, sqlite
+, curl
+, sqlite
 , trezorSupport ? true
 , libusb1
 , protobuf
@@ -41,10 +52,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    boost openssl unbound
-    pcsclite readline
-    libsodium hidapi rapidjson
-    protobuf curl sqlite
+    boost
+    openssl
+    unbound
+    pcsclite
+    readline
+    libsodium
+    hidapi
+    rapidjson
+    protobuf
+    curl
+    sqlite
   ] ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
@@ -59,9 +77,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Private cryptocurrency based on Monero";
-    homepage    = "https://oxen.io/";
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    homepage = "https://oxen.io/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = [ maintainers.viric ];
   };
 }

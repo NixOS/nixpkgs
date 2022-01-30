@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, openssl, db, groff, libtool, libsodium
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, db
+, groff
+, libtool
+, libsodium
 , withCyrusSasl ? true
 , cyrus_sasl
 }:
@@ -23,7 +30,7 @@ stdenv.mkDerivation rec {
 
   # Disable install stripping as it breaks cross-compiling.
   # We strip binaries anyway in fixupPhase.
-  makeFlags= [
+  makeFlags = [
     "STRIP="
     "prefix=$(out)"
     "moduledir=$(out)/lib/modules"
@@ -36,7 +43,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-overlays"
-    "--disable-dependency-tracking"   # speeds up one-time build
+    "--disable-dependency-tracking" # speeds up one-time build
     "--enable-modules"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
@@ -45,7 +52,7 @@ stdenv.mkDerivation rec {
     "--with-yielding_select=yes"
     "ac_cv_func_memcmp_working=yes"
   ] ++ lib.optional (!withCyrusSasl) "--without-cyrus-sasl"
-    ++ lib.optional stdenv.isFreeBSD "--with-pic";
+  ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
   postBuild = ''
     make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/sha2
@@ -76,7 +83,7 @@ stdenv.mkDerivation rec {
     for f in $out/lib/libldap.la $out/lib/libldap_r.la; do
       substituteInPlace "$f" --replace '-lssl' '-L${openssl.out}/lib -lssl'
   '' + lib.optionalString withCyrusSasl ''
-      substituteInPlace "$f" --replace '-lsasl2' '-L${cyrus_sasl.out}/lib -lsasl2'
+    substituteInPlace "$f" --replace '-lsasl2' '-L${cyrus_sasl.out}/lib -lsasl2'
   '' + ''
     done
   '';
@@ -93,6 +100,6 @@ stdenv.mkDerivation rec {
     description = "An open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

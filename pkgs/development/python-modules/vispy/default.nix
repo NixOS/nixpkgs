@@ -49,7 +49,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  doCheck = false;  # otherwise runs OSX code on linux.
+  doCheck = false; # otherwise runs OSX code on linux.
 
   pythonImportsCheck = [
     "vispy"

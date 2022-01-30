@@ -4,7 +4,7 @@
 , fetchpatch
 , python3Packages
 
-# build time
+  # build time
 , autoreconfHook
 , flex
 , bison
@@ -12,7 +12,7 @@
 , pkg-config
 , texinfo
 
-# runtime
+  # runtime
 , c-ares
 , json_c
 , libcap
@@ -26,7 +26,7 @@
 , python3
 , readline
 
-# tests
+  # tests
 , nettools
 , nixosTests
 }:

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle_6, git, perl
-, makeWrapper, fetchpatch
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitLab
+, jdk17_headless
+, coreutils
+, gradle_6
+, git
+, perl
+, makeWrapper
+, fetchpatch
 }:
 
 let
@@ -50,7 +59,8 @@ let
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname src version;
 
   patches = [

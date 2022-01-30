@@ -9,7 +9,7 @@ let
   # 0.3.4 would change hashes: https://github.com/NixOS/nixpkgs/issues/25154
   patchutils = buildPackages.patchutils_0_3_3;
 in
-{ stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
+{ stripLen ? 0, extraPrefix ? null, excludes ? [ ], includes ? [ ], revert ? false, ... }@args:
 
 let
   # Make base-64 encoded SRI hash filename-safe using RFC 4648 §5
@@ -57,5 +57,5 @@ fetchurl ({
     ${patchutils}/bin/interdiff "$out" /dev/null > "$tmpfile"
     mv "$tmpfile" "$out"
   '' + (args.postFetch or "");
-  meta.broken = excludes != [] && includes != [];
-} // builtins.removeAttrs args ["stripLen" "extraPrefix" "excludes" "includes" "revert" "postFetch"])
+  meta.broken = excludes != [ ] && includes != [ ];
+} // builtins.removeAttrs args [ "stripLen" "extraPrefix" "excludes" "includes" "revert" "postFetch" ])

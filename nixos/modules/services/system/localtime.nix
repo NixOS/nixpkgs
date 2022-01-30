@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.localtime;
-in {
+in
+{
   options = {
     services.localtime = {
       enable = mkOption {
@@ -39,7 +40,7 @@ in {
       isSystemUser = true;
       group = "localtimed";
     };
-    users.groups.localtimed = {};
+    users.groups.localtimed = { };
 
     systemd.services.localtime = {
       wantedBy = [ "multi-user.target" ];

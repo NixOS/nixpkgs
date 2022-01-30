@@ -1,11 +1,20 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , pkg-config
-, libX11, libXv
+, libX11
+, libXv
 , udev
 , SDL2
-, gtk2, gtksourceview
-, alsa-lib, libao, openal, libpulseaudio
-, libicns, Cocoa, OpenAL
+, gtk2
+, gtksourceview
+, alsa-lib
+, libao
+, openal
+, libpulseaudio
+, libicns
+, Cocoa
+, OpenAL
 }:
 
 stdenv.mkDerivation {

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, asciidoc, libxml2, docbook_xml_dtd_45, libxslt
-, docbook_xsl, diffutils, coreutils, gnugrep, gnused
+{ lib
+, stdenv
+, fetchurl
+, asciidoc
+, libxml2
+, docbook_xml_dtd_45
+, libxslt
+, docbook_xsl
+, diffutils
+, coreutils
+, gnugrep
+, gnused
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +22,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    asciidoc libxml2 docbook_xml_dtd_45 libxslt docbook_xsl
+    asciidoc
+    libxml2
+    docbook_xml_dtd_45
+    libxslt
+    docbook_xsl
   ];
 
   installFlags = [ "prefix=$(out)" ];

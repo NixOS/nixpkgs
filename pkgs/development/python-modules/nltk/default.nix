@@ -1,4 +1,7 @@
-{ fetchPypi, buildPythonPackage, lib, isPy3k
+{ fetchPypi
+, buildPythonPackage
+, lib
+, isPy3k
 , click
 , joblib
 , regex

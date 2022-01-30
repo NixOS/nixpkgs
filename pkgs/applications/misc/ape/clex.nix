@@ -5,10 +5,10 @@ stdenv.mkDerivation rec {
   version = "5133afe";
 
   src = fetchFromGitHub {
-     owner = "Attempto";
-     repo = "Clex";
-     rev = version;
-     sha256 = "0p9s64g1jic213bwm6347jqckszgnni9szrrz31qjgaf32kf7nkp";
+    owner = "Attempto";
+    repo = "Clex";
+    rev = version;
+    sha256 = "0p9s64g1jic213bwm6347jqckszgnni9szrrz31qjgaf32kf7nkp";
   };
 
   installPhase = ''

@@ -6,45 +6,50 @@ let
   cfg = config.services.sourcehut;
   domain = cfg.settings."sr.ht".global-domain;
   settingsFormat = pkgs.formats.ini {
-    listToValue = concatMapStringsSep "," (generators.mkValueStringDefault {});
+    listToValue = concatMapStringsSep "," (generators.mkValueStringDefault { });
     mkKeyValue = k: v:
       if v == null then ""
-      else generators.mkKeyValueDefault {
-        mkValueString = v:
-          if v == true then "yes"
-          else if v == false then "no"
-          else generators.mkValueStringDefault {} v;
-      } "=" k v;
+      else
+        generators.mkKeyValueDefault
+          {
+            mkValueString = v:
+              if v == true then "yes"
+              else if v == false then "no"
+              else generators.mkValueStringDefault { } v;
+          } "="
+          k
+          v;
   };
   configIniOfService = srv: settingsFormat.generate "sourcehut-${srv}-config.ini"
     # Each service needs access to only a subset of sections (and secrets).
     (filterAttrs (k: v: v != null)
-    (mapAttrs (section: v:
-      let srvMatch = builtins.match "^([a-z]*)\\.sr\\.ht(::.*)?$" section; in
-      if srvMatch == null # Include sections shared by all services
-      || head srvMatch == srv # Include sections for the service being configured
-      then v
-      # Enable Web links and integrations between services.
-      else if tail srvMatch == [ null ] && elem (head srvMatch) cfg.services
-      then {
-        inherit (v) origin;
-        # mansrht crashes without it
-        oauth-client-id = v.oauth-client-id or null;
-      }
-      # Drop sub-sections of other services
-      else null)
-    (recursiveUpdate cfg.settings {
-      # Those paths are mounted using BindPaths= or BindReadOnlyPaths=
-      # for services needing access to them.
-      "builds.sr.ht::worker".buildlogs = "/var/log/sourcehut/buildsrht-worker";
-      "git.sr.ht".post-update-script = "/usr/bin/gitsrht-update-hook";
-      "git.sr.ht".repos = "/var/lib/sourcehut/gitsrht/repos";
-      "hg.sr.ht".changegroup-script = "/usr/bin/hgsrht-hook-changegroup";
-      "hg.sr.ht".repos = "/var/lib/sourcehut/hgsrht/repos";
-      # Making this a per service option despite being in a global section,
-      # so that it uses the redis-server used by the service.
-      "sr.ht".redis-host = cfg.${srv}.redis.host;
-    })));
+      (mapAttrs
+        (section: v:
+          let srvMatch = builtins.match "^([a-z]*)\\.sr\\.ht(::.*)?$" section; in
+          if srvMatch == null # Include sections shared by all services
+            || head srvMatch == srv # Include sections for the service being configured
+          then v
+          # Enable Web links and integrations between services.
+          else if tail srvMatch == [ null ] && elem (head srvMatch) cfg.services
+          then {
+            inherit (v) origin;
+            # mansrht crashes without it
+            oauth-client-id = v.oauth-client-id or null;
+          }
+          # Drop sub-sections of other services
+          else null)
+        (recursiveUpdate cfg.settings {
+          # Those paths are mounted using BindPaths= or BindReadOnlyPaths=
+          # for services needing access to them.
+          "builds.sr.ht::worker".buildlogs = "/var/log/sourcehut/buildsrht-worker";
+          "git.sr.ht".post-update-script = "/usr/bin/gitsrht-update-hook";
+          "git.sr.ht".repos = "/var/lib/sourcehut/gitsrht/repos";
+          "hg.sr.ht".changegroup-script = "/usr/bin/hgsrht-hook-changegroup";
+          "hg.sr.ht".repos = "/var/lib/sourcehut/hgsrht/repos";
+          # Making this a per service option despite being in a global section,
+          # so that it uses the redis-server used by the service.
+          "sr.ht".redis-host = cfg.${srv}.redis.host;
+        })));
   commonServiceSettings = srv: {
     origin = mkOption {
       description = "URL ${srv}.sr.ht is being served at (protocol://domain)";
@@ -146,7 +151,7 @@ in
       enable = mkEnableOption ''local nginx integration'';
       virtualHost = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Virtual-host configuration merged with all Sourcehut's virtual-hosts.";
       };
     };
@@ -289,8 +294,7 @@ in
           };
         };
 
-        options."dispatch.sr.ht" = commonServiceSettings "dispatch" // {
-        };
+        options."dispatch.sr.ht" = commonServiceSettings "dispatch" // { };
         options."dispatch.sr.ht::github" = {
           oauth-client-id = mkOptionNullOrStr "OAuth client id.";
           oauth-client-secret = mkOptionNullOrStr "OAuth client secret.";
@@ -330,7 +334,7 @@ in
               If master and worker are on the same system
               set to <literal>/usr/bin/runner-shell</literal>.
             '';
-            type = types.enum ["/usr/bin/master-shell" "/usr/bin/runner-shell"];
+            type = types.enum [ "/usr/bin/master-shell" "/usr/bin/runner-shell" ];
             default = "/usr/bin/master-shell";
           };
         };
@@ -449,8 +453,7 @@ in
           };
         };
 
-        options."hub.sr.ht" = commonServiceSettings "hub" // {
-        };
+        options."hub.sr.ht" = commonServiceSettings "hub" // { };
 
         options."lists.sr.ht" = commonServiceSettings "lists" // {
           allow-new-lists = mkEnableOption "Allow creation of new lists.";
@@ -485,7 +488,7 @@ in
               Uses fnmatch for wildcard expansion.
             '';
             type = with types; listOf str;
-            default = ["text/html"];
+            default = [ "text/html" ];
           };
           reject-url = mkOption {
             description = "Reject URL.";
@@ -510,25 +513,24 @@ in
           };
         };
 
-        options."man.sr.ht" = commonServiceSettings "man" // {
-        };
+        options."man.sr.ht" = commonServiceSettings "man" // { };
 
         options."meta.sr.ht" =
           removeAttrs (commonServiceSettings "meta")
-            ["oauth-client-id" "oauth-client-secret"] // {
-          api-origin = mkOption {
-            description = "Origin URL for API, 100 more than web.";
-            type = types.str;
-            default = "http://${cfg.listenAddress}:${toString (cfg.meta.port + 100)}";
-            defaultText = ''http://<xref linkend="opt-services.sourcehut.listenAddress"/>:''${toString (<xref linkend="opt-services.sourcehut.meta.port"/> + 100)}'';
+            [ "oauth-client-id" "oauth-client-secret" ] // {
+            api-origin = mkOption {
+              description = "Origin URL for API, 100 more than web.";
+              type = types.str;
+              default = "http://${cfg.listenAddress}:${toString (cfg.meta.port + 100)}";
+              defaultText = ''http://<xref linkend="opt-services.sourcehut.listenAddress"/>:''${toString (<xref linkend="opt-services.sourcehut.meta.port"/> + 100)}'';
+            };
+            webhooks = mkOption {
+              description = "The Redis connection used for the webhooks worker.";
+              type = types.str;
+              default = "redis+socket:///run/redis-sourcehut-metasrht/redis.sock?virtual_host=1";
+            };
+            welcome-emails = mkEnableOption "sending stock sourcehut welcome emails after signup";
           };
-          webhooks = mkOption {
-            description = "The Redis connection used for the webhooks worker.";
-            type = types.str;
-            default = "redis+socket:///run/redis-sourcehut-metasrht/redis.sock?virtual_host=1";
-          };
-          welcome-emails = mkEnableOption "sending stock sourcehut welcome emails after signup";
-        };
         options."meta.sr.ht::api" = {
           internal-ipnet = mkOption {
             description = ''
@@ -544,7 +546,7 @@ in
         options."meta.sr.ht::aliases" = mkOption {
           description = "Aliases for the client IDs of commonly used OAuth clients.";
           type = with types; attrsOf int;
-          default = {};
+          default = { };
           example = { "git.sr.ht" = 12345; };
         };
         options."meta.sr.ht::billing" = {
@@ -610,8 +612,7 @@ in
           };
         };
 
-        options."paste.sr.ht" = commonServiceSettings "paste" // {
-        };
+        options."paste.sr.ht" = commonServiceSettings "paste" // { };
 
         options."todo.sr.ht" = commonServiceSettings "todo" // {
           notify-from = mkOption {
@@ -758,14 +759,16 @@ in
     }
     (mkIf cfg.postgresql.enable {
       assertions = [
-        { assertion = postgresql.enable;
+        {
+          assertion = postgresql.enable;
           message = "postgresql must be enabled and configured";
         }
       ];
     })
     (mkIf cfg.postfix.enable {
       assertions = [
-        { assertion = postfix.enable;
+        {
+          assertion = postfix.enable;
           message = "postfix must be enabled and configured";
         }
       ];
@@ -777,7 +780,8 @@ in
     })
     (mkIf cfg.nginx.enable {
       assertions = [
-        { assertion = nginx.enable;
+        {
+          assertion = nginx.enable;
           message = "nginx must be enabled and configured";
         }
       ];
@@ -803,7 +807,7 @@ in
       environment.etc."ssh/sourcehut/config.ini".source =
         settingsFormat.generate "sourcehut-dispatch-config.ini"
           (filterAttrs (k: v: k == "git.sr.ht::dispatch")
-          cfg.settings);
+            cfg.settings);
       environment.etc."ssh/sourcehut/subdir/srht-dispatch" = {
         # sshd_config(5): The program must be owned by root, not writable by group or others
         mode = "0755";
@@ -906,102 +910,114 @@ in
       srvsrht = "buildsrht";
       port = 5002;
       # TODO: a celery worker on the master and worker are apparently needed
-      extraServices.buildsrht-worker = let
-        qemuPackage = pkgs.qemu_kvm;
-        serviceName = "buildsrht-worker";
-        statePath = "/var/lib/sourcehut/${serviceName}";
-        in mkIf cfg.builds.enableWorker {
-        path = [ pkgs.openssh pkgs.docker ];
-        preStart = ''
-          set -x
-          if test -z "$(docker images -q qemu:latest 2>/dev/null)" \
-          || test "$(cat ${statePath}/docker-image-qemu)" != "${qemuPackage.version}"
-          then
-            # Create and import qemu:latest image for docker
-            ${pkgs.dockerTools.streamLayeredImage {
-              name = "qemu";
-              tag = "latest";
-              contents = [ qemuPackage ];
-            }} | docker load
-            # Mark down current package version
-            echo '${qemuPackage.version}' >${statePath}/docker-image-qemu
-          fi
-        '';
-        serviceConfig = {
-          ExecStart = "${pkgs.sourcehut.buildsrht}/bin/builds.sr.ht-worker";
-          BindPaths = [ cfg.settings."builds.sr.ht::worker".buildlogs ];
-          LogsDirectory = [ "sourcehut/${serviceName}" ];
-          RuntimeDirectory = [ "sourcehut/${serviceName}/subdir" ];
-          StateDirectory = [ "sourcehut/${serviceName}" ];
-          TimeoutStartSec = "1800s";
-          # builds.sr.ht-worker looks up ../config.ini
-          WorkingDirectory = "-"+"/run/sourcehut/${serviceName}/subdir";
+      extraServices.buildsrht-worker =
+        let
+          qemuPackage = pkgs.qemu_kvm;
+          serviceName = "buildsrht-worker";
+          statePath = "/var/lib/sourcehut/${serviceName}";
+        in
+        mkIf cfg.builds.enableWorker {
+          path = [ pkgs.openssh pkgs.docker ];
+          preStart = ''
+            set -x
+            if test -z "$(docker images -q qemu:latest 2>/dev/null)" \
+            || test "$(cat ${statePath}/docker-image-qemu)" != "${qemuPackage.version}"
+            then
+              # Create and import qemu:latest image for docker
+              ${pkgs.dockerTools.streamLayeredImage {
+                name = "qemu";
+                tag = "latest";
+                contents = [ qemuPackage ];
+              }} | docker load
+              # Mark down current package version
+              echo '${qemuPackage.version}' >${statePath}/docker-image-qemu
+            fi
+          '';
+          serviceConfig = {
+            ExecStart = "${pkgs.sourcehut.buildsrht}/bin/builds.sr.ht-worker";
+            BindPaths = [ cfg.settings."builds.sr.ht::worker".buildlogs ];
+            LogsDirectory = [ "sourcehut/${serviceName}" ];
+            RuntimeDirectory = [ "sourcehut/${serviceName}/subdir" ];
+            StateDirectory = [ "sourcehut/${serviceName}" ];
+            TimeoutStartSec = "1800s";
+            # builds.sr.ht-worker looks up ../config.ini
+            WorkingDirectory = "-" + "/run/sourcehut/${serviceName}/subdir";
+          };
         };
-      };
-      extraConfig = let
-        image_dirs = flatten (
-          mapAttrsToList (distro: revs:
-            mapAttrsToList (rev: archs:
-              mapAttrsToList (arch: image:
-                pkgs.runCommand "buildsrht-images" { } ''
-                  mkdir -p $out/${distro}/${rev}/${arch}
-                  ln -s ${image}/*.qcow2 $out/${distro}/${rev}/${arch}/root.img.qcow2
-                ''
-              ) archs
-            ) revs
-          ) cfg.builds.images
-        );
-        image_dir_pre = pkgs.symlinkJoin {
-          name = "builds.sr.ht-worker-images-pre";
-          paths = image_dirs;
+      extraConfig =
+        let
+          image_dirs = flatten (
+            mapAttrsToList
+              (distro: revs:
+                mapAttrsToList
+                  (rev: archs:
+                    mapAttrsToList
+                      (arch: image:
+                        pkgs.runCommand "buildsrht-images" { } ''
+                          mkdir -p $out/${distro}/${rev}/${arch}
+                          ln -s ${image}/*.qcow2 $out/${distro}/${rev}/${arch}/root.img.qcow2
+                        ''
+                      )
+                      archs
+                  )
+                  revs
+              )
+              cfg.builds.images
+          );
+          image_dir_pre = pkgs.symlinkJoin {
+            name = "builds.sr.ht-worker-images-pre";
+            paths = image_dirs;
             # FIXME: not working, apparently because ubuntu/latest is a broken link
             # ++ [ "${pkgs.sourcehut.buildsrht}/lib/images" ];
-        };
-        image_dir = pkgs.runCommand "builds.sr.ht-worker-images" { } ''
-          mkdir -p $out/images
-          cp -Lr ${image_dir_pre}/* $out/images
-        '';
-        in mkMerge [
-        {
-          users.users.${cfg.builds.user}.shell = pkgs.bash;
+          };
+          image_dir = pkgs.runCommand "builds.sr.ht-worker-images" { } ''
+            mkdir -p $out/images
+            cp -Lr ${image_dir_pre}/* $out/images
+          '';
+        in
+        mkMerge [
+          {
+            users.users.${cfg.builds.user}.shell = pkgs.bash;
 
-          virtualisation.docker.enable = true;
+            virtualisation.docker.enable = true;
 
-          services.sourcehut.settings = mkMerge [
-            { # Note that git.sr.ht::dispatch is not a typo,
-              # gitsrht-dispatch always use this section
-              "git.sr.ht::dispatch"."/usr/bin/buildsrht-keys" =
-                mkDefault "${cfg.builds.user}:${cfg.builds.group}";
+            services.sourcehut.settings = mkMerge [
+              {
+                # Note that git.sr.ht::dispatch is not a typo,
+                # gitsrht-dispatch always use this section
+                "git.sr.ht::dispatch"."/usr/bin/buildsrht-keys" =
+                  mkDefault "${cfg.builds.user}:${cfg.builds.group}";
+              }
+              (mkIf cfg.builds.enableWorker {
+                "builds.sr.ht::worker".shell = "/usr/bin/runner-shell";
+                "builds.sr.ht::worker".images = mkDefault "${image_dir}/images";
+                "builds.sr.ht::worker".controlcmd = mkDefault "${image_dir}/images/control";
+              })
+            ];
+          }
+          (mkIf cfg.builds.enableWorker {
+            users.groups = {
+              docker.members = [ cfg.builds.user ];
+            };
+          })
+          (mkIf (cfg.builds.enableWorker && cfg.nginx.enable) {
+            # Allow nginx access to buildlogs
+            users.users.${nginx.user}.extraGroups = [ cfg.builds.group ];
+            systemd.services.nginx = {
+              serviceConfig.BindReadOnlyPaths = [ cfg.settings."builds.sr.ht::worker".buildlogs ];
+            };
+            services.nginx.virtualHosts."logs.${domain}" = mkMerge [{
+              /* FIXME: is a listen needed?
+                listen = with builtins;
+                # FIXME: not compatible with IPv6
+                let address = split ":" cfg.settings."builds.sr.ht::worker".name; in
+                [{ addr = elemAt address 0; port = lib.toInt (elemAt address 2); }];
+              */
+              locations."/logs/".alias = cfg.settings."builds.sr.ht::worker".buildlogs + "/";
             }
-            (mkIf cfg.builds.enableWorker {
-              "builds.sr.ht::worker".shell = "/usr/bin/runner-shell";
-              "builds.sr.ht::worker".images = mkDefault "${image_dir}/images";
-              "builds.sr.ht::worker".controlcmd = mkDefault "${image_dir}/images/control";
-            })
-          ];
-        }
-        (mkIf cfg.builds.enableWorker {
-          users.groups = {
-            docker.members = [ cfg.builds.user ];
-          };
-        })
-        (mkIf (cfg.builds.enableWorker && cfg.nginx.enable) {
-          # Allow nginx access to buildlogs
-          users.users.${nginx.user}.extraGroups = [ cfg.builds.group ];
-          systemd.services.nginx = {
-            serviceConfig.BindReadOnlyPaths = [ cfg.settings."builds.sr.ht::worker".buildlogs ];
-          };
-          services.nginx.virtualHosts."logs.${domain}" = mkMerge [ {
-            /* FIXME: is a listen needed?
-            listen = with builtins;
-              # FIXME: not compatible with IPv6
-              let address = split ":" cfg.settings."builds.sr.ht::worker".name; in
-              [{ addr = elemAt address 0; port = lib.toInt (elemAt address 2); }];
-            */
-            locations."/logs/".alias = cfg.settings."builds.sr.ht::worker".buildlogs + "/";
-          } cfg.nginx.virtualHost ];
-        })
-      ];
+              cfg.nginx.virtualHost];
+          })
+        ];
     })
 
     (import ./service.nix "dispatch" {
@@ -1009,219 +1025,240 @@ in
       port = 5005;
     })
 
-    (import ./service.nix "git" (let
-      baseService = {
-        path = [ cfg.git.package ];
-        serviceConfig.BindPaths = [ "${cfg.settings."git.sr.ht".repos}:/var/lib/sourcehut/gitsrht/repos" ];
-      };
-      in {
-      inherit configIniOfService;
-      mainService = mkMerge [ baseService {
-        serviceConfig.StateDirectory = [ "sourcehut/gitsrht" "sourcehut/gitsrht/repos" ];
-        preStart = mkIf (!versionAtLeast config.system.stateVersion "22.05") (mkBefore ''
-          # Fix Git hooks of repositories pre-dating https://github.com/NixOS/nixpkgs/pull/133984
-          (
-          set +f
-          shopt -s nullglob
-          for h in /var/lib/sourcehut/gitsrht/repos/~*/*/hooks/{pre-receive,update,post-update}
-          do ln -fnsv /usr/bin/gitsrht-update-hook "$h"; done
-          )
-        '');
-      } ];
-      port = 5001;
-      webhooks = true;
-      extraTimers.gitsrht-periodic = {
-        service = baseService;
-        timerConfig.OnCalendar = ["*:0/20"];
-      };
-      extraConfig = mkMerge [
-        {
-          # https://stackoverflow.com/questions/22314298/git-push-results-in-fatal-protocol-error-bad-line-length-character-this
-          # Probably could use gitsrht-shell if output is restricted to just parameters...
-          users.users.${cfg.git.user}.shell = pkgs.bash;
-          services.sourcehut.settings = {
-            "git.sr.ht::dispatch"."/usr/bin/gitsrht-keys" =
-              mkDefault "${cfg.git.user}:${cfg.git.group}";
-          };
-          systemd.services.sshd = baseService;
-        }
-        (mkIf cfg.nginx.enable {
-          services.nginx.virtualHosts."git.${domain}" = {
-            locations."/authorize" = {
-              proxyPass = "http://${cfg.listenAddress}:${toString cfg.git.port}";
-              extraConfig = ''
-                proxy_pass_request_body off;
-                proxy_set_header Content-Length "";
-                proxy_set_header X-Original-URI $request_uri;
-              '';
-            };
-            locations."~ ^/([^/]+)/([^/]+)/(HEAD|info/refs|objects/info/.*|git-upload-pack).*$" = {
-              root = "/var/lib/sourcehut/gitsrht/repos";
-              fastcgiParams = {
-                GIT_HTTP_EXPORT_ALL = "";
-                GIT_PROJECT_ROOT = "$document_root";
-                PATH_INFO = "$uri";
-                SCRIPT_FILENAME = "${cfg.git.package}/bin/git-http-backend";
-              };
-              extraConfig = ''
-                auth_request /authorize;
-                fastcgi_read_timeout 500s;
-                fastcgi_pass unix:/run/gitsrht-fcgiwrap.sock;
-                gzip off;
-              '';
-            };
-          };
-          systemd.sockets.gitsrht-fcgiwrap = {
-            before = [ "nginx.service" ];
-            wantedBy = [ "sockets.target" "gitsrht.service" ];
-            # This path remains accessible to nginx.service, which has no RootDirectory=
-            socketConfig.ListenStream = "/run/gitsrht-fcgiwrap.sock";
-            socketConfig.SocketUser = nginx.user;
-            socketConfig.SocketMode = "600";
-          };
-        })
-      ];
-      extraServices.gitsrht-fcgiwrap = mkIf cfg.nginx.enable {
-        serviceConfig = {
-          # Socket is passed by gitsrht-fcgiwrap.socket
-          ExecStart = "${pkgs.fcgiwrap}/sbin/fcgiwrap -c ${toString cfg.git.fcgiwrap.preforkProcess}";
-          # No need for config.ini
-          ExecStartPre = mkForce [];
-          User = null;
-          DynamicUser = true;
-          BindReadOnlyPaths = [ "${cfg.settings."git.sr.ht".repos}:/var/lib/sourcehut/gitsrht/repos" ];
-          IPAddressDeny = "any";
-          InaccessiblePaths = [ "-+/run/postgresql" "-+/run/redis-sourcehut" ];
-          PrivateNetwork = true;
-          RestrictAddressFamilies = mkForce [ "none" ];
-          SystemCallFilter = mkForce [
-            "@system-service"
-            "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@resources" "~@setuid"
-            # @timer is needed for alarm()
-          ];
+    (import ./service.nix "git" (
+      let
+        baseService = {
+          path = [ cfg.git.package ];
+          serviceConfig.BindPaths = [ "${cfg.settings."git.sr.ht".repos}:/var/lib/sourcehut/gitsrht/repos" ];
         };
-      };
-    }))
+      in
+      {
+        inherit configIniOfService;
+        mainService = mkMerge [
+          baseService
+          {
+            serviceConfig.StateDirectory = [ "sourcehut/gitsrht" "sourcehut/gitsrht/repos" ];
+            preStart = mkIf (!versionAtLeast config.system.stateVersion "22.05") (mkBefore ''
+              # Fix Git hooks of repositories pre-dating https://github.com/NixOS/nixpkgs/pull/133984
+              (
+              set +f
+              shopt -s nullglob
+              for h in /var/lib/sourcehut/gitsrht/repos/~*/*/hooks/{pre-receive,update,post-update}
+              do ln -fnsv /usr/bin/gitsrht-update-hook "$h"; done
+              )
+            '');
+          }
+        ];
+        port = 5001;
+        webhooks = true;
+        extraTimers.gitsrht-periodic = {
+          service = baseService;
+          timerConfig.OnCalendar = [ "*:0/20" ];
+        };
+        extraConfig = mkMerge [
+          {
+            # https://stackoverflow.com/questions/22314298/git-push-results-in-fatal-protocol-error-bad-line-length-character-this
+            # Probably could use gitsrht-shell if output is restricted to just parameters...
+            users.users.${cfg.git.user}.shell = pkgs.bash;
+            services.sourcehut.settings = {
+              "git.sr.ht::dispatch"."/usr/bin/gitsrht-keys" =
+                mkDefault "${cfg.git.user}:${cfg.git.group}";
+            };
+            systemd.services.sshd = baseService;
+          }
+          (mkIf cfg.nginx.enable {
+            services.nginx.virtualHosts."git.${domain}" = {
+              locations."/authorize" = {
+                proxyPass = "http://${cfg.listenAddress}:${toString cfg.git.port}";
+                extraConfig = ''
+                  proxy_pass_request_body off;
+                  proxy_set_header Content-Length "";
+                  proxy_set_header X-Original-URI $request_uri;
+                '';
+              };
+              locations."~ ^/([^/]+)/([^/]+)/(HEAD|info/refs|objects/info/.*|git-upload-pack).*$" = {
+                root = "/var/lib/sourcehut/gitsrht/repos";
+                fastcgiParams = {
+                  GIT_HTTP_EXPORT_ALL = "";
+                  GIT_PROJECT_ROOT = "$document_root";
+                  PATH_INFO = "$uri";
+                  SCRIPT_FILENAME = "${cfg.git.package}/bin/git-http-backend";
+                };
+                extraConfig = ''
+                  auth_request /authorize;
+                  fastcgi_read_timeout 500s;
+                  fastcgi_pass unix:/run/gitsrht-fcgiwrap.sock;
+                  gzip off;
+                '';
+              };
+            };
+            systemd.sockets.gitsrht-fcgiwrap = {
+              before = [ "nginx.service" ];
+              wantedBy = [ "sockets.target" "gitsrht.service" ];
+              # This path remains accessible to nginx.service, which has no RootDirectory=
+              socketConfig.ListenStream = "/run/gitsrht-fcgiwrap.sock";
+              socketConfig.SocketUser = nginx.user;
+              socketConfig.SocketMode = "600";
+            };
+          })
+        ];
+        extraServices.gitsrht-fcgiwrap = mkIf cfg.nginx.enable {
+          serviceConfig = {
+            # Socket is passed by gitsrht-fcgiwrap.socket
+            ExecStart = "${pkgs.fcgiwrap}/sbin/fcgiwrap -c ${toString cfg.git.fcgiwrap.preforkProcess}";
+            # No need for config.ini
+            ExecStartPre = mkForce [ ];
+            User = null;
+            DynamicUser = true;
+            BindReadOnlyPaths = [ "${cfg.settings."git.sr.ht".repos}:/var/lib/sourcehut/gitsrht/repos" ];
+            IPAddressDeny = "any";
+            InaccessiblePaths = [ "-+/run/postgresql" "-+/run/redis-sourcehut" ];
+            PrivateNetwork = true;
+            RestrictAddressFamilies = mkForce [ "none" ];
+            SystemCallFilter = mkForce [
+              "@system-service"
+              "~@aio"
+              "~@keyring"
+              "~@memlock"
+              "~@privileged"
+              "~@resources"
+              "~@setuid"
+              # @timer is needed for alarm()
+            ];
+          };
+        };
+      }
+    ))
 
-    (import ./service.nix "hg" (let
-      baseService = {
-        path = [ cfg.hg.package ];
-        serviceConfig.BindPaths = [ "${cfg.settings."hg.sr.ht".repos}:/var/lib/sourcehut/hgsrht/repos" ];
-      };
-      in {
-      inherit configIniOfService;
-      mainService = mkMerge [ baseService {
-        serviceConfig.StateDirectory = [ "sourcehut/hgsrht" "sourcehut/hgsrht/repos" ];
-      } ];
-      port = 5010;
-      webhooks = true;
-      extraTimers.hgsrht-periodic = {
-        service = baseService;
-        timerConfig.OnCalendar = ["*:0/20"];
-      };
-      extraTimers.hgsrht-clonebundles = mkIf cfg.hg.cloneBundles {
-        service = baseService;
-        timerConfig.OnCalendar = ["daily"];
-        timerConfig.AccuracySec = "1h";
-      };
-      extraConfig = mkMerge [
-        {
-          users.users.${cfg.hg.user}.shell = pkgs.bash;
-          services.sourcehut.settings = {
-            # Note that git.sr.ht::dispatch is not a typo,
-            # gitsrht-dispatch always uses this section.
-            "git.sr.ht::dispatch"."/usr/bin/hgsrht-keys" =
-              mkDefault "${cfg.hg.user}:${cfg.hg.group}";
-          };
-          systemd.services.sshd = baseService;
-        }
-        (mkIf cfg.nginx.enable {
-          # Allow nginx access to repositories
-          users.users.${nginx.user}.extraGroups = [ cfg.hg.group ];
-          services.nginx.virtualHosts."hg.${domain}" = {
-            locations."/authorize" = {
-              proxyPass = "http://${cfg.listenAddress}:${toString cfg.hg.port}";
-              extraConfig = ''
-                proxy_pass_request_body off;
-                proxy_set_header Content-Length "";
-                proxy_set_header X-Original-URI $request_uri;
-              '';
+    (import ./service.nix "hg" (
+      let
+        baseService = {
+          path = [ cfg.hg.package ];
+          serviceConfig.BindPaths = [ "${cfg.settings."hg.sr.ht".repos}:/var/lib/sourcehut/hgsrht/repos" ];
+        };
+      in
+      {
+        inherit configIniOfService;
+        mainService = mkMerge [
+          baseService
+          {
+            serviceConfig.StateDirectory = [ "sourcehut/hgsrht" "sourcehut/hgsrht/repos" ];
+          }
+        ];
+        port = 5010;
+        webhooks = true;
+        extraTimers.hgsrht-periodic = {
+          service = baseService;
+          timerConfig.OnCalendar = [ "*:0/20" ];
+        };
+        extraTimers.hgsrht-clonebundles = mkIf cfg.hg.cloneBundles {
+          service = baseService;
+          timerConfig.OnCalendar = [ "daily" ];
+          timerConfig.AccuracySec = "1h";
+        };
+        extraConfig = mkMerge [
+          {
+            users.users.${cfg.hg.user}.shell = pkgs.bash;
+            services.sourcehut.settings = {
+              # Note that git.sr.ht::dispatch is not a typo,
+              # gitsrht-dispatch always uses this section.
+              "git.sr.ht::dispatch"."/usr/bin/hgsrht-keys" =
+                mkDefault "${cfg.hg.user}:${cfg.hg.group}";
             };
-            # Let clients reach pull bundles. We don't really need to lock this down even for
-            # private repos because the bundles are named after the revision hashes...
-            # so someone would need to know or guess a SHA value to download anything.
-            # TODO: proxyPass to an hg serve service?
-            locations."~ ^/[~^][a-z0-9_]+/[a-zA-Z0-9_.-]+/\\.hg/bundles/.*$" = {
-              root = "/var/lib/nginx/hgsrht/repos";
-              extraConfig = ''
-                auth_request /authorize;
-                gzip off;
-              '';
+            systemd.services.sshd = baseService;
+          }
+          (mkIf cfg.nginx.enable {
+            # Allow nginx access to repositories
+            users.users.${nginx.user}.extraGroups = [ cfg.hg.group ];
+            services.nginx.virtualHosts."hg.${domain}" = {
+              locations."/authorize" = {
+                proxyPass = "http://${cfg.listenAddress}:${toString cfg.hg.port}";
+                extraConfig = ''
+                  proxy_pass_request_body off;
+                  proxy_set_header Content-Length "";
+                  proxy_set_header X-Original-URI $request_uri;
+                '';
+              };
+              # Let clients reach pull bundles. We don't really need to lock this down even for
+              # private repos because the bundles are named after the revision hashes...
+              # so someone would need to know or guess a SHA value to download anything.
+              # TODO: proxyPass to an hg serve service?
+              locations."~ ^/[~^][a-z0-9_]+/[a-zA-Z0-9_.-]+/\\.hg/bundles/.*$" = {
+                root = "/var/lib/nginx/hgsrht/repos";
+                extraConfig = ''
+                  auth_request /authorize;
+                  gzip off;
+                '';
+              };
             };
-          };
-          systemd.services.nginx = {
-            serviceConfig.BindReadOnlyPaths = [ "${cfg.settings."hg.sr.ht".repos}:/var/lib/nginx/hgsrht/repos" ];
-          };
-        })
-      ];
-    }))
+            systemd.services.nginx = {
+              serviceConfig.BindReadOnlyPaths = [ "${cfg.settings."hg.sr.ht".repos}:/var/lib/nginx/hgsrht/repos" ];
+            };
+          })
+        ];
+      }
+    ))
 
     (import ./service.nix "hub" {
       inherit configIniOfService;
       port = 5014;
       extraConfig = {
         services.nginx = mkIf cfg.nginx.enable {
-          virtualHosts."hub.${domain}" = mkMerge [ {
+          virtualHosts."hub.${domain}" = mkMerge [{
             serverAliases = [ domain ];
-          } cfg.nginx.virtualHost ];
+          }
+            cfg.nginx.virtualHost];
         };
       };
     })
 
-    (import ./service.nix "lists" (let
-      srvsrht = "listssrht";
-      in {
-      inherit configIniOfService;
-      port = 5006;
-      webhooks = true;
-      # Receive the mail from Postfix and enqueue them into Redis and PostgreSQL
-      extraServices.listssrht-lmtp = {
-        wants = [ "postfix.service" ];
-        unitConfig.JoinsNamespaceOf = optional cfg.postfix.enable "postfix.service";
-        serviceConfig.ExecStart = "${cfg.python}/bin/listssrht-lmtp";
-        # Avoid crashing: os.chown(sock, os.getuid(), sock_gid)
-        serviceConfig.PrivateUsers = mkForce false;
-      };
-      # Dequeue the mails from Redis and dispatch them
-      extraServices.listssrht-process = {
-        serviceConfig = {
-          preStart = ''
-            cp ${pkgs.writeText "${srvsrht}-webhooks-celeryconfig.py" cfg.lists.process.celeryConfig} \
-               /run/sourcehut/${srvsrht}-webhooks/celeryconfig.py
-          '';
-          ExecStart = "${cfg.python}/bin/celery --app listssrht.process worker --hostname listssrht-process@%%h " + concatStringsSep " " cfg.lists.process.extraArgs;
-          # Avoid crashing: os.getloadavg()
-          ProcSubset = mkForce "all";
+    (import ./service.nix "lists" (
+      let
+        srvsrht = "listssrht";
+      in
+      {
+        inherit configIniOfService;
+        port = 5006;
+        webhooks = true;
+        # Receive the mail from Postfix and enqueue them into Redis and PostgreSQL
+        extraServices.listssrht-lmtp = {
+          wants = [ "postfix.service" ];
+          unitConfig.JoinsNamespaceOf = optional cfg.postfix.enable "postfix.service";
+          serviceConfig.ExecStart = "${cfg.python}/bin/listssrht-lmtp";
+          # Avoid crashing: os.chown(sock, os.getuid(), sock_gid)
+          serviceConfig.PrivateUsers = mkForce false;
         };
-      };
-      extraConfig = mkIf cfg.postfix.enable {
-        users.groups.${postfix.group}.members = [ cfg.lists.user ];
-        services.sourcehut.settings."lists.sr.ht::mail".sock-group = postfix.group;
-        services.postfix = {
-          destination = [ "lists.${domain}" ];
-          # FIXME: an accurate recipient list should be queried
-          # from the lists.sr.ht PostgreSQL database to avoid backscattering.
-          # But usernames are unfortunately not in that database but in meta.sr.ht.
-          # Note that two syntaxes are allowed:
-          # - ~username/list-name@lists.${domain}
-          # - u.username.list-name@lists.${domain}
-          localRecipients = [ "@lists.${domain}" ];
-          transport = ''
-            lists.${domain} lmtp:unix:${cfg.settings."lists.sr.ht::worker".sock}
-          '';
+        # Dequeue the mails from Redis and dispatch them
+        extraServices.listssrht-process = {
+          serviceConfig = {
+            preStart = ''
+              cp ${pkgs.writeText "${srvsrht}-webhooks-celeryconfig.py" cfg.lists.process.celeryConfig} \
+                 /run/sourcehut/${srvsrht}-webhooks/celeryconfig.py
+            '';
+            ExecStart = "${cfg.python}/bin/celery --app listssrht.process worker --hostname listssrht-process@%%h " + concatStringsSep " " cfg.lists.process.extraArgs;
+            # Avoid crashing: os.getloadavg()
+            ProcSubset = mkForce "all";
+          };
         };
-      };
-    }))
+        extraConfig = mkIf cfg.postfix.enable {
+          users.groups.${postfix.group}.members = [ cfg.lists.user ];
+          services.sourcehut.settings."lists.sr.ht::mail".sock-group = postfix.group;
+          services.postfix = {
+            destination = [ "lists.${domain}" ];
+            # FIXME: an accurate recipient list should be queried
+            # from the lists.sr.ht PostgreSQL database to avoid backscattering.
+            # But usernames are unfortunately not in that database but in meta.sr.ht.
+            # Note that two syntaxes are allowed:
+            # - ~username/list-name@lists.${domain}
+            # - u.username.list-name@lists.${domain}
+            localRecipients = [ "@lists.${domain}" ];
+            transport = ''
+              lists.${domain} lmtp:unix:${cfg.settings."lists.sr.ht::worker".sock}
+            '';
+          };
+        };
+      }
+    ))
 
     (import ./service.nix "man" {
       inherit configIniOfService;
@@ -1235,28 +1272,32 @@ in
       extraServices.metasrht-api = {
         serviceConfig.Restart = "always";
         serviceConfig.RestartSec = "2s";
-        preStart = "set -x\n" + concatStringsSep "\n\n" (attrValues (mapAttrs (k: s:
-          let srvMatch = builtins.match "^([a-z]*)\\.sr\\.ht$" k;
+        preStart = "set -x\n" + concatStringsSep "\n\n" (attrValues (mapAttrs
+          (k: s:
+            let
+              srvMatch = builtins.match "^([a-z]*)\\.sr\\.ht$" k;
               srv = head srvMatch;
-          in
-          # Configure client(s) as "preauthorized"
-          optionalString (srvMatch != null && cfg.${srv}.enable && ((s.oauth-client-id or null) != null)) ''
-            # Configure ${srv}'s OAuth client as "preauthorized"
-            ${postgresql.package}/bin/psql '${cfg.settings."meta.sr.ht".connection-string}' \
-              -c "UPDATE oauthclient SET preauthorized = true WHERE client_id = '${s.oauth-client-id}'"
-          ''
-          ) cfg.settings));
+            in
+            # Configure client(s) as "preauthorized"
+            optionalString (srvMatch != null && cfg.${srv}.enable && ((s.oauth-client-id or null) != null)) ''
+              # Configure ${srv}'s OAuth client as "preauthorized"
+              ${postgresql.package}/bin/psql '${cfg.settings."meta.sr.ht".connection-string}' \
+                -c "UPDATE oauthclient SET preauthorized = true WHERE client_id = '${s.oauth-client-id}'"
+            ''
+          )
+          cfg.settings));
         serviceConfig.ExecStart = "${pkgs.sourcehut.metasrht}/bin/metasrht-api -b ${cfg.listenAddress}:${toString (cfg.meta.port + 100)}";
       };
       extraTimers.metasrht-daily.timerConfig = {
-        OnCalendar = ["daily"];
+        OnCalendar = [ "daily" ];
         AccuracySec = "1h";
       };
       extraConfig = mkMerge [
         {
           assertions = [
-            { assertion = let s = cfg.settings."meta.sr.ht::billing"; in
-                          s.enabled == "yes" -> (s.stripe-public-key != null && s.stripe-secret-key != null);
+            {
+              assertion = let s = cfg.settings."meta.sr.ht::billing"; in
+                s.enabled == "yes" -> (s.stripe-public-key != null && s.stripe-secret-key != null);
               message = "If meta.sr.ht::billing is enabled, the keys must be defined.";
             }
           ];
@@ -1306,37 +1347,39 @@ in
     (import ./service.nix "pages" {
       inherit configIniOfService;
       port = 5112;
-      mainService = let
-        srvsrht = "pagessrht";
-        version = pkgs.sourcehut.${srvsrht}.version;
-        stateDir = "/var/lib/sourcehut/${srvsrht}";
-        iniKey = "pages.sr.ht";
-        in {
-        preStart = mkBefore ''
-          set -x
-          # Use the /run/sourcehut/${srvsrht}/config.ini
-          # installed by a previous ExecStartPre= in baseService
-          cd /run/sourcehut/${srvsrht}
+      mainService =
+        let
+          srvsrht = "pagessrht";
+          version = pkgs.sourcehut.${srvsrht}.version;
+          stateDir = "/var/lib/sourcehut/${srvsrht}";
+          iniKey = "pages.sr.ht";
+        in
+        {
+          preStart = mkBefore ''
+            set -x
+            # Use the /run/sourcehut/${srvsrht}/config.ini
+            # installed by a previous ExecStartPre= in baseService
+            cd /run/sourcehut/${srvsrht}
 
-          if test ! -e ${stateDir}/db; then
-            ${postgresql.package}/bin/psql '${cfg.settings.${iniKey}.connection-string}' -f ${pkgs.sourcehut.pagessrht}/share/sql/schema.sql
-            echo ${version} >${stateDir}/db
-          fi
+            if test ! -e ${stateDir}/db; then
+              ${postgresql.package}/bin/psql '${cfg.settings.${iniKey}.connection-string}' -f ${pkgs.sourcehut.pagessrht}/share/sql/schema.sql
+              echo ${version} >${stateDir}/db
+            fi
 
-          ${optionalString cfg.settings.${iniKey}.migrate-on-upgrade ''
-            # Just try all the migrations because they're not linked to the version
-            for sql in ${pkgs.sourcehut.pagessrht}/share/sql/migrations/*.sql; do
-              ${postgresql.package}/bin/psql '${cfg.settings.${iniKey}.connection-string}' -f "$sql" || true
-            done
-          ''}
+            ${optionalString cfg.settings.${iniKey}.migrate-on-upgrade ''
+              # Just try all the migrations because they're not linked to the version
+              for sql in ${pkgs.sourcehut.pagessrht}/share/sql/migrations/*.sql; do
+                ${postgresql.package}/bin/psql '${cfg.settings.${iniKey}.connection-string}' -f "$sql" || true
+              done
+            ''}
 
-          # Disable webhook
-          touch ${stateDir}/webhook
-        '';
-        serviceConfig = {
-          ExecStart = mkForce "${pkgs.sourcehut.pagessrht}/bin/pages.sr.ht -b ${cfg.listenAddress}:${toString cfg.pages.port}";
+            # Disable webhook
+            touch ${stateDir}/webhook
+          '';
+          serviceConfig = {
+            ExecStart = mkForce "${pkgs.sourcehut.pagessrht}/bin/pages.sr.ht -b ${cfg.listenAddress}:${toString cfg.pages.port}";
+          };
         };
-      };
     })
 
     (import ./service.nix "paste" {
@@ -1375,9 +1418,9 @@ in
     })
 
     (mkRenamedOptionModule [ "services" "sourcehut" "originBase" ]
-                           [ "services" "sourcehut" "settings" "sr.ht" "global-domain" ])
+      [ "services" "sourcehut" "settings" "sr.ht" "global-domain" ])
     (mkRenamedOptionModule [ "services" "sourcehut" "address" ]
-                           [ "services" "sourcehut" "listenAddress" ])
+      [ "services" "sourcehut" "listenAddress" ])
 
   ];
 

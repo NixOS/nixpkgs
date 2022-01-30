@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cp -R ./ $out/share/zsh-prezto
   '';
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "The configuration framework for Zsh";

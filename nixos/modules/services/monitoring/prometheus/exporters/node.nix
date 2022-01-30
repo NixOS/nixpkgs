@@ -10,7 +10,7 @@ in
   extraOpts = {
     enabledCollectors = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "systemd" ];
       description = ''
         Collectors to enable. The collectors listed here are enabled in addition to the default ones.
@@ -18,7 +18,7 @@ in
     };
     disabledCollectors = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "timex" ];
       description = ''
         Collectors to disable which are enabled by default.

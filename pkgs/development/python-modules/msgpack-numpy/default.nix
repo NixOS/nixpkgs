@@ -21,8 +21,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-   msgpack
-   numpy
+    msgpack
+    numpy
   ];
 
   checkPhase = ''

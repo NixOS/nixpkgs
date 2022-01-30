@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl
-, buildPackages, pkgsHostHost
-, pkg-config, which, makeWrapper
-, zlib, bzip2, libpng, gnumake, glib
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, pkgsHostHost
+, pkg-config
+, which
+, makeWrapper
+, zlib
+, bzip2
+, libpng
+, gnumake
+, glib
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.

@@ -2,7 +2,8 @@
 with lib;
 let
   cfg = config.services.xe-guest-utilities;
-in {
+in
+{
   options = {
     services.xe-guest-utilities = {
       enable = mkEnableOption "the Xen guest utilities daemon";
@@ -14,7 +15,7 @@ in {
 
     systemd.services.xe-daemon = {
       description = "xen daemon file";
-      wantedBy    = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
       after = [ "xe-linux-distribution.service" ];
       requires = [ "proc-xen.mount" ];
       path = [ pkgs.coreutils pkgs.iproute2 ];
@@ -27,7 +28,7 @@ in {
 
     systemd.services.xe-linux-distribution = {
       description = "xen linux distribution service";
-      wantedBy    = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
       before = [ "xend.service" ];
       path = [ pkgs.xe-guest-utilities pkgs.coreutils pkgs.gawk pkgs.gnused ];
       serviceConfig = {
@@ -38,7 +39,8 @@ in {
     };
 
     systemd.mounts = [
-      { description = "Mount /proc/xen files";
+      {
+        description = "Mount /proc/xen files";
         what = "xenfs";
         where = "/proc/xen";
         type = "xenfs";

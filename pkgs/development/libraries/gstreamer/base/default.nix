@@ -27,9 +27,9 @@
 , wayland-protocols
 , enableAlsa ? stdenv.isLinux
 , alsa-lib
-# Enabling Cocoa seems to currently not work, giving compile
-# errors. Suspected is that a newer version than clang
-# is needed than 5.0 but it is not clear.
+  # Enabling Cocoa seems to currently not work, giving compile
+  # errors. Suspected is that a newer version than clang
+  # is needed than 5.0 but it is not clear.
 , enableCocoa ? false
 , Cocoa
 , OpenGL
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
   ] ++ lib.optional enableCocoa Cocoa
-    ++ lib.optional enableCdparanoia cdparanoia;
+  ++ lib.optional enableCdparanoia cdparanoia;
 
   propagatedBuildInputs = [
     gstreamer

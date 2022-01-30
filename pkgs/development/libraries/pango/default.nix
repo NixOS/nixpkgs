@@ -16,7 +16,8 @@
 , ninja
 , glib
 , python3
-, x11Support? !stdenv.isDarwin, libXft
+, x11Support ? !stdenv.isDarwin
+, libXft
 , withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , gobject-introspection
 , withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
@@ -41,7 +42,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja
+    meson
+    ninja
     glib # for glib-mkenum
     pkg-config
   ] ++ lib.optionals withIntrospection [

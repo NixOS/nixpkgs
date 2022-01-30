@@ -13,12 +13,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   machine =
     { pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    {
+      imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
 
       networking.bridges = {
         br0 = {
-          interfaces = [];
+          interfaces = [ ];
         };
       };
       networking.interfaces = {
@@ -36,7 +37,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           localAddress = containerIp;
           localAddress6 = containerIp6;
           config =
-            { services.httpd.enable = true;
+            {
+              services.httpd.enable = true;
               services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
             };
@@ -48,7 +50,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           privateNetwork = true;
           hostBridge = "br0";
           config =
-            { services.httpd.enable = true;
+            {
+              services.httpd.enable = true;
               services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
             };

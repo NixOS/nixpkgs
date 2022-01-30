@@ -9,21 +9,24 @@ let
     listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault { });
   };
 
-  pkg = if isNull cfg.package then
-    pkgs.radicale
-  else
-    cfg.package;
+  pkg =
+    if isNull cfg.package then
+      pkgs.radicale
+    else
+      cfg.package;
 
-  confFile = if cfg.settings == { } then
-    pkgs.writeText "radicale.conf" cfg.config
-  else
-    format.generate "radicale.conf" cfg.settings;
+  confFile =
+    if cfg.settings == { } then
+      pkgs.writeText "radicale.conf" cfg.config
+    else
+      format.generate "radicale.conf" cfg.settings;
 
   rightsFile = format.generate "radicale.rights" cfg.rights;
 
   bindLocalhost = cfg.settings != { } && !hasAttrByPath [ "server" "hosts" ] cfg.settings;
 
-in {
+in
+{
   options.services.radicale = {
     enable = mkEnableOption "Radicale CalDAV and CardDAV server";
 
@@ -101,7 +104,7 @@ in {
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "Extra arguments passed to the Radicale daemon.";
     };
   };
@@ -145,7 +148,7 @@ in {
       group = "radicale";
     };
 
-    users.groups.radicale = {};
+    users.groups.radicale = { };
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
@@ -154,7 +157,9 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = concatStringsSep " " ([
-          "${pkg}/bin/radicale" "-C" confFile
+          "${pkg}/bin/radicale"
+          "-C"
+          confFile
         ] ++ (
           map escapeShellArg cfg.extraArgs
         ));

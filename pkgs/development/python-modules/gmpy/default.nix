@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchurl, isPyPy, gmp } :
+{ buildPythonPackage, fetchurl, isPyPy, gmp }:
 
 let
   pname = "gmpy";

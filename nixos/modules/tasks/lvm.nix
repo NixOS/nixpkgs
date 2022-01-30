@@ -3,7 +3,8 @@
 with lib;
 let
   cfg = config.services.lvm;
-in {
+in
+{
   options.services.lvm = {
     package = mkOption {
       type = types.package;
@@ -64,19 +65,19 @@ in {
     })
     (mkIf (cfg.dmeventd.enable || cfg.boot.thin.enable) {
       boot.initrd.preLVMCommands = ''
-          mkdir -p /etc/lvm
-          cat << EOF >> /etc/lvm/lvm.conf
-          ${optionalString cfg.boot.thin.enable (
-            concatMapStringsSep "\n"
-              (bin: "global/${bin}_executable = $(command -v ${bin})")
-              [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ]
-            )
-          }
-          ${optionalString cfg.dmeventd.enable ''
-            dmeventd/executable = "$(command -v false)"
-            activation/monitoring = 0
-          ''}
-          EOF
+        mkdir -p /etc/lvm
+        cat << EOF >> /etc/lvm/lvm.conf
+        ${optionalString cfg.boot.thin.enable (
+          concatMapStringsSep "\n"
+            (bin: "global/${bin}_executable = $(command -v ${bin})")
+            [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ]
+          )
+        }
+        ${optionalString cfg.dmeventd.enable ''
+          dmeventd/executable = "$(command -v false)"
+          activation/monitoring = 0
+        ''}
+        EOF
       '';
     })
   ];

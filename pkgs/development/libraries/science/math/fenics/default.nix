@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , boost
@@ -33,7 +34,8 @@ let
 
   # TODO: test with newer pytest
   pytest = pythonPackages.callPackage
-    ../../../../python2-modules/pytest {
+    ../../../../python2-modules/pytest
+    {
       # hypothesis tests require pytest that causes dependency cycle
       hypothesis = pythonPackages.hypothesis.override {
         doCheck = false;
@@ -269,4 +271,5 @@ let
       license = lib.licenses.lgpl3;
     };
   };
-in python-dolfin
+in
+python-dolfin

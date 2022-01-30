@@ -3,7 +3,8 @@ let
     require "cocoapods"
     require "#{Gem::Specification.find_by_name(%(${name})).gem_dir}/lib/cocoapods_plugin"
   '';
-in {
+in
+{
   actioncable = [ "action_cable" ];
   actionmailer = [ "action_mailer" ];
   actionpack = [ "action_pack" ];
@@ -26,7 +27,7 @@ in {
   cocoapods-deploy = cocoapod-plugin "cocoapods-deploy";
   cocoapods-generate = cocoapod-plugin "cocoapods-generate";
   cocoapods-git_url_rewriter = cocoapod-plugin "cocoapods-git_url_rewriter";
-  cocoapods-keys = []; # osx only cocoapod-plugin "cocoapods-keys";
+  cocoapods-keys = [ ]; # osx only cocoapod-plugin "cocoapods-keys";
   cocoapods-open = [ "cocoapods" "cocoapods_plugin" ];
   cocoapods-packager = [ "cocoapods_packager" ];
   cocoapods-packager-pro = [ ]; # requires osx
@@ -50,7 +51,7 @@ in {
   gobject-introspection = [ "gobject-introspection" ];
   gtk2 = [ ]; # requires display
   idn-ruby = [ "idn" ];
-  jekyll-sass-converter = []; # tested through jekyll
+  jekyll-sass-converter = [ ]; # tested through jekyll
   libxml-ruby = [ "libxml" ];
   multipart-post = [ "multipart_post" ];
   unicode-display_width = [ "unicode/display_width" ];

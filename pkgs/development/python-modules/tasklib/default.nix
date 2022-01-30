@@ -4,9 +4,10 @@ with pythonPackages;
 
 let
 
-wsl_stub = writeShellScriptBin "wsl" "true";
+  wsl_stub = writeShellScriptBin "wsl" "true";
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "tasklib";
   version = "2.4.3";
 

@@ -2,7 +2,8 @@
 
 let
   version = "1.11-6";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "quake3-demodata";
   inherit version;
 

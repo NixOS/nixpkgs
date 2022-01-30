@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, munge, lua,
-  libcap, perl, ncurses
+{ lib
+, stdenv
+, fetchurl
+, munge
+, lua
+, libcap
+, perl
+, ncurses
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An I/O forwarding server that implements a variant of the 9P protocol";
     maintainers = with maintainers; [ rnhmjoj ];
-    platforms   = platforms.linux;
-    license     = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

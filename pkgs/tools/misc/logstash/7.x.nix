@@ -17,12 +17,12 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux  = "1vm53alq9q1qy2jcsjg9z339xrkac5r9qqpdafp53ny4zsv1n7vj";
+      x86_64-linux = "1vm53alq9q1qy2jcsjg9z339xrkac5r9qqpdafp53ny4zsv1n7vj";
       x86_64-darwin = "0hhjyl04h3gd66rdk22272rj419br4v2i59lyrmaj6hmnsqbv968";
       aarch64-linux = "0yjaki7gjffrz86hvqgn1gzhd9dc9llcj50g2x1sgpyn88zk0z0p";
     }
     else {
-      x86_64-linux  = "1f3659vcgczm7v03q3fvsmp1ndp6wm3i7r2b2vbl4xq7hf9v7azk";
+      x86_64-linux = "1f3659vcgczm7v03q3fvsmp1ndp6wm3i7r2b2vbl4xq7hf9v7azk";
       x86_64-darwin = "10zw9qc0lc0x9in0nkxc1aiazhyd69l8sya2ni46ivyyjwf0sqsn";
       aarch64-linux = "1czhgmky2zf3mqykn5ww4257yfhd36mi4x6dq569ymly83pivf8v";
     };

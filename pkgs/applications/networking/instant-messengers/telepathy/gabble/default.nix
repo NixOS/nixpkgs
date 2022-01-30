@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, libxslt, telepathy-glib, python2, libxml2, dbus-glib, dbus
-, sqlite, libsoup, libnice, gnutls}:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libxslt
+, telepathy-glib
+, python2
+, libxml2
+, dbus-glib
+, dbus
+, sqlite
+, libsoup
+, libnice
+, gnutls
+}:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-gabble";

@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config
-, dpdk, libbpf, libconfig, libpcap, numactl, openssl, zlib, libbsd, libelf, jansson
-}: let
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, dpdk
+, libbpf
+, libconfig
+, libpcap
+, numactl
+, openssl
+, zlib
+, libbsd
+, libelf
+, jansson
+}:
+let
   dpdk_19_11 = dpdk.overrideAttrs (old: rec {
     version = "19.11";
     src = fetchurl {
@@ -12,7 +26,8 @@
     ];
   });
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "odp-dpdk";
   version = "1.30.1.0_DPDK_19.11";
 
@@ -47,7 +62,7 @@ in stdenv.mkDerivation rec {
     description = "Open Data Plane optimized for DPDK";
     homepage = "https://www.opendataplane.org";
     license = licenses.bsd3;
-    platforms =  platforms.linux;
+    platforms = platforms.linux;
     maintainers = [ maintainers.abuibrahim ];
   };
 }

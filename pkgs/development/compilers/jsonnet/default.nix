@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "jsonnet";
   version = "0.18.0";
-  outputs = ["out" "doc"];
+  outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
     rev = "v${version}";

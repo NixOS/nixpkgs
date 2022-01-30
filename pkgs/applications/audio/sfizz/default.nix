@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, libjack2, libsndfile, xorg, freetype
-, libxkbcommon, cairo, glib, gnome, flac, libogg, libvorbis, libopus, cmake
-, pango, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, libjack2
+, libsndfile
+, xorg
+, freetype
+, libxkbcommon
+, cairo
+, glib
+, gnome
+, flac
+, libogg
+, libvorbis
+, libopus
+, cmake
+, pango
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "sfizz";

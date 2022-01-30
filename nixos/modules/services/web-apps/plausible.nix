@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.plausible;
 
-in {
+in
+{
   options.services.plausible = {
     enable = mkEnableOption "plausible";
 
@@ -162,7 +163,8 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.adminUser.activate -> cfg.database.postgres.setup;
+      {
+        assertion = cfg.adminUser.activate -> cfg.database.postgres.setup;
         message = ''
           Unable to automatically activate the admin-user if no locally managed DB for
           postgres (`services.plausible.database.postgres.setup') is enabled!
@@ -191,9 +193,9 @@ in {
           after = optionals cfg.database.postgres.setup [ "postgresql.service" "plausible-postgres.service" ];
           requires = optional cfg.database.clickhouse.setup "clickhouse.service"
             ++ optionals cfg.database.postgres.setup [
-              "postgresql.service"
-              "plausible-postgres.service"
-            ];
+            "postgresql.service"
+            "plausible-postgres.service"
+          ];
 
           environment = {
             # NixOS specific option to avoid that it's trying to write into its store-path.
@@ -257,7 +259,7 @@ in {
               "ADMIN_USER_PWD:${cfg.adminUser.passwordFile}"
               "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
               "RELEASE_COOKIE:${cfg.releaseCookiePath}"
-            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"];
+            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}" ];
           };
         };
       }

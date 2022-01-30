@@ -1,10 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , autoreconfHook
 , jre
 , openssl
 , pkg-config
-# We depend on ZooKeeper for the Jute compiler.
+  # We depend on ZooKeeper for the Jute compiler.
 , zookeeper
 }:
 

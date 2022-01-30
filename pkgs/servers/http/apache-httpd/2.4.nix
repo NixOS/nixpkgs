@@ -1,12 +1,27 @@
-{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
+{ lib
+, stdenv
+, fetchurl
+, perl
+, zlib
+, apr
+, aprutil
+, pcre
+, libiconv
+, lynx
 , nixosTests
 , proxySupport ? true
-, sslSupport ? true, openssl
-, http2Support ? true, nghttp2
-, ldapSupport ? true, openldap
-, libxml2Support ? true, libxml2
-, brotliSupport ? true, brotli
-, luaSupport ? false, lua5
+, sslSupport ? true
+, openssl
+, http2Support ? true
+, nghttp2
+, ldapSupport ? true
+, openldap
+, libxml2Support ? true
+, libxml2
+, brotliSupport ? true
+, brotli
+, luaSupport ? false
+, lua5
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +40,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
-    lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
+    lib.optional ldapSupport openldap ++ # there is no --with-ldap flag
     lib.optional libxml2Support libxml2 ++
     lib.optional http2Support nghttp2 ++
     lib.optional stdenv.isDarwin libiconv;
@@ -88,9 +103,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Apache HTTPD, the world's most popular web server";
-    homepage    = "https://httpd.apache.org/";
-    license     = licenses.asl20;
-    platforms   = platforms.linux ++ platforms.darwin;
+    homepage = "https://httpd.apache.org/";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ lovek323 ];
   };
 }

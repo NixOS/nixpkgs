@@ -1,7 +1,21 @@
-{ config, stdenv, lib, fetchurl, fetchpatch, bash, cmake
-, opencv3, gtest, blas, gomp, llvmPackages, perl
-, cudaSupport ? config.cudaSupport or false, cudatoolkit, nvidia_x11
-, cudnnSupport ? cudaSupport, cudnn
+{ config
+, stdenv
+, lib
+, fetchurl
+, fetchpatch
+, bash
+, cmake
+, opencv3
+, gtest
+, blas
+, gomp
+, llvmPackages
+, perl
+, cudaSupport ? config.cudaSupport or false
+, cudatoolkit
+, nvidia_x11
+, cudnnSupport ? cudaSupport
+, cudnn
 }:
 
 assert cudnnSupport -> cudaSupport;
@@ -41,7 +55,7 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     [ "-DUSE_MKL_IF_AVAILABLE=OFF" ]
     ++ (if cudaSupport then [
-      "-DUSE_OLDCMAKECUDA=ON"  # see https://github.com/apache/incubator-mxnet/issues/10743
+      "-DUSE_OLDCMAKECUDA=ON" # see https://github.com/apache/incubator-mxnet/issues/10743
       "-DCUDA_ARCH_NAME=All"
       "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     ] else [ "-DUSE_CUDA=OFF" ])

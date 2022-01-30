@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A fast and complete Python implementation of Markdown";
-    homepage =  "https://github.com/trentm/python-markdown2";
+    homepage = "https://github.com/trentm/python-markdown2";
     license = licenses.mit;
     maintainers = with maintainers; [ hbunke ];
   };

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =[
+  buildInputs = [
     libX11
     libXext
     libXft

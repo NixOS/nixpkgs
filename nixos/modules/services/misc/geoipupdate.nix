@@ -37,9 +37,9 @@ in
           freeformType =
             with lib.types;
             let
-              type = oneOf [str int bool];
+              type = oneOf [ str int bool ];
             in
-              attrsOf (either type (listOf type));
+            attrsOf (either type (listOf type));
 
           options = {
 
@@ -123,11 +123,11 @@ in
             geoipupdateKeyValue = lib.generators.toKeyValue {
               mkKeyValue = lib.flip lib.generators.mkKeyValueDefault " " rec {
                 mkValueString = v: with builtins;
-                  if isInt           v then toString v
-                  else if isString   v then v
-                  else if true  ==   v then "1"
-                  else if false ==   v then "0"
-                  else if isList     v then lib.concatMapStringsSep " " mkValueString v
+                  if isInt v then toString v
+                  else if isString v then v
+                  else if true == v then "1"
+                  else if false == v then "0"
+                  else if isList v then lib.concatMapStringsSep " " mkValueString v
                   else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
               };
             };
@@ -143,7 +143,7 @@ in
                                                         /run/geoipupdate/GeoIP.conf
             '';
           in
-            "+${pkgs.writeShellScript "start-pre-full-privileges" script}";
+          "+${pkgs.writeShellScript "start-pre-full-privileges" script}";
         ExecStart = "${pkgs.geoipupdate}/bin/geoipupdate -f /run/geoipupdate/GeoIP.conf";
         User = "geoip";
         DynamicUser = true;

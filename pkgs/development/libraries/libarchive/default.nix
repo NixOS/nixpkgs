@@ -1,11 +1,24 @@
-{
-  fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook,
-  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
-
-  # Optional but increases closure only negligibly. Also, while libxml2
+{ fetchFromGitHub
+, lib
+, stdenv
+, pkg-config
+, autoreconfHook
+, acl
+, attr
+, bzip2
+, e2fsprogs
+, libxml2
+, lzo
+, openssl
+, sharutils
+, xz
+, zlib
+, zstd
+, # Optional but increases closure only negligibly. Also, while libxml2
   # builds fine on windows, but libarchive has trouble linking windows
   # things it depends on for some reason.
-  xarSupport ? stdenv.hostPlatform.isUnix,
+  xarSupport ? stdenv.hostPlatform.isUnix
+,
 }:
 
 assert xarSupport -> libxml2 != null;
@@ -35,9 +48,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
-  preBuild = if stdenv.isCygwin then ''
-    echo "#include <windows.h>" >> config.h
-  '' else null;
+  preBuild =
+    if stdenv.isCygwin then ''
+      echo "#include <windows.h>" >> config.h
+    '' else null;
 
   doCheck = false; # fails
 

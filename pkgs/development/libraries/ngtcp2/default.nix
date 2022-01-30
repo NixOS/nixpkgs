@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, cunit, file
-, jemalloc, libev, nghttp3, quictls
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, cunit
+, file
+, jemalloc
+, libev
+, nghttp3
+, quictls
 }:
 
 stdenv.mkDerivation rec {

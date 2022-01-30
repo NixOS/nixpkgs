@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
 , fonttools
-, lxml, fs # for fonttools extras
+, lxml
+, fs # for fonttools extras
 , setuptools-scm
-, pytestCheckHook, pytest-cov, pytest-xdist
+, pytestCheckHook
+, pytest-cov
+, pytest-xdist
 }:
 
 buildPythonPackage rec {

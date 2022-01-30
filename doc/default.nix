@@ -1,8 +1,9 @@
-{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
+{ pkgs ? (import ./.. { }), nixpkgs ? { } }:
 let
   lib = pkgs.lib;
   doc-support = import ./doc-support { inherit pkgs nixpkgs; };
-in pkgs.stdenv.mkDerivation {
+in
+pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
   nativeBuildInputs = with pkgs; [

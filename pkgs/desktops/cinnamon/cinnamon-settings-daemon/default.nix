@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
   version = "5.2.0";
 
   /* csd-power-manager.c:50:10: fatal error: csd-power-proxy.h: No such file or directory
-   #include "csd-power-proxy.h"
-            ^~~~~~~~~~~~~~~~~~~
-  compilation terminated. */
+    #include "csd-power-proxy.h"
+    ^~~~~~~~~~~~~~~~~~~
+    compilation terminated. */
 
   # but this occurs only sometimes, so disabling parallel building
   # also see https://github.com/linuxmint/cinnamon-settings-daemon/issues/248

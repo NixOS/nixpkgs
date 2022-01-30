@@ -15,7 +15,8 @@ let
   # This is what drives omnisharp.
   rtDepsSrcsFromJson = lib.importJSON ./rt-deps-bin-srcs.json;
 
-  rtDepsBinSrcs = builtins.mapAttrs (k: v:
+  rtDepsBinSrcs = builtins.mapAttrs
+    (k: v:
       let
         # E.g: "OmniSharp-x86_64-linux"
         kSplit = builtins.split "(__)" k;

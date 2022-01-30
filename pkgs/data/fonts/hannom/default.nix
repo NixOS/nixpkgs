@@ -2,7 +2,8 @@
 
 let
   version = "2005";
-in fetchzip {
+in
+fetchzip {
   name = "hannom-${version}";
 
   url = "mirror://sourceforge/vietunicode/hannom/hannom%20v${version}/hannomH.zip";

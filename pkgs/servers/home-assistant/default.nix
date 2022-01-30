@@ -9,19 +9,20 @@
 , inetutils
 , nixosTests
 
-# Look up dependencies of specified components in component-packages.nix
+  # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
 
-# Additional packages to add to propagatedBuildInputs
-, extraPackages ? ps: []
+  # Additional packages to add to propagatedBuildInputs
+, extraPackages ? ps: [ ]
 
-# Override Python packages using
-# self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
-# Applied after defaultOverrides
-, packageOverrides ? self: super: {}
+  # Override Python packages using
+  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
+  # Applied after defaultOverrides
+, packageOverrides ? self: super: { }
 
-# Skip pip install of required packages on startup
-, skipPip ? true }:
+  # Skip pip install of required packages on startup
+, skipPip ? true
+}:
 
 let
   defaultOverrides = [
@@ -179,7 +180,8 @@ let
   # Don't forget to run parse-requirements.py after updating
   hassVersion = "2021.12.10";
 
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
 
@@ -206,28 +208,30 @@ in python.pkgs.buildPythonApplication rec {
     ./patches/tests-ignore-OSErrors-in-hass-fixture.patch
   ];
 
-  postPatch = let
-    relaxedConstraints = [
-      "aiohttp"
-      "async_timeout"
-      "attrs"
-      "awesomeversion"
-      "bcrypt"
-      "cryptography"
-      "httpx"
-      "pip"
-      "PyJWT"
-      "requests"
-      "yarl"
-    ];
-  in ''
-    sed -r -i \
-      ${lib.concatStringsSep "\n" (map (package:
-        ''-e 's@${package}[<>=]+.*@${package}",@g' \''
-      ) relaxedConstraints)}
-    setup.py
-    substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
-  '';
+  postPatch =
+    let
+      relaxedConstraints = [
+        "aiohttp"
+        "async_timeout"
+        "attrs"
+        "awesomeversion"
+        "bcrypt"
+        "cryptography"
+        "httpx"
+        "pip"
+        "PyJWT"
+        "requests"
+        "yarl"
+      ];
+    in
+    ''
+      sed -r -i \
+        ${lib.concatStringsSep "\n" (map (package:
+          ''-e 's@${package}[<>=]+.*@${package}",@g' \''
+        ) relaxedConstraints)}
+      setup.py
+      substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
+    '';
 
   propagatedBuildInputs = with python.pkgs; [
     # Only packages required in setup.py

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitea, cmake, boost, miniupnpc_2, openssl, unbound
-, readline, libsodium, rapidjson
+{ lib
+, stdenv
+, fetchFromGitea
+, cmake
+, boost
+, miniupnpc_2
+, openssl
+, unbound
+, readline
+, libsodium
+, rapidjson
 }:
 
 with lib;
@@ -28,7 +37,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    boost miniupnpc_2 openssl unbound rapidjson readline libsodium
+    boost
+    miniupnpc_2
+    openssl
+    unbound
+    rapidjson
+    readline
+    libsodium
   ];
 
   postUnpack = ''
@@ -53,9 +68,9 @@ stdenv.mkDerivation rec {
       signatures using different participants for the same tx outputs on
       opposing forks.
     '';
-    homepage    = "https://wownero.org/";
-    license     = licenses.bsd3;
-    platforms   = platforms.linux;
+    homepage = "https://wownero.org/";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ fuwa ];
   };
 }

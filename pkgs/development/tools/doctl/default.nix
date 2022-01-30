@@ -10,12 +10,13 @@ buildGoModule rec {
 
   subPackages = [ "cmd/doctl" ];
 
-  ldflags = let t = "github.com/digitalocean/doctl"; in [
-    "-X ${t}.Major=${lib.versions.major version}"
-    "-X ${t}.Minor=${lib.versions.minor version}"
-    "-X ${t}.Patch=${lib.versions.patch version}"
-    "-X ${t}.Label=release"
-  ];
+  ldflags = let t = "github.com/digitalocean/doctl"; in
+    [
+      "-X ${t}.Major=${lib.versions.major version}"
+      "-X ${t}.Minor=${lib.versions.minor version}"
+      "-X ${t}.Patch=${lib.versions.patch version}"
+      "-X ${t}.Label=release"
+    ];
 
   nativeBuildInputs = [ installShellFiles ];
 

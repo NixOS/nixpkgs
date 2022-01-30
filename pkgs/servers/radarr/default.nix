@@ -14,7 +14,8 @@ let
     x64-osx_hash = "sha256-Nfm9vWB+ii2ZST6I4I8Y2PuG2a1qY7rbki57y88Ft8A=";
   }."${arch}-${os}_hash";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "radarr";
   version = "3.2.2.5080";
 

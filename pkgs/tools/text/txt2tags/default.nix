@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://txt2tags.org/";
     description = "A KISS markup language";
-    license  = lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ kovirobi ];
     platforms = with lib.platforms; unix;
   };

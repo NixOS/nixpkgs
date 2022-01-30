@@ -1,15 +1,19 @@
-{ lib, buildLinux, fetchurl
+{ lib
+, buildLinux
+, fetchurl
 , kernelPatches ? [ ]
-, structuredExtraConfig ? {}
-, extraMeta ? {}
-, argsOverride ? {}
-, ... } @ args:
+, structuredExtraConfig ? { }
+, extraMeta ? { }
+, argsOverride ? { }
+, ...
+} @ args:
 
 let
   version = "5.4.170-rt68"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
-in buildLinux (args // {
+in
+buildLinux (args // {
   inherit version;
 
   src = fetchurl {

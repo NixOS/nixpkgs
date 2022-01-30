@@ -1,10 +1,12 @@
-{ lib, stdenv, fetchFromGitLab
+{ lib
+, stdenv
+, fetchFromGitLab
 , cmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "libaec";
-  version  = "1.0.6";
+  version = "1.0.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.dkrz.de";

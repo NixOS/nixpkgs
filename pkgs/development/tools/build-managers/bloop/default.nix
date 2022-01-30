@@ -36,9 +36,10 @@ stdenv.mkDerivation rec {
   bloop-coursier = stdenv.mkDerivation rec {
     name = "${pname}-coursier-${version}";
 
-    platform = if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
-    else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
-    else throw "unsupported platform";
+    platform =
+      if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
+      else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
+      else throw "unsupported platform";
 
     dontUnpack = true;
     installPhase = ''
@@ -60,9 +61,10 @@ stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "jqcecAM51qEDmTim2VBNm8IO8wQmwU19R57Zk4pxwSA="
-    else if stdenv.isDarwin && stdenv.isx86_64 then "15m2rahf9kihw29hp6bwd9xqav6dcr17w5c2rsw0ijpchr2av72q"
-    else throw "unsupported platform";
+    outputHash =
+      if stdenv.isLinux && stdenv.isx86_64 then "jqcecAM51qEDmTim2VBNm8IO8wQmwU19R57Zk4pxwSA="
+      else if stdenv.isDarwin && stdenv.isx86_64 then "15m2rahf9kihw29hp6bwd9xqav6dcr17w5c2rsw0ijpchr2av72q"
+      else throw "unsupported platform";
   };
 
   dontUnpack = true;

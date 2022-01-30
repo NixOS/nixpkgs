@@ -1,7 +1,23 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, pkg-config
-, qmake, qttools, kirigami2, qtquickcontrols2, qtlocation
-, libosmscout, valhalla, libpostal, osrm-backend, protobuf
-, libmicrohttpd_0_9_70, sqlite, marisa, kyotocabinet, boost
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, qmake
+, qttools
+, kirigami2
+, qtquickcontrols2
+, qtlocation
+, libosmscout
+, valhalla
+, libpostal
+, osrm-backend
+, protobuf
+, libmicrohttpd_0_9_70
+, sqlite
+, marisa
+, kyotocabinet
+, boost
 }:
 
 let
@@ -40,9 +56,20 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake pkg-config qttools ];
   buildInputs = [
-    kirigami2 qtquickcontrols2 qtlocation
-    valhalla libosmscout osrm-backend libmicrohttpd_0_9_70
-    libpostal sqlite marisa kyotocabinet boost protobuf date
+    kirigami2
+    qtquickcontrols2
+    qtlocation
+    valhalla
+    libosmscout
+    osrm-backend
+    libmicrohttpd_0_9_70
+    libpostal
+    sqlite
+    marisa
+    kyotocabinet
+    boost
+    protobuf
+    date
   ];
 
   # OSMScout server currently defaults to an earlier version of valhalla,

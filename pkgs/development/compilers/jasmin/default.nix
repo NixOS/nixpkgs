@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , unzip
 , jdk8
@@ -7,7 +8,10 @@
 , callPackage
 }:
 
-let jre = jdk8.jre; jdk = jdk8; in
+let
+  jre = jdk8.jre;
+  jdk = jdk8;
+in
 stdenv.mkDerivation rec {
   pname = "jasmin";
   version = "2.4";
@@ -21,15 +25,15 @@ stdenv.mkDerivation rec {
 
   buildPhase = "ant all";
   installPhase =
-  ''
-    install -Dm644 jasmin.jar $out/share/java/jasmin.jar
-    mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/jasmin \
-      --add-flags "-jar $out/share/java/jasmin.jar"
-  '';
+    ''
+      install -Dm644 jasmin.jar $out/share/java/jasmin.jar
+      mkdir -p $out/bin
+      makeWrapper ${jre}/bin/java $out/bin/jasmin \
+        --add-flags "-jar $out/share/java/jasmin.jar"
+    '';
 
   passthru.tests = {
-    minimal-module = callPackage ./test-assemble-hello-world {};
+    minimal-module = callPackage ./test-assemble-hello-world { };
   };
 
   meta = with lib; {

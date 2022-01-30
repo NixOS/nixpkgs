@@ -26,7 +26,8 @@ let
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
 
-in {
+in
+{
   imports = [
     (mkRemovedOptionModule [ "services" "bookstack" "extraConfig" ] "Use services.bookstack.config instead.")
     (mkRemovedOptionModule [ "services" "bookstack" "cacheDir" ] "The cache directory is now handled automatically.")
@@ -60,10 +61,11 @@ in {
 
     hostname = lib.mkOption {
       type = lib.types.str;
-      default = if config.networking.domain != null then
-                  config.networking.fqdn
-                else
-                  config.networking.hostName;
+      default =
+        if config.networking.domain != null then
+          config.networking.fqdn
+        else
+          config.networking.hostName;
       defaultText = lib.literalExpression "config.networking.fqdn";
       example = "bookstack.example.com";
       description = ''
@@ -200,9 +202,10 @@ in {
     nginx = mkOption {
       type = types.submodule (
         recursiveUpdate
-          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
+          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+          { }
       );
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           serverAliases = [
@@ -242,7 +245,7 @@ in {
                   };
                 };
               })));
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           ALLOWED_IFRAME_HOSTS = "https://example.com";
@@ -279,10 +282,12 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = db.createLocally -> db.user == user;
+      {
+        assertion = db.createLocally -> db.user == user;
         message = "services.bookstack.database.user must be set to ${user} if services.bookstack.database.createLocally is set true.";
       }
-      { assertion = db.createLocally -> db.passwordFile == null;
+      {
+        assertion = db.createLocally -> db.passwordFile == null;
         message = "services.bookstack.database.passwordFile cannot be specified if services.bookstack.database.createLocally is set to true.";
       }
     ];
@@ -318,7 +323,8 @@ in {
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ db.name ];
       ensureUsers = [
-        { name = db.user;
+        {
+          name = db.user;
           ensurePermissions = { "${db.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
@@ -344,21 +350,24 @@ in {
       recommendedTlsSettings = true;
       recommendedOptimisation = true;
       recommendedGzipSettings = true;
-      virtualHosts.${cfg.hostname} = mkMerge [ cfg.nginx {
-        root = mkForce "${bookstack}/public";
-        locations = {
-          "/" = {
-            index = "index.php";
-            tryFiles = "$uri $uri/ /index.php?$query_string";
+      virtualHosts.${cfg.hostname} = mkMerge [
+        cfg.nginx
+        {
+          root = mkForce "${bookstack}/public";
+          locations = {
+            "/" = {
+              index = "index.php";
+              tryFiles = "$uri $uri/ /index.php?$query_string";
+            };
+            "~ \.php$".extraConfig = ''
+              fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
+            '';
+            "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+              extraConfig = "expires 365d;";
+            };
           };
-          "~ \.php$".extraConfig = ''
-            fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
-          '';
-          "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
-            extraConfig = "expires 365d;";
-          };
-        };
-      }];
+        }
+      ];
     };
 
     systemd.services.bookstack-setup = {
@@ -381,9 +390,9 @@ in {
           bookstackEnvVars = lib.generators.toKeyValue {
             mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
               mkValueString = v: with builtins;
-                if isInt         v then toString v
+                if isInt v then toString v
                 else if isString v then v
-                else if true  == v then "true"
+                else if true == v then "true"
                 else if false == v then "false"
                 else if isSecret v then v._secret
                 else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
@@ -394,25 +403,26 @@ in {
             replace-secret ${escapeShellArgs [ file file "${cfg.dataDir}/.env" ]}
           '';
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
+          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [{ } null])) cfg.config;
           bookstackEnv = pkgs.writeText "bookstack.env" (bookstackEnvVars filteredConfig);
-        in ''
-        # error handling
-        set -euo pipefail
+        in
+        ''
+          # error handling
+          set -euo pipefail
 
-        # set permissions
-        umask 077
+          # set permissions
+          umask 077
 
-        # create .env file
-        install -T -m 0600 -o ${user} ${bookstackEnv} "${cfg.dataDir}/.env"
-        ${secretReplacements}
-        if ! grep 'APP_KEY=base64:' "${cfg.dataDir}/.env" >/dev/null; then
-            sed -i 's/APP_KEY=/APP_KEY=base64:/' "${cfg.dataDir}/.env"
-        fi
+          # create .env file
+          install -T -m 0600 -o ${user} ${bookstackEnv} "${cfg.dataDir}/.env"
+          ${secretReplacements}
+          if ! grep 'APP_KEY=base64:' "${cfg.dataDir}/.env" >/dev/null; then
+              sed -i 's/APP_KEY=/APP_KEY=base64:/' "${cfg.dataDir}/.env"
+          fi
 
-        # migrate db
-        ${pkgs.php}/bin/php artisan migrate --force
-      '';
+          # migrate db
+          ${pkgs.php}/bin/php artisan migrate --force
+        '';
     };
 
     systemd.tmpfiles.rules = [
@@ -439,7 +449,7 @@ in {
         "${config.services.nginx.user}".extraGroups = [ group ];
       };
       groups = mkIf (group == "bookstack") {
-        bookstack = {};
+        bookstack = { };
       };
     };
 

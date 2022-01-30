@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  subPackages = ["."];
+  subPackages = [ "." ];
 
   buildInputs = [
     docker

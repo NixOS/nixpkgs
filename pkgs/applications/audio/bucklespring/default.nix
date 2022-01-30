@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/zevv/bucklespring";
     license = licenses.gpl2Only;
-    platforms  = platforms.unix;
+    platforms = platforms.unix;
     maintainers = [ maintainers.evils ];
   };
 }

@@ -19,7 +19,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    python-json-logger jsonschema ruamel-yaml traitlets
+    python-json-logger
+    jsonschema
+    ruamel-yaml
+    traitlets
   ];
 
   meta = with lib; {

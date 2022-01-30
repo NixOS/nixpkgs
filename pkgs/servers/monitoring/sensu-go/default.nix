@@ -20,12 +20,14 @@ let
 
       doCheck = false;
 
-      ldflags = let
-        versionPkg = "github.com/sensu/sensu-go/version";
-      in [
-        "-X ${versionPkg}.Version=${version}"
-        "-X ${versionPkg}.BuildSHA=${shortRev}"
-      ];
+      ldflags =
+        let
+          versionPkg = "github.com/sensu/sensu-go/version";
+        in
+        [
+          "-X ${versionPkg}.Version=${version}"
+          "-X ${versionPkg}.BuildSHA=${shortRev}"
+        ];
 
       meta = {
         inherit mainProgram;

@@ -2,7 +2,7 @@
 , runCommand
 , makeWrapper
 , lib
-, extraPackages ? []
+, extraPackages ? [ ]
 , cri-o
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
@@ -23,7 +23,9 @@ let
     iptables
   ] ++ extraPackages);
 
-in runCommand cri-o.name {
+in
+runCommand cri-o.name
+{
   name = "${cri-o.pname}-wrapper-${cri-o.version}";
   inherit (cri-o) pname version passthru;
 

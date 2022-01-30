@@ -10,29 +10,29 @@ let
     };
   };
 in
-  python3Packages.buildPythonApplication rec {
-    pname = "truffleHog";
-    version = "2.2.1";
+python3Packages.buildPythonApplication rec {
+  pname = "truffleHog";
+  version = "2.2.1";
 
-    src = python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "sha256-fw0JyM2iqQrkL4FAXllEozJdkKWELS3eAURx5NZcceQ=";
-    };
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-fw0JyM2iqQrkL4FAXllEozJdkKWELS3eAURx5NZcceQ=";
+  };
 
-    # Relax overly restricted version constraint
-    postPatch = ''
-      substituteInPlace setup.py --replace "GitPython ==" "GitPython >= "
-    '';
+  # Relax overly restricted version constraint
+  postPatch = ''
+    substituteInPlace setup.py --replace "GitPython ==" "GitPython >= "
+  '';
 
-    propagatedBuildInputs = [ python3Packages.GitPython truffleHogRegexes ];
+  propagatedBuildInputs = [ python3Packages.GitPython truffleHogRegexes ];
 
-    # Test cases run git clone and require network access
-    doCheck = false;
+  # Test cases run git clone and require network access
+  doCheck = false;
 
-    meta = {
-      homepage = "https://github.com/dxa4481/truffleHog";
-      description = "Searches through git repositories for high entropy strings and secrets, digging deep into commit history";
-      license = with lib.licenses; [ gpl2 ];
-      maintainers = with lib.maintainers; [ bhipple ];
-    };
-  }
+  meta = {
+    homepage = "https://github.com/dxa4481/truffleHog";
+    description = "Searches through git repositories for high entropy strings and secrets, digging deep into commit history";
+    license = with lib.licenses; [ gpl2 ];
+    maintainers = with lib.maintainers; [ bhipple ];
+  };
+}

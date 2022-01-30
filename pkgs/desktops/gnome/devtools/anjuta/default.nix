@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, gnome, gtk3, gjs, flex, bison, libxml2, intltool,
-  gdl, libgda, gtksourceview, gsettings-desktop-schemas,
-  itstool, python3, ncurses, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gnome
+, gtk3
+, gjs
+, flex
+, bison
+, libxml2
+, intltool
+, gdl
+, libgda
+, gtksourceview
+, gsettings-desktop-schemas
+, itstool
+, python3
+, ncurses
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "anjuta";
@@ -18,13 +35,23 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkg-config intltool itstool python3 makeWrapper
+    pkg-config
+    intltool
+    itstool
+    python3
+    makeWrapper
     # Required by python3
     ncurses
   ];
   buildInputs = [
-    flex bison gtk3 libxml2 gjs gdl
-    libgda gtksourceview
+    flex
+    bison
+    gtk3
+    libxml2
+    gjs
+    gdl
+    libgda
+    gtksourceview
     gsettings-desktop-schemas
   ];
 
@@ -38,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "Software development studio";
     homepage = "http://anjuta.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

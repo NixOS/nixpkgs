@@ -34,7 +34,8 @@ let
         boehmgc = boehmgc-nix;
         aws-sdk-cpp = aws-sdk-cpp-nix;
       };
-in lib.makeExtensible (self: {
+in
+lib.makeExtensible (self: {
   nix_2_3 = (common rec {
     version = "2.3.16";
     src = fetchurl {

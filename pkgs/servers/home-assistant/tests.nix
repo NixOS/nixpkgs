@@ -33,37 +33,40 @@ let
       "--deselect tests/components/asuswrt/test_config_flow.py::test_on_connect_failed"
     ];
   };
-in lib.listToAttrs (map (component: lib.nameValuePair component (
-  home-assistant.overridePythonAttrs (old: {
-    pname = "homeassistant-test-${component}";
+in
+lib.listToAttrs (map
+  (component: lib.nameValuePair component (
+    home-assistant.overridePythonAttrs (old: {
+      pname = "homeassistant-test-${component}";
 
-    dontBuild = true;
-    dontInstall = true;
+      dontBuild = true;
+      dontInstall = true;
 
-    checkInputs = old.checkInputs
-      ++ home-assistant.getPackages component home-assistant.python.pkgs
-      ++ extraCheckInputs.${component} or [ ];
+      checkInputs = old.checkInputs
+        ++ home-assistant.getPackages component home-assistant.python.pkgs
+        ++ extraCheckInputs.${component} or [ ];
 
-    disabledTestPaths = old.disabledTestPaths ++ extraDisabledTestPaths.${component} or [ ];
+      disabledTestPaths = old.disabledTestPaths ++ extraDisabledTestPaths.${component} or [ ];
 
-    pytestFlagsArray = lib.remove "tests" old.pytestFlagsArray
-      ++ extraPytestFlagsArray.${component} or [ ]
-      ++ [ "tests/components/${component}" ];
+      pytestFlagsArray = lib.remove "tests" old.pytestFlagsArray
+        ++ extraPytestFlagsArray.${component} or [ ]
+        ++ [ "tests/components/${component}" ];
 
-    preCheck = old.preCheck + lib.optionalString (component != "network") ''
-      patch -p1 < ${./patches/tests-mock-source-ip.patch}
-    '';
+      preCheck = old.preCheck + lib.optionalString (component != "network") ''
+        patch -p1 < ${./patches/tests-mock-source-ip.patch}
+      '';
 
-    meta = old.meta // {
-      broken = lib.elem component [
-        "airtouch4"
-        "glances"
-        "ridwell"
-        "venstar"
-        "yamaha_musiccast"
-      ];
-      # upstream only tests on Linux, so do we.
-      platforms = lib.platforms.linux;
-    };
-  })
-)) home-assistant.supportedComponentsWithTests)
+      meta = old.meta // {
+        broken = lib.elem component [
+          "airtouch4"
+          "glances"
+          "ridwell"
+          "venstar"
+          "yamaha_musiccast"
+        ];
+        # upstream only tests on Linux, so do we.
+        platforms = lib.platforms.linux;
+      };
+    })
+  ))
+  home-assistant.supportedComponentsWithTests)

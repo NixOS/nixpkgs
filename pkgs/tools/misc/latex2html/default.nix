@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, ghostscript, netpbm, perl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, ghostscript
+, netpbm
+, perl
+}:
 # TODO: withTex
 
 stdenv.mkDerivation rec {

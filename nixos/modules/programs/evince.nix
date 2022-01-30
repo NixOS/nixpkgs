@@ -6,7 +6,8 @@ with lib;
 
 let cfg = config.programs.evince;
 
-in {
+in
+{
 
   # Added 2019-08-09
   imports = [

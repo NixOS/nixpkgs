@@ -1,10 +1,31 @@
-{ lib, fetchFromGitHub
-, meson, ninja, pkg-config, wrapGAppsHook
-, desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy, webkitgtk
-, python3Packages, gettext
-, appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3, gnome
-, steam-run, xdg-utils, pciutils, cabextract, wineWowPackages
-, freetype, p7zip, gamemode
+{ lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook
+, desktop-file-utils
+, gsettings-desktop-schemas
+, libnotify
+, libhandy
+, webkitgtk
+, python3Packages
+, gettext
+, appstream-glib
+, gdk-pixbuf
+, glib
+, gobject-introspection
+, gspell
+, gtk3
+, gnome
+, steam-run
+, xdg-utils
+, pciutils
+, cabextract
+, wineWowPackages
+, freetype
+, p7zip
+, gamemode
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , cmake
-, fuse }:
+, fuse
+}:
 
 stdenv.mkDerivation rec {
   pname = "securefs";

@@ -14,13 +14,22 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = with pkgs; [
-    swig qmake cmake
+    swig
+    qmake
+    cmake
   ];
 
   buildInputs = with pkgs; with xorg; [
-    coin3d soqt qtbase
-    libGLU libGL
-    libXi libXext libSM libICE libX11
+    coin3d
+    soqt
+    qtbase
+    libGLU
+    libGL
+    libXi
+    libXext
+    libSM
+    libICE
+    libX11
   ];
 
   NIX_CFLAGS_COMPILE = toString [
@@ -31,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   dontUseQmakeConfigure = true;
-  dontWrapQtApps =true;
+  dontWrapQtApps = true;
   doCheck = false;
 
   postPatch = ''

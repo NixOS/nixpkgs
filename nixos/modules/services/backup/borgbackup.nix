@@ -75,10 +75,12 @@ let
   mkBackupService = name: cfg:
     let
       userHome = config.users.users.${cfg.user}.home;
-    in nameValuePair "borgbackup-job-${name}" {
+    in
+    nameValuePair "borgbackup-job-${name}" {
       description = "BorgBackup job ${name}";
       path = with pkgs; [
-        borgbackup openssh
+        borgbackup
+        openssh
       ];
       script = mkBackupScript cfg;
       serviceConfig = {
@@ -114,15 +116,19 @@ let
     };
 
   # utility function around makeWrapper
-  mkWrapperDrv = {
-      original, name, set ? {}
+  mkWrapperDrv =
+    { original
+    , name
+    , set ? { }
     }:
-    pkgs.runCommand "${name}-wrapper" {
-      buildInputs = [ pkgs.makeWrapper ];
-    } (with lib; ''
-      makeWrapper "${original}" "$out/bin/${name}" \
-        ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
-    '');
+    pkgs.runCommand "${name}-wrapper"
+      {
+        buildInputs = [ pkgs.makeWrapper ];
+      }
+      (with lib; ''
+        makeWrapper "${original}" "$out/bin/${name}" \
+          ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
+      '');
 
   mkBorgWrapper = name: cfg: mkWrapperDrv {
     original = "${pkgs.borgbackup}/bin/borg";
@@ -135,15 +141,15 @@ let
     let
       install = "install -o ${cfg.user} -g ${cfg.group}";
     in
-      nameValuePair "borgbackup-job-${name}" (stringAfter [ "users" ] (''
-        # Ensure that the home directory already exists
-        # We can't assert createHome == true because that's not the case for root
-        cd "${config.users.users.${cfg.user}.home}"
-        ${install} -d .config/borg
-        ${install} -d .cache/borg
-      '' + optionalString (isLocalPath cfg.repo && !cfg.removableDevice) ''
-        ${install} -d ${escapeShellArg cfg.repo}
-      ''));
+    nameValuePair "borgbackup-job-${name}" (stringAfter [ "users" ] (''
+      # Ensure that the home directory already exists
+      # We can't assert createHome == true because that's not the case for root
+      cd "${config.users.users.${cfg.user}.home}"
+      ${install} -d .config/borg
+      ${install} -d .cache/borg
+    '' + optionalString (isLocalPath cfg.repo && !cfg.removableDevice) ''
+      ${install} -d ${escapeShellArg cfg.repo}
+    ''));
 
   mkPassAssertion = name: cfg: {
     assertion = with cfg.encryption;
@@ -176,13 +182,13 @@ let
       quotaArg = optionalString (cfg.quota != null) "--storage-quota ${cfg.quota}";
       serveCommand = "borg serve ${restrictedArg} ${appendOnlyArg} ${quotaArg}";
     in
-      ''command="${cdCommand} && ${serveCommand}",restrict ${key}'';
+    ''command="${cdCommand} && ${serveCommand}",restrict ${key}'';
 
   mkUsersConfig = name: cfg: {
     users.${cfg.user} = {
       openssh.authorizedKeys.keys =
         (map (mkAuthorizedKey cfg false) cfg.authorizedKeys
-        ++ map (mkAuthorizedKey cfg true) cfg.authorizedKeysAppendOnly);
+          ++ map (mkAuthorizedKey cfg true) cfg.authorizedKeysAppendOnly);
       useDefaultShell = true;
       group = cfg.group;
       isSystemUser = true;
@@ -212,7 +218,8 @@ let
     '';
   };
 
-in {
+in
+{
   meta.maintainers = with maintainers; [ dotlambda ];
   meta.doc = ./borgbackup.xml;
 
@@ -227,38 +234,39 @@ in {
     '';
     default = { };
     example = literalExpression ''
-      { # for a local backup
-        rootBackup = {
-          paths = "/";
-          exclude = [ "/nix" ];
-          repo = "/path/to/local/repo";
-          encryption = {
-            mode = "repokey";
-            passphrase = "secret";
+        { # for a local backup
+          rootBackup = {
+            paths = "/";
+            exclude = [ "/nix" ];
+            repo = "/path/to/local/repo";
+            encryption = {
+              mode = "repokey";
+              passphrase = "secret";
+            };
+            compression = "auto,lzma";
+            startAt = "weekly";
           };
+        }
+        { # Root backing each day up to a remote backup server. We assume that you have
+          #   * created a password less key: ssh-keygen -N "" -t ed25519 -f /path/to/ssh_key
+          #     best practices are: use -t ed25519, /path/to = /run/keys
+          #   * the passphrase is in the file /run/keys/borgbackup_passphrase
+          #   * you have initialized the repository manually
+          paths = [ "/etc" "/home" ];
+          exclude = [ "/nix" "'**/.cache'" ];
+          doInit = false;
+          repo =  "user3@arep.repo.borgbase.com:repo";
+          encryption = {
+            mode = "repokey-blake2";
+            passCommand = "cat /path/to/passphrase";
+          };
+          environment = { BORG_RSH = "ssh -i /path/to/ssh_key"; };
           compression = "auto,lzma";
-          startAt = "weekly";
-        };
-      }
-      { # Root backing each day up to a remote backup server. We assume that you have
-        #   * created a password less key: ssh-keygen -N "" -t ed25519 -f /path/to/ssh_key
-        #     best practices are: use -t ed25519, /path/to = /run/keys
-        #   * the passphrase is in the file /run/keys/borgbackup_passphrase
-        #   * you have initialized the repository manually
-        paths = [ "/etc" "/home" ];
-        exclude = [ "/nix" "'**/.cache'" ];
-        doInit = false;
-        repo =  "user3@arep.repo.borgbase.com:repo";
-        encryption = {
-          mode = "repokey-blake2";
-          passCommand = "cat /path/to/passphrase";
-        };
-        environment = { BORG_RSH = "ssh -i /path/to/ssh_key"; };
-        compression = "auto,lzma";
-        startAt = "daily";
-    };
+          startAt = "daily";
+      };
     '';
-    type = types.attrsOf (types.submodule (let globalConfig = config; in
+    type = types.attrsOf (types.submodule (
+      let globalConfig = config; in
       { name, config, ... }: {
         options = {
 
@@ -366,9 +374,12 @@ in {
 
           encryption.mode = mkOption {
             type = types.enum [
-              "repokey" "keyfile"
-              "repokey-blake2" "keyfile-blake2"
-              "authenticated" "authenticated-blake2"
+              "repokey"
+              "keyfile"
+              "repokey-blake2"
+              "keyfile-blake2"
+              "authenticated"
+              "authenticated-blake2"
               "none"
             ];
             description = ''
@@ -721,7 +732,7 @@ in {
 
       # A job named "foo" is mapped to systemd.timers.borgbackup-job-foo
       # only generate the timer if interval (startAt) is set
-      systemd.timers = mapAttrs' mkBackupTimers (filterAttrs (_: cfg: cfg.startAt != []) jobs);
+      systemd.timers = mapAttrs' mkBackupTimers (filterAttrs (_: cfg: cfg.startAt != [ ]) jobs);
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 

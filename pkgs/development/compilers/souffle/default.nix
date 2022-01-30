@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, perl, ncurses, zlib, sqlite, libffi
-, autoreconfHook, mcpp, bison, flex, doxygen, graphviz
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, perl
+, ncurses
+, zlib
+, sqlite
+, libffi
+, autoreconfHook
+, mcpp
+, bison
+, flex
+, doxygen
+, graphviz
 , makeWrapper
 }:
 
@@ -13,9 +25,9 @@ stdenv.mkDerivation rec {
   version = "2.0.2";
 
   src = fetchFromGitHub {
-    owner  = "souffle-lang";
-    repo   = "souffle";
-    rev    = version;
+    owner = "souffle-lang";
+    repo = "souffle";
+    rev = version;
     sha256 = "1fa6yssgndrln8qbbw2j7j199glxp63irfrz1c2y424rq82mm2r5";
   };
 
@@ -55,9 +67,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A translator of declarative Datalog programs into the C++ language";
-    homepage    = "https://souffle-lang.github.io/";
-    platforms   = platforms.unix;
+    homepage = "https://souffle-lang.github.io/";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice copumpkin wchresta ];
-    license     = licenses.upl;
+    license = licenses.upl;
   };
 }

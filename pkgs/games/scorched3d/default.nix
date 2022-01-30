@@ -1,5 +1,23 @@
-{ lib, stdenv, fetchurl, libGLU, libGL, glew, pkg-config, openalSoft, freealut, wxGTK, libogg
-, freetype, libvorbis, fftwSinglePrec, SDL, SDL_net, expat, libjpeg, libpng }:
+{ lib
+, stdenv
+, fetchurl
+, libGLU
+, libGL
+, glew
+, pkg-config
+, openalSoft
+, freealut
+, wxGTK
+, libogg
+, freetype
+, libvorbis
+, fftwSinglePrec
+, SDL
+, SDL_net
+, expat
+, libjpeg
+, libpng
+}:
 
 stdenv.mkDerivation rec {
   version = "44";
@@ -10,8 +28,22 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ libGLU libGL glew openalSoft freealut wxGTK libogg freetype libvorbis
-      SDL SDL_net expat libjpeg libpng fftwSinglePrec
+    [
+      libGLU
+      libGL
+      glew
+      openalSoft
+      freealut
+      wxGTK
+      libogg
+      freetype
+      libvorbis
+      SDL
+      SDL_net
+      expat
+      libjpeg
+      libpng
+      fftwSinglePrec
     ];
 
   nativeBuildInputs = [ pkg-config ];

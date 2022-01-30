@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   buildPhase =
     if stdenv.isDarwin then ''
-       make -f Bootstrap.mak osx
+      make -f Bootstrap.mak osx
     '' else ''
-       make -f Bootstrap.mak linux
+      make -f Bootstrap.mak linux
     '';
 
   installPhase = ''

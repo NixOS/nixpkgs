@@ -16,7 +16,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    sqlalchemy alembic banal
+    sqlalchemy
+    alembic
+    banal
   ];
 
   # checks attempt to import nonexistent module 'test.test' and fail

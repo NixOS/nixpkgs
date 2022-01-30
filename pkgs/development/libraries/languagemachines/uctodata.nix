@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl
-, automake, autoconf, libtool, pkg-config, autoconf-archive
- }:
+{ lib
+, stdenv
+, fetchurl
+, automake
+, autoconf
+, libtool
+, pkg-config
+, autoconf-archive
+}:
 
 let
   release = lib.importJSON ./release-info/LanguageMachines-uctodata.json;
@@ -9,17 +15,19 @@ in
 stdenv.mkDerivation {
   name = "uctodata-${release.version}";
   version = release.version;
-  src = fetchurl { inherit (release) url sha256;
-                   name = "uctodata-${release.version}.tar.gz"; };
+  src = fetchurl {
+    inherit (release) url sha256;
+    name = "uctodata-${release.version}.tar.gz";
+  };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ automake autoconf libtool autoconf-archive ];
   preConfigure = "sh bootstrap.sh";
 
   meta = with lib; {
     description = "A rule-based tokenizer for natural language";
-    homepage    = "https://languagemachines.github.io/ucto/";
-    license     = licenses.gpl3;
-    platforms   = platforms.all;
+    homepage = "https://languagemachines.github.io/ucto/";
+    license = licenses.gpl3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ roberth ];
 
     longDescription = ''

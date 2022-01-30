@@ -2,7 +2,8 @@
 
 let
   version = "2021-07-29";
-in fetchFromGitHub rec {
+in
+fetchFromGitHub rec {
   name = "comfortaa-${version}";
 
   owner = "googlefonts";
@@ -23,6 +24,6 @@ in fetchFromGitHub rec {
     description = "A clean and modern font suitable for headings and logos";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

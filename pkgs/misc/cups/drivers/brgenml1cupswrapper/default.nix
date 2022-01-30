@@ -1,54 +1,64 @@
-{ lib, stdenv, fetchurl, makeWrapper, cups, perl, coreutils, gnused, gnugrep
-, brgenml1lpr, debugLvl ? "0"}:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, cups
+, perl
+, coreutils
+, gnused
+, gnugrep
+, brgenml1lpr
+, debugLvl ? "0"
+}:
 
 /*
-    [Setup instructions](http://support.brother.com/g/s/id/linux/en/instruction_prn1a.html).
+  [Setup instructions](http://support.brother.com/g/s/id/linux/en/instruction_prn1a.html).
 
-    URI example
-     ~  `lpd://BRW0080927AFBCE/binary_p1`
+  URI example
+  ~  `lpd://BRW0080927AFBCE/binary_p1`
 
-    Logging
-    -------
+  Logging
+  -------
 
-    `/tmp/br_cupswrapper_ml1.log` when `DEBUG > 0` in `brother_lpdwrapper_BrGenML1`.
-    Note that when `DEBUG > 1` the wrapper stops performing its function. Better
-    keep `DEBUG == 1` unless this is desirable.
+  `/tmp/br_cupswrapper_ml1.log` when `DEBUG > 0` in `brother_lpdwrapper_BrGenML1`.
+  Note that when `DEBUG > 1` the wrapper stops performing its function. Better
+  keep `DEBUG == 1` unless this is desirable.
 
-    Now activable through this package's `debugLvl` parameter whose value is to be
-    used to establish `DEBUG`.
+  Now activable through this package's `debugLvl` parameter whose value is to be
+  used to establish `DEBUG`.
 
-    Issues
-    ------
+  Issues
+  ------
 
-     1.  >  Error: /tmp/brBrGenML1rc_15642 :cannot open file !!
+  1.  >  Error: /tmp/brBrGenML1rc_15642 :cannot open file !!
 
-        Fixed.
+  Fixed.
 
-     2.  >  touch: cannot touch '/tmp/BrGenML1_latest_print_info': Permission denied
+  2.  >  touch: cannot touch '/tmp/BrGenML1_latest_print_info': Permission denied
 
-        Fixed.
+  Fixed.
 
-     3.  >  perl: warning: Falling back to the standard locale ("C").
+  3.  >  perl: warning: Falling back to the standard locale ("C").
 
-            are supported and installed on your system.
-            LANG = "en_US.UTF-8"
-            LC_ALL = (unset),
-            LANGUAGE = (unset),
-            perl: warning: Please check that your locale settings:
-            perl: warning: Setting locale failed.
+  are supported and installed on your system.
+  LANG = "en_US.UTF-8"
+  LC_ALL = (unset),
+  LANGUAGE = (unset),
+  perl: warning: Please check that your locale settings:
+  perl: warning: Setting locale failed.
 
-        TODO: Address.
+  TODO: Address.
 
-     4. Since nixos 16.03 release, in `brother_lpdwrapper_BrGenML1`:
+  4. Since nixos 16.03 release, in `brother_lpdwrapper_BrGenML1`:
 
-        > sh: grep: command not found
-          sh: chmod: command not found
-          sh: cp: command not found
-          Error: /tmp/brBrGenML1rc_1850 :cannot open file !!
-          sh: sed: command not found
+  > sh: grep: command not found
+  sh: chmod: command not found
+  sh: cp: command not found
+  Error: /tmp/brBrGenML1rc_1850 :cannot open file !!
+  sh: sed: command not found
 
-        Fixed by use of a wrapper that brings `coreutils`, `gnused`, `gnugrep`
-        in `PATH`.
+  Fixed by use of a wrapper that brings `coreutils`, `gnused`, `gnugrep`
+  in `PATH`.
 */
 
 stdenv.mkDerivation rec {

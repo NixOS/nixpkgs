@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre ];
 
   configureFlags = [
-    "--enable-namespace" "--enable-flexible-member"
+    "--enable-namespace"
+    "--enable-flexible-member"
   ];
 
   meta = {

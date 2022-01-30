@@ -4,7 +4,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
-# build inputs
+  # build inputs
 , appdirs
 , click
 , diskcache

@@ -1,6 +1,7 @@
 { elk6Version
 , enableUnfree ? true
-, lib, stdenv
+, lib
+, stdenv
 , makeWrapper
 , fetchurl
 , nodejs-10_x
@@ -18,15 +19,16 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux  = "1a501lavxhckb3l93sbrbqyshicwkk6p89frry4x8p037xcfpy0x";
+      x86_64-linux = "1a501lavxhckb3l93sbrbqyshicwkk6p89frry4x8p037xcfpy0x";
       x86_64-darwin = "0zm45af30shhcg3mdhcma6rms1hyrx62rm5jzwnz9kxv4d30skbw";
     }
     else {
-      x86_64-linux  = "0wfdipf21apyily7mvlqgyc7m5jpr96zgrryzwa854z3xb2vw8zg";
+      x86_64-linux = "0wfdipf21apyily7mvlqgyc7m5jpr96zgrryzwa854z3xb2vw8zg";
       x86_64-darwin = "1nklfx4yz6hsxlljvnvwjy7pncv9mzngl84710xad5jlyras3sdj";
     };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "kibana${optionalString (!enableUnfree) "-oss"}";
   version = elk6Version;
 

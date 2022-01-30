@@ -91,7 +91,7 @@ in
       createHome = true;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     systemd.services.plantuml-server = {
       description = "PlantUML server";
@@ -105,13 +105,13 @@ in
         ALLOW_PLANTUML_INCLUDE = if cfg.allowPlantumlInclude then "true" else "false";
       };
       script = ''
-      ${pkgs.jre}/bin/java \
-        -jar ${pkgs.jetty}/start.jar \
-          --module=deploy,http,jsp \
-          jetty.home=${pkgs.jetty} \
-          jetty.base=${cfg.package} \
-          jetty.http.host=${cfg.listenHost} \
-          jetty.http.port=${builtins.toString cfg.listenPort}
+        ${pkgs.jre}/bin/java \
+          -jar ${pkgs.jetty}/start.jar \
+            --module=deploy,http,jsp \
+            jetty.home=${pkgs.jetty} \
+            jetty.base=${cfg.package} \
+            jetty.http.host=${cfg.listenHost} \
+            jetty.http.port=${builtins.toString cfg.listenPort}
       '';
       serviceConfig = {
         User = cfg.user;

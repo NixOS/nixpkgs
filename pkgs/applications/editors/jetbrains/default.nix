@@ -1,5 +1,11 @@
-{ lib, stdenv, callPackage, fetchurl
-, jdk, cmake, zlib, python3
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, jdk
+, cmake
+, zlib
+, python3
 , dotnet-sdk_5
 , maven
 , autoPatchelfHook
@@ -28,10 +34,10 @@ let
         platforms = platforms.linux;
       };
     }).overrideAttrs (attrs: {
-      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optionals (stdenv.isLinux) [
+      nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ optionals (stdenv.isLinux) [
         autoPatchelfHook
       ];
-      buildInputs = (attrs.buildInputs or []) ++ optionals (stdenv.isLinux) [
+      buildInputs = (attrs.buildInputs or [ ]) ++ optionals (stdenv.isLinux) [
         python3
         stdenv.cc.cc
         libdbusmenu
@@ -252,7 +258,7 @@ in
   clion = buildClion rec {
     name = "clion-${version}";
     version = "2021.3.2"; /* updated by script */
-    description  = "C/C++ IDE. New. Intelligent. Cross-platform";
+    description = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";

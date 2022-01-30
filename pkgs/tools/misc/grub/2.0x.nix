@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchurl, flex, bison, python3, autoreconfHook, gnulib, libtool, bash
-, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, python3
+, autoreconfHook
+, gnulib
+, libtool
+, bash
+, gettext
+, ncurses
+, libusb-compat-0_1
+, freetype
+, qemu
+, lvm2
+, unifont
+, pkg-config
 , buildPackages
 , fetchpatch
 , pkgsBuildBuild
@@ -10,7 +26,8 @@
 , efiSupport ? false
 , zfsSupport ? false
 , xenSupport ? false
-, kbdcompSupport ? false, ckbcomp
+, kbdcompSupport ? false
+, ckbcomp
 }:
 
 with lib;
@@ -41,53 +58,55 @@ let
 
   version = "2.06";
 
-in (
+in
+(
 
-assert efiSupport -> canEfi;
-assert zfsSupport -> zfs != null;
-assert !(efiSupport && xenSupport);
+  assert efiSupport -> canEfi;
+  assert zfsSupport -> zfs != null;
+  assert !(efiSupport && xenSupport);
 
-stdenv.mkDerivation rec {
-  pname = "grub";
-  inherit version;
+  stdenv.mkDerivation rec {
+    pname = "grub";
+    inherit version;
 
-  src = fetchurl {
-    url = "mirror://gnu/grub/grub-${version}.tar.xz";
-    sha256 = "sha256-t56kSvkbk9F80/6Ava5u1DdwZ4qaWuGSzOqAPrtlfuE=";
-  };
+    src = fetchurl {
+      url = "mirror://gnu/grub/grub-${version}.tar.xz";
+      sha256 = "sha256-t56kSvkbk9F80/6Ava5u1DdwZ4qaWuGSzOqAPrtlfuE=";
+    };
 
-  patches = [
-    ./fix-bash-completion.patch
-    (fetchpatch {
-      name = "Add-hidden-menu-entries.patch";
-      # https://lists.gnu.org/archive/html/grub-devel/2016-04/msg00089.html
-      url = "https://marc.info/?l=grub-devel&m=146193404929072&q=mbox";
-      sha256 = "00wa1q5adiass6i0x7p98vynj9vsz1w0gn1g4dgz89v35mpyw2bi";
-    })
-  ];
+    patches = [
+      ./fix-bash-completion.patch
+      (fetchpatch {
+        name = "Add-hidden-menu-entries.patch";
+        # https://lists.gnu.org/archive/html/grub-devel/2016-04/msg00089.html
+        url = "https://marc.info/?l=grub-devel&m=146193404929072&q=mbox";
+        sha256 = "00wa1q5adiass6i0x7p98vynj9vsz1w0gn1g4dgz89v35mpyw2bi";
+      })
+    ];
 
-  postPatch = if kbdcompSupport then ''
-    sed -i util/grub-kbdcomp.in -e 's@\bckbcomp\b@${ckbcomp}/bin/ckbcomp@'
-  '' else ''
-    echo '#! ${runtimeShell}' > util/grub-kbdcomp.in
-    echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
-  '';
+    postPatch =
+      if kbdcompSupport then ''
+        sed -i util/grub-kbdcomp.in -e 's@\bckbcomp\b@${ckbcomp}/bin/ckbcomp@'
+      '' else ''
+        echo '#! ${runtimeShell}' > util/grub-kbdcomp.in
+        echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
+      '';
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoreconfHook ];
-  buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool bash ]
-    ++ optional doCheck qemu
-    ++ optional zfsSupport zfs;
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoreconfHook ];
+    buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool bash ]
+      ++ optional doCheck qemu
+      ++ optional zfsSupport zfs;
 
-  strictDeps = true;
+    strictDeps = true;
 
-  hardeningDisable = [ "all" ];
+    hardeningDisable = [ "all" ];
 
-  # Work around a bug in the generated flex lexer (upstream flex bug?)
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+    # Work around a bug in the generated flex lexer (upstream flex bug?)
+    NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  preConfigure =
-    '' for i in "tests/util/"*.in
+    preConfigure =
+      '' for i in "tests/util/"*.in
        do
          sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
        done
@@ -111,54 +130,55 @@ stdenv.mkDerivation rec {
       substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
     '';
 
-  configureFlags = [
-    "--enable-grub-mount" # dep of os-prober
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # grub doesn't do cross-compilation as usual and tries to use unprefixed
-    # tools to target the host. Provide toolchain information explicitly for
-    # cross builds.
-    #
-    # Ref: # https://github.com/buildroot/buildroot/blob/master/boot/grub2/grub2.mk#L108
-    "TARGET_CC=${stdenv.cc.targetPrefix}cc"
-    "TARGET_NM=${stdenv.cc.targetPrefix}nm"
-    "TARGET_OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-    "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
-  ] ++ optional zfsSupport "--enable-libzfs"
+    configureFlags = [
+      "--enable-grub-mount" # dep of os-prober
+    ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # grub doesn't do cross-compilation as usual and tries to use unprefixed
+      # tools to target the host. Provide toolchain information explicitly for
+      # cross builds.
+      #
+      # Ref: # https://github.com/buildroot/buildroot/blob/master/boot/grub2/grub2.mk#L108
+      "TARGET_CC=${stdenv.cc.targetPrefix}cc"
+      "TARGET_NM=${stdenv.cc.targetPrefix}nm"
+      "TARGET_OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+      "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
+      "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
+    ] ++ optional zfsSupport "--enable-libzfs"
     ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
-    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
+    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" ];
 
-  # save target that grub is compiled for
-  grubTarget = if efiSupport
-               then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
-               else if inPCSystems
-                    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
-                    else "";
+    # save target that grub is compiled for
+    grubTarget =
+      if efiSupport
+      then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
+      else if inPCSystems
+      then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
+      else "";
 
-  doCheck = false;
-  enableParallelBuilding = true;
+    doCheck = false;
+    enableParallelBuilding = true;
 
-  postInstall = ''
-    # Avoid a runtime reference to gcc
-    sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
-    # just adding bash to buildInputs wasn't enough to fix the shebang
-    substituteInPlace $out/lib/grub/*/modinfo.sh \
-      --replace ${buildPackages.bash} "/usr/bin/bash"
-  '';
+    postInstall = ''
+      # Avoid a runtime reference to gcc
+      sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
+      # just adding bash to buildInputs wasn't enough to fix the shebang
+      substituteInPlace $out/lib/grub/*/modinfo.sh \
+        --replace ${buildPackages.bash} "/usr/bin/bash"
+    '';
 
-  passthru.tests = {
-    nixos-grub = nixosTests.grub;
-    nixos-install-simple = nixosTests.installer.simple;
-    nixos-install-grub1 = nixosTests.installer.grub1;
-    nixos-install-grub-uefi = nixosTests.installer.simpleUefiGrub;
-    nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
-  };
+    passthru.tests = {
+      nixos-grub = nixosTests.grub;
+      nixos-install-simple = nixosTests.installer.simple;
+      nixos-install-grub1 = nixosTests.installer.grub1;
+      nixos-install-grub-uefi = nixosTests.installer.simpleUefiGrub;
+      nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
+    };
 
-  meta = with lib; {
-    description = "GNU GRUB, the Grand Unified Boot Loader (2.x beta)";
+    meta = with lib; {
+      description = "GNU GRUB, the Grand Unified Boot Loader (2.x beta)";
 
-    longDescription =
-      '' GNU GRUB is a Multiboot boot loader. It was derived from GRUB, GRand
+      longDescription =
+        '' GNU GRUB is a Multiboot boot loader. It was derived from GRUB, GRand
          Unified Bootloader, which was originally designed and implemented by
          Erich Stefan Boleyn.
 
@@ -169,12 +189,13 @@ stdenv.mkDerivation rec {
          operating system (e.g., GNU).
       '';
 
-    homepage = "https://www.gnu.org/software/grub/";
+      homepage = "https://www.gnu.org/software/grub/";
 
-    license = licenses.gpl3Plus;
+      license = licenses.gpl3Plus;
 
-    platforms = platforms.gnu ++ platforms.linux;
+      platforms = platforms.gnu ++ platforms.linux;
 
-    maintainers = [ maintainers.samueldr ];
-  };
-})
+      maintainers = [ maintainers.samueldr ];
+    };
+  }
+)

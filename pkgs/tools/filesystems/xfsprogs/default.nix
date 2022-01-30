@@ -1,5 +1,16 @@
-{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
-, icu, libuuid, readline, inih
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, autoconf
+, automake
+, gettext
+, libtool
+, pkg-config
+, icu
+, libuuid
+, readline
+, inih
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +26,11 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
-    autoconf automake libtool gettext pkg-config
+    autoconf
+    automake
+    libtool
+    gettext
+    pkg-config
     libuuid # codegen tool uses libuuid
   ];
   buildInputs = [ readline icu inih ];
@@ -48,7 +63,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://xfs.org/";
     description = "SGI XFS utilities";
-    license = with licenses; [ gpl2Only lgpl21 gpl3Plus ];  # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
+    license = with licenses; [ gpl2Only lgpl21 gpl3Plus ]; # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
     platforms = platforms.linux;
     maintainers = with maintainers; [ dezgeg ajs124 ];
   };

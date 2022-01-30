@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ++ lib.optionals (!pythonAtLeast "3.5") [ scandir ]
     ++ lib.optionals (!pythonAtLeast "3.5") [ enum34 ];
 
-  LC_ALL="en_US.utf-8";
+  LC_ALL = "en_US.utf-8";
 
   preCheck = ''
     HOME=$(mktemp -d)
@@ -48,7 +48,8 @@ buildPythonPackage rec {
 
   disabledTests = [
     "user_data_repr"
-  ] ++ lib.optionals (stdenv.isDarwin) [ # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
     "test_ftpfs"
   ] ++ lib.optionals (pythonAtLeast "3.9") [
     # update friend version of this commit: https://github.com/PyFilesystem/pyfilesystem2/commit/3e02968ce7da7099dd19167815c5628293e00040
@@ -60,10 +61,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Filesystem abstraction";
-    homepage    = "https://github.com/PyFilesystem/pyfilesystem2";
-    license     = licenses.bsd3;
+    homepage = "https://github.com/PyFilesystem/pyfilesystem2";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 
 }

@@ -19,11 +19,12 @@ let
 in
 
 rec {
-  launcher = runCommand "octave-kernel-launcher" {
-    inherit octave;
-    python = python3.withPackages (ps: [ ps.traitlets ps.jupyter_core ps.ipykernel ps.metakernel kernel ]);
-    buildInputs = [ makeWrapper ];
-  } ''
+  launcher = runCommand "octave-kernel-launcher"
+    {
+      inherit octave;
+      python = python3.withPackages (ps: [ ps.traitlets ps.jupyter_core ps.ipykernel ps.metakernel kernel ]);
+      buildInputs = [ makeWrapper ];
+    } ''
     mkdir -p $out/bin
 
     makeWrapper $python/bin/python $out/bin/octave-kernel \

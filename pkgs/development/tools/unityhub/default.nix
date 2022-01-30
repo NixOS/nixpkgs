@@ -8,18 +8,64 @@ let
     sha256 = "07nfyfp9apshqarc6pgshsczila6x4943hiyyizc55kp85aw0imn";
   };
   name = "unityhub";
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit name src;
 
-  extraPkgs = (pkgs: with pkgs; with xorg; [ gtk2 gdk-pixbuf glib libGL libGLU nss nspr
-    alsa-lib cups gnome2.GConf libcap fontconfig freetype pango
-    cairo dbus dbus-glib libdbusmenu libdbusmenu-gtk2 expat zlib libpng12 udev tbb
-    libpqxx gtk3 libsecret lsb-release openssl nodejs ncurses5
+  extraPkgs = (pkgs: with pkgs; with xorg; [
+    gtk2
+    gdk-pixbuf
+    glib
+    libGL
+    libGLU
+    nss
+    nspr
+    alsa-lib
+    cups
+    gnome2.GConf
+    libcap
+    fontconfig
+    freetype
+    pango
+    cairo
+    dbus
+    dbus-glib
+    libdbusmenu
+    libdbusmenu-gtk2
+    expat
+    zlib
+    libpng12
+    udev
+    tbb
+    libpqxx
+    gtk3
+    libsecret
+    lsb-release
+    openssl
+    nodejs
+    ncurses5
 
-    libX11 libXcursor libXdamage libXfixes libXrender libXi
-    libXcomposite libXext libXrandr libXtst libSM libICE libxcb
+    libX11
+    libXcursor
+    libXdamage
+    libXfixes
+    libXrender
+    libXi
+    libXcomposite
+    libXext
+    libXrandr
+    libXtst
+    libSM
+    libICE
+    libxcb
 
-    libselinux pciutils libpulseaudio libxml2 icu clang cacert
+    libselinux
+    pciutils
+    libpulseaudio
+    libxml2
+    icu
+    clang
+    cacert
   ]);
 
   extraInstallCommands =

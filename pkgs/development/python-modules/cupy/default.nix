@@ -1,7 +1,19 @@
-{ lib, buildPythonPackage
-, fetchPypi, isPy3k, cython
-, fastrlock, numpy, six, wheel, pytestCheckHook, mock, setuptools
-, cudatoolkit, cudnn, cutensor, nccl
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, cython
+, fastrlock
+, numpy
+, six
+, wheel
+, pytestCheckHook
+, mock
+, setuptools
+, cudatoolkit
+, cudnn
+, cutensor
+, nccl
 , addOpenGLRunpath
 }:
 

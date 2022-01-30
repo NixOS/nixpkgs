@@ -1,5 +1,13 @@
-{ lib, buildDunePackage
-, alcotest-lwt, index, irmin, irmin-layers, irmin-test, ocaml_lwt, fpath, optint
+{ lib
+, buildDunePackage
+, alcotest-lwt
+, index
+, irmin
+, irmin-layers
+, irmin-test
+, ocaml_lwt
+, fpath
+, optint
 }:
 
 buildDunePackage rec {

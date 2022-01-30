@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # and not just a warning. With the current c++ compiler
   # pgadmin3 will fail with several "narrowing" errors.
   # see https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html#index-Wno-narrowing
-  makeFlags = "CXXFLAGS=-Wno-narrowing" ;
+  makeFlags = "CXXFLAGS=-Wno-narrowing";
 
   meta = with lib; {
     description = "PostgreSQL administration GUI tool";
@@ -45,20 +45,22 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 
-  postFixup = let
-    desktopItem = makeDesktopItem {
-      name = "pgAdmin";
-      desktopName = "pgAdmin III";
-      genericName = "SQL Administration";
-      exec = "pgadmin3";
-      icon = "pgAdmin3";
-      type = "Application";
-      categories = "Development;";
-      mimeType = "text/html";
-    };
-  in ''
-    mkdir -p $out/share/pixmaps;
-    cp pgadmin/include/images/pgAdmin3.png $out/share/pixmaps/;
-    cp -rv ${desktopItem}/share/applications $out/share/
-  '';
+  postFixup =
+    let
+      desktopItem = makeDesktopItem {
+        name = "pgAdmin";
+        desktopName = "pgAdmin III";
+        genericName = "SQL Administration";
+        exec = "pgadmin3";
+        icon = "pgAdmin3";
+        type = "Application";
+        categories = "Development;";
+        mimeType = "text/html";
+      };
+    in
+    ''
+      mkdir -p $out/share/pixmaps;
+      cp pgadmin/include/images/pgAdmin3.png $out/share/pixmaps/;
+      cp -rv ${desktopItem}/share/applications $out/share/
+    '';
 }

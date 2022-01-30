@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchFromGitLab , go-md2man, coreutils, substituteAll }:
+{ lib, stdenv, fetchFromGitLab, go-md2man, coreutils, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "brillo";
   version = "1.4.10";
 
   src = fetchFromGitLab {
-    owner= "cameronnemo";
-    repo= "brillo";
-    rev= "v${version}";
+    owner = "cameronnemo";
+    repo = "brillo";
+    rev = "v${version}";
     sha256 = "sha256-x8K6CMkOyR+kWRlqa/BmJogZo41LvsL1kfz6CZ5PaUI=";
   };
 

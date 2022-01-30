@@ -7,7 +7,9 @@
 , ncurses
 , which
 , pkg-config
-, lib, stdenv }:
+, lib
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
   version = "2.53";
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${version}/NEWS";
     description = "A z-machine interpreter for Infocom games and other interactive fiction";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nicknovitski  ddelabru ];
+    maintainers = with maintainers; [ nicknovitski ddelabru ];
     license = licenses.gpl2;
   };
 }

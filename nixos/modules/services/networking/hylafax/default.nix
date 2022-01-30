@@ -17,7 +17,7 @@
       inherit (config.users.users.nobody) home;
     };
     assertions = [{
-      assertion = config.services.hylafax.modems != {};
+      assertion = config.services.hylafax.modems != { };
       message = ''
         HylaFAX cannot be used without modems.
         Please define at least one modem with

@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, freeglut, gtk2, gtkglext
-, libjpeg_turbo, libtheora, libXmu, lua, libGLU, libGL, perl, autoreconfHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, freeglut
+, gtk2
+, gtkglext
+, libjpeg_turbo
+, libtheora
+, libXmu
+, lua
+, libGLU
+, libGL
+, perl
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +28,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
-    freeglut gtk2 gtkglext lua perl
-    libjpeg_turbo libtheora libXmu libGLU libGL
+    freeglut
+    gtk2
+    gtkglext
+    lua
+    perl
+    libjpeg_turbo
+    libtheora
+    libXmu
+    libGLU
+    libGL
   ];
 
   configureFlags = [

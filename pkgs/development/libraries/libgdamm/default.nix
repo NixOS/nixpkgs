@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, glibmm, libgda, libxml2, gnome
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glibmm
+, libgda
+, libxml2
+, gnome
 , mysqlSupport ? false
-, postgresSupport ? false }:
+, postgresSupport ? false
+}:
 
 let
   gda = libgda.override {
     inherit mysqlSupport postgresSupport;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libgdamm";
   version = "4.99.11";
 

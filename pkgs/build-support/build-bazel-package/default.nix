@@ -8,40 +8,39 @@ let
   bazelPkg = bazel;
 in
 
-args@{
-  name ? "${args.pname}-${args.version}"
+args@{ name ? "${args.pname}-${args.version}"
 , bazel ? bazelPkg
-, bazelFlags ? []
-, bazelBuildFlags ? []
-, bazelFetchFlags ? []
+, bazelFlags ? [ ]
+, bazelBuildFlags ? [ ]
+, bazelFetchFlags ? [ ]
 , bazelTarget
 , buildAttrs
 , fetchAttrs
 
-# Newer versions of Bazel are moving away from built-in rules_cc and instead
-# allow fetching it as an external dependency in a WORKSPACE file[1]. If
-# removed in the fixed-output fetch phase, building will fail to download it.
-# This can be seen e.g. in #73097
-#
-# This option allows configuring the removal of rules_cc in cases where a
-# project depends on it via an external dependency.
-#
-# [1]: https://github.com/bazelbuild/rules_cc
+  # Newer versions of Bazel are moving away from built-in rules_cc and instead
+  # allow fetching it as an external dependency in a WORKSPACE file[1]. If
+  # removed in the fixed-output fetch phase, building will fail to download it.
+  # This can be seen e.g. in #73097
+  #
+  # This option allows configuring the removal of rules_cc in cases where a
+  # project depends on it via an external dependency.
+  #
+  # [1]: https://github.com/bazelbuild/rules_cc
 , removeRulesCC ? true
 , removeLocalConfigCc ? true
 , removeLocal ? true
 
-# Use build --nobuild instead of fetch. This allows fetching the dependencies
-# required for the build as configured, rather than fetching all the dependencies
-# which may not work in some situations (e.g. Java code which ends up relying on
-# Debian-specific /usr/share/java paths, but doesn't in the configured build).
+  # Use build --nobuild instead of fetch. This allows fetching the dependencies
+  # required for the build as configured, rather than fetching all the dependencies
+  # which may not work in some situations (e.g. Java code which ends up relying on
+  # Debian-specific /usr/share/java paths, but doesn't in the configured build).
 , fetchConfigured ? true
 
-# Don’t add Bazel --copt and --linkopt from NIX_CFLAGS_COMPILE /
-# NIX_LDFLAGS. This is necessary when using a custom toolchain which
-# Bazel wants all headers / libraries to come from, like when using
-# CROSSTOOL. Weirdly, we can still get the flags through the wrapped
-# compiler.
+  # Don’t add Bazel --copt and --linkopt from NIX_CFLAGS_COMPILE /
+  # NIX_LDFLAGS. This is necessary when using a custom toolchain which
+  # Bazel wants all headers / libraries to come from, like when using
+  # CROSSTOOL. Weirdly, we can still get the flags through the wrapped
+  # compiler.
 , dontAddBazelOpts ? false
 , ...
 }:
@@ -51,7 +50,8 @@ let
   fBuildAttrs = fArgs // buildAttrs;
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
 
-in stdenv.mkDerivation (fBuildAttrs // {
+in
+stdenv.mkDerivation (fBuildAttrs // {
   inherit name bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
@@ -60,7 +60,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-    nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
+    nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [ ] ++ [ bazel ];
 
     preHook = fFetchAttrs.preHook or "" + ''
       export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
@@ -144,13 +144,13 @@ in stdenv.mkDerivation (fBuildAttrs // {
     '';
 
     dontFixup = true;
-    allowedRequisites = [];
+    allowedRequisites = [ ];
 
     outputHashAlgo = "sha256";
     outputHash = fetchAttrs.sha256;
   });
 
-  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];
+  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [ ] ++ [ (bazel.override { enableNixHacks = true; }) ];
 
   preHook = fBuildAttrs.preHook or "" + ''
     export bazelOut="$NIX_BUILD_TOP/output"

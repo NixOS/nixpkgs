@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchsvn, libxml2, gtk2, curl, pkg-config } :
+{ lib, stdenv, fetchsvn, libxml2, gtk2, curl, pkg-config }:
 
 let
   version = "31801";

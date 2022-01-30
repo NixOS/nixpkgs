@@ -1,7 +1,8 @@
 { stdenvNoCC, lib, fetchFromGitHub, bats }:
 
 let version = "0.4.1";
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   pname = "bash-preexec";
   inherit version;
 

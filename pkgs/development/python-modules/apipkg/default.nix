@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, setuptools-scm, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, setuptools-scm
+, isPy3k
+}:
 
 buildPythonPackage rec {
   pname = "apipkg";
@@ -21,17 +26,19 @@ buildPythonPackage rec {
 
   # Failing tests on Python 3
   # https://github.com/pytest-dev/apipkg/issues/17
-  checkPhase = let
-    disabledTests = lib.optionals isPy3k [
-      "test_error_loading_one_element"
-      "test_aliasmodule_proxy_methods"
-      "test_eagerload_on_bython"
-    ];
-    testExpression = lib.optionalString (disabledTests != [])
-    "-k 'not ${lib.concatStringsSep " and not " disabledTests}'";
-  in ''
-    py.test ${testExpression}
-  '';
+  checkPhase =
+    let
+      disabledTests = lib.optionals isPy3k [
+        "test_error_loading_one_element"
+        "test_aliasmodule_proxy_methods"
+        "test_eagerload_on_bython"
+      ];
+      testExpression = lib.optionalString (disabledTests != [ ])
+        "-k 'not ${lib.concatStringsSep " and not " disabledTests}'";
+    in
+    ''
+      py.test ${testExpression}
+    '';
 
   meta = with lib; {
     description = "Namespace control and lazy-import mechanism";

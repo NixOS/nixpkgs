@@ -11,9 +11,9 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchFromGitHub {
-    owner  = "hannesm";
-    repo   = "jackline";
-    rev    = "ca1012098d123c555e9fa5244466d2e009521700";
+    owner = "hannesm";
+    repo = "jackline";
+    rev = "ca1012098d123c555e9fa5244466d2e009521700";
     sha256 = "1j1azskcdrp4g44rv3a4zylkzbzpcs23zzzrx94llbgssw6cd9ih";
   };
 

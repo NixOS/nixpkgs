@@ -9,7 +9,8 @@ let
     sha256 = "06imlhsps4wrjgjb92zpaxprxfxl2pjb2x9pl859c8cryssrz2jv";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "purple-facebook";
   version = "0.9.5";
 

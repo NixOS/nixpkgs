@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, transfig, tex, ghostscript, colm
+{ lib
+, stdenv
+, fetchurl
+, transfig
+, tex
+, ghostscript
+, colm
 , build-manual ? false
 }:
 

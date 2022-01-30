@@ -36,7 +36,8 @@ let
         maintainers = with maintainers; [ lesuisse jk ];
       };
     };
-in {
+in
+{
   rekor-cli = generic {
     pname = "rekor-cli";
     packageToBuild = "cmd/rekor-cli";

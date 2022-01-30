@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, perl, openssl, db, zlib, uwimap, html-tidy, pam}:
+{ lib, stdenv, fetchurl, fetchpatch, perl, openssl, db, zlib, uwimap, html-tidy, pam }:
 
 let
   ssl = lib.optionals uwimap.withSSL

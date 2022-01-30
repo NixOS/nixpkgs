@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An SVG Optimizer / Cleaner ";
-    homepage    = "https://github.com/scour-project/scour";
-    license     = licenses.asl20;
+    homepage = "https://github.com/scour-project/scour";
+    license = licenses.asl20;
     maintainers = with maintainers; [ worldofpeace ];
   };
 }

@@ -12,17 +12,17 @@ let
     let
       sslCertDir = config.security.acme.certs.${hostOpts.useACMEHost}.directory;
     in
-      ''
-        ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
-          bind ${concatStringsSep " " hostOpts.listenAddresses}
-          ${optionalString (hostOpts.useACMEHost != null) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
-          log {
-            ${hostOpts.logFormat}
-          }
-
-          ${hostOpts.extraConfig}
+    ''
+      ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
+        bind ${concatStringsSep " " hostOpts.listenAddresses}
+        ${optionalString (hostOpts.useACMEHost != null) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
+        log {
+          ${hostOpts.logFormat}
         }
-      '';
+
+        ${hostOpts.extraConfig}
+      }
+    '';
 
   configFile =
     let
@@ -37,7 +37,7 @@ let
         ${cfg.package}/bin/caddy fmt ${Caddyfile} > $out
       '';
     in
-      if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile;
+    if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile;
 
   acmeHosts = unique (catAttrs "useACMEHost" acmeVHosts);
 
@@ -221,7 +221,7 @@ in
 
     virtualHosts = mkOption {
       type = with types; attrsOf (submodule (import ./vhost-options.nix { inherit cfg; }));
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           "hydra.example.com" = {
@@ -267,14 +267,17 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.adapter != "caddyfile" -> cfg.configFile != configFile;
+      {
+        assertion = cfg.adapter != "caddyfile" -> cfg.configFile != configFile;
         message = "Any value other than 'caddyfile' is only valid when providing your own `services.caddy.configFile`";
       }
-    ] ++ map (name: mkCertOwnershipAssertion {
-      inherit (cfg) group user;
-      cert = config.security.acme.certs.${name};
-      groups = config.users.groups;
-    }) acmeHosts;
+    ] ++ map
+      (name: mkCertOwnershipAssertion {
+        inherit (cfg) group user;
+        cert = config.security.acme.certs.${name};
+        groups = config.users.groups;
+      })
+      acmeHosts;
 
     services.caddy.extraConfig = concatMapStringsSep "\n" mkVHostConf virtualHosts;
     services.caddy.globalConfig = ''
@@ -333,7 +336,7 @@ in
       let
         reloads = map (useACMEHost: nameValuePair useACMEHost { reloadServices = [ "caddy.service" ]; }) acmeHosts;
       in
-        listToAttrs reloads;
+      listToAttrs reloads;
 
   };
 }

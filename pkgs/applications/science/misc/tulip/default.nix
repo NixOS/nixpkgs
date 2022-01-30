@@ -1,6 +1,17 @@
-{ fetchurl, lib, stdenv, libxml2, freetype, libGLU, libGL, glew
-, qtbase, wrapQtAppsHook, python3
-, cmake, libjpeg }:
+{ fetchurl
+, lib
+, stdenv
+, libxml2
+, freetype
+, libGLU
+, libGL
+, glew
+, qtbase
+, wrapQtAppsHook
+, python3
+, cmake
+, libjpeg
+}:
 
 stdenv.mkDerivation rec {
   pname = "tulip";
@@ -35,6 +46,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
   };
 }

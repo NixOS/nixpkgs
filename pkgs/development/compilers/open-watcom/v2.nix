@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , unstableGitUpdater
 
-# Docs cause an immense increase in build time, up to 2 additional hours
+  # Docs cause an immense increase in build time, up to 2 additional hours
 , withDocs ? false
 , dosbox
 , ghostscript

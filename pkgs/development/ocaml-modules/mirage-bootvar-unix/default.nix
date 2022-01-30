@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage
-, lwt, parse-argv
+{ lib
+, fetchurl
+, buildDunePackage
+, lwt
+, parse-argv
 }:
 
 buildDunePackage rec {

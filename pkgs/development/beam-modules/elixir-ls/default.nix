@@ -14,7 +14,7 @@ let
     fetchSubmodules = true;
   };
 in
-mixRelease  {
+mixRelease {
   inherit pname version src elixir;
 
   mixFodDeps = fetchMixDeps {

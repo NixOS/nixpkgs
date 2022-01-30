@@ -7,9 +7,9 @@ let
       version = "1.18.6";
 
       src = fetchFromGitHub {
-        owner  = "syncthing";
-        repo   = "syncthing";
-        rev    = "v${version}";
+        owner = "syncthing";
+        repo = "syncthing";
+        rev = "v${version}";
         sha256 = "sha256-fkIHHyhwZV0/aB/JFwz3XrYVOaCn5ZK3ihY3GVoOAHg=";
       };
 
@@ -17,8 +17,8 @@ let
 
       doCheck = false;
 
-      BUILD_USER="nix";
-      BUILD_HOST="nix";
+      BUILD_USER = "nix";
+      BUILD_HOST = "nix";
 
       buildPhase = ''
         runHook preBuild
@@ -49,7 +49,8 @@ let
       };
     };
 
-in {
+in
+{
   syncthing = common {
     stname = "syncthing";
     target = "syncthing";

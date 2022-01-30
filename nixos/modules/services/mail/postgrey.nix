@@ -41,16 +41,18 @@ with lib; let
     };
   };
 
-in {
+in
+{
   imports = [
-    (mkMergedOptionModule [ [ "services" "postgrey" "inetAddr" ] [ "services" "postgrey" "inetPort" ] ] [ "services" "postgrey" "socket" ] (config: let
+    (mkMergedOptionModule [ [ "services" "postgrey" "inetAddr" ] [ "services" "postgrey" "inetPort" ] ] [ "services" "postgrey" "socket" ] (config:
+      let
         value = p: getAttrFromPath p config;
         inetAddr = [ "services" "postgrey" "inetAddr" ];
         inetPort = [ "services" "postgrey" "inetPort" ];
       in
-        if value inetAddr == null
-        then { path = "/run/postgrey.sock"; }
-        else { addr = value inetAddr; port = value inetPort; }
+      if value inetAddr == null
+      then { path = "/run/postgrey.sock"; }
+      else { addr = value inetAddr; port = value inetPort; }
     ))
   ];
 
@@ -131,12 +133,12 @@ in {
       };
       whitelistClients = mkOption {
         type = listOf path;
-        default = [];
+        default = [ ];
         description = "Client address whitelist files (see postgrey(8))";
       };
       whitelistRecipients = mkOption {
         type = listOf path;
-        default = [];
+        default = [ ];
         description = "Recipient address whitelist files (see postgrey(8))";
       };
     };
@@ -161,23 +163,26 @@ in {
       };
     };
 
-    systemd.services.postgrey = let
-      bind-flag = if cfg.socket ? path then
-        "--unix=${cfg.socket.path} --socketmode=${cfg.socket.mode}"
-      else
-        ''--inet=${optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")}${toString cfg.socket.port}'';
-    in {
-      description = "Postfix Greylisting Service";
-      wantedBy = [ "multi-user.target" ];
-      before = [ "postfix.service" ];
-      preStart = ''
-        mkdir -p /var/postgrey
-        chown postgrey:postgrey /var/postgrey
-        chmod 0770 /var/postgrey
-      '';
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = ''${pkgs.postgrey}/bin/postgrey \
+    systemd.services.postgrey =
+      let
+        bind-flag =
+          if cfg.socket ? path then
+            "--unix=${cfg.socket.path} --socketmode=${cfg.socket.mode}"
+          else
+            ''--inet=${optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")}${toString cfg.socket.port}'';
+      in
+      {
+        description = "Postfix Greylisting Service";
+        wantedBy = [ "multi-user.target" ];
+        before = [ "postfix.service" ];
+        preStart = ''
+          mkdir -p /var/postgrey
+          chown postgrey:postgrey /var/postgrey
+          chmod 0770 /var/postgrey
+        '';
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = ''${pkgs.postgrey}/bin/postgrey \
           ${bind-flag} \
           --group=postgrey --user=postgrey \
           --dbdir=/var/postgrey \
@@ -194,11 +199,11 @@ in {
           ${concatMapStringsSep " " (x: "--whitelist-clients=" + x) cfg.whitelistClients} \
           ${concatMapStringsSep " " (x: "--whitelist-recipients=" + x) cfg.whitelistRecipients}
         '';
-        Restart = "always";
-        RestartSec = 5;
-        TimeoutSec = 10;
+          Restart = "always";
+          RestartSec = 5;
+          TimeoutSec = 10;
+        };
       };
-    };
 
   };
 

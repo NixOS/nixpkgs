@@ -1,7 +1,7 @@
 { callPackage, lib, stdenv, fetchurl, jre, makeWrapper }:
 
 let this = stdenv.mkDerivation rec {
-  version = "6.0.0-2021-01-18";  # Also update the fetchurl link
+  version = "6.0.0-2021-01-18"; # Also update the fetchurl link
   pname = "openapi-generator-cli";
 
   jarfilename = "${pname}-${version}.jar";

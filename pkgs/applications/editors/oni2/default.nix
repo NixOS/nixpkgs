@@ -1,7 +1,8 @@
 { callPackage }:
 
 let mkOni2 = callPackage ./common.nix { };
-in mkOni2 rec {
+in
+mkOni2 rec {
   variant = "oni2";
   license = {
     fullName = "Outrun Labs End User License Agreement";

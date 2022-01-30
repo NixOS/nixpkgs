@@ -1,13 +1,13 @@
-{
-    lib,
-    buildPythonPackage,
-    fetchFromGitHub,
-    six,
-    requests,
-    django,
-    boto3,
-    python,
-    mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, requests
+, django
+, boto3
+, python
+, mock
+,
 }:
 
 buildPythonPackage rec {

@@ -1,5 +1,12 @@
-{ stdenv, lib, buildPackages, fetchurl, attr, perl, runtimeShell
-, usePam ? !isStatic, pam ? null
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
+, attr
+, perl
+, runtimeShell
+, usePam ? !isStatic
+, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
 }:
 

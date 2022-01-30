@@ -29,7 +29,8 @@ let
         };
       }
     );
-in {
+in
+{
   boost155 = makeBoost ./1.55.nix;
   boost159 = makeBoost ./1.59.nix;
   boost160 = makeBoost ./1.60.nix;

@@ -1,22 +1,34 @@
-{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
+{ stdenv
+, fetchurl
+, lib
+, libidn
+, openssl
+, makeWrapper
+, fetchhg
 , lua
 , nixosTests
 , withLibevent ? true
 , withDBI ? true
-# use withExtraLibs to add additional dependencies of community modules
+  # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
 , withOnlyInstalledCommunityModules ? [ ]
-, withCommunityModules ? [ ] }:
+, withCommunityModules ? [ ]
+}:
 
 with lib;
 
 
 let
-  luaEnv = lua.withPackages(p: with p; [
-      luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3
-    ]
-    ++ lib.optional withLibevent p.luaevent
-    ++ lib.optional withDBI p.luadbi
+  luaEnv = lua.withPackages (p: with p; [
+    luasocket
+    luasec
+    luaexpat
+    luafilesystem
+    luabitop
+    luadbi-sqlite3
+  ]
+  ++ lib.optional withLibevent p.luaevent
+  ++ lib.optional withDBI p.luadbi
   );
 in
 stdenv.mkDerivation rec {
@@ -48,7 +60,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    luaEnv libidn openssl
+    luaEnv
+    libidn
+    openssl
   ]
   ++ withExtraLibs;
 
@@ -65,22 +79,22 @@ stdenv.mkDerivation rec {
 
   # the wrapping should go away once lua hook is fixed
   postInstall = ''
-      ${concatMapStringsSep "\n" (module: ''
-        cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
-      '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
-      wrapProgram $out/bin/prosody \
-        --prefix LUA_PATH ';' "$LUA_PATH" \
-        --prefix LUA_CPATH ';' "$LUA_CPATH"
-      wrapProgram $out/bin/prosodyctl \
-        --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --prefix LUA_PATH ';' "$LUA_PATH" \
-        --prefix LUA_CPATH ';' "$LUA_CPATH"
+    ${concatMapStringsSep "\n" (module: ''
+      cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
+    '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
+    wrapProgram $out/bin/prosody \
+      --prefix LUA_PATH ';' "$LUA_PATH" \
+      --prefix LUA_CPATH ';' "$LUA_CPATH"
+    wrapProgram $out/bin/prosodyctl \
+      --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
+      --prefix LUA_PATH ';' "$LUA_PATH" \
+      --prefix LUA_CPATH ';' "$LUA_CPATH"
 
-      make -C tools/migration install
-      wrapProgram $out/bin/prosody-migrator \
-        --prefix LUA_PATH ';' "$LUA_PATH" \
-        --prefix LUA_CPATH ';' "$LUA_CPATH"
-    '';
+    make -C tools/migration install
+    wrapProgram $out/bin/prosody-migrator \
+      --prefix LUA_PATH ';' "$LUA_PATH" \
+      --prefix LUA_CPATH ';' "$LUA_CPATH"
+  '';
 
   passthru = {
     communityModules = withCommunityModules;

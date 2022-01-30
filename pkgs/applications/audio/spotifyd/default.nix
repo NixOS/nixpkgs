@@ -1,7 +1,14 @@
-{ lib, fetchFromGitHub, rustPackages, pkg-config, openssl
-, withALSA ? true, alsa-lib
-, withPulseAudio ? false, libpulseaudio
-, withPortAudio ? false, portaudio
+{ lib
+, fetchFromGitHub
+, rustPackages
+, pkg-config
+, openssl
+, withALSA ? true
+, alsa-lib
+, withPulseAudio ? false
+, libpulseaudio
+, withPortAudio ? false
+, portaudio
 , withMpris ? false
 , withKeyring ? false
 , dbus

@@ -109,8 +109,8 @@ buildPythonPackage rec {
   pythonImportChecks = [ "ihatemoney" ];
 
   disabledTests = [
-    "test_notifications"  # requires running service.
-    "test_invite"         # requires running service.
+    "test_notifications" # requires running service.
+    "test_invite" # requires running service.
     "test_invitation_email_failure" # requires dns resolution
   ];
 

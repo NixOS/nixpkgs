@@ -36,9 +36,9 @@ mkYarnPackage rec {
   inherit (pinData) version;
 
   src = fetchFromGitHub {
-    owner  = "hedgedoc";
-    repo   = "hedgedoc";
-    rev    = version;
+    owner = "hedgedoc";
+    repo = "hedgedoc";
+    rev = version;
     sha256 = pinData.srcHash;
   };
 

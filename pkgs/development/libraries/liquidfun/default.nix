@@ -2,10 +2,10 @@
 
 let
   sourceInfo = rec {
-    version="1.1.0";
-    name="liquidfun-${version}";
-    url="https://github.com/google/liquidfun/releases/download/v${version}/${name}";
-    hash="5011a000eacd6202a47317c489e44aa753a833fb562d970e7b8c0da9de01df86";
+    version = "1.1.0";
+    name = "liquidfun-${version}";
+    url = "https://github.com/google/liquidfun/releases/download/v${version}/${name}";
+    hash = "5011a000eacd6202a47317c489e44aa753a833fb562d970e7b8c0da9de01df86";
   };
 in
 stdenv.mkDerivation {
@@ -37,11 +37,11 @@ stdenv.mkDerivation {
   meta = {
     description = "2D physics engine based on Box2D";
     maintainers = with lib.maintainers;
-    [
-      qknight
-    ];
+      [
+        qknight
+      ];
     platforms = lib.platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = lib.licenses.bsd2;
     homepage = "https://google.github.io/liquidfun/";
   };

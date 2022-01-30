@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl,  openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "popa3d";

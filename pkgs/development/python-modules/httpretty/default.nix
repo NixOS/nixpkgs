@@ -31,9 +31,20 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ nose sure coverage mock rednose pytest
+  checkInputs = [
+    nose
+    sure
+    coverage
+    mock
+    rednose
+    pytest
     # Following not declared in setup.py
-    nose-randomly requests tornado httplib2 nose-exclude freezegun
+    nose-randomly
+    requests
+    tornado
+    httplib2
+    nose-exclude
+    freezegun
   ];
 
   checkPhase = ''

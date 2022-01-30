@@ -1,8 +1,34 @@
-{ stdenv, lib, fetchurl, fetchpatch, texlive, bison, flex, lapack, blas
-, gmp, mpfr, pari, ntl, gsl, mpfi, ecm, glpk, nauty
-, readline, gettext, libpng, libao, gfortran, perl
-, enableGUI ? false, libGL, libGLU, xorg, fltk
-, enableMicroPy ? false, python3
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, texlive
+, bison
+, flex
+, lapack
+, blas
+, gmp
+, mpfr
+, pari
+, ntl
+, gsl
+, mpfi
+, ecm
+, glpk
+, nauty
+, readline
+, gettext
+, libpng
+, libao
+, gfortran
+, perl
+, enableGUI ? false
+, libGL
+, libGLU
+, xorg
+, fltk
+, enableMicroPy ? false
+, python3
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -43,27 +69,46 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    texlive.combined.scheme-small bison flex
+    texlive.combined.scheme-small
+    bison
+    flex
   ];
 
   # perl is only needed for patchShebangs fixup.
   buildInputs = [
-    gmp mpfr pari ntl gsl blas mpfi glpk nauty
-    readline gettext libpng libao perl ecm
+    gmp
+    mpfr
+    pari
+    ntl
+    gsl
+    blas
+    mpfi
+    glpk
+    nauty
+    readline
+    gettext
+    libpng
+    libao
+    perl
+    ecm
     # gfortran.cc default output contains static libraries compiled without -fPIC
     # we want libgfortran.so.3 instead
     (lib.getLib gfortran.cc)
-    lapack blas
+    lapack
+    blas
   ] ++ lib.optionals enableGUI [
-    libGL libGLU fltk xorg.libX11
+    libGL
+    libGLU
+    fltk
+    xorg.libX11
   ] ++ lib.optional enableMicroPy python3;
 
   /* fixes:
-  configure:16211: checking for main in -lntl
-  configure:16230: g++ -o conftest -g -O2   conftest.cpp -lntl  -llapack -lblas -lgfortran -ldl -lpng16 -lm -lmpfi -lmpfr -lgmp  >&5
-  /nix/store/y9c1v4x7y39j2rfbg17agjwqdzxpsn18-ntl-11.3.2/lib/libntl.so: undefined reference to `pthread_key_create'
+    configure:16211: checking for main in -lntl
+    configure:16230: g++ -o conftest -g -O2   conftest.cpp -lntl  -llapack -lblas -lgfortran -ldl -lpng16 -lm -lmpfi -lmpfr -lgmp  >&5
+    /nix/store/y9c1v4x7y39j2rfbg17agjwqdzxpsn18-ntl-11.3.2/lib/libntl.so: undefined reference to `pthread_key_create'
   */
-  NIX_CFLAGS_LINK="-lpthread";
+  NIX_CFLAGS_LINK = "-lpthread";
 
   # xcas Phys and Turtle menus are broken with split outputs
   # and interactive use is likely to need docs
@@ -81,11 +126,19 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--enable-gc" "--enable-png" "--enable-gsl" "--enable-lapack"
-    "--enable-pari" "--enable-ntl" "--enable-gmpxx" # "--enable-cocoa"
-    "--enable-ao" "--enable-ecm" "--enable-glpk"
+    "--enable-gc"
+    "--enable-png"
+    "--enable-gsl"
+    "--enable-lapack"
+    "--enable-pari"
+    "--enable-ntl"
+    "--enable-gmpxx" # "--enable-cocoa"
+    "--enable-ao"
+    "--enable-ecm"
+    "--enable-glpk"
   ] ++ lib.optionals enableGUI [
-    "--enable-gui" "--with-x"
+    "--enable-gui"
+    "--with-x"
   ] ++ lib.optional (!enableMicroPy) "--disable-micropy";
 
   postInstall = ''

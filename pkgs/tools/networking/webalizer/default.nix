@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
         --replace "--static" ""
     '';
 
-  buildInputs = [zlib libpng gd geoip db];
+  buildInputs = [ zlib libpng gd geoip db ];
 
   configureFlags = [
     "--enable-dns"

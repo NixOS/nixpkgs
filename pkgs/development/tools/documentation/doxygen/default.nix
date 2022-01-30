@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-       lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
+    lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
     ++ lib.optional stdenv.isSunOS libiconv
     ++ lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 

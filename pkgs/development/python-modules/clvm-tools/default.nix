@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   # give a hint to setuptools-scm on package version
-  SETUPTOOLS_SCM_PRETEND_VERSION="v${version}";
+  SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
   meta = with lib; {
     description = "Tools for clvm development";

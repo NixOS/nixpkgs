@@ -17,7 +17,8 @@ let
   # Dictionaries we want
   dicts = f aspellDicts;
 
-in buildEnv {
+in
+buildEnv {
   name = "aspell-env";
   buildInputs = [ makeWrapper ];
   paths = [ aspell ] ++ dicts;

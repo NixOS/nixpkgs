@@ -5,8 +5,8 @@ let
 
   cfg = config.programs.tmux;
 
-  defaultKeyMode  = "emacs";
-  defaultResize   = 5;
+  defaultKeyMode = "emacs";
+  defaultResize = 5;
   defaultShortcut = "b";
   defaultTerminal = "screen";
 
@@ -61,7 +61,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
   ###### interface
 
   options = {
@@ -173,7 +174,7 @@ in {
       };
 
       plugins = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         description = "List of plugins to install.";
         example = lib.literalExpression "[ pkgs.tmuxPlugins.nord ]";

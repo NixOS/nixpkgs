@@ -16,8 +16,9 @@ let
         '';
       })
       (addBuildDepends [ makeWrapper ] (justStaticExecutables haskellPackages.hercules-ci-cli));
-in pkg // {
-    meta = pkg.meta // {
-      position = toString ./default.nix + ":1";
-    };
-  }
+in
+pkg // {
+  meta = pkg.meta // {
+    position = toString ./default.nix + ":1";
+  };
+}

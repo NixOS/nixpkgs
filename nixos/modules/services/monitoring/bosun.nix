@@ -16,7 +16,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
 
   options = {
 
@@ -69,7 +70,7 @@ in {
         default = null;
         example = "localhost:8086";
         description = ''
-           Host and port of the influxdb database.
+          Host and port of the influxdb database.
         '';
       };
 

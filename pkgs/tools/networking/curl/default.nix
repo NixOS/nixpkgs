@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, perl
-, brotliSupport ? false, brotli ? null
-, c-aresSupport ? false, c-ares ? null
-, gnutlsSupport ? false, gnutls ? null
-, gsaslSupport ? false, gsasl ? null
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, perl
+, brotliSupport ? false
+, brotli ? null
+, c-aresSupport ? false
+, c-ares ? null
+, gnutlsSupport ? false
+, gnutls ? null
+, gsaslSupport ? false
+, gsasl ? null
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
     # disable gss becuase of: undefined reference to `k5_bcmp'
@@ -12,18 +20,31 @@
     # fixed in mig, but losing gss support on cross compilation to darwin is
     # not worth the effort.
     !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
-  ), libkrb5 ? null
-, http2Support ? true, nghttp2 ? null
-, http3Support ? false, nghttp3, ngtcp2 ? null
-, idnSupport ? false, libidn2 ? null
-, ldapSupport ? false, openldap ? null
-, opensslSupport ? zlibSupport, openssl ? null
-, pslSupport ? false, libpsl ? null
-, rtmpSupport ? false, rtmpdump ? null
-, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
-, wolfsslSupport ? false, wolfssl ? null
-, zlibSupport ? true, zlib ? null
-, zstdSupport ? false, zstd ? null
+  )
+, libkrb5 ? null
+, http2Support ? true
+, nghttp2 ? null
+, http3Support ? false
+, nghttp3
+, ngtcp2 ? null
+, idnSupport ? false
+, libidn2 ? null
+, ldapSupport ? false
+, openldap ? null
+, opensslSupport ? zlibSupport
+, openssl ? null
+, pslSupport ? false
+, libpsl ? null
+, rtmpSupport ? false
+, rtmpdump ? null
+, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin
+, libssh2 ? null
+, wolfsslSupport ? false
+, wolfssl ? null
+, zlibSupport ? true
+, zlib ? null
+, zstdSupport ? false
+, zstd ? null
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -45,8 +66,8 @@ assert http3Support -> ngtcp2 != null;
 assert idnSupport -> libidn2 != null;
 assert ldapSupport -> openldap != null;
 assert opensslSupport -> openssl != null;
-assert pslSupport -> libpsl !=null;
-assert rtmpSupport -> rtmpdump !=null;
+assert pslSupport -> libpsl != null;
+assert rtmpSupport -> rtmpdump != null;
 assert scpSupport -> libssh2 != null;
 assert wolfsslSupport -> wolfssl != null;
 assert zlibSupport -> zlib != null;
@@ -105,36 +126,36 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      # Build without manual
-      "--disable-manual"
-      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
-      # to nss-cacert from the default profile.
-      "--without-ca-bundle"
-      "--without-ca-path"
-      (lib.enableFeature c-aresSupport "ares")
-      (lib.enableFeature ldapSupport "ldap")
-      (lib.enableFeature ldapSupport "ldaps")
-      # The build fails when using wolfssl with --with-ca-fallback
-      (lib.withFeature (!wolfsslSupport) "ca-fallback")
-      (lib.withFeature http3Support "nghttp3")
-      (lib.withFeature http3Support "ngtcp2")
-      (lib.withFeature rtmpSupport "librtmp")
-      (lib.withFeature zstdSupport "zstd")
-      (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
-      (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
-      (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
-      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
-      (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
-      (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
-    ]
-    ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
-       # For the 'urandom', maybe it should be a cross-system option
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-       "--with-random=/dev/urandom"
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
-      "--disable-shared"
-      "--enable-static"
-    ];
+    # Build without manual
+    "--disable-manual"
+    # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
+    # to nss-cacert from the default profile.
+    "--without-ca-bundle"
+    "--without-ca-path"
+    (lib.enableFeature c-aresSupport "ares")
+    (lib.enableFeature ldapSupport "ldap")
+    (lib.enableFeature ldapSupport "ldaps")
+    # The build fails when using wolfssl with --with-ca-fallback
+    (lib.withFeature (!wolfsslSupport) "ca-fallback")
+    (lib.withFeature http3Support "nghttp3")
+    (lib.withFeature http3Support "ngtcp2")
+    (lib.withFeature rtmpSupport "librtmp")
+    (lib.withFeature zstdSupport "zstd")
+    (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
+    (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
+    (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
+    (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
+    (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
+    (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
+  ]
+  ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
+  # For the 'urandom', maybe it should be a cross-system option
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    "--with-random=/dev/urandom"
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "--disable-shared"
+    "--enable-static"
+  ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
   CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
@@ -160,7 +181,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A command line tool for transferring files with URL syntax";
-    homepage    = "https://curl.se/";
+    homepage = "https://curl.se/";
     license = licenses.curl;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;

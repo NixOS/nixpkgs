@@ -19,12 +19,13 @@ let
       };
       set = (nullOr (lazyAttrsOf valueTypes)) // {
         description = "KDE Configuration set";
-        emptyValue.value = {};
+        emptyValue.value = { };
       };
-    in (lazyAttrsOf set) // {
-        description = "KDE Configuration file";
-        emptyValue.value = {};
-      };
+    in
+    (lazyAttrsOf set) // {
+      description = "KDE Configuration file";
+      emptyValue.value = { };
+    };
 
   libsForQt5 = pkgs.plasma5Packages;
   inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
@@ -195,14 +196,14 @@ in
     # Internally allows configuring kdeglobals globally
     kdeglobals = mkOption {
       internal = true;
-      default = {};
+      default = { };
       type = kdeConfigurationType;
     };
 
     # Internally allows configuring kwin globally
     kwinrc = mkOption {
       internal = true;
-      default = {};
+      default = { };
       type = kdeConfigurationType;
     };
 
@@ -431,8 +432,8 @@ in
       nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
 
       environment.etc = {
-        "xdg/kwinrc".text     = lib.generators.toINI {} cfg.kwinrc;
-        "xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
+        "xdg/kwinrc".text = lib.generators.toINI { } cfg.kwinrc;
+        "xdg/kdeglobals".text = lib.generators.toINI { } cfg.kdeglobals;
       };
     })
 

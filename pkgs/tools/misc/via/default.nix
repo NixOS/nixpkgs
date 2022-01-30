@@ -11,7 +11,8 @@ let
     sha256 = "d2cd73d280a265149fedb24161ec7c575523596c4d30898ad6b5875e09b3f34a";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   profile = ''

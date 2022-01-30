@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, texinfo, pcre2
-, enablePython ? false, python ? null, swig, libxml2, ncurses
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, texinfo
+, pcre2
+, enablePython ? false
+, python ? null
+, swig
+, libxml2
+, ncurses
 }:
 let
   isPython3 = enablePython && python.pythonAtLeast "3";

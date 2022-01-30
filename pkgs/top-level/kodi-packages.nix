@@ -18,7 +18,7 @@ let self = rec {
   # Convert derivation to a kodi module. Stolen from ../../../top-level/python-packages.nix
   toKodiAddon = drv: drv.overrideAttrs (oldAttrs: {
     # Use passthru in order to prevent rebuilds when possible.
-    passthru = (oldAttrs.passthru or {}) // {
+    passthru = (oldAttrs.passthru or { }) // {
       kodiAddonFor = kodi;
       requiredKodiAddons = requiredKodiAddons drv.propagatedBuildInputs;
     };
@@ -32,7 +32,7 @@ let self = rec {
     let
       modules = filter hasKodiAddon drvs;
     in
-      unique (modules ++ concatLists (catAttrs "requiredKodiAddons" modules));
+    unique (modules ++ concatLists (catAttrs "requiredKodiAddons" modules));
 
   # package update scripts
 
@@ -153,7 +153,8 @@ let self = rec {
   trakt-module = callPackage ../applications/video/kodi/addons/trakt-module { };
 
   trakt = callPackage ../applications/video/kodi/addons/trakt { };
-}; in self // lib.optionalAttrs (config.allowAliases or true) {
+}; in
+self // lib.optionalAttrs (config.allowAliases or true) {
   # deprecated or renamed packages
 
   controllers = throw "kodi.packages.controllers has been replaced with kodi.packages.controller-topology-project - a package which contains a large number of controller profiles." { };

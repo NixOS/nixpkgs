@@ -1,6 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, isPy3k
-, pbr, six, futures ? null, monotonic ? null, typing ? null, setuptools-scm
-, pytest, sphinx, tornado, typeguard
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, isPy3k
+, pbr
+, six
+, futures ? null
+, monotonic ? null
+, typing ? null
+, setuptools-scm
+, pytest
+, sphinx
+, tornado
+, typeguard
 }:
 
 buildPythonPackage rec {
@@ -18,11 +30,12 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest sphinx tornado ]
     ++ lib.optionals isPy3k [ typeguard ];
-  checkPhase = if isPy27 then ''
-    pytest --ignore='tenacity/tests/test_asyncio.py'
-  '' else ''
-    pytest
-  '';
+  checkPhase =
+    if isPy27 then ''
+      pytest --ignore='tenacity/tests/test_asyncio.py'
+    '' else ''
+      pytest
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/jd/tenacity";

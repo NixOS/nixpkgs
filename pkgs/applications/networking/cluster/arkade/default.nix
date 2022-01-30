@@ -35,7 +35,8 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/alexellis/arkade/cmd.GitCommit=ref/tags/${version}"
     "-X github.com/alexellis/arkade/cmd.Version=${version}"
   ];

@@ -4,9 +4,11 @@ let
   stableVersion = "2.2.29";
   previewVersion = stableVersion;
   addVersion = args:
-    let version = if args.stable then stableVersion else previewVersion;
-        branch = if args.stable then "stable" else "preview";
-    in args // { inherit version branch; };
+    let
+      version = if args.stable then stableVersion else previewVersion;
+      branch = if args.stable then "stable" else "preview";
+    in
+    args // { inherit version branch; };
   extraArgs = rec {
     mkOverride = attrname: version: sha256:
       self: super: {
@@ -28,7 +30,8 @@ let
   mkServer = args: callPackage (import ./server.nix (addVersion args // extraArgs)) { };
   guiSrcHash = "04yqh0kq5pkmadcxf090ilh9sqqxajcg65nf7ai1iikxi3x7z3r8";
   serverSrcHash = "0p6q421rldmyqi0padssgrssf4d9mb5ifiqjm5y8vfhwfl5a2cqk";
-in {
+in
+{
   guiStable = mkGui {
     stable = true;
     sha256Hash = guiSrcHash;

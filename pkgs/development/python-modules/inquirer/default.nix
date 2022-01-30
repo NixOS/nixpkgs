@@ -15,9 +15,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ blessed python-editor readchar ];
 
   postPatch = ''
-   substituteInPlace requirements.txt \
-     --replace "blessed==1.17.6" "blessed~=1.17" \
-     --replace "readchar==2.0.1" "readchar>=2.0.0"
+    substituteInPlace requirements.txt \
+      --replace "blessed==1.17.6" "blessed~=1.17" \
+      --replace "readchar==2.0.1" "readchar>=2.0.0"
   '';
 
   checkInputs = [ pytest pytest-cov pexpect pytest-mock ];

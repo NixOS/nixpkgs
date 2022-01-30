@@ -17,7 +17,8 @@ in
   config = {
 
     environment.variables =
-      { NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
+      {
+        NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
         # note: many programs exec() this directly, so default options for less must not
         # be specified here; do so in the default value of programs.less.envVariables instead
         PAGER = mkDefault "less";
@@ -29,13 +30,15 @@ in
     programs.less.enable = true;
 
     environment.profiles = mkAfter
-      [ "/nix/var/nix/profiles/default"
+      [
+        "/nix/var/nix/profiles/default"
         "/run/current-system/sw"
       ];
 
     # TODO: move most of these elsewhere
     environment.profileRelativeSessionVariables =
-      { PATH = [ "/bin" ];
+      {
+        PATH = [ "/bin" ];
         INFOPATH = [ "/info" "/share/info" ];
         KDEDIRS = [ "" ];
         QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" ];
@@ -49,15 +52,15 @@ in
 
     environment.extraInit =
       ''
-         unset ASPELL_CONF
-         for i in ${concatStringsSep " " (reverseList cfg.profiles)} ; do
-           if [ -d "$i/lib/aspell" ]; then
-             export ASPELL_CONF="dict-dir $i/lib/aspell"
-           fi
-         done
+        unset ASPELL_CONF
+        for i in ${concatStringsSep " " (reverseList cfg.profiles)} ; do
+          if [ -d "$i/lib/aspell" ]; then
+            export ASPELL_CONF="dict-dir $i/lib/aspell"
+          fi
+        done
 
-         export NIX_USER_PROFILE_DIR="/nix/var/nix/profiles/per-user/$USER"
-         export NIX_PROFILES="${concatStringsSep " " (reverseList cfg.profiles)}"
+        export NIX_USER_PROFILE_DIR="/nix/var/nix/profiles/per-user/$USER"
+        export NIX_PROFILES="${concatStringsSep " " (reverseList cfg.profiles)}"
       '';
 
   };

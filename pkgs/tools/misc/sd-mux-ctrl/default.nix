@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, cmake, pkg-config, libftdi1, popt}:
+{ lib, stdenv, fetchgit, cmake, pkg-config, libftdi1, popt }:
 
 stdenv.mkDerivation rec {
   pname = "sd-mux-ctrl-unstable";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Tool for controlling multiple sd-mux devices";
     homepage = "https://wiki.tizen.org/SD_MUX";
     license = licenses.asl20;
-    maintainers =  with maintainers; [ sarcasticadmin ];
+    maintainers = with maintainers; [ sarcasticadmin ];
     platforms = platforms.unix;
   };
 }

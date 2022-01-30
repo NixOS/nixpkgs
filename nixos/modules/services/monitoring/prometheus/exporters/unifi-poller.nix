@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.prometheus.exporters.unifi-poller;
 
-  configFile = pkgs.writeText "prometheus-unifi-poller-exporter.json" (generators.toJSON {} {
+  configFile = pkgs.writeText "prometheus-unifi-poller-exporter.json" (generators.toJSON { } {
     poller = { inherit (cfg.log) debug quiet; };
     unifi = { inherit (cfg) controllers; };
     influxdb.disable = true;
@@ -15,7 +15,8 @@ let
     };
   });
 
-in {
+in
+{
   port = 9130;
 
   extraOpts = {

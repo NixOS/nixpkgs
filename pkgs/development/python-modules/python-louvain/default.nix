@@ -2,7 +2,8 @@
 , fetchPypi
 , buildPythonPackage
 , networkx
-, numpy }:
+, numpy
+}:
 
 buildPythonPackage rec {
   pname = "python-louvain";

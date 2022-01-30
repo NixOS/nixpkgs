@@ -10,7 +10,8 @@ let
     rev = "v3.0.0";
     sha256 = "O6p2PFB7c2KE9VqWvmTaFywbW1hSzAP5V42EuemX+ls=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "nlohmann_json";
   version = "3.10.2";
 

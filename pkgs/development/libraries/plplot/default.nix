@@ -3,15 +3,17 @@
 , fetchurl
 , cmake
 , enableWX ? false
-, wxGTK31, wxmac
+, wxGTK31
+, wxmac
 , enableXWin ? false
 , libX11
 }:
 
 let
   wxWidgets = (if stdenv.isDarwin then wxmac else wxGTK31);
-in stdenv.mkDerivation rec {
-  pname   = "plplot";
+in
+stdenv.mkDerivation rec {
+  pname = "plplot";
   version = "5.15.0";
 
   src = fetchurl {
@@ -30,7 +32,7 @@ in stdenv.mkDerivation rec {
       wxWidgets
       enableXWin
       libX11
-    ;
+      ;
   };
 
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" "-DBUILD_TEST=ON" ];
@@ -39,9 +41,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform scientific graphics plotting library";
-    homepage    = "https://plplot.org";
+    homepage = "https://plplot.org";
     maintainers = with maintainers; [ bcdarwin ];
-    platforms   = platforms.unix;
-    license     = licenses.lgpl2;
+    platforms = platforms.unix;
+    license = licenses.lgpl2;
   };
 }

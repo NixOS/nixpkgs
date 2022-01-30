@@ -19,8 +19,9 @@ mkCoqDerivation {
     { case = isEq "8.12"; out = "1.7.4"; }
     { case = isEq "8.11"; out = "1.7.3"; }
     { case = isEq "8.10"; out = "1.7.2"; }
-    { case = isEq "8.9";  out = "1.7.1"; }
-  ] null;
+    { case = isEq "8.9"; out = "1.7.1"; }
+  ]
+    null;
 
   mlPlugin = true;
 

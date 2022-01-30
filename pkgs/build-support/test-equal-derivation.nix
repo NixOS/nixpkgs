@@ -11,10 +11,10 @@
 
   Example:
 
-      testEqualDerivation
-        "The hello package must stay the same when enabling checks."
-        hello
-        (hello.overrideAttrs(o: { doCheck = true; }))
+  testEqualDerivation
+  "The hello package must stay the same when enabling checks."
+  hello
+  (hello.overrideAttrs(o: { doCheck = true; }))
 
 */
 assertion: a: b:
@@ -30,14 +30,14 @@ if drvA == drvB then
   emptyFile
 else
   runCommand name
-    {
-      inherit assertion drvA drvB;
-      nativeBuildInputs = [ nix-diff ];
-    } ''
-      echo "$assertion"
-      echo "However, the derivations differ:"
-      echo
-      echo nix-diff $drvA $drvB
-      nix-diff $drvA $drvB
-      exit 1
-    ''
+  {
+    inherit assertion drvA drvB;
+    nativeBuildInputs = [ nix-diff ];
+  } ''
+    echo "$assertion"
+    echo "However, the derivations differ:"
+    echo
+    echo nix-diff $drvA $drvB
+    nix-diff $drvA $drvB
+    exit 1
+  ''

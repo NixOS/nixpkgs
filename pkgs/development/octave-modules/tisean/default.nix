@@ -2,9 +2,9 @@
 , stdenv
 , lib
 , fetchurl
-# Octave dependencies
+  # Octave dependencies
 , signal # >= 1.3.0
-# Build dependencies
+  # Build dependencies
 , gfortran
 }:
 

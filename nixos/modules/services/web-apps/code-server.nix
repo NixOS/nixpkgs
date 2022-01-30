@@ -7,7 +7,8 @@ let
   defaultUser = "code-server";
   defaultGroup = defaultUser;
 
-in {
+in
+{
   ###### interface
   options = {
     services.code-server = {

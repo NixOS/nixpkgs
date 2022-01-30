@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchurl
-, perl, gmp, mpfr, flint, boost
-, bliss, ppl, singular, cddlib, lrs, nauty
-, ninja, ant, openjdk
+{ lib
+, stdenv
+, fetchurl
+, perl
+, gmp
+, mpfr
+, flint
+, boost
+, bliss
+, ppl
+, singular
+, cddlib
+, lrs
+, nauty
+, ninja
+, ant
+, openjdk
 , perlPackages
 , makeWrapper
 }:
@@ -22,15 +35,30 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    perl gmp mpfr flint boost
-    bliss ppl singular cddlib lrs nauty
+    perl
+    gmp
+    mpfr
+    flint
+    boost
+    bliss
+    ppl
+    singular
+    cddlib
+    lrs
+    nauty
     openjdk
   ] ++ (with perlPackages; [
-    JSON TermReadLineGnu TermReadKey XMLSAX
+    JSON
+    TermReadLineGnu
+    TermReadKey
+    XMLSAX
   ]);
 
   nativeBuildInputs = [
-    makeWrapper ninja ant perl
+    makeWrapper
+    ninja
+    ant
+    perl
   ];
 
   ninjaFlags = [ "-C" "build/Opt" ];

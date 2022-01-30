@@ -1,5 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, appdirs, dungeon-eos, explorerscript
-, ndspy, pillow, setuptools, skytemple-rust, tilequant, armips
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, appdirs
+, dungeon-eos
+, explorerscript
+, ndspy
+, pillow
+, setuptools
+, skytemple-rust
+, tilequant
+, armips
 }:
 
 buildPythonPackage rec {

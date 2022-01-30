@@ -153,7 +153,7 @@ in
 
       forward = mkOption {
         default = "first";
-        type = types.enum ["first" "only"];
+        type = types.enum [ "first" "only" ];
         description = "
           Whether to forward 'first' (try forwarding but lookup directly if forwarding fails) or 'only'.
         ";
@@ -242,7 +242,7 @@ in
         description = "BIND daemon user";
         isSystemUser = true;
       };
-    users.groups.${bindUser} = {};
+    users.groups.${bindUser} = { };
 
     systemd.services.bind = {
       description = "BIND Domain Name Server";

@@ -34,11 +34,11 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Command line mailman moderator queue manipulation";
     longDescription = ''
-       listadmin is a command line tool to manipulate the queues of messages
-       held for moderator approval by mailman. It is designed to keep user
-       interaction to a minimum, in theory you could run it from cron to prune
-       the queue. It can use the score from a header added by SpamAssassin to
-       filter, or it can match specific senders, subjects, or reasons.
+      listadmin is a command line tool to manipulate the queues of messages
+      held for moderator approval by mailman. It is designed to keep user
+      interaction to a minimum, in theory you could run it from cron to prune
+      the queue. It can use the score from a header added by SpamAssassin to
+      filter, or it can match specific senders, subjects, or reasons.
     '';
     homepage = "https://sourceforge.net/projects/listadmin/";
     license = licenses.publicDomain;

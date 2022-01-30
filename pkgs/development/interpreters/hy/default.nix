@@ -1,6 +1,6 @@
 { lib
 , callPackage
-, hyDefinedPythonPackages ? python-packages: [] /* Packages like with python.withPackages */
+, hyDefinedPythonPackages ? python-packages: [ ] /* Packages like with python.withPackages */
 }:
 let
   withPackages = (

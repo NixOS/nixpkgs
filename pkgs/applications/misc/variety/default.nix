@@ -11,8 +11,10 @@
 , python3
 , runtimeShell
 , wrapGAppsHook
-, fehSupport ? false, feh
-, imagemagickSupport ? true, imagemagick
+, fehSupport ? false
+, feh
+, imagemagickSupport ? true
+, imagemagick
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -32,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-   gexiv2
-   gobject-introspection
-   gtk3
-   hicolor-icon-theme
-   libnotify
-   librsvg
+    gexiv2
+    gobject-introspection
+    gtk3
+    hicolor-icon-theme
+    libnotify
+    librsvg
   ]
   ++ (with python3.pkgs; [
     beautifulsoup4

@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, vala, gobject-introspection, gtk-doc
-, docbook_xsl, docbook_xml_dtd_412, glib, libxml2, libsoup, gnome, buildPackages
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, vala
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, glib
+, libxml2
+, libsoup
+, gnome
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {

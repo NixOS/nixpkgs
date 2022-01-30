@@ -3,7 +3,8 @@
 let
   versionBase = "0.4";
   versionSuffix = "alpha4";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ddrescueview";
   version = "${versionBase}${versionSuffix}";
 

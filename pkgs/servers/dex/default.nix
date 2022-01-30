@@ -18,7 +18,9 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-w" "-s" "-X github.com/dexidp/dex/version.Version=${src.rev}"
+    "-w"
+    "-s"
+    "-X github.com/dexidp/dex/version.Version=${src.rev}"
   ];
 
   postInstall = ''

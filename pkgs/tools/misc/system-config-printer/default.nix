@@ -1,9 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, udev, intltool, pkg-config, glib, xmlto, wrapGAppsHook
-, docbook_xml_dtd_412, docbook_xsl
-, libxml2, desktop-file-utils, libusb1, cups, gdk-pixbuf, pango, atk, libnotify
-, gobject-introspection, libsecret, packagekit
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, udev
+, intltool
+, pkg-config
+, glib
+, xmlto
+, wrapGAppsHook
+, docbook_xml_dtd_412
+, docbook_xsl
+, libxml2
+, desktop-file-utils
+, libusb1
+, cups
+, gdk-pixbuf
+, pango
+, atk
+, libnotify
+, gobject-introspection
+, libsecret
+, packagekit
 , cups-filters
-, python3Packages, autoreconfHook, bash
+, python3Packages
+, autoreconfHook
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -29,17 +50,31 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib udev libusb1 cups
+    glib
+    udev
+    libusb1
+    cups
     python3Packages.python
-    libnotify gobject-introspection gdk-pixbuf pango atk packagekit
+    libnotify
+    gobject-introspection
+    gdk-pixbuf
+    pango
+    atk
+    packagekit
     libsecret
   ];
 
   nativeBuildInputs = [
-    intltool pkg-config
-    xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
+    intltool
+    pkg-config
+    xmlto
+    libxml2
+    docbook_xml_dtd_412
+    docbook_xsl
+    desktop-file-utils
     python3Packages.wrapPython
-    wrapGAppsHook autoreconfHook
+    wrapGAppsHook
+    autoreconfHook
   ];
 
   pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];

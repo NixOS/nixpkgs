@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, curl}:
+{ lib, stdenv, fetchurl, curl }:
 
 stdenv.mkDerivation rec {
   pname = "libnxml";

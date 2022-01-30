@@ -1,4 +1,14 @@
-{ fetchFromGitHub, automake, autoconf, which, pkg-config, libtool, lib, stdenv, gnutls, asciidoc, doxygen
+{ fetchFromGitHub
+, automake
+, autoconf
+, which
+, pkg-config
+, libtool
+, lib
+, stdenv
+, gnutls
+, asciidoc
+, doxygen
 , withTLS ? true
 , withDocs ? true
 }:
@@ -18,7 +28,7 @@ stdenv.mkDerivation rec {
     which
     libtool
     pkg-config
-  ] ++ lib.optional withTLS gnutls ++ lib.optionals withDocs [ doxygen asciidoc ] ;
+  ] ++ lib.optional withTLS gnutls ++ lib.optionals withDocs [ doxygen asciidoc ];
   preConfigure = "./autogen.sh";
   configureFlags = [ "--disable-shared" ]
     ++ lib.optional (!withDocs) "--disable-documentation"

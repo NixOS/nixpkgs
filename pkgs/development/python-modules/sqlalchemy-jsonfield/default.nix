@@ -12,7 +12,8 @@
 , pytest-sugar
 , coverage
 , pymysql
-, psycopg2 }:
+, psycopg2
+}:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-jsonfield";

@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-  mkdir -p $out/bin
-  make PREFIX=$out install
+    mkdir -p $out/bin
+    make PREFIX=$out install
   '';
 
   meta = with lib; {

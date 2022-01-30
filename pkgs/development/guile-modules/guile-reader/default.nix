@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libffi
   ];
 
-  GUILE_SITE="${guile-lib}/share/guile/site";
+  GUILE_SITE = "${guile-lib}/share/guile/site";
 
   configureFlags = [ "--with-guilemoduledir=$(out)/share/guile/site" ];
 
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/guile-reader/";
     description = "A simple framework for building readers for GNU Guile";
     longDescription = ''
-       Guile-Reader is a simple framework for building readers for GNU Guile.
+      Guile-Reader is a simple framework for building readers for GNU Guile.
 
-       The idea is to make it easy to build procedures that extend Guile's read
-       procedure. Readers supporting various syntax variants can easily be
-       written, possibly by re-using existing "token readers" of a standard
-       Scheme readers. For example, it is used to implement Skribilo's
-       R5RS-derived document syntax.
+      The idea is to make it easy to build procedures that extend Guile's read
+      procedure. Readers supporting various syntax variants can easily be
+      written, possibly by re-using existing "token readers" of a standard
+      Scheme readers. For example, it is used to implement Skribilo's
+      R5RS-derived document syntax.
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];

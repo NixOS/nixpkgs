@@ -1,9 +1,9 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.hadoop;
   hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
-  restartIfChanged  = mkOption {
+  restartIfChanged = mkOption {
     type = types.bool;
     description = ''
       Automatically restart the service on config change.
@@ -183,15 +183,17 @@ in
         14000 # httpfs.http.port
       ]);
     })
-    (mkIf (
+    (mkIf
+      (
         cfg.hdfs.namenode.enable || cfg.hdfs.datanode.enable || cfg.hdfs.journalnode.enable || cfg.hdfs.zkfc.enable
-    ) {
-      users.users.hdfs = {
-        description = "Hadoop HDFS user";
-        group = "hadoop";
-        uid = config.ids.uids.hdfs;
-      };
-    })
+      )
+      {
+        users.users.hdfs = {
+          description = "Hadoop HDFS user";
+          group = "hadoop";
+          uid = config.ids.uids.hdfs;
+        };
+      })
     (mkIf cfg.hdfs.httpfs.enable {
       users.users.httpfs = {
         description = "Hadoop HTTPFS user";

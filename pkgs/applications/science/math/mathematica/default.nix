@@ -41,7 +41,8 @@ let
   l10n = import ./l10ns.nix {
     inherit lib requireFile lang;
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit (l10n) version name src;
 
   nativeBuildInputs = [

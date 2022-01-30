@@ -23,7 +23,8 @@ let
     checkPhase = "${pkgs.adguardhome}/bin/adguardhome -c $out --check-config";
   };
 
-in {
+in
+{
   options.services.adguardhome = with types; {
     enable = mkEnableOption "AdGuard Home network-wide ad blocker";
 

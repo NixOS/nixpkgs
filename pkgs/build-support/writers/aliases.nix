@@ -5,7 +5,7 @@ let
   # set to appear while listing all the packages available.
   removeRecurseForDerivations = alias: with lib;
     if alias.recurseForDerivations or false then
-      removeAttrs alias ["recurseForDerivations"]
+      removeAttrs alias [ "recurseForDerivations" ]
     else alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
@@ -17,15 +17,17 @@ let
 
   # Make sure that we are not shadowing something from
   # writers.
-  checkInPkgs = n: alias: if builtins.hasAttr n prev
-                          then throw "Alias ${n} is still in writers"
-                          else alias;
+  checkInPkgs = n: alias:
+    if builtins.hasAttr n prev
+    then throw "Alias ${n} is still in writers"
+    else alias;
 
   mapAliases = aliases:
-    lib.mapAttrs (n: alias: removeDistribute
-                             (removeRecurseForDerivations
-                              (checkInPkgs n alias)))
-                     aliases;
+    lib.mapAttrs
+      (n: alias: removeDistribute
+        (removeRecurseForDerivations
+          (checkInPkgs n alias)))
+      aliases;
 
 in
 mapAliases ({

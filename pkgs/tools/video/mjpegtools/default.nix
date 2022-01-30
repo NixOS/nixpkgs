@@ -1,4 +1,14 @@
-{ stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkg-config, SDL, SDL_gfx
+{ stdenv
+, lib
+, fetchurl
+, gtk2
+, libdv
+, libjpeg
+, libpng
+, libX11
+, pkg-config
+, SDL
+, SDL_gfx
 , withMinimal ? true
 }:
 
@@ -20,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libdv libjpeg libpng ]
-              ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
+    ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${SDL.dev}/include/SDL";
 

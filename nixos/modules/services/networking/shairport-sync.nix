@@ -84,12 +84,12 @@ in
         group = cfg.group;
         extraGroups = [ "audio" ] ++ optional config.hardware.pulseaudio.enable "pulse";
       };
-      groups.${cfg.group} = {};
+      groups.${cfg.group} = { };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ 5000 ];
-      allowedUDPPortRanges = [ { from = 6001; to = 6011; } ];
+      allowedUDPPortRanges = [{ from = 6001; to = 6011; }];
     };
 
     systemd.services.shairport-sync =

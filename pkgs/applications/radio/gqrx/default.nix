@@ -10,11 +10,13 @@
 , fftwFloat
 , alsa-lib
 , libjack2
-# drivers (optional):
+  # drivers (optional):
 , rtl-sdr
 , hackrf
-, pulseaudioSupport ? true, libpulseaudio
-, portaudioSupport ? false, portaudio
+, pulseaudioSupport ? true
+, libpulseaudio
+, portaudioSupport ? false
+, portaudio
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -54,7 +56,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     thrift
     gnuradio3_8Minimal.unwrapped.python.pkgs.thrift
   ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-    ++ lib.optionals portaudioSupport [ portaudio ];
+  ++ lib.optionals portaudioSupport [ portaudio ];
 
   cmakeFlags =
     let
@@ -64,7 +66,8 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
         else if portaudioSupport
         then "Portaudio"
         else "Gr-audio";
-    in [
+    in
+    [
       "-DLINUX_AUDIO_BACKEND=${audioBackend}"
     ];
 
@@ -80,7 +83,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     # Some of the code comes from the Cutesdr project, with a BSD license, but
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;  # should work on Darwin / macOS too
+    platforms = platforms.linux; # should work on Darwin / macOS too
     maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }

@@ -11,7 +11,7 @@ let
     USERS = cfg.users;
     SECURE_ONLY = cfg.secureOnly;
   } // lib.optionalAttrs (cfg.adTag != null) { AD_TAG = cfg.adTag; }
-    // cfg.extraConfig;
+  // cfg.extraConfig;
 
   convertOption = opt:
     if isString opt || isInt opt then
@@ -78,7 +78,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = {
           STATS_PRINT_PERIOD = 600;
         };

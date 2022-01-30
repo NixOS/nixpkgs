@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, pkg-config, cairo, glib, gdk-pixbuf, libjpeg
-, libpng, libtiff, libxml2, openjpeg, sqlite, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, cairo
+, glib
+, gdk-pixbuf
+, libjpeg
+, libpng
+, libtiff
+, libxml2
+, openjpeg
+, sqlite
+, zlib
 }:
 
 stdenv.mkDerivation rec {

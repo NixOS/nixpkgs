@@ -19,7 +19,8 @@ let helloWorld = writeText "hello-world.ssa" ''
   data $fmt = { b "One and one make %d!\n", b 0 }
 '';
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "qbe-test-can-run-hello-world";
   meta.timeout = 10;
   buildCommand = ''

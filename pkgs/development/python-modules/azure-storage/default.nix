@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ azure-common cryptography python-dateutil requests ]
-                            ++ pkgs.lib.optionals (!isPy3k) [ futures ];
+    ++ pkgs.lib.optionals (!isPy3k) [ futures ];
 
   postPatch = ''
     rm azure_bdist_wheel.py

@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, makeWrapper
-, curl, libiconv, mercurial, zlib
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, makeWrapper
+, curl
+, libiconv
+, mercurial
+, zlib
 }:
 
 let

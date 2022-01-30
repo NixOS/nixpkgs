@@ -40,37 +40,37 @@ let
   # postPatch scripts.
   # Tells ghidra to use our own protoc binary instead of the prebuilt one.
   fixProtoc = ''
-    cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
-protobuf {
-  protoc {
-    path = '${protobuf3_17}/bin/protoc'
-  }
-}
-HERE
+        cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
+    protobuf {
+      protoc {
+        path = '${protobuf3_17}/bin/protoc'
+      }
+    }
+    HERE
   '';
 
   # Adds a gradle step that downloads all the dependencies to the gradle cache.
   addResolveStep = ''
-    cat >>build.gradle <<HERE
-task resolveDependencies {
-  doLast {
-    project.rootProject.allprojects.each { subProject ->
-      subProject.buildscript.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
-      }
-      subProject.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
+        cat >>build.gradle <<HERE
+    task resolveDependencies {
+      doLast {
+        project.rootProject.allprojects.each { subProject ->
+          subProject.buildscript.configurations.each { configuration ->
+            resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
+          }
+          subProject.configurations.each { configuration ->
+            resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
+          }
+        }
       }
     }
-  }
-}
-void resolveConfiguration(subProject, configuration, name) {
-  if (configuration.canBeResolved) {
-    logger.info("Resolving project {} {}", subProject.name, name)
-    configuration.resolve()
-  }
-}
-HERE
+    void resolveConfiguration(subProject, configuration, name) {
+      if (configuration.canBeResolved) {
+        logger.info("Resolving project {} {}", subProject.name, name)
+        configuration.resolve()
+      }
+    }
+    HERE
   '';
 
   # fake build to pre-download deps into fixed-output derivation
@@ -104,11 +104,15 @@ HERE
     outputHash = "sha256-Yxf6g908+fRRUh40PrwNUCTvxzlvSmwzE8R+3ZkRIvs=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src;
 
   nativeBuildInputs = [
-    gradle unzip makeWrapper icoutils
+    gradle
+    unzip
+    makeWrapper
+    icoutils
   ] ++ lib.optional stdenv.isDarwin xcbuild;
 
   dontStrip = true;

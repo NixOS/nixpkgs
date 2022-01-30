@@ -22,7 +22,8 @@ let
     { name = "files"; path = indexCache; }
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "comma";
   version = "1.1.0";
 

@@ -1,7 +1,24 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
-, gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, fetchFromGitLab
+, bundlerEnv
+, ruby
+, tzdata
+, git
+, nettools
+, nixosTests
+, nodejs
+, openssl
+, gitlabEnterprise ? false
+, callPackage
+, yarn
+, fixup_yarn_lock
+, replace
+, file
+, cacert
+, fetchYarnDeps
 }:
 
 let
@@ -21,7 +38,8 @@ let
     gemdir = ./rubyEnv;
     gemset =
       let x = import (gemdir + "/gemset.nix");
-      in x // {
+      in
+      x // {
         # the openssl needs the openssl include files
         openssl = x.openssl // {
           buildInputs = [ openssl ];
@@ -41,7 +59,14 @@ let
         };
       };
     groups = [
-      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
+      "default"
+      "unicorn"
+      "ed25519"
+      "metrics"
+      "development"
+      "puma"
+      "test"
+      "kerberos"
     ];
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
@@ -120,7 +145,12 @@ stdenv.mkDerivation {
   inherit src;
 
   buildInputs = [
-    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
+    rubyEnv
+    rubyEnv.wrappedRuby
+    rubyEnv.bundler
+    tzdata
+    git
+    nettools
   ];
 
   patches = [

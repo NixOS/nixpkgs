@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0836nwcpyfdrapyj3hbg3wh149ihc26pc78h01adpc7c0r7d9pr9";
   };
 
-  nativeBuildInputs = [ cmake  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ qt4 file ];
 

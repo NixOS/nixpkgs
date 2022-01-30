@@ -1,6 +1,22 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
-, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
-, oathToolkit }:
+{ gnustep
+, lib
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, python3
+, lndir
+, openssl
+, openldap
+, sope
+, libmemcached
+, curl
+, libsodium
+, libytnef
+, libzip
+, pkg-config
+, nixosTests
+, oathToolkit
+}:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
   version = "5.5.0";

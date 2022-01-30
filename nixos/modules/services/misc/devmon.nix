@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.devmon;
 
-in {
+in
+{
   options = {
     services.devmon = {
       enable = mkEnableOption "devmon, an automatic device mounting daemon";

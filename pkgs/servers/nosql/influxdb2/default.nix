@@ -60,7 +60,8 @@ let
     '';
   };
 
-in buildGoModule {
+in
+buildGoModule {
   pname = "influxdb";
   version = version;
   src = src;

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , makeWrapper
 , pkg-config
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ git ];
 
-  checkInputs = []
+  checkInputs = [ ]
     ++ (with perlPackages; [ perl ShellCommand TestMost ]);
 
   outputs = [ "out" "doc" "man" ];

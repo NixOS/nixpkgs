@@ -20,7 +20,8 @@ let
     pygments
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pwndbg";
   version = "2021.06.22";
   format = "other";

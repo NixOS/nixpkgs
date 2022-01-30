@@ -49,7 +49,7 @@ in
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ bool str ]);
-        default = {};
+        default = { };
         description = ''
           <citerefentry><refentrytitle>ssmtp</refentrytitle><manvolnum>5</manvolnum></citerefentry> configuration. Refer
           to <link xlink:href="https://linux.die.net/man/5/ssmtp.conf"/> for details on supported values.
@@ -164,17 +164,20 @@ in
     ];
 
     # careful here: ssmtp REQUIRES all config lines to end with a newline char!
-    environment.etc."ssmtp/ssmtp.conf".text = with generators; toKeyValue {
-      mkKeyValue = mkKeyValueDefault {
-        mkValueString = value:
-          if value == true then "YES"
-          else if value == false then "NO"
-          else mkValueStringDefault {} value
-        ;
-      } "=";
-    } cfg.settings;
+    environment.etc."ssmtp/ssmtp.conf".text = with generators; toKeyValue
+      {
+        mkKeyValue = mkKeyValueDefault
+          {
+            mkValueString = value:
+              if value == true then "YES"
+              else if value == false then "NO"
+              else mkValueStringDefault { } value
+            ;
+          } "=";
+      }
+      cfg.settings;
 
-    environment.systemPackages = [pkgs.ssmtp];
+    environment.systemPackages = [ pkgs.ssmtp ];
 
     services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail {
       program = "sendmail";

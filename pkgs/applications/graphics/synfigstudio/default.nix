@@ -1,6 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, boost, cairo, gettext, glibmm, gtk3, gtkmm3
-, libjack2, libsigcxx, libxmlxx, makeWrapper, mlt-qt5, pango, pkg-config
-, imagemagick, intltool, autoreconfHook, which, gnome
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, cairo
+, gettext
+, glibmm
+, gtk3
+, gtkmm3
+, libjack2
+, libsigcxx
+, libxmlxx
+, makeWrapper
+, mlt-qt5
+, pango
+, pkg-config
+, imagemagick
+, intltool
+, autoreconfHook
+, which
+, gnome
 }:
 
 let
@@ -10,10 +28,10 @@ let
     name = "ETL-0.04.19";
 
     src = fetchFromGitHub {
-       repo   = "synfig";
-       owner  = "synfig";
-       rev    = version;
-       sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
+      repo = "synfig";
+      owner = "synfig";
+      rev = version;
+      sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
     };
 
     postUnpack = "sourceRoot=\${sourceRoot}/ETL/";
@@ -26,10 +44,10 @@ let
     inherit version;
 
     src = fetchFromGitHub {
-       repo   = "synfig";
-       owner  = "synfig";
-       rev    = version;
-       sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
+      repo = "synfig";
+      owner = "synfig";
+      rev = version;
+      sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
     };
 
     postUnpack = "sourceRoot=\${sourceRoot}/synfig-core/";
@@ -41,7 +59,14 @@ let
 
     nativeBuildInputs = [ pkg-config autoreconfHook gettext ];
     buildInputs = [
-      ETL boost cairo glibmm mlt-qt5 libsigcxx libxmlxx pango
+      ETL
+      boost
+      cairo
+      glibmm
+      mlt-qt5
+      libsigcxx
+      libxmlxx
+      pango
     ];
 
     meta.broken = true;
@@ -52,10 +77,10 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchFromGitHub {
-     repo   = "synfig";
-     owner  = "synfig";
-     rev    = version;
-     sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
+    repo = "synfig";
+    owner = "synfig";
+    rev = version;
+    sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/synfig-studio/";
@@ -105,9 +130,22 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config autoreconfHook gettext ];
   buildInputs = [
-    ETL boost cairo glibmm gtk3 gtkmm3 imagemagick intltool
-    libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5
-    synfig which gnome.adwaita-icon-theme
+    ETL
+    boost
+    cairo
+    glibmm
+    gtk3
+    gtkmm3
+    imagemagick
+    intltool
+    libjack2
+    libsigcxx
+    libxmlxx
+    makeWrapper
+    mlt-qt5
+    synfig
+    which
+    gnome.adwaita-icon-theme
   ];
 
   postInstall = ''

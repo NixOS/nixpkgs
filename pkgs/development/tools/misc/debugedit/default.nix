@@ -1,5 +1,5 @@
 #TODO@deliciouslytyped The tool seems to unnecessarily force mutable access for the debugedit `-l` feature
-{fetchgit, lib, stdenv, autoreconfHook, pkg-config, elfutils, help2man, util-linux}:
+{ fetchgit, lib, stdenv, autoreconfHook, pkg-config, elfutils, help2man, util-linux }:
 stdenv.mkDerivation rec {
   pname = "debugedit";
   version = "5.0";

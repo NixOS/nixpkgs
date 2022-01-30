@@ -14,7 +14,8 @@ in
   ###### implementation
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton
-      { name = "icewm";
+      {
+        name = "icewm";
         start =
           ''
             ${pkgs.icewm}/bin/icewm &

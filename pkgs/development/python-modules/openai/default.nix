@@ -3,14 +3,14 @@
 , fetchFromGitHub
 , pythonOlder
 
-# Python dependencies
+  # Python dependencies
 , openpyxl
 , pandas
 , pandas-stubs
 , requests
 , tqdm
 
-# Check dependencies
+  # Check dependencies
 , pytest-mock
 , pytestCheckHook
 }:

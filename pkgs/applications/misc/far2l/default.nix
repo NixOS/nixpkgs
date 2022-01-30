@@ -1,15 +1,48 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, cmake, ninja, pkg-config, m4, bash
-, xdg-utils, zip, unzip, gzip, bzip2, gnutar, p7zip, xz
-, IOKit, Carbon, Cocoa, AudioToolbox, OpenGL
-, withTTYX ? true, libX11
-, withGUI ? true, wxGTK30, wxmac
-, withUCD ? true, libuchardet
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, cmake
+, ninja
+, pkg-config
+, m4
+, bash
+, xdg-utils
+, zip
+, unzip
+, gzip
+, bzip2
+, gnutar
+, p7zip
+, xz
+, IOKit
+, Carbon
+, Cocoa
+, AudioToolbox
+, OpenGL
+, withTTYX ? true
+, libX11
+, withGUI ? true
+, wxGTK30
+, wxmac
+, withUCD ? true
+, libuchardet
 
-# Plugins
-, withColorer ? true, spdlog, xercesc
-, withMultiArc ? true, libarchive, pcre
-, withNetRocks ? true, openssl, libssh, samba, libnfs, neon
-, withPython ? false, python3Packages
+  # Plugins
+, withColorer ? true
+, spdlog
+, xercesc
+, withMultiArc ? true
+, libarchive
+, pcre
+, withNetRocks ? true
+, openssl
+, libssh
+, samba
+, libnfs
+, neon
+, withPython ? false
+, python3Packages
 }:
 
 let

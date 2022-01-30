@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, setuptools-git, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-git
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "pytest-fixture-config";

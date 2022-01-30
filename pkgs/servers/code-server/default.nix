@@ -1,7 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
-, cacert, moreutils, jq, git, rsync, pkg-config, yarn, python3
-, esbuild, nodejs-14_x, node-gyp, libsecret, xorg, ripgrep
-, AppKit, Cocoa, CoreServices, Security, cctools, xcbuild }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, makeWrapper
+, runCommand
+, cacert
+, moreutils
+, jq
+, git
+, rsync
+, pkg-config
+, yarn
+, python3
+, esbuild
+, nodejs-14_x
+, node-gyp
+, libsecret
+, xorg
+, ripgrep
+, AppKit
+, Cocoa
+, CoreServices
+, Security
+, cctools
+, xcbuild
+}:
 
 let
   system = stdenv.hostPlatform.system;
@@ -9,17 +32,18 @@ let
   nodejs = nodejs-14_x;
   python = python3;
   yarn' = yarn.override { inherit nodejs; };
-  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
+  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress" ];
 
   # replaces esbuild's download script with a binary from nixpkgs
-  patchEsbuild = path : version : ''
+  patchEsbuild = path: version: ''
     mkdir -p ${path}/node_modules/esbuild/bin
     jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
     sed -i 's/${version}/${esbuild.version}/g' ${path}/node_modules/esbuild/lib/main.js
     ln -s -f ${esbuild}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "code-server";
   version = "4.0.1";
   commit = "7fe23daf009e5234eaa54a1ea5ff26df384c47ac";
@@ -75,13 +99,26 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    nodejs yarn' python pkg-config makeWrapper git rsync jq moreutils
+    nodejs
+    yarn'
+    python
+    pkg-config
+    makeWrapper
+    git
+    rsync
+    jq
+    moreutils
   ];
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (with xorg; [ libX11 libxkbfile ])
     ++ lib.optionals stdenv.isDarwin [
-      AppKit Cocoa CoreServices Security cctools xcbuild
-    ];
+    AppKit
+    Cocoa
+    CoreServices
+    Security
+    cctools
+    xcbuild
+  ];
 
   patches = [
     # remove download of coder-cloud agent

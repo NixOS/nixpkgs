@@ -26,12 +26,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ bash
-                  curl
-                  dnsutils
-                  gawk
-                  jq
-                  netcat ];
+  buildInputs = [
+    bash
+    curl
+    dnsutils
+    gawk
+    jq
+    netcat
+  ];
 
   installPhase = ''
     runHook preInstall

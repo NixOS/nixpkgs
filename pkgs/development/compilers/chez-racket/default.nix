@@ -30,7 +30,7 @@ let
       runHook postInstall
     '';
   };
-  boot = buildPackages.callPackage (import ./shared.nix forBoot) {};
+  boot = buildPackages.callPackage (import ./shared.nix forBoot) { };
   forFinal = {
     pname = "chez-scheme-racket";
     configurePhase = ''
@@ -47,6 +47,6 @@ let
     '';
     setupHook = ./setup-hook.sh;
   };
-  final = callPackage (import ./shared.nix forFinal) {};
+  final = callPackage (import ./shared.nix forFinal) { };
 in
 final

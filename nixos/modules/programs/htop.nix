@@ -30,7 +30,7 @@ in
 
     settings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool (listOf (oneOf [ str int bool ])) ]);
-      default = {};
+      default = { };
       example = {
         hide_kernel_threads = true;
         hide_userland_threads = true;

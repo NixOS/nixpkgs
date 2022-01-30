@@ -8,7 +8,7 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dex2jar";
-  version  = "2.0";
+  version = "2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.zip";

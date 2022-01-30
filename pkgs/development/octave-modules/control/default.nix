@@ -2,7 +2,8 @@
 , lib
 , fetchurl
 , gfortran
-, lapack, blas
+, lapack
+, blas
 }:
 
 buildOctavePackage rec {
@@ -19,7 +20,8 @@ buildOctavePackage rec {
   ];
 
   buildInputs = [
-    lapack blas
+    lapack
+    blas
   ];
 
   meta = with lib; {

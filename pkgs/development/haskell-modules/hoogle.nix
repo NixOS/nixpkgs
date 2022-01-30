@@ -2,7 +2,10 @@
 # database which provides "Source" links to all specified 'packages' -- or the
 # current Haskell Platform if no custom package set is provided.
 
-{ lib, stdenv, buildPackages, haskellPackages
+{ lib
+, stdenv
+, buildPackages
+, haskellPackages
 , writeText
 }:
 
@@ -27,14 +30,15 @@ let
   ghcDocLibDir =
     if !isGhcjs
     then ghc.doc + "/share/doc/ghc*/html/libraries"
-    else ghc     + "/doc/lib";
+    else ghc + "/doc/lib";
   # On GHCJS, use a stripped down version of GHC's prologue.txt
   prologue =
     if !isGhcjs
     then "${ghcDocLibDir}/prologue.txt"
-    else writeText "ghcjs-prologue.txt" ''
-      This index includes documentation for many Haskell modules.
-    '';
+    else
+      writeText "ghcjs-prologue.txt" ''
+        This index includes documentation for many Haskell modules.
+      '';
 
   # TODO: closePropagation is deprecated; replace
   docPackages = lib.closePropagation
@@ -44,11 +48,11 @@ let
 in
 buildPackages.stdenv.mkDerivation {
   name = "hoogle-with-packages";
-  buildInputs = [ghc hoogle];
+  buildInputs = [ ghc hoogle ];
 
   inherit docPackages;
 
-  passAsFile = ["buildCommand"];
+  passAsFile = [ "buildCommand" ];
 
   buildCommand = ''
     ${let # Filter out nulls here to work around https://github.com/NixOS/nixpkgs/issues/82245

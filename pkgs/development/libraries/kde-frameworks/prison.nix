@@ -1,7 +1,9 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  libdmtx, qrencode, qtbase,
+{ mkDerivation
+, extra-cmake-modules
+, libdmtx
+, qrencode
+, qtbase
+,
 }:
 
 mkDerivation {

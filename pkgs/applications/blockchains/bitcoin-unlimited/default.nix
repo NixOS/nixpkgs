@@ -1,7 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, util-linux, protobuf, qrencode, libevent, python3
-, withGui, wrapQtAppsHook ? null, qtbase ? null, qttools ? null
-, Foundation, ApplicationServices, AppKit }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, openssl
+, db48
+, boost
+, zlib
+, miniupnpc
+, util-linux
+, protobuf
+, qrencode
+, libevent
+, python3
+, withGui
+, wrapQtAppsHook ? null
+, qtbase ? null
+, qttools ? null
+, Foundation
+, ApplicationServices
+, AppKit
+}:
 
 with lib;
 
@@ -18,20 +37,29 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook python3 ]
     ++ optionals withGui [ wrapQtAppsHook qttools ];
-  buildInputs = [ openssl db48 boost zlib
-                  miniupnpc util-linux protobuf libevent ]
-                  ++ optionals withGui [ qtbase qttools qrencode ]
-                  ++ optionals stdenv.isDarwin [ Foundation ApplicationServices AppKit ];
+  buildInputs = [
+    openssl
+    db48
+    boost
+    zlib
+    miniupnpc
+    util-linux
+    protobuf
+    libevent
+  ]
+  ++ optionals withGui [ qtbase qttools qrencode ]
+  ++ optionals stdenv.isDarwin [ Foundation ApplicationServices AppKit ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt5"
-                                            "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-                                          ];
+    ++ optionals withGui [
+    "--with-gui=qt5"
+    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+  ];
   enableParallelBuilding = true;
 
   meta = {
     description = "Peer-to-peer electronic cash system (Unlimited client)";
-    longDescription= ''
+    longDescription = ''
       Bitcoin is a free open source peer-to-peer electronic cash system that is
       completely decentralized, without the need for a central server or trusted
       parties. Users hold the crypto keys to their own money and transact directly

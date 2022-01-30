@@ -11,14 +11,18 @@
 , pkg-config
 , ploticus
 , transfig
-, enableEmacs ? false, emacs
-, enableLout ? true, lout
-, enableTex ? true, tex
+, enableEmacs ? false
+, emacs
+, enableLout ? true
+, lout
+, enableTex ? true
+, tex
 }:
 
 let
   inherit (lib) optional;
-in stdenv.mkDerivation rec{
+in
+stdenv.mkDerivation rec{
   pname = "skribilo";
   version = "0.9.5";
 

@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, nose
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nose
 , lxml
 , requests
 , pyparsing
@@ -25,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://twill-tools.github.io/twill/";
     description = "A simple scripting language for Web browsing";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
   };
 }

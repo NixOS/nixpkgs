@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper,
-  maim, slop, ffmpeg, byzanz, libnotify, xdpyinfo }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, maim
+, slop
+, ffmpeg
+, byzanz
+, libnotify
+, xdpyinfo
+}:
 
 stdenv.mkDerivation rec {
   pname = "yaxg";

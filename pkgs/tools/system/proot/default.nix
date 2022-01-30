@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
 , talloc
 , pkg-config
 , libarchive
 , git
 , ncurses
-, docutils, swig, python3, coreutils, enablePython ? true }:
+, docutils
+, swig
+, python3
+, coreutils
+, enablePython ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "proot";
@@ -30,7 +38,7 @@ stdenv.mkDerivation rec {
     # without this patch the package does not build with python>3.7
     (fetchpatch {
       url = "https://github.com/proot-me/proot/pull/285.patch";
-      sha256= "1vncq36pr4v0h63fijga6zrwlsb0vb4pj25zxf1ni15ndxv63pxj";
+      sha256 = "1vncq36pr4v0h63fijga6zrwlsb0vb4pj25zxf1ni15ndxv63pxj";
     })
   ];
 

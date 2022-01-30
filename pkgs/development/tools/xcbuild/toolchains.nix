@@ -1,5 +1,11 @@
-{ runCommand, toolchainName, fetchurl, stdenv
-, buildPackages, lib, writeText }:
+{ runCommand
+, toolchainName
+, fetchurl
+, stdenv
+, buildPackages
+, lib
+, writeText
+}:
 
 let
 
@@ -14,13 +20,13 @@ let
   # loop if we want to bootstrap and this is just a tiny script so I'm
   # not going to bother.
   mkdep-darwin-src = fetchurl {
-    url        = "https://opensource.apple.com/source/developer_cmds/developer_cmds-63/mkdep/mkdep.sh";
-    sha256     = "0n4wpqfslfjs5zbys5yri8pfi2awyhlmknsf6laa5jzqbzq9x541";
+    url = "https://opensource.apple.com/source/developer_cmds/developer_cmds-63/mkdep/mkdep.sh";
+    sha256 = "0n4wpqfslfjs5zbys5yri8pfi2awyhlmknsf6laa5jzqbzq9x541";
     executable = true;
   };
 in
 
-runCommand "Toolchains" {} (''
+runCommand "Toolchains" { } (''
   toolchain=$out/XcodeDefault.xctoolchain
   mkdir -p $toolchain
 

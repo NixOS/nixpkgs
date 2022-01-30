@@ -1,5 +1,15 @@
-{ lib, buildDunePackage, async, async_ssl, ppx_sexp_conv, ppx_here, uri, conduit
-, core, ipaddr, ipaddr-sexp, sexplib
+{ lib
+, buildDunePackage
+, async
+, async_ssl
+, ppx_sexp_conv
+, ppx_here
+, uri
+, conduit
+, core
+, ipaddr
+, ipaddr-sexp
+, sexplib
 }:
 
 buildDunePackage {

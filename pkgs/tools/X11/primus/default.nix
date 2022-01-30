@@ -25,7 +25,8 @@ let
     ++ lib.optionals (primusLib_i686 != null) [ primus_i686 primus_i686.glvnd ]
   ));
 
-in writeScriptBin "primusrun" ''
+in
+writeScriptBin "primusrun" ''
   #!${runtimeShell}
   export LD_LIBRARY_PATH=${ldPath}''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   # https://bugs.launchpad.net/ubuntu/+source/bumblebee/+bug/1758243

@@ -29,7 +29,7 @@ let
         | sh
     '';
 
-    outputHashAlgo =  "sha256";
+    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     outputHash = "0d6qs0wg2nfxyq85q46a8dcdqknz9pypb2qmvc8k2w8vcdac1y7n";
   };
@@ -70,7 +70,8 @@ let
     categories = "Development";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src;
   nativeBuildInputs = [ jdk gradle makeWrapper ];
 
@@ -81,7 +82,7 @@ in stdenv.mkDerivation rec {
     gradle --offline --no-daemon --info --init-script ${gradleInit} build
 
     runHook postBuild
-    '';
+  '';
 
   installPhase = ''
     runHook preInstall

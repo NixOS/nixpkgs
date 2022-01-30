@@ -20,12 +20,14 @@ let
     nixpkgs = nixpkgsSrc;
   };
 
-  nixpkgs' = builtins.removeAttrs (import ../pkgs/top-level/release.nix {
-    inherit supportedSystems;
-    nixpkgs = nixpkgsSrc;
-  }) [ "unstable" ];
+  nixpkgs' = builtins.removeAttrs
+    (import ../pkgs/top-level/release.nix {
+      inherit supportedSystems;
+      nixpkgs = nixpkgsSrc;
+    }) [ "unstable" ];
 
-in rec {
+in
+rec {
 
   nixos = {
     inherit (nixos') channel manual options iso_minimal amazonImage dummy;
@@ -89,7 +91,8 @@ in rec {
       maintainers = [ lib.maintainers.eelco ];
     };
     constituents =
-      [ "nixos.channel"
+      [
+        "nixos.channel"
         "nixos.dummy.x86_64-linux"
         "nixos.iso_minimal.x86_64-linux"
         "nixos.amazonImage.x86_64-linux"

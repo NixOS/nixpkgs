@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, fetchurl, ppxlib, alcotest
-, ppx_deriving, yaml
+{ lib
+, buildDunePackage
+, fetchurl
+, ppxlib
+, alcotest
+, ppx_deriving
+, yaml
 }:
 
 buildDunePackage rec {

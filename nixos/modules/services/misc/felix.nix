@@ -49,7 +49,8 @@ in
     users.groups.osgi.gid = config.ids.gids.osgi;
 
     users.users.osgi =
-      { uid = config.ids.uids.osgi;
+      {
+        uid = config.ids.uids.osgi;
         description = "OSGi user";
         home = "/homeless-shelter";
       };

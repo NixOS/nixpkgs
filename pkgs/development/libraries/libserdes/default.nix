@@ -7,7 +7,8 @@
 , jansson
 , curl
 , avro-c
-, avro-cpp }:
+, avro-cpp
+}:
 
 stdenv.mkDerivation rec {
   pname = "libserdes";

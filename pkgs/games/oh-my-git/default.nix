@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ohmygit.org/";
     description = "An interactive Git learning game";
     license = with licenses; [ blueOak100 ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jojosch ];
   };
 }

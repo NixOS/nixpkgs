@@ -2,7 +2,8 @@
 
 let
   version = "1.0";
-in fetchurl rec {
+in
+fetchurl rec {
   name = "curie-${version}";
 
   url = "https://github.com/NerdyPepper/curie/releases/download/v${version}/curie-v${version}.tar.gz";

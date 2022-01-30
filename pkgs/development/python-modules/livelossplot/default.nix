@@ -21,9 +21,9 @@ buildPythonPackage rec {
   postPatch = ''substituteInPlace ${pname}/version.py --replace "0.5.3" "0.5.4"'';
 
   src = fetchFromGitHub {
-    owner  = "stared";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "stared";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "IV6YAidoqVoKvpy+LNNHTPpobiDoGX59bHqJcBtaydk=";
   };
 

@@ -116,7 +116,7 @@ in
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
       };
-      startAt = mkIf (cfg.autoTime!=null) cfg.autoTime;
+      startAt = mkIf (cfg.autoTime != null) cfg.autoTime;
     };
   };
 

@@ -45,7 +45,7 @@ import ./make-test-python.nix ({ lib, ... }: {
 
     services.postgresql = {
       enable = true;
-      ensureDatabases =[ "dex" ];
+      ensureDatabases = [ "dex" ];
       ensureUsers = [
         {
           name = "dex";

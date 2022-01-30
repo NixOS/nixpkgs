@@ -40,7 +40,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
   ];
 
   # This application has no tests

@@ -89,7 +89,7 @@ in
     desktopConfiguration = mkOption {
       internal = true;
       type = types.listOf types.lines;
-      default = [];
+      default = [ ];
       description = ''
         Text to preseed the desktop configuration that <literal>nixos-generate-config</literal>
         saves to <literal>/etc/nixos/configuration.nix</literal>.
@@ -212,7 +212,8 @@ in
     '';
 
     environment.systemPackages =
-      [ nixos-build-vms
+      [
+        nixos-build-vms
         nixos-install
         nixos-rebuild
         nixos-generate-config

@@ -1,5 +1,11 @@
-{ stdenv, lib, cmake, fetchFromGitHub
-, wrapQtAppsHook, qtbase, qtquickcontrols2, qtgraphicaleffects
+{ stdenv
+, lib
+, cmake
+, fetchFromGitHub
+, wrapQtAppsHook
+, qtbase
+, qtquickcontrols2
+, qtgraphicaleffects
 }:
 
 stdenv.mkDerivation rec {

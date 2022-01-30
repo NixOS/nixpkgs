@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, cli11, nlohmann_json, curl, libarchive, libyamlcpp, libsolv, reproc, spdlog, termcolor, ghc_filesystem
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, cli11
+, nlohmann_json
+, curl
+, libarchive
+, libyamlcpp
+, libsolv
+, reproc
+, spdlog
+, termcolor
+, ghc_filesystem
 }:
 
 let

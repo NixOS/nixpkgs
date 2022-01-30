@@ -5,10 +5,10 @@
 , gtk-engine-murrine
 , jdupes
 , sassc
-, themeVariants ? [] # default: blue
-, colorVariants ? [] # default: all
-, sizeVariants ? [] # default: standard
-, tweaks ? []
+, themeVariants ? [ ] # default: blue
+, colorVariants ? [ ] # default: all
+, sizeVariants ? [ ] # default: standard
+, tweaks ? [ ]
 , wallpapers ? false
 }:
 
@@ -17,11 +17,15 @@ let
 
 in
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "blue" "all" ] themeVariants
-lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
-lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
-lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "midblack" "rimless" "normal" ] tweaks
+  lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ]
+  colorVariants
+  lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ]
+  sizeVariants
+  lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "midblack" "rimless" "normal" ]
+  tweaks
 
-stdenvNoCC.mkDerivation {
+  stdenvNoCC.mkDerivation
+{
   inherit pname;
   version = "unstable-2022-01-07";
 

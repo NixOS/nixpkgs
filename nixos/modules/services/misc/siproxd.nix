@@ -95,7 +95,7 @@ in
         type = types.int;
         default = 7070;
         description = ''
-         Bottom of UDP port range for incoming and outgoing RTP traffic
+          Bottom of UDP port range for incoming and outgoing RTP traffic
         '';
       };
 
@@ -103,7 +103,7 @@ in
         type = types.int;
         default = 7089;
         description = ''
-         Top of UDP port range for incoming and outgoing RTP traffic
+          Top of UDP port range for incoming and outgoing RTP traffic
         '';
       };
 

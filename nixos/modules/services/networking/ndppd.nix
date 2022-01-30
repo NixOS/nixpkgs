@@ -63,7 +63,7 @@ let
           is provided, /128 is assumed. You may have several rule sections, and the
           addresses may or may not overlap.
         '';
-        default = {};
+        default = { };
       };
     };
   };
@@ -101,7 +101,8 @@ let
     };
   };
 
-in {
+in
+{
   options.services.ndppd = {
     enable = mkEnableOption "daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces";
     interface = mkOption {
@@ -141,7 +142,7 @@ in {
         This sets up a listener, that will listen for any Neighbor Solicitation
         messages, and respond to them according to a set of rules.
       '';
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           eth0.rules."1111::/64" = {};
@@ -151,13 +152,15 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = mkIf (cfg.interface != null && cfg.network != null) [ ''
-      The options services.ndppd.interface and services.ndppd.network will probably be removed soon,
-      please use services.ndppd.proxies.<interface>.rules.<network> instead.
-    '' ];
+    warnings = mkIf (cfg.interface != null && cfg.network != null) [
+      ''
+        The options services.ndppd.interface and services.ndppd.network will probably be removed soon,
+        please use services.ndppd.proxies.<interface>.rules.<network> instead.
+      ''
+    ];
 
     services.ndppd.proxies = mkIf (cfg.interface != null && cfg.network != null) {
-      ${cfg.interface}.rules.${cfg.network} = {};
+      ${cfg.interface}.rules.${cfg.network} = { };
     };
 
     systemd.services.ndppd = {

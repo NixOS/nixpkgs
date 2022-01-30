@@ -10,11 +10,11 @@ let
   configFile = settingsFormat.generate "custom.conf" cfg.gdm.settings;
 
   xSessionWrapper = if (cfg.setupCommands == "") then null else
-    pkgs.writeScript "gdm-x-session-wrapper" ''
-      #!${pkgs.bash}/bin/bash
-      ${cfg.setupCommands}
-      exec "$@"
-    '';
+  pkgs.writeScript "gdm-x-session-wrapper" ''
+    #!${pkgs.bash}/bin/bash
+    ${cfg.setupCommands}
+    exec "$@"
+  '';
 
   # Solves problems like:
   # https://wiki.archlinux.org/index.php/Talk:Bluetooth_headset#GDMs_pulseaudio_instance_captures_bluetooth_headset
@@ -130,7 +130,8 @@ in
     services.xserver.displayManager.lightdm.enable = false;
 
     users.users.gdm =
-      { name = "gdm";
+      {
+        name = "gdm";
         uid = config.ids.uids.gdm;
         group = "gdm";
         home = "/run/gdm";
@@ -210,7 +211,7 @@ in
     # conflicts display-manager.service, then when nixos-rebuild
     # switch starts multi-user.target, display-manager.service is
     # stopped so plymouth-quit.service can be started.)
-    systemd.services.plymouth-quit.wantedBy = lib.mkForce [];
+    systemd.services.plymouth-quit.wantedBy = lib.mkForce [ ];
 
     systemd.services.display-manager.serviceConfig = {
       # Restart = "always"; - already defined in xserver.nix
@@ -246,39 +247,40 @@ in
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
     programs.dconf.profiles.gdm =
-    let
-      customDconf = pkgs.writeTextFile {
-        name = "gdm-dconf";
-        destination = "/dconf/gdm-custom";
-        text = ''
-          ${optionalString (!cfg.gdm.autoSuspend) ''
-            [org/gnome/settings-daemon/plugins/power]
-            sleep-inactive-ac-type='nothing'
-            sleep-inactive-battery-type='nothing'
-            sleep-inactive-ac-timeout=0
-            sleep-inactive-battery-timeout=0
-          ''}
-        '';
-      };
+      let
+        customDconf = pkgs.writeTextFile {
+          name = "gdm-dconf";
+          destination = "/dconf/gdm-custom";
+          text = ''
+            ${optionalString (!cfg.gdm.autoSuspend) ''
+              [org/gnome/settings-daemon/plugins/power]
+              sleep-inactive-ac-type='nothing'
+              sleep-inactive-battery-type='nothing'
+              sleep-inactive-ac-timeout=0
+              sleep-inactive-battery-timeout=0
+            ''}
+          '';
+        };
 
-      customDconfDb = pkgs.stdenv.mkDerivation {
-        name = "gdm-dconf-db";
+        customDconfDb = pkgs.stdenv.mkDerivation {
+          name = "gdm-dconf-db";
+          buildCommand = ''
+            ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
+          '';
+        };
+      in
+      pkgs.stdenv.mkDerivation {
+        name = "dconf-gdm-profile";
         buildCommand = ''
-          ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
+          # Check that the GDM profile starts with what we expect.
+          if [ $(head -n 1 ${gdm}/share/dconf/profile/gdm) != "user-db:user" ]; then
+            echo "GDM dconf profile changed, please update gdm.nix"
+            exit 1
+          fi
+          # Insert our custom DB behind it.
+          sed '2ifile-db:${customDconfDb}' ${gdm}/share/dconf/profile/gdm > $out
         '';
       };
-    in pkgs.stdenv.mkDerivation {
-      name = "dconf-gdm-profile";
-      buildCommand = ''
-        # Check that the GDM profile starts with what we expect.
-        if [ $(head -n 1 ${gdm}/share/dconf/profile/gdm) != "user-db:user" ]; then
-          echo "GDM dconf profile changed, please update gdm.nix"
-          exit 1
-        fi
-        # Insert our custom DB behind it.
-        sed '2ifile-db:${customDconfDb}' ${gdm}/share/dconf/profile/gdm > $out
-      '';
-    };
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
@@ -287,12 +289,12 @@ in
       daemon = mkMerge [
         { WaylandEnable = cfg.gdm.wayland; }
         # nested if else didn't work
-        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay != 0 ) {
+        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay != 0) {
           TimedLoginEnable = true;
           TimedLogin = cfg.autoLogin.user;
           TimedLoginDelay = cfg.gdm.autoLogin.delay;
         })
-        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay == 0 ) {
+        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay == 0) {
           AutomaticLoginEnable = true;
           AutomaticLogin = cfg.autoLogin.user;
         })

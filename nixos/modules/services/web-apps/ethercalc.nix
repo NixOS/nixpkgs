@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.ethercalc;
-in {
+in
+{
   options = {
     services.ethercalc = {
       enable = mkOption {
@@ -48,13 +49,13 @@ in {
   config = mkIf cfg.enable {
     systemd.services.ethercalc = {
       description = "Ethercalc service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
-        DynamicUser    =   true;
-        ExecStart        = "${cfg.package}/bin/ethercalc --host ${cfg.host} --port ${toString cfg.port}";
-        Restart          = "always";
-        StateDirectory   = "ethercalc";
+        DynamicUser = true;
+        ExecStart = "${cfg.package}/bin/ethercalc --host ${cfg.host} --port ${toString cfg.port}";
+        Restart = "always";
+        StateDirectory = "ethercalc";
         WorkingDirectory = "/var/lib/ethercalc";
       };
     };

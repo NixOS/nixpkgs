@@ -56,7 +56,8 @@ let
 
   addrOpts = v:
     assert v == 4 || v == 6;
-    { options = {
+    {
+      options = {
         address = mkOption {
           type = types.str;
           description = ''
@@ -76,43 +77,44 @@ let
     };
 
   routeOpts = v:
-  { options = {
-      address = mkOption {
-        type = types.str;
-        description = "IPv${toString v} address of the network.";
-      };
+    {
+      options = {
+        address = mkOption {
+          type = types.str;
+          description = "IPv${toString v} address of the network.";
+        };
 
-      prefixLength = mkOption {
-        type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
-        description = ''
-          Subnet mask of the network, specified as the number of
-          bits in the prefix (<literal>${if v == 4 then "24" else "64"}</literal>).
-        '';
-      };
+        prefixLength = mkOption {
+          type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
+          description = ''
+            Subnet mask of the network, specified as the number of
+            bits in the prefix (<literal>${if v == 4 then "24" else "64"}</literal>).
+          '';
+        };
 
-      via = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = "IPv${toString v} address of the next hop.";
-      };
+        via = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "IPv${toString v} address of the next hop.";
+        };
 
-      options = mkOption {
-        type = types.attrsOf types.str;
-        default = { };
-        example = { mtu = "1492"; window = "524288"; };
-        description = ''
-          Other route options. See the symbol <literal>OPTIONS</literal>
-          in the <literal>ip-route(8)</literal> manual page for the details.
-          You may also specify <literal>metric</literal>,
-          <literal>src</literal>, <literal>protocol</literal>,
-          <literal>scope</literal>, <literal>from</literal>
-          and <literal>table</literal>, which are technically
-          not route options, in the sense used in the manual.
-        '';
-      };
+        options = mkOption {
+          type = types.attrsOf types.str;
+          default = { };
+          example = { mtu = "1492"; window = "524288"; };
+          description = ''
+            Other route options. See the symbol <literal>OPTIONS</literal>
+            in the <literal>ip-route(8)</literal> manual page for the details.
+            You may also specify <literal>metric</literal>,
+            <literal>src</literal>, <literal>protocol</literal>,
+            <literal>scope</literal>, <literal>from</literal>
+            and <literal>table</literal>, which are technically
+            not route options, in the sense used in the manual.
+          '';
+        };
 
+      };
     };
-  };
 
   gatewayCoerce = address: { inherit address; };
 
@@ -205,7 +207,7 @@ let
       };
 
       ipv4.routes = mkOption {
-        default = [];
+        default = [ ];
         example = [
           { address = "10.0.0.0"; prefixLength = 16; }
           { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
@@ -225,7 +227,7 @@ let
       };
 
       ipv6.routes = mkOption {
-        default = [];
+        default = [ ];
         example = [
           { address = "fdfd:b3f0::"; prefixLength = 48; }
           { address = "2001:1470:fffd:2098::"; prefixLength = 64; via = "fdfd:b3f0::1"; }
@@ -318,14 +320,15 @@ let
     imports =
       let
         defined = x: x != "_mkMergedOptionModule";
-      in [
+      in
+      [
         (mkChangedOptionModule [ "preferTempAddress" ] [ "tempAddress" ]
-         (config:
-          let bool = getAttrFromPath [ "preferTempAddress" ] config;
-          in if bool then "default" else "enabled"
-        ))
-        (mkRenamedOptionModule [ "ip4" ] [ "ipv4" "addresses"])
-        (mkRenamedOptionModule [ "ip6" ] [ "ipv6" "addresses"])
+          (config:
+            let bool = getAttrFromPath [ "preferTempAddress" ] config;
+            in if bool then "default" else "enabled"
+          ))
+        (mkRenamedOptionModule [ "ip4" ] [ "ipv4" "addresses" ])
+        (mkRenamedOptionModule [ "ip6" ] [ "ipv6" "addresses" ])
         (mkRemovedOptionModule [ "subnetMask" ] ''
           Supply a prefix length instead; use option
           networking.interfaces.<name>.ipv{4,6}.addresses'')
@@ -333,13 +336,13 @@ let
           [ [ "ipAddress" ] [ "prefixLength" ] ]
           [ "ipv4" "addresses" ]
           (cfg: with cfg;
-            optional (defined ipAddress && defined prefixLength)
+          optional (defined ipAddress && defined prefixLength)
             { address = ipAddress; prefixLength = prefixLength; }))
         (mkMergedOptionModule
           [ [ "ipv6Address" ] [ "ipv6PrefixLength" ] ]
           [ "ipv6" "addresses" ]
           (cfg: with cfg;
-            optional (defined ipv6Address && defined ipv6PrefixLength)
+          optional (defined ipv6Address && defined ipv6PrefixLength)
             { address = ipv6Address; prefixLength = ipv6PrefixLength; }))
 
         ({ options.warnings = options.warnings; options.assertions = options.assertions; })
@@ -347,7 +350,7 @@ let
 
   };
 
-  vswitchInterfaceOpts = {name, ...}: {
+  vswitchInterfaceOpts = { name, ... }: {
 
     options = {
 
@@ -435,19 +438,21 @@ in
 
         WARNING: Do not use underscores (_) or you may run into unexpected issues.
       '';
-       # warning until the issues in https://github.com/NixOS/nixpkgs/pull/138978
-       # are resolved
+      # warning until the issues in https://github.com/NixOS/nixpkgs/pull/138978
+      # are resolved
     };
 
     networking.fqdn = mkOption {
       readOnly = true;
       type = types.str;
-      default = if (cfg.hostName != "" && cfg.domain != null)
+      default =
+        if (cfg.hostName != "" && cfg.domain != null)
         then "${cfg.hostName}.${cfg.domain}"
-        else throw ''
-          The FQDN is required but cannot be determined. Please make sure that
-          both networking.hostName and networking.domain are set properly.
-        '';
+        else
+          throw ''
+            The FQDN is required but cannot be determined. Please make sure that
+            both networking.hostName and networking.domain are set properly.
+          '';
       defaultText = literalExpression ''"''${networking.hostName}.''${networking.domain}"'';
       description = ''
         The fully qualified domain name (FQDN) of this host. It is the result
@@ -524,15 +529,15 @@ in
 
     networking.nameservers = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = ["130.161.158.4" "130.161.33.17"];
+      default = [ ];
+      example = [ "130.161.158.4" "130.161.33.17" ];
       description = ''
         The list of nameservers.  It can be left empty if it is auto-detected through DHCP.
       '';
     };
 
     networking.search = mkOption {
-      default = [];
+      default = [ ];
       example = [ "example.com" "home.arpa" ];
       type = types.listOf types.str;
       description = ''
@@ -571,12 +576,13 @@ in
     };
 
     networking.interfaces = mkOption {
-      default = {};
+      default = { };
       example =
-        { eth0.ipv4.addresses = [ {
+        {
+          eth0.ipv4.addresses = [{
             address = "131.211.84.78";
             prefixLength = 25;
-          } ];
+          }];
         };
       description = ''
         The configuration for each network interface.  If
@@ -589,8 +595,9 @@ in
     networking.vswitches = mkOption {
       default = { };
       example =
-        { vs0.interfaces = { eth0 = { }; lo1 = { type="internal"; }; };
-          vs1.interfaces = [ { name = "eth2"; } { name = "lo2"; type="internal"; } ];
+        {
+          vs0.interfaces = { eth0 = { }; lo1 = { type = "internal"; }; };
+          vs1.interfaces = [{ name = "eth2"; } { name = "lo2"; type = "internal"; }];
         };
       description =
         ''
@@ -612,7 +619,7 @@ in
 
           controllers = mkOption {
             type = types.listOf types.str;
-            default = [];
+            default = [ ];
             example = [ "ptcp:6653:[::1]" ];
             description = ''
               Specify the controller targets. For the allowed options see <literal>man 8 ovs-vsctl</literal>.
@@ -673,7 +680,8 @@ in
     networking.bridges = mkOption {
       default = { };
       example =
-        { br0.interfaces = [ "eth0" "eth1" ];
+        {
+          br0.interfaces = [ "eth0" "eth1" ];
           br1.interfaces = [ "eth2" "wlan0" ];
         };
       description =
@@ -710,13 +718,14 @@ in
 
     networking.bonds =
       let
-        driverOptionsExample =  ''
+        driverOptionsExample = ''
           {
             miimon = "100";
             mode = "active-backup";
           }
         '';
-      in mkOption {
+      in
+      mkOption {
         default = { };
         example = literalExpression ''
           {
@@ -746,7 +755,7 @@ in
 
             driverOptions = mkOption {
               type = types.attrsOf types.str;
-              default = {};
+              default = { };
               example = literalExpression driverOptionsExample;
               description = ''
                 Options for the bonding driver.
@@ -849,7 +858,7 @@ in
       example =
         {
           primary = { port = 9001; local = { address = "192.0.2.1"; dev = "eth0"; }; };
-          backup =  { port = 9002; };
+          backup = { port = 9002; };
         };
       description = ''
         This option allows you to configure Foo Over UDP and Generic UDP Encapsulation
@@ -1318,30 +1327,33 @@ in
       # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
       "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
     } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
-        (i: [(nameValuePair "net.ipv4.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)]))
-      // listToAttrs (forEach interfaces
-        (i: let
+      (i: [ (nameValuePair "net.ipv4.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true) ]))
+    // listToAttrs (forEach interfaces
+      (i:
+        let
           opt = i.tempAddress;
           val = tempaddrValues.${opt}.sysctl;
-         in nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" val));
+        in
+        nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" val));
 
     # Capabilities won't work unless we have at-least a 4.3 Linux
     # kernel because we need the ambient capability
-    security.wrappers = if (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") then {
-      ping = {
-        owner = "root";
-        group = "root";
-        capabilities = "cap_net_raw+p";
-        source = "${pkgs.iputils.out}/bin/ping";
+    security.wrappers =
+      if (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") then {
+        ping = {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_net_raw+p";
+          source = "${pkgs.iputils.out}/bin/ping";
+        };
+      } else {
+        ping = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.iputils.out}/bin/ping";
+        };
       };
-    } else {
-      ping = {
-        setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${pkgs.iputils.out}/bin/ping";
-      };
-    };
     security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
       /run/wrappers/bin/ping {
         include <abstractions/base>
@@ -1371,7 +1383,8 @@ in
       '';
 
     environment.etc.hostid = mkIf (cfg.hostId != null)
-      { source = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
+      {
+        source = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
           hi="${cfg.hostId}"
           ${if pkgs.stdenv.isBigEndian then ''
             echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
@@ -1389,7 +1402,8 @@ in
       };
 
     environment.systemPackages =
-      [ pkgs.host
+      [
+        pkgs.host
         pkgs.iproute2
         pkgs.iputils
         pkgs.nettools
@@ -1403,7 +1417,8 @@ in
     # The network-interfaces target is kept for backwards compatibility.
     # New modules must NOT use it.
     systemd.targets.network-interfaces =
-      { description = "All Network Interfaces (deprecated)";
+      {
+        description = "All Network Interfaces (deprecated)";
         wantedBy = [ "network.target" ];
         before = [ "network.target" ];
         after = [ "network-pre.target" ];
@@ -1430,32 +1445,36 @@ in
 
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };
 
-    services.udev.packages =  [
+    services.udev.packages = [
       (pkgs.writeTextFile rec {
         name = "ipv6-privacy-extensions.rules";
         destination = "/etc/udev/rules.d/98-${name}";
-        text = let
-          sysctl-value = tempaddrValues.${cfg.tempAddresses}.sysctl;
-        in ''
-          # enable and prefer IPv6 privacy addresses by default
-          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo ${sysctl-value} > /proc/sys/net/ipv6/conf/%k/use_tempaddr'"
-        '';
+        text =
+          let
+            sysctl-value = tempaddrValues.${cfg.tempAddresses}.sysctl;
+          in
+          ''
+            # enable and prefer IPv6 privacy addresses by default
+            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo ${sysctl-value} > /proc/sys/net/ipv6/conf/%k/use_tempaddr'"
+          '';
       })
       (pkgs.writeTextFile rec {
         name = "ipv6-privacy-extensions.rules";
         destination = "/etc/udev/rules.d/99-${name}";
-        text = concatMapStrings (i:
-          let
-            opt = i.tempAddress;
-            val = tempaddrValues.${opt}.sysctl;
-            msg = tempaddrValues.${opt}.description;
-          in
-          ''
-            # override to ${msg} for ${i.name}
-            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=${val}"
-          '') (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
+        text = concatMapStrings
+          (i:
+            let
+              opt = i.tempAddress;
+              val = tempaddrValues.${opt}.sysctl;
+              msg = tempaddrValues.${opt}.description;
+            in
+            ''
+              # override to ${msg} for ${i.name}
+              ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=${val}"
+            '')
+          (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
       })
-    ] ++ lib.optional (cfg.wlanInterfaces != {})
+    ] ++ lib.optional (cfg.wlanInterfaces != { })
       (pkgs.writeTextFile {
         name = "99-zzz-40-wlanInterfaces.rules";
         destination = "/etc/udev/rules.d/99-zzz-40-wlanInterfaces.rules";
@@ -1468,14 +1487,14 @@ in
                 allDevices = unique (mapAttrsToList (_: v: v.device) cfg.wlanInterfaces);
                 interfacesOfDevice = d: filterAttrs (_: v: v.device == d) cfg.wlanInterfaces;
               in
-                genAttrs allDevices (d: interfacesOfDevice d);
+              genAttrs allDevices (d: interfacesOfDevice d);
 
             # Convert device:interface key:value pairs into a list, and if it exists,
             # place the interface which is named after the device at the beginning.
             wlanListDeviceFirst = device: interfaces:
               if hasAttr device interfaces
-              then mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n==device) interfaces) ++ mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n!=device) interfaces)
-              else mapAttrsToList (n: v: v // {_iName = n;}) interfaces;
+              then mapAttrsToList (n: v: v // { _iName = n; }) (filterAttrs (n: _: n == device) interfaces) ++ mapAttrsToList (n: v: v // { _iName = n; }) (filterAttrs (n: _: n != device) interfaces)
+              else mapAttrsToList (n: v: v // { _iName = n; }) interfaces;
 
             # Udev script to execute for the default WLAN interface with the persistend udev name.
             # The script creates the required, new WLAN interfaces interfaces and configures the
@@ -1517,18 +1536,19 @@ in
               interfaces = wlanListDeviceFirst device wlanDeviceInterfaces.${device};
               curInterface = elemAt interfaces 0;
               newInterfaces = drop 1 interfaces;
-            in ''
-            # It is important to have that rule first as overwriting the NAME attribute also prevents the
-            # next rules from matching.
-            ${flip (concatMapStringsSep "\n") (wlanListDeviceFirst device wlanDeviceInterfaces.${device}) (interface:
-            ''ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", ENV{INTERFACE}=="${interface._iName}", ${systemdAttrs interface._iName}, RUN+="${newInterfaceScript interface}"'')}
+            in
+            ''
+              # It is important to have that rule first as overwriting the NAME attribute also prevents the
+              # next rules from matching.
+              ${flip (concatMapStringsSep "\n") (wlanListDeviceFirst device wlanDeviceInterfaces.${device}) (interface:
+              ''ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", ENV{INTERFACE}=="${interface._iName}", ${systemdAttrs interface._iName}, RUN+="${newInterfaceScript interface}"'')}
 
-            # Add the required, new WLAN interfaces to the default WLAN interface with the
-            # persistent, default name as assigned by udev.
-            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}, RUN+="${curInterfaceScript device curInterface newInterfaces}"
-            # Generate the same systemd events for both 'add' and 'move' udev events.
-            ACTION=="move", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}
-          '');
+              # Add the required, new WLAN interfaces to the default WLAN interface with the
+              # persistent, default name as assigned by udev.
+              ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}, RUN+="${curInterfaceScript device curInterface newInterfaces}"
+              # Generate the same systemd events for both 'add' and 'move' udev events.
+              ACTION=="move", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}
+            '');
       });
   };
 

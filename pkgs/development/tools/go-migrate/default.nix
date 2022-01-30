@@ -16,10 +16,10 @@ buildGoModule rec {
   subPackages = [ "cmd/migrate" ];
 
   meta = with lib; {
-    homepage    = "https://github.com/golang-migrate/migrate";
+    homepage = "https://github.com/golang-migrate/migrate";
     description = "Database migrations. CLI and Golang library";
     maintainers = with maintainers; [ offline ];
-    license     = licenses.mit;
+    license = licenses.mit;
     mainProgram = "migrate";
   };
 }

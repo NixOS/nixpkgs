@@ -5,7 +5,7 @@
 , openssl
 , zlib
 , libuv
-# External poll is required for e.g. mosquitto, but discouraged by the maintainer.
+  # External poll is required for e.g. mosquitto, but discouraged by the maintainer.
 , withExternalPoll ? false
 }:
 
@@ -32,7 +32,7 @@ let
       # Required since v4.2.0
       "-DLWS_BUILD_HASH=no_hash"
     ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
-      ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON";
+    ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON";
 
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
 
@@ -59,7 +59,8 @@ let
     };
   };
 
-in {
+in
+{
   libwebsockets_3_1 = generic {
     sha256 = "1w1wz6snf3cmcpa3f4dci2nz9za2f5rrylxl109id7bcb36xhbdl";
     version = "3.1.0";

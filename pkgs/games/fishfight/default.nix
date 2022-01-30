@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-KQiqUzdsVMIjDmmreihekrrFoXeyNzd6ZbqApwH8B4Q=";
 
-  buildInputs =  [
+  buildInputs = [
     SDL2
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib

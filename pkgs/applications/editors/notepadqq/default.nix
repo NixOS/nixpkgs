@@ -12,11 +12,15 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config which qttools
+    pkg-config
+    which
+    qttools
   ];
 
   buildInputs = [
-    qtbase qtsvg qtwebkit
+    qtbase
+    qtsvg
+    qtwebkit
   ];
 
   preConfigure = ''

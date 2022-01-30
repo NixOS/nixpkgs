@@ -1,9 +1,14 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchFromGitLab
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
+, fetchFromGitLab
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableMinimal ? false
-# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
-# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
-, useMusl ? stdenv.hostPlatform.libc == "musl", musl
+  # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+  # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
+, useMusl ? stdenv.hostPlatform.libc == "musl"
+, musl
 , extraConfig ? ""
 }:
 

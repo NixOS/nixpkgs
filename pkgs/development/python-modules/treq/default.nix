@@ -1,5 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, service-identity, requests, six
-, mock, twisted, incremental, pep8, httpbin
+{ lib
+, fetchPypi
+, buildPythonPackage
+, service-identity
+, requests
+, six
+, mock
+, twisted
+, incremental
+, pep8
+, httpbin
 }:
 
 buildPythonPackage rec {
@@ -18,8 +27,8 @@ buildPythonPackage rec {
     service-identity
     twisted
   ]
-    # twisted [tls] requirements (we should find a way to list "extras")
-    ++ twisted.extras.tls;
+  # twisted [tls] requirements (we should find a way to list "extras")
+  ++ twisted.extras.tls;
 
   checkInputs = [
     pep8

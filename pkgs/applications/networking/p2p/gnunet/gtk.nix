@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , glade
 , gnunet
 , gnutls
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FLLlqpQ7Bf+oNRUvx7IniVxFusy/tPYxEP2T6VGF7h8=";
   };
 
-  nativeBuildInputs= [
+  nativeBuildInputs = [
     pkg-config
     wrapGAppsHook
   ];

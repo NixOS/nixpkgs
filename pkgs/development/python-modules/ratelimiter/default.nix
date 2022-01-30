@@ -1,5 +1,4 @@
-{
-  lib
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest

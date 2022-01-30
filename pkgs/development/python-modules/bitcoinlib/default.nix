@@ -1,16 +1,17 @@
 { stdenv, lib, buildPythonPackage, isPy3k, fetchFromGitHub, openssl }:
 
 let ext = if stdenv.isDarwin then "dylib" else "so";
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "bitcoinlib";
   version = "0.11.0";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
-    owner  = "petertodd";
-    repo   = "python-bitcoinlib";
-    rev    = "python-${pname}-v${version}";
+    owner = "petertodd";
+    repo = "python-bitcoinlib";
+    rev = "python-${pname}-v${version}";
     sha256 = "0pwypd966zzivb37fvg4l6yr7ihplqnr1jwz9zm3biip7x89bdzm";
   };
 

@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchzip, fpc , lang ? "en" } :
+{ lib, stdenv, fetchzip, fpc, lang ? "en" }:
 
-assert lib.assertOneOf "lang" lang ["cn" "de" "en" "fr" "tr"];
+assert lib.assertOneOf "lang" lang [ "cn" "de" "en" "fr" "tr" ];
 
 stdenv.mkDerivation rec {
   pname = "gavrasm";
   version = "5.1";
-  flatVersion = lib.strings.replaceStrings ["."] [""] version;
+  flatVersion = lib.strings.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchzip {
     url = "http://www.avr-asm-tutorial.net/gavrasm/v${flatVersion}/gavrasm_sources_lin_${flatVersion}.zip";
     sha256 = "0k94f8k4980wvhx3dpl1savpx4wqv9r5090l0skg2k8vlhsv58gf";
-    stripRoot=false;
+    stripRoot = false;
   };
 
   nativeBuildInputs = [ fpc ];

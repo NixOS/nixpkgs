@@ -71,7 +71,7 @@ in
     };
 
     users.groups = mkIf (cfg.group == "bazarr") {
-      bazarr = {};
+      bazarr = { };
     };
   };
 }

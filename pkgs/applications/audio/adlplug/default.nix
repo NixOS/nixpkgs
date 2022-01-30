@@ -20,7 +20,8 @@
 , DiscRecording
 
   # Enabling JACK requires a JACK server at runtime, no fallback mechanism
-, withJack ? false, jack
+, withJack ? false
+, jack
 
 , type ? "ADL"
 }:

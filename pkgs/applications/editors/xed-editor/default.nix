@@ -14,7 +14,8 @@
 , ninja
 , wrapGAppsHook
 , intltool
-, itstool }:
+, itstool
+}:
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";

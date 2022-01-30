@@ -15,7 +15,7 @@
 , buildEnv
 , makeWrapper
 , enableGui ? false  # enables Java GUI `dsmj`
-# path to `dsm.sys` configuration files
+  # path to `dsm.sys` configuration files
 , dsmSysCli ? "/etc/tsm-client/cli.dsm.sys"
 , dsmSysApi ? "/etc/tsm-client/api.dsm.sys"
 }:
@@ -91,7 +91,7 @@ let
   };
 
   passthru.tests = {
-    test-cli = callPackage ./test-cli.nix {};
+    test-cli = callPackage ./test-cli.nix { };
     test-gui = nixosTests.tsm-client-gui;
   };
 
@@ -102,7 +102,7 @@ let
       patch = lib.versions.patch version;
       fixup = lib.lists.elemAt (lib.versions.splitVersion version) 3;
     in
-      "https://public.dhe.ibm.com/storage/tivoli-storage-management/${if fixup=="0" then "maintenance" else "patches"}/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
+    "https://public.dhe.ibm.com/storage/tivoli-storage-management/${if fixup=="0" then "maintenance" else "patches"}/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";

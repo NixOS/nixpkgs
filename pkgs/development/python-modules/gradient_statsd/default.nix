@@ -1,5 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage
-, requests, datadog, configparser, python
+{ lib
+, fetchPypi
+, buildPythonPackage
+, requests
+, datadog
+, configparser
+, python
 }:
 
 buildPythonPackage rec {
@@ -21,9 +26,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Wrapper around the DogStatsd client";
-    homepage    = "https://paperspace.com";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://paperspace.com";
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ freezeboy ];
   };
 }

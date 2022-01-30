@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.hardware.printers;
-  ppdOptionsString = options: optionalString (options != {})
+  ppdOptionsString = options: optionalString (options != { })
     (concatStringsSep " "
       (mapAttrsToList (name: value: "-o '${name}'='${value}'") options)
     );
@@ -24,7 +24,8 @@ let
     // { description = "printable string without spaces, # and /"; };
 
 
-in {
+in
+{
   options = {
     hardware.printers = {
       ensureDefaultPrinter = mkOption {
@@ -43,7 +44,7 @@ in {
           and remove printers with <command>lpadmin -x &lt;printer-name&gt;</command>.
           Printers not listed here can still be manually configured.
         '';
-        default = [];
+        default = [ ];
         type = types.listOf (types.submodule {
           options = {
             name = mkOption {
@@ -97,7 +98,7 @@ in {
                 PageSize = "A4";
                 Duplex = "DuplexNoTumble";
               };
-              default = {};
+              default = { };
               description = ''
                 Sets PPD options for the printer.
                 <command>lpoptions [-p printername] -l</command> shows suported PPD options for the given printer.
@@ -109,22 +110,24 @@ in {
     };
   };
 
-  config = mkIf (cfg.ensurePrinters != [] && config.services.printing.enable) {
-    systemd.services.ensure-printers = let
-      cupsUnit = if config.services.printing.startWhenNeeded then "cups.socket" else "cups.service";
-    in {
-      description = "Ensure NixOS-configured CUPS printers";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ cupsUnit ];
-      after = [ cupsUnit ];
+  config = mkIf (cfg.ensurePrinters != [ ] && config.services.printing.enable) {
+    systemd.services.ensure-printers =
+      let
+        cupsUnit = if config.services.printing.startWhenNeeded then "cups.socket" else "cups.service";
+      in
+      {
+        description = "Ensure NixOS-configured CUPS printers";
+        wantedBy = [ "multi-user.target" ];
+        requires = [ cupsUnit ];
+        after = [ cupsUnit ];
 
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+
+        script = concatMapStringsSep "\n" ensurePrinter cfg.ensurePrinters
+          + optionalString (cfg.ensureDefaultPrinter != null) (ensureDefaultPrinter cfg.ensureDefaultPrinter);
       };
-
-      script = concatMapStringsSep "\n" ensurePrinter cfg.ensurePrinters
-        + optionalString (cfg.ensureDefaultPrinter != null) (ensureDefaultPrinter cfg.ensureDefaultPrinter);
-    };
   };
 }

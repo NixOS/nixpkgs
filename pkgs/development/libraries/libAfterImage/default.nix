@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, giflib, libjpeg, libpng, libX11, zlib
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, giflib
+, libjpeg
+, libpng
+, libX11
+, zlib
 , static ? stdenv.hostPlatform.isStatic
-, withX ? !stdenv.isDarwin }:
+, withX ? !stdenv.isDarwin
+}:
 
 stdenv.mkDerivation {
   pname = "libAfterImage";

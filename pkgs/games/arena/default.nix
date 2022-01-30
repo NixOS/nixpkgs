@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   # stdenv.cc.cc.lib is in that list to pick up libstdc++.so. Is there a better way?
-  buildInputs = [gtk2-x11 glib pango cairo atk gdk-pixbuf libX11 stdenv.cc.cc.lib];
+  buildInputs = [ gtk2-x11 glib pango cairo atk gdk-pixbuf libX11 stdenv.cc.cc.lib ];
 
   unpackPhase = ''
     # This is is a tar bomb, i.e. it extract a dozen files and directories to
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       chess board & DGT clocks and much more.
     '';
     license = lib.licenses.unfree;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     hydraPlatforms = lib.platforms.none;
   };
 

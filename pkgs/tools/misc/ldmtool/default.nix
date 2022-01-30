@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, gtk-doc, pkg-config, libuuid,
-  libtool, readline, gobject-introspection, json-glib, lvm2, libxslt, docbook_xsl
-, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, gtk-doc
+, pkg-config
+, libuuid
+, libtool
+, readline
+, gobject-introspection
+, json-glib
+, lvm2
+, libxslt
+, docbook_xsl
+, fetchpatch
+}:
 
 stdenv.mkDerivation rec {
   pname = "ldmtool";
@@ -32,8 +46,17 @@ stdenv.mkDerivation rec {
   configureScript = "sh autogen.sh";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake gtk-doc lvm2 libxslt.bin
-    libtool readline gobject-introspection json-glib libuuid
+  buildInputs = [
+    autoconf
+    automake
+    gtk-doc
+    lvm2
+    libxslt.bin
+    libtool
+    readline
+    gobject-introspection
+    json-glib
+    libuuid
   ];
 
   meta = with lib; {

@@ -75,11 +75,11 @@ buildPythonPackage rec {
     # Fails with a decoding error at the moment
     "test_inference_async"
   ] ++ lib.optionals (pythonAtLeast "3.9") [
-     # AttributeError: module 'base64' has no attribute 'decodestring
-     # https://github.com/runwayml/model-sdk/issues/99
-     "test_image_serialize_and_deserialize"
-     "test_segmentation_serialize_and_deserialize_colormap"
-     "test_segmentation_serialize_and_deserialize_labelmap"
+    # AttributeError: module 'base64' has no attribute 'decodestring
+    # https://github.com/runwayml/model-sdk/issues/99
+    "test_image_serialize_and_deserialize"
+    "test_segmentation_serialize_and_deserialize_colormap"
+    "test_segmentation_serialize_and_deserialize_labelmap"
   ];
 
   meta = {

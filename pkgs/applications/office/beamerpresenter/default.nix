@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles,
-  qmake, qtbase, qtmultimedia, wrapQtAppsHook,
-  poppler, mupdf, freetype, jbig2dec, openjpeg, gumbo,
-  renderer ? "mupdf" }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, qmake
+, qtbase
+, qtmultimedia
+, wrapQtAppsHook
+, poppler
+, mupdf
+, freetype
+, jbig2dec
+, openjpeg
+, gumbo
+, renderer ? "mupdf"
+}:
 
 let
   renderers = {

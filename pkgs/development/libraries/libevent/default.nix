@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, findutils, fixDarwinDylibNames
-, sslSupport? true, openssl
+{ lib
+, stdenv
+, fetchurl
+, findutils
+, fixDarwinDylibNames
+, sslSupport ? true
+, openssl
 }:
 
 assert sslSupport -> openssl != null;
@@ -21,20 +26,20 @@ stdenv.mkDerivation rec {
   # in the default closure.
   outputs = [ "out" "dev" ]
     ++ lib.optional sslSupport "openssl"
-    ;
+  ;
   outputBin = "dev";
   propagatedBuildOutputs = [ "out" ]
     ++ lib.optional sslSupport "openssl"
-    ;
+  ;
 
-  nativeBuildInputs = []
+  nativeBuildInputs = [ ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
-    ;
+  ;
 
-  buildInputs = []
+  buildInputs = [ ]
     ++ lib.optional sslSupport openssl
     ++ lib.optional stdenv.isCygwin findutils
-    ;
+  ;
 
   doCheck = false; # needs the net
 

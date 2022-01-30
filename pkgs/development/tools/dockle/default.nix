@@ -17,7 +17,9 @@ buildGoModule rec {
   buildInputs = [ btrfs-progs lvm2 ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   preCheck = ''

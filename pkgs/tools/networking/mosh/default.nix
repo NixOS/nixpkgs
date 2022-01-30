@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkg-config
-, makeWrapper, perlPackages, openssl, autoreconfHook, openssh, bash-completion
-, withUtempter ? stdenv.isLinux, libutempter }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, zlib
+, protobuf
+, ncurses
+, pkg-config
+, makeWrapper
+, perlPackages
+, openssl
+, autoreconfHook
+, openssh
+, bash-completion
+, withUtempter ? stdenv.isLinux
+, libutempter
+}:
 
 stdenv.mkDerivation rec {
   pname = "mosh";
@@ -49,7 +63,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withUtempter "--with-utempter";
 
   postInstall = ''
-      wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
+    wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";

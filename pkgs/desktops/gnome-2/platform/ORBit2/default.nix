@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    homepage    = "https://developer-old.gnome.org/ORBit2/";
+    homepage = "https://developer-old.gnome.org/ORBit2/";
     description = "A CORBA 2.4-compliant Object Request Broker";
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lovek323 ];
 
     longDescription = ''

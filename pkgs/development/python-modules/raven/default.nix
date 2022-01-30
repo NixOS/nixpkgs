@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, contextlib2, blinker
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, contextlib2
+, blinker
 }:
 
 buildPythonPackage rec {

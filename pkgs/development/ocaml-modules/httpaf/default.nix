@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage
-, angstrom, faraday, alcotest
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, buildDunePackage
+, angstrom
+, faraday
+, alcotest
 }:
 
 buildDunePackage rec {

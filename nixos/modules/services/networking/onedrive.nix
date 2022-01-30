@@ -2,7 +2,7 @@
 let
   cfg = config.services.onedrive;
 
-  onedriveLauncher =  pkgs.writeShellScriptBin
+  onedriveLauncher = pkgs.writeShellScriptBin
     "onedrive-launcher"
     ''
       # XDG_CONFIG_HOME is not recognized in the environment here.
@@ -19,7 +19,8 @@ let
     ''
   ;
 
-in {
+in
+{
   ### Documentation
   # meta.doc = ./onedrive.xml;
 
@@ -32,16 +33,16 @@ in {
       description = "Enable OneDrive service";
     };
 
-     package = lib.mkOption {
-       type = lib.types.package;
-       default = pkgs.onedrive;
-       defaultText = lib.literalExpression "pkgs.onedrive";
-       description = ''
-         OneDrive package to use.
-       '';
-     };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.onedrive;
+      defaultText = lib.literalExpression "pkgs.onedrive";
+      description = ''
+        OneDrive package to use.
+      '';
+    };
   };
-### Implementation
+  ### Implementation
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
@@ -54,9 +55,9 @@ in {
         ExecStart = ''
           ${cfg.package}/bin/onedrive --monitor --confdir=%h/.config/%i
         '';
-        Restart="on-failure";
-        RestartSec=3;
-        RestartPreventExitStatus=3;
+        Restart = "on-failure";
+        RestartSec = 3;
+        RestartPreventExitStatus = 3;
       };
     };
 

@@ -15,9 +15,9 @@
 }:
 
 buildGo117Module rec {
-  inherit pname ;
+  inherit pname;
   version = "1.4.0";
-  tags = lib.optionals enableGateway ["gateway"];
+  tags = lib.optionals enableGateway [ "gateway" ];
   vendorSha256 = "19rd450gmc51gmwa13991lbkva7r80d2camikkxmmgywyhrd06sf";
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ buildGo117Module rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [installShellFiles] ++ lib.optionals isFull [coredns];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals isFull [ coredns ];
 
   preBuild = ''
     export HOME=$TMPDIR
@@ -37,24 +37,29 @@ buildGo117Module rec {
 
   subPackages = map (p: "app/" + p) components;
 
-  postInstall = lib.concatMapStringsSep "\n" (p: ''
-    installShellCompletion --cmd ${p} \
-      --bash <($out/bin/${p} completion bash) \
-      --fish <($out/bin/${p} completion fish) \
-      --zsh <($out/bin/${p} completion zsh)
-  '') components + lib.optionalString isFull ''
+  postInstall = lib.concatMapStringsSep "\n"
+    (p: ''
+      installShellCompletion --cmd ${p} \
+        --bash <($out/bin/${p} completion bash) \
+        --fish <($out/bin/${p} completion fish) \
+        --zsh <($out/bin/${p} completion zsh)
+    '')
+    components + lib.optionalString isFull ''
     ln -sLf ${coredns}/bin/coredns $out/bin
   '';
 
-  ldflags = let
-    prefix = "github.com/kumahq/kuma/pkg/version";
-  in [
-    "-s" "-w"
-    "-X ${prefix}.version=${version}"
-    "-X ${prefix}.gitTag=${version}"
-    "-X ${prefix}.gitCommit=${version}"
-    "-X ${prefix}.buildDate=${version}"
-  ];
+  ldflags =
+    let
+      prefix = "github.com/kumahq/kuma/pkg/version";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${prefix}.version=${version}"
+      "-X ${prefix}.gitTag=${version}"
+      "-X ${prefix}.gitCommit=${version}"
+      "-X ${prefix}.buildDate=${version}"
+    ];
 
   meta = with lib; {
     description = "Service mesh controller";

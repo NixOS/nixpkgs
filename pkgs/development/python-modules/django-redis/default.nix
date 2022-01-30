@@ -3,14 +3,14 @@
 , pythonOlder
 , buildPythonPackage
 
-# propagated
+  # propagated
 , django
 , hiredis
 , lz4
 , msgpack
 , redis
 
-# testing
+  # testing
 , pkgs
 , pytest-django
 , pytest-mock

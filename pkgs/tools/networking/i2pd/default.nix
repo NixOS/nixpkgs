@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , installShellFiles
-, boost, zlib, openssl
-, upnpSupport ? true, miniupnpc ? null
+, boost
+, zlib
+, openssl
+, upnpSupport ? true
+, miniupnpc ? null
 , aesniSupport ? stdenv.hostPlatform.aesSupport
-, avxSupport   ? stdenv.hostPlatform.avxSupport
+, avxSupport ? stdenv.hostPlatform.avxSupport
 }:
 
 assert upnpSupport -> miniupnpc != null;
@@ -28,9 +33,10 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     let ynf = a: b: a + "=" + (if b then "yes" else "no"); in
-    [ (ynf "USE_AESNI" aesniSupport)
-      (ynf "USE_AVX"   avxSupport)
-      (ynf "USE_UPNP"  upnpSupport)
+    [
+      (ynf "USE_AESNI" aesniSupport)
+      (ynf "USE_AVX" avxSupport)
+      (ynf "USE_UPNP" upnpSupport)
     ];
 
   enableParallelBuilding = true;

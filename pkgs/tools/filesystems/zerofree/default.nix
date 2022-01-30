@@ -5,7 +5,8 @@ let
     url = "https://manpages.ubuntu.com/manpages.gz/xenial/man8/zerofree.8.gz";
     sha256 = "0y132xmjl02vw41k794psa4nmjpdyky9f6sf0h4f7rvf83z3zy4k";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zerofree";
   version = "1.1.1";
 

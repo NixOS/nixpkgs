@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, config, wrapGAppsHook
+{ lib
+, stdenv
+, fetchurl
+, config
+, wrapGAppsHook
 , alsa-lib
 , atk
 , cairo
@@ -31,7 +35,8 @@
 , libcanberra
 , libnotify
 , adwaita-icon-theme
-, libGLU, libGL
+, libGLU
+, libGL
 , nspr
 , nss
 , pango
@@ -70,20 +75,20 @@ let
     builtins.substring 0 (builtins.stringLength prefix) string == prefix;
 
   sourceMatches = locale: source:
-      (isPrefixOf source.locale locale) && source.arch == arch;
+    (isPrefixOf source.locale locale) && source.arch == arch;
 
   policies = {
     DisableAppUpdate = true;
-  } // config.firefox.policies or {};
+  } // config.firefox.policies or { };
 
   policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
-  defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = lib.findFirst (sourceMatches "en-US") { } sources;
 
   mozLocale =
     if systemLocale == "ca_ES@valencia"
     then "ca-valencia"
-    else lib.replaceStrings ["_"] ["-"] systemLocale;
+    else lib.replaceStrings [ "_" ] [ "-" ] systemLocale;
 
   source = lib.findFirst (sourceMatches mozLocale) defaultSource sources;
 
@@ -97,7 +102,8 @@ stdenv.mkDerivation {
   src = fetchurl { inherit (source) url sha256; };
 
   libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc
+    [
+      stdenv.cc.cc
       alsa-lib
       atk
       cairo
@@ -130,7 +136,8 @@ stdenv.mkDerivation {
       libXtst
       libcanberra
       libnotify
-      libGLU libGL
+      libGLU
+      libGL
       nspr
       nss
       pango
@@ -141,8 +148,8 @@ stdenv.mkDerivation {
       systemd
       ffmpeg
     ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
-      stdenv.cc.cc
-    ];
+    stdenv.cc.cc
+  ];
 
   inherit gtk3;
 
@@ -199,15 +206,15 @@ stdenv.mkDerivation {
     inherit pname channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
-        then "http://archive.mozilla.org/pub/devedition/releases/"
-        else "http://archive.mozilla.org/pub/firefox/releases/";
+      then "http://archive.mozilla.org/pub/devedition/releases/"
+      else "http://archive.mozilla.org/pub/firefox/releases/";
   };
   meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "http://www.mozilla.org/firefox/";
     license = licenses.mpl20;
     platforms = builtins.attrNames mozillaPlatforms;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

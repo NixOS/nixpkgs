@@ -13,7 +13,7 @@ let
     let
       addonsWithPythonPath = lib.filter (addon: addon ? pythonPath) addons;
     in
-      lib.concatMapStringsSep ":" (addon: "${addon}${kodiPackages.addonDir}/${addon.namespace}/${addon.pythonPath}") addonsWithPythonPath;
+    lib.concatMapStringsSep ":" (addon: "${addon}${kodiPackages.addonDir}/${addon.namespace}/${addon.pythonPath}") addonsWithPythonPath;
 in
 
 buildEnv {

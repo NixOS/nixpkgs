@@ -6,7 +6,8 @@ with lib;
 
 let cfg = config.programs.file-roller;
 
-in {
+in
+{
 
   # Added 2019-08-09
   imports = [

@@ -50,7 +50,7 @@ buildPythonPackage rec {
     rm $out/bin/pijuice_sys.py
     rm $out/bin/pijuiceboot
     mv $out/bin/pijuice_cli.py $out/bin/pijuice_cli
-   '';
+  '';
 
   meta = with lib; {
     description = "Library and resources for PiJuice HAT for Raspberry Pi";

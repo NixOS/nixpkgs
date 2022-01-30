@@ -3,7 +3,8 @@
 let
   version = "3.13";
   pname = "ps_mem";
-in python2Packages.buildPythonApplication {
+in
+python2Packages.buildPythonApplication {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

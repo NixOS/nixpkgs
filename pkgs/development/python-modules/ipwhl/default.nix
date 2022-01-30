@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromSourcehut
-, ipfs, packaging, tomli }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromSourcehut
+, ipfs
+, packaging
+, tomli
+}:
 
 buildPythonPackage rec {
   pname = "ipwhl";

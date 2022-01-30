@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, imake, libXt, libXaw, libXtst
-, libXi, libXpm, xorgproto, gccmakedep, Xaw3d }:
+{ lib
+, stdenv
+, fetchurl
+, imake
+, libXt
+, libXaw
+, libXtst
+, libXi
+, libXpm
+, xorgproto
+, gccmakedep
+, Xaw3d
+}:
 
 stdenv.mkDerivation {
   pname = "xvkbd";

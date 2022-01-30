@@ -12,15 +12,17 @@ let
 
   nixpkgsSrc = nixpkgs; # urgh
 
-  pkgs = import ./.. {};
+  pkgs = import ./.. { };
 
-  removeMaintainers = set: if builtins.isAttrs set
+  removeMaintainers = set:
+    if builtins.isAttrs set
     then if (set.type or "") == "derivation"
-      then set // { meta = builtins.removeAttrs (set.meta or {}) [ "maintainers" ]; }
-      else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
+    then set // { meta = builtins.removeAttrs (set.meta or { }) [ "maintainers" ]; }
+    else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
 
-in rec {
+in
+rec {
 
   nixos = removeMaintainers (import ./release.nix {
     inherit stableBranch;
@@ -28,10 +30,11 @@ in rec {
     nixpkgs = nixpkgsSrc;
   });
 
-  nixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
-    inherit supportedSystems;
-    nixpkgs = nixpkgsSrc;
-  })) [ "unstable" ];
+  nixpkgs = builtins.removeAttrs
+    (removeMaintainers (import ../pkgs/top-level/release.nix {
+      inherit supportedSystems;
+      nixpkgs = nixpkgsSrc;
+    })) [ "unstable" ];
 
   tested =
     let
@@ -39,7 +42,8 @@ in rec {
       onAllSupported = x: map (system: "${x}.${system}") (supportedSystems ++ limitedSupportedSystems);
       onSystems = systems: x: map (system: "${x}.${system}")
         (pkgs.lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems));
-    in pkgs.releaseTools.aggregate {
+    in
+    pkgs.releaseTools.aggregate {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
@@ -49,21 +53,21 @@ in rec {
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
-        (onSystems ["x86_64-linux" "aarch64-linux"] "nixos.amazonImage")
-        (onSystems ["x86_64-linux"] "nixos.iso_plasma5")
-        (onSystems ["x86_64-linux"] "nixos.iso_gnome")
+        (onSystems [ "x86_64-linux" "aarch64-linux" ] "nixos.amazonImage")
+        (onSystems [ "x86_64-linux" ] "nixos.iso_plasma5")
+        (onSystems [ "x86_64-linux" ] "nixos.iso_gnome")
         (onFullSupported "nixos.manual")
-        (onSystems ["x86_64-linux"] "nixos.ova")
-        (onSystems ["aarch64-linux"] "nixos.sd_image")
-        (onSystems ["x86_64-linux"] "nixos.tests.boot.biosCdrom")
-        (onSystems ["x86_64-linux"] "nixos.tests.boot.biosUsb")
+        (onSystems [ "x86_64-linux" ] "nixos.ova")
+        (onSystems [ "aarch64-linux" ] "nixos.sd_image")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.boot.biosCdrom")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.boot.biosUsb")
         (onFullSupported "nixos.tests.boot-stage1")
-        (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiCdrom")
-        (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiUsb")
-        (onSystems ["x86_64-linux"] "nixos.tests.chromium")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.boot.uefiCdrom")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.boot.uefiUsb")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.chromium")
         (onFullSupported "nixos.tests.containers-imperative")
         (onFullSupported "nixos.tests.containers-ip")
-        (onSystems ["x86_64-linux"] "nixos.tests.docker")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.docker")
         (onFullSupported "nixos.tests.ecryptfs")
         (onFullSupported "nixos.tests.env")
         (onFullSupported "nixos.tests.firefox-esr")
@@ -72,20 +76,20 @@ in rec {
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
         (onFullSupported "nixos.tests.gnome")
         (onFullSupported "nixos.tests.gnome-xorg")
-        (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvols")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.luksroot")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.lvm")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBootFat")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBoot")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleLabels")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleProvided")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleUefiSystemdBoot")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.simple")
-        (onSystems ["x86_64-linux"] "nixos.tests.installer.swraid")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.btrfsSimple")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.btrfsSubvolDefault")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.btrfsSubvols")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.luksroot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.lvm")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.separateBootFat")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.separateBoot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.simpleLabels")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.simpleProvided")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.simple")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer.swraid")
         (onFullSupported "nixos.tests.ipv6")
         (onFullSupported "nixos.tests.keymap.azerty")
         (onFullSupported "nixos.tests.keymap.colemak")
@@ -151,10 +155,10 @@ in rec {
         (onFullSupported "nixos.tests.switchTest")
         (onFullSupported "nixos.tests.udisks2")
         (onFullSupported "nixos.tests.xfce")
-        (onSystems ["i686-linux"] "nixos.tests.zfs.installer")
+        (onSystems [ "i686-linux" ] "nixos.tests.zfs.installer")
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
-        ["nixpkgs.tarball"]
+        [ "nixpkgs.tarball" ]
       ];
     };
 }

@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchFromGitHub
-, curl, findutils, gnugrep, gnused, shellcheck }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, findutils
+, gnugrep
+, gnused
+, shellcheck
+}:
 
 let
   pname = "pass-checkup";
   version = "0.2.1";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {

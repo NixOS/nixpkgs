@@ -30,7 +30,8 @@ let
     prosodyctl deluser cthon98@example.com
     prosodyctl deluser azurediamond@example.com
   '';
-in import ../make-test-python.nix {
+in
+import ../make-test-python.nix {
   name = "prosody";
   nodes = {
     client = { nodes, pkgs, config, ... }: {

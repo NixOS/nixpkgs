@@ -29,7 +29,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     toml
   ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata zipp
+    importlib-metadata
+    zipp
   ];
 
   checkInputs = [

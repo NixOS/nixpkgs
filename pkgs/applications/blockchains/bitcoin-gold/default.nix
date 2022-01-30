@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , openssl
 , boost
@@ -56,10 +57,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
-      "--with-boost-libdir=${boost.out}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
   ] ++ optionals withGui [
-      "--with-gui=qt5"
-      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    "--with-gui=qt5"
+    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
   meta = {

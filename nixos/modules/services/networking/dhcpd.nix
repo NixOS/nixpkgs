@@ -43,15 +43,25 @@ let
       serviceConfig =
         let
           configFile = if cfg.configFile != null then cfg.configFile else writeConfig cfg;
-          args = [ "@${pkgs.dhcp}/sbin/dhcpd" "dhcpd${postfix}" "-${postfix}"
-                   "-pf" "/run/dhcpd${postfix}/dhcpd.pid"
-                   "-cf" "${configFile}"
-                   "-lf" "${cfg.stateDir}/dhcpd.leases"
-                   "-user" "dhcpd" "-group" "nogroup"
-                 ] ++ cfg.extraFlags
-                   ++ cfg.interfaces;
+          args = [
+            "@${pkgs.dhcp}/sbin/dhcpd"
+            "dhcpd${postfix}"
+            "-${postfix}"
+            "-pf"
+            "/run/dhcpd${postfix}/dhcpd.pid"
+            "-cf"
+            "${configFile}"
+            "-lf"
+            "${cfg.stateDir}/dhcpd.leases"
+            "-user"
+            "dhcpd"
+            "-group"
+            "nogroup"
+          ] ++ cfg.extraFlags
+          ++ cfg.interfaces;
 
-        in {
+        in
+        {
           ExecStart = concatMapStringsSep " " escapeShellArg args;
           Type = "forking";
           Restart = "always";
@@ -134,7 +144,7 @@ let
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Additional command line flags to be passed to the dhcpd daemon.
       '';
@@ -151,7 +161,7 @@ let
 
     interfaces = mkOption {
       type = types.listOf types.str;
-      default = ["eth0"];
+      default = [ "eth0" ];
       description = ''
         The interfaces on which the DHCP server should listen.
       '';
@@ -159,13 +169,15 @@ let
 
     machines = mkOption {
       type = with types; listOf (submodule machineOpts);
-      default = [];
+      default = [ ];
       example = [
-        { hostName = "foo";
+        {
+          hostName = "foo";
           ethernetAddress = "00:16:76:9a:32:1d";
           ipAddress = "192.168.1.10";
         }
-        { hostName = "bar";
+        {
+          hostName = "bar";
           ethernetAddress = "00:19:d1:1d:c4:9a";
           ipAddress = "192.168.1.11";
         }
@@ -216,7 +228,7 @@ in
         group = "dhcpd";
         description = "DHCP daemon user";
       };
-      groups.dhcpd = {};
+      groups.dhcpd = { };
     };
 
     systemd.services = dhcpdService "4" cfg4 // dhcpdService "6" cfg6;

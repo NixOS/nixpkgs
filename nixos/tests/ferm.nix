@@ -1,54 +1,54 @@
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "ferm";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ mic92 ];
   };
 
   nodes =
-    { client =
+    {
+      client =
         { pkgs, ... }:
-        with pkgs.lib;
-        {
-          networking = {
-            dhcpcd.enable = false;
-            interfaces.eth1.ipv6.addresses = mkOverride 0 [ { address = "fd00::2"; prefixLength = 64; } ];
-            interfaces.eth1.ipv4.addresses = mkOverride 0 [ { address = "192.168.1.2"; prefixLength = 24; } ];
+          with pkgs.lib;
+          {
+            networking = {
+              dhcpcd.enable = false;
+              interfaces.eth1.ipv6.addresses = mkOverride 0 [{ address = "fd00::2"; prefixLength = 64; }];
+              interfaces.eth1.ipv4.addresses = mkOverride 0 [{ address = "192.168.1.2"; prefixLength = 24; }];
+            };
           };
-      };
       server =
         { pkgs, ... }:
-        with pkgs.lib;
-        {
-          networking = {
-            dhcpcd.enable = false;
-            useNetworkd = true;
-            useDHCP = false;
-            interfaces.eth1.ipv6.addresses = mkOverride 0 [ { address = "fd00::1"; prefixLength = 64; } ];
-            interfaces.eth1.ipv4.addresses = mkOverride 0 [ { address = "192.168.1.1"; prefixLength = 24; } ];
-          };
+          with pkgs.lib;
+          {
+            networking = {
+              dhcpcd.enable = false;
+              useNetworkd = true;
+              useDHCP = false;
+              interfaces.eth1.ipv6.addresses = mkOverride 0 [{ address = "fd00::1"; prefixLength = 64; }];
+              interfaces.eth1.ipv4.addresses = mkOverride 0 [{ address = "192.168.1.1"; prefixLength = 24; }];
+            };
 
-          services = {
-            ferm.enable = true;
-            ferm.config = ''
-              domain (ip ip6) table filter chain INPUT {
-                interface lo ACCEPT;
-                proto tcp dport 8080 REJECT reject-with tcp-reset;
-              }
-            '';
-            nginx.enable = true;
-            nginx.httpConfig = ''
-              server {
-                listen 80;
-                listen [::]:80;
-                listen 8080;
-                listen [::]:8080;
+            services = {
+              ferm.enable = true;
+              ferm.config = ''
+                domain (ip ip6) table filter chain INPUT {
+                  interface lo ACCEPT;
+                  proto tcp dport 8080 REJECT reject-with tcp-reset;
+                }
+              '';
+              nginx.enable = true;
+              nginx.httpConfig = ''
+                server {
+                  listen 80;
+                  listen [::]:80;
+                  listen 8080;
+                  listen [::]:8080;
 
-                location /status { stub_status on; }
-              }
-            '';
+                  location /status { stub_status on; }
+                }
+              '';
+            };
           };
-        };
     };
 
   testScript =

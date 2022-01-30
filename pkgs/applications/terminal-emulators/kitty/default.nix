@@ -1,23 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring,
-  harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel,
-  libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
-  libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  lcms2,
-  librsync,
-  installShellFiles,
-  dbus,
-  darwin,
-  Cocoa,
-  CoreGraphics,
-  Foundation,
-  IOKit,
-  Kernel,
-  OpenGL,
-  libcanberra,
-  libicns,
-  libpng,
-  python3,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, libunistring
+, harfbuzz
+, fontconfig
+, pkg-config
+, ncurses
+, imagemagick
+, xsel
+, libstartup_notification
+, libGL
+, libX11
+, libXrandr
+, libXinerama
+, libXcursor
+, libxkbcommon
+, libXi
+, libXext
+, wayland-protocols
+, wayland
+, lcms2
+, librsync
+, installShellFiles
+, dbus
+, darwin
+, Cocoa
+, CoreGraphics
+, Foundation
+, IOKit
+, Kernel
+, OpenGL
+, libcanberra
+, libicns
+, libpng
+, python3
+, zlib
+,
 }:
 
 with python3Packages;
@@ -51,9 +70,19 @@ buildPythonApplication rec {
   ] ++ lib.optionals (stdenv.isDarwin && (builtins.hasAttr "UserNotifications" darwin.apple_sdk.frameworks)) [
     darwin.apple_sdk.frameworks.UserNotifications
   ] ++ lib.optionals stdenv.isLinux [
-    fontconfig libunistring libcanberra libX11
-    libXrandr libXinerama libXcursor libxkbcommon libXi libXext
-    wayland-protocols wayland dbus
+    fontconfig
+    libunistring
+    libcanberra
+    libX11
+    libXrandr
+    libXinerama
+    libXcursor
+    libxkbcommon
+    libXi
+    libXext
+    wayland-protocols
+    wayland
+    dbus
   ];
 
   nativeBuildInputs = [
@@ -67,7 +96,7 @@ buildPythonApplication rec {
     sphinx-inline-tabs
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
-    libicns  # For the png2icns tool.
+    libicns # For the png2icns tool.
   ];
 
   propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
@@ -79,35 +108,37 @@ buildPythonApplication rec {
 
   dontConfigure = true;
 
-  buildPhase = let
-    commonOptions = ''
-      --update-check-interval=0 \
-      --shell-integration=enabled\ no-rc
+  buildPhase =
+    let
+      commonOptions = ''
+        --update-check-interval=0 \
+        --shell-integration=enabled\ no-rc
+      '';
+    in
+    ''
+      runHook preBuild
+      ${if stdenv.isDarwin then ''
+        ${python.interpreter} setup.py kitty.app \
+        --disable-link-time-optimization \
+        ${commonOptions}
+        make man
+      '' else ''
+        ${python.interpreter} setup.py linux-package \
+        --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
+        --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
+        --canberra-library='${libcanberra}/lib/libcanberra.so' \
+        ${commonOptions}
+      ''}
+      runHook postBuild
     '';
-  in ''
-    runHook preBuild
-    ${if stdenv.isDarwin then ''
-      ${python.interpreter} setup.py kitty.app \
-      --disable-link-time-optimization \
-      ${commonOptions}
-      make man
-    '' else ''
-      ${python.interpreter} setup.py linux-package \
-      --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
-      --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
-      --canberra-library='${libcanberra}/lib/libcanberra.so' \
-      ${commonOptions}
-    ''}
-    runHook postBuild
-  '';
 
   checkInputs = [ pillow ];
 
   checkPhase =
     let buildBinPath =
       if stdenv.isDarwin
-        then "kitty.app/Contents/MacOS"
-        else "linux-package/bin";
+      then "kitty.app/Contents/MacOS"
+      else "linux-package/bin";
     in
     ''
       # Fontconfig error: Cannot load default config file: No such file: (null)

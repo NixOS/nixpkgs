@@ -37,7 +37,7 @@
 , vulkan-loader
 , libpulseaudio
 
-# - Inputs used for Darwin
+  # - Inputs used for Darwin
 , CoreBluetooth
 , ForceFeedback
 , IOKit

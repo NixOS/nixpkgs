@@ -12,8 +12,9 @@
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-genmon-plugin";
+in
+stdenv.mkDerivation rec {
+  pname = "xfce4-genmon-plugin";
   version = "4.1.1";
 
   src = fetchurl {

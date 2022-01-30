@@ -1,5 +1,12 @@
-{ stdenv, lib, python3, fetchFromGitHub, which, findutils, coreutils
-, perl, installShellFiles
+{ stdenv
+, lib
+, python3
+, fetchFromGitHub
+, which
+, findutils
+, coreutils
+, perl
+, installShellFiles
 , doCheck ? true
 }: stdenv.mkDerivation rec {
 

@@ -9,7 +9,8 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
 
     routerBase =
       lib.mkMerge [
-        { virtualisation.vlans = [ 2 1 ];
+        {
+          virtualisation.vlans = [ 2 1 ];
           networking.firewall.enable = withFirewall;
           networking.nat.internalIPs = [ "192.168.1.0/24" ];
           networking.nat.externalInterface = "eth1";
@@ -22,16 +23,18 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
   in
   {
     name = "nat" + (if withFirewall then "WithFirewall" else "Standalone")
-                 + (lib.optionalString withConntrackHelpers "withConntrackHelpers");
+      + (lib.optionalString withConntrackHelpers "withConntrackHelpers");
     meta = with pkgs.lib.maintainers; {
       maintainers = [ eelco rob ];
     };
 
     nodes =
-      { client =
+      {
+        client =
           { pkgs, nodes, ... }:
           lib.mkMerge [
-            { virtualisation.vlans = [ 1 ];
+            {
+              virtualisation.vlans = [ 1 ];
               networking.defaultGateway =
                 (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address;
             }
@@ -42,20 +45,21 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
           ];
 
         router =
-        { ... }: lib.mkMerge [
-          routerBase
-          { networking.nat.enable = true; }
-        ];
+          { ... }: lib.mkMerge [
+            routerBase
+            { networking.nat.enable = true; }
+          ];
 
         routerDummyNoNat =
-        { ... }: lib.mkMerge [
-          routerBase
-          { networking.nat.enable = false; }
-        ];
+          { ... }: lib.mkMerge [
+            routerBase
+            { networking.nat.enable = false; }
+          ];
 
         server =
           { ... }:
-          { virtualisation.vlans = [ 2 ];
+          {
+            virtualisation.vlans = [ 2 ];
             networking.firewall.enable = false;
             services.httpd.enable = true;
             services.httpd.adminAddr = "foo@example.org";
@@ -65,10 +69,12 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
       };
 
     testScript =
-      { nodes, ... }: let
+      { nodes, ... }:
+      let
         routerDummyNoNatClosure = nodes.routerDummyNoNat.config.system.build.toplevel;
         routerClosure = nodes.router.config.system.build.toplevel;
-      in ''
+      in
+      ''
         client.start()
         router.start()
         server.start()

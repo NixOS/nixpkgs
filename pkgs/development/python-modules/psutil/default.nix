@@ -1,4 +1,9 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, python
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, python
 , darwin
 , pytestCheckHook
 , mock
@@ -24,7 +29,7 @@ buildPythonPackage rec {
   #    https://github.com/giampaolo/psutil/issues/1912
   doCheck = false;
   checkInputs = [ pytestCheckHook ]
-  ++ lib.optionals isPy27 [ mock ipaddress unittest2 ];
+    ++ lib.optionals isPy27 [ mock ipaddress unittest2 ];
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin

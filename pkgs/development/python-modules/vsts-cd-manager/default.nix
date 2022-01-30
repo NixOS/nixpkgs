@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, msrest
+{ lib
+, buildPythonPackage
+, fetchPypi
+, msrest
 , mock
 }:
 

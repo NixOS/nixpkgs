@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ python2 cmake clang ];
   buildInputs = [ llvmPackages.libclang ] ++
-   lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   doCheck = true;

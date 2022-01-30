@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       allows to create standalone programs. Yabasic runs under Unix and Windows
       and has a comprehensive documentation; it is small, simple, open-source
       and free.
-   '';
+    '';
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;

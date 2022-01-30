@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
     # pull upstream fix for -fno-common toolchains like clang-12
     (fetchpatch {
-        name = "fno-common.patch";
-        url = "https://github.com/opensvc/multipath-tools/commit/23a9247fa89cd0c84fe7e0f32468fd698b1caa48.patch";
-        sha256 = "10hq0g2jfkfbmwhm4x4q5cgsswj30lm34ib153alqzjzsxc1hqjk";
+      name = "fno-common.patch";
+      url = "https://github.com/opensvc/multipath-tools/commit/23a9247fa89cd0c84fe7e0f32468fd698b1caa48.patch";
+      sha256 = "10hq0g2jfkfbmwhm4x4q5cgsswj30lm34ib153alqzjzsxc1hqjk";
     })
   ];
 

@@ -1,9 +1,9 @@
 { callPackage }:
 
 rec {
-  mlton20130715 = callPackage ./20130715.nix {};
+  mlton20130715 = callPackage ./20130715.nix { };
 
-  mlton20180207Binary = callPackage ./20180207-binary.nix {};
+  mlton20180207Binary = callPackage ./20180207-binary.nix { };
 
   mlton20180207 = callPackage ./from-git-source.nix {
     mltonBootstrap = mlton20180207Binary;

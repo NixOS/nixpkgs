@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, fixDarwinDylibNames, snappy, cmake
-, static ? stdenv.hostPlatform.isStatic }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, fixDarwinDylibNames
+, snappy
+, cmake
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "leveldb";

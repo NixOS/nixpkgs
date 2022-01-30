@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gnome, gtk3, wrapGAppsHook
-, gettext, meson, gsound, librsvg, itstool, vala
-, python3, ninja, desktop-file-utils }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gnome
+, gtk3
+, wrapGAppsHook
+, gettext
+, meson
+, gsound
+, librsvg
+, itstool
+, vala
+, python3
+, ninja
+, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
   pname = "four-in-a-row";
@@ -12,8 +26,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config wrapGAppsHook gettext meson itstool vala
-    ninja python3 desktop-file-utils
+    pkg-config
+    wrapGAppsHook
+    gettext
+    meson
+    itstool
+    vala
+    ninja
+    python3
+    desktop-file-utils
   ];
   buildInputs = [ gtk3 gsound librsvg gnome.adwaita-icon-theme ];
 

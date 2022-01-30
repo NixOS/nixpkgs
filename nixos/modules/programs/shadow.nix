@@ -7,13 +7,13 @@ with lib;
 let
 
   /*
-  There are three different sources for user/group id ranges, each of which gets
-  used by different programs:
-  - The login.defs file, used by the useradd, groupadd and newusers commands
-  - The update-users-groups.pl file, used by NixOS in the activation phase to
+    There are three different sources for user/group id ranges, each of which gets
+    used by different programs:
+    - The login.defs file, used by the useradd, groupadd and newusers commands
+    - The update-users-groups.pl file, used by NixOS in the activation phase to
     decide on which ids to use for declaratively defined users without a static
     id
-  - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
+    - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
     by systemd for features like ConditionUser=@system and systemd-sysusers
   */
   loginDefs =
@@ -44,7 +44,8 @@ let
     '';
 
   mkSetuidRoot = source:
-    { setuid = true;
+    {
+      setuid = true;
       owner = "root";
       group = "root";
       inherit source;
@@ -83,7 +84,8 @@ in
         config.users.defaultUserShell;
 
     environment.etc =
-      { # /etc/login.defs: global configuration for pwdutils.  You
+      {
+        # /etc/login.defs: global configuration for pwdutils.  You
         # cannot login without it!
         "login.defs".source = pkgs.writeText "login.defs" loginDefs;
 
@@ -97,10 +99,11 @@ in
       };
 
     security.pam.services =
-      { chsh = { rootOK = true; };
+      {
+        chsh = { rootOK = true; };
         chfn = { rootOK = true; };
         su = { rootOK = true; forwardXAuth = true; logFailures = true; };
-        passwd = {};
+        passwd = { };
         # Note: useradd, groupadd etc. aren't setuid root, so it
         # doesn't really matter what the PAM config says as long as it
         # lets root in.
@@ -116,13 +119,13 @@ in
       };
 
     security.wrappers = {
-      su        = mkSetuidRoot "${pkgs.shadow.su}/bin/su";
-      sg        = mkSetuidRoot "${pkgs.shadow.out}/bin/sg";
-      newgrp    = mkSetuidRoot "${pkgs.shadow.out}/bin/newgrp";
+      su = mkSetuidRoot "${pkgs.shadow.su}/bin/su";
+      sg = mkSetuidRoot "${pkgs.shadow.out}/bin/sg";
+      newgrp = mkSetuidRoot "${pkgs.shadow.out}/bin/newgrp";
       newuidmap = mkSetuidRoot "${pkgs.shadow.out}/bin/newuidmap";
       newgidmap = mkSetuidRoot "${pkgs.shadow.out}/bin/newgidmap";
     } // lib.optionalAttrs config.users.mutableUsers {
-      chsh   = mkSetuidRoot "${pkgs.shadow.out}/bin/chsh";
+      chsh = mkSetuidRoot "${pkgs.shadow.out}/bin/chsh";
       passwd = mkSetuidRoot "${pkgs.shadow.out}/bin/passwd";
     };
   };

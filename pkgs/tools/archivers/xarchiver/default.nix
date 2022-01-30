@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, pkg-config, intltool, libxslt, makeWrapper,
-  coreutils, zip, unzip, p7zip, unar, gnutar, bzip2, gzip, lhasa, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk3
+, pkg-config
+, intltool
+, libxslt
+, makeWrapper
+, coreutils
+, zip
+, unzip
+, p7zip
+, unar
+, gnutar
+, bzip2
+, gzip
+, lhasa
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   version = "0.5.4.17";

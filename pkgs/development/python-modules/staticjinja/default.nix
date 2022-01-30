@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   passthru.tests = {
     version = testVersion { package = staticjinja; };
-    minimal-template = callPackage ./test-minimal-template {};
+    minimal-template = callPackage ./test-minimal-template { };
   };
 
   meta = with lib; {

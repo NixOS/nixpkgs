@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 TimeKeeper/TimeKeeper $out/bin/timekeeper
-    '';
+  '';
 
   meta = with lib; {
     description = "Log hours worked and make reports";

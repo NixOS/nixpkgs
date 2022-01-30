@@ -64,12 +64,22 @@
 , unzip
 , xorg
 , zlib
-, chromecastSupport ? true, libmicrodns, protobuf
+, chromecastSupport ? true
+, libmicrodns
+, protobuf
 , jackSupport ? false
 , onlyLibVLC ? false
-, skins2Support ? !onlyLibVLC, freetype
-, waylandSupport ? true, wayland, wayland-protocols
-, withQt5 ? true, qtbase, qtsvg, qtwayland, qtx11extras, wrapQtAppsHook
+, skins2Support ? !onlyLibVLC
+, freetype
+, waylandSupport ? true
+, wayland
+, wayland-protocols
+, withQt5 ? true
+, qtbase
+, qtsvg
+, qtwayland
+, qtx11extras
+, wrapQtAppsHook
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.

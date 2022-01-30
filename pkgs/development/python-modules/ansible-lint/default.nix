@@ -49,7 +49,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--numprocesses" "$NIX_BUILD_CORES"
+    "--numprocesses"
+    "$NIX_BUILD_CORES"
   ];
 
   preCheck = ''

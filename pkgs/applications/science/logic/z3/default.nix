@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     ++ optional javaBindings "java"
     ++ optional ocamlBindings "ocaml";
 
-   passthru = {
+  passthru = {
     updateScript = writeScript "update-z3" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts curl jq
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       )"
       update-source-version ${pname} "$newVersion"
     '';
-   };
+  };
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";

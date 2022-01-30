@@ -1,7 +1,7 @@
 # Verifies that the configuration suggested in (non-deprecated) example values
 # will result in the expected output.
 
-import ../make-test-python.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ... }: {
   name = "krb5-with-example-config";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eqyiel ];
@@ -104,9 +104,10 @@ import ../make-test-python.nix ({ pkgs, ...} : {
         admin_server = SYSLOG:NOTICE
         default      = SYSLOG:NOTICE
     '';
-  in ''
-    machine.succeed(
-        "diff /etc/krb5.conf ${snapshot}"
-    )
-  '';
+    in
+    ''
+      machine.succeed(
+          "diff /etc/krb5.conf ${snapshot}"
+      )
+    '';
 })

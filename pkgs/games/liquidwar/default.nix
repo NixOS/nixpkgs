@@ -1,10 +1,31 @@
-{ lib, stdenv, fetchurl, xorgproto, libX11, libXrender
-, gmp, libjpeg, libpng
-, expat, gettext, perl, guile
-, SDL, SDL_image, SDL_mixer, SDL_ttf
-, curl, sqlite, libtool, readline
-, libogg, libvorbis, libcaca, csound, cunit
-, pkg-config }:
+{ lib
+, stdenv
+, fetchurl
+, xorgproto
+, libX11
+, libXrender
+, gmp
+, libjpeg
+, libpng
+, expat
+, gettext
+, perl
+, guile
+, SDL
+, SDL_image
+, SDL_mixer
+, SDL_ttf
+, curl
+, sqlite
+, libtool
+, readline
+, libogg
+, libvorbis
+, libcaca
+, csound
+, cunit
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "liquidwar6";
@@ -16,14 +37,29 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    xorgproto libX11 gmp guile
-    libjpeg libpng
-    expat gettext perl
-    SDL SDL_image SDL_mixer SDL_ttf
-    curl sqlite
-    libogg libvorbis csound
-    libXrender libcaca cunit
-    libtool readline
+    xorgproto
+    libX11
+    gmp
+    guile
+    libjpeg
+    libpng
+    expat
+    gettext
+    perl
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_ttf
+    curl
+    sqlite
+    libogg
+    libvorbis
+    csound
+    libXrender
+    libcaca
+    cunit
+    libtool
+    readline
   ];
 
   nativeBuildInputs = [ pkg-config ];

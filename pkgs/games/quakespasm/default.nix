@@ -1,6 +1,18 @@
-{ lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad
-, Cocoa, CoreAudio, CoreFoundation, IOKit, OpenGL
-, copyDesktopItems, makeDesktopItem
+{ lib
+, stdenv
+, SDL
+, SDL2
+, fetchurl
+, gzip
+, libvorbis
+, libmad
+, Cocoa
+, CoreAudio
+, CoreFoundation
+, IOKit
+, OpenGL
+, copyDesktopItems
+, makeDesktopItem
 , useSDL2 ? stdenv.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
 }:
 
@@ -22,9 +34,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ copyDesktopItems ];
   buildInputs = [
-    gzip libvorbis libmad (if useSDL2 then SDL2 else SDL)
+    gzip
+    libvorbis
+    libmad
+    (if useSDL2 then SDL2 else SDL)
   ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa CoreAudio IOKit OpenGL
+    Cocoa
+    CoreAudio
+    IOKit
+    OpenGL
   ] ++ lib.optionals (stdenv.isDarwin && useSDL2) [
     CoreFoundation
   ];

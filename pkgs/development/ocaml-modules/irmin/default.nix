@@ -1,6 +1,17 @@
-{ lib, buildDunePackage
-, astring, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
-, repr, ppx_irmin, bheap, uutf
+{ lib
+, buildDunePackage
+, astring
+, digestif
+, fmt
+, jsonm
+, logs
+, ocaml_lwt
+, ocamlgraph
+, uri
+, repr
+, ppx_irmin
+, bheap
+, uutf
 }:
 
 buildDunePackage {

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  installPhase= ''
+  installPhase = ''
     mkdir -p $out/bin
     cp aescrypt $out/bin
     cp aescrypt_keygen $out/bin
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Encrypt files with Advanced Encryption Standard (AES)";
-    homepage    = "https://www.aescrypt.com/";
-    license     = licenses.gpl2;
+    homepage = "https://www.aescrypt.com/";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 qknight ];
-    platforms   = lib.platforms.all;
+    platforms = lib.platforms.all;
     hydraPlatforms = with platforms; unix;
   };
 }

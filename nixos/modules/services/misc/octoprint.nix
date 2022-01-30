@@ -17,7 +17,7 @@ let
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
+  pluginsEnv = package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
 
   package = pkgs.octoprint;
 
@@ -67,7 +67,7 @@ in
 
       plugins = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = plugins: [];
+        default = plugins: [ ];
         defaultText = literalExpression "plugins: []";
         example = literalExpression "plugins: with plugins; [ themeify stlviewer ]";
         description = "Additional plugins to be used. Available plugins are passed through the plugins input.";
@@ -75,7 +75,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Extra options which are added to OctoPrint's YAML configuration file.";
       };
 

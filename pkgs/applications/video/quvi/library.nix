@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libquvi";
-  version="0.9.4";
+  version = "0.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/quvi/libquvi-${version}.tar.xz";

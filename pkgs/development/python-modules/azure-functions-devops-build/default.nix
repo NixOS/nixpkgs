@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , jinja2
 , msrest
 , vsts

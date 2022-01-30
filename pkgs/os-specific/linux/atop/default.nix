@@ -6,7 +6,7 @@
 , findutils
 , systemd
 , python3
-# makes the package unfree via pynvml
+  # makes the package unfree via pynvml
 , withAtopgpu ? false
 }:
 

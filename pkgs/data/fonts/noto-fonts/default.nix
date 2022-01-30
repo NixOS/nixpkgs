@@ -42,19 +42,19 @@ let
         description = "Beautiful and free fonts for many languages";
         homepage = "https://www.google.com/get/noto/";
         longDescription =
-        ''
-          When text is rendered by a computer, sometimes characters are
-          displayed as “tofu”. They are little boxes to indicate your device
-          doesn’t have a font to display the text.
+          ''
+            When text is rendered by a computer, sometimes characters are
+            displayed as “tofu”. They are little boxes to indicate your device
+            doesn’t have a font to display the text.
 
-          Google has been developing a font family called Noto, which aims to
-          support all languages with a harmonious look and feel. Noto is
-          Google’s answer to tofu. The name noto is to convey the idea that
-          Google’s goal is to see “no more tofu”.  Noto has multiple styles and
-          weights, and freely available to all.
+            Google has been developing a font family called Noto, which aims to
+            support all languages with a harmonious look and feel. Noto is
+            Google’s answer to tofu. The name noto is to convey the idea that
+            Google’s goal is to see “no more tofu”.  Noto has multiple styles and
+            weights, and freely available to all.
 
-          This package also includes the Arimo, Cousine, and Tinos fonts.
-        '';
+            This package also includes the Arimo, Cousine, and Tinos fonts.
+          '';
         license = licenses.ofl;
         platforms = platforms.all;
         maintainers = with maintainers; [ mathnerd314 emily ];
@@ -123,66 +123,68 @@ in
     sha256 = "sha256-BX4tcDcz+RGka8mtced1k3BopUJQ14t1BtAVqTjyPik=";
   };
 
-  noto-fonts-emoji = let
-    version = "2.034";
-    emojiPythonEnv =
-      python3.withPackages (p: with p; [ fonttools nototools ]);
-  in stdenv.mkDerivation {
-    pname = "noto-fonts-emoji";
-    inherit version;
+  noto-fonts-emoji =
+    let
+      version = "2.034";
+      emojiPythonEnv =
+        python3.withPackages (p: with p; [ fonttools nototools ]);
+    in
+    stdenv.mkDerivation {
+      pname = "noto-fonts-emoji";
+      inherit version;
 
-    src = fetchFromGitHub {
-      owner = "googlefonts";
-      repo = "noto-emoji";
-      rev = "v${version}";
-      sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
+      src = fetchFromGitHub {
+        owner = "googlefonts";
+        repo = "noto-emoji";
+        rev = "v${version}";
+        sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
+      };
+
+      nativeBuildInputs = [
+        cairo
+        imagemagick
+        zopfli
+        pngquant
+        which
+        pkg-config
+        emojiPythonEnv
+      ];
+
+      postPatch = ''
+        patchShebangs *.py
+        patchShebangs third_party/color_emoji/*.py
+        # remove check for virtualenv, since we handle
+        # python requirements using python.withPackages
+        sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
+
+        # Remove check for missing zopfli, it doesn't
+        # work and we guarantee its presence already.
+        sed -i '/ifdef MISSING_ZOPFLI/,+2d' Makefile
+        sed -i '/ifeq (,$(shell which $(ZOPFLIPNG)))/,+4d' Makefile
+
+        sed -i '/ZOPFLIPNG = zopflipng/d' Makefile
+        echo "ZOPFLIPNG = ${zopfli}/bin/zopflipng" >> Makefile
+
+        # Make the build verbose so it won't get culled by Hydra thinking that
+        # it somehow got stuck doing nothing.
+        sed -i 's;\t@;\t;' Makefile
+      '';
+
+      enableParallelBuilding = true;
+
+      installPhase = ''
+        mkdir -p $out/share/fonts/noto
+        cp NotoColorEmoji.ttf fonts/NotoEmoji-Regular.ttf $out/share/fonts/noto
+      '';
+
+      meta = with lib; {
+        description = "Color and Black-and-White emoji fonts";
+        homepage = "https://github.com/googlefonts/noto-emoji";
+        license = with licenses; [ ofl asl20 ];
+        platforms = platforms.all;
+        maintainers = with maintainers; [ mathnerd314 sternenseemann ];
+      };
     };
-
-    nativeBuildInputs = [
-      cairo
-      imagemagick
-      zopfli
-      pngquant
-      which
-      pkg-config
-      emojiPythonEnv
-    ];
-
-    postPatch = ''
-      patchShebangs *.py
-      patchShebangs third_party/color_emoji/*.py
-      # remove check for virtualenv, since we handle
-      # python requirements using python.withPackages
-      sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
-
-      # Remove check for missing zopfli, it doesn't
-      # work and we guarantee its presence already.
-      sed -i '/ifdef MISSING_ZOPFLI/,+2d' Makefile
-      sed -i '/ifeq (,$(shell which $(ZOPFLIPNG)))/,+4d' Makefile
-
-      sed -i '/ZOPFLIPNG = zopflipng/d' Makefile
-      echo "ZOPFLIPNG = ${zopfli}/bin/zopflipng" >> Makefile
-
-      # Make the build verbose so it won't get culled by Hydra thinking that
-      # it somehow got stuck doing nothing.
-      sed -i 's;\t@;\t;' Makefile
-    '';
-
-    enableParallelBuilding = true;
-
-    installPhase = ''
-      mkdir -p $out/share/fonts/noto
-      cp NotoColorEmoji.ttf fonts/NotoEmoji-Regular.ttf $out/share/fonts/noto
-    '';
-
-    meta = with lib; {
-      description = "Color and Black-and-White emoji fonts";
-      homepage = "https://github.com/googlefonts/noto-emoji";
-      license = with licenses; [ ofl asl20 ];
-      platforms = platforms.all;
-      maintainers = with maintainers; [ mathnerd314 sternenseemann ];
-    };
-  };
 
   noto-fonts-emoji-blob-bin =
     let

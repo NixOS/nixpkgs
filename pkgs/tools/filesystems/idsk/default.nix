@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Manipulating CPC dsk images and files";
-    homepage = "https://github.com/cpcsdk/idsk" ;
+    homepage = "https://github.com/cpcsdk/idsk";
     license = licenses.mit;
     maintainers = [ ];
     platforms = platforms.all;

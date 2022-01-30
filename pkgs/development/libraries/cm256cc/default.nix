@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost } :
+{ lib, stdenv, fetchFromGitHub, cmake, boost }:
 
 stdenv.mkDerivation rec {
   pname = "cm256cc";

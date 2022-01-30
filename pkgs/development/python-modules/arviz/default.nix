@@ -13,14 +13,14 @@
 , scipy
 , setuptools
 , typing-extensions
-# , tensorflow-probability (incompatible version)
+  # , tensorflow-probability (incompatible version)
 , xarray
 , zarr
 , h5py
-#, pymc3 (broken)
-#, pyro-ppl (broken)
-#, pystan (not packaged)
-#, numpyro (not packaged)
+  #, pymc3 (broken)
+  #, pyro-ppl (broken)
+  #, pystan (not packaged)
+  #, numpyro (not packaged)
 }:
 
 buildPythonPackage rec {

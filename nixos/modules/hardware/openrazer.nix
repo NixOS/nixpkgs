@@ -97,7 +97,7 @@ in
 
       users = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Usernames to be added to the "openrazer" group, so that they
           can start and interact with the OpenRazer userspace daemon.
@@ -127,15 +127,15 @@ in
     systemd.user.services.openrazer-daemon = {
       description = "Daemon to manage razer devices in userspace";
       unitConfig.Documentation = "man:openrazer-daemon(8)";
-        # Requires a graphical session so the daemon knows when the screensaver
-        # starts. See the 'devicesOffOnScreensaver' option.
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.razer";
-          ExecStart = "${daemonExe} --foreground";
-          Restart = "always";
+      # Requires a graphical session so the daemon knows when the screensaver
+      # starts. See the 'devicesOffOnScreensaver' option.
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "dbus";
+        BusName = "org.razer";
+        ExecStart = "${daemonExe} --foreground";
+        Restart = "always";
       };
     };
   };

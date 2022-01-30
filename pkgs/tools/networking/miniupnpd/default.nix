@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchurl, iptables, libuuid, pkg-config
-, which, iproute2, gnused, coreutils, gawk, makeWrapper
+{ stdenv
+, lib
+, fetchurl
+, iptables
+, libuuid
+, pkg-config
+, which
+, iproute2
+, gnused
+, coreutils
+, gawk
+, makeWrapper
 , nixosTests
 }:
 
@@ -17,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ iptables libuuid ];
-  nativeBuildInputs= [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   makefile = "Makefile.linux";
 

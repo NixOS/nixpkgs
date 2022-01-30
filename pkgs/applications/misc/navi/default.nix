@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
     "--skip=test_parse_variable_line"
-   ];
+  ];
 
   meta = with lib; {
     description = "An interactive cheatsheet tool for the command-line and application launchers";

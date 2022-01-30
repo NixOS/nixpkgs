@@ -5,8 +5,16 @@
 # for token storage, except that it would make the Nix package inconsistent with
 # upstream and other distributions.
 
-{ stdenv, lib, fetchFromGitHub, curl, jq, coreutils, gnugrep, gnused
-, runtimeShell }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, curl
+, jq
+, coreutils
+, gnugrep
+, gnused
+, runtimeShell
+}:
 
 stdenv.mkDerivation rec {
   pname = "slack-cli";

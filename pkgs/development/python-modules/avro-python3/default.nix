@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pycodestyle isort ];
-  doCheck = false;        # No such file or directory: './run_tests.py
+  doCheck = false; # No such file or directory: './run_tests.py
 
   meta = with lib; {
     description = "A serialization and RPC framework";

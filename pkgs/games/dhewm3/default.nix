@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, SDL2, libGLU, libGL, zlib, libjpeg, libogg, libvorbis
-, openal, curl, copyDesktopItems, makeDesktopItem }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, SDL2
+, libGLU
+, libGL
+, zlib
+, libjpeg
+, libogg
+, libvorbis
+, openal
+, curl
+, copyDesktopItems
+, makeDesktopItem
+}:
 
 stdenv.mkDerivation rec {
   pname = "dhewm3";

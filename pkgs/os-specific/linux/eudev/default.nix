@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "hwdb_bin=/var/lib/udev/hwdb.bin"
     "udevrulesdir=/etc/udev/rules.d"
-    ];
+  ];
 
   preInstall = ''
     # Disable install-exec-hook target,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/eudev-project/eudev";
     description = "A fork of udev with the aim of isolating it from init";
-    license = licenses.gpl2Plus ;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin AndersonTorres ];
     platforms = platforms.linux;
   };

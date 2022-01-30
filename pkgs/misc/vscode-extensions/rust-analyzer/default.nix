@@ -39,9 +39,12 @@ let
     inherit releaseTag;
 
     nativeBuildInputs = [
-      jq moreutils esbuild
+      jq
+      moreutils
+      esbuild
       # Required by `keytar`, which is a dependency of `vsce`.
-      pkg-config libsecret
+      pkg-config
+      libsecret
     ] ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Security

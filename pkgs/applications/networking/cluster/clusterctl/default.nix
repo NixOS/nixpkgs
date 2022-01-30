@@ -17,11 +17,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = let t = "sigs.k8s.io/cluster-api/version"; in [
-    "-X ${t}.gitMajor=${lib.versions.major version}"
-    "-X ${t}.gitMinor=${lib.versions.minor version}"
-    "-X ${t}.gitVersion=v${version}"
-  ];
+  ldflags = let t = "sigs.k8s.io/cluster-api/version"; in
+    [
+      "-X ${t}.gitMajor=${lib.versions.major version}"
+      "-X ${t}.gitMinor=${lib.versions.minor version}"
+      "-X ${t}.gitVersion=v${version}"
+    ];
 
   postInstall = ''
     # errors attempting to write config to read-only $HOME

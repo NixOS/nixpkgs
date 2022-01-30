@@ -10,7 +10,8 @@ let
     desktopName = "MissionPlanner";
     genericName = "Ground Control Station";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname;
   version = "1.3.74";
 

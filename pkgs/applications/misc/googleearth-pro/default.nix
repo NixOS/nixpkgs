@@ -74,7 +74,7 @@ mkDerivation rec {
     dpkg --fsys-tarfile ${src} | tar --extract
   '';
 
-  installPhase =''
+  installPhase = ''
     runHook preInstall
 
     mkdir $out

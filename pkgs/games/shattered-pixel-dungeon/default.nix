@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , makeWrapper
 , fetchFromGitHub
 , nixosTests
@@ -50,7 +51,8 @@ let
     outputHash = "sha256-UI5/ZJbUtEz1Fr+qn6a8kzi9rrP+lVrpBbuDv8TG5y0=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src postPatch;
 
   nativeBuildInputs = [ gradle_6 perl makeWrapper ];

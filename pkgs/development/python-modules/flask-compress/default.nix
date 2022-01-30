@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage, flask
+{ lib
+, fetchPypi
+, buildPythonPackage
+, flask
 , brotli
 }:
 

@@ -40,7 +40,8 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "egl-wayland";
   version = "1.1.9";
 

@@ -26,7 +26,7 @@ in
     services.pantheon = {
 
       contractor = {
-         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
+        enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
       };
 
       apps.enable = mkEnableOption "Pantheon default applications";
@@ -41,7 +41,7 @@ in
       };
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gnome.gpaste ]";
         description = ''
@@ -51,9 +51,9 @@ in
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
         apply = list: list ++
-        [
-          pkgs.pantheon.pantheon-agent-geoclue2
-        ];
+          [
+            pkgs.pantheon.pantheon-agent-geoclue2
+          ];
       };
 
       extraWingpanelIndicators = mkOption {
@@ -75,7 +75,7 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
@@ -85,7 +85,7 @@ in
     };
 
     environment.pantheon.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.pantheon.elementary-camera ]";
       type = types.listOf types.package;
       description = "Which packages pantheon should exclude from the default environment";
@@ -216,7 +216,8 @@ in
       ]) ++ (gnome.removePackagesByName [
         gnome.gnome-font-viewer
         gnome.gnome-settings-daemon338
-      ] config.environment.pantheon.excludePackages);
+      ]
+        config.environment.pantheon.excludePackages);
 
       programs.evince.enable = mkDefault true;
       programs.evince.package = pkgs.pantheon.evince;
@@ -287,7 +288,8 @@ in
         elementary-terminal
         elementary-videos
         epiphany
-      ] config.environment.pantheon.excludePackages);
+      ]
+        config.environment.pantheon.excludePackages);
 
       # needed by screenshot
       fonts.fonts = [

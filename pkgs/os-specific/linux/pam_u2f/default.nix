@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "pam_u2f";
   version = "1.2.0";
 
-  src     = fetchurl {
+  src = fetchurl {
     url = "https://developers.yubico.com/pam-u2f/Releases/${pname}-${version}.tar.gz";
     sha256 = "sha256-IwPm+Zsf3o7jw6sopN4tpt3SJclTaT6EXWstg4giH7M=";
   };

@@ -15,14 +15,14 @@ let
 
   bin = {
     bash = writeBashBin "test-writers-bash-bin" ''
-     if [[ "test" == "test" ]]; then echo "success"; fi
+      if [[ "test" == "test" ]]; then echo "success"; fi
     '';
 
     dash = writeDashBin "test-writers-dash-bin" ''
-     test '~' = '~' && echo 'success'
+      test '~' = '~' && echo 'success'
     '';
 
-    rust = writeRustBin "test-writers-rust-bin" {} ''
+    rust = writeRustBin "test-writers-rust-bin" { } ''
       fn main(){
         println!("success")
       }
@@ -87,11 +87,11 @@ let
 
   simple = {
     bash = writeBash "test-writers-bash" ''
-     if [[ "test" == "test" ]]; then echo "success"; fi
+      if [[ "test" == "test" ]]; then echo "success"; fi
     '';
 
     dash = writeDash "test-writers-dash" ''
-     test '~' = '~' && echo 'success'
+      test '~' = '~' && echo 'success'
     '';
 
     haskell = writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
@@ -150,15 +150,15 @@ let
       print(y[0]['test'])
     '';
 
-    pypy2NoLibs = writePyPy2 "test-writers-pypy2-no-libs" {} ''
+    pypy2NoLibs = writePyPy2 "test-writers-pypy2-no-libs" { } ''
       print("success")
     '';
 
-    python3NoLibs = writePython3 "test-writers-python3-no-libs" {} ''
+    python3NoLibs = writePython3 "test-writers-python3-no-libs" { } ''
       print("success")
     '';
 
-    pypy3NoLibs = writePyPy3 "test-writers-pypy3-no-libs" {} ''
+    pypy3NoLibs = writePyPy3 "test-writers-pypy3-no-libs" { } ''
       print("success")
     '';
   };
@@ -189,7 +189,9 @@ let
       fi
     '';
 
-in runCommand "test-writers" {
+in
+runCommand "test-writers"
+{
   passthru = { inherit writeTest bin simple path; };
   meta.platforms = lib.platforms.all;
 } ''

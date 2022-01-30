@@ -1,9 +1,14 @@
-{ lib, fetchurl, makeWrapper
+{ lib
+, fetchurl
+, makeWrapper
 , pypy2Packages
-, cvs, subversion, git, breezy
+, cvs
+, subversion
+, git
+, breezy
 }:
 
-pypy2Packages.buildPythonApplication  rec {
+pypy2Packages.buildPythonApplication rec {
   pname = "cvs2svn";
   version = "2.5.0";
 

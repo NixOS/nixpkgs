@@ -4,14 +4,13 @@ let
   inherit (nonExtendedLib) warn;
   nonExtendedLib = import ../../lib;
 in
-{ # Optional. Allows an extended `lib` to be used instead of the regular Nixpkgs lib.
-  lib ? nonExtendedLib,
-
-  # Feature flags allow you to opt in to unfinished code. These may change some
+{
+  # Optional. Allows an extended `lib` to be used instead of the regular Nixpkgs lib.
+  lib ? nonExtendedLib
+, # Feature flags allow you to opt in to unfinished code. These may change some
   # behavior or disable warnings.
-  featureFlags ? {},
-
-  # This file itself is rather new, so we accept unknown parameters to be forward
+  featureFlags ? { }
+, # This file itself is rather new, so we accept unknown parameters to be forward
   # compatible. This is generally not recommended, because typos go undetected.
   ...
 }:
@@ -22,10 +21,10 @@ let
 
   eval-config-minimal = import ./eval-config-minimal.nix { inherit lib; };
 in
-/*
-  This attribute set appears as lib.nixos in the flake, or can be imported
-  using a binding like `nixosLib = import (nixpkgs + "/nixos/lib") { }`.
-*/
+  /*
+    This attribute set appears as lib.nixos in the flake, or can be imported
+    using a binding like `nixosLib = import (nixpkgs + "/nixos/lib") { }`.
+  */
 {
   inherit (seqAttrsIf (!featureFlags?minimalModules) minimalModulesWarning eval-config-minimal)
     evalModules

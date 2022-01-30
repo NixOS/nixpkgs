@@ -10,10 +10,10 @@ rec {
     # if builtins.pathExists ./.local
     # then ./.
     # else
-      fetchFromGitHub {
-        owner = "abathur";
-        repo = "resholve";
-        rev = "v${version}";
-        hash = "sha256-y9O5w4wA/kR8zoPay9pGs3vwxNqq3JEeZmX0wBJq4UQ=";
-      };
+    fetchFromGitHub {
+      owner = "abathur";
+      repo = "resholve";
+      rev = "v${version}";
+      hash = "sha256-y9O5w4wA/kR8zoPay9pGs3vwxNqq3JEeZmX0wBJq4UQ=";
+    };
 }

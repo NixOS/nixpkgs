@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , bzip2
-, enableNLS ? false, libnatspec
+, enableNLS ? false
+, libnatspec
 }:
 
 stdenv.mkDerivation rec {

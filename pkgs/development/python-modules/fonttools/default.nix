@@ -23,9 +23,9 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = version;
+    owner = pname;
+    repo = pname;
+    rev = version;
     sha256 = "1zp9idjkn4bn1a4pn8x64vi8j1ijdsd4qvgf1f70dfwqvw6ak1i6";
   };
 

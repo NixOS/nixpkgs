@@ -1,7 +1,21 @@
-{ lib, mkDerivation, fetchFromGitHub, SDL2
-, qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
-, qtgraphicaleffects, qtspeech, qtx11extras, qmake, qttools
-, gst_all_1, wayland, pkg-config
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, SDL2
+, qtbase
+, qtcharts
+, qtlocation
+, qtserialport
+, qtsvg
+, qtquickcontrols2
+, qtgraphicaleffects
+, qtspeech
+, qtx11extras
+, qmake
+, qttools
+, gst_all_1
+, wayland
+, pkg-config
 }:
 
 mkDerivation rec {
@@ -9,12 +23,23 @@ mkDerivation rec {
   version = "4.1.4";
 
   qtInputs = [
-    qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
-    qtgraphicaleffects qtspeech qtx11extras
+    qtbase
+    qtcharts
+    qtlocation
+    qtserialport
+    qtsvg
+    qtquickcontrols2
+    qtgraphicaleffects
+    qtspeech
+    qtx11extras
   ];
 
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad wayland
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    wayland
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;

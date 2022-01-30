@@ -1,8 +1,26 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast, pythonOlder, isPy27
-, backports_functools_lru_cache ? null, configparser ? null, futures ? null, future, jedi, pluggy, python-jsonrpc-server, flake8
-, pytestCheckHook, mock, pytest-cov, coverage, setuptools, ujson, flaky
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, pythonOlder
+, isPy27
+, backports_functools_lru_cache ? null
+, configparser ? null
+, futures ? null
+, future
+, jedi
+, pluggy
+, python-jsonrpc-server
+, flake8
+, pytestCheckHook
+, mock
+, pytest-cov
+, coverage
+, setuptools
+, ujson
+, flaky
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
-  providers ? ["*"]
+  providers ? [ "*" ]
   # The following packages are optional and
   # can be overwritten with null as your liking.
 , autopep8 ? null
@@ -53,10 +71,14 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.2") [ backports_functools_lru_cache futures ];
 
   # The tests require all the providers, disable otherwise.
-  doCheck = providers == ["*"];
+  doCheck = providers == [ "*" ];
 
   checkInputs = [
-    pytestCheckHook mock pytest-cov coverage flaky
+    pytestCheckHook
+    mock
+    pytest-cov
+    coverage
+    flaky
     # Do not propagate flake8 or it will enable pyflakes implicitly
     flake8
     # rope is technically a dependency, but we don't add it by default since we

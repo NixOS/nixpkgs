@@ -204,13 +204,13 @@ in
         NoNewPrivileges = true;
         LockPersonality = true;
         RestrictRealtime = true;
-        SystemCallFilter = ["@system-service" "~@priviledged" "@chown"];
+        SystemCallFilter = [ "@system-service" "~@priviledged" "@chown" ];
         SystemCallArchitectures = "native";
         RestrictAddressFamilies = "AF_INET AF_INET6";
       };
     };
 
-    users.groups.heisenbridge = {};
+    users.groups.heisenbridge = { };
     users.users.heisenbridge = {
       description = "Service user for the Heisenbridge";
       group = "heisenbridge";

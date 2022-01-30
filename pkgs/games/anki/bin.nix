@@ -44,34 +44,37 @@ let
   passthru = { inherit sources; };
 in
 
-if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
-  name = "anki";
+if stdenv.isLinux then
+  buildFHSUserEnv
+    (appimageTools.defaultFhsEnvArgs // {
+      name = "anki";
 
-  runScript = writeShellScript "anki-wrapper.sh" ''
-    exec ${unpacked}/bin/anki
-  '';
+      runScript = writeShellScript "anki-wrapper.sh" ''
+        exec ${unpacked}/bin/anki
+      '';
 
-  extraInstallCommands = ''
-    mkdir -p $out/share
-    cp -R ${unpacked}/share/applications \
-      ${unpacked}/share/man \
-      ${unpacked}/share/pixmaps \
-      $out/share/
-  '';
+      extraInstallCommands = ''
+        mkdir -p $out/share
+        cp -R ${unpacked}/share/applications \
+          ${unpacked}/share/man \
+          ${unpacked}/share/pixmaps \
+          $out/share/
+      '';
 
-  inherit meta passthru;
-}) else stdenv.mkDerivation {
-  inherit pname version passthru;
+      inherit meta passthru;
+    }) else
+  stdenv.mkDerivation {
+    inherit pname version passthru;
 
-  src = sources.darwin;
+    src = sources.darwin;
 
-  nativeBuildInputs = [ undmg ];
-  sourceRoot = ".";
+    nativeBuildInputs = [ undmg ];
+    sourceRoot = ".";
 
-  installPhase = ''
-    mkdir -p $out/Applications/
-    cp -a Anki.app $out/Applications/
-  '';
+    installPhase = ''
+      mkdir -p $out/Applications/
+      cp -a Anki.app $out/Applications/
+    '';
 
-  inherit meta;
-}
+    inherit meta;
+  }

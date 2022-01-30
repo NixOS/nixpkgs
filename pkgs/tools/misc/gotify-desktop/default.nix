@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, openssl, pkg-config}:
+{ lib, fetchFromGitHub, rustPlatform, openssl, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gotify-desktop";

@@ -6,7 +6,8 @@
 , jinja2
 , ipython
 , jsonpickle
-, numpy }:
+, numpy
+}:
 
 buildPythonPackage rec {
   pname = "pyvis";

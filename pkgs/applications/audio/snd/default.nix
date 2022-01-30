@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config
-, alsa-lib, fftw, gsl, motif, xorg
-, CoreServices, CoreMIDI
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, alsa-lib
+, fftw
+, gsl
+, motif
+, xorg
+, CoreServices
+, CoreMIDI
 }:
 
 stdenv.mkDerivation rec {

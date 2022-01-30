@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, extra-cmake-modules, fcitx5, fcitx5-qt
-, ninja, gettext, wrapQtAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, fcitx5
+, fcitx5-qt
+, ninja
+, gettext
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {

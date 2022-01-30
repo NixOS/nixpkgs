@@ -25,7 +25,8 @@ buildGoModule rec {
   # git ref and the release version from github.
   # Ref <https://github.com/NixOS/nixpkgs/pull/87383#discussion_r432097657>
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X github.com/naggie/dstask.VERSION=${version}"
     "-X github.com/naggie/dstask.GIT_COMMIT=v${version}"
   ];

@@ -10,11 +10,11 @@
 { name
 , src
 , stdenv ? orig.stdenv
-, patches ? []
+, patches ? [ ]
 , # deprecated, use the nativeBuildInputs
-  buildInputs ? []
+  buildInputs ? [ ]
 , # used to pass extra unpackers
-  nativeBuildInputs ? []
+  nativeBuildInputs ? [ ]
 , # needed when passing an existing derivation
   ...
 }:
@@ -27,5 +27,5 @@ stdenv.mkDerivation {
     src
     ;
   installPhase = "cp -r . $out";
-  phases = ["unpackPhase" "patchPhase" "installPhase"];
+  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 }

@@ -14,7 +14,8 @@ let
       click = self.callPackage ../../../development/python2-modules/click/default.nix { };
     };
   };
-in with python.pkgs; buildPythonApplication rec {
+in
+with python.pkgs; buildPythonApplication rec {
   pname = "watson";
 
   # When you update Watson, please check whether the Click 7

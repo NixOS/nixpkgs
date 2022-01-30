@@ -1,5 +1,15 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, requests
-, pytestCheckHook, flask, flask-cors, dbus-python, mock, isPy27 }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, pytestCheckHook
+, flask
+, flask-cors
+, dbus-python
+, mock
+, isPy27
+}:
 
 buildPythonPackage rec {
   pname = "SwSpotify";
@@ -14,7 +24,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    requests flask flask-cors dbus-python
+    requests
+    flask
+    flask-cors
+    dbus-python
   ];
 
   postPatch = ''

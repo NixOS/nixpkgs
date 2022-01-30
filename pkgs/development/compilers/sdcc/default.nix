@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, autoconf, bison, boost, flex, texinfo, zlib, gputils ? null
-, excludePorts ? [] }:
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, bison
+, boost
+, flex
+, texinfo
+, zlib
+, gputils ? null
+, excludePorts ? [ ]
+}:
 
 with lib;
 

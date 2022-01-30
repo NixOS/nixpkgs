@@ -18,7 +18,7 @@ with python3Packages; buildPythonApplication rec {
     dulwich
     pbr
     pyyaml
-    setuptools  # required for finding pkg_resources at runtime
+    setuptools # required for finding pkg_resources at runtime
   ];
 
   checkInputs = [

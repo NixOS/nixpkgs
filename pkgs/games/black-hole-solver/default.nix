@@ -1,7 +1,13 @@
-{
-  stdenv, lib, fetchurl,
-  cmake, perl, pkg-config, python3,
-  rinutils, PathTiny,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, perl
+, pkg-config
+, python3
+, rinutils
+, PathTiny
+,
 }:
 
 stdenv.mkDerivation rec {

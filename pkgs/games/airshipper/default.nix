@@ -57,7 +57,8 @@ rustPlatform.buildRustPackage rec {
         libXi
         libXcursor
       ];
-    in ''
+    in
+    ''
       patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
     '';
 

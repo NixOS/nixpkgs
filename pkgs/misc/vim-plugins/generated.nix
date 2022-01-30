@@ -3338,10 +3338,10 @@ final: prev:
     pname = "lsp_lines.nvim";
     version = "2022-01-14";
     src = fetchgit {
-            url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim";
-            rev = "6267f4234b559f756ec22dade7e8d50eb7325135";
-            sha256 = "02gzhvhsd76jx09fnqf0i67k79zygikkplhj25p36qcc0rgw1abf";
-        };
+      url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim";
+      rev = "6267f4234b559f756ec22dade7e8d50eb7325135";
+      sha256 = "02gzhvhsd76jx09fnqf0i67k79zygikkplhj25p36qcc0rgw1abf";
+    };
     meta.homepage = "https://git.sr.ht/~whynothugo/lsp_lines.nvim";
   };
 

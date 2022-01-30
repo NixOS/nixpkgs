@@ -1,6 +1,11 @@
-{ lib, buildDunePackage, fetchurl
-, ocaml, dune-configurator, cmdliner
-, lwt, withLwt ? lib.versionAtLeast ocaml.version "4.07"
+{ lib
+, buildDunePackage
+, fetchurl
+, ocaml
+, dune-configurator
+, cmdliner
+, lwt
+, withLwt ? lib.versionAtLeast ocaml.version "4.07"
 }:
 
 buildDunePackage rec {

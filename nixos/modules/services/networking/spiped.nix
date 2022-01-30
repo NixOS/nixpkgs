@@ -9,8 +9,8 @@ in
   options = {
     services.spiped = {
       enable = mkOption {
-        type        = types.bool;
-        default     = false;
+        type = types.bool;
+        default = false;
         description = "Enable the spiped service module.";
       };
 
@@ -19,7 +19,7 @@ in
           {
             options = {
               encrypt = mkOption {
-                type    = types.bool;
+                type = types.bool;
                 default = false;
                 description = ''
                   Take unencrypted connections from the
@@ -29,7 +29,7 @@ in
               };
 
               decrypt = mkOption {
-                type    = types.bool;
+                type = types.bool;
                 default = false;
                 description = ''
                   Take encrypted connections from the
@@ -39,7 +39,7 @@ in
               };
 
               source = mkOption {
-                type    = types.str;
+                type = types.str;
                 description = ''
                   Address on which spiped should listen for incoming
                   connections.  Must be in one of the following formats:
@@ -55,12 +55,12 @@ in
               };
 
               target = mkOption {
-                type    = types.str;
+                type = types.str;
                 description = "Address to which spiped should connect.";
               };
 
               keyfile = mkOption {
-                type    = types.path;
+                type = types.path;
                 description = ''
                   Name of a file containing the spiped key. As the
                   daemon runs as the <literal>spiped</literal> user, the
@@ -136,7 +136,7 @@ in
           }
         ));
 
-        default = {};
+        default = { };
 
         example = literalExpression ''
           {
@@ -166,29 +166,31 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = mapAttrsToList (name: c: {
-      assertion = (c.encrypt -> !c.decrypt) || (c.decrypt -> c.encrypt);
-      message   = "A pipe must either encrypt or decrypt";
-    }) cfg.config;
+    assertions = mapAttrsToList
+      (name: c: {
+        assertion = (c.encrypt -> !c.decrypt) || (c.decrypt -> c.encrypt);
+        message = "A pipe must either encrypt or decrypt";
+      })
+      cfg.config;
 
     users.groups.spiped.gid = config.ids.gids.spiped;
     users.users.spiped = {
       description = "Secure Pipe Service user";
-      group       = "spiped";
-      uid         = config.ids.uids.spiped;
+      group = "spiped";
+      uid = config.ids.uids.spiped;
     };
 
     systemd.services."spiped@" = {
       description = "Secure pipe '%i'";
-      after       = [ "network.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
-        Restart   = "always";
-        User      = "spiped";
+        Restart = "always";
+        User = "spiped";
         PermissionsStartOnly = true;
       };
 
-      preStart  = ''
+      preStart = ''
         cd /var/lib/spiped
         chmod -R 0660 *
         chown -R spiped:spiped *
@@ -197,24 +199,28 @@ in
       script = "exec ${pkgs.spiped}/bin/spiped -F `cat /etc/spiped/$1.spec`";
     };
 
-    system.activationScripts.spiped = optionalString (cfg.config != {})
+    system.activationScripts.spiped = optionalString (cfg.config != { })
       "mkdir -p /var/lib/spiped";
 
     # Setup spiped config files
-    environment.etc = mapAttrs' (name: cfg: nameValuePair "spiped/${name}.spec"
-      { text = concatStringsSep " "
-          [ (if cfg.encrypt then "-e" else "-d")        # Mode
-            "-s ${cfg.source}"                          # Source
-            "-t ${cfg.target}"                          # Target
-            "-k ${cfg.keyfile}"                         # Keyfile
-            "-n ${toString cfg.maxConns}"               # Max number of conns
-            "-o ${toString cfg.timeout}"                # Timeout
-            (optionalString cfg.waitForDNS "-D")        # Wait for DNS
-            (optionalString cfg.weakHandshake "-f")     # No PFS
-            (optionalString cfg.disableKeepalives "-j") # Keepalives
-            (if cfg.disableReresolution then "-R"
+    environment.etc = mapAttrs'
+      (name: cfg: nameValuePair "spiped/${name}.spec"
+        {
+          text = concatStringsSep " "
+            [
+              (if cfg.encrypt then "-e" else "-d") # Mode
+              "-s ${cfg.source}" # Source
+              "-t ${cfg.target}" # Target
+              "-k ${cfg.keyfile}" # Keyfile
+              "-n ${toString cfg.maxConns}" # Max number of conns
+              "-o ${toString cfg.timeout}" # Timeout
+              (optionalString cfg.waitForDNS "-D") # Wait for DNS
+              (optionalString cfg.weakHandshake "-f") # No PFS
+              (optionalString cfg.disableKeepalives "-j") # Keepalives
+              (if cfg.disableReresolution then "-R"
               else "-r ${toString cfg.resolveRefresh}")
-          ];
-      }) cfg.config;
+            ];
+        })
+      cfg.config;
   };
 }

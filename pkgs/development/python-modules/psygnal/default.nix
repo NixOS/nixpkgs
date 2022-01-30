@@ -23,7 +23,7 @@
   buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ typing-extensions ];
   checkInputs = [ pytestCheckHook pytest-cov pytest-mypy-plugins ];
-  doCheck = false;  # mypy checks are failing
+  doCheck = false; # mypy checks are failing
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   meta = with lib; {

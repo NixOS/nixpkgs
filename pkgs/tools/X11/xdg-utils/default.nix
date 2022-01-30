@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub
-, file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
-, w3m, gnugrep, gnused, coreutils, xset, perlPackages
-, mimiSupport ? false, gawk ? null }:
+{ lib
+, stdenv
+, fetchgit
+, fetchFromGitHub
+, file
+, libxslt
+, docbook_xml_dtd_412
+, docbook_xsl
+, xmlto
+, w3m
+, gnugrep
+, gnused
+, coreutils
+, xset
+, perlPackages
+, mimiSupport ? false
+, gawk ? null
+}:
 
 assert mimiSupport -> gawk != null;
 
@@ -15,7 +29,10 @@ let
   };
 
   perlPath = with perlPackages; makePerlPath [
-    NetDBus XMLTwig XMLParser X11Protocol
+    NetDBus
+    XMLTwig
+    XMLParser
+    X11Protocol
   ];
 
 in

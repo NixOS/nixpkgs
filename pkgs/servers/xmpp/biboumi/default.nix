@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn
-, libiconv, botan2, systemd, pkg-config, udns, python3Packages } :
+{ lib
+, stdenv
+, fetchurl
+, fetchgit
+, cmake
+, libuuid
+, expat
+, sqlite
+, libidn
+, libiconv
+, botan2
+, systemd
+, pkg-config
+, udns
+, python3Packages
+}:
 
 let
   louiz_catch = fetchgit {

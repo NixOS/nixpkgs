@@ -3,7 +3,8 @@
 let
   cfg = config.services.lorri;
   socketPath = "lorri/daemon.socket";
-in {
+in
+{
   options = {
     services.lorri = {
       enable = lib.mkOption {

@@ -1,10 +1,38 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wayland-scanner
-, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
-, libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
-, colord, lcms2, pipewire ? null
-, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
-, libwebp ? null, xwayland ? null, wayland-protocols
-# beware of null defaults, as the parameters *are* supplied by callPackage by default
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, wayland
+, libGL
+, mesa
+, libxkbcommon
+, cairo
+, libxcb
+, libXcursor
+, xlibsWrapper
+, udev
+, libdrm
+, mtdev
+, libjpeg
+, pam
+, dbus
+, libinput
+, libevdev
+, colord
+, lcms2
+, pipewire ? null
+, pango ? null
+, libunwind ? null
+, freerdp ? null
+, vaapi ? null
+, libva ? null
+, libwebp ? null
+, xwayland ? null
+, wayland-protocols
+  # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
 with lib;
@@ -19,13 +47,35 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
   buildInputs = [
-    wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
-    mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
-    libwebp wayland-protocols
-    colord lcms2 pipewire
+    wayland
+    libGL
+    mesa
+    libxkbcommon
+    cairo
+    libxcb
+    libXcursor
+    xlibsWrapper
+    udev
+    libdrm
+    mtdev
+    libjpeg
+    pam
+    dbus
+    libinput
+    libevdev
+    pango
+    libunwind
+    freerdp
+    vaapi
+    libva
+    libwebp
+    wayland-protocols
+    colord
+    lcms2
+    pipewire
   ];
 
-  mesonFlags= [
+  mesonFlags = [
     "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
     "-Dbackend-rdp=${boolToString (freerdp != null)}"
     "-Dxwayland=${boolToString (xwayland != null)}" # Default is true!

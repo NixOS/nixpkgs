@@ -3,7 +3,8 @@
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
-in buildVscodeMarketplaceExtension {
+in
+buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "jupyter";
     publisher = "ms-toolsai";

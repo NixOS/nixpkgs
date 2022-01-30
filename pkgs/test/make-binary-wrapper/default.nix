@@ -32,22 +32,25 @@ let
 
     cp wrapper.c $out
   '';
-  tests = let
-    names = [
-      "add-flags"
-      "argv0"
-      "basic"
-      "chdir"
-      "combination"
-      "env"
-      "inherit-argv0"
-      "invalid-env"
-      "prefix"
-      "suffix"
-    ];
-    f = name: lib.nameValuePair name (makeGoldenTest name);
-  in builtins.listToAttrs (builtins.map f names);
-in writeText "make-binary-wrapper-test" ''
+  tests =
+    let
+      names = [
+        "add-flags"
+        "argv0"
+        "basic"
+        "chdir"
+        "combination"
+        "env"
+        "inherit-argv0"
+        "invalid-env"
+        "prefix"
+        "suffix"
+      ];
+      f = name: lib.nameValuePair name (makeGoldenTest name);
+    in
+    builtins.listToAttrs (builtins.map f names);
+in
+writeText "make-binary-wrapper-test" ''
   ${lib.concatStringsSep "\n" (lib.mapAttrsToList (_: test: ''
     "${test.name}" "${test}"
   '') tests)}

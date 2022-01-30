@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ...} :
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.orangefs.client;
 
-in {
+in
+{
   ###### interface
 
   options = {
@@ -14,7 +15,7 @@ in {
 
       extraOptions = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = "Extra command line options for pvfs2-client.";
       };
 
@@ -30,7 +31,7 @@ in {
           target = "tcp://server:3334/orangefs";
         }];
 
-        type = with types; listOf (submodule ({ ... } : {
+        type = with types; listOf (submodule ({ ... }: {
           options = {
 
             mountPoint = mkOption {
@@ -41,7 +42,7 @@ in {
 
             options = mkOption {
               type = with types; listOf str;
-              default = [];
+              default = [ ];
               description = "Mount options";
             };
 
@@ -72,25 +73,27 @@ in {
       serviceConfig = {
         Type = "simple";
 
-         ExecStart = ''
-           ${pkgs.orangefs}/bin/pvfs2-client-core \
-              --logtype=syslog ${concatStringsSep " " cfg.extraOptions}
+        ExecStart = ''
+          ${pkgs.orangefs}/bin/pvfs2-client-core \
+             --logtype=syslog ${concatStringsSep " " cfg.extraOptions}
         '';
 
         TimeoutStopSec = "120";
       };
     };
 
-    systemd.mounts = map (fs: {
-      requires = [ "orangefs-client.service" ];
-      after = [ "orangefs-client.service" ];
-      bindsTo = [ "orangefs-client.service" ];
-      wantedBy = [ "remote-fs.target" ];
-      type = "pvfs2";
-      options = concatStringsSep "," fs.options;
-      what = fs.target;
-      where = fs.mountPoint;
-    }) cfg.fileSystems;
+    systemd.mounts = map
+      (fs: {
+        requires = [ "orangefs-client.service" ];
+        after = [ "orangefs-client.service" ];
+        bindsTo = [ "orangefs-client.service" ];
+        wantedBy = [ "remote-fs.target" ];
+        type = "pvfs2";
+        options = concatStringsSep "," fs.options;
+        what = fs.target;
+        where = fs.mountPoint;
+      })
+      cfg.fileSystems;
   };
 }
 

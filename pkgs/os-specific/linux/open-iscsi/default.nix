@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext
-, util-linux, open-isns, openssl, kmod, perl, systemd, pkgconf, nixosTests
+{ lib
+, stdenv
+, fetchFromGitHub
+, automake
+, autoconf
+, libtool
+, gettext
+, util-linux
+, open-isns
+, openssl
+, kmod
+, perl
+, systemd
+, pkgconf
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {

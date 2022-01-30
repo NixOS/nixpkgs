@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.programs.mtr;
 
-in {
+in
+{
   options = {
     programs.mtr = {
       enable = mkOption {

@@ -1,8 +1,23 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchFromGitHub, pkg-config, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
-, librsvg, wrapGAppsHook
-, withGtk2 ? false, withGtk3 ? true
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, m4
+, jansson
+, gtk2
+, dbus
+, gtk3
+, libXv
+, libXrandr
+, libXext
+, libXxf86vm
+, libvdpau
+, librsvg
+, wrapGAppsHook
+, withGtk2 ? false
+, withGtk3 ? true
 }:
 
 let
@@ -48,7 +63,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config m4 ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
-             ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
+    ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
 
   enableParallelBuilding = true;
   makeFlags = nvidia_x11.makeFlags ++ [ "NV_USE_BUNDLED_LIBJANSSON=0" ];

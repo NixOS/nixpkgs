@@ -1,24 +1,42 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja
-, libevdev, mtdev, udev, libwacom
-, documentationSupport ? false, doxygen, graphviz # Documentation
-, eventGUISupport ? false, cairo, glib, gtk3 # GUI event viewer support
-, testsSupport ? false, check, valgrind, python3
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, libevdev
+, mtdev
+, udev
+, libwacom
+, documentationSupport ? false
+, doxygen
+, graphviz # Documentation
+, eventGUISupport ? false
+, cairo
+, glib
+, gtk3 # GUI event viewer support
+, testsSupport ? false
+, check
+, valgrind
+, python3
 , nixosTests
 }:
 
 let
   mkFlag = optSet: flag: "-D${flag}=${lib.boolToString optSet}";
 
-  sphinx-build = if documentationSupport then
-    python3.pkgs.sphinx.overrideAttrs (super: {
-      propagatedBuildInputs = super.propagatedBuildInputs ++ (with python3.pkgs; [ recommonmark sphinx_rtd_theme ]);
+  sphinx-build =
+    if documentationSupport then
+      python3.pkgs.sphinx.overrideAttrs
+        (super: {
+          propagatedBuildInputs = super.propagatedBuildInputs ++ (with python3.pkgs; [ recommonmark sphinx_rtd_theme ]);
 
-      postFixup = super.postFixup or "" + ''
-        # Do not propagate Python
-        rm $out/nix-support/propagated-build-inputs
-      '';
-    })
-  else null;
+          postFixup = super.postFixup or "" + ''
+            # Do not propagate Python
+            rm $out/nix-support/propagated-build-inputs
+          '';
+        })
+    else null;
 in
 
 stdenv.mkDerivation rec {
@@ -83,9 +101,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
-    homepage    = "https://www.freedesktop.org/wiki/Software/libinput/";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://www.freedesktop.org/wiki/Software/libinput/";
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
   };
 }

@@ -87,7 +87,8 @@ in
   config = mkIf cfg.enable {
 
     users.users.gpsd =
-      { inherit uid;
+      {
+        inherit uid;
         group = "gpsd";
         description = "gpsd daemon user";
         home = "/var/empty";

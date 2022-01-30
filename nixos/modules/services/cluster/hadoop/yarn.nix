@@ -1,9 +1,9 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.hadoop;
   hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
-  restartIfChanged  = mkOption {
+  restartIfChanged = mkOption {
     type = types.bool;
     description = ''
       Automatically restart the service on config change.
@@ -49,16 +49,18 @@ in
   };
 
   config = mkMerge [
-    (mkIf (
+    (mkIf
+      (
         cfg.yarn.resourcemanager.enable || cfg.yarn.nodemanager.enable
-    ) {
+      )
+      {
 
-      users.users.yarn = {
-        description = "Hadoop YARN user";
-        group = "hadoop";
-        uid = config.ids.uids.yarn;
-      };
-    })
+        users.users.yarn = {
+          description = "Hadoop YARN user";
+          group = "hadoop";
+          uid = config.ids.uids.yarn;
+        };
+      })
 
     (mkIf cfg.yarn.resourcemanager.enable {
       systemd.services.yarn-resourcemanager = {
@@ -70,7 +72,7 @@ in
           User = "yarn";
           SyslogIdentifier = "yarn-resourcemanager";
           ExecStart = "${cfg.package}/bin/yarn --config ${hadoopConf} " +
-                      " resourcemanager";
+            " resourcemanager";
           Restart = "always";
         };
       };
@@ -114,13 +116,13 @@ in
           SyslogIdentifier = "yarn-nodemanager";
           PermissionsStartOnly = true;
           ExecStart = "${cfg.package}/bin/yarn --config ${hadoopConf} " +
-                      " nodemanager";
+            " nodemanager";
           Restart = "always";
         };
       };
 
       networking.firewall.allowedTCPPortRanges = [
-        (mkIf (cfg.yarn.nodemanager.openFirewall) {from = 1024; to = 65535;})
+        (mkIf (cfg.yarn.nodemanager.openFirewall) { from = 1024; to = 65535; })
       ];
     })
 

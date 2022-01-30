@@ -50,7 +50,7 @@ buildPythonPackage rec {
     "test_avoid_phage_blast_matches"
     "test_avoid_matches_with_list"
     "test_avoid_matches_with_phage"
-   ];
+  ];
   pythonImportsCheck = [ "dnachisel" ];
 
   meta = with lib; {

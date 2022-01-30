@@ -3,12 +3,12 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-# Build dependencies
+  # Build dependencies
 , glibcLocales
-# Test dependencies
+  # Test dependencies
 , nose
 , pygments
-# Runtime dependencies
+  # Runtime dependencies
 , jedi
 , decorator
 , matplotlib-inline
@@ -48,9 +48,9 @@ buildPythonPackage rec {
     pygments
     pexpect
     backcall
-  ] ++ lib.optionals stdenv.isDarwin [appnope];
+  ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   doCheck = false; # Circular dependency with ipykernel
 

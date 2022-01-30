@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, characteristic, six, twisted
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, characteristic
+, six
+, twisted
 }:
 
 buildPythonPackage rec {
@@ -22,8 +27,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "a data-processing and flow-control engine for event-driven programs";
-    homepage    = "https://github.com/twisted/tubes";
-    license     = licenses.mit;
+    homepage = "https://github.com/twisted/tubes";
+    license = licenses.mit;
     maintainers = with maintainers; [ exarkun ];
   };
 }

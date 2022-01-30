@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, git
-, asio, catch2, spdlog
-, IOKit, udev
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, git
+, asio
+, catch2
+, spdlog
+, IOKit
+, udev
 }:
 
 stdenv.mkDerivation rec {

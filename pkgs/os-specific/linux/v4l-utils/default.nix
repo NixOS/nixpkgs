@@ -1,7 +1,17 @@
-{ stdenv, lib, fetchurl, pkg-config, perl
-, libjpeg, udev
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, perl
+, libjpeg
+, udev
 , withUtils ? true
-, withGUI ? true, alsa-lib, libX11, qtbase, libGLU, wrapQtAppsHook
+, withGUI ? true
+, alsa-lib
+, libX11
+, qtbase
+, libGLU
+, wrapQtAppsHook
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
@@ -9,8 +19,9 @@
 let
   withQt = withUtils && withGUI;
 
-# we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
-in stdenv.mkDerivation rec {
+  # we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
+in
+stdenv.mkDerivation rec {
   pname = "v4l-utils";
   version = "1.20.0";
 

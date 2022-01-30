@@ -1,7 +1,23 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, nasm, makeDesktopItem
-, alsa-lib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
-, SDL2, SDL2_mixer
-, AGL, Cocoa, GLUT, OpenGL
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, nasm
+, makeDesktopItem
+, alsa-lib
+, flac
+, gtk2
+, libvorbis
+, libvpx
+, libGLU
+, libGL
+, SDL2
+, SDL2_mixer
+, AGL
+, Cocoa
+, GLUT
+, OpenGL
 }:
 
 let
@@ -16,7 +32,8 @@ let
 
   wrapper = "eduke32-wrapper";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "eduke32";
   version = "20210910";
   rev = "9603";

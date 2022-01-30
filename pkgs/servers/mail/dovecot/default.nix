@@ -1,12 +1,33 @@
-{ stdenv, lib, fetchurl, perl, pkg-config, systemd, openssl
-, bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
-, clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
+{ stdenv
+, lib
+, fetchurl
+, perl
+, pkg-config
+, systemd
+, openssl
+, bzip2
+, zlib
+, lz4
+, inotify-tools
+, pam
+, libcap
+, coreutils
+, clucene_core_2
+, icu
+, openldap
+, libsodium
+, libstemmer
+, cyrus_sasl
 , nixosTests
-# Auth modules
-, withMySQL ? false, libmysqlclient
-, withPgSQL ? false, postgresql
-, withSQLite ? true, sqlite
-, withLua ? false, lua5_3
+  # Auth modules
+, withMySQL ? false
+, libmysqlclient
+, withPgSQL ? false
+, postgresql
+, withSQLite ? true
+, sqlite
+, withLua ? false
+, lua5_3
 }:
 
 stdenv.mkDerivation rec {
@@ -89,11 +110,11 @@ stdenv.mkDerivation rec {
     "lib_cv___va_copy=yes"
     "lib_cv_va_val_copy=yes"
   ] ++ lib.optional stdenv.isLinux "--with-systemd"
-    ++ lib.optional stdenv.isDarwin "--enable-static"
-    ++ lib.optional withMySQL "--with-mysql"
-    ++ lib.optional withPgSQL "--with-pgsql"
-    ++ lib.optional withSQLite "--with-sqlite"
-    ++ lib.optional withLua "--with-lua";
+  ++ lib.optional stdenv.isDarwin "--enable-static"
+  ++ lib.optional withMySQL "--with-mysql"
+  ++ lib.optional withPgSQL "--with-pgsql"
+  ++ lib.optional withSQLite "--with-sqlite"
+  ++ lib.optional withLua "--with-lua";
 
   doCheck = !stdenv.isDarwin;
 

@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, fetchpatch
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, fetchpatch
 , alembic
 , click
 , cloudpickle

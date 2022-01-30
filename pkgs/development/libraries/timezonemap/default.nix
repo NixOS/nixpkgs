@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , autoreconfHook
 , fetchbzr
 , pkg-config

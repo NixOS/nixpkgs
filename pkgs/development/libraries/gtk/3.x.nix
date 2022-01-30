@@ -203,7 +203,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Wrap demos
-  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     demos=(gtk3-demo gtk3-demo-application gtk3-icon-browser gtk3-widget-factory)
 
     for program in ''${demos[@]}; do

@@ -10,18 +10,19 @@ let
 
   toConf = indent: n: v:
     if builtins.isFloat v then (toOption indent n (builtins.toJSON v))
-    else if isInt v       then (toOption indent n (toString v))
-    else if isBool v      then (toOption indent n (yesOrNo v))
-    else if isString v    then (toOption indent n v)
-    else if isList v      then (concatMapStringsSep "\n" (toConf indent n) v)
-    else if isAttrs v     then (concatStringsSep "\n" (
-                                  ["${indent}${n}:"] ++ (
-                                    mapAttrsToList (toConf "${indent}  ") v
-                                  )
-                                ))
+    else if isInt v then (toOption indent n (toString v))
+    else if isBool v then (toOption indent n (yesOrNo v))
+    else if isString v then (toOption indent n v)
+    else if isList v then (concatMapStringsSep "\n" (toConf indent n) v)
+    else if isAttrs v then
+      (concatStringsSep "\n" (
+        [ "${indent}${n}:" ] ++ (
+          mapAttrsToList (toConf "${indent}  ") v
+        )
+      ))
     else throw (traceSeq v "services.unbound.settings: unexpected type");
 
-  confNoServer = concatStringsSep "\n" ((mapAttrsToList (toConf "") (builtins.removeAttrs cfg.settings [ "server" ])) ++ [""]);
+  confNoServer = concatStringsSep "\n" ((mapAttrsToList (toConf "") (builtins.removeAttrs cfg.settings [ "server" ])) ++ [ "" ]);
   confServer = concatStringsSep "\n" (mapAttrsToList (toConf "  ") (builtins.removeAttrs cfg.settings.server [ "define-tag" ]));
 
   confFile = pkgs.writeText "unbound.conf" ''
@@ -33,7 +34,8 @@ let
 
   rootTrustAnchorFile = "${cfg.stateDir}/root.key";
 
-in {
+in
+{
 
   ###### interface
 
@@ -104,15 +106,18 @@ in {
       };
 
       settings = mkOption {
-        default = {};
+        default = { };
         type = with types; submodule {
 
-          freeformType = let
-            validSettingsPrimitiveTypes = oneOf [ int str bool float ];
-            validSettingsTypes = oneOf [ validSettingsPrimitiveTypes (listOf validSettingsPrimitiveTypes) ];
-            settingsType = oneOf [ str (attrsOf validSettingsTypes) ];
-          in attrsOf (oneOf [ settingsType (listOf settingsType) ])
-              // { description = ''
+          freeformType =
+            let
+              validSettingsPrimitiveTypes = oneOf [ int str bool float ];
+              validSettingsTypes = oneOf [ validSettingsPrimitiveTypes (listOf validSettingsPrimitiveTypes) ];
+              settingsType = oneOf [ str (attrsOf validSettingsTypes) ];
+            in
+            attrsOf (oneOf [ settingsType (listOf settingsType) ])
+            // {
+              description = ''
                 unbound.conf configuration type. The format consist of an attribute
                 set of settings. Each settings can be either one value, a list of
                 values or an attribute set. The allowed values are integers,
@@ -204,7 +209,7 @@ in {
     };
 
     users.groups = mkIf (cfg.group == "unbound") {
-      unbound = {};
+      unbound = { };
     };
 
     networking = mkIf cfg.resolveLocalQueries {

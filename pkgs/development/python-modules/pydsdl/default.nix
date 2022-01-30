@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder }:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pydsdl";
   version = "1.12.1";
   disabled = pythonOlder "3.5"; # only python>=3.5 is supported

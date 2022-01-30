@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, perl, flex, bison, python3, autoconf
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, flex
+, bison
+, python3
+, autoconf
 }:
 
 stdenv.mkDerivation rec {
@@ -34,9 +40,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast and robust (System)Verilog simulator/compiler";
-    homepage    = "https://www.veripool.org/wiki/verilator";
-    license     = with licenses; [ lgpl3Only artistic2 ];
-    platforms   = platforms.unix;
+    homepage = "https://www.veripool.org/wiki/verilator";
+    license = with licenses; [ lgpl3Only artistic2 ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

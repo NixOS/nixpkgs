@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, gettext, intltool
-, gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
-, wrapGAppsHook, fetchpatch, bash, doxygen
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoconf
+, automake
+, gettext
+, intltool
+, gtk3
+, lcms2
+, exiv2
+, libchamplain
+, clutter-gtk
+, ffmpegthumbnailer
+, fbida
+, wrapGAppsHook
+, fetchpatch
+, bash
+, doxygen
 }:
 
 stdenv.mkDerivation rec {
@@ -30,12 +46,25 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   nativeBuildInputs =
-    [ pkg-config autoconf automake gettext intltool
-      wrapGAppsHook bash doxygen
+    [
+      pkg-config
+      autoconf
+      automake
+      gettext
+      intltool
+      wrapGAppsHook
+      bash
+      doxygen
     ];
 
   buildInputs = [
-    gtk3 lcms2 exiv2 libchamplain clutter-gtk ffmpegthumbnailer fbida
+    gtk3
+    lcms2
+    exiv2
+    libchamplain
+    clutter-gtk
+    ffmpegthumbnailer
+    fbida
   ];
 
   postInstall = ''

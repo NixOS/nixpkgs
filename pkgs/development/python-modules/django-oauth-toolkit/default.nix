@@ -2,13 +2,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# propagates
+  # propagates
 , django
 , jwcrypto
 , requests
 , oauthlib
 
-# tests
+  # tests
 , djangorestframework
 , pytest-django
 , pytest-xdist

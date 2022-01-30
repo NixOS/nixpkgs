@@ -39,7 +39,7 @@ in
       wantedBy = [ "sshd.service" "waagent.service" ];
       before = [ "sshd.service" "waagent.service" ];
 
-      path  = [ pkgs.coreutils ];
+      path = [ pkgs.coreutils ];
       script =
         ''
           eval "$(cat /metadata/CustomData.bin)"

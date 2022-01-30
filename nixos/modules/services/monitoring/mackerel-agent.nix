@@ -4,8 +4,9 @@ with lib;
 
 let
   cfg = config.services.mackerel-agent;
-  settingsFmt = pkgs.formats.toml {};
-in {
+  settingsFmt = pkgs.formats.toml { };
+in
+{
   options.services.mackerel-agent = {
     enable = mkEnableOption "mackerel.io agent";
 
@@ -36,7 +37,7 @@ in {
         <link xlink:href="https://mackerel.io/docs/entry/spec/agent"/>
       '';
 
-      default = {};
+      default = { };
       example = {
         verbose = false;
         silent = false;

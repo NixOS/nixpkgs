@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # Python 2 for the foreseeable future.
   # c.f. https://github.com/KevinOConnor/klipper/pull/3278
   # NB: This is needed for the postBuild step
-  nativeBuildInputs = [ (python2.withPackages ( p: with p; [ cffi ] )) ];
+  nativeBuildInputs = [ (python2.withPackages (p: with p; [ cffi ])) ];
 
   buildInputs = [ (python2.withPackages (p: with p; [ cffi pyserial greenlet jinja2 ])) ];
 

@@ -3,8 +3,9 @@
 with lib;
 
 let
-  data = import ./data.nix {};
-in stdenv.mkDerivation {
+  data = import ./data.nix { };
+in
+stdenv.mkDerivation {
   pname = "pulumi";
   version = data.version;
 

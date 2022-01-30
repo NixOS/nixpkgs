@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, pkg-config, fftwFloat, libsamplerate
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, fftwFloat
+, libsamplerate
 }:
 
 stdenv.mkDerivation rec {

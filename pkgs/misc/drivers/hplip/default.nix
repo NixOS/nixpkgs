@@ -1,11 +1,28 @@
-{ lib, stdenv, fetchurl, substituteAll
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
 , pkg-config
-, cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
-, dbus, file, ghostscript, usbutils
-, net-snmp, openssl, perl, nettools, avahi
-, bash, util-linux
-# To remove references to gcc-unwrapped
-, removeReferencesTo, qt5
+, cups
+, zlib
+, libjpeg
+, libusb1
+, python3Packages
+, sane-backends
+, dbus
+, file
+, ghostscript
+, usbutils
+, net-snmp
+, openssl
+, perl
+, nettools
+, avahi
+, bash
+, util-linux
+  # To remove references to gcc-unwrapped
+, removeReferencesTo
+, qt5
 , withQt5 ? true
 , withPlugin ? false
 , withStaticPPDInstall ? false
@@ -32,7 +49,7 @@ let
   };
 
   hplipPlatforms = {
-    i686-linux   = "x86_32";
+    i686-linux = "x86_32";
     x86_64-linux = "x86_64";
     armv6l-linux = "arm32";
     armv7l-linux = "arm32";
@@ -123,19 +140,20 @@ python3Packages.buildPythonApplication {
       {} +
   '';
 
-  configureFlags = let out = placeholder "out"; in [
-    "--with-hpppddir=${out}/share/cups/model/HP"
-    "--with-cupsfilterdir=${out}/lib/cups/filter"
-    "--with-cupsbackenddir=${out}/lib/cups/backend"
-    "--with-icondir=${out}/share/applications"
-    "--with-systraydir=${out}/xdg/autostart"
-    "--with-mimedir=${out}/etc/cups"
-    "--enable-policykit"
-    "--disable-qt4"
-  ]
+  configureFlags = let out = placeholder "out"; in
+    [
+      "--with-hpppddir=${out}/share/cups/model/HP"
+      "--with-cupsfilterdir=${out}/lib/cups/filter"
+      "--with-cupsbackenddir=${out}/lib/cups/backend"
+      "--with-icondir=${out}/share/applications"
+      "--with-systraydir=${out}/xdg/autostart"
+      "--with-mimedir=${out}/etc/cups"
+      "--enable-policykit"
+      "--disable-qt4"
+    ]
     ++ lib.optional withStaticPPDInstall "--enable-cups-ppd-install"
     ++ lib.optional withQt5 "--enable-qt5"
-    ;
+  ;
 
   # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
   # generation of '*.ppd' files.
@@ -143,15 +161,16 @@ python3Packages.buildPythonApplication {
   # Could not find how to fix the problem in 'ppdc' so this is a workaround.
   CUPS_DATADIR = "${cups}/share/cups";
 
-  makeFlags = let out = placeholder "out"; in [
-    "halpredir=${out}/share/hal/fdi/preprobe/10osvendor"
-    "rulesdir=${out}/etc/udev/rules.d"
-    "policykit_dir=${out}/share/polkit-1/actions"
-    "policykit_dbus_etcdir=${out}/etc/dbus-1/system.d"
-    "policykit_dbus_sharedir=${out}/share/dbus-1/system-services"
-    "hplip_confdir=${out}/etc/hp"
-    "hplip_statedir=${out}/var/lib/hp"
-  ];
+  makeFlags = let out = placeholder "out"; in
+    [
+      "halpredir=${out}/share/hal/fdi/preprobe/10osvendor"
+      "rulesdir=${out}/etc/udev/rules.d"
+      "policykit_dir=${out}/share/polkit-1/actions"
+      "policykit_dbus_etcdir=${out}/etc/dbus-1/system.d"
+      "policykit_dbus_sharedir=${out}/share/dbus-1/system-services"
+      "hplip_confdir=${out}/etc/hp"
+      "hplip_statedir=${out}/var/lib/hp"
+    ];
 
   postConfigure = ''
     # don't save timestamp, in order to improve reproducibility
@@ -247,14 +266,19 @@ python3Packages.buildPythonApplication {
 
   # There are some binaries there, which reference gcc-unwrapped otherwise.
   stripDebugList = [
-    "share/hplip" "lib/cups/backend" "lib/cups/filter" python3Packages.python.sitePackages "lib/sane"
+    "share/hplip"
+    "lib/cups/backend"
+    "lib/cups/filter"
+    python3Packages.python.sitePackages
+    "lib/sane"
   ];
 
   meta = with lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
-    license = if withPlugin
+    license =
+      if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ];

@@ -8,7 +8,7 @@ buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
-    rev  = "release-${version}";
+    rev = "release-${version}";
     sha256 = "sha256-De/xCDzdRHCslD0j6vT8bwjcMTf5R8KZ32aaB3i+Nig=";
   };
 
@@ -20,7 +20,11 @@ buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config gpgme python3 installShellFiles ];
   buildInputs = [
-    ncurses openssl libgpg-error gpgme xorg.libxcb
+    ncurses
+    openssl
+    libgpg-error
+    gpgme
+    xorg.libxcb
   ] ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   preCheck = ''

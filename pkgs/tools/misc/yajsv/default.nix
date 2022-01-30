@@ -1,7 +1,8 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
 let version = "1.4.0";
-in buildGoModule {
+in
+buildGoModule {
   pname = "yajsv";
   version = version;
 

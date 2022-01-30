@@ -60,7 +60,7 @@
       moduleDir = "";
     };
   }
-    {
+  {
     goPackagePath = "bazil.org/fuse";
     fetch = {
       type = "git";

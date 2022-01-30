@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, p4est-sc-debugEnable ? true, p4est-sc-mpiSupport ? true
-, mpi, openssh, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, p4est-sc-debugEnable ? true
+, p4est-sc-mpiSupport ? true
+, mpi
+, openssh
+, zlib
 }:
 
 let

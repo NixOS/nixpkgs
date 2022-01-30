@@ -1,8 +1,14 @@
-{ lib, stdenv, fetchurl, unzip
-# If jdk is null, require JAVA_HOME in runtime environment, else store
-# JAVA_HOME=${jdk.home} into grails.
+{ lib
+, stdenv
+, fetchurl
+, unzip
+  # If jdk is null, require JAVA_HOME in runtime environment, else store
+  # JAVA_HOME=${jdk.home} into grails.
 , jdk ? null
-, coreutils, ncurses, gnused, gnugrep  # for purity
+, coreutils
+, ncurses
+, gnused
+, gnugrep  # for purity
 }:
 
 let

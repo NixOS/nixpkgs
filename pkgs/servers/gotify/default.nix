@@ -46,7 +46,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [
-    "-X main.Version=${version}" "-X main.Mode=prod"
+    "-X main.Version=${version}"
+    "-X main.Mode=prod"
   ];
 
   meta = with lib; {

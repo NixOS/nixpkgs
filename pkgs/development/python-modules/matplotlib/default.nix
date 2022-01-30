@@ -1,14 +1,47 @@
-{ lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
-, which, cycler, python-dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
-, certifi, pillow, fonttools, setuptools-scm, setuptools-scm-git-archive, packaging
-, enableGhostscript ? true, ghostscript, gtk3
-, enableGtk3 ? false, cairo
-# darwin has its own "MacOSX" backend
-, enableTk ? !stdenv.isDarwin, tcl, tk, tkinter
-, enableQt ? false, pyqt5
-# required for headless detection
-, libX11, wayland
+{ lib
+, stdenv
+, fetchPypi
+, writeText
+, buildPythonPackage
+, isPy3k
+, pycairo
+, which
+, cycler
+, python-dateutil
+, numpy
+, pyparsing
+, sphinx
+, tornado
+, kiwisolver
+, freetype
+, qhull
+, libpng
+, pkg-config
+, mock
+, pytz
+, pygobject3
+, gobject-introspection
+, certifi
+, pillow
+, fonttools
+, setuptools-scm
+, setuptools-scm-git-archive
+, packaging
+, enableGhostscript ? true
+, ghostscript
+, gtk3
+, enableGtk3 ? false
+, cairo
+  # darwin has its own "MacOSX" backend
+, enableTk ? !stdenv.isDarwin
+, tcl
+, tk
+, tkinter
+, enableQt ? false
+, pyqt5
+  # required for headless detection
+, libX11
+, wayland
 , Cocoa
 }:
 
@@ -87,7 +120,7 @@ buildPythonPackage rec {
     };
   };
 
-  MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI {} passthru.config);
+  MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI { } passthru.config);
 
   # Matplotlib tries to find Tcl/Tk by opening a Tk window and asking the
   # corresponding interpreter object for its library paths. This fails if
@@ -120,8 +153,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python plotting library, making publication quality plots";
-    homepage    = "https://matplotlib.org/";
-    license     = with licenses; [ psfl bsd0 ];
+    homepage = "https://matplotlib.org/";
+    license = with licenses; [ psfl bsd0 ];
     maintainers = with maintainers; [ lovek323 veprbl ];
   };
 }

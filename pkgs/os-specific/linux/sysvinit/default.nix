@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mv $out/sbin/killall5 $out/bin
     ln -sf killall5 $out/bin/pidof
   ''
-    + lib.optionalString withoutInitTools
+  + lib.optionalString withoutInitTools
     ''
       shopt -s extglob
       rm -rf $out/sbin/!(sulogin)

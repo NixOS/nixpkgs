@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1ic63gpdda762x6ks3al71dwgmsy2isicqyr2935bd245jx8s209";
   };
   makeFlags = [
-              # author do not use configure and prefix directly using $prefix
-              "prefix=$(out)"
-              # graphical version of dozdc requires xforms, which is not i nixpkgs so I turned it down
-              "XFORMS_FLAGS=-UXFORMS"
-              "LUALIB=-llua"
-              "bindir=$(prefix)/bin/"
-            ];
+    # author do not use configure and prefix directly using $prefix
+    "prefix=$(out)"
+    # graphical version of dozdc requires xforms, which is not i nixpkgs so I turned it down
+    "XFORMS_FLAGS=-UXFORMS"
+    "LUALIB=-llua"
+    "bindir=$(prefix)/bin/"
+  ];
   # some include hardcodes the lua libraries path. This is a patch for that
   patches = [ ./lua-header.patch ];
   preBuild = "cd dozenal";

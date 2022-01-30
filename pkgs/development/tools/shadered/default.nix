@@ -7,7 +7,8 @@
 , python3
 , glew
 , pkg-config
-, SDL2 }:
+, SDL2
+}:
 
 stdenv.mkDerivation rec {
   pname = "SHADERed";

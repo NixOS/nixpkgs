@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       between source files.
     '';
     license = licenses.gpl3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

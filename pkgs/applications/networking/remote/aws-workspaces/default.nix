@@ -1,6 +1,21 @@
-{ stdenv, lib
-, makeWrapper, dpkg, fetchurl, autoPatchelfHook
-, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking
+{ stdenv
+, lib
+, makeWrapper
+, dpkg
+, fetchurl
+, autoPatchelfHook
+, curl
+, libkrb5
+, lttng-ust
+, libpulseaudio
+, gtk3
+, openssl_1_1
+, icu
+, webkitgtk
+, librsvg
+, gdk-pixbuf
+, libsoup
+, glib-networking
 }:
 
 stdenv.mkDerivation rec {

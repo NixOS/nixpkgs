@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, pkgs, makeWrapper, buildEnv
-, nodejs, runtimeShell
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkgs
+, makeWrapper
+, buildEnv
+, nodejs
+, runtimeShell
 }:
 
 let
@@ -12,9 +17,13 @@ let
   runtimeEnv = buildEnv {
     name = "airfield-runtime";
     paths = with nodePackages; [
-      nodePackages."express-3.0.5" nodePackages."swig-0.14.0"
-      nodePackages."consolidate-0.10.0" redis connect-redis
-      async request
+      nodePackages."express-3.0.5"
+      nodePackages."swig-0.14.0"
+      nodePackages."consolidate-0.10.0"
+      redis
+      connect-redis
+      async
+      request
     ];
   };
 
@@ -39,7 +48,8 @@ let
       cp -R . $out
     '';
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name version src;
 
   nativeBuildInputs = [ makeWrapper ];

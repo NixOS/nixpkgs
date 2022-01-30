@@ -62,14 +62,14 @@ in
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
     nixpkgs.config.lightdm-tiny-greeter.conf =
-    let
-      configHeader = ''
-        #include <gtk/gtk.h>
-        static const char *user_text = "${cfg.label.user}";
-        static const char *pass_text = "${cfg.label.pass}";
-        static const char *session = "${dmcfg.defaultSession}";
-      '';
-    in
+      let
+        configHeader = ''
+          #include <gtk/gtk.h>
+          static const char *user_text = "${cfg.label.user}";
+          static const char *pass_text = "${cfg.label.pass}";
+          static const char *session = "${dmcfg.defaultSession}";
+        '';
+      in
       optionalString (cfg.extraConfig != "")
         (configHeader + cfg.extraConfig);
 

@@ -64,40 +64,40 @@ let
   });
 
 in
-  buildPythonPackage rec {
-    pname = "cadquery";
-    version = "2.0";
+buildPythonPackage rec {
+  pname = "cadquery";
+  version = "2.0";
 
-    src = fetchFromGitHub {
-      owner = "CadQuery";
-      repo = pname;
-      rev = version;
-      sha256 = "1n63b6cjjrdwdfmwq0zx1xabjnhndk9mgfkm4w7z9ardcfpvg84l";
-    };
+  src = fetchFromGitHub {
+    owner = "CadQuery";
+    repo = pname;
+    rev = version;
+    sha256 = "1n63b6cjjrdwdfmwq0zx1xabjnhndk9mgfkm4w7z9ardcfpvg84l";
+  };
 
-    buildInputs = [
-      opencascade
-    ];
+  buildInputs = [
+    opencascade
+  ];
 
-    propagatedBuildInputs = [
-      pyparsing
-      pythonocc-core-cadquery
-    ];
+  propagatedBuildInputs = [
+    pyparsing
+    pythonocc-core-cadquery
+  ];
 
-    FONTCONFIG_FILE = makeFontsConf {
-      fontDirectories = [ freefont_ttf ];
-    };
+  FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
+  };
 
-    checkInputs = [
-      pytest
-    ];
+  checkInputs = [
+    pytest
+  ];
 
-    disabled = pythonOlder "3.6" || pythonAtLeast "3.8";
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.8";
 
-    meta = with lib; {
-      description = "Parametric scripting language for creating and traversing CAD models";
-      homepage = "https://github.com/CadQuery/cadquery";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ costrouc marcus7070 ];
-    };
-  }
+  meta = with lib; {
+    description = "Parametric scripting language for creating and traversing CAD models";
+    homepage = "https://github.com/CadQuery/cadquery";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ costrouc marcus7070 ];
+  };
+}

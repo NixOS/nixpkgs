@@ -3,7 +3,8 @@
 let
   version = "1.0.0";
   filterVersion = "1.0.0";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "epson-201401w";
   inherit version;
 

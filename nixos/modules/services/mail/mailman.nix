@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:          # mailman.nix
+{ config, pkgs, lib, ... }: # mailman.nix
 
 with lib;
 
@@ -7,7 +7,7 @@ let
   cfg = config.services.mailman;
 
   pythonEnv = pkgs.python3.withPackages (ps:
-    [ps.mailman ps.mailman-web]
+    [ ps.mailman ps.mailman-web ]
     ++ lib.optional cfg.hyperkitty.enable ps.mailman-hyperkitty
     ++ cfg.extraPythonPackages);
 
@@ -44,7 +44,7 @@ let
     transport_file_type: hash
   '';
 
-  mailmanCfg = lib.generators.toINI {} cfg.settings;
+  mailmanCfg = lib.generators.toINI { } cfg.settings;
 
   mailmanHyperkittyCfg = pkgs.writeText "mailman-hyperkitty.cfg" ''
     [general]
@@ -59,7 +59,8 @@ let
     api_key: @API_KEY@
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -118,7 +119,7 @@ in {
 
       webHosts = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           The list of hostnames and/or IP addresses from which the Mailman Web
           UI will accept requests. By default, "localhost" and "127.0.0.1" are
@@ -138,7 +139,7 @@ in {
 
       webSettings = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = ''
           Overrides for the default mailman-web Django settings.
         '';
@@ -151,13 +152,13 @@ in {
       extraPythonPackages = mkOption {
         description = "Packages to add to the python environment used by mailman and mailman-web";
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
       };
 
       settings = mkOption {
         description = "Settings for mailman.cfg";
         type = types.attrsOf (types.attrsOf types.str);
-        default = {};
+        default = { };
       };
 
       hyperkitty = {
@@ -203,44 +204,50 @@ in {
         enable = "yes";
         configuration = "/var/lib/mailman/mailman-hyperkitty.cfg";
       };
-    } // (let
-      loggerNames = ["root" "archiver" "bounce" "config" "database" "debug" "error" "fromusenet" "http" "locks" "mischief" "plugins" "runner" "smtp"];
-      loggerSectionNames = map (n: "logging.${n}") loggerNames;
-      in lib.genAttrs loggerSectionNames(name: { handler = "stderr"; })
+    } // (
+      let
+        loggerNames = [ "root" "archiver" "bounce" "config" "database" "debug" "error" "fromusenet" "http" "locks" "mischief" "plugins" "runner" "smtp" ];
+        loggerSectionNames = map (n: "logging.${n}") loggerNames;
+      in
+      lib.genAttrs loggerSectionNames (name: { handler = "stderr"; })
     );
 
-    assertions = let
-      inherit (config.services) postfix;
+    assertions =
+      let
+        inherit (config.services) postfix;
 
-      requirePostfixHash = optionPath: dataFile:
-        with lib;
-        let
-          expected = "hash:/var/lib/mailman/data/${dataFile}";
-          value = attrByPath optionPath [] postfix;
-        in
-          { assertion = postfix.enable -> isList value && elem expected value;
+        requirePostfixHash = optionPath: dataFile:
+          with lib;
+          let
+            expected = "hash:/var/lib/mailman/data/${dataFile}";
+            value = attrByPath optionPath [ ] postfix;
+          in
+          {
+            assertion = postfix.enable -> isList value && elem expected value;
             message = ''
               services.postfix.${concatStringsSep "." optionPath} must contain
               "${expected}".
               See <https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html>.
             '';
           };
-    in (lib.optionals cfg.enablePostfix [
-      { assertion = postfix.enable;
-        message = ''
-          Mailman's default NixOS configuration requires Postfix to be enabled.
+      in
+      (lib.optionals cfg.enablePostfix [
+        {
+          assertion = postfix.enable;
+          message = ''
+            Mailman's default NixOS configuration requires Postfix to be enabled.
 
-          If you want to use another MTA, set services.mailman.enablePostfix
-          to false and configure settings in services.mailman.settings.mta.
+            If you want to use another MTA, set services.mailman.enablePostfix
+            to false and configure settings in services.mailman.settings.mta.
 
-          Refer to <https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html>
-          for more info.
-        '';
-      }
-      (requirePostfixHash [ "relayDomains" ] "postfix_domains")
-      (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
-      (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
-    ]);
+            Refer to <https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html>
+            for more info.
+          '';
+        }
+        (requirePostfixHash [ "relayDomains" ] "postfix_domains")
+        (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
+        (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
+      ]);
 
     users.users.mailman = {
       description = "GNU Mailman";
@@ -252,7 +259,7 @@ in {
       isSystemUser = true;
       group = "mailman";
     };
-    users.groups.mailman = {};
+    users.groups.mailman = { };
 
     environment.etc."mailman.cfg".text = mailmanCfg;
 
@@ -286,28 +293,30 @@ in {
       };
     };
 
-    environment.systemPackages = [ (pkgs.buildEnv {
-      name = "mailman-tools";
-      # We don't want to pollute the system PATH with a python
-      # interpreter etc. so let's pick only the stuff we actually
-      # want from pythonEnv
-      pathsToLink = ["/bin"];
-      paths = [pythonEnv];
-      postBuild = ''
-        find $out/bin/ -mindepth 1 -not -name "mailman*" -delete
-      '';
-    }) ];
+    environment.systemPackages = [
+      (pkgs.buildEnv {
+        name = "mailman-tools";
+        # We don't want to pollute the system PATH with a python
+        # interpreter etc. so let's pick only the stuff we actually
+        # want from pythonEnv
+        pathsToLink = [ "/bin" ];
+        paths = [ pythonEnv ];
+        postBuild = ''
+          find $out/bin/ -mindepth 1 -not -name "mailman*" -delete
+        '';
+      })
+    ];
 
     services.postfix = lib.mkIf cfg.enablePostfix {
-      recipientDelimiter = "+";         # bake recipient addresses in mail envelopes via VERP
+      recipientDelimiter = "+"; # bake recipient addresses in mail envelopes via VERP
       config = {
-        owner_request_special = "no";   # Mailman handles -owner addresses on its own
+        owner_request_special = "no"; # Mailman handles -owner addresses on its own
       };
     };
 
     systemd.sockets.mailman-uwsgi = lib.mkIf cfg.serve.enable {
-      wantedBy = ["sockets.target"];
-      before = ["nginx.service"];
+      wantedBy = [ "sockets.target" ];
+      before = [ "nginx.service" ];
       socketConfig.ListenStream = "/run/mailman-web.socket";
     };
     systemd.services = {
@@ -386,29 +395,32 @@ in {
         };
       };
 
-      mailman-uwsgi = mkIf cfg.serve.enable (let
-        uwsgiConfig.uwsgi = {
-          type = "normal";
-          plugins = ["python3"];
-          home = pythonEnv;
-          module = "mailman_web.wsgi";
-          http = "127.0.0.1:18507";
-        };
-        uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
-      in {
-        wantedBy = ["multi-user.target"];
-        requires = ["mailman-uwsgi.socket" "mailman-web-setup.service"];
-        restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
-        serviceConfig = {
-          # Since the mailman-web settings.py obstinately creates a logs
-          # dir in the cwd, change to the (writable) runtime directory before
-          # starting uwsgi.
-          ExecStart = "${pkgs.coreutils}/bin/env -C $RUNTIME_DIRECTORY ${pkgs.uwsgi.override { plugins = ["python3"]; }}/bin/uwsgi --json ${uwsgiConfigFile}";
-          User = cfg.webUser;
-          Group = "mailman";
-          RuntimeDirectory = "mailman-uwsgi";
-        };
-      });
+      mailman-uwsgi = mkIf cfg.serve.enable (
+        let
+          uwsgiConfig.uwsgi = {
+            type = "normal";
+            plugins = [ "python3" ];
+            home = pythonEnv;
+            module = "mailman_web.wsgi";
+            http = "127.0.0.1:18507";
+          };
+          uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
+        in
+        {
+          wantedBy = [ "multi-user.target" ];
+          requires = [ "mailman-uwsgi.socket" "mailman-web-setup.service" ];
+          restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
+          serviceConfig = {
+            # Since the mailman-web settings.py obstinately creates a logs
+            # dir in the cwd, change to the (writable) runtime directory before
+            # starting uwsgi.
+            ExecStart = "${pkgs.coreutils}/bin/env -C $RUNTIME_DIRECTORY ${pkgs.uwsgi.override { plugins = ["python3"]; }}/bin/uwsgi --json ${uwsgiConfigFile}";
+            User = cfg.webUser;
+            Group = "mailman";
+            RuntimeDirectory = "mailman-uwsgi";
+          };
+        }
+      );
 
       mailman-daily = {
         description = "Trigger daily Mailman events";
@@ -433,25 +445,27 @@ in {
           WorkingDirectory = "/var/lib/mailman-web";
         };
       };
-    } // flip lib.mapAttrs' {
-      "minutely" = "minutely";
-      "quarter_hourly" = "*:00/15";
-      "hourly" = "hourly";
-      "daily" = "daily";
-      "weekly" = "weekly";
-      "yearly" = "yearly";
-    } (name: startAt:
-      lib.nameValuePair "hyperkitty-${name}" (lib.mkIf cfg.hyperkitty.enable {
-        description = "Trigger ${name} Hyperkitty events";
-        inherit startAt;
-        restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
-        serviceConfig = {
-          ExecStart = "${pythonEnv}/bin/mailman-web runjobs ${name}";
-          User = cfg.webUser;
-          Group = "mailman";
-          WorkingDirectory = "/var/lib/mailman-web";
-        };
-      }));
+    } // flip lib.mapAttrs'
+      {
+        "minutely" = "minutely";
+        "quarter_hourly" = "*:00/15";
+        "hourly" = "hourly";
+        "daily" = "daily";
+        "weekly" = "weekly";
+        "yearly" = "yearly";
+      }
+      (name: startAt:
+        lib.nameValuePair "hyperkitty-${name}" (lib.mkIf cfg.hyperkitty.enable {
+          description = "Trigger ${name} Hyperkitty events";
+          inherit startAt;
+          restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
+          serviceConfig = {
+            ExecStart = "${pythonEnv}/bin/mailman-web runjobs ${name}";
+            User = cfg.webUser;
+            Group = "mailman";
+            WorkingDirectory = "/var/lib/mailman-web";
+          };
+        }));
   };
 
   meta = {

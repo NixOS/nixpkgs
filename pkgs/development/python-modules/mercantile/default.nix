@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , click
 , pytestCheckHook
 , hypothesis

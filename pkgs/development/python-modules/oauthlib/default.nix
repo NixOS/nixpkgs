@@ -2,12 +2,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# propagates
+  # propagates
 , blinker
 , cryptography
 , pyjwt
 
-# test
+  # test
 , mock
 , pytestCheckHook
 }:

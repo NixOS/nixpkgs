@@ -1,4 +1,4 @@
-{lib, nimPackages, fetchFromGitHub, pcre}:
+{ lib, nimPackages, fetchFromGitHub, pcre }:
 
 nimPackages.buildNimPackage rec {
   pname = "mosdepth";

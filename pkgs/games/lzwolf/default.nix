@@ -1,7 +1,17 @@
-{ stdenv, lib, fetchFromBitbucket, p7zip, cmake
-, SDL2, bzip2, zlib, libjpeg
-, libsndfile, mpg123
-, SDL2_net, SDL2_mixer }:
+{ stdenv
+, lib
+, fetchFromBitbucket
+, p7zip
+, cmake
+, SDL2
+, bzip2
+, zlib
+, libjpeg
+, libsndfile
+, mpg123
+, SDL2_net
+, SDL2_mixer
+}:
 
 stdenv.mkDerivation rec {
   pname = "lzwolf";
@@ -15,7 +25,14 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ p7zip cmake ];
   buildInputs = [
-    SDL2 bzip2 zlib libjpeg SDL2_mixer SDL2_net libsndfile mpg123
+    SDL2
+    bzip2
+    zlib
+    libjpeg
+    SDL2_mixer
+    SDL2_net
+    libsndfile
+    mpg123
   ];
 
   cmakeFlags = [

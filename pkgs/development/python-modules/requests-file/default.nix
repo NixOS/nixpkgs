@@ -1,7 +1,7 @@
 { lib, fetchPypi, buildPythonPackage, pytestCheckHook, requests, six }:
 
 buildPythonPackage rec {
-  pname   = "requests-file";
+  pname = "requests-file";
   version = "1.5.1";
 
   src = fetchPypi {

@@ -47,5 +47,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/hauntsaninja/pyp";
     license = licenses.mit;
     maintainers = with maintainers; [ rmcgibbo ];
-   };
+  };
 }

@@ -59,7 +59,7 @@ in
       group = "influxdb2";
     };
 
-    users.extraGroups.influxdb2 = {};
+    users.extraGroups.influxdb2 = { };
   };
 
   meta.maintainers = with lib.maintainers; [ nickcao ];

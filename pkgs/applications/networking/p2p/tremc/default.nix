@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, python3Packages
 , x11Support ? !stdenv.isDarwin
 , xclip ? null
 , pbcopy ? null
@@ -44,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   dontBuild = true;
   doCheck = false;
 
-  makeWrapperArgs = ["--prefix PATH : ${wrapperPath}"];
+  makeWrapperArgs = [ "--prefix PATH : ${wrapperPath}" ];
 
   installPhase = ''
     make DESTDIR=$out install

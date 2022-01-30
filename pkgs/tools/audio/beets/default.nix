@@ -6,52 +6,58 @@
 , diffPlugins
 , substituteAll
 , pythonPackages
-# can be null, if you wish to disable a reference to it. It's needed for the
-# artresizer, see:
-# https://beets.readthedocs.io/en/v1.6.0/plugins/fetchart.html#image-resizing
+  # can be null, if you wish to disable a reference to it. It's needed for the
+  # artresizer, see:
+  # https://beets.readthedocs.io/en/v1.6.0/plugins/fetchart.html#image-resizing
 , imagemagick
 , gobject-introspection
 , gst_all_1
 , runtimeShell
 
-# external plugins package set
+  # external plugins package set
 , beetsExternalPlugins
 
-, enableAbsubmit         ? lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms, essentia-extractor
-, enableAcousticbrainz   ? true
-, enableAcoustid         ? true
-, enableAura             ? true
-, enableBadfiles         ? true, flac, mp3val
-, enableBeatport         ? true
-, enableBpsync           ? true
-, enableConvert          ? true, ffmpeg
-, enableDeezer           ? true
-, enableDiscogs          ? true
-, enableEmbyupdate       ? true
-, enableFetchart         ? true
-, enableKeyfinder        ? true, keyfinder-cli
-, enableKodiupdate       ? true
-, enableLastfm           ? true
-, enableLoadext          ? true
-, enableLyrics           ? true
-, enableMpd              ? true
-, enablePlaylist         ? true
-, enableReplaygain       ? true
-, enableSonosUpdate      ? true
+, enableAbsubmit ? lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms
+, essentia-extractor
+, enableAcousticbrainz ? true
+, enableAcoustid ? true
+, enableAura ? true
+, enableBadfiles ? true
+, flac
+, mp3val
+, enableBeatport ? true
+, enableBpsync ? true
+, enableConvert ? true
+, ffmpeg
+, enableDeezer ? true
+, enableDiscogs ? true
+, enableEmbyupdate ? true
+, enableFetchart ? true
+, enableKeyfinder ? true
+, keyfinder-cli
+, enableKodiupdate ? true
+, enableLastfm ? true
+, enableLoadext ? true
+, enableLyrics ? true
+, enableMpd ? true
+, enablePlaylist ? true
+, enableReplaygain ? true
+, enableSonosUpdate ? true
 , enableSubsonicplaylist ? true
-, enableSubsonicupdate   ? true
-, enableThumbnails       ? true
-, enableWeb              ? true
+, enableSubsonicupdate ? true
+, enableThumbnails ? true
+, enableWeb ? true
 
-# External plugins
-, enableAlternatives     ? false
-, enableCopyArtifacts    ? false
-, enableExtraFiles       ? false
+  # External plugins
+, enableAlternatives ? false
+, enableCopyArtifacts ? false
+, enableExtraFiles ? false
 
-, bashInteractive, bash-completion
+, bashInteractive
+, bash-completion
 }:
 
-assert enableBpsync      -> enableBeatport;
+assert enableBpsync -> enableBeatport;
 
 let
   optionalPlugins = {
@@ -85,12 +91,48 @@ let
   };
 
   pluginsWithoutDeps = [
-    "albumtypes" "bareasc" "bench" "bpd" "bpm" "bucket" "duplicates" "edit" "embedart"
-    "export" "filefilter" "fish" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
-    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "gmusic"
-    "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "parentwork" "permissions" "play"
-    "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
-    "types" "unimported" "zero"
+    "albumtypes"
+    "bareasc"
+    "bench"
+    "bpd"
+    "bpm"
+    "bucket"
+    "duplicates"
+    "edit"
+    "embedart"
+    "export"
+    "filefilter"
+    "fish"
+    "freedesktop"
+    "fromfilename"
+    "ftintitle"
+    "fuzzy"
+    "hook"
+    "ihate"
+    "importadded"
+    "importfeeds"
+    "info"
+    "inline"
+    "ipfs"
+    "gmusic"
+    "mbcollection"
+    "mbsubmit"
+    "mbsync"
+    "metasync"
+    "missing"
+    "parentwork"
+    "permissions"
+    "play"
+    "plexupdate"
+    "random"
+    "rewrite"
+    "scrub"
+    "smartplaylist"
+    "spotify"
+    "the"
+    "types"
+    "unimported"
+    "zero"
   ];
 
   enabledOptionalPlugins = lib.attrNames (lib.filterAttrs (_: lib.id) optionalPlugins);
@@ -101,7 +143,8 @@ let
   testShell = "${bashInteractive}/bin/bash --norc";
   completion = "${bash-completion}/share/bash-completion/bash_completion";
 
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   pname = "beets";
   version = "1.6.0";
 
@@ -127,31 +170,35 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.confuse
     pythonPackages.mediafile
     gobject-introspection
-  ] ++ lib.optional enableAbsubmit         essentia-extractor
-    ++ lib.optional enableAcoustid         pythonPackages.pyacoustid
-    ++ lib.optional enableBeatport         pythonPackages.requests_oauthlib
-    ++ lib.optional enableConvert          ffmpeg
-    ++ lib.optional enableDiscogs          pythonPackages.discogs-client
-    ++ lib.optional (enableFetchart
-                  || enableDeezer
-                  || enableEmbyupdate
-                  || enableKodiupdate
-                  || enableLoadext
-                  || enablePlaylist
-                  || enableSubsonicplaylist
-                  || enableSubsonicupdate
-                  || enableAcousticbrainz) pythonPackages.requests
-    ++ lib.optional enableKeyfinder        keyfinder-cli
-    ++ lib.optional enableLastfm           pythonPackages.pylast
-    ++ lib.optional enableLyrics           pythonPackages.beautifulsoup4
-    ++ lib.optional enableMpd              pythonPackages.mpd2
-    ++ lib.optional enableSonosUpdate      pythonPackages.soco
-    ++ lib.optional enableThumbnails       pythonPackages.pyxdg
-    ++ lib.optional (enableAura
-                  || enableWeb)            pythonPackages.flask
-    ++ lib.optional enableAlternatives     beetsExternalPlugins.alternatives
-    ++ lib.optional enableCopyArtifacts    beetsExternalPlugins.copyartifacts
-    ++ lib.optional enableExtraFiles       beetsExternalPlugins.extrafiles
+  ] ++ lib.optional enableAbsubmit essentia-extractor
+  ++ lib.optional enableAcoustid pythonPackages.pyacoustid
+  ++ lib.optional enableBeatport pythonPackages.requests_oauthlib
+  ++ lib.optional enableConvert ffmpeg
+  ++ lib.optional enableDiscogs pythonPackages.discogs-client
+  ++ lib.optional
+    (enableFetchart
+      || enableDeezer
+      || enableEmbyupdate
+      || enableKodiupdate
+      || enableLoadext
+      || enablePlaylist
+      || enableSubsonicplaylist
+      || enableSubsonicupdate
+      || enableAcousticbrainz)
+    pythonPackages.requests
+  ++ lib.optional enableKeyfinder keyfinder-cli
+  ++ lib.optional enableLastfm pythonPackages.pylast
+  ++ lib.optional enableLyrics pythonPackages.beautifulsoup4
+  ++ lib.optional enableMpd pythonPackages.mpd2
+  ++ lib.optional enableSonosUpdate pythonPackages.soco
+  ++ lib.optional enableThumbnails pythonPackages.pyxdg
+  ++ lib.optional
+    (enableAura
+      || enableWeb)
+    pythonPackages.flask
+  ++ lib.optional enableAlternatives beetsExternalPlugins.alternatives
+  ++ lib.optional enableCopyArtifacts beetsExternalPlugins.copyartifacts
+  ++ lib.optional enableExtraFiles beetsExternalPlugins.extrafiles
   ;
 
   buildInputs = [
@@ -180,28 +227,28 @@ in pythonPackages.buildPythonApplication rec {
     # Bash completion fix for Nix
     ./bash-completion-always-print.patch
   ]
-    # Fix path to imagemagick, used for the artresizer.py file. This reference
-    # to imagemagick might be expensive for some people, so the patch can be
-    # disabled if imagemagick is set to null
-    ++ lib.optional (imagemagick != null) (substituteAll {
-      src = ./imagemagick-nix-path.patch;
-      inherit imagemagick;
-    })
-    # We need to force ffmpeg as the default, since we do not package
-    # bs1770gain, and set the absolute path there, to avoid impurities.
-    ++ lib.optional enableReplaygain (substituteAll {
-      src = ./replaygain-default-ffmpeg.patch;
-      ffmpeg = lib.getBin ffmpeg;
-    })
-    # Put absolute Nix paths in place
-    ++ lib.optional enableConvert (substituteAll {
-      src = ./convert-plugin-ffmpeg-path.patch;
-      ffmpeg = lib.getBin ffmpeg;
-    })
-    ++ lib.optional enableBadfiles (substituteAll {
-      src = ./badfiles-plugin-nix-paths.patch;
-      inherit mp3val flac;
-    })
+  # Fix path to imagemagick, used for the artresizer.py file. This reference
+  # to imagemagick might be expensive for some people, so the patch can be
+  # disabled if imagemagick is set to null
+  ++ lib.optional (imagemagick != null) (substituteAll {
+    src = ./imagemagick-nix-path.patch;
+    inherit imagemagick;
+  })
+  # We need to force ffmpeg as the default, since we do not package
+  # bs1770gain, and set the absolute path there, to avoid impurities.
+  ++ lib.optional enableReplaygain (substituteAll {
+    src = ./replaygain-default-ffmpeg.patch;
+    ffmpeg = lib.getBin ffmpeg;
+  })
+  # Put absolute Nix paths in place
+  ++ lib.optional enableConvert (substituteAll {
+    src = ./convert-plugin-ffmpeg-path.patch;
+    ffmpeg = lib.getBin ffmpeg;
+  })
+  ++ lib.optional enableBadfiles (substituteAll {
+    src = ./badfiles-plugin-nix-paths.patch;
+    inherit mp3val flac;
+  })
   ;
 
   # Disable failing tests

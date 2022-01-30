@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , linkStatic ? with stdenv.hostPlatform; isStatic || isCygwin
 , autoreconfHook
 }:
@@ -13,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "1.0.6.0.2";
 
   /* We use versions patched to use autotools style properly,
-      saving lots of trouble. */
+    saving lots of trouble. */
   src = fetchurl {
     urls = map
       (prefix: prefix + "/people/sbrabec/bzip2/tarballs/${pname}-${version}.tar.gz")

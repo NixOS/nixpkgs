@@ -1,7 +1,24 @@
-{ lib, fetchFromGitHub, fetchpatch, mkDerivation
-, qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
-, qtconnectivity, qtcharts, libusb-compat-0_1, gsl, blas
-, bison, flex, zlib, qmake, makeDesktopItem, makeWrapper
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, mkDerivation
+, qtbase
+, qtsvg
+, qtserialport
+, qtwebengine
+, qtmultimedia
+, qttools
+, qtconnectivity
+, qtcharts
+, libusb-compat-0_1
+, gsl
+, blas
+, bison
+, flex
+, zlib
+, qmake
+, makeDesktopItem
+, makeWrapper
 }:
 
 let
@@ -14,7 +31,8 @@ let
     comment = "Performance software for cyclists, runners and triathletes";
     categories = "Utility;";
   };
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "golden-cheetah";
   version = "3.6-DEV2111";
 

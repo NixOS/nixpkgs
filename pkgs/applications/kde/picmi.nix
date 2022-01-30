@@ -1,6 +1,10 @@
-{ mkDerivation, lib, fetchpatch
-, libkdegames, extra-cmake-modules
-, kdeclarative, knewstuff
+{ mkDerivation
+, lib
+, fetchpatch
+, libkdegames
+, extra-cmake-modules
+, kdeclarative
+, knewstuff
 }:
 
 mkDerivation {

@@ -1,6 +1,29 @@
-{ stdenv, lib, fetchurl, perlPackages, makeWrapper, perl, which, nx-libs
-, util-linux, coreutils, glibc, gawk, gnused, gnugrep, findutils, xorg
-, nettools, iproute2, bc, procps, psmisc, lsof, pwgen, openssh, sshfs, bash
+{ stdenv
+, lib
+, fetchurl
+, perlPackages
+, makeWrapper
+, perl
+, which
+, nx-libs
+, util-linux
+, coreutils
+, glibc
+, gawk
+, gnused
+, gnugrep
+, findutils
+, xorg
+, nettools
+, iproute2
+, bc
+, procps
+, psmisc
+, lsof
+, pwgen
+, openssh
+, sshfs
+, bash
 }:
 
 let
@@ -26,14 +49,45 @@ let
   };
 
   perlEnv = perl.withPackages (p: with p; [
-    x2go-perl DBI DBDSQLite FileBaseDir TryTiny CaptureTiny ConfigSimple Switch FileWhich
+    x2go-perl
+    DBI
+    DBDSQLite
+    FileBaseDir
+    TryTiny
+    CaptureTiny
+    ConfigSimple
+    Switch
+    FileWhich
   ]);
 
   binaryDeps = [
-    perlEnv which nx-libs util-linux coreutils glibc.bin gawk gnused gnugrep
-    findutils nettools iproute2 bc procps psmisc lsof pwgen openssh sshfs
-    xorg.xauth xorg.xinit xorg.xrandr xorg.xmodmap xorg.xwininfo xorg.fontutil
-    xorg.xkbcomp xorg.setxkbmap
+    perlEnv
+    which
+    nx-libs
+    util-linux
+    coreutils
+    glibc.bin
+    gawk
+    gnused
+    gnugrep
+    findutils
+    nettools
+    iproute2
+    bc
+    procps
+    psmisc
+    lsof
+    pwgen
+    openssh
+    sshfs
+    xorg.xauth
+    xorg.xinit
+    xorg.xrandr
+    xorg.xmodmap
+    xorg.xwininfo
+    xorg.fontutil
+    xorg.xkbcomp
+    xorg.setxkbmap
   ];
 in
 stdenv.mkDerivation rec {

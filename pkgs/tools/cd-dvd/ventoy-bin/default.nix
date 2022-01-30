@@ -1,20 +1,36 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoPatchelfHook, makeWrapper
-, hexdump, exfat, dosfstools, e2fsprogs, xz, util-linux, bash, parted
-, withGtk3 ? true, gtk3
-, withQt5 ? false, qt5
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoPatchelfHook
+, makeWrapper
+, hexdump
+, exfat
+, dosfstools
+, e2fsprogs
+, xz
+, util-linux
+, bash
+, parted
+, withGtk3 ? true
+, gtk3
+, withQt5 ? false
+, qt5
 }:
 
-let arch = {
-  x86_64-linux = "x86_64";
-  i686-linux = "i386";
-  aarch64-linux = "aarch64";
-  mipsel-linux = "mips64el";
-}.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-defaultGuiType = if withGtk3 then "gtk3"
-                 else if withQt5 then "qt5"
-                 else "";
-in stdenv.mkDerivation rec {
+let
+  arch = {
+    x86_64-linux = "x86_64";
+    i686-linux = "i386";
+    aarch64-linux = "aarch64";
+    mipsel-linux = "mips64el";
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+  defaultGuiType =
+    if withGtk3 then "gtk3"
+    else if withQt5 then "qt5"
+    else "";
+in
+stdenv.mkDerivation rec {
   pname = "ventoy-bin";
   version = "1.0.56";
 

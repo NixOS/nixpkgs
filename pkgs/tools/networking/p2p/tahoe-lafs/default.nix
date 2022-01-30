@@ -56,9 +56,29 @@ python3Packages.buildPythonApplication rec {
 
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with python3Packages; [
-    appdirs beautifulsoup4 characteristic distro eliot fixtures foolscap future
-    html5lib magic-wormhole netifaces pyasn1 pycrypto pyutil pyyaml recommonmark
-    service-identity simplejson sphinx_rtd_theme testtools treq twisted zfec
+    appdirs
+    beautifulsoup4
+    characteristic
+    distro
+    eliot
+    fixtures
+    foolscap
+    future
+    html5lib
+    magic-wormhole
+    netifaces
+    pyasn1
+    pycrypto
+    pyutil
+    pyyaml
+    recommonmark
+    service-identity
+    simplejson
+    sphinx_rtd_theme
+    testtools
+    treq
+    twisted
+    zfec
     zope_interface
   ];
 

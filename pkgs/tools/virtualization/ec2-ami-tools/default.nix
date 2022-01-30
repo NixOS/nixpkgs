@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       done
 
       sed -i 's|/bin/bash|${stdenv.shell}|' $out/lib/ec2/platform/base/pipeline.rb
-    '';  # */
+    ''; # */
 
   meta = {
     homepage = "https://aws.amazon.com/developertools/Amazon-EC2/368";

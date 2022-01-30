@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
 
 let
-  p = if stdenv.is64bit then {
+  p =
+    if stdenv.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.cc.cc.lib}/lib64";
       sha256 = "e4f579963199f05476657f0066beaa32d1261aef2203382f3919e1ed4bc4594e";
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://help.yandex.com/disk/cli-clients.xml";
     description = "A free cloud file storage service";
     maintainers = with lib.maintainers; [ smironov jagajaga ];
-    platforms = ["i686-linux" "x86_64-linux"];
+    platforms = [ "i686-linux" "x86_64-linux" ];
     license = lib.licenses.unfree;
     longDescription = ''
       Yandex.Disk console client for Linux lets you manage files on Disk without

@@ -6,21 +6,25 @@
 , jdupes
 , librsvg
 , libxml2
-, buttonVariants ? [] # default to all
-, colorVariants ? [] # default to all
-, opacityVariants ? [] # default to all
-, sizeVariants ? [] # default to all
+, buttonVariants ? [ ] # default to all
+, colorVariants ? [ ] # default to all
+, opacityVariants ? [ ] # default to all
+, sizeVariants ? [ ] # default to all
 }:
 
 let
   pname = "sierra-gtk-theme";
 in
 lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVariants
-lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
-lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityVariants
-lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
+  lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ]
+  colorVariants
+  lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ]
+  opacityVariants
+  lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ]
+  sizeVariants
 
-stdenv.mkDerivation {
+  stdenv.mkDerivation
+{
   inherit pname;
   version = "unstable-2021-05-24";
 

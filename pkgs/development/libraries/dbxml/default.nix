@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xercesc xqilla
+    xercesc
+    xqilla
   ];
 
   propagatedBuildInputs = [

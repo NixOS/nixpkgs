@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPackages
 , fetchurl
 , wafHook
@@ -29,16 +30,27 @@
 , python3Packages
 , nixosTests
 
-, enableLDAP ? false, openldap
-, enablePrinting ? false, cups
+, enableLDAP ? false
+, openldap
+, enablePrinting ? false
+, cups
 , enableProfiling ? true
-, enableMDNS ? false, avahi
-, enableDomainController ? false, gpgme, lmdb
-, enableRegedit ? true, ncurses
-, enableCephFS ? false, ceph
-, enableGlusterFS ? false, glusterfs, libuuid
-, enableAcl ? (!stdenv.isDarwin), acl
-, enablePam ? (!stdenv.isDarwin), pam
+, enableMDNS ? false
+, avahi
+, enableDomainController ? false
+, gpgme
+, lmdb
+, enableRegedit ? true
+, ncurses
+, enableCephFS ? false
+, ceph
+, enableGlusterFS ? false
+, glusterfs
+, libuuid
+, enableAcl ? (!stdenv.isDarwin)
+, acl
+, enablePam ? (!stdenv.isDarwin)
+, pam
 }:
 
 with lib;
@@ -96,15 +108,15 @@ stdenv.mkDerivation rec {
     libtasn1
     tdb
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
-    ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
-    ++ optional (enablePrinting && stdenv.isLinux) cups
-    ++ optional enableMDNS avahi
-    ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
-    ++ optional enableRegedit ncurses
-    ++ optional (enableCephFS && stdenv.isLinux) (lib.getDev ceph)
-    ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
-    ++ optional enableAcl acl
-    ++ optional enablePam pam;
+  ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
+  ++ optional (enablePrinting && stdenv.isLinux) cups
+  ++ optional enableMDNS avahi
+  ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
+  ++ optional enableRegedit ncurses
+  ++ optional (enableCephFS && stdenv.isLinux) (lib.getDev ceph)
+  ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
+  ++ optional enableAcl acl
+  ++ optional enablePam pam;
 
   wafPath = "buildtools/bin/waf";
 
@@ -135,9 +147,9 @@ stdenv.mkDerivation rec {
     "--without-ldap"
     "--without-ads"
   ] ++ optional enableProfiling "--with-profiling-data"
-    ++ optional (!enableAcl) "--without-acl-support"
-    ++ optional (!enablePam) "--without-pam"
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ++ optional (!enableAcl) "--without-acl-support"
+  ++ optional (!enablePam) "--without-pam"
+  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
   ] ++ optional stdenv.isAarch32 [
     # https://bugs.gentoo.org/683148

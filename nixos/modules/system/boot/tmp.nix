@@ -23,7 +23,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-         Whether to mount a tmpfs on <filename>/tmp</filename> during boot.
+        Whether to mount a tmpfs on <filename>/tmp</filename> during boot.
       '';
     };
 

@@ -11,7 +11,7 @@
 , wayland-protocols
 , enablePNG ? true
 , enableJPEG ? true
-# Optional dependencies
+  # Optional dependencies
 , libpng
 , libjpeg
 }:
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
   ] ++ lib.optional enablePNG libpng
-    ++ lib.optional enableJPEG libjpeg;
+  ++ lib.optional enableJPEG libjpeg;
 
   mesonBuildType = "release";
 

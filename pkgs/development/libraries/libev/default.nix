@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , # Note: -static hasn’t work on darwin
   static ? with stdenv.hostPlatform; isStatic && !isDarwin
 }:
@@ -10,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libev";
-  version="4.33";
+  version = "4.33";
 
   src = fetchurl {
     url = "http://dist.schmorp.de/libev/Attic/${pname}-${version}.tar.gz";

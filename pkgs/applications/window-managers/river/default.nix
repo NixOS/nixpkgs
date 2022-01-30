@@ -14,7 +14,8 @@
 , libevdev
 , libinput
 , libGL
-, xwaylandSupport ? true, libX11
+, xwaylandSupport ? true
+, libX11
 }:
 
 stdenv.mkDerivation rec {
@@ -55,8 +56,8 @@ stdenv.mkDerivation rec {
   '';
 
   /* Builder patch install dir into river to get default config
-     When installFlags is removed, river becomes half broken.
-     See https://github.com/riverwm/river/blob/7ffa2f4b9e7abf7d152134f555373c2b63ccfc1d/river/main.zig#L56
+    When installFlags is removed, river becomes half broken.
+    See https://github.com/riverwm/river/blob/7ffa2f4b9e7abf7d152134f555373c2b63ccfc1d/river/main.zig#L56
   */
   installFlags = [ "DESTDIR=$(out)" ];
 

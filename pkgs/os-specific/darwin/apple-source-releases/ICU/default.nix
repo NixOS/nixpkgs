@@ -7,7 +7,8 @@ let
       major = lib.toInt (lib.elemAt versionParts 0);
       minor = lib.toInt (lib.elemAt versionParts 1);
       patch = if lib.length versionParts > 2 then lib.toInt (lib.elemAt versionParts 2) else 0;
-    in toString (major * 10000 + minor * 100 + patch);
+    in
+    toString (major * 10000 + minor * 100 + patch);
 in
 
 appleDerivation {
@@ -59,7 +60,8 @@ appleDerivation {
 
     "DATA_INSTALL_DIR=/share/icu/"
     "DATA_LOOKUP_DIR=$(DSTROOT)$(DATA_INSTALL_DIR)"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ # darwin* platform properties are only defined on darwin
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # darwin* platform properties are only defined on darwin
     # hack to use our lower macos version
     "MAC_OS_X_VERSION_MIN_REQUIRED=${formatVersionNumeric stdenv.hostPlatform.darwinMinVersion}"
     "ICU_TARGET_VERSION=-m${stdenv.hostPlatform.darwinPlatform}-version-min=${stdenv.hostPlatform.darwinMinVersion}"

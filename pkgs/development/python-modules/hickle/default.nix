@@ -18,7 +18,7 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "hickle";
+  pname = "hickle";
   version = "4.0.4";
   disabled = pythonOlder "3.5";
 
@@ -36,7 +36,16 @@ buildPythonPackage rec {
 
   doCheck = false; # incompatible with latest astropy
   checkInputs = [
-    pytest pytest-cov pytest-runner coveralls scipy pandas astropy twine check-manifest codecov
+    pytest
+    pytest-cov
+    pytest-runner
+    coveralls
+    scipy
+    pandas
+    astropy
+    twine
+    check-manifest
+    codecov
   ];
 
   pythonImportsCheck = [ "hickle" ];

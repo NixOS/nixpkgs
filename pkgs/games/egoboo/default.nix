@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
     # Some files have to go to $HOME, but we put them in the 'shared'.
     patchPhase = ''
-      sed -i -e 's,''${HOME}/.''${PROJ_NAME},''${PREFIX}/share/games/''${PROJ_NAME},g' Makefile
+    sed -i -e 's,''${HOME}/.''${PROJ_NAME},''${PREFIX}/share/games/''${PROJ_NAME},g' Makefile
     '';
 
     preBuild = ''
-      makeFlags=PREFIX=$out
+    makeFlags=PREFIX=$out
     '';
   */
 

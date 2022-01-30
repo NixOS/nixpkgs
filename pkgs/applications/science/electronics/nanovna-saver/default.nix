@@ -17,7 +17,8 @@ let
       });
     };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "nanovna-saver";
   version = "0.3.8";
 

@@ -30,7 +30,8 @@ with lib;
       cfg = config.virtualisation.digitalOcean;
       hostName = config.networking.hostName;
       doMetadataFile = "/run/do-metadata/v1.json";
-    in mkMerge [{
+    in
+    mkMerge [{
       fileSystems."/" = {
         device = "/dev/disk/by-label/nixos";
         autoResize = true;
@@ -57,7 +58,7 @@ with lib;
       };
 
       /* Check for and wait for the metadata server to become reachable.
-       * This serves as a dependency for all the other metadata services. */
+        * This serves as a dependency for all the other metadata services. */
       systemd.services.digitalocean-metadata = {
         path = [ pkgs.curl ];
         description = "Get host metadata provided by Digitalocean";
@@ -75,7 +76,7 @@ with lib;
             sleep 1
           done
           chmod 600 $RUNTIME_DIRECTORY/v1.json
-          '';
+        '';
         environment = {
           DO_DELAY_ATTEMPTS_MAX = "10";
         };
@@ -94,8 +95,8 @@ with lib;
       };
 
       /* Fetch the root password from the digital ocean metadata.
-       * There is no specific route for this, so we use jq to get
-       * it from the One Big JSON metadata blob */
+        * There is no specific route for this, so we use jq to get
+        * it from the One Big JSON metadata blob */
       systemd.services.digitalocean-set-root-password = mkIf cfg.setRootPassword {
         path = [ pkgs.shadow pkgs.jq ];
         description = "Set root password provided by Digitalocean";
@@ -105,7 +106,7 @@ with lib;
           ROOT_PASSWORD=$(jq -er '.auth_key' ${doMetadataFile})
           echo "root:$ROOT_PASSWORD" | chpasswd
           mkdir -p /etc/do-metadata/set-root-password
-          '';
+        '';
         unitConfig = {
           ConditionPathExists = "!/etc/do-metadata/set-root-password";
           Before = optional config.services.openssh.enable "sshd.service";
@@ -118,8 +119,8 @@ with lib;
       };
 
       /* Set the hostname from Digital Ocean, unless the user configured it in
-       * the NixOS configuration. The cached metadata file isn't used here
-       * because the hostname is a mutable part of the droplet. */
+        * the NixOS configuration. The cached metadata file isn't used here
+        * because the hostname is a mutable part of the droplet. */
       systemd.services.digitalocean-set-hostname = mkIf (hostName == "") {
         path = [ pkgs.curl pkgs.nettools ];
         description = "Set hostname provided by Digitalocean";
@@ -166,8 +167,8 @@ with lib;
       };
 
       /* Initialize the RNG by running the entropy-seed script from the
-       * Digital Ocean metadata
-       */
+        * Digital Ocean metadata
+      */
       systemd.services.digitalocean-entropy-seed = mkIf cfg.seedEntropy {
         description = "Run the kernel RNG entropy seeding script from the Digital Ocean vendor data";
         wantedBy = [ "network.target" ];
@@ -179,7 +180,7 @@ with lib;
           ENTROPY_SEED=$(grep -rl "DigitalOcean Entropy Seed script" $TEMPDIR)
           ${pkgs.runtimeShell} $ENTROPY_SEED
           rm -rf $TEMPDIR
-          '';
+        '';
         unitConfig = {
           Before = [ "network.target" ];
           After = [ "digitalocean-metadata.service" ];
@@ -190,8 +191,7 @@ with lib;
         };
       };
 
-    }
-  ];
+    }];
   meta.maintainers = with maintainers; [ arianvp eamsden ];
 }
 

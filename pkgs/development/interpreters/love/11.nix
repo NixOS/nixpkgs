@@ -1,7 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, SDL2, libGLU, libGL, openal, luajit
-, libdevil, freetype, physfs, libmodplug, mpg123, libvorbis, libogg
-, libtheora, which, autoconf, automake, libtool
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, SDL2
+, libGLU
+, libGL
+, openal
+, luajit
+, libdevil
+, freetype
+, physfs
+, libmodplug
+, mpg123
+, libvorbis
+, libogg
+, libtheora
+, which
+, autoconf
+, automake
+, libtool
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +34,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    SDL2 libGLU libGL openal luajit libdevil freetype physfs libmodplug mpg123
-    libvorbis libogg libtheora autoconf which libtool automake
+    SDL2
+    libGLU
+    libGL
+    openal
+    luajit
+    libdevil
+    freetype
+    physfs
+    libmodplug
+    mpg123
+    libvorbis
+    libogg
+    libtheora
+    autoconf
+    which
+    libtool
+    automake
   ];
 
   preConfigure = "$shell ./platform/unix/automagic";

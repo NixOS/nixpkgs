@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   # ignore network related tests, which fail in sandbox
   disabledTests = [ "StartNSfunc" "Broadcast" "GetIP" "TestNameServer" "TestBCSetup" ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "Socket"
   ];
 

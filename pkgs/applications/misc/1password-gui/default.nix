@@ -75,7 +75,8 @@ stdenv.mkDerivation rec {
       pango
       systemd
     ] + ":${stdenv.cc.cc.lib}/lib64";
-    in ''
+    in
+    ''
       runHook preInstall
 
       mkdir -p $out/bin $out/share/1password

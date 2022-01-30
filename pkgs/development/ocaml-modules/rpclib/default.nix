@@ -1,6 +1,12 @@
-{ lib, fetchurl, buildDunePackage
+{ lib
+, fetchurl
+, buildDunePackage
 , alcotest
-, base64, cmdliner, rresult, xmlm, yojson
+, base64
+, cmdliner
+, rresult
+, xmlm
+, yojson
 }:
 
 buildDunePackage rec {

@@ -1,5 +1,13 @@
-{ coq, mkCoqDerivation, mathcomp, mathcomp-finmap, mathcomp-bigenough, mathcomp-real-closed,
-  hierarchy-builder, lib, version ? null }:
+{ coq
+, mkCoqDerivation
+, mathcomp
+, mathcomp-finmap
+, mathcomp-bigenough
+, mathcomp-real-closed
+, hierarchy-builder
+, lib
+, version ? null
+}:
 
 with lib;
 let mca = mkCoqDerivation {
@@ -17,17 +25,23 @@ let mca = mkCoqDerivation {
   release."0.2.3".sha256 = "0p9mr8g1qma6h10qf7014dv98ln90dfkwn76ynagpww7qap8s966";
 
   inherit version;
-  defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
-      { cases = [ (range "8.11" "8.14") (isGe "1.12.0") ];      out = "0.3.10"; }
-      { cases = [ (range "8.11" "8.13") "1.11.0" ];             out = "0.3.4"; }
-      { cases = [ (range "8.10" "8.12") "1.11.0" ];             out = "0.3.3"; }
-      { cases = [ (range "8.10" "8.11") "1.11.0" ];             out = "0.3.1"; }
-      { cases = [ (range "8.8"  "8.11") (range "1.8" "1.10") ]; out = "0.2.3"; }
-    ] null;
+  defaultVersion = with versions; switch [ coq.version mathcomp.version ] [
+    { cases = [ (range "8.11" "8.14") (isGe "1.12.0") ]; out = "0.3.10"; }
+    { cases = [ (range "8.11" "8.13") "1.11.0" ]; out = "0.3.4"; }
+    { cases = [ (range "8.10" "8.12") "1.11.0" ]; out = "0.3.3"; }
+    { cases = [ (range "8.10" "8.11") "1.11.0" ]; out = "0.3.1"; }
+    { cases = [ (range "8.8" "8.11") (range "1.8" "1.10") ]; out = "0.2.3"; }
+  ]
+    null;
 
   propagatedBuildInputs =
-    [ mathcomp.ssreflect mathcomp.field
-      mathcomp-finmap mathcomp-bigenough mathcomp-real-closed ];
+    [
+      mathcomp.ssreflect
+      mathcomp.field
+      mathcomp-finmap
+      mathcomp-bigenough
+      mathcomp-real-closed
+    ];
 
   meta = {
     description = "Analysis library compatible with Mathematical Components";
@@ -36,10 +50,14 @@ let mca = mkCoqDerivation {
   };
 }; in
 mca.overrideAttrs (o:
-  let ext = { propagatedBuildInputs = o.propagatedBuildInputs
-                                      ++ [ hierarchy-builder ]; };
-  in with versions; switch o.version [
-    {case = "dev";        out = ext;}
-    {case = isGe "0.3.4"; out = ext;}
-  ] {}
+  let ext = {
+    propagatedBuildInputs = o.propagatedBuildInputs
+      ++ [ hierarchy-builder ];
+  };
+  in
+  with versions; switch o.version [
+    { case = "dev"; out = ext; }
+    { case = isGe "0.3.4"; out = ext; }
+  ]
+    { }
 )

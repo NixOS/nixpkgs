@@ -42,7 +42,7 @@ buildPythonPackage rec {
     "test_bivariate_kde_norm"
   ];
 
-  pythonImportsCheck= [
+  pythonImportsCheck = [
     "seaborn"
   ];
 

@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , # Compile statically (support for packages that look for the static object)
   staticSupport ? stdenv.hostPlatform.isStatic
 }:
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     # Fix include directory
     sed -e 's,$(GSM_INSTALL_ROOT)/inc,$(GSM_INSTALL_ROOT)/include/gsm,' -i Makefile
   '' + optionalString (!staticSupport) (
-    (if isDarwin then  ''
+    (if isDarwin then ''
       # Build dylib on Darwin
       sed -e 's,libgsm.a,libgsm.dylib,' -i Makefile
       sed -e 's,$(AR) $(ARFLAGS) $(LIBGSM) $(GSM_OBJECTS),$(LD) -o $(LIBGSM) -dynamiclib -install_name $(GSM_INSTALL_ROOT)/$(LIBGSM) $(GSM_OBJECTS) -lc,' -i Makefile
@@ -48,9 +50,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lossy speech compression codec";
-    homepage    = "http://www.quut.com/gsm/";
-    license     = licenses.bsd2;
+    homepage = "http://www.quut.com/gsm/";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ codyopel raskin ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

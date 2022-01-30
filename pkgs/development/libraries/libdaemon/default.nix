@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libdaemon";
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-lynx" ]
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    [ # Can't run this test while cross-compiling
+    [
+      # Can't run this test while cross-compiling
       "ac_cv_func_setpgrp_void=yes"
     ];
 

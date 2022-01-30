@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, flex}:
+{ lib, stdenv, fetchurl, flex }:
 
 stdenv.mkDerivation rec {
   pname = "detox";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "02cfkf3yhw64xg8mksln8w24gdwgm2x9g3vps7gn6jbjbfd8mh45";
   };
 
-  buildInputs = [flex];
+  buildInputs = [ flex ];
 
   hardeningDisable = [ "format" ];
 

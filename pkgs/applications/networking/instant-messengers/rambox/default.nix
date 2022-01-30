@@ -1,7 +1,7 @@
 { stdenv, callPackage, fetchurl, lib }:
 
 let
-  mkRambox = opts: callPackage (import ./rambox.nix opts) {};
+  mkRambox = opts: callPackage (import ./rambox.nix opts) { };
 in
 mkRambox rec {
   pname = "rambox";
@@ -22,8 +22,8 @@ mkRambox rec {
     description = "Free and Open Source messaging and emailing app that combines common web applications into one";
     homepage = "https://rambox.pro";
     license = licenses.mit;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = [ "i686-linux" "x86_64-linux" ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

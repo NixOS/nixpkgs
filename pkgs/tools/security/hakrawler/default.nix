@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Web crawler for the discovery of endpoints and assets";
     homepage = "https://github.com/hakluke/hakrawler";
-    longDescription =  ''
+    longDescription = ''
       Simple, fast web crawler designed for easy, quick discovery of endpoints
       and assets within a web application.
     '';

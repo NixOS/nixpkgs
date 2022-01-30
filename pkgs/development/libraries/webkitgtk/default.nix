@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , runCommand
 , fetchurl
 , perl
@@ -155,7 +156,7 @@ stdenv.mkDerivation rec {
     # (We pick just that one because using the other headers from `sdk` is not
     # compatible with our C++ standard library. This header is already in
     # the standard library on aarch64)
-    runCommand "${pname}_headers" {} ''
+    runCommand "${pname}_headers" { } ''
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
   ) ++ lib.optionals stdenv.isLinux [

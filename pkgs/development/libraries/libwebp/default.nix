@@ -1,11 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtool
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libtool
 , threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut ? null, libGL ? null, libGLU ? null # OpenGL (required for vwebp)
-, pngSupport ? true, libpng ? null # PNG image format
-, jpegSupport ? true, libjpeg ? null # JPEG image format
-, tiffSupport ? true, libtiff ? null # TIFF image format
-, gifSupport ? true, giflib ? null # GIF image format
-#, wicSupport ? true # Windows Imaging Component
+, openglSupport ? false
+, freeglut ? null
+, libGL ? null
+, libGLU ? null # OpenGL (required for vwebp)
+, pngSupport ? true
+, libpng ? null # PNG image format
+, jpegSupport ? true
+, libjpeg ? null # JPEG image format
+, tiffSupport ? true
+, libtiff ? null # TIFF image format
+, gifSupport ? true
+, giflib ? null # GIF image format
+  #, wicSupport ? true # Windows Imaging Component
 , alignedSupport ? false # Force aligned memory operations
 , swap16bitcspSupport ? false # Byte swap for 16bit color spaces
 , experimentalSupport ? false # Experimental code
@@ -30,10 +41,10 @@ stdenv.mkDerivation rec {
   version = "1.2.1";
 
   src = fetchFromGitHub {
-    owner  = "webmproject";
-    repo   = pname;
-    rev    = "v${version}";
-    hash   = "sha256-KrvB5d3KNmujbfekWaevz2JZrWtK3PjEG9NEzRBYIDw=";
+    owner = "webmproject";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-KrvB5d3KNmujbfekWaevz2JZrWtK3PjEG9NEzRBYIDw=";
   };
 
   prePatch = "patchShebangs .";

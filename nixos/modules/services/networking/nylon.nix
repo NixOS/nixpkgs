@@ -92,8 +92,8 @@ let
         type = with types; listOf str;
         default = [ "192.168.0.0/16" "127.0.0.1/8" "172.16.0.1/12" "10.0.0.0/8" ];
         description = ''
-           Allowed client IP ranges are evaluated first, defaults to ARIN IPv4 private ranges:
-             [ "192.168.0.0/16" "127.0.0.0/8" "172.16.0.0/12" "10.0.0.0/8" ]
+          Allowed client IP ranges are evaluated first, defaults to ARIN IPv4 private ranges:
+            [ "192.168.0.0/16" "127.0.0.0/8" "172.16.0.0/12" "10.0.0.0/8" ]
         '';
       };
 
@@ -116,12 +116,12 @@ let
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig =
-      {
-        User = "nylon";
-        Group = "nylon";
-        WorkingDirectory = homeDir;
-        ExecStart = "${pkgs.nylon}/bin/nylon -f -c ${configFile cfg}";
-      };
+        {
+          User = "nylon";
+          Group = "nylon";
+          WorkingDirectory = homeDir;
+          ExecStart = "${pkgs.nylon}/bin/nylon -f -c ${configFile cfg}";
+        };
     };
   };
 
@@ -138,7 +138,7 @@ in
   options = {
 
     services.nylon = mkOption {
-      default = {};
+      default = { };
       description = "Collection of named nylon instances";
       type = with types; attrsOf (submodule nylonOpts);
       internal = true;
@@ -148,7 +148,7 @@ in
 
   ###### implementation
 
-  config = mkIf (length(enabledNylons) > 0) {
+  config = mkIf (length (enabledNylons) > 0) {
 
     users.users.nylon = {
       group = "nylon";
@@ -160,7 +160,7 @@ in
 
     users.groups.nylon.gid = config.ids.gids.nylon;
 
-    systemd.services = foldr (a: b: a // b) {} nylonUnits;
+    systemd.services = foldr (a: b: a // b) { } nylonUnits;
 
   };
 }

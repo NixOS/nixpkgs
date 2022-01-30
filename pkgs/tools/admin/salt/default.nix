@@ -3,7 +3,7 @@
 , openssl
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
-, extraInputs ? []
+, extraInputs ? [ ]
 }:
 
 let
@@ -17,7 +17,7 @@ let
           sha256 = "CYwTxhmJE8KgaQI1+nTS5JFhdV9mtmO+rsiWUVVMx5w=";
         };
       });
-   };
+    };
   };
 in
 py.pkgs.buildPythonApplication rec {

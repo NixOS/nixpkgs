@@ -37,7 +37,8 @@ python3Packages.buildPythonApplication rec {
         ++ lib.optional (unzipSupport) unzip
         ++ lib.optional (unrarSupport) unrar
       );
-    in ''
+    in
+    ''
       wrapProgram "$out/bin/dtrx" --prefix PATH : "${archivers}"
     '';
 

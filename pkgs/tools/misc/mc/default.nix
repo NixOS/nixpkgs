@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkg-config
 , glib
@@ -18,7 +19,7 @@
 , autoreconfHook
 , autoSignDarwinBinariesHook
 
-# updater only
+  # updater only
 , writeScript
 }:
 
@@ -35,8 +36,8 @@ stdenv.mkDerivation rec {
     # The preFixup hook rewrites the binary, which invaliates the code
     # signature. Add the fixup hook to sign the output.
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ];
+    autoSignDarwinBinariesHook
+  ];
 
   buildInputs = [
     file
@@ -76,15 +77,15 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = writeScript "update-mc" ''
-   #!/usr/bin/env nix-shell
-   #!nix-shell -i bash -p curl pcre common-updater-scripts
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl pcre common-updater-scripts
 
-   set -eu -o pipefail
+    set -eu -o pipefail
 
-   # Expect the text in format of "Current version is: 4.8.27; ...".
-   new_version="$(curl -s https://midnight-commander.org/ | pcregrep -o1 'Current version is: (([0-9]+\.?)+);')"
-   update-source-version mc "$new_version"
- '';
+    # Expect the text in format of "Current version is: 4.8.27; ...".
+    new_version="$(curl -s https://midnight-commander.org/ | pcregrep -o1 'Current version is: (([0-9]+\.?)+);')"
+    update-source-version mc "$new_version"
+  '';
 
   meta = with lib; {
     description = "File Manager and User Shell for the GNU Project";

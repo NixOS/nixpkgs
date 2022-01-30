@@ -1,7 +1,18 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
-, pkg-config, openssl
-, libiconv, Security, CoreServices
-, dbBackend ? "sqlite", libmysqlclient, postgresql }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchurl
+, nixosTests
+, pkg-config
+, openssl
+, libiconv
+, Security
+, CoreServices
+, dbBackend ? "sqlite"
+, libmysqlclient
+, postgresql
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";

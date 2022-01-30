@@ -79,7 +79,7 @@ in
             Handler can be a single command.
           </para></note>
         '';
-        default = {};
+        default = { };
         example = {
           ac-power = {
             event = "ac_adapter/*";
@@ -136,11 +136,13 @@ in
 
       serviceConfig = {
         ExecStart = escapeShellArgs
-          ([ "${pkgs.acpid}/bin/acpid"
-             "--foreground"
-             "--netlink"
-             "--confdir" "${acpiConfDir}"
-           ] ++ optional cfg.logEvents "--logevents"
+          ([
+            "${pkgs.acpid}/bin/acpid"
+            "--foreground"
+            "--netlink"
+            "--confdir"
+            "${acpiConfDir}"
+          ] ++ optional cfg.logEvents "--logevents"
           );
       };
       unitConfig = {

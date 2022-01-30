@@ -1,6 +1,24 @@
-{ lib, stdenv, fetchgit, mpfr, m4, binutils, emacs, zlib, which
-, texinfo, libX11, xorgproto, libXi, gmp, readline, strace
-, libXext, libXt, libXaw, libXmu } :
+{ lib
+, stdenv
+, fetchgit
+, mpfr
+, m4
+, binutils
+, emacs
+, zlib
+, which
+, texinfo
+, libX11
+, xorgproto
+, libXi
+, gmp
+, readline
+, strace
+, libXext
+, libXt
+, libXaw
+, libXmu
+}:
 
 assert stdenv ? cc ;
 assert stdenv.cc.isGNU ;
@@ -28,13 +46,26 @@ stdenv.mkDerivation {
 
   sourceRoot = "gcl/gcl";
 
-  patches = [];
+  patches = [ ];
 
   buildInputs = [
-    mpfr m4 binutils emacs gmp
-    libX11 xorgproto libXi
-    libXext libXt libXaw libXmu
-    zlib which texinfo readline strace
+    mpfr
+    m4
+    binutils
+    emacs
+    gmp
+    libX11
+    xorgproto
+    libXi
+    libXext
+    libXt
+    libXaw
+    libXmu
+    zlib
+    which
+    texinfo
+    readline
+    strace
   ];
 
   configureFlags = [

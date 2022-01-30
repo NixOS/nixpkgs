@@ -1,46 +1,51 @@
 { enableMultiThreading ? true
-, enableG3toG4         ? false
-, enableInventor       ? false
-, enableGDML           ? false
-, enableQT             ? false
-, enableXM             ? false
-, enableOpenGLX11      ? true
-, enablePython         ? false
-, enableRaytracerX11   ? false
+, enableG3toG4 ? false
+, enableInventor ? false
+, enableGDML ? false
+, enableQT ? false
+, enableXM ? false
+, enableOpenGLX11 ? true
+, enablePython ? false
+, enableRaytracerX11 ? false
 
-# Standard build environment with cmake.
-, lib, stdenv, fetchurl, fetchpatch, cmake
+  # Standard build environment with cmake.
+, lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
 
-# Optional system packages, otherwise internal GEANT4 packages are used.
+  # Optional system packages, otherwise internal GEANT4 packages are used.
 , clhep ? null # not packaged currently
 , expat
 , zlib
 
-# For enableGDML.
+  # For enableGDML.
 , xercesc
 
-# For enableQT.
+  # For enableQT.
 , qtbase
 , wrapQtAppsHook
 
-# For enableXM.
+  # For enableXM.
 , motif
 
-# For enableInventor
+  # For enableInventor
 , coin3d
 , soxt
 , libXpm
 
-# For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
-, libGLU, libGL
+  # For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
+, libGLU
+, libGL
 , xlibsWrapper
 , libXmu
 
-# For enablePython
+  # For enablePython
 , boost
 , python3
 
-# For tests
+  # For tests
 , callPackage
 }:
 
@@ -52,7 +57,7 @@ stdenv.mkDerivation rec {
   version = "11.0.0";
   pname = "geant4";
 
-  src = fetchurl{
+  src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
     sha256 = "sha256-PMin350/8ceiGmLS6zoQvhX2uxWNOTI78yEzScnvdbk=";
   };
@@ -78,7 +83,7 @@ stdenv.mkDerivation rec {
     "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
   ];
 
-  nativeBuildInputs =  [
+  nativeBuildInputs = [
     cmake
   ] ++ lib.optionals enableQT [
     wrapQtAppsHook
@@ -106,11 +111,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     data = import ./datasets.nix {
-          inherit lib stdenv fetchurl;
-          geant_version = version;
-      };
+      inherit lib stdenv fetchurl;
+      geant_version = version;
+    };
 
-    tests = callPackage ./tests.nix {};
+    tests = callPackage ./tests.nix { };
   };
 
   # Set the myriad of envars required by Geant4 if we use a nix-shell.

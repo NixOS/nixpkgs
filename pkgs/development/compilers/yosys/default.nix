@@ -53,9 +53,10 @@ let
       paths = lib.closePropagation plugins;
       module_flags = with builtins; concatStringsSep " "
         (map (n: "--add-flags -m --add-flags ${n.plugin}") plugins);
-    in lib.appendToName "with-plugins" ( symlinkJoin {
+    in
+    lib.appendToName "with-plugins" (symlinkJoin {
       inherit (yosys) name;
-      paths = paths ++ [ yosys ] ;
+      paths = paths ++ [ yosys ];
       buildInputs = [ makeWrapper ];
       postBuild = ''
         wrapProgram $out/bin/yosys \
@@ -66,26 +67,27 @@ let
 
   allPlugins = {
     bluespec = yosys-bluespec;
-    ghdl     = yosys-ghdl;
+    ghdl = yosys-ghdl;
   } // (yosys-symbiflow);
 
 
-in stdenv.mkDerivation rec {
-  pname   = "yosys";
+in
+stdenv.mkDerivation rec {
+  pname = "yosys";
   version = "0.12+54";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
-    repo  = "yosys";
-    rev   = "59a71503448401d2476cf0872808e0a99c3a4d81";
-    hash  = "sha256-cz4PQymaA9UW91lN+6iniFhbcPRpFNIAeC8ZkwYeg0U=";
+    repo = "yosys";
+    rev = "59a71503448401d2476cf0872808e0a99c3a4d81";
+    hash = "sha256-cz4PQymaA9UW91lN+6iniFhbcPRpFNIAeC8ZkwYeg0U=";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config bison flex ];
   buildInputs = [ tcl readline libffi python3 protobuf zlib ];
 
-  makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
+  makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}" ];
 
   patches = [
     ./plugin-search-dirs.patch
@@ -100,26 +102,28 @@ in stdenv.mkDerivation rec {
     patchShebangs tests ./misc/yosys-config.in
   '';
 
-  preBuild = let
-    shortAbcRev = builtins.substring 0 7 abc-verifier.rev;
-  in ''
-    chmod -R u+w .
-    make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
-    echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
+  preBuild =
+    let
+      shortAbcRev = builtins.substring 0 7 abc-verifier.rev;
+    in
+    ''
+      chmod -R u+w .
+      make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
+      echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
 
-    # we have to do this ourselves for some reason...
-    (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
+      # we have to do this ourselves for some reason...
+      (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
 
-    if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
-      echo "ERROR: yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
-      exit 1
-    fi
+      if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
+        echo "ERROR: yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
+        exit 1
+      fi
 
-    if ! grep -q "YOSYS_VER := $version" Makefile; then
-      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${version}), failing."
-      exit 1
-    fi
-  '';
+      if ! grep -q "YOSYS_VER := $version" Makefile; then
+        echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${version}), failing."
+        exit 1
+      fi
+    '';
 
   checkTarget = "test";
   doCheck = true;
@@ -132,7 +136,7 @@ in stdenv.mkDerivation rec {
   #
   # add a symlink to fake things so that both variants work the same way. this
   # is also needed at build time for the test suite.
-  postBuild   = "ln -sfv ${abc-verifier}/bin/abc ./yosys-abc";
+  postBuild = "ln -sfv ${abc-verifier}/bin/abc ./yosys-abc";
   postInstall = "ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc";
 
   setupHook = ./setup-hook.sh;
@@ -143,9 +147,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open RTL synthesis framework and tools";
-    homepage    = "http://www.clifford.at/yosys/";
-    license     = licenses.isc;
-    platforms   = platforms.all;
+    homepage = "http://www.clifford.at/yosys/";
+    license = licenses.isc;
+    platforms = platforms.all;
     maintainers = with maintainers; [ shell thoughtpolice emily ];
   };
 }

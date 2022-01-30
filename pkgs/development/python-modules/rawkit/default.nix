@@ -1,6 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, fetchpatch
+{ lib
+, fetchPypi
+, buildPythonPackage
+, fetchpatch
 , libraw
-, pytest, mock }:
+, pytest
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "rawkit";

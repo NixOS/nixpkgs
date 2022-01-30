@@ -1,6 +1,15 @@
-{ lib, fetchurl, buildDunePackage
-, ppx_sexp_conv, base64, jsonm, re, stringext, uri-sexp
-, ocaml, fmt, alcotest
+{ lib
+, fetchurl
+, buildDunePackage
+, ppx_sexp_conv
+, base64
+, jsonm
+, re
+, stringext
+, uri-sexp
+, ocaml
+, fmt
+, alcotest
 }:
 
 buildDunePackage rec {

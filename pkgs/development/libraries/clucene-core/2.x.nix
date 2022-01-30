@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cmake, boost, zlib}:
+{ lib, stdenv, fetchurl, cmake, boost, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "clucene-core";
@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   patches = # From debian
-    [ ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch
+    [
+      ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch
       ./Fixing_ZLIB_configuration_in_shared_CMakeLists.patch
       ./Install-contribs-lib.patch
     ] ++ lib.optionals stdenv.isDarwin [ ./fix-darwin.patch ];

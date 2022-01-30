@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.rtsp-simple-server;
   package = pkgs.rtsp-simple-server;
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
 in
 {
   options = {
@@ -41,7 +41,7 @@ in
       env = mkOption {
         type = with types; attrsOf anything;
         description = "Extra environment variables for RTSP Simple Server";
-        default = {};
+        default = { };
         example = {
           RTSP_CONFKEY = "mykey";
         };

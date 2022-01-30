@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, pkg-config, ninja
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
 , libdrm
 }:
 
@@ -27,8 +31,8 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     changelog = "https://github.com/emersion/libliftoff/releases/tag/v${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };
 }

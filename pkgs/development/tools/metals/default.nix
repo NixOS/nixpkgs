@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "sha256-wYIuRTvkPqS4SE5RnkBgmLCwmNv+cYB/iPb9TYip9s0=";
+    outputHash = "sha256-wYIuRTvkPqS4SE5RnkBgmLCwmNv+cYB/iPb9TYip9s0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

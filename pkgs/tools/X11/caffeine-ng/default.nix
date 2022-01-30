@@ -1,24 +1,42 @@
-{ gdk-pixbuf, glib, gobject-introspection, gtk3, lib, libnotify,
-  procps, xset, xautolock, xscreensaver, python3Packages, wrapGAppsHook
+{ gdk-pixbuf
+, glib
+, gobject-introspection
+, gtk3
+, lib
+, libnotify
+, procps
+, xset
+, xautolock
+, xscreensaver
+, python3Packages
+, wrapGAppsHook
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "caffeine-ng";
   version = "3.5.1";
 
-  src = python3Packages.fetchPypi{
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256="0akzldqvxnqngpj1s6y2phgj7ch8wfm02j6z2drqvsbvaadw0jbm";
+    sha256 = "0akzldqvxnqngpj1s6y2phgj7ch8wfm02j6z2drqvsbvaadw0jbm";
   };
 
   nativeBuildInputs = [ wrapGAppsHook glib ];
   buildInputs = [
-    gdk-pixbuf gobject-introspection libnotify gtk3
+    gdk-pixbuf
+    gobject-introspection
+    libnotify
+    gtk3
     python3Packages.setuptools-scm
   ];
   pythonPath = with python3Packages; [
-    dbus-python docopt ewmh pygobject3 pyxdg
-    setproctitle pulsectl
+    dbus-python
+    docopt
+    ewmh
+    pygobject3
+    pyxdg
+    setproctitle
+    pulsectl
   ];
 
   doCheck = false; # There are no tests.

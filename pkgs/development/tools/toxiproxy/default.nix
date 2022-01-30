@@ -11,7 +11,7 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/Shopify/toxiproxy";
-  subPackages = ["cmd" "cli"];
+  subPackages = [ "cmd" "cli" ];
   ldflags = [ "-X github.com/Shopify/toxiproxy.Version=v${version}" ];
 
   postInstall = ''

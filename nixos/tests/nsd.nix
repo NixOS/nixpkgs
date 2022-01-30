@@ -5,7 +5,8 @@ let
     # for a host utility with IPv6 support
     environment.systemPackages = [ pkgs.bind ];
   };
-in import ./make-test-python.nix ({ pkgs, ...} : {
+in
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "nsd";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ aszlig ];
@@ -42,7 +43,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
       ];
       services.nsd.enable = true;
       services.nsd.rootServer = true;
-      services.nsd.interfaces = lib.mkForce [];
+      services.nsd.interfaces = lib.mkForce [ ];
       services.nsd.keys."tsig.example.com." = {
         algorithm = "hmac-sha256";
         keyFile = pkgs.writeTextFile { name = "tsig.example.com."; text = "aR3FJA92+bxRSyosadsJ8Aeeav5TngQW/H/EF9veXbc="; };

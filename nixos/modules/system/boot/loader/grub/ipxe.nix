@@ -25,7 +25,8 @@ let
 in
 {
   options =
-    { boot.loader.grub.ipxe = mkOption {
+    {
+      boot.loader.grub.ipxe = mkOption {
         type = types.attrsOf (types.either types.path types.str);
         description =
           ''
@@ -55,8 +56,8 @@ in
     boot.loader.grub.extraFiles =
       { "ipxe.lkrn" = "${pkgs.ipxe}/ipxe.lkrn"; }
       //
-      builtins.listToAttrs ( map
-        (name: { name = name+".ipxe"; value = scriptFile name; })
+      builtins.listToAttrs (map
+        (name: { name = name + ".ipxe"; value = scriptFile name; })
         scripts
       );
   };

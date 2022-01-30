@@ -1,6 +1,16 @@
-{ lib, buildDunePackage, fetchurl
-, bos, fpath, rresult, ptime, mirage-crypto, x509, astring, logs
-, cacert, alcotest
+{ lib
+, buildDunePackage
+, fetchurl
+, bos
+, fpath
+, rresult
+, ptime
+, mirage-crypto
+, x509
+, astring
+, logs
+, cacert
+, alcotest
 }:
 
 buildDunePackage rec {
@@ -21,7 +31,7 @@ buildDunePackage rec {
   # Assumes nss-cacert < 3.74 https://github.com/mirage/ca-certs/issues/21
   doCheck = false;
   checkInputs = [
-    cacert    # for /etc/ssl/certs/ca-bundle.crt
+    cacert # for /etc/ssl/certs/ca-bundle.crt
     alcotest
   ];
 

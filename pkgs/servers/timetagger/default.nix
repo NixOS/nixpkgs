@@ -24,8 +24,8 @@ python3Packages.buildPythonPackage rec {
 
   propagatedBuildInputs = [ tt ]
     ++ (with python3Packages; [
-      setuptools
-    ]);
+    setuptools
+  ]);
 
   format = "custom";
   installPhase = ''

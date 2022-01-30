@@ -112,28 +112,30 @@ in
       wants = [ "network-pre.target" ];
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
-      serviceConfig = let
-        rulesScript = pkgs.writeScript "nftables-rules" ''
-          #! ${pkgs.nftables}/bin/nft -f
-          flush ruleset
-          include "${cfg.rulesetFile}"
-        '';
-        checkScript = pkgs.writeScript "nftables-check" ''
-          #! ${pkgs.runtimeShell} -e
-          if $(${pkgs.kmod}/bin/lsmod | grep -q ip_tables); then
-            echo "Unload ip_tables before using nftables!" 1>&2
-            exit 1
-          else
-            ${rulesScript}
-          fi
-        '';
-      in {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = checkScript;
-        ExecReload = checkScript;
-        ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
-      };
+      serviceConfig =
+        let
+          rulesScript = pkgs.writeScript "nftables-rules" ''
+            #! ${pkgs.nftables}/bin/nft -f
+            flush ruleset
+            include "${cfg.rulesetFile}"
+          '';
+          checkScript = pkgs.writeScript "nftables-check" ''
+            #! ${pkgs.runtimeShell} -e
+            if $(${pkgs.kmod}/bin/lsmod | grep -q ip_tables); then
+              echo "Unload ip_tables before using nftables!" 1>&2
+              exit 1
+            else
+              ${rulesScript}
+            fi
+          '';
+        in
+        {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = checkScript;
+          ExecReload = checkScript;
+          ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
+        };
     };
   };
 }

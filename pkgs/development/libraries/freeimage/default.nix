@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchsvn, darwin, libtiff
-, libpng, zlib, libwebp, libraw, openexr, openjpeg
-, libjpeg, jxrlib, pkg-config
-, fixDarwinDylibNames }:
+{ lib
+, stdenv
+, fetchsvn
+, darwin
+, libtiff
+, libpng
+, zlib
+, libwebp
+, libraw
+, openexr
+, openjpeg
+, libjpeg
+, jxrlib
+, pkg-config
+, fixDarwinDylibNames
+}:
 
 stdenv.mkDerivation {
   pname = "freeimage";
@@ -64,7 +76,7 @@ stdenv.mkDerivation {
     description = "Open Source library for accessing popular graphics image file formats";
     homepage = "http://freeimage.sourceforge.net/";
     license = "GPL";
-    maintainers = with lib.maintainers; [viric l-as];
+    maintainers = with lib.maintainers; [ viric l-as ];
     platforms = with lib.platforms; unix;
   };
 }

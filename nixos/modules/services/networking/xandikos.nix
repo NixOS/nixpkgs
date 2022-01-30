@@ -43,7 +43,7 @@ in
       };
 
       extraOptions = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         example = literalExpression ''
           [ "--autocreate"
@@ -58,7 +58,7 @@ in
       };
 
       nginx = mkOption {
-        default = {};
+        default = { };
         description = ''
           Configuration for nginx reverse proxy.
         '';

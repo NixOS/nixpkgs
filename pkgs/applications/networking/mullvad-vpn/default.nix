@@ -1,44 +1,65 @@
-{ stdenv, lib, fetchurl, dpkg
-, alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
-, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, alsa-lib
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gnome2
+, pango
+, nspr
+, nss
+, gtk3
+, mesa
+, xorg
+, autoPatchelfHook
+, systemd
+, libnotify
+, libappindicator
 , makeWrapper
 }:
 
 let deps = [
-    alsa-lib
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gnome2.GConf
-    pango
-    gtk3
-    libappindicator
-    libnotify
-    mesa
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
-    xorg.libxshmfence
-    nspr
-    nss
-    systemd
-  ];
+  alsa-lib
+  atk
+  cairo
+  cups
+  dbus
+  expat
+  fontconfig
+  freetype
+  gdk-pixbuf
+  glib
+  gnome2.GConf
+  pango
+  gtk3
+  libappindicator
+  libnotify
+  mesa
+  xorg.libX11
+  xorg.libXScrnSaver
+  xorg.libXcomposite
+  xorg.libXcursor
+  xorg.libXdamage
+  xorg.libXext
+  xorg.libXfixes
+  xorg.libXi
+  xorg.libXrandr
+  xorg.libXrender
+  xorg.libXtst
+  xorg.libxcb
+  xorg.libxshmfence
+  nspr
+  nss
+  systemd
+];
 
 in
 

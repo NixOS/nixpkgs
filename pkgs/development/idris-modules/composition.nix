@@ -3,7 +3,7 @@
 , hezarfen
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "composition";
   version = "2017-11-12";
 

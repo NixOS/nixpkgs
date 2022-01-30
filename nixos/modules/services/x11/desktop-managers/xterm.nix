@@ -24,7 +24,8 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.desktopManager.session = singleton
-      { name = "xterm";
+      {
+        name = "xterm";
         start = ''
           ${pkgs.xterm}/bin/xterm -ls &
           waitPID=$!

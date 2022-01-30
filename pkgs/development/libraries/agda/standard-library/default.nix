@@ -11,7 +11,7 @@ mkDerivation rec {
     sha256 = "0khl12jvknsvjsq3l5cbp2b5qlw983qbymi1dcgfz9z0b92si3r0";
   };
 
-  nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];
+  nativeBuildInputs = [ (ghcWithPackages (self: [ self.filemanip ])) ];
   preConfigure = ''
     runhaskell GenerateEverything.hs
     # We will only build/consider Everything.agda, in particular we don't want Everything*.agda

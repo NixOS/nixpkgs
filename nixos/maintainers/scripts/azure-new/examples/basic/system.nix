@@ -29,6 +29,10 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   environment.systemPackages = with pkgs; [
-    git file htop wget curl
+    git
+    file
+    htop
+    wget
+    curl
   ];
 }

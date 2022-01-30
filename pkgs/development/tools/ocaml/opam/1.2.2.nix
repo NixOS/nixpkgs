@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchurl, makeWrapper,
-  ocaml, unzip, ncurses, curl, aspcud
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, ocaml
+, unzip
+, ncurses
+, curl
+, aspcud
 }:
 
 assert lib.versionAtLeast ocaml.version "3.12.1";
@@ -43,7 +50,8 @@ let
       sha256 = "c590ce55ae69ec74f46215cf16a156a02b23c5f3ecb22f23a3ad9ba3d91ddb6e";
     };
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "opam";
   version = "1.2.2";
 
@@ -70,7 +78,7 @@ in stdenv.mkDerivation {
   postConfigure = "make lib-ext";
 
   # Dirty, but apparently ocp-build requires a TERM
-  makeFlags = ["TERM=screen"];
+  makeFlags = [ "TERM=screen" ];
 
   # change argv0 to "opam" as a workaround for
   # https://github.com/ocaml/opam/issues/2142

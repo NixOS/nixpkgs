@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
 , gnome
 , dconf
@@ -157,9 +158,9 @@ stdenv.mkDerivation rec {
     "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
   ]
   ++ optionals (with3d)
-  [
-    "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
-  ]
+    [
+      "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+    ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
   # infinisil's workaround for #39493

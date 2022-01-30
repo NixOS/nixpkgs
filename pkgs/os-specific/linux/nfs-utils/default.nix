@@ -1,6 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, lib, pkg-config, util-linux, libcap, libtirpc, libevent
-, sqlite, libkrb5, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, python3, buildPackages, nixosTests, rpcsvc-proto
+{ stdenv
+, fetchurl
+, fetchpatch
+, lib
+, pkg-config
+, util-linux
+, libcap
+, libtirpc
+, libevent
+, sqlite
+, libkrb5
+, kmod
+, libuuid
+, keyutils
+, lvm2
+, systemd
+, coreutils
+, tcp_wrappers
+, python3
+, buildPackages
+, nixosTests
+, rpcsvc-proto
 , enablePython ? true
 }:
 
@@ -24,8 +43,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config buildPackages.stdenv.cc rpcsvc-proto ];
 
   buildInputs = [
-    libtirpc libcap libevent sqlite lvm2
-    libuuid keyutils libkrb5 tcp_wrappers
+    libtirpc
+    libcap
+    libevent
+    sqlite
+    lvm2
+    libuuid
+    keyutils
+    libkrb5
+    tcp_wrappers
   ] ++ lib.optional enablePython python3;
 
   enableParallelBuilding = true;
@@ -38,7 +64,8 @@ stdenv.mkDerivation rec {
     '';
 
   configureFlags =
-    [ "--enable-gss"
+    [
+      "--enable-gss"
       "--enable-svcgss"
       "--with-statedir=/var/lib/nfs"
       "--with-krb5=${lib.getLib libkrb5}"

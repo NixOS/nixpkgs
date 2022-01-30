@@ -1,7 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
-, gd, ncurses
+, gd
+, ncurses
 , sqlite
 , check
 }:

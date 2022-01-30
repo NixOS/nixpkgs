@@ -10,7 +10,7 @@
 , extraMeta ? { }
 , callPackage
 , self
-, packageOverrides ? (final: prev: {})
+, packageOverrides ? (final: prev: { })
 , enableFFI ? true
 , enableJIT ? true
 , enableJITDebugModule ? enableJIT
@@ -93,8 +93,8 @@ stdenv.mkDerivation rec {
     ln -s "$out"/bin/luajit-* "$out"/bin/luajit
   '';
 
-  LuaPathSearchPaths    = luaPackages.lib.luaPathList;
-  LuaCPathSearchPaths   = luaPackages.lib.luaCPathList;
+  LuaPathSearchPaths = luaPackages.lib.luaPathList;
+  LuaCPathSearchPaths = luaPackages.lib.luaCPathList;
 
   setupHook = luaPackages.lua-setup-hook luaPackages.lib.luaPathList luaPackages.lib.luaCPathList;
 

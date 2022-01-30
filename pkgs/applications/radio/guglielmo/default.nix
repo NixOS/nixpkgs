@@ -1,4 +1,8 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
 , airspy
 , librtlsdr
 , fdk_aac
@@ -9,7 +13,7 @@
 , portaudio
 , qtmultimedia
 , qwt
-} :
+}:
 
 mkDerivation rec {
   pname = "guglielmo";
@@ -50,6 +54,6 @@ mkDerivation rec {
     homepage = "https://github.com/marcogrecopriolo/guglielmo";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.markuskowa ];
-    platforms =  platforms.linux;
+    platforms = platforms.linux;
   };
 }

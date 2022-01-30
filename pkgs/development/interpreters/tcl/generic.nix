@@ -1,7 +1,12 @@
-{ lib, stdenv, callPackage, makeSetupHook
+{ lib
+, stdenv
+, callPackage
+, makeSetupHook
 
-# Version specific stuff
-, release, version, src
+  # Version specific stuff
+, release
+, version
+, src
 , ...
 }:
 
@@ -31,13 +36,15 @@ let
 
       enableParallelBuilding = true;
 
-      postInstall = let
-        dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
-      in ''
-        make install-private-headers
-        ln -s $out/bin/tclsh${release} $out/bin/tclsh
-        ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
-      '';
+      postInstall =
+        let
+          dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
+        in
+        ''
+          make install-private-headers
+          ln -s $out/bin/tclsh${release} $out/bin/tclsh
+          ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
+        '';
 
       meta = with lib; {
         description = "The Tcl scripting language";
@@ -51,17 +58,21 @@ let
         inherit release version;
         libPrefix = "tcl${release}";
         libdir = "lib/${libPrefix}";
-        tclPackageHook = callPackage ({ buildPackages }: makeSetupHook {
-          name = "tcl-package-hook";
-          deps = [ buildPackages.makeWrapper ];
-        } ./tcl-package-hook.sh) {};
+        tclPackageHook = callPackage
+          ({ buildPackages }: makeSetupHook
+            {
+              name = "tcl-package-hook";
+              deps = [ buildPackages.makeWrapper ];
+            } ./tcl-package-hook.sh)
+          { };
       };
     };
 
   mkTclDerivation = callPackage ./mk-tcl-derivation.nix { tcl = baseInterp; };
 
-in baseInterp.overrideAttrs (self: {
-     passthru = self.passthru // {
-       inherit mkTclDerivation;
-     };
+in
+baseInterp.overrideAttrs (self: {
+  passthru = self.passthru // {
+    inherit mkTclDerivation;
+  };
 })

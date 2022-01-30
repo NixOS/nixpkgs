@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsa-lib
-, mpg123, releasePath ? null }:
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, libXext
+, libXcursor
+, libXrandr
+, libjack2
+, alsa-lib
+, mpg123
+, releasePath ? null
+}:
 
 with lib;
 
@@ -18,16 +28,17 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-        if releasePath == null then
-        fetchurl {
-          urls = [
+      if releasePath == null then
+        fetchurl
+          {
+            urls = [
               "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
               "https://web.archive.org/web/https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
-          ];
-          sha256 = "0d9pnrvs93d4bwbfqxwyr3lg3k6gnzmp81m95gglzwdzczxkw38k";
-        }
-        else
-          releasePath
+            ];
+            sha256 = "0d9pnrvs93d4bwbfqxwyr3lg3k6gnzmp81m95gglzwdzczxkw38k";
+          }
+      else
+        releasePath
     else throw "Platform is not supported. Use instalation native to your platform https://www.renoise.com/";
 
   buildInputs = [ alsa-lib libjack2 libX11 libXcursor libXext libXrandr ];
@@ -80,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "Modern tracker-based DAW";
     homepage = "https://www.renoise.com/";
     license = licenses.unfree;
-    maintainers = [];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

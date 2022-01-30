@@ -1,7 +1,8 @@
-{lib, stdenv, fetchurl, unzip}:
+{ lib, stdenv, fetchurl, unzip }:
 
-let baseName = "premake";
-  version  = "3.7";
+let
+  baseName = "premake";
+  version = "3.7";
 in
 
 stdenv.mkDerivation {

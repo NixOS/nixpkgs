@@ -53,7 +53,8 @@ let
       });
     };
   };
-in with localPython.pkgs; buildPythonApplication rec {
+in
+with localPython.pkgs; buildPythonApplication rec {
   pname = "awsebcli";
   version = "3.12.4";
 
@@ -69,7 +70,13 @@ in with localPython.pkgs; buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
 
   checkInputs = [
-    pytest mock nose pathspec colorama requests docutils
+    pytest
+    mock
+    nose
+    pathspec
+    colorama
+    requests
+    docutils
   ];
 
   doCheck = false;
@@ -78,8 +85,20 @@ in with localPython.pkgs; buildPythonApplication rec {
     # FIXME: Add optional docker dependency, which requires requests >= 2.14.2.
     # Otherwise, awsebcli will try to install it using pip when using some
     # commands (like "eb local run").
-    blessed botocore cement colorama dockerpty docopt pathspec pyyaml
-    requests semantic-version setuptools tabulate termcolor websocket-client
+    blessed
+    botocore
+    cement
+    colorama
+    dockerpty
+    docopt
+    pathspec
+    pyyaml
+    requests
+    semantic-version
+    setuptools
+    tabulate
+    termcolor
+    websocket-client
   ];
 
   postInstall = ''

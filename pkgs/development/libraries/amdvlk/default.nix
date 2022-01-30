@@ -20,7 +20,8 @@ let
 
   suffix = if stdenv.system == "x86_64-linux" then "64" else "32";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "amdvlk";
   version = "2022.Q1.1";
 

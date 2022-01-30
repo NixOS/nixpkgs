@@ -43,7 +43,7 @@ in
       path = [ pkgs.wget ];
       description = "Fetch Metadata on startup";
       wantedBy = [ "multi-user.target" ];
-      before = [ "apply-ec2-data.service" "amazon-init.service"];
+      before = [ "apply-ec2-data.service" "amazon-init.service" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script = metadataFetcher;

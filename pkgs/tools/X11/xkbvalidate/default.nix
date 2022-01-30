@@ -1,6 +1,7 @@
 { lib, runCommandCC, libxkbcommon }:
 
-runCommandCC "xkbvalidate" {
+runCommandCC "xkbvalidate"
+{
   buildInputs = [ libxkbcommon ];
   meta = {
     description = "NixOS tool to validate X keyboard configuration";

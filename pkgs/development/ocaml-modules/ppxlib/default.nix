@@ -1,10 +1,16 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
-, version ?
-  if lib.versionAtLeast ocaml.version "4.07"
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, version ? if lib.versionAtLeast ocaml.version "4.07"
   then if lib.versionAtLeast ocaml.version "4.08"
   then "0.24.0" else "0.15.0" else "0.13.0"
-, ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
-, stdlib-shims, ocaml-migrate-parsetree-2
+, ocaml-compiler-libs
+, ocaml-migrate-parsetree
+, ppx_derivers
+, stdio
+, stdlib-shims
+, ocaml-migrate-parsetree-2
 }:
 
 let param = {
@@ -49,37 +55,37 @@ let param = {
 }."${version}"; in
 
 if param ? max_version && lib.versionAtLeast ocaml.version param.max_version
-|| param ? min_version && !lib.versionAtLeast ocaml.version param.min_version
+  || param ? min_version && !lib.versionAtLeast ocaml.version param.min_version
 then throw "ppxlib-${version} is not available for OCaml ${ocaml.version}"
 else
 
-buildDunePackage rec {
-  pname = "ppxlib";
-  inherit version;
+  buildDunePackage rec {
+    pname = "ppxlib";
+    inherit version;
 
-  useDune2 = param.useDune2 or true;
+    useDune2 = param.useDune2 or true;
 
-  src = fetchFromGitHub {
-    owner = "ocaml-ppx";
-    repo = pname;
-    rev = version;
-    inherit (param) sha256;
-  };
+    src = fetchFromGitHub {
+      owner = "ocaml-ppx";
+      repo = pname;
+      rev = version;
+      inherit (param) sha256;
+    };
 
-  propagatedBuildInputs = [
-    ocaml-compiler-libs
-    (if param.useOMP2 or true
-     then ocaml-migrate-parsetree-2
-     else ocaml-migrate-parsetree)
-    ppx_derivers
-    stdio
-    stdlib-shims
-  ];
+    propagatedBuildInputs = [
+      ocaml-compiler-libs
+      (if param.useOMP2 or true
+      then ocaml-migrate-parsetree-2
+      else ocaml-migrate-parsetree)
+      ppx_derivers
+      stdio
+      stdlib-shims
+    ];
 
-  meta = {
-    description = "Comprehensive ppx tool set";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
-  };
-}
+    meta = {
+      description = "Comprehensive ppx tool set";
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.vbgl ];
+      inherit (src.meta) homepage;
+    };
+  }

@@ -11,12 +11,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ elfutils libunwind ];
 
-  prePatch = let
+  prePatch =
+    let
       debian = fetchurl {
         url = "mirror://debian/pool/main/l/ltrace/ltrace_0.7.3-6.debian.tar.xz";
         sha256 = "0xc4pfd8qw53crvdxr29iwl8na53zmknca082kziwpvlzsick4kp";
       };
-    in ''
+    in
+    ''
       tar xf '${debian}'
       patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
     '';

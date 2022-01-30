@@ -1,7 +1,27 @@
-{ lib, stdenv, fetchurl, intltool, gettext, coreutils, gnused, gnome
-, gnugrep, parted, glib, libuuid, pkg-config, gtkmm3, libxml2
-, gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook, substituteAll
-, mtools, dosfstools
+{ lib
+, stdenv
+, fetchurl
+, intltool
+, gettext
+, coreutils
+, gnused
+, gnome
+, gnugrep
+, parted
+, glib
+, libuuid
+, pkg-config
+, gtkmm3
+, libxml2
+, gpart
+, hdparm
+, procps
+, util-linux
+, polkit
+, wrapGAppsHook
+, substituteAll
+, mtools
+, dosfstools
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +45,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-doc" ];
 
-  buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome.adwaita-icon-theme  ];
+  buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome.adwaita-icon-theme ];
   nativeBuildInputs = [ intltool gettext pkg-config wrapGAppsHook ];
 
   preFixup = ''

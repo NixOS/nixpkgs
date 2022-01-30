@@ -111,7 +111,7 @@ buildPythonPackage rec {
     "qiskit.optimization"
   ];
   pytestFlagsArray = [
-    "--timeout=30"  # limit test duration to 30 seconds. Some tests previously would run indefinitely
+    "--timeout=30" # limit test duration to 30 seconds. Some tests previously would run indefinitely
     "--durations=10"
   ];
   disabledTestPaths = lib.optionals (!withPyscf) [

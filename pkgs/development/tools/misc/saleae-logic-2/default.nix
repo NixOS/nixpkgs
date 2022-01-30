@@ -23,13 +23,13 @@ appimageTools.wrapType2 {
     let
       appimageContents = appimageTools.extractType2 { inherit name src; };
     in
-      ''
-        mkdir -p $out/etc/udev/rules.d
-        cp ${appimageContents}/resources/linux/99-SaleaeLogic.rules $out/etc/udev/rules.d/
-        mkdir -p $out/share/pixmaps
-        ln -s ${desktopItem}/share/applications $out/share/
-        cp ${appimageContents}/usr/share/icons/hicolor/256x256/apps/Logic.png $out/share/pixmaps/Logic.png
-      '';
+    ''
+      mkdir -p $out/etc/udev/rules.d
+      cp ${appimageContents}/resources/linux/99-SaleaeLogic.rules $out/etc/udev/rules.d/
+      mkdir -p $out/share/pixmaps
+      ln -s ${desktopItem}/share/applications $out/share/
+      cp ${appimageContents}/usr/share/icons/hicolor/256x256/apps/Logic.png $out/share/pixmaps/Logic.png
+    '';
 
   profile = ''
     export XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}''${XDG_DATA_DIRS:+:"''$XDG_DATA_DIRS"}"

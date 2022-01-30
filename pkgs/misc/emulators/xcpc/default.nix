@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libXaw, libX11, libXext
-  , libDSKSupport ? true, libdsk
-  , motifSupport ? false, lesstif
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, libXaw
+, libX11
+, libXext
+, libDSKSupport ? true
+, libdsk
+, motifSupport ? false
+, lesstif
 }:
 
 with lib;

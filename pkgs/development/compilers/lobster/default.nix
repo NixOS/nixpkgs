@@ -1,14 +1,15 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , unstableGitUpdater
 , cmake
 , callPackage
 
-# Linux deps
+  # Linux deps
 , libGL
 , xorg
 
-# Darwin deps
+  # Darwin deps
 , cf-private
 , Cocoa
 , AudioToolbox
@@ -29,7 +30,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = if stdenv.isDarwin
+  buildInputs =
+    if stdenv.isDarwin
     then [
       cf-private
       Cocoa
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
     cd dev
   '';
 
-  passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
+  passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
 
   meta = with lib; {
     homepage = "https://strlen.com/lobster/";

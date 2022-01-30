@@ -5,7 +5,7 @@
 , desktopName
 , longDescription
 , buildFHSUserEnv
-, extraBuildInputs ? []
+, extraBuildInputs ? [ ]
 , stdenv
 , lib
 , dpkg

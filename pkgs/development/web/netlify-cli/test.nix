@@ -1,10 +1,11 @@
-{
-  curl,
-  netlify-cli,
-  runCommand,
+{ curl
+, netlify-cli
+, runCommand
+,
 }:
 
-runCommand "netlify-cli-test" {
+runCommand "netlify-cli-test"
+{
   nativeBuildInputs = [
     netlify-cli
     curl

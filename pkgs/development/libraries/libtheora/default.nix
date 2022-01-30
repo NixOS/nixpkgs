@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libogg, libvorbis, pkg-config, autoreconfHook, fetchpatch }:
+{ lib, stdenv, fetchurl, libogg, libvorbis, pkg-config, autoreconfHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "libtheora";

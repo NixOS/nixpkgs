@@ -1,4 +1,12 @@
-{ lib, stdenv, buildPackages, appleDerivation, fetchzip, bsdmake, perl, flex, bison
+{ lib
+, stdenv
+, buildPackages
+, appleDerivation
+, fetchzip
+, bsdmake
+, perl
+, flex
+, bison
 }:
 
 # this derivation sucks
@@ -15,7 +23,8 @@ let recentAdvCmds = fetchzip {
   sha256 = "0z081kcprzg5jcvqivfnwvvv6wfxzkjg2jc2lagsf8c7j7vgm8nn";
 };
 
-in appleDerivation {
+in
+appleDerivation {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bsdmake perl bison flex ];
   buildInputs = [ flex ];

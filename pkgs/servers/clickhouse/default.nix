@@ -1,8 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
-, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
-, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
-, poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
-, xxHash, zstd
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libtool
+, llvm-bintools
+, ninja
+, boost
+, brotli
+, capnproto
+, cctz
+, clang-unwrapped
+, double-conversion
+, icu
+, jemalloc
+, libcpuid
+, libxml2
+, lld
+, llvm
+, lz4
+, libmysqlclient
+, openssl
+, perl
+, poco
+, protobuf
+, python3
+, rapidjson
+, re2
+, rdkafka
+, readline
+, sparsehash
+, unixODBC
+, xxHash
+, zstd
 , nixosTests
 }:
 
@@ -13,19 +42,41 @@ stdenv.mkDerivation rec {
   broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
   src = fetchFromGitHub {
-    owner  = "ClickHouse";
-    repo   = "ClickHouse";
-    rev    = "v${version}-lts";
+    owner = "ClickHouse";
+    repo = "ClickHouse";
+    rev = "v${version}-lts";
     fetchSubmodules = true;
     sha256 = "1qqacb7v7mhr9k162yll8mcbh0cxa347f5hypz0a8l54v1dz5fyl";
   };
 
   nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
   buildInputs = [
-    boost brotli capnproto cctz clang-unwrapped double-conversion
-    icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
-    poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
-    xxHash zstd
+    boost
+    brotli
+    capnproto
+    cctz
+    clang-unwrapped
+    double-conversion
+    icu
+    jemalloc
+    libxml2
+    lld
+    llvm
+    lz4
+    libmysqlclient
+    openssl
+    perl
+    poco
+    protobuf
+    python3
+    rapidjson
+    re2
+    rdkafka
+    readline
+    sparsehash
+    unixODBC
+    xxHash
+    zstd
   ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
 
   postPatch = ''

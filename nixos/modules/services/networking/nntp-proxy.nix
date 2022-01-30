@@ -186,7 +186,7 @@ in
           NNTP-Proxy user configuration
         '';
 
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "user1" = {
@@ -213,13 +213,13 @@ in
       group = "nntp-proxy";
       description = "NNTP-Proxy daemon user";
     };
-    users.groups.nntp-proxy = {};
+    users.groups.nntp-proxy = { };
 
     systemd.services.nntp-proxy = {
       description = "NNTP proxy";
       after = [ "network.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = { User="nntp-proxy"; };
+      serviceConfig = { User = "nntp-proxy"; };
       serviceConfig.ExecStart = "${nntp-proxy}/bin/nntp-proxy ${confFile}";
       preStart = ''
         if [ ! \( -f ${cfg.sslCert} -a -f ${cfg.sslKey} \) ]; then

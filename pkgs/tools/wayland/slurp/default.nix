@@ -8,7 +8,8 @@
 , libxkbcommon
 , wayland
 , wayland-protocols
-, buildDocs ? true, scdoc
+, buildDocs ? true
+, scdoc
 }:
 
 stdenv.mkDerivation rec {

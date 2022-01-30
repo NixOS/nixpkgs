@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, libX11, libXext, xorgproto, libjpeg, giflib, libtiff, libpng
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libX11
+, libXext
+, xorgproto
+, libjpeg
+, giflib
+, libtiff
+, libpng
 }:
 
 stdenv.mkDerivation rec {

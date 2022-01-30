@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "5.1.3";
   outputs = [ "out" "lib" "dev" ];
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";

@@ -1,10 +1,40 @@
-{ stdenv, lib, fetchurl, rpmextract, autoPatchelfHook, wrapGAppsHook
+{ stdenv
+, lib
+, fetchurl
+, rpmextract
+, autoPatchelfHook
+, wrapGAppsHook
 
-# Dynamic libraries
-, alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
-, gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
-, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
-, libxcb, libuuid, libxshmfence, nspr, nss, pango, mesa
+  # Dynamic libraries
+, alsa-lib
+, atk
+, at-spi2-atk
+, at-spi2-core
+, cairo
+, dbus
+, cups
+, expat
+, gdk-pixbuf
+, glib
+, gtk3
+, libX11
+, libXScrnSaver
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libXrandr
+, libXrender
+, libXtst
+, libxcb
+, libuuid
+, libxshmfence
+, nspr
+, nss
+, pango
+, mesa
 
 , systemd
 }:

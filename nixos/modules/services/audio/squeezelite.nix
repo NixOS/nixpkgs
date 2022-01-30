@@ -6,13 +6,14 @@ let
   dataDir = "/var/lib/squeezelite";
   cfg = config.services.squeezelite;
 
-in {
+in
+{
 
   ###### interface
 
   options = {
 
-    services.squeezelite= {
+    services.squeezelite = {
 
       enable = mkEnableOption "Squeezelite, a software Squeezebox emulator";
 
@@ -33,7 +34,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.services.squeezelite= {
+    systemd.services.squeezelite = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "sound.target" ];
       description = "Software Squeezebox emulator";

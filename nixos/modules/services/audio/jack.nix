@@ -12,7 +12,8 @@ let
 
   umaskNeeded = versionOlder cfg.jackd.package.version "1.9.12";
   bridgeNeeded = versionAtLeast cfg.jackd.package.version "1.9.12";
-in {
+in
+{
   options = {
     services.jack = {
       jackd = {
@@ -230,7 +231,7 @@ in {
         { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
         { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }
       ];
-      users.groups.jackaudio = {};
+      users.groups.jackaudio = { };
 
       environment = {
         systemPackages = [ cfg.jackd.package ];
@@ -248,7 +249,7 @@ in {
           User = "jackaudio";
           SupplementaryGroups = lib.optional
             (config.hardware.pulseaudio.enable
-            && !config.hardware.pulseaudio.systemWide) "users";
+              && !config.hardware.pulseaudio.systemWide) "users";
           ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
           LimitRTPRIO = 99;
           LimitMEMLOCK = "infinity";

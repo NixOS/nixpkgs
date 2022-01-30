@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, which
-, gettext, libffi, libiconv, libtasn1
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, which
+, gettext
+, libffi
+, libiconv
+, libtasn1
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jvUzOhMvbq05SxQ+kjKQHDDMzNwo4U6nFHu3JjygJHw=";
   };
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   # for cross platform builds of p11-kit, libtasn1 in nativeBuildInputs

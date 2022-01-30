@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook , qtbase}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, qtbase }:
 
 stdenv.mkDerivation rec {
   pname = "tytools";

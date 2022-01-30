@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , dpkg
 , writeScript
@@ -16,13 +17,17 @@ stdenv.mkDerivation rec {
   pname = "plexmediaserver";
 
   # Fetch the source
-  src = if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
-    hash = "sha256-Q0768UxZXSuUm26Ro2XIrw8qoQEWCU23P7EBtbiIa0c=";
-  } else fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
-    hash = "sha256-TaOvXVeo385vqtv/dYvmQQx8c1K/EMw4MTDucg511Cs=";
-  };
+  src =
+    if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl
+        {
+          url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
+          hash = "sha256-Q0768UxZXSuUm26Ro2XIrw8qoQEWCU23P7EBtbiIa0c=";
+        } else
+      fetchurl {
+        url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
+        hash = "sha256-TaOvXVeo385vqtv/dYvmQQx8c1K/EMw4MTDucg511Cs=";
+      };
 
   outputs = [ "out" "basedb" ];
 

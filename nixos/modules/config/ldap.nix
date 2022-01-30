@@ -123,13 +123,13 @@ in
         };
 
         extraConfig = mkOption {
-          default =  "";
+          default = "";
           type = types.lines;
           description = ''
             Extra configuration options that will be added verbatim at
             the end of the nslcd configuration file (<literal>nslcd.conf(5)</literal>).
-          '' ;
-        } ;
+          '';
+        };
 
         rootpwmoddn = mkOption {
           default = "";
@@ -211,7 +211,7 @@ in
           If <option>users.ldap.daemon</option> is enabled, this
           configuration will not be used. In that case, use
           <option>users.ldap.daemon.extraConfig</option> instead.
-        '' ;
+        '';
       };
 
     };
@@ -298,6 +298,7 @@ in
   };
 
   imports =
-    [ (mkRenamedOptionModule [ "users" "ldap" "bind" "password"] [ "users" "ldap" "bind" "passwordFile"])
+    [
+      (mkRenamedOptionModule [ "users" "ldap" "bind" "password" ] [ "users" "ldap" "bind" "passwordFile" ])
     ];
 }

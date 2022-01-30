@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , pkgsBuildBuild
 , fetch
 , cmake
@@ -140,9 +142,10 @@ stdenv.mkDerivation (rec {
     ] ++ optionals enableSharedLibraries [
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
-  in flagsForLlvmConfig ++ [
+  in
+  flagsForLlvmConfig ++ [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
+    "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
@@ -183,8 +186,9 @@ stdenv.mkDerivation (rec {
           "-DCMAKE_INSTALL_LIBDIR=${placeholder "lib"}/lib"
           "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "lib"}/libexec"
         ];
-      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
-      + lib.concatStringsSep ";" (lib.concatLists [
+      in
+      "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
+        + lib.concatStringsSep ";" (lib.concatLists [
         flagsForLlvmConfig
         nativeToolchainFlags
         nativeInstallFlags
@@ -250,7 +254,7 @@ stdenv.mkDerivation (rec {
     make docs-llvm-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     make -C docs install

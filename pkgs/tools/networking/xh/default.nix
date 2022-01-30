@@ -7,7 +7,8 @@
 , withNativeTls ? true
 , Security
 , libiconv
-, openssl }:
+, openssl
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";

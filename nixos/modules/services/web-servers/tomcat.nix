@@ -54,26 +54,26 @@ in
       };
 
       logDirs = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "Directories to create in baseDir/logs/";
       };
 
       extraConfigFiles = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "Extra configuration files to pull into the tomcat conf directory";
       };
 
       extraEnvironment = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "ENVIRONMENT=production" ];
         description = "Environment Variables to pass to the tomcat service";
       };
 
       extraGroups = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         example = [ "users" ];
         description = "Defines extra groups to which the tomcat user belongs.";
@@ -105,7 +105,7 @@ in
 
       sharedLibs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
       };
 
@@ -120,7 +120,7 @@ in
 
       commonLibs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
       };
 
@@ -141,7 +141,7 @@ in
             aliases = mkOption {
               type = types.listOf types.str;
               description = "aliases of the virtualhost";
-              default = [];
+              default = [ ];
             };
             webapps = mkOption {
               type = types.listOf types.path;
@@ -149,11 +149,11 @@ in
                 List containing web application WAR files and/or directories containing
                 web applications and configuration files for the virtual host.
               '';
-              default = [];
+              default = [ ];
             };
           };
         });
-        default = [];
+        default = [ ];
         description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
       };
 
@@ -179,7 +179,7 @@ in
         };
 
         services = mkOption {
-          default = [];
+          default = [ ];
           type = types.listOf types.str;
           description = "List containing AAR files or directories with AAR files which are web services to be deployed on Axis2";
         };
@@ -198,7 +198,8 @@ in
     users.groups.tomcat.gid = config.ids.gids.tomcat;
 
     users.users.tomcat =
-      { uid = config.ids.uids.tomcat;
+      {
+        uid = config.ids.uids.tomcat;
         description = "Tomcat user";
         home = "/homeless-shelter";
         extraGroups = cfg.extraGroups;
@@ -404,10 +405,10 @@ in
       serviceConfig = {
         Type = "forking";
         PermissionsStartOnly = true;
-        PIDFile="/run/tomcat/tomcat.pid";
+        PIDFile = "/run/tomcat/tomcat.pid";
         RuntimeDirectory = "tomcat";
         User = cfg.user;
-        Environment=[
+        Environment = [
           "CATALINA_BASE=${cfg.baseDir}"
           "CATALINA_PID=/run/tomcat/tomcat.pid"
           "JAVA_HOME='${cfg.jdk}'"

@@ -23,15 +23,16 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = if withApplePCSC then ''
-    substituteInPlace smartcard/scard/winscarddll.c \
-      --replace "/System/Library/Frameworks/PCSC.framework/PCSC" \
-                "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
-  '' else ''
-    substituteInPlace smartcard/scard/winscarddll.c \
-      --replace "libpcsclite.so.1" \
-                "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
-  '';
+  postPatch =
+    if withApplePCSC then ''
+      substituteInPlace smartcard/scard/winscarddll.c \
+        --replace "/System/Library/Frameworks/PCSC.framework/PCSC" \
+                  "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
+    '' else ''
+      substituteInPlace smartcard/scard/winscarddll.c \
+        --replace "libpcsclite.so.1" \
+                  "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+    '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
     "-I ${lib.getDev pcsclite}/include/PCSC";

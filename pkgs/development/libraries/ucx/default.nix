@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
-, numactl, rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, doxygen
+, numactl
+, rdma-core
+, libbfd
+, libiberty
+, perl
+, zlib
+, symlinkJoin
 , enableCuda ? false
 , cudatoolkit
 }:
@@ -11,7 +21,8 @@ let
     paths = [ cudatoolkit cudatoolkit.lib ];
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ucx";
   version = "1.12.0";
 

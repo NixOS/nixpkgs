@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "810640fa6670be41f4a712b287d9307a14ad849d966f06a17d2cf1593b66c3cd";
   };
 
-  doCheck = false;  # No tests included
+  doCheck = false; # No tests included
   pythonImportsCheck = [ "multitasking" ];
 
   meta = with lib; {

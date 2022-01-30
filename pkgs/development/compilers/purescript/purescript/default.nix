@@ -6,17 +6,18 @@
 let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 
-  patchelf = libPath :
+  patchelf = libPath:
     if stdenv.isDarwin
-      then ""
-      else
-        ''
-          chmod u+w $PURS
-          patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
-          chmod u-w $PURS
-        '';
+    then ""
+    else
+      ''
+        chmod u+w $PURS
+        patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
+        chmod u-w $PURS
+      '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "purescript";
   version = "0.14.5";
 
@@ -24,20 +25,23 @@ in stdenv.mkDerivation rec {
   src =
     if stdenv.isDarwin
     then
-    fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "1brvbpzr3cwls809fl0sjrm9cbh8v7maf5d7ic2mha0xapabgfpv";
-    }
+      fetchurl
+        {
+          url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
+          sha256 = "1brvbpzr3cwls809fl0sjrm9cbh8v7maf5d7ic2mha0xapabgfpv";
+        }
     else
-    fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "1mvxvn30iyrq0ck6g08f925gxnnhbfgl29b2gjjsmm3m9mpll7ws";
-    };
+      fetchurl {
+        url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
+        sha256 = "1mvxvn30iyrq0ck6g08f925gxnnhbfgl29b2gjjsmm3m9mpll7ws";
+      };
 
 
-  buildInputs = [ zlib
-                  gmp
-                  ncurses5 ];
+  buildInputs = [
+    zlib
+    gmp
+    ncurses5
+  ];
   libPath = lib.makeLibraryPath buildInputs;
   dontStrip = true;
 
@@ -55,7 +59,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      minimal-module = pkgs.callPackage ./test-minimal-module {};
+      minimal-module = pkgs.callPackage ./test-minimal-module { };
     };
   };
 

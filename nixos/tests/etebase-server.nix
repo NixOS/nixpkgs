@@ -1,9 +1,10 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
-let
-  dataDir = "/var/lib/foobar";
+  let
+    dataDir = "/var/lib/foobar";
 
-in {
+  in
+  {
     name = "etebase-server";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ felschr ];

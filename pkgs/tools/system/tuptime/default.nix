@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, makeWrapper, installShellFiles
-, python3, sqlite
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, installShellFiles
+, python3
+, sqlite
 , nixosTests
 }:
 

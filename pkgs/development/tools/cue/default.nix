@@ -18,7 +18,9 @@ buildGoModule rec {
   subPackages = [ "cmd/cue" ];
 
   ldflags = [
-    "-s" "-w" "-X cuelang.org/go/cmd/cue/cmd.version=${version}"
+    "-s"
+    "-w"
+    "-X cuelang.org/go/cmd/cue/cmd.version=${version}"
   ];
 
   doInstallCheck = true;
@@ -29,7 +31,7 @@ buildGoModule rec {
   meta = {
     description = "A data constraint language which aims to simplify tasks involving defining and using data";
     homepage = "https://cuelang.org/";
-    maintainers = [];
+    maintainers = [ ];
     license = lib.licenses.asl20;
   };
 }

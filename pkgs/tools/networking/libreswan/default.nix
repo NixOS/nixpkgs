@@ -35,9 +35,14 @@
 let
   # Tools needed by ipsec scripts
   binPath = lib.makeBinPath [
-    iproute2 iptables procps
-    coreutils gnused gawk
-    nss.tools which
+    iproute2
+    iptables
+    procps
+    coreutils
+    gnused
+    gawk
+    nss.tools
+    which
   ];
 in
 
@@ -63,11 +68,22 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    systemd coreutils
-    gnused gawk gmp unbound pam libevent
-    libcap_ng curl nspr nss ldns
+    systemd
+    coreutils
+    gnused
+    gawk
+    gmp
+    unbound
+    pam
+    libevent
+    libcap_ng
+    curl
+    nspr
+    nss
+    ldns
     # needed to patch shebangs
-    python3 bash
+    python3
+    bash
   ] ++ lib.optional stdenv.isLinux libselinux;
 
   prePatch = ''
@@ -137,7 +153,7 @@ stdenv.mkDerivation rec {
     homepage = "https://libreswan.org";
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
     platforms = platforms.linux ++ platforms.freebsd;
-    license = with licenses; [ gpl2Plus mpl20 ] ;
+    license = with licenses; [ gpl2Plus mpl20 ];
     maintainers = with maintainers; [ afranchuk rnhmjoj ];
   };
 }

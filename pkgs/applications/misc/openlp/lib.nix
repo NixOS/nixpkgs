@@ -1,11 +1,23 @@
 # This file contains the base package, some of which is compiled.
 # Runtime glue to optinal runtime dependencies is in 'default.nix'.
-{ fetchurl, lib, qt5
+{ fetchurl
+, lib
+, qt5
 
-# python deps
-, python, buildPythonPackage
-, alembic, beautifulsoup4, chardet, lxml, Mako, pyenchant
-, pyqt5_with_qtwebkit, pyxdg, sip_4, sqlalchemy, sqlalchemy-migrate
+  # python deps
+, python
+, buildPythonPackage
+, alembic
+, beautifulsoup4
+, chardet
+, lxml
+, Mako
+, pyenchant
+, pyqt5_with_qtwebkit
+, pyxdg
+, sip_4
+, sqlalchemy
+, sqlalchemy-migrate
 }:
 
 buildPythonPackage rec {

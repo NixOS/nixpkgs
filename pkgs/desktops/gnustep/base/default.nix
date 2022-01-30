@@ -1,15 +1,25 @@
-{ aspell, audiofile
+{ aspell
+, audiofile
 , gsmakeDerivation
 , cups
 , fetchzip
 , fetchpatch
-, gmp, gnutls
-, libffi, binutils-unwrapped
-, libjpeg, libtiff, libpng, giflib
-, libxml2, libxslt, libiconv
-, libobjc, libgcrypt
+, gmp
+, gnutls
+, libffi
+, binutils-unwrapped
+, libjpeg
+, libtiff
+, libpng
+, giflib
+, libxml2
+, libxslt
+, libiconv
+, libobjc
+, libgcrypt
 , icu
-, pkg-config, portaudio
+, pkg-config
+, portaudio
 , libiberty
 }:
 gsmakeDerivation rec {
@@ -21,13 +31,23 @@ gsmakeDerivation rec {
   };
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [
-    aspell audiofile
+    aspell
+    audiofile
     cups
-    gmp gnutls
-    libffi binutils-unwrapped
-    libjpeg libtiff libpng giflib giflib
-    libxml2 libxslt libiconv
-    libobjc libgcrypt
+    gmp
+    gnutls
+    libffi
+    binutils-unwrapped
+    libjpeg
+    libtiff
+    libpng
+    giflib
+    giflib
+    libxml2
+    libxslt
+    libiconv
+    libobjc
+    libgcrypt
     icu
     portaudio
     libiberty

@@ -4,7 +4,7 @@
 , darwin
 , openssl
 
-# major and only downstream dependency
+  # major and only downstream dependency
 , vlc
 }:
 

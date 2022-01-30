@@ -1,24 +1,52 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, wrapGAppsHook
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, makeWrapper
+, wrapGAppsHook
 
-# Buildtime dependencies.
-, check, pkg-config, xxd
+  # Buildtime dependencies.
+, check
+, pkg-config
+, xxd
 
-# Runtime dependencies.
-, curl, expat, libXcursor, libXrandr, libidn, libjpeg, libpng, libwebp, libxml2
-, openssl, perl, perlPackages
+  # Runtime dependencies.
+, curl
+, expat
+, libXcursor
+, libXrandr
+, libidn
+, libjpeg
+, libpng
+, libwebp
+, libxml2
+, openssl
+, perl
+, perlPackages
 
-# uilib-specific dependencies
+  # uilib-specific dependencies
 , gtk2 # GTK 2
 , gtk3 # GTK 3
 , SDL  # Framebuffer
 
-# Configuration
+  # Configuration
 , uilib
 
-# Netsurf-specific dependencies
-, libcss, libdom, libhubbub, libnsbmp, libnsfb, libnsgif
-, libnslog, libnspsl, libnsutils, libparserutils, libsvgtiny, libutf8proc
-, libwapcaplet, nsgenbind
+  # Netsurf-specific dependencies
+, libcss
+, libdom
+, libhubbub
+, libnsbmp
+, libnsfb
+, libnsgif
+, libnslog
+, libnspsl
+, libnsutils
+, libparserutils
+, libsvgtiny
+, libutf8proc
+, libwapcaplet
+, nsgenbind
 }:
 
 let
@@ -44,10 +72,30 @@ stdenv.mkDerivation rec {
   ;
 
   buildInputs = [
-    check curl libXcursor libXrandr libidn libjpeg libpng libwebp libxml2 openssl
+    check
+    curl
+    libXcursor
+    libXrandr
+    libidn
+    libjpeg
+    libpng
+    libwebp
+    libxml2
+    openssl
     # Netsurf-specific libraries
-    nsgenbind libnsfb libwapcaplet libparserutils libnslog libcss
-    libhubbub libdom libnsbmp libnsgif libsvgtiny libnsutils libnspsl
+    nsgenbind
+    libnsfb
+    libwapcaplet
+    libparserutils
+    libnslog
+    libcss
+    libhubbub
+    libdom
+    libnsbmp
+    libnsgif
+    libsvgtiny
+    libnsutils
+    libnspsl
     libutf8proc
   ]
   ++ optionals (uilib == "framebuffer") [ expat SDL ]

@@ -20,7 +20,7 @@ buildDunePackage rec {
 
   meta = {
     description = "ZeroMQ bindings for OCaml";
-    license     = lib.licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ akavel ];
     inherit (src.meta) homepage;
   };

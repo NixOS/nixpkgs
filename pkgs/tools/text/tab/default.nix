@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Programming language/shell calculator";
-    homepage    = "https://tkatchev.bitbucket.io/tab/";
-    license     = licenses.boost;
+    homepage = "https://tkatchev.bitbucket.io/tab/";
+    license = licenses.boost;
     maintainers = with maintainers; [ mstarzyk ];
-    platforms   = with platforms; unix;
+    platforms = with platforms; unix;
   };
 }

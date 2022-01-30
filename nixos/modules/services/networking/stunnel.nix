@@ -9,7 +9,7 @@ let
 
   verifyChainPathAssert = n: c: {
     assertion = c.verifyHostname == null || (c.verifyChain || c.verifyPeer);
-    message =  "stunnel: \"${n}\" client configuration - hostname verification " +
+    message = "stunnel: \"${n}\" client configuration - hostname verification " +
       "is not possible without either verifyChain or verifyPeer enabled";
   };
 

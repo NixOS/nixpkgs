@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "tldextract";
+  pname = "tldextract";
   version = "3.1.2";
   disabled = pythonOlder "3.6";
 

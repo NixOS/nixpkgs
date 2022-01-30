@@ -1,9 +1,20 @@
-{
-  mkDerivation, lib, fetchurl,
-  extra-cmake-modules, makeWrapper,
-  libpthreadstubs, libXdmcp,
-  qtsvg, qtx11extras, ki18n, kdelibs4support, kio, kmediaplayer, kwidgetsaddons,
-  phonon, cairo, mplayer
+{ mkDerivation
+, lib
+, fetchurl
+, extra-cmake-modules
+, makeWrapper
+, libpthreadstubs
+, libXdmcp
+, qtsvg
+, qtx11extras
+, ki18n
+, kdelibs4support
+, kio
+, kmediaplayer
+, kwidgetsaddons
+, phonon
+, cairo
+, mplayer
 }:
 
 mkDerivation rec {
@@ -30,9 +41,17 @@ mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules makeWrapper ];
 
   buildInputs = [
-    libpthreadstubs libXdmcp
-    qtsvg qtx11extras ki18n kdelibs4support kio kmediaplayer kwidgetsaddons
-    phonon cairo
+    libpthreadstubs
+    libXdmcp
+    qtsvg
+    qtx11extras
+    ki18n
+    kdelibs4support
+    kio
+    kmediaplayer
+    kwidgetsaddons
+    phonon
+    cairo
   ];
 
   postInstall = ''

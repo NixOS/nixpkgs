@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $file \
         --subst-var-by PERLBIN ${perl}/bin/perl
     done
-    '';
+  '';
 
   configureFlags = [ "--with-perl=${perl}/bin/perl" ];
 

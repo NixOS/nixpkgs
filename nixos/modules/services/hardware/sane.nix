@@ -65,7 +65,7 @@ in
 
     hardware.sane.extraBackends = mkOption {
       type = types.listOf types.path;
-      default = [];
+      default = [ ];
       description = ''
         Packages providing extra SANE backends to enable.
 
@@ -78,7 +78,7 @@ in
 
     hardware.sane.disabledDefaultBackends = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "v4l" ];
       description = ''
         Names of backends which are enabled by default but should be disabled.

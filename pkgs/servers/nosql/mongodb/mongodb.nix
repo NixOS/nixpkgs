@@ -1,27 +1,48 @@
-{ lib, stdenv, fetchurl, sconsPackages, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
-, sasl, openssl, libpcap, curl, Security, CoreFoundation, cctools }:
+{ lib
+, stdenv
+, fetchurl
+, sconsPackages
+, boost
+, gperftools
+, pcre-cpp
+, snappy
+, zlib
+, libyamlcpp
+, sasl
+, openssl
+, libpcap
+, curl
+, Security
+, CoreFoundation
+, cctools
+}:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
 
 with lib;
 
-{ version, sha256, patches ? []
+{ version
+, sha256
+, patches ? [ ]
 , license ? lib.licenses.sspl
 }@args:
 
 let
-  variants = if versionAtLeast version "4.2"
-    then rec { python = scons.python.withPackages (ps: with ps; [ pyyaml cheetah3 psutil setuptools ]);
-            scons = sconsPackages.scons_latest;
-            mozjsVersion = "60";
-            mozjsReplace = "defined(HAVE___SINCOS)";
-          }
-    else rec { python = scons.python.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
-            scons = sconsPackages.scons_3_1_2;
-            mozjsVersion = "45";
-            mozjsReplace = "defined(HAVE_SINCOS)";
-          };
+  variants =
+    if versionAtLeast version "4.2"
+    then rec {
+      python = scons.python.withPackages (ps: with ps; [ pyyaml cheetah3 psutil setuptools ]);
+      scons = sconsPackages.scons_latest;
+      mozjsVersion = "60";
+      mozjsReplace = "defined(HAVE___SINCOS)";
+    }
+    else rec {
+      python = scons.python.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+      scons = sconsPackages.scons_3_1_2;
+      mozjsVersion = "45";
+      mozjsReplace = "defined(HAVE_SINCOS)";
+    };
   system-libraries = [
     "boost"
     "pcre"
@@ -35,7 +56,8 @@ let
   ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
   inherit (lib) systems subtractLists;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit version;
   pname = "mongodb";
 

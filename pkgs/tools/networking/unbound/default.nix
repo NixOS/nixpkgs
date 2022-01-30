@@ -32,8 +32,8 @@
 , withDNSTAP ? false
 , withTFO ? false
 , withRedis ? false
-# Avoid .lib depending on openssl.out
-# The build gets a little hacky, so in some cases we disable this approach.
+  # Avoid .lib depending on openssl.out
+  # The build gets a little hacky, so in some cases we disable this approach.
 , withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
 , libnghttp2
 }:
@@ -90,11 +90,13 @@ stdenv.mkDerivation rec {
   PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
 
   # Remove references to compile-time dependencies that are included in the configure flags
-  postConfigure = let
-    inherit (builtins) storeDir;
-  in ''
-    sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
-  '';
+  postConfigure =
+    let
+      inherit (builtins) storeDir;
+    in
+    ''
+      sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
+    '';
 
   checkInputs = [ bison ];
 

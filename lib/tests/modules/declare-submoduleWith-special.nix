@@ -12,6 +12,6 @@
         foo = "foo";
       };
     };
-    default = {};
+    default = { };
   };
 }

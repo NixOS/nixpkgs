@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libfixposix";
-  version="0.4.3";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "sionescu";

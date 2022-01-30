@@ -1,4 +1,4 @@
-{stdenv, lib, fetchFromGitHub, fetchpatch, ldc, curl}:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, ldc, curl }:
 
 stdenv.mkDerivation rec {
   pname = "dtools";
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-      $makeCmd test_rdmd
-    '';
+    $makeCmd test_rdmd
+  '';
 
   installPhase = ''
-      $makeCmd INSTALL_DIR=$out install
+    $makeCmd INSTALL_DIR=$out install
   '';
 
   meta = with lib; {

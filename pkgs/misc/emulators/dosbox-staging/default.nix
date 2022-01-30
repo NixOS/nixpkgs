@@ -1,6 +1,21 @@
-{ lib, fetchFromGitHub, stdenv
-, gtest, makeWrapper, meson, ninja, pkg-config
-, alsa-lib, fluidsynth, libGL, libGLU, libogg, libpng, munt, opusfile, SDL2, SDL2_net
+{ lib
+, fetchFromGitHub
+, stdenv
+, gtest
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, alsa-lib
+, fluidsynth
+, libGL
+, libGLU
+, libogg
+, libpng
+, munt
+, opusfile
+, SDL2
+, SDL2_net
 }:
 
 stdenv.mkDerivation rec {

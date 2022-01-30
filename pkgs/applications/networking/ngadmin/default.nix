@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, readline
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, readline
 , withReadline ? true
 , enableEmu ? true
 , enableSpy ? true

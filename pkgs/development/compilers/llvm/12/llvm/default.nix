@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , pkgsBuildBuild
 , fetch
 , fetchpatch
@@ -17,9 +19,9 @@
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 , enablePFM ? !(stdenv.isDarwin
-  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-  || stdenv.isAarch32 # broken for the armv7l builder
-)
+    || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+    || stdenv.isAarch32 # broken for the armv7l builder
+  )
 , enablePolly ? false
 }:
 
@@ -30,7 +32,8 @@ let
   shortVersion = with lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
 
-in stdenv.mkDerivation (rec {
+in
+stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
@@ -161,9 +164,10 @@ in stdenv.mkDerivation (rec {
     ] ++ optionals enableSharedLibraries [
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
-  in flagsForLlvmConfig ++ [
+  in
+  flagsForLlvmConfig ++ [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
+    "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
@@ -211,8 +215,9 @@ in stdenv.mkDerivation (rec {
           "-DCMAKE_INSTALL_LIBDIR=${placeholder "lib"}/lib"
           "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "lib"}/libexec"
         ];
-      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
-      + lib.concatStringsSep ";" (lib.concatLists [
+      in
+      "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
+        + lib.concatStringsSep ";" (lib.concatLists [
         flagsForLlvmConfig
         nativeToolchainFlags
         nativeInstallFlags
@@ -277,7 +282,7 @@ in stdenv.mkDerivation (rec {
     make docs-llvm-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     make -C docs install

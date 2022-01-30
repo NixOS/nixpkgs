@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , zlib
 , expat
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "exiv2";
-    repo  = "exiv2";
+    repo = "exiv2";
     rev = "v${version}";
     sha256 = "sha256-5kdzw/YzpYldfHjUSPOzu3gW2TPgxt8Oxs0LZDFphgA=";
   };

@@ -1,7 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, numpy, nunavut
-, pyserial , pytest, ruamel-yaml}:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, numpy
+, nunavut
+, pyserial
+, pytest
+, ruamel-yaml
+}:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pyuavcan";
   version = "1.1.0.dev1";
   disabled = pythonOlder "3.7"; # only python>=3.7 is supported

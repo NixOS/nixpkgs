@@ -1,4 +1,6 @@
-{ runCommand, glibc, glibc32
+{ runCommand
+, glibc
+, glibc32
 }:
 
 let
@@ -6,7 +8,7 @@ let
   glibc64 = glibc;
 in
 runCommand "${nameVersion.name}-multi-${nameVersion.version}"
-  { outputs = [ "bin" "dev" "out"]; } # TODO: no static version here (yet)
+{ outputs = [ "bin" "dev" "out" ]; } # TODO: no static version here (yet)
   ''
     mkdir -p "$out/lib"
     ln -s '${glibc64.out}'/lib/* "$out/lib"

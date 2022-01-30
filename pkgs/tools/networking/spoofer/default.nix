@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, protobuf, openssl, libpcap, traceroute
-, withGUI ? false, qt5 }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, protobuf
+, openssl
+, libpcap
+, traceroute
+, withGUI ? false
+, qt5
+}:
 
 let inherit (lib) optional;
 in
@@ -15,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl protobuf libpcap traceroute ]
-                ++ optional withGUI qt5.qtbase ;
+    ++ optional withGUI qt5.qtbase;
 
   dontWrapQtApps = true;
 
@@ -36,6 +45,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ leenaars];
+    maintainers = with lib.maintainers; [ leenaars ];
   };
 }

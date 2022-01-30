@@ -18,7 +18,7 @@ in
 
   imports = [
     (mkRemovedOptionModule
-      ["services" "gnome3" "gnome-settings-daemon" "package"]
+      [ "services" "gnome3" "gnome-settings-daemon" "package" ]
       "")
 
     # Added 2021-05-07

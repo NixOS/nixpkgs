@@ -2,8 +2,9 @@
 
 # This derivation does not provide any Python module and should therefore be called via `all-packages.nix`.
 let
-  pythonEnv = python3.withPackages(ps: with ps; [ sphinx ]);
-in stdenv.mkDerivation rec {
+  pythonEnv = python3.withPackages (ps: with ps; [ sphinx ]);
+in
+stdenv.mkDerivation rec {
   pname = "pyside-generatorrunner";
   version = "0.6.16";
 

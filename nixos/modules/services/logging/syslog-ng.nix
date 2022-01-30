@@ -24,7 +24,8 @@ let
     "--pidfile=${pidFile}"
   ];
 
-in {
+in
+{
   imports = [
     (mkRemovedOptionModule [ "services" "syslog-ng" "serviceName" ] "")
     (mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ] "")
@@ -50,7 +51,7 @@ in {
       };
       extraModulePaths = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = literalExpression ''
           [ "''${pkgs.syslogng_incubator}/lib/syslog-ng" ]
         '';

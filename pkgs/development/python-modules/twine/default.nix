@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , importlib-metadata
 , keyring
 , pkginfo

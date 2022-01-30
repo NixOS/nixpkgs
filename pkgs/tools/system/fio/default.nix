@@ -1,15 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, libaio, python3, zlib
-, withGnuplot ? false, gnuplot ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, libaio
+, python3
+, zlib
+, withGnuplot ? false
+, gnuplot ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "fio";
   version = "3.29";
 
   src = fetchFromGitHub {
-    owner  = "axboe";
-    repo   = "fio";
-    rev    = "fio-${version}";
+    owner = "axboe";
+    repo = "fio";
+    rev = "fio-${version}";
     sha256 = "sha256-SSQFZK8oVarenp/I37QX/N4F4Es2r2bVyWw6U2OcCHw=";
   };
 

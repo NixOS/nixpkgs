@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook responses ];
 
-  JUPYTER_PATH="${nbconvert}/share/jupyter";
+  JUPYTER_PATH = "${nbconvert}/share/jupyter";
   disabledTests = [
     "test_post_to_confluence"
     "test_optional_components"

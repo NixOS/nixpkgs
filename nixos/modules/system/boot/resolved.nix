@@ -5,7 +5,7 @@ let
   cfg = config.services.resolved;
 
   dnsmasqResolve = config.services.dnsmasq.enable &&
-                   config.services.dnsmasq.resolveLocalQueries;
+    config.services.dnsmasq.resolveLocalQueries;
 
 in
 {
@@ -132,7 +132,8 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = !config.networking.useHostResolvConf;
+      {
+        assertion = !config.networking.useHostResolvConf;
         message = "Using host resolv.conf is not supported with systemd-resolved";
       }
     ];
@@ -142,7 +143,7 @@ in
     # add resolve to nss hosts database if enabled and nscd enabled
     # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
     # added with order 501 to allow modules to go before with mkBefore
-    system.nssDatabases.hosts = (mkOrder 501 ["resolve [!UNAVAIL=return]"]);
+    system.nssDatabases.hosts = (mkOrder 501 [ "resolve [!UNAVAIL=return]" ]);
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-resolved.service"

@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, alsaSupport ? !stdenv.isDarwin, alsa-lib
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
-, CoreServices, AudioUnit, AudioToolbox
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, alsaSupport ? !stdenv.isDarwin
+, alsa-lib
+, pulseSupport ? !stdenv.isDarwin
+, libpulseaudio
+, CoreServices
+, AudioUnit
+, AudioToolbox
 }:
 
 stdenv.mkDerivation rec {
@@ -31,13 +38,14 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = toString (
     lib.optional alsaSupport "-lasound"
-    ++ lib.optional pulseSupport "-lpulse");
+    ++ lib.optional pulseSupport "-lpulse"
+  );
 
   meta = with lib; {
     description = "OpenAL alternative";
     homepage = "https://kcat.strangesoft.net/openal.html";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ftrvxmtrx];
+    maintainers = with maintainers; [ ftrvxmtrx ];
     platforms = platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkg-config, glib, libxml2, gtk-doc}:
+{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, gtk-doc }:
 
 let
   pname = "gdome2";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libxml2 gtk-doc ];
-  propagatedBuildInputs = [glib libxml2];
+  propagatedBuildInputs = [ glib libxml2 ];
   patches = [
     ./xml-document.patch
     ./fno-common.patch

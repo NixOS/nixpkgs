@@ -1,8 +1,37 @@
-{ alsa-lib, at-spi2-core, cmake, curl, dbus, libepoxy, fetchFromGitHub, freeglut
-, freetype, gcc-unwrapped, gtk3, lib, libGL, libXcursor, libXdmcp, libXext
-, libXinerama, libXrandr, libXtst, libdatrie, libjack2, libpsl, libselinux
-, libsepol, libsysprof-capture, libthai, libxkbcommon, lv2, pcre, pkg-config
-, python3, sqlite, stdenv }:
+{ alsa-lib
+, at-spi2-core
+, cmake
+, curl
+, dbus
+, libepoxy
+, fetchFromGitHub
+, freeglut
+, freetype
+, gcc-unwrapped
+, gtk3
+, lib
+, libGL
+, libXcursor
+, libXdmcp
+, libXext
+, libXinerama
+, libXrandr
+, libXtst
+, libdatrie
+, libjack2
+, libpsl
+, libselinux
+, libsepol
+, libsysprof-capture
+, libthai
+, libxkbcommon
+, lv2
+, pcre
+, pkg-config
+, python3
+, sqlite
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
   pname = "CHOWTapeModel";

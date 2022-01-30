@@ -46,7 +46,8 @@ let
     fetchSubmodules = true;
     sha256 = "sha256-oHRJZItw+he5M+beVZkUrhJir6rgFZ80ORzA73mJT2A=";
   };
-in multiStdenv.mkDerivation rec {
+in
+multiStdenv.mkDerivation rec {
   pname = "yabridge";
   version = "3.8.0";
 
@@ -101,7 +102,8 @@ in multiStdenv.mkDerivation rec {
   BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
   mesonFlags = [
-    "--cross-file" "cross-wine.conf"
+    "--cross-file"
+    "cross-wine.conf"
     "-Dwith-bitbridge=true"
 
     # Requires CMake and is unnecessary

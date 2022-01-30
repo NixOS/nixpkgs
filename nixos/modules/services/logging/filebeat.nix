@@ -11,7 +11,7 @@ let
 
   cfg = config.services.filebeat;
 
-  json = pkgs.formats.json {};
+  json = pkgs.formats.json { };
 in
 {
   options = {
@@ -46,7 +46,7 @@ in
 
           See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
         '';
-        default = {};
+        default = { };
         type = types.attrsOf (types.submodule ({ name, ... }: {
           freeformType = json.type;
           options = {
@@ -96,7 +96,7 @@ in
 
           See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
         '';
-        default = {};
+        default = { };
         type = types.attrsOf (types.submodule ({ name, ... }: {
           freeformType = json.type;
           options = {
@@ -157,7 +157,7 @@ in
             filebeat = {
               inputs = mkOption {
                 type = types.listOf json.type;
-                default = [];
+                default = [ ];
                 internal = true;
                 description = ''
                   Inputs specify how Filebeat locates and processes
@@ -169,7 +169,7 @@ in
               };
               modules = mkOption {
                 type = types.listOf json.type;
-                default = [];
+                default = [ ];
                 internal = true;
                 description = ''
                   Filebeat modules provide a quick way to get started
@@ -186,7 +186,7 @@ in
             };
           };
         };
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             settings = {

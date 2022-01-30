@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromSourcehut, pythonOlder
-, cmake, cython, alure2, typing-extensions
+{ lib
+, buildPythonPackage
+, fetchFromSourcehut
+, pythonOlder
+, cmake
+, cython
+, alure2
+, typing-extensions
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , traitlets
 
-# tests
+  # tests
 , ipython
 }:
 

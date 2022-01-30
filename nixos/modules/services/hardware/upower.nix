@@ -219,7 +219,7 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    environment.etc."UPower/UPower.conf".text = generators.toINI {} {
+    environment.etc."UPower/UPower.conf".text = generators.toINI { } {
       UPower = {
         EnableWattsUpPro = cfg.enableWattsUpPro;
         NoPollBatteries = cfg.noPollBatteries;

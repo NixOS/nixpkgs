@@ -1,12 +1,12 @@
 { buildPythonPackage
-# pkgs dependencies
+  # pkgs dependencies
 , check
 , cppunit
 , pkg-config
 , subunit
 , pythonOlder
 
-# python dependencies
+  # python dependencies
 , fixtures
 , hypothesis
 , pytest

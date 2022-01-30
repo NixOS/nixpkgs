@@ -1,5 +1,9 @@
-{ buildPythonPackage, fetchPypi
-, requests, six, python-dateutil }:
+{ buildPythonPackage
+, fetchPypi
+, requests
+, six
+, python-dateutil
+}:
 
 buildPythonPackage rec {
   pname = "hypchat";

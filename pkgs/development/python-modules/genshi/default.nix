@@ -19,7 +19,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    setuptools six
+    setuptools
+    six
   ];
 
   meta = with lib; {

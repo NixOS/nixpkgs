@@ -2,7 +2,8 @@
 
 let
   cfg = config.services.hardware.xow;
-in {
+in
+{
   options.services.hardware.xow = {
     enable = lib.mkEnableOption "xow as a systemd service";
   };

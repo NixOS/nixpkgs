@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -22,9 +23,9 @@ stdenv.mkDerivation rec {
   version = "unstable-2018.08.20";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "beignet";
-    rev    = "fc5f430cb7b7a8f694d86acbb038bd5b38ec389c";
+    owner = "intel";
+    repo = "beignet";
+    rev = "fc5f430cb7b7a8f694d86acbb038bd5b38ec389c";
     sha256 = "1z64v69w7f52jrskh1jfyh1x46mzfhjrqxj9hhgzh3xxv9yla32h";
   };
 

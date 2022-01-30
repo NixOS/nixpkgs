@@ -1,8 +1,16 @@
-{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, pytestCheckHook,
-  libffi, pkg-config, pycparser
+{ lib
+, stdenv
+, buildPythonPackage
+, isPyPy
+, fetchPypi
+, pytestCheckHook
+, libffi
+, pkg-config
+, pycparser
 }:
 
-if isPyPy then null else buildPythonPackage rec {
+if isPyPy then null else
+buildPythonPackage rec {
   pname = "cffi";
   version = "1.15.0";
 

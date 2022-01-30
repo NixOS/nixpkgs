@@ -36,11 +36,16 @@ python3.pkgs.buildPythonApplication rec {
       --replace "pytest-runner" ""
   '';
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [
-    imagemagick
-    tesseract
-    xpdf
-  ])];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      imagemagick
+      tesseract
+      xpdf
+    ])
+  ];
 
   # Tests fails even when ran manually on my ubuntu machine !!
   doCheck = false;

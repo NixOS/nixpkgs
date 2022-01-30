@@ -1,7 +1,21 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
-, openssl, json_c, curl, libgcrypt
-, cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, doxygen
+, perl
+, openssl
+, json_c
+, curl
+, libgcrypt
+, cmocka
+, uthash
+, ibm-sw-tpm2
+, iproute2
+, procps
+, which
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -24,7 +38,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook autoconf-archive pkg-config doxygen perl
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+    doxygen
+    perl
   ];
 
   # cmocka is checked / used(?) in the configure script
@@ -37,7 +55,12 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
+    cmocka
+    which
+    openssl
+    procps_pkg
+    iproute2
+    ibm-sw-tpm2
   ];
 
   strictDeps = true;

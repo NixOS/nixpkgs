@@ -21,5 +21,5 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux;
     description = "A simple file server for handling XMPP http_upload requests";
- };
+  };
 }

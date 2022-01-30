@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, cmake
-, boost, eigen2, lua, luabind, libGLU, libGL, SDL }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, boost
+, eigen2
+, lua
+, luabind
+, libGLU
+, libGL
+, SDL
+}:
 
 stdenv.mkDerivation rec {
   pname = "soi";

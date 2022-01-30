@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "-C" "src"
+    "-C"
+    "src"
     "PREFIX=${placeholder "out"}"
   ];
 

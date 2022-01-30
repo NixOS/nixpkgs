@@ -22,9 +22,12 @@ let
     '';
 in
 
-{ options =
-    { services.pdnsd =
-        { enable = mkEnableOption "pdnsd";
+{
+  options =
+    {
+      services.pdnsd =
+        {
+          enable = mkEnableOption "pdnsd";
 
           cacheDir = mkOption {
             type = types.str;
@@ -73,7 +76,8 @@ in
     };
 
     systemd.services.pdnsd =
-      { wantedBy = [ "multi-user.target" ];
+      {
+        wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         preStart =
           ''

@@ -41,7 +41,7 @@ buildGoModule rec {
       Environments on Pull Requests using Jenkins, Knative Build, Prow,
       Skaffold and Helm.
     '';
-    license = licenses.asl20 ;
+    license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;
   };

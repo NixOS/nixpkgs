@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, airspy, soapysdr
-} :
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, airspy
+, soapysdr
+}:
 
 stdenv.mkDerivation rec {
   pname = "soapyairspy";

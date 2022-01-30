@@ -1,4 +1,7 @@
-{ lib, stdenv, rustPlatform, buildPackages
+{ lib
+, stdenv
+, rustPlatform
+, buildPackages
 , originalCargoToml ? null
 }:
 

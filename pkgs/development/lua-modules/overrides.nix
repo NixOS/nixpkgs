@@ -5,7 +5,7 @@ with prev;
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
-  bit32 = prev.bit32.overrideAttrs(oa: {
+  bit32 = prev.bit32.overrideAttrs (oa: {
     # Small patch in order to no longer redefine a Lua 5.2 function that Luajit
     # 2.1 also provides, see https://github.com/LuaJIT/LuaJIT/issues/325 for
     # more
@@ -14,7 +14,7 @@ with prev;
     ];
   });
 
-  busted = prev.busted.overrideAttrs(oa: {
+  busted = prev.busted.overrideAttrs (oa: {
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace "'lua_cliargs = 3.0-1'," "'lua_cliargs >= 3.0-1',"
@@ -34,27 +34,29 @@ with prev;
       { name = "OPENSSL"; dep = pkgs.openssl; }
     ];
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
-  })).overrideAttrs(oa: rec {
+  })).overrideAttrs (oa: rec {
     # Parse out a version number without the Lua version inserted
     version = with pkgs.lib; let
       version' = prev.cqueues.version;
       rel = splitVersion version';
       date = head rel;
       rev = last (splitString "-" (last rel));
-    in "${date}-${rev}";
+    in
+    "${date}-${rev}";
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
-    postConfigure = let inherit (prev.cqueues) pname; in ''
-      # 'all' target auto-detects correct Lua version, which is fine for us as
-      # we only have the right one available :)
-      sed -Ei ''${rockspecFilename} \
-        -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.3|' \
-        -e 's|build_target = "[^"]+"|build_target = "all"|' \
-        -e 's|version = "[^"]+"|version = "${version}"|'
-      specDir=$(dirname ''${rockspecFilename})
-      cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
-      rockspecFilename="$specDir/${pname}-${version}.rockspec"
-    '';
+    postConfigure = let inherit (prev.cqueues) pname; in
+      ''
+        # 'all' target auto-detects correct Lua version, which is fine for us as
+        # we only have the right one available :)
+        sed -Ei ''${rockspecFilename} \
+          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.3|' \
+          -e 's|build_target = "[^"]+"|build_target = "all"|' \
+          -e 's|version = "[^"]+"|version = "${version}"|'
+        specDir=$(dirname ''${rockspecFilename})
+        cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
+        rockspecFilename="$specDir/${pname}-${version}.rockspec"
+      '';
   });
 
   cyrussasl = prev.lib.overrideLuarocks prev.cyrussasl (drv: {
@@ -63,7 +65,7 @@ with prev;
     ];
   });
 
-  http = prev.http.overrideAttrs(oa: {
+  http = prev.http.overrideAttrs (oa: {
     patches = [
       (pkgs.fetchpatch {
         name = "invalid-state-progression.patch";
@@ -72,16 +74,16 @@ with prev;
       })
     ];
     /* TODO: separate docs derivation? (pandoc is heavy)
-    nativeBuildInputs = [ pandoc ];
-    makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
+      nativeBuildInputs = [ pandoc ];
+      makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
     */
   });
 
   ldbus = prev.lib.overrideLuarocks prev.ldbus (drv: {
     extraVariables = {
-      DBUS_DIR="${pkgs.dbus.lib}";
-      DBUS_ARCH_INCDIR="${pkgs.dbus.lib}/lib/dbus-1.0/include";
-      DBUS_INCDIR="${pkgs.dbus.dev}/include/dbus-1.0";
+      DBUS_DIR = "${pkgs.dbus.lib}";
+      DBUS_ARCH_INCDIR = "${pkgs.dbus.lib}/lib/dbus-1.0/include";
+      DBUS_INCDIR = "${pkgs.dbus.dev}/include/dbus-1.0";
     };
     buildInputs = with pkgs; [
       dbus
@@ -153,7 +155,7 @@ with prev;
     ];
   });
 
-  lua-lsp = prev.lua-lsp.overrideAttrs(oa: {
+  lua-lsp = prev.lua-lsp.overrideAttrs (oa: {
     # until Alloyed/lua-lsp#28
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
@@ -171,8 +173,8 @@ with prev;
   luadbi-mysql = prev.lib.overrideLuarocks prev.luadbi-mysql (drv: {
     extraVariables = {
       # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR="${pkgs.libmysqlclient.dev}/include/mysql";
-      MYSQL_LIBDIR="${pkgs.libmysqlclient}/lib/mysql";
+      MYSQL_INCDIR = "${pkgs.libmysqlclient.dev}/include/mysql";
+      MYSQL_LIBDIR = "${pkgs.libmysqlclient}/lib/mysql";
     };
     buildInputs = [
       pkgs.mariadb.client
@@ -216,7 +218,8 @@ with prev;
   luaffi = prev.lib.overrideLuarocks prev.luaffi (drv: {
     # The packaged .src.rock version is pretty old, and doesn't work with Lua 5.3
     src = pkgs.fetchFromGitHub {
-      owner = "facebook"; repo = "luaffifb";
+      owner = "facebook";
+      repo = "luaffifb";
       rev = "532c757e51c86f546a85730b71c9fef15ffa633d";
       sha256 = "1nwx6sh56zfq99rcs7sph0296jf6a9z72mxknn0ysw9fd7m1r8ig";
     };
@@ -262,7 +265,7 @@ with prev;
       { name = "LIBUUID"; dep = pkgs.libuuid; }
     ];
     disabled = luaOlder "5.1" || (luaAtLeast "5.4");
-  })).overrideAttrs(oa: {
+  })).overrideAttrs (oa: {
     meta = oa.meta // {
       platforms = pkgs.lib.platforms.linux;
     };
@@ -275,9 +278,10 @@ with prev;
     patches = [
       ./luuid.patch
     ];
-    postConfigure = let inherit (prev.luuid) version pname; in ''
-      sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
-    '';
+    postConfigure = let inherit (prev.luuid) version pname; in
+      ''
+        sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
+      '';
   });
 
   luv = prev.lib.overrideLuarocks prev.luv (drv: {
@@ -287,8 +291,8 @@ with prev;
     # While at it, remove bundled libuv source entirely to be sure.
     # We may wish to drop bundled lua submodules too...
     preBuild = ''
-     sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
-     rm -rf deps/libuv
+      sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
+      rm -rf deps/libuv
     '';
 
     buildInputs = [ pkgs.libuv ];
@@ -323,7 +327,7 @@ with prev;
     USE_SYSTEM_MPACK = "yes";
   });
 
-  rapidjson = prev.rapidjson.overrideAttrs(oa: {
+  rapidjson = prev.rapidjson.overrideAttrs (oa: {
     preBuild = ''
       sed -i '/set(CMAKE_CXX_FLAGS/d' CMakeLists.txt
       sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
@@ -347,14 +351,14 @@ with prev;
     '';
   });
 
-  std-_debug = prev.std-_debug.overrideAttrs(oa: {
+  std-_debug = prev.std-_debug.overrideAttrs (oa: {
     # run make to generate lib/std/_debug/version.lua
     preConfigure = ''
       make all
     '';
   });
 
-  std-normalize = prev.std-normalize.overrideAttrs(oa: {
+  std-normalize = prev.std-normalize.overrideAttrs (oa: {
     # run make to generate lib/std/_debug/version.lua
     preConfigure = ''
       make all
@@ -363,8 +367,8 @@ with prev;
 
   # TODO just while testing, remove afterwards
   # toVimPlugin should do it instead
-  gitsigns-nvim = prev.gitsigns-nvim.overrideAttrs(oa: {
-    nativeBuildInputs = oa.nativeBuildInputs or [] ++ [ pkgs.vimUtils.vimGenDocHook ];
+  gitsigns-nvim = prev.gitsigns-nvim.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [ pkgs.vimUtils.vimGenDocHook ];
   });
 
   # aliases

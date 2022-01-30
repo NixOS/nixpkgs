@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ pkg-config gettext gobject-introspection wrapGAppsHook ];
 
-  propagatedBuildInputs =  [ mate.mate-menus python3.pkgs.pygobject3 ];
+  propagatedBuildInputs = [ mate.mate-menus python3.pkgs.pygobject3 ];
 
   buildInputs = [ gtk3 glib ];
 

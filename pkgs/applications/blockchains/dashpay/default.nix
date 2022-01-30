@@ -1,10 +1,23 @@
-{ fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook
-, openssl, db48, boost, zlib, miniupnpc
-, qrencode, glib, protobuf, yasm, libevent
+{ fetchFromGitHub
+, lib
+, stdenv
+, pkg-config
+, autoreconfHook
+, openssl
+, db48
+, boost
+, zlib
+, miniupnpc
+, qrencode
+, glib
+, protobuf
+, yasm
+, libevent
 , util-linux
 , enable_Upnp ? false
 , disable_Wallet ? false
-, disable_Daemon ? false }:
+, disable_Daemon ? false
+}:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -13,21 +26,32 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dashpay";
-    repo= "dash";
+    repo = "dash";
     rev = "v${version}";
     sha256 = "sha256-DMoiUX8Q0HcBHA6ZIN58uPsTnHjEJMi8eGG2DW8z17Q=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ glib openssl db48 yasm boost zlib libevent
-                  miniupnpc protobuf qrencode util-linux ];
+  buildInputs = [
+    glib
+    openssl
+    db48
+    yasm
+    boost
+    zlib
+    libevent
+    miniupnpc
+    protobuf
+    qrencode
+    util-linux
+  ];
 
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib --with-gui=no" ]
-                    ++ optional enable_Upnp "--enable-upnp-default"
-                    ++ optional disable_Wallet "--disable-wallet"
-                    ++ optional disable_Daemon "--disable-daemon"
-                    ;
+    ++ optional enable_Upnp "--enable-upnp-default"
+    ++ optional disable_Wallet "--disable-wallet"
+    ++ optional disable_Daemon "--disable-daemon"
+  ;
 
   meta = {
     description = "A decentralized key/value registration and transfer system";

@@ -8,23 +8,25 @@ let
   cfg = top.kubelet;
 
   cniConfig =
-    if cfg.cni.config != [] && cfg.cni.configDir != null then
+    if cfg.cni.config != [ ] && cfg.cni.configDir != null then
       throw "Verbatim CNI-config and CNI configDir cannot both be set."
     else if cfg.cni.configDir != null then
       cfg.cni.configDir
     else
       (pkgs.buildEnv {
         name = "kubernetes-cni-config";
-        paths = imap (i: entry:
-          pkgs.writeTextDir "${toString (10+i)}-${entry.type}.conf" (builtins.toJSON entry)
-        ) cfg.cni.config;
+        paths = imap
+          (i: entry:
+            pkgs.writeTextDir "${toString (10+i)}-${entry.type}.conf" (builtins.toJSON entry)
+          )
+          cfg.cni.config;
       });
 
   infraContainer = pkgs.dockerTools.buildImage {
     name = "pause";
     tag = "latest";
     contents = top.package.pause;
-    config.Cmd = ["/bin/pause"];
+    config.Cmd = [ "/bin/pause" ];
   };
 
   kubeconfig = top.lib.mkKubeConfig "kubelet" cfg.kubeconfig;
@@ -46,7 +48,7 @@ let
       effect = mkOption {
         description = "Effect of taint.";
         example = "NoSchedule";
-        type = enum ["NoSchedule" "PreferNoSchedule" "NoExecute"];
+        type = enum [ "NoSchedule" "PreferNoSchedule" "NoExecute" ];
       };
     };
   };
@@ -93,13 +95,13 @@ in
       packages = mkOption {
         description = "List of network plugin packages to install.";
         type = listOf package;
-        default = [];
+        default = [ ];
       };
 
       config = mkOption {
         description = "Kubernetes CNI configuration.";
         type = listOf attrs;
-        default = [];
+        default = [ ];
         example = literalExpression ''
           [{
             "cniVersion": "0.3.1",
@@ -131,7 +133,7 @@ in
 
     containerRuntime = mkOption {
       description = "Which container runtime type to use";
-      type = enum ["docker" "remote"];
+      type = enum [ "docker" "remote" ];
       default = "remote";
     };
 
@@ -182,12 +184,12 @@ in
     manifests = mkOption {
       description = "List of manifests to bootstrap with kubelet (only pods can be created as manifest entry)";
       type = attrsOf attrs;
-      default = {};
+      default = { };
     };
 
     networkPlugin = mkOption {
       description = "Network plugin to use by Kubernetes.";
-      type = nullOr (enum ["cni" "kubenet"]);
+      type = nullOr (enum [ "cni" "kubenet" ]);
       default = "kubenet";
     };
 
@@ -211,13 +213,13 @@ in
 
     seedDockerImages = mkOption {
       description = "List of docker images to preload on system";
-      default = [];
+      default = [ ];
       type = listOf package;
     };
 
     taints = mkOption {
       description = "Node taints (https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).";
-      default = {};
+      default = { };
       type = attrsOf (submodule [ taintOptions ]);
     };
 
@@ -256,11 +258,11 @@ in
 
       environment.etc."cni/net.d".source = cniConfig;
 
-      services.kubernetes.kubelet.seedDockerImages = [infraContainer];
+      services.kubernetes.kubelet.seedDockerImages = [ infraContainer ];
 
       boot.kernel.sysctl = {
-        "net.bridge.bridge-nf-call-iptables"  = 1;
-        "net.ipv4.ip_forward"                 = 1;
+        "net.bridge.bridge-nf-call-iptables" = 1;
+        "net.ipv4.ip_forward" = 1;
         "net.bridge.bridge-nf-call-ip6tables" = 1;
       };
 
@@ -349,9 +351,9 @@ in
       };
 
       # Allways include cni plugins
-      services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins pkgs.cni-plugin-flannel];
+      services.kubernetes.kubelet.cni.packages = [ pkgs.cni-plugins pkgs.cni-plugin-flannel ];
 
-      boot.kernelModules = ["br_netfilter" "overlay"];
+      boot.kernelModules = [ "br_netfilter" "overlay" ];
 
       services.kubernetes.kubelet.hostname = with config.networking;
         mkDefault (hostName + optionalString (domain != null) ".${domain}");
@@ -376,13 +378,15 @@ in
       services.kubernetes.kubelet.kubeconfig.server = mkDefault top.apiserverAddress;
     })
 
-    (mkIf (cfg.enable && cfg.manifests != {}) {
-      environment.etc = mapAttrs' (name: manifest:
-        nameValuePair "${manifestPath}/${name}.json" {
-          text = builtins.toJSON manifest;
-          mode = "0755";
-        }
-      ) cfg.manifests;
+    (mkIf (cfg.enable && cfg.manifests != { }) {
+      environment.etc = mapAttrs'
+        (name: manifest:
+          nameValuePair "${manifestPath}/${name}.json" {
+            text = builtins.toJSON manifest;
+            mode = "0755";
+          }
+        )
+        cfg.manifests;
     })
 
     (mkIf (cfg.unschedulable && cfg.enable) {

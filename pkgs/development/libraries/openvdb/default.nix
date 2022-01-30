@@ -37,8 +37,8 @@ stdenv.mkDerivation rec
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  NIX_CFLAGS_COMPILE="-I${openexr.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR/";
-  NIX_LDFLAGS="-lboost_iostreams";
+  NIX_CFLAGS_COMPILE = "-I${openexr.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR/";
+  NIX_LDFLAGS = "-lboost_iostreams";
 
   meta = with lib; {
     description = "An open framework for voxel";

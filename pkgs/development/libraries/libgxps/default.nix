@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, gobject-introspection, cairo
-, libarchive, freetype, libjpeg, libtiff, gnome, lcms2
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, glib
+, gobject-introspection
+, cairo
+, libarchive
+, freetype
+, libjpeg
+, libtiff
+, gnome
+, lcms2
 }:
 
 stdenv.mkDerivation rec {

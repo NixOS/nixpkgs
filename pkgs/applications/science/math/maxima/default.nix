@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
     ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   ''
-   + (lib.optionalString (lisp-compiler.pname == "ecl") ''
-     cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
-   '')
+  + (lib.optionalString (lisp-compiler.pname == "ecl") ''
+    cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
+  '')
   ;
 
   patches = [
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   #
   # These failures don't look serious. It would be nice to fix them, but I
   # don't know how and probably won't have the time to find out.
-  doCheck = false;    # try to re-enable after next version update
+  doCheck = false; # try to re-enable after next version update
 
   enableParallelBuilding = true;
 

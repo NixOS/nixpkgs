@@ -1,6 +1,16 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, qtbase, qttools
-, seafile-shared, jansson, libsearpc
-, withShibboleth ? true, qtwebengine }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, pkg-config
+, cmake
+, qtbase
+, qttools
+, seafile-shared
+, jansson
+, libsearpc
+, withShibboleth ? true
+, qtwebengine
+}:
 
 mkDerivation rec {
   pname = "seafile-client";

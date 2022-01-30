@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/mednaffe \
       --prefix PATH ':' "${mednafen}/bin"
-   '';
+  '';
 
   meta = with lib; {
     description = "GTK-based frontend for mednafen emulator";

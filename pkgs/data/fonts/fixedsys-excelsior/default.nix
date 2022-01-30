@@ -1,10 +1,11 @@
-{ lib, fetchurl } :
+{ lib, fetchurl }:
 
 let
   major = "3";
   minor = "00";
   version = "${major}.${minor}";
-in fetchurl rec {
+in
+fetchurl rec {
   name = "fixedsys-excelsior-${version}";
 
   urls = [

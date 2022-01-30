@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt, writeTextFile
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, clang
+, llvmPackages_latest
+, rustfmt
+, writeTextFile
 , runtimeShell
 , bash
 }:
@@ -49,11 +55,12 @@ rustPlatform.buildRustPackage rec {
         exec "$@"
       '';
     };
-  in [
-    rustfmt
-    fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
-    clang
-  ];
+    in
+    [
+      rustfmt
+      fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
+      clang
+    ];
   preCheck = ''
     # for the ci folder, notably
     patchShebangs .

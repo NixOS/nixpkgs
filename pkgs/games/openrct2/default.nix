@@ -1,7 +1,24 @@
-{ lib, stdenv, fetchFromGitHub
-, SDL2, cmake, curl, duktape, fontconfig, freetype, icu, jansson, libGLU
-, libiconv, libpng, libpthreadstubs, libzip, nlohmann_json, openssl, pkg-config
-, speexdsp, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, cmake
+, curl
+, duktape
+, fontconfig
+, freetype
+, icu
+, jansson
+, libGLU
+, libiconv
+, libpng
+, libpthreadstubs
+, libzip
+, nlohmann_json
+, openssl
+, pkg-config
+, speexdsp
+, zlib
 }:
 
 let

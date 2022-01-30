@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication {
     EOF
   '';
 
-  doCheck = false;  # Tests are interactive.
+  doCheck = false; # Tests are interactive.
 
   meta = with lib; {
     description = "A Password Safe V3 compatible password vault";

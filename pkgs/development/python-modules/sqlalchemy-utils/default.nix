@@ -1,7 +1,23 @@
-{ lib, fetchPypi, buildPythonPackage
-, six, sqlalchemy
-, mock, pytz, isort, flake8, jinja2, pg8000, pyodbc, pytest, pymysql, python-dateutil
-, docutils, flexmock, psycopg2, pygments }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, six
+, sqlalchemy
+, mock
+, pytz
+, isort
+, flake8
+, jinja2
+, pg8000
+, pyodbc
+, pytest
+, pymysql
+, python-dateutil
+, docutils
+, flexmock
+, psycopg2
+, pygments
+}:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";

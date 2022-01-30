@@ -2,7 +2,8 @@
 { name ? "${attrs.pname}-${attrs.version}"
 , namespace
 , sourceDir ? ""
-, ... } @ attrs:
+, ...
+} @ attrs:
 toKodiAddon (stdenv.mkDerivation ({
   name = "kodi-" + name;
 

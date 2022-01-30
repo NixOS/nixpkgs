@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , dialog
 , gawk
 , wpa_supplicant
@@ -9,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "wifish";
   version = "1.1.4";
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "bougyman";
     repo = "wifish";
     rev = version;

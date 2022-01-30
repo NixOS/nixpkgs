@@ -30,8 +30,13 @@ stdenv.mkDerivation rec {
     sha256 = "Ar3BKfADjJvvP0dI9+x/l3RDs8ncx4jmO7ol4MgOr4M=";
   };
   buildInputs = [
-    llvmPackages_9.llvm clang_9 z3 stp cryptominisat
-    gperftools sqlite
+    llvmPackages_9.llvm
+    clang_9
+    z3
+    stp
+    cryptominisat
+    gperftools
+    sqlite
   ];
   nativeBuildInputs = [
     cmake
@@ -45,31 +50,32 @@ stdenv.mkDerivation rec {
     (lit.override { python3 = kleePython; })
   ];
 
-  cmakeFlags = let
-    buildType = if debug then "Debug" else "Release";
-  in
-  [
-    "-DCMAKE_BUILD_TYPE=${buildType}"
-    "-DKLEE_RUNTIME_BUILD_TYPE=${buildType}"
-    "-DENABLE_POSIX_RUNTIME=ON"
-    "-DENABLE_UNIT_TESTS=ON"
-    "-DENABLE_SYSTEM_TESTS=ON"
-    "-DGTEST_SRC_DIR=${gtest.src}"
-    "-DGTEST_INCLUDE_DIR=${gtest.src}/googletest/include"
-    "-Wno-dev"
-  ];
+  cmakeFlags =
+    let
+      buildType = if debug then "Debug" else "Release";
+    in
+    [
+      "-DCMAKE_BUILD_TYPE=${buildType}"
+      "-DKLEE_RUNTIME_BUILD_TYPE=${buildType}"
+      "-DENABLE_POSIX_RUNTIME=ON"
+      "-DENABLE_UNIT_TESTS=ON"
+      "-DENABLE_SYSTEM_TESTS=ON"
+      "-DGTEST_SRC_DIR=${gtest.src}"
+      "-DGTEST_INCLUDE_DIR=${gtest.src}/googletest/include"
+      "-Wno-dev"
+    ];
 
   # Silence various warnings during the compilation of fortified bitcode.
-  NIX_CFLAGS_COMPILE = ["-Wno-macro-redefined"];
+  NIX_CFLAGS_COMPILE = [ "-Wno-macro-redefined" ];
 
   prePatch = ''
     patchShebangs .
   '';
 
   /* This patch is currently necessary for the unit test suite to run correctly.
-   * See https://www.mail-archive.com/klee-dev@imperial.ac.uk/msg03136.html
-   * and https://github.com/klee/klee/pull/1458 for more information.
-   */
+    * See https://www.mail-archive.com/klee-dev@imperial.ac.uk/msg03136.html
+    * and https://github.com/klee/klee/pull/1458 for more information.
+  */
   patches = map fetchpatch [
     {
       name = "fix-gtest";

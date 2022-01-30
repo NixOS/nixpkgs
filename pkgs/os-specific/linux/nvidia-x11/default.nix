@@ -1,29 +1,36 @@
 { lib, callPackage, fetchpatch, fetchurl, stdenv, pkgsi686Linux }:
 
 let
-  generic = args: let
-    imported = import ./generic.nix args;
-  in if ((!lib.versionOlder args.version "391")
-    && stdenv.hostPlatform.system != "x86_64-linux") then null
-  else callPackage imported {
-    lib32 = (pkgsi686Linux.callPackage imported {
-      libsOnly = true;
-      kernel = null;
-    }).out;
-  };
+  generic = args:
+    let
+      imported = import ./generic.nix args;
+    in
+    if ((!lib.versionOlder args.version "391")
+      && stdenv.hostPlatform.system != "x86_64-linux") then null
+    else
+      callPackage imported {
+        lib32 = (pkgsi686Linux.callPackage imported {
+          libsOnly = true;
+          kernel = null;
+        }).out;
+      };
 
   kernel = callPackage # a hacky way of extracting parameters from callPackage
-    ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
+    ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel)
+    { };
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux"
-    then generic {
-      version = "495.46";
-      sha256_64bit = "2Dt30X2gxUZnqlsT1uqVpcUTBCV7Hs8vjUo7WuMcYvU=";
-      settingsSha256 = "vbcZYn+UBBGwjfrJ6SyXt3+JLBeNcXK4h8mjj7qxZPk=";
-      persistencedSha256 = "ieYqkVxe26cLw1LUgBsFSSowAyfZkTcItIzQCestCXI=";
-    }
+  stable =
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then
+      generic
+        {
+          version = "495.46";
+          sha256_64bit = "2Dt30X2gxUZnqlsT1uqVpcUTBCV7Hs8vjUo7WuMcYvU=";
+          settingsSha256 = "vbcZYn+UBBGwjfrJ6SyXt3+JLBeNcXK4h8mjj7qxZPk=";
+          persistencedSha256 = "ieYqkVxe26cLw1LUgBsFSSowAyfZkTcItIzQCestCXI=";
+        }
     else legacy_390;
 
   # see https://www.nvidia.com/en-us/drivers/unix/ "Production branch"
@@ -54,10 +61,10 @@ rec {
 
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-      version = "470.94";
-      sha256_64bit = "lYWqKTMOutm98izjyiusICbIWpoy8D18WfcUp3mFAOs=";
-      settingsSha256 = "blJNKuFu/Th/ceexkKhTH/eYk8miUlTT+ESrcIyJNn0=";
-      persistencedSha256 = "xnccQ/EgafwnReBlk5Y7iClAj4hwXyFq9gUmwqyEuwE=";
+    version = "470.94";
+    sha256_64bit = "lYWqKTMOutm98izjyiusICbIWpoy8D18WfcUp3mFAOs=";
+    settingsSha256 = "blJNKuFu/Th/ceexkKhTH/eYk8miUlTT+ESrcIyJNn0=";
+    persistencedSha256 = "xnccQ/EgafwnReBlk5Y7iClAj4hwXyFq9gUmwqyEuwE=";
   };
 
   # Last one supporting x86

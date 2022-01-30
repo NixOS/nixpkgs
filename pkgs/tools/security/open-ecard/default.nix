@@ -16,7 +16,8 @@ let
       sha256 = "0rpmyv10vjx2yfpm03mqliygcww8af2wnrnrppmsazdplksaxkhs";
     };
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "open-ecard";
   inherit version;
 

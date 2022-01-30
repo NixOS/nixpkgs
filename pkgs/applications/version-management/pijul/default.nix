@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchCrate
 , rustPlatform
 , pkg-config
@@ -27,8 +28,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl libsodium xxHash zstd ]
     ++ (lib.optionals gitImportSupport [ libgit2 ])
     ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      CoreServices Security SystemConfiguration
-    ]));
+    CoreServices
+    Security
+    SystemConfiguration
+  ]));
 
   buildFeatures = lib.optional gitImportSupport "git";
 

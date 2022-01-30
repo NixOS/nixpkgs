@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, gnome2, gnome, libgksu,
-  intltool, libstartup_notification, gtk-doc, wrapGAppsHook
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk2
+, gnome2
+, gnome
+, libgksu
+, intltool
+, libstartup_notification
+, gtk-doc
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -12,11 +22,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config intltool gtk-doc wrapGAppsHook
+    pkg-config
+    intltool
+    gtk-doc
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk2 gnome2.GConf libstartup_notification gnome.libgnome-keyring
+    gtk2
+    gnome2.GConf
+    libstartup_notification
+    gnome.libgnome-keyring
   ];
 
   propagatedBuildInputs = [

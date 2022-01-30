@@ -1,5 +1,11 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, fmt, lwt, macaddr, mirage-device
+{ lib
+, fetchurl
+, buildDunePackage
+, cstruct
+, fmt
+, lwt
+, macaddr
+, mirage-device
 }:
 
 buildDunePackage rec {

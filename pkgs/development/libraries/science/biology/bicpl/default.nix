@@ -6,9 +6,9 @@ stdenv.mkDerivation rec {
 
   # current master is significantly ahead of most recent release, so use Git version:
   src = fetchFromGitHub {
-    owner  = "BIC-MNI";
-    repo   = pname;
-    rev    = "a58af912a71a4c62014975b89ef37a8e72de3c9d";
+    owner = "BIC-MNI";
+    repo = pname;
+    rev = "a58af912a71a4c62014975b89ef37a8e72de3c9d";
     sha256 = "0iw0pmr8xrifbx5l8a0xidfqbm1v8hwzqrw0lcmimxlzdihyri0g";
   };
 
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Brain Imaging Centre programming library";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license = licenses.free;
   };
 }

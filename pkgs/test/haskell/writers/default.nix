@@ -14,7 +14,8 @@ let
     ;
 in
 
-runCommand "test-haskell-writers" {
+runCommand "test-haskell-writers"
+{
   meta = {
     inherit (tests.writers.meta) platforms;
   };

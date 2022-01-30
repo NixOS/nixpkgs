@@ -1,6 +1,6 @@
 /*
   This test runs podman as a backend for the Docker CLI.
- */
+*/
 import ../make-test-python.nix (
   { pkgs, lib, ... }:
 
@@ -34,7 +34,7 @@ import ../make-test-python.nix (
     echo extendedKeyUsage = clientAuth > extfile-client.cnf
     openssl x509 -req -days 365 -sha256 -in client-2.csr -CA ca-2.pem -CAkey ca-2-key.pem -CAcreateserial -out client-2-cert.pem -extfile extfile-client.cnf
 
-    '';
+  '';
   in
   {
     name = "podman-tls-ghostunnel";
@@ -65,7 +65,7 @@ import ../make-test-python.nix (
             isNormalUser = true;
             home = "/home/alice";
             description = "Alice Foobar";
-            extraGroups = ["podman"];
+            extraGroups = [ "podman" ];
           };
 
         };

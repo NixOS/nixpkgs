@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://graspologic.readthedocs.io";
     description = "A package for graph statistical algorithms";
-    license = licenses.asl20;  # changing to `licenses.mit` in next release
+    license = licenses.asl20; # changing to `licenses.mit` in next release
     maintainers = with maintainers; [ bcdarwin ];
   };
 }

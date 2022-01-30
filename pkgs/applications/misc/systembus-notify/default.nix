@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rfjakob/systembus-notify";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,4 +1,5 @@
-{ lib, appimageTools, fetchurl, nodePackages }: let
+{ lib, appimageTools, fetchurl, nodePackages }:
+let
   pname = "flexoptix-app";
   version = "5.11.0";
   name = "${pname}-${version}";
@@ -25,7 +26,8 @@
     '';
   });
 
-in appimageTools.wrapAppImage {
+in
+appimageTools.wrapAppImage {
   inherit name;
   src = appimageContents;
 

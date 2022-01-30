@@ -18,7 +18,7 @@ rec {
       fetchCargoTarball importCargoLock rustc;
   };
 
-  importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix {};
+  importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix { };
 
   rustcSrc = callPackage ./rust-src.nix {
     inherit stdenv rustc;

@@ -1,6 +1,10 @@
-{ lib, gccStdenv, fetchFromGitLab, cudatoolkit
+{ lib
+, gccStdenv
+, fetchFromGitLab
+, cudatoolkit
 , cudaSupport ? false
-, pkg-config }:
+, pkg-config
+}:
 
 gccStdenv.mkDerivation rec {
   pname = "truecrack";

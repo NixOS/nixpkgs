@@ -1,5 +1,14 @@
-{ lib, stdenv, buildGoPackage, trousers, dclxvi, wrapGAppsHook, pkg-config, gtk3, gtkspell3,
-  fetchgit }:
+{ lib
+, stdenv
+, buildGoPackage
+, trousers
+, dclxvi
+, wrapGAppsHook
+, pkg-config
+, gtk3
+, gtkspell3
+, fetchgit
+}:
 
 let
   gui = true; # Might be implemented with nixpkgs config.

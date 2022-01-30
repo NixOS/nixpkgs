@@ -1,16 +1,38 @@
-{ stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
+{ stdenv
+, lib
+, fetchurl
+, doxygen
+, extra-cmake-modules
+, graphviz
+, kdoctools
 , wrapQtAppsHook
 
-, akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
-, kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
-, kitemmodels, libical, libofx, qgpgme
+, akonadi
+, alkimia
+, aqbanking
+, gmp
+, gwenhywfar
+, kactivities
+, karchive
+, kcmutils
+, kcontacts
+, kdewebkit
+, kdiagram
+, kholidays
+, kidentitymanagement
+, kitemmodels
+, libical
+, libofx
+, qgpgme
 
 , sqlcipher
 
-# Needed for running tests:
-, qtbase, xvfb-run
+  # Needed for running tests:
+, qtbase
+, xvfb-run
 
-, python2, python3Packages
+, python2
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -26,14 +48,33 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python2
-    python3Packages.wrapPython wrapQtAppsHook
+    doxygen
+    extra-cmake-modules
+    graphviz
+    kdoctools
+    python2
+    python3Packages.wrapPython
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    akonadi alkimia aqbanking gmp gwenhywfar kactivities karchive kcmutils
-    kcontacts kdewebkit kdiagram kholidays kidentitymanagement kitemmodels
-    libical libofx qgpgme
+    akonadi
+    alkimia
+    aqbanking
+    gmp
+    gwenhywfar
+    kactivities
+    karchive
+    kcmutils
+    kcontacts
+    kdewebkit
+    kdiagram
+    kholidays
+    kidentitymanagement
+    kitemmodels
+    libical
+    libofx
+    qgpgme
     sqlcipher
 
     # Put it into buildInputs so that CMake can find it, even though we patch

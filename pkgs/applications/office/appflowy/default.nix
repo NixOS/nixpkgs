@@ -1,13 +1,13 @@
-{ stdenv,
-  lib,
-  fetchzip,
-  autoPatchelfHook,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  gtk3,
-  openssl,
-  xdg-user-dirs
+{ stdenv
+, lib
+, fetchzip
+, autoPatchelfHook
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, gtk3
+, openssl
+, xdg-user-dirs
 }:
 
 stdenv.mkDerivation rec {
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-      autoPatchelfHook
-      makeWrapper
-      copyDesktopItems
+    autoPatchelfHook
+    makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
-      gtk3
-      openssl
+    gtk3
+    openssl
   ];
 
   dontBuild = true;
@@ -45,15 +45,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = let
-    libPath = lib.makeLibraryPath [
-      xdg-user-dirs
-    ];
-  in ''
-    # Add missing libraries to appflowy using the ones it comes with
-    makeWrapper $out/opt/app_flowy $out/bin/appflowy \
-          --set LD_LIBRARY_PATH "$out/opt/lib/:${libPath}"
-  '';
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        xdg-user-dirs
+      ];
+    in
+    ''
+      # Add missing libraries to appflowy using the ones it comes with
+      makeWrapper $out/opt/app_flowy $out/bin/appflowy \
+            --set LD_LIBRARY_PATH "$out/opt/lib/:${libPath}"
+    '';
 
   desktopItems = [
     (makeDesktopItem {

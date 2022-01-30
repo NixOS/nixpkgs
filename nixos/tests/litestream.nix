@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "litestream";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ jwygoda ];
@@ -6,7 +6,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   machine =
     { pkgs, ... }:
-    { services.litestream = {
+    {
+      services.litestream = {
         enable = true;
         settings = {
           dbs = [
@@ -40,7 +41,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       services.openssh = {
         enable = true;
         allowSFTP = true;
-        listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+        listenAddresses = [{ addr = "127.0.0.1"; port = 22; }];
       };
       services.grafana = {
         enable = true;

@@ -20,7 +20,7 @@ buildGoModule rec {
 
   excludedPackages = "\\(sample\\|webhook\\|help\\)";
 
-  tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
+  tags = [ ] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
 
   ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/pkg/version.GitVersion=v${version}" ];
 

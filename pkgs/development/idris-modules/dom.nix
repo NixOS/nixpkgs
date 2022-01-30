@@ -5,7 +5,7 @@
 , xhr
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "dom";
   version = "2017-04-22";
 

@@ -18,7 +18,9 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-extldflags '-static'"
+    "-s"
+    "-w"
+    "-extldflags '-static'"
   ];
 
   subPackages = [ "cmd/gobgp" ];

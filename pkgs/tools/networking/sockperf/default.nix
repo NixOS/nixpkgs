@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, doxygen
 , enableTool ? false
-, enableTest ? false }:
+, enableTest ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "sockperf";

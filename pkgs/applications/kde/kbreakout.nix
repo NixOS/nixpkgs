@@ -1,4 +1,5 @@
-{ mkDerivation, lib
+{ mkDerivation
+, lib
 , extra-cmake-modules
 , cmake
 , kdbusaddons
@@ -18,9 +19,15 @@ mkDerivation {
   };
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [
-    cmake extra-cmake-modules
+    cmake
+    extra-cmake-modules
   ];
   propagatedBuildInputs = [
-    kdbusaddons ki18n kconfigwidgets kcrash kxmlgui libkdegames
+    kdbusaddons
+    ki18n
+    kconfigwidgets
+    kcrash
+    kxmlgui
+    libkdegames
   ];
 }

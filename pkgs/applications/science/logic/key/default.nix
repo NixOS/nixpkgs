@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , jdk
 , gradle_7
@@ -40,7 +41,8 @@ let
     outputHashMode = "recursive";
     outputHash = "sha256-1TWySkS8w7L6Q+V946kcLOnM4hL3fieFvLrF5BZAlh4=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src sourceRoot;
 
   nativeBuildInputs = [

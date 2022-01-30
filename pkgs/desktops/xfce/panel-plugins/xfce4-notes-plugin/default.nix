@@ -11,8 +11,9 @@
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-notes-plugin";
+in
+stdenv.mkDerivation rec {
+  pname = "xfce4-notes-plugin";
   version = "1.9.0";
 
   src = fetchurl {

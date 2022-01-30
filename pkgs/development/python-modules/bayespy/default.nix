@@ -1,6 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytest, nose, glibcLocales
-, numpy, scipy, matplotlib, h5py }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytest
+, nose
+, glibcLocales
+, numpy
+, scipy
+, matplotlib
+, h5py
+}:
 
 buildPythonPackage rec {
   pname = "bayespy";

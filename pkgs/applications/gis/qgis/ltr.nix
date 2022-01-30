@@ -1,11 +1,14 @@
-{ lib, makeWrapper, symlinkJoin
+{ lib
+, makeWrapper
+, symlinkJoin
 , extraPythonPackages ? (ps: [ ])
 , libsForQt5
 }:
 with lib;
 let
-  qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {  };
-in symlinkJoin rec {
+  qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix { };
+in
+symlinkJoin rec {
 
   inherit (qgis-ltr-unwrapped) version;
   name = "qgis-${version}";

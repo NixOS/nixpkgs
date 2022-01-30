@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "pytorch-metric-learning";
+  pname = "pytorch-metric-learning";
   version = "0.9.99";
 
   disabled = isPy27;

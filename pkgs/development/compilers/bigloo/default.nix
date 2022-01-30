@@ -1,5 +1,12 @@
-{ fetchurl, lib, stdenv, autoconf, automake, libtool, gmp
-, darwin, libunistring
+{ fetchurl
+, lib
+, stdenv
+, autoconf
+, automake
+, libtool
+, gmp
+, darwin
+, libunistring
 }:
 
 stdenv.mkDerivation rec {
@@ -31,15 +38,15 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # Fix absolute paths.
-    sed -e 's=/bin/mv=mv=g' -e 's=/bin/rm=rm=g'			\
-        -e 's=/tmp=$TMPDIR=g' -i autoconf/*		\
-        [Mm]akefile*   */[Mm]akefile*   */*/[Mm]akefile*	\
-        */*/*/[Mm]akefile*   */*/*/*/[Mm]akefile*		\
+    sed -e 's=/bin/mv=mv=g' -e 's=/bin/rm=rm=g'      \
+        -e 's=/tmp=$TMPDIR=g' -i autoconf/*    \
+        [Mm]akefile*   */[Mm]akefile*   */*/[Mm]akefile*  \
+        */*/*/[Mm]akefile*   */*/*/*/[Mm]akefile*    \
         comptime/Cc/cc.scm gc/install-*
 
     # Make sure we don't change string lengths in the generated
     # C files.
-    sed -e 's=/bin/rm=     rm=g' -e 's=/bin/mv=     mv=g'	\
+    sed -e 's=/bin/rm=     rm=g' -e 's=/bin/mv=     mv=g'  \
         -i comptime/Cc/cc.c
   '';
 
@@ -50,9 +57,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Efficient Scheme compiler";
-    homepage    = "http://www-sop.inria.fr/indes/fp/Bigloo/";
-    license     = lib.licenses.gpl2Plus;
-    platforms   = lib.platforms.unix;
+    homepage = "http://www-sop.inria.fr/indes/fp/Bigloo/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
 
     longDescription = ''

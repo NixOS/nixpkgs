@@ -6,7 +6,8 @@ with lib;
 
 let
   cfg = config.virtualisation.lxd;
-in {
+in
+{
   imports = [
     (mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
   ];
@@ -130,7 +131,7 @@ in {
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" "lxcfs.service" ];
-      requires = [ "network-online.target" "lxd.socket"  "lxcfs.service" ];
+      requires = [ "network-online.target" "lxd.socket" "lxcfs.service" ];
       documentation = [ "man:lxd(1)" ];
 
       path = optional cfg.zfsSupport config.boot.zfs.package;
@@ -158,11 +159,11 @@ in {
       };
     };
 
-    users.groups.lxd = {};
+    users.groups.lxd = { };
 
     users.users.root = {
-      subUidRanges = [ { startUid = 1000000; count = 65536; } ];
-      subGidRanges = [ { startGid = 1000000; count = 65536; } ];
+      subUidRanges = [{ startUid = 1000000; count = 65536; }];
+      subGidRanges = [{ startGid = 1000000; count = 65536; }];
     };
 
     boot.kernel.sysctl = mkIf cfg.recommendedSysctlSettings {

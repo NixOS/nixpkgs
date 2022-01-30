@@ -11,10 +11,10 @@ python3Packages.buildPythonApplication rec {
   version = "unstable-2020-05-18";
 
   src = fetchFromGitHub {
-      owner = "thann";
-      repo = "play-with-mpv";
-      rev = "656448e03fe9de9e8bd21959f2a3b47c4acb8c3e";
-      sha256 = "1qma8b3lnkdhxdjsnrq7n9zgy53q62j4naaqqs07kjxbn72zb4p4";
+    owner = "thann";
+    repo = "play-with-mpv";
+    rev = "656448e03fe9de9e8bd21959f2a3b47c4acb8c3e";
+    sha256 = "1qma8b3lnkdhxdjsnrq7n9zgy53q62j4naaqqs07kjxbn72zb4p4";
   };
 
   nativeBuildInputs = [ git ];

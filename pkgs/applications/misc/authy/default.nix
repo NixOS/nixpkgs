@@ -1,7 +1,29 @@
-{ alsa-lib, at-spi2-atk, at-spi2-core, atk, autoPatchelfHook, cairo, cups
-, dbus, electron_9, expat, fetchurl, gdk-pixbuf, glib, gtk3, lib
-, libappindicator-gtk3, libdbusmenu-gtk3, libuuid, makeWrapper
-, nspr, nss, pango, squashfsTools, stdenv, systemd, xorg
+{ alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, autoPatchelfHook
+, cairo
+, cups
+, dbus
+, electron_9
+, expat
+, fetchurl
+, gdk-pixbuf
+, glib
+, gtk3
+, lib
+, libappindicator-gtk3
+, libdbusmenu-gtk3
+, libuuid
+, makeWrapper
+, nspr
+, nss
+, pango
+, squashfsTools
+, stdenv
+, systemd
+, xorg
 }:
 
 let

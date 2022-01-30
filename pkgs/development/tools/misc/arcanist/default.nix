@@ -3,7 +3,8 @@
 , fetchFromGitHub
 , flex
 , php
-, lib, stdenv
+, lib
+, stdenv
 , installShellFiles
 }:
 

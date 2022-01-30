@@ -29,20 +29,21 @@ stdenv.mkDerivation {
     "--with-pythia=${pythia}"
   ];
 
-  postInstall = if stdenv.isDarwin then ''
-    install_name_tool -add_rpath ${pythia}/lib "$out"/bin/run-pythia
-  '' else ''
-    wrapProgram $out/bin/run-pythia \
-      --prefix LD_LIBRARY_PATH : "${pythia}/lib"
-  '';
+  postInstall =
+    if stdenv.isDarwin then ''
+      install_name_tool -add_rpath ${pythia}/lib "$out"/bin/run-pythia
+    '' else ''
+      wrapProgram $out/bin/run-pythia \
+        --prefix LD_LIBRARY_PATH : "${pythia}/lib"
+    '';
 
   enableParallelBuilding = true;
 
   meta = {
     description = "A standalone contribution to AGILe for steering Pythia 8";
-    license     = lib.licenses.gpl2;
-    homepage    = "https://agile.hepforge.org/trac/wiki/Sacrifice";
-    platforms   = lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    homepage = "https://agile.hepforge.org/trac/wiki/Sacrifice";
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

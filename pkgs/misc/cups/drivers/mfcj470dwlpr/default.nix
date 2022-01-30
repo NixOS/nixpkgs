@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/opt/brother/Printers/mfcj470dw/lpd/filtermfcj470dw \
     --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused coreutils ] }
-    '';
+  '';
 
   meta = {
     homepage = "http://www.brother.com/";

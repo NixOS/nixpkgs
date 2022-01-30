@@ -7,7 +7,8 @@
 , libtool
 , libpcap
 , json_c
-, pkg-config }:
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "ndpi";

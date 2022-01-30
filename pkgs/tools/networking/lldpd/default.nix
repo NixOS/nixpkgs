@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchurl, pkg-config, removeReferencesTo
-, libevent, readline, net-snmp, openssl
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, removeReferencesTo
+, libevent
+, readline
+, net-snmp
+, openssl
 }:
 
 stdenv.mkDerivation rec {

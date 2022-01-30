@@ -27,8 +27,10 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "cranelift" "jit" ];
   cargoBuildFlags = [
     # must target manifest and desired output bin, otherwise output is empty
-    "--manifest-path" "lib/cli/Cargo.toml"
-    "--bin" "wasmer"
+    "--manifest-path"
+    "lib/cli/Cargo.toml"
+    "--bin"
+    "wasmer"
   ];
 
   # Can't use test-jit:

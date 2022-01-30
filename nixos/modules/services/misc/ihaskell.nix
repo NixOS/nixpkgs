@@ -22,7 +22,7 @@ in
 
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = haskellPackages: [];
+        default = haskellPackages: [ ];
         defaultText = literalExpression "haskellPackages: []";
         example = literalExpression ''
           haskellPackages: [

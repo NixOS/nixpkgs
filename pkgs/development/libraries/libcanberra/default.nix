@@ -1,8 +1,21 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkg-config, libtool
-, gtk2-x11, gtk3-x11 , gtkSupport ? null
-, libpulseaudio, gst_all_1, libvorbis, libcap
-, Carbon, CoreServices
-, withAlsa ? stdenv.isLinux, alsa-lib }:
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, pkg-config
+, libtool
+, gtk2-x11
+, gtk3-x11
+, gtkSupport ? null
+, libpulseaudio
+, gst_all_1
+, libvorbis
+, libcap
+, Carbon
+, CoreServices
+, withAlsa ? stdenv.isLinux
+, alsa-lib
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcanberra";
@@ -16,14 +29,15 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libpulseaudio libvorbis
+    libpulseaudio
+    libvorbis
     libtool # in buildInputs rather than nativeBuildInputs since libltdl is used (not libtool itself)
   ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ])
-    ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
-    ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
-    ++ lib.optionals stdenv.isDarwin [Carbon CoreServices]
-    ++ lib.optional stdenv.isLinux libcap
-    ++ lib.optional withAlsa alsa-lib;
+  ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
+  ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
+  ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices ]
+  ++ lib.optional stdenv.isLinux libcap
+  ++ lib.optional withAlsa alsa-lib;
 
   configureFlags = [ "--disable-oss" ];
 

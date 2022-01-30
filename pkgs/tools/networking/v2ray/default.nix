@@ -1,5 +1,14 @@
-{ lib, fetchFromGitHub, fetchurl, symlinkJoin, buildGoModule, runCommand, makeWrapper, nixosTests
-, v2ray-geoip, v2ray-domain-list-community, assets ? [ v2ray-geoip v2ray-domain-list-community ]
+{ lib
+, fetchFromGitHub
+, fetchurl
+, symlinkJoin
+, buildGoModule
+, runCommand
+, makeWrapper
+, nixosTests
+, v2ray-geoip
+, v2ray-domain-list-community
+, assets ? [ v2ray-geoip v2ray-domain-list-community ]
 }:
 
 let
@@ -47,7 +56,9 @@ let
     };
   };
 
-in runCommand "v2ray-${version}" {
+in
+runCommand "v2ray-${version}"
+{
   inherit src version;
   inherit (core) meta;
 

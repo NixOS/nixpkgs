@@ -42,7 +42,8 @@ let
     outputHashMode = "recursive";
     outputHash = "sha256-t+CkjoZqWqphxbg/4E3/7U8nKoV0AlITyRScLN8x6yY=";
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [ gradle jdk makeWrapper ];

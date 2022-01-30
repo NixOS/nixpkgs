@@ -51,7 +51,7 @@ in
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra commandline options to pass to Restic REST server.
       '';
@@ -96,7 +96,7 @@ in
     };
 
     systemd.tmpfiles.rules = mkIf cfg.privateRepos [
-        "f ${cfg.dataDir}/.htpasswd 0700 restic restic -"
+      "f ${cfg.dataDir}/.htpasswd 0700 restic restic -"
     ];
 
     users.users.restic = {

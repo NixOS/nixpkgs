@@ -1,5 +1,13 @@
-{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, libusb1
-, libiconv, AppKit, IOKit }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchCrate
+, pkg-config
+, libusb1
+, libiconv
+, AppKit
+, IOKit
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";

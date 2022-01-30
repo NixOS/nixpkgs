@@ -67,7 +67,7 @@ in
       description = "OpenNTP daemon user";
       home = "/var/empty";
     };
-    users.groups.ntp = {};
+    users.groups.ntp = { };
 
     systemd.services.openntpd = {
       description = "OpenNTP Server";

@@ -1,6 +1,25 @@
-{ mkDerivation, lib, fetchFromGitHub, buildEnv, makeDesktopItem, runCommand, writeText, pkg-config
-, cmake, qmake, cacert, jsoncpp, libX11, libXScrnSaver, lua, openssl, poco
-, qtbase, qtwebengine, qtx11extras, sqlite }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, buildEnv
+, makeDesktopItem
+, runCommand
+, writeText
+, pkg-config
+, cmake
+, qmake
+, cacert
+, jsoncpp
+, libX11
+, libXScrnSaver
+, lua
+, openssl
+, poco
+, qtbase
+, qtwebengine
+, qtx11extras
+, sqlite
+}:
 
 let
   name = "toggldesktop-${version}";
@@ -66,7 +85,7 @@ let
     Cflags: -I${poco}/include/Poco
   '';
 
-  poco-pc-wrapped = runCommand "poco-pc-wrapped" {} ''
+  poco-pc-wrapped = runCommand "poco-pc-wrapped" { } ''
     mkdir -p $out/lib/pkgconfig && ln -s ${poco-pc} $_/poco.pc
   '';
 
@@ -128,7 +147,7 @@ let
     '';
   };
 
-  toggldesktop-wrapped = runCommand "toggldesktop-wrapped" {} ''
+  toggldesktop-wrapped = runCommand "toggldesktop-wrapped" { } ''
     mkdir -p $out/bin && ln -s ${toggldesktop}/toggldesktop $_
   '';
 

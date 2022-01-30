@@ -49,7 +49,7 @@ in
       '';
       description = ''
         Extra lines appended to the configuration of davfs2.
-      ''  ;
+      '';
     };
   };
 

@@ -1,16 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper,
-  perlPackages,
-  libminc, octave, coreutils, minc_tools }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, perlPackages
+, libminc
+, octave
+, coreutils
+, minc_tools
+}:
 
 stdenv.mkDerivation rec {
   pname = "minc-widgets";
-  name  = "${pname}-2016-04-20";
+  name = "${pname}-2016-04-20";
 
 
   src = fetchFromGitHub {
-    owner  = "BIC-MNI";
-    repo   = pname;
-    rev    = "f08b643894c81a1a2e0fbfe595a17a42ba8906db";
+    owner = "BIC-MNI";
+    repo = pname;
+    rev = "f08b643894c81a1a2e0fbfe595a17a42ba8906db";
     sha256 = "1b9g6lf37wpp211ikaji4rf74rl9xcmrlyqcw1zq3z12ji9y33bm";
   };
 

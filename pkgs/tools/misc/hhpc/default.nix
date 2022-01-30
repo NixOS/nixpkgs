@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, xorg, pkg-config}:
+{ lib, stdenv, fetchFromGitHub, xorg, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "hhpc";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ xorg.libX11 ];
 
   installPhase = ''
-      mkdir -p $out/bin
-      cp hhpc $out/bin/
+    mkdir -p $out/bin
+    cp hhpc $out/bin/
   '';
 
   meta = with lib; {

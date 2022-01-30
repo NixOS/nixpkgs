@@ -1,10 +1,12 @@
-{ buildPythonPackage, lib, fetchPypi
+{ buildPythonPackage
+, lib
+, fetchPypi
 , networkx
 , numpy
 , pint
 , pydantic
 , pytestCheckHook
-} :
+}:
 
 buildPythonPackage rec {
   pname = "qcelemental";

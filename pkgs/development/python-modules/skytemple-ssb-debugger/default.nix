@@ -1,6 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3
-, wrapGAppsHook, nest-asyncio, pycairo, py-desmume, pygtkspellcheck, setuptools
-, skytemple-files, skytemple-icons
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gobject-introspection
+, gtk3
+, gtksourceview3
+, wrapGAppsHook
+, nest-asyncio
+, pycairo
+, py-desmume
+, pygtkspellcheck
+, setuptools
+, skytemple-files
+, skytemple-icons
 }:
 
 buildPythonPackage rec {

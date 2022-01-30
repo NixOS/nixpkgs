@@ -1,10 +1,32 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, wayland-scanner
-, libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
-, libpng, ffmpeg, xcbutilrenderutil, seatd, vulkan-loader, glslang
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, libGL
+, wayland
+, wayland-protocols
+, libinput
+, libxkbcommon
+, pixman
+, xcbutilwm
+, libX11
+, libcap
+, xcbutilimage
+, xcbutilerrors
+, mesa
+, libpng
+, ffmpeg
+, xcbutilrenderutil
+, seatd
+, vulkan-loader
+, glslang
 , nixosTests
 
-, enableXWayland ? true, xwayland ? null
+, enableXWayland ? true
+, xwayland ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -27,11 +49,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner glslang ];
 
   buildInputs = [
-    libGL wayland wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg xcbutilrenderutil seatd vulkan-loader
+    libGL
+    wayland
+    wayland-protocols
+    libinput
+    libxkbcommon
+    pixman
+    xcbutilwm
+    libX11
+    libcap
+    xcbutilimage
+    xcbutilerrors
+    mesa
+    libpng
+    ffmpeg
+    xcbutilrenderutil
+    seatd
+    vulkan-loader
   ]
-    ++ lib.optional enableXWayland xwayland
+  ++ lib.optional enableXWayland xwayland
   ;
 
   mesonFlags =
@@ -61,8 +97,8 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     changelog = "https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos synthetica ];
   };
 }

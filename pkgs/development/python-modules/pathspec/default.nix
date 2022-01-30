@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "pathspec";
+  pname = "pathspec";
   version = "0.9.0";
 
   src = fetchPypi {

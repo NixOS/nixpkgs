@@ -28,8 +28,16 @@ python2Packages.buildPythonApplication rec {
     owner = "tmbdev";
   };
 
-  propagatedBuildInputs = with python2Packages; [ curl numpy scipy pillow
-    matplotlib beautifulsoup4 pygtk lxml ];
+  propagatedBuildInputs = with python2Packages; [
+    curl
+    numpy
+    scipy
+    pillow
+    matplotlib
+    beautifulsoup4
+    pygtk
+    lxml
+  ];
 
   enableParallelBuilding = true;
 
@@ -41,7 +49,7 @@ python2Packages.buildPythonApplication rec {
     substituteInPlace ocrolib/default.py --replace /usr/local $out
   '';
 
-  doCheck = false;  # fails
+  doCheck = false; # fails
   checkPhase = ''
     patchShebangs .
     substituteInPlace ./run-test \

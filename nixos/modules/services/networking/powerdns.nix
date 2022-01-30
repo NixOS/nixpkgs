@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.powerdns;
   configDir = pkgs.writeTextDir "pdns.conf" "${cfg.extraConfig}";
-in {
+in
+{
   options = {
     services.powerdns = {
       enable = mkEnableOption "PowerDNS domain name server";
@@ -41,7 +42,7 @@ in {
       description = "PowerDNS";
     };
 
-    users.groups.pdns = {};
+    users.groups.pdns = { };
 
   };
 }

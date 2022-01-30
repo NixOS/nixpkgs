@@ -1,14 +1,26 @@
 # Getdns and Stubby are released together, see https://getdnsapi.net/releases/
 
-{ lib, stdenv, fetchurl, cmake, darwin, doxygen, libidn2, libyaml, openssl
-, systemd, unbound, yq }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, darwin
+, doxygen
+, libidn2
+, libyaml
+, openssl
+, systemd
+, unbound
+, yq
+}:
 let
   metaCommon = with lib; {
     maintainers = with maintainers; [ leenaars ehmry ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };
-in rec {
+in
+rec {
 
   getdns = stdenv.mkDerivation rec {
     pname = "getdns";

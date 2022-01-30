@@ -1,7 +1,20 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, requests
-, pytestCheckHook, tzlocal, pytest-mock, pytest-freezegun, pytest-raisin
-, pytest-socket, requests-mock, pebble, python-dateutil, termcolor
-, beautifulsoup4, setuptools
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, pytestCheckHook
+, tzlocal
+, pytest-mock
+, pytest-freezegun
+, pytest-raisin
+, pytest-socket
+, requests-mock
+, pebble
+, python-dateutil
+, termcolor
+, beautifulsoup4
+, setuptools
 }:
 
 buildPythonPackage rec {

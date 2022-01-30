@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitLab
-, sedlex_2, uunf, uutf
+{ lib
+, buildDunePackage
+, fetchFromGitLab
+, sedlex_2
+, uunf
+, uutf
 }:
 
 buildDunePackage rec {

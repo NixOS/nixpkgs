@@ -1,9 +1,16 @@
 let version = "2.9.7"; in
-{ stdenv, lib, buildPackages, fetchurl, zlib, gettext
-, wordlists ? [ (fetchurl {
-  url = "https://github.com/cracklib/cracklib/releases/download/v${version}/cracklib-words-${version}.gz";
-  sha256 = "12fk8w06q628v754l357cf8kfjna98wj09qybpqr892az3x4a33z";
-}) ]
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
+, zlib
+, gettext
+, wordlists ? [
+    (fetchurl {
+      url = "https://github.com/cracklib/cracklib/releases/download/v${version}/cracklib-words-${version}.gz";
+      sha256 = "12fk8w06q628v754l357cf8kfjna98wj09qybpqr892az3x4a33z";
+    })
+  ]
 }:
 
 stdenv.mkDerivation rec {
@@ -33,10 +40,10 @@ stdenv.mkDerivation rec {
   installCheckTarget = "test";
 
   meta = with lib; {
-    homepage    = "https://github.com/cracklib/cracklib";
+    homepage = "https://github.com/cracklib/cracklib";
     description = "A library for checking the strength of passwords";
     license = licenses.lgpl21; # Different license for the wordlist: http://www.openwall.com/wordlists
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -5,7 +5,8 @@ with lib;
 let
   name = "opensnitch";
   cfg = config.services.opensnitch;
-in {
+in
+{
   options = {
     services.opensnitch = {
       enable = mkEnableOption "Opensnitch application firewall";

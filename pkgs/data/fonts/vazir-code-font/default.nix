@@ -3,7 +3,8 @@
 let
   pname = "vazir-code-font";
   version = "1.1.2";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
 
   owner = "rastikerdar";

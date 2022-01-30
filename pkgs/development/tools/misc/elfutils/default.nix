@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, musl-fts
-, musl-obstack, m4, zlib, zstd, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, musl-fts
+, musl-obstack
+, m4
+, zlib
+, zstd
+, bzip2
+, bison
+, flex
+, gettext
+, xz
+, setupDebugInfoDirs
 , argp-standalone
-, enableDebuginfod ? false, sqlite, curl, libmicrohttpd_0_9_70, libarchive
+, enableDebuginfod ? false
+, sqlite
+, curl
+, libmicrohttpd_0_9_70
+, libarchive
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.

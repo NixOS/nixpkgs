@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   checkInputs = with python3Packages; [
     testtools
     pytest
-   ];
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     colored

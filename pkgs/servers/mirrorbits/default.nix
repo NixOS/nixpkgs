@@ -1,5 +1,11 @@
-{ lib, buildGoPackage, fetchFromGitHub, fetchpatch
-, pkg-config, zlib, geoip }:
+{ lib
+, buildGoPackage
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, zlib
+, geoip
+}:
 
 buildGoPackage rec {
   pname = "mirrorbits";

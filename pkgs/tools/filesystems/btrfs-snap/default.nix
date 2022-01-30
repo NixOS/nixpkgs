@@ -28,5 +28,5 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lionello ];
     platforms = platforms.linux;
- };
+  };
 }

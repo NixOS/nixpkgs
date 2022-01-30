@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut
-, Cocoa,  OpenGL
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libGLU
+, libGL
+, freeglut
+, Cocoa
+, OpenGL
 }:
 
 stdenv.mkDerivation {

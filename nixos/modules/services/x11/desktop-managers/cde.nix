@@ -5,14 +5,24 @@ with lib;
 let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.cde;
-in {
+in
+{
   options.services.xserver.desktopManager.cde = {
     enable = mkEnableOption "Common Desktop Environment";
 
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs.xorg; [
-        xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
+        xclock
+        bitmap
+        xlsfonts
+        xfd
+        xrefresh
+        xload
+        xwininfo
+        xdpyinfo
+        xwd
+        xwud
       ];
       defaultText = literalExpression ''
         with pkgs.xorg; [
@@ -46,7 +56,7 @@ in {
       }
     ];
 
-    users.groups.mail = {};
+    users.groups.mail = { };
     security.wrappers = {
       dtmail = {
         setgid = true;
@@ -62,11 +72,13 @@ in {
     '';
 
     services.xserver.desktopManager.session = [
-    { name = "CDE";
-      start = ''
-        exec ${pkgs.cdesktopenv}/opt/dt/bin/Xsession
-      '';
-    }];
+      {
+        name = "CDE";
+        start = ''
+          exec ${pkgs.cdesktopenv}/opt/dt/bin/Xsession
+        '';
+      }
+    ];
   };
 
   meta.maintainers = [ ];

@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoconf automake openssl libgsf gmp ];
 
   installPhase =
-  ''
-    mkdir -p $out/bin
-    cp crackxls2003 $out/bin/
-  '';
+    ''
+      mkdir -p $out/bin
+      cp crackxls2003 $out/bin/
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/GavinSmith0123/crackxls2003/";

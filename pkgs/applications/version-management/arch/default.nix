@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   # Instead of GNU Autoconf, tla uses Tom Lord's now
   # defunct `package-framework'.
   buildPhase = ''
-    mkdir +build && cd +build &&		\
-    ../src/configure --prefix="$out" &&		\
+    mkdir +build && cd +build &&    \
+    ../src/configure --prefix="$out" &&    \
     make install
   '';
 

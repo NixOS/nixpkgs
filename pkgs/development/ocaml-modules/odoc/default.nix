@@ -1,6 +1,18 @@
-{ lib, fetchurl, buildDunePackage, ocaml
-, astring, cmdliner, cppo, fpath, result, tyxml
-, markup, alcotest, yojson, sexplib, jq
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, astring
+, cmdliner
+, cppo
+, fpath
+, result
+, tyxml
+, markup
+, alcotest
+, yojson
+, sexplib
+, jq
 }:
 
 buildDunePackage rec {

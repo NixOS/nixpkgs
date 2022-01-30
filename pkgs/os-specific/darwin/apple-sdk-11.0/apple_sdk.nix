@@ -9,21 +9,21 @@ let
     "/System/Library/${lib.optionalString private "Private"}Frameworks/${name}.framework";
 
   mkDepsRewrites = deps:
-  let
-    mergeRewrites = x: y: {
-      prefix = lib.mergeAttrs (x.prefix or {}) (y.prefix or {});
-      const = lib.mergeAttrs (x.const or {}) (y.const or {});
-    };
+    let
+      mergeRewrites = x: y: {
+        prefix = lib.mergeAttrs (x.prefix or { }) (y.prefix or { });
+        const = lib.mergeAttrs (x.const or { }) (y.const or { });
+      };
 
-    rewriteArgs = { prefix ? {}, const ? {} }: lib.concatLists (
-      (lib.mapAttrsToList (from: to: [ "-p" "${from}:${to}" ]) prefix) ++
-      (lib.mapAttrsToList (from: to: [ "-c" "${from}:${to}" ]) const)
-    );
+      rewriteArgs = { prefix ? { }, const ? { } }: lib.concatLists (
+        (lib.mapAttrsToList (from: to: [ "-p" "${from}:${to}" ]) prefix) ++
+        (lib.mapAttrsToList (from: to: [ "-c" "${from}:${to}" ]) const)
+      );
 
-    rewrites = depList: lib.fold mergeRewrites {}
-      (map (dep: dep.tbdRewrites)
-        (lib.filter (dep: dep ? tbdRewrites) depList));
-  in
+      rewrites = depList: lib.fold mergeRewrites { }
+        (map (dep: dep.tbdRewrites)
+          (lib.filter (dep: dep ? tbdRewrites) depList));
+    in
     lib.escapeShellArgs (rewriteArgs (rewrites (builtins.attrValues deps)));
 
   mkFramework = { name, deps, private ? false }:
@@ -68,17 +68,18 @@ let
       meta = with lib; {
         description = "Apple SDK framework ${name}";
         maintainers = with maintainers; [ copumpkin ];
-        platforms   = platforms.darwin;
+        platforms = platforms.darwin;
       };
     };
-  in self;
+    in self;
 
   framework = name: deps: mkFramework { inherit name deps; private = false; };
   privateFramework = name: deps: mkFramework { inherit name deps; private = true; };
-in rec {
+in
+rec {
   libs = {
     xpc = stdenv.mkDerivation {
-      name   = "apple-lib-xpc";
+      name = "apple-lib-xpc";
       dontUnpack = true;
 
       installPhase = ''
@@ -91,11 +92,17 @@ in rec {
     };
 
     Xplugin = stdenv.mkDerivation {
-      name   = "apple-lib-Xplugin";
+      name = "apple-lib-Xplugin";
       dontUnpack = true;
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit CoreGraphics CoreServices CoreText
+        OpenGL
+        ApplicationServices
+        Carbon
+        IOKit
+        CoreGraphics
+        CoreServices
+        CoreText
       ];
 
       installPhase = ''
@@ -107,7 +114,7 @@ in rec {
     };
 
     utmp = stdenv.mkDerivation {
-      name   = "apple-lib-utmp";
+      name = "apple-lib-utmp";
       dontUnpack = true;
 
       installPhase = ''

@@ -5,10 +5,10 @@
 }:
 
 ##User input
-{ vscode             ? vscodeDefault
-, extensionsToIgnore ? []
-# will use those extensions to get sha256 if still exists when executed.
-, extensions         ? []
+{ vscode ? vscodeDefault
+, extensionsToIgnore ? [ ]
+  # will use those extensions to get sha256 if still exists when executed.
+, extensions ? [ ]
 }:
 let
   mktplcExtRefToFetchArgs = import ./mktplcExtRefToFetchArgs.nix;

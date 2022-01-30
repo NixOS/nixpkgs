@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, autoconf, automake, libtool, pkg-config
-, bzip2, libpcap, flex, bison }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, bzip2
+, libpcap
+, flex
+, bison
+}:
 
 let version = "1.6.23"; in
 

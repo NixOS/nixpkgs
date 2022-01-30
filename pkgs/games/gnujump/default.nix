@@ -13,14 +13,16 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lm";
 
-  desktopItems = [ (makeDesktopItem {
-    name = "gnujump";
-    exec = "gnujump";
-    icon = "gnujump";
-    desktopName = "GNUjump";
-    comment     = "Jump up the tower to survive";
-    categories  = "Game;ArcadeGame;";
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gnujump";
+      exec = "gnujump";
+      icon = "gnujump";
+      desktopName = "GNUjump";
+      comment = "Jump up the tower to survive";
+      categories = "Game;ArcadeGame;";
+    })
+  ];
 
   postInstall = ''
     install -Dm644 ${./gnujump.xpm} $out/share/pixmaps/gnujump.xpm

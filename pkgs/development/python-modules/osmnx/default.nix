@@ -1,5 +1,21 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, geopandas, matplotlib, networkx, numpy
-, pandas, requests, Rtree, shapely, folium, scikit-learn, scipy, gdal, rasterio}:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, geopandas
+, matplotlib
+, networkx
+, numpy
+, pandas
+, requests
+, Rtree
+, shapely
+, folium
+, scikit-learn
+, scipy
+, gdal
+, rasterio
+}:
 
 buildPythonPackage rec {
   pname = "osmnx";
@@ -7,9 +23,9 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner  = "gboeing";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "gboeing";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "0dkv3fnlq23d7d30lhdf4a313lxy3a5qfldidvszs1z9n16ycnwb";
   };
 

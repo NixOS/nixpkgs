@@ -37,7 +37,7 @@ buildPythonPackage rec {
     "doc"
   ];
   disabledTests = [
-    "build"   # needs network connection
+    "build" # needs network connection
   ];
 
   # Check packages with cythonized modules

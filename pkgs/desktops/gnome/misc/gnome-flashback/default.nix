@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , autoreconfHook
 , fetchurl
 , gettext
@@ -208,7 +209,7 @@ let
         };
 
       mkSystemdTargetForWm = { wmName, wmLabel, wmCommand, enableGnomePanel }:
-        runCommand "gnome-flashback-${wmName}.target" {} ''
+        runCommand "gnome-flashback-${wmName}.target" { } ''
           mkdir -p $out/lib/systemd/user
           cp -r "${gnome-flashback}/lib/systemd/user/gnome-session@gnome-flashback-metacity.target.d" \
             "$out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d"

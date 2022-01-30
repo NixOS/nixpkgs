@@ -9,7 +9,8 @@
   # Default native-image arguments. You probably don't want to set this,
   # except in special cases. In most cases, use extraNativeBuildArgs instead
 , nativeImageBuildArgs ? [
-    "-jar" jar
+    "-jar"
+    jar
     "-H:CLibraryPath=${lib.getLib graalvm}/lib"
     (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
     "-H:Name=${executable}"

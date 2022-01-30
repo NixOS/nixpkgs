@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, libmediainfo, wxGTK30-gtk3
-, desktop-file-utils, libSM, imagemagick }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libzen
+, libmediainfo
+, wxGTK30-gtk3
+, desktop-file-utils
+, libSM
+, imagemagick
+}:
 
 stdenv.mkDerivation rec {
   version = "21.09";
@@ -10,8 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libzen libmediainfo wxGTK30-gtk3 desktop-file-utils libSM
-                  imagemagick ];
+  buildInputs = [
+    libzen
+    libmediainfo
+    wxGTK30-gtk3
+    desktop-file-utils
+    libSM
+    imagemagick
+  ];
 
   sourceRoot = "./MediaInfo/Project/GNU/GUI/";
 

@@ -18,7 +18,10 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-X main.Version=v${version}" "-X main.Revision=${src.rev}"
+    "-s"
+    "-w"
+    "-X main.Version=v${version}"
+    "-X main.Revision=${src.rev}"
   ];
 
   postInstall = ''

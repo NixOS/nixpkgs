@@ -1,6 +1,16 @@
-{ fetchurl, lib, stdenv, flex, bison, pkg-config, libmnl, libnfnetlink
-, libnetfilter_conntrack, libnetfilter_queue, libnetfilter_cttimeout
-, libnetfilter_cthelper, systemd
+{ fetchurl
+, lib
+, stdenv
+, flex
+, bison
+, pkg-config
+, libmnl
+, libnfnetlink
+, libnetfilter_conntrack
+, libnetfilter_queue
+, libnetfilter_cttimeout
+, libnetfilter_cthelper
+, systemd
 , libtirpc
 }:
 
@@ -14,8 +24,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libmnl libnfnetlink libnetfilter_conntrack libnetfilter_queue
-    libnetfilter_cttimeout libnetfilter_cthelper systemd libtirpc
+    libmnl
+    libnfnetlink
+    libnetfilter_conntrack
+    libnetfilter_queue
+    libnetfilter_cttimeout
+    libnetfilter_cthelper
+    systemd
+    libtirpc
   ];
   nativeBuildInputs = [ flex bison pkg-config ];
 

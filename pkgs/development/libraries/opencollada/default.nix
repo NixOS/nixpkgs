@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libxml2, pcre
-, darwin}:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libxml2
+, pcre
+, darwin
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencollada";

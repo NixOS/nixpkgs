@@ -46,13 +46,14 @@ stdenv.mkDerivation {
   ] ++ optional enableMpi mpi;
 
   configureFlags =
-    [ "--enable-shared"
+    [
+      "--enable-shared"
       "--enable-threads"
     ]
     ++ optional (precision != "double") "--enable-${precision}"
     # all x86_64 have sse2
     # however, not all float sizes fit
-    ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
+    ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double")) "--enable-sse2"
     ++ optional enableAvx "--enable-avx"
     ++ optional enableAvx2 "--enable-avx2"
     ++ optional enableAvx512 "--enable-avx512"

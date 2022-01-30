@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, automake, autoconf, libtool, autoreconfHook, gmpxx}:
+{ lib, stdenv, fetchurl, automake, autoconf, libtool, autoreconfHook, gmpxx }:
 stdenv.mkDerivation rec {
   pname = "givaro";
   version = "3.7.2";
@@ -7,11 +7,11 @@ stdenv.mkDerivation rec {
     sha256 = "0lf5cnbyr27fw7klc3zabkb1979dn67jmrjz6pa3jzw2ng74x9b3";
   };
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [autoconf automake libtool gmpxx];
+  buildInputs = [ autoconf automake libtool gmpxx ];
   meta = {
     description = "A C++ library for arithmetic and algebraic computations";
     license = lib.licenses.cecill-b;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, wxGTK } :
+{ lib, stdenv, fetchFromGitHub, SDL2, wxGTK }:
 
 stdenv.mkDerivation rec {
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-  [ wxGTK SDL2 ];
+    [ wxGTK SDL2 ];
 
   preConfigure = ''
     export SDL_CONFIG=${SDL2.dev}/bin/sdl2-config

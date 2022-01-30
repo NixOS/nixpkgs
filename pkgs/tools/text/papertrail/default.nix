@@ -8,7 +8,8 @@ let
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "papertrail";
   version = (import ./gemset.nix).papertrail.version;
 
@@ -23,9 +24,9 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Command-line client for Papertrail log management service";
-    homepage    = "https://github.com/papertrail/papertrail-cli/";
-    license     = licenses.mit;
+    homepage = "https://github.com/papertrail/papertrail-cli/";
+    license = licenses.mit;
     maintainers = with maintainers; [ nicknovitski ];
-    platforms   = ruby.meta.platforms;
+    platforms = ruby.meta.platforms;
   };
 }

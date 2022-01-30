@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 let
-  font-awesome = { version, sha256, rev ? version}: fetchFromGitHub {
+  font-awesome = { version, sha256, rev ? version }: fetchFromGitHub {
     name = "font-awesome-${version}";
 
 
@@ -27,7 +27,8 @@ let
       maintainers = with maintainers; [ abaldeau johnazoidberg ];
     };
   };
-in {
+in
+{
   # Keeping version 4 because version 5 is incompatible for some icons. That
   # means that projects which depend on it need to actively convert the
   # symbols. See:

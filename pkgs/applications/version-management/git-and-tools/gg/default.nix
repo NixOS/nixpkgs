@@ -20,9 +20,12 @@ buildGoModule rec {
   patches = [ ./skip-broken-revert-tests.patch ];
   subPackages = [ "cmd/gg" ];
   ldflags = [
-    "-s" "-w"
-    "-X" "main.versionInfo=${version}"
-    "-X" "main.buildCommit=a0b348c9cef33fa46899f5e55e3316f382a09f6a+"
+    "-s"
+    "-w"
+    "-X"
+    "main.versionInfo=${version}"
+    "-X"
+    "main.buildCommit=a0b348c9cef33fa46899f5e55e3316f382a09f6a+"
   ];
 
   vendorSha256 = "sha256-+ZmNXB+I6vPRbACwEkfl/vVmqoZy67Zn9SBrham5zRk=";

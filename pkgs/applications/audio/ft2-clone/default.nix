@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , nixosTests
@@ -31,12 +32,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL2 ]
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [
-         libiconv
-         CoreAudio
-         CoreMIDI
-         CoreServices
-         Cocoa
-       ];
+    libiconv
+    CoreAudio
+    CoreMIDI
+    CoreServices
+    Cocoa
+  ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin [
     "-framework CoreAudio"
