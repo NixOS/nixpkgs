@@ -145,6 +145,12 @@
     githubId = 16829510;
     name = "Aaron Janse";
   };
+  aaronjheng = {
+    email = "wentworth@outlook.com";
+    github = "aaronjheng";
+    githubId = 806876;
+    name = "Aaron Jheng";
+  };
   aaronschif = {
     email = "aaronschif@gmail.com";
     github = "aaronschif";
