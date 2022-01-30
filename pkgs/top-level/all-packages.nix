@@ -21240,7 +21240,9 @@ with pkgs;
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
-  livepeer = callPackage ../servers/livepeer { };
+  livepeer = callPackage ../servers/livepeer {
+    buildGoModule = buildGo117Module;
+  };
 
   lwan = callPackage ../servers/http/lwan { };
 
