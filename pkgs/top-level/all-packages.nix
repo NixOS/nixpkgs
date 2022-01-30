@@ -2165,7 +2165,9 @@ with pkgs;
     packetbeat6
     journalbeat6;
 
-  inherit (callPackages ../misc/logging/beats/7.x.nix { })
+  inherit (callPackages ../misc/logging/beats/7.x.nix {
+    buildGoModule = buildGo117Module;
+  })
     filebeat7
     heartbeat7
     metricbeat7
