@@ -26801,7 +26801,9 @@ with pkgs;
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
 
-  k9s = callPackage ../applications/networking/cluster/k9s { };
+  k9s = callPackage ../applications/networking/cluster/k9s {
+    buildGoModule = buildGo117Module;
+  };
 
   pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
 
