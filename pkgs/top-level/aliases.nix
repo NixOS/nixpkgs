@@ -106,8 +106,6 @@ mapAliases ({
   bsod = throw "bsod has been removed: deleted by upstream"; # added 2022-01-07
   btc1 = throw "btc1 has been removed, it was abandoned by upstream"; # added 2020-11-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
-  buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
-  buildGo112Module = throw "buildGo112Module has been removed"; # added 2020-04-26
   buildkite-agent3 = buildkite-agent; # added 2018-09-26
   bundler_HEAD = bundler; # added 2015-11-15
   bunny = throw "bunny has been removed: deleted by upstream"; # added 2022-01-07
@@ -360,7 +358,6 @@ mapAliases ({
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
   gmock = gtest; # moved from top-level 2021-03-14
-  go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobby5 = gobby; # added 2021-02-01
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
