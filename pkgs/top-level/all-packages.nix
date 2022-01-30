@@ -1911,7 +1911,9 @@ with pkgs;
 
   pass = callPackage ../tools/security/pass { };
 
-  passphrase2pgp = callPackage ../tools/security/passphrase2pgp { };
+  passphrase2pgp = callPackage ../tools/security/passphrase2pgp {
+    buildGoModule = buildGo117Module;
+  };
 
   pass-git-helper = python3Packages.callPackage ../applications/version-management/git-and-tools/pass-git-helper { };
 
