@@ -9,6 +9,7 @@ assert (sha256 == null) -> (src != null);
 let
   atLeast24 = lib.versionAtLeast version "2.4pre";
   atLeast25 = lib.versionAtLeast version "2.5pre";
+  atLeast27 = lib.versionAtLeast version "2.7pre";
 in
 { stdenv
 , autoconf-archive
@@ -100,6 +101,8 @@ stdenv.mkDerivation {
     lowdown
   ] ++ lib.optionals (atLeast24 && stdenv.isx86_64) [
     libcpuid
+  ] ++ lib.optional (atLeast27) [
+    nlohmann_json
   ] ++ lib.optionals withLibseccomp [
     libseccomp
   ] ++ lib.optionals withAWS [
