@@ -907,7 +907,9 @@ with pkgs;
     wxGTK = wxGTK30;
   } // (config.aegisub or {}));
 
-  aerc = callPackage ../applications/networking/mailreaders/aerc { };
+  aerc = callPackage ../applications/networking/mailreaders/aerc {
+    buildGoModule = buildGo117Module;
+  };
 
   aerospike = callPackage ../servers/nosql/aerospike { };
 
