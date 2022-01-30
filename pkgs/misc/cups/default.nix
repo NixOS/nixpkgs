@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
   pname = "cups";
 
   # After 2.2.6, CUPS requires headers only available in macOS 10.12+
-  version = if stdenv.isDarwin then "2.2.6" else "2.4.0";
+  version = if stdenv.isDarwin then "2.2.6" else "2.4.1";
 
   src = fetchurl (if stdenv.isDarwin then {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
     sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
   } else {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "1pm6lf08z8vgs62g5b5rjw32qy3vr0q3sgidpg2lfs6a530wxgls";
+    sha256 = "sha256-xzOfdfjU8t7FDGczQaRfwGtohbttQ2bWv1mk5sEK4Xg=";
   });
 
   outputs = [ "out" "lib" "dev" "man" ];
