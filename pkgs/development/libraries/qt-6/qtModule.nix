@@ -67,7 +67,7 @@ let
 
     # help cmake to find $dev/lib/cmake
     setupHook = writeText "setup-hook.sh" ''
-      echo "setupHook of ${pname}: add to QT_ADDITIONAL_PACKAGES_PREFIX_PATH: $1"
+      echo "qtModule setupHook: add to QT_ADDITIONAL_PACKAGES_PREFIX_PATH: $1"
       export "QT_ADDITIONAL_PACKAGES_PREFIX_PATH=''${QT_ADDITIONAL_PACKAGES_PREFIX_PATH:+''${QT_ADDITIONAL_PACKAGES_PREFIX_PATH}:}$1"
     '';
 
