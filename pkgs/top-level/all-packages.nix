@@ -7232,7 +7232,9 @@ with pkgs;
 
   ncrack = callPackage ../tools/security/ncrack { };
 
-  nerdctl = callPackage ../applications/networking/cluster/nerdctl { };
+  nerdctl = callPackage ../applications/networking/cluster/nerdctl {
+    buildGoModule = buildGo117Module;
+  };
 
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
