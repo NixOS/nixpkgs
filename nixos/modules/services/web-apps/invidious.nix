@@ -29,7 +29,7 @@ let
 
       serviceConfig = {
         RestartSec = "2s";
-        DynamicUser = true;
+        User = cfg.user;
 
         CapabilityBoundingSet = "";
         PrivateDevices = true;
@@ -68,6 +68,15 @@ let
       assertion = cfg.database.host != null -> cfg.database.passwordFile != null;
       message = "If database host isn't null, database password needs to be set";
     }];
+
+    users = lib.mkIf (cfg.user == "invidious") {
+      users.invidious = {
+        home = "/var/empty";
+        group = "invidious";
+        isSystemUser = true;
+      };
+      groups.invidious = {};
+    };
   };
 
   # Settings necessary for running with an automatically managed local database
@@ -84,10 +93,10 @@ let
           "DATABASE ${cfg.settings.db.dbname}" = "ALL PRIVILEGES";
         };
       };
-      # This is only needed because the unix user invidious isn't the same as
+      # This is only needed because the unix user isn't the same as
       # the database user. This tells postgres to map one to the other.
       identMap = ''
-        invidious invidious ${cfg.settings.db.user}
+        invidious ${cfg.user} ${cfg.settings.db.user}
       '';
       # And this specifically enables peer authentication for only this
       # database, which allows passwordless authentication over the postgres
@@ -107,18 +116,13 @@ let
         psql ${cfg.settings.db.dbname} ${cfg.settings.db.user} -c "TRUNCATE TABLE videos"
       '';
       serviceConfig = {
-        DynamicUser = true;
-        User = "invidious";
+        User = cfg.user;
       };
     };
 
     systemd.services.invidious = {
       requires = [ "postgresql.service" ];
       after = [ "postgresql.service" ];
-
-      serviceConfig = {
-        User = "invidious";
-      };
     };
   };
 
@@ -153,6 +157,12 @@ in
       default = pkgs.invidious;
       defaultText = "pkgs.invidious";
       description = "The Invidious package to use.";
+    };
+
+    user = lib.mkOption {
+      type = types.str;
+      default = "invidious";
+      description = "The user Invidious should run as.";
     };
 
     settings = lib.mkOption {
