@@ -4,35 +4,27 @@ with lib;
 
 let
   cfg = config.services.home-assistant;
+  format = pkgs.formats.yaml {};
 
-  # cfg.config != null can be assumed here
-  configJSON = pkgs.writeText "configuration.json"
-    (builtins.toJSON (if cfg.applyDefaultConfig then
-    (recursiveUpdate defaultConfig cfg.config) else cfg.config));
+  # Render config attribute sets to YAML
+  # Values that are null will be filtered from the output, so this is one way to have optional
+  # options shown in settings.
+  # We post-process the result to add support for YAML functions, like secrets or includes, see e.g.
+  # https://www.home-assistant.io/docs/configuration/secrets/
+  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) cfg.config or {};
   configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
-    ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
-    # Hack to support custom yaml objects,
-    # i.e. secrets: https://www.home-assistant.io/docs/configuration/secrets/
+    cp ${format.generate "configuration.yaml" filteredConfig} $out
     sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
   '';
+  lovelaceConfig = cfg.lovelaceConfig or {};
+  lovelaceConfigFile = format.generate "ui-lovelace.yaml" lovelaceConfig;
 
-  lovelaceConfigJSON = pkgs.writeText "ui-lovelace.json"
-    (builtins.toJSON cfg.lovelaceConfig);
-  lovelaceConfigFile = pkgs.runCommand "ui-lovelace.yaml" { preferLocalBuild = true; } ''
-    ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigJSON} -o $out
-  '';
-
+  # Components advertised by the home-assistant package
   availableComponents = cfg.package.availableComponents;
 
+  # Components that were added by overriding the package
   explicitComponents = cfg.package.extraComponents;
-
-  usedPlatforms = config:
-    if isAttrs config then
-      optional (config ? platform) config.platform
-      ++ concatMap usedPlatforms (attrValues config)
-    else if isList config then
-      concatMap usedPlatforms config
-    else [ ];
+  useExplicitComponent = component: elem component explicitComponents;
 
   # Given a component "platform", looks up whether it is used in the config
   # as `platform = "platform";`.
@@ -42,33 +34,42 @@ let
   #   platform = "mqtt";
   #   ...
   # } ];
+  usedPlatforms = config:
+    if isAttrs config then
+      optional (config ? platform) config.platform
+      ++ concatMap usedPlatforms (attrValues config)
+    else if isList config then
+      concatMap usedPlatforms config
+    else [ ];
+
   useComponentPlatform = component: elem component (usedPlatforms cfg.config);
 
-  useExplicitComponent = component: elem component explicitComponents;
-
-  # Returns whether component is used in config or explicitly passed into package
+  # Returns whether component is used in config, explicitly passed into package or
+  # configured in the module.
   useComponent = component:
     hasAttrByPath (splitString "." component) cfg.config
     || useComponentPlatform component
     || useExplicitComponent component;
 
-  # List of components used in config
+  # Final list of components passed into the package to include required dependencies
   extraComponents = filter useComponent availableComponents;
 
-  package = if (cfg.autoExtraComponents && cfg.config != null)
-    then (cfg.package.override { inherit extraComponents; })
-    else cfg.package;
-
-  # If you are changing this, please update the description in applyDefaultConfig
-  defaultConfig = {
-    homeassistant.time_zone = config.time.timeZone;
-    http.server_port = cfg.port;
-  } // optionalAttrs (cfg.lovelaceConfig != null) {
-    lovelace.mode = "yaml";
-  };
+  package = (cfg.package.override {
+    inherit extraComponents;
+  });
 
 in {
-  meta.maintainers = teams.home-assistant.members;
+  imports = [
+    # Migrations in NixOS 22.05
+    (mkRemovedOptionModule [ "services" "home-assistant" "applyDefaultConfig" ] "The default config was migrated into services.home-assistant.config")
+    (mkRemovedOptionModule [ "services" "home-assistant" "autoExtraComponents" ] "Components are now parsed from services.home-assistant.config unconditionally")
+    (mkRenamedOptionModule [ "services" "home-assistant" "port" ] [ "services" "home-assistant" "config" "http" "server_port" ])
+  ];
+
+  meta = {
+    buildDocsInSandbox = false;
+    maintainers = teams.home-assistant.members;
+  };
 
   options.services.home-assistant = {
     # Running home-assistant on NixOS is considered an installation method that is unsupported by the upstream project.
@@ -81,42 +82,117 @@ in {
       description = "The config directory, where your <filename>configuration.yaml</filename> is located.";
     };
 
-    port = mkOption {
-      default = 8123;
-      type = types.port;
-      description = "The port on which to listen.";
-    };
-
-    applyDefaultConfig = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Setting this option enables a few configuration options for HA based on NixOS configuration (such as time zone) to avoid having to manually specify configuration we already have.
-        </para>
-        <para>
-        Currently one side effect of enabling this is that the <literal>http</literal> component will be enabled.
-        </para>
-        <para>
-        This only takes effect if <literal>config != null</literal> in order to ensure that a manually managed <filename>configuration.yaml</filename> is not overwritten.
-      '';
-    };
-
     config = mkOption {
-      default = null;
-      # Migrate to new option types later: https://github.com/NixOS/nixpkgs/pull/75584
-      type =  with lib.types; let
-          valueType = nullOr (oneOf [
-            bool
-            int
-            float
-            str
-            (lazyAttrsOf valueType)
-            (listOf valueType)
-          ]) // {
-            description = "Yaml value";
-            emptyValue.value = {};
+      type = types.submodule {
+        freeformType = format.type;
+        options = {
+          # This is a partial selection of the most common options, so new users can quickly
+          # pick up how to match home-assistants config structure to ours. It also lets us preset
+          # config values intelligently.
+
+          homeassistant = {
+            # https://www.home-assistant.io/docs/configuration/basic/
+            name = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "Home";
+              description = ''
+                Name of the location where Home Assistant is running.
+              '';
+            };
+
+            latitude = mkOption {
+              type = types.nullOr (types.either types.float types.str);
+              default = null;
+              example = 52.3;
+              description = ''
+                Latitude of your location required to calculate the time the sun rises and sets.
+              '';
+            };
+
+            longitude = mkOption {
+              type = types.nullOr (types.either types.float types.str);
+              default = null;
+              example = 4.9;
+              description = ''
+                Longitude of your location required to calculate the time the sun rises and sets.
+              '';
+            };
+
+            unit_system = mkOption {
+              type = types.nullOr (types.enum [ "metric" "imperial" ]);
+              default = null;
+              example = "metric";
+              description = ''
+                The unit system to use. This also sets temperature_unit, Celsius for Metric and Fahrenheit for Imperial.
+              '';
+            };
+
+            temperature_unit = mkOption {
+              type = types.nullOr (types.enum [ "C" "F" ]);
+              default = null;
+              example = "C";
+              description = ''
+                Override temperature unit set by unit_system. <literal>C</literal> for Celsius, <literal>F</literal> for Fahrenheit.
+              '';
+            };
+
+            time_zone = mkOption {
+              type = types.nullOr types.str;
+              default = config.time.timeZone or null;
+              defaultText = literalExpression ''
+                config.time.timeZone or null
+              '';
+              example = "Europe/Amsterdam";
+              description = ''
+                Pick your time zone from the column TZ of Wikipedia’s <link xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">list of tz database time zones</link>.
+              '';
+            };
           };
-        in valueType;
+
+          http = {
+            # https://www.home-assistant.io/integrations/http/
+            server_host = mkOption {
+              type = types.either types.str (types.listOf types.str);
+              default = [
+                "0.0.0.0"
+                "::"
+              ];
+              example = "::1";
+              description = ''
+                Only listen to incoming requests on specific IP/host. The default listed assumes support for IPv4 and IPv6.
+              '';
+            };
+
+            server_port = mkOption {
+              default = 8123;
+              type = types.port;
+              description = ''
+                The port on which to listen.
+              '';
+            };
+          };
+
+          lovelace = {
+            # https://www.home-assistant.io/lovelace/dashboards/
+            mode = mkOption {
+              type = types.enum [ "yaml" "storage" ];
+              default = if cfg.lovelaceConfig != null
+                then "yaml"
+                else "storage";
+              defaultText = literalExpression ''
+                if cfg.lovelaceConfig != null
+                  then "yaml"
+                else "storage";
+              '';
+              example = "yaml";
+              description = ''
+                In what mode should the main Lovelace panel be, <literal>yaml</literal> or <literal>storage</literal> (UI managed).
+              '';
+            };
+          };
+        };
+      };
       example = literalExpression ''
         {
           homeassistant = {
@@ -130,15 +206,19 @@ in {
           frontend = {
             themes = "!include_dir_merge_named themes";
           };
-          http = { };
+          http = {};
           feedreader.urls = [ "https://nixos.org/blogs.xml" ];
         }
       '';
       description = ''
         Your <filename>configuration.yaml</filename> as a Nix attribute set.
-        Beware that setting this option will delete your previous <filename>configuration.yaml</filename>.
-        <link xlink:href="https://www.home-assistant.io/docs/configuration/secrets/">Secrets</link>
-        are encoded as strings as shown in the example.
+
+        YAML functions like <link xlink:href="https://www.home-assistant.io/docs/configuration/secrets/">secrets</link>
+        can be passed as a string and will be unquoted automatically.
+
+        Unless this option is explicitly set to <literal>null</literal>
+        we assume your <filename>configuration.yaml</filename> is
+        managed through this module and thereby overwritten on startup.
       '';
     };
 
@@ -147,16 +227,18 @@ in {
       type = types.bool;
       description = ''
         Whether to make <filename>configuration.yaml</filename> writable.
-        This only has an effect if <option>config</option> is set.
+
         This will allow you to edit it from Home Assistant's web interface.
+
+        This only has an effect if <option>config</option> is set.
         However, bear in mind that it will be overwritten at every start of the service.
       '';
     };
 
     lovelaceConfig = mkOption {
       default = null;
-      type = with types; nullOr attrs;
-      # from https://www.home-assistant.io/lovelace/yaml-mode/
+      type = types.nullOr format.type;
+      # from https://www.home-assistant.io/lovelace/dashboards/
       example = literalExpression ''
         {
           title = "My Awesome Home";
@@ -172,8 +254,8 @@ in {
       '';
       description = ''
         Your <filename>ui-lovelace.yaml</filename> as a Nix attribute set.
-        Setting this option will automatically add
-        <literal>lovelace.mode = "yaml";</literal> to your <option>config</option>.
+        Setting this option will automatically set <literal>lovelace.mode</literal> to <literal>yaml</literal>.
+
         Beware that setting this option will delete your previous <filename>ui-lovelace.yaml</filename>
       '';
     };
@@ -183,8 +265,10 @@ in {
       type = types.bool;
       description = ''
         Whether to make <filename>ui-lovelace.yaml</filename> writable.
-        This only has an effect if <option>lovelaceConfig</option> is set.
+
         This will allow you to edit it from Home Assistant's web interface.
+
+        This only has an effect if <option>lovelaceConfig</option> is set.
         However, bear in mind that it will be overwritten at every start of the service.
       '';
     };
@@ -212,26 +296,11 @@ in {
         }
       '';
       description = ''
-        Home Assistant package to use. By default the tests are disabled, as they take a considerable amout of time to complete.
+        The Home Assistant package to use.
         Override <literal>extraPackages</literal> or <literal>extraComponents</literal> in order to add additional dependencies.
         If you specify <option>config</option> and do not set <option>autoExtraComponents</option>
         to <literal>false</literal>, overriding <literal>extraComponents</literal> will have no effect.
         Avoid <literal>home-assistant.overridePythonAttrs</literal> if you use <literal>autoExtraComponents</literal>.
-      '';
-    };
-
-    autoExtraComponents = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        If set to <literal>true</literal>, the components used in <literal>config</literal>
-        are set as the specified package's <literal>extraComponents</literal>.
-        This in turn adds all packaged dependencies to the derivation.
-        You might still see import errors in your log.
-        In this case, you will need to package the necessary dependencies yourself
-        or ask for someone else to package them.
-        If a dependency is packaged but not automatically added to this list,
-        you might need to specify it in <literal>extraPackages</literal>.
       '';
     };
 
