@@ -1517,6 +1517,8 @@ in {
 
   cffi = callPackage ../development/python-modules/cffi { };
 
+  cffsubr = callPackage ../development/python-modules/cffsubr { };
+
   cfgv = callPackage ../development/python-modules/cfgv { };
 
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
