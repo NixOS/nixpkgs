@@ -20467,10 +20467,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
   };
 
-  wxmac = callPackage ../development/libraries/wxwidgets/3.0/mac.nix {
-    inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel WebKit;
-    inherit (darwin.stubs) setfile rez derez;
-  };
+  wxmac = callPackage ../development/libraries/wxwidgets/3.0/mac.nix { };
 
   wxSVG = callPackage ../development/libraries/wxSVG {
     wxGTK = wxGTK30-gtk3;
