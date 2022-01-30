@@ -42,11 +42,11 @@ in {
   serviceOpts = {
     serviceConfig = {
       AmbientCapabilities = [
-        "CAP_RAW_SYSIO"
+        "CAP_SYS_RAWIO"
         "CAP_SYS_ADMIN"
       ];
       CapabilityBoundingSet = [
-        "CAP_RAW_SYSIO"
+        "CAP_SYS_RAWIO"
         "CAP_SYS_ADMIN"
       ];
       DevicePolicy = "closed";
