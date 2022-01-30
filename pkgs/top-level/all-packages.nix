@@ -22817,7 +22817,9 @@ with pkgs;
 
   gotools = callPackage ../development/tools/gotools { };
 
-  gotop = callPackage ../tools/system/gotop { };
+  gotop = callPackage ../tools/system/gotop {
+    buildGoModule = buildGo117Module;
+  };
 
   go-migrate = callPackage ../development/tools/go-migrate { };
 
