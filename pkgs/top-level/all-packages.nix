@@ -6316,7 +6316,9 @@ with pkgs;
 
   haskell-language-server = callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix { };
 
-  hasmail = callPackage ../applications/networking/mailreaders/hasmail { };
+  hasmail = callPackage ../applications/networking/mailreaders/hasmail {
+    buildGoModule = buildGo117Module;
+  };
 
   haste-client = callPackage ../tools/misc/haste-client { };
 
