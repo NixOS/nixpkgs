@@ -278,6 +278,14 @@ let
             url = "https://github.com/svanderburg/node2nix/commit/e4c951971df6c9f9584c7252971c13b55c369916.patch";
             sha256 = "0w8fcyr12g2340rn06isv40jkmz2khmak81c95zpkjgipzx7hp7w";
           })
+          # handle package alias in dependencies
+          # https://github.com/svanderburg/node2nix/pull/240
+          #
+          # TODO: remove after node2nix 1.10.0
+          (fetchpatch {
+            url = "https://github.com/svanderburg/node2nix/commit/644e90c0304038a446ed53efc97e9eb1e2831e71.patch";
+            sha256 = "sha256-sQgVf80H1ouUjzHq+2d9RO4a+o++kh+l+FOTNXfPBH0=";
+          })
         ];
       };
       postInstall = ''
