@@ -7,6 +7,7 @@
 , ruby
 , which, dtach, openssl, bash, gdb, man
 , withEmacs ? true
+, withVim ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -80,13 +81,22 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   checkInputs = [
     which dtach openssl bash
-    gdb man emacs
-  ];
+    gdb man
+  ] ++ optional (withEmacs) [ emacs ];
 
   installTargets = [ "install" "install-man" "install-info" ];
 
   postInstall = lib.optionalString withEmacs ''
     moveToOutput bin/notmuch-emacs-mua $emacs
+  '' + optionalString withVim ''
+    make -C vim DESTDIR="$out/share/vim" prefix="" install
+  '' + optionalString (!isNull ruby) ''
+    make -C bindings/ruby install DESTDIR="" prefix="$out" install
+    # This is very hacky, see pkgs/development/interpreters/ruby/default.nix
+    mkdir -p $out/nix-support
+    cat > $out/nix-support/setup-hook <<EOF
+    addToSearchPath RUBYLIB $out/lib/ruby/vendor_ruby/${ruby.version.libDir}/${stdenv.targetPlatform.system}
+    EOF
   '';
 
   passthru = {
