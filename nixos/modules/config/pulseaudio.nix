@@ -17,10 +17,6 @@ let
   binary = "${getBin overriddenPackage}/bin/pulseaudio";
   binaryNoDaemon = "${binary} --daemonize=no";
 
-  # Forces 32bit pulseaudio and alsa-plugins to be built/supported for apps
-  # using 32bit alsa on 64bit linux.
-  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs.pkgsi686Linux.alsa-lib != null && pkgs.pkgsi686Linux.libpulseaudio != null);
-
 
   myConfigFile =
     let
@@ -60,26 +56,22 @@ let
   # Write an /etc/asound.conf that causes all ALSA applications to
   # be re-routed to the PulseAudio server through ALSA's Pulse
   # plugin.
-  alsaConf = writeText "asound.conf" (''
+  alsaConf = writeText "asound.conf" ''
     pcm_type.pulse {
-      libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
-      ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
+      lib ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
     }
     pcm.!default {
       type pulse
       hint.description "Default Audio Device (via PulseAudio)"
     }
     ctl_type.pulse {
-      libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;
-      ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
+      lib ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;
     }
     ctl.!default {
       type pulse
     }
     ${alsaCfg.extraConfig}
-  '');
+  '';
 
 in {
 
@@ -106,15 +98,6 @@ in {
           Please read the PulseAudio documentation for more details.
 
           Don't enable this option unless you know what you are doing.
-        '';
-      };
-
-      support32Bit = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to include the 32-bit pulseaudio libraries in the system or not.
-          This is only useful on 64-bit systems and currently limited to x86_64-linux.
         '';
       };
 
