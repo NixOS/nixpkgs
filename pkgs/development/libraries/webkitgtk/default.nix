@@ -1,6 +1,7 @@
 { lib, stdenv
 , runCommand
 , fetchurl
+, fetchpatch
 , perl
 , python3
 , ruby
@@ -82,6 +83,30 @@ stdenv.mkDerivation rec {
       inherit (addOpenGLRunpath) driverLink;
     })
     ./libglvnd-headers.patch
+
+    # Pull upstream patches for missing includes on gcc-12:
+    #  https://trac.webkit.org/changeset/288379/webkit
+    (fetchpatch {
+      name = "exchange-gcc-12.patch";
+      url  = "https://github.com/WebKit/WebKit/commit/198b392130b8dd625f4d5d36e652954eececb16b.patch";
+      excludes = [
+        "Source/JavaScriptCore/ChangeLog"
+        "Source/WTF/ChangeLog"
+        "Source/WebCore/ChangeLog"
+        "Tools/ChangeLog"
+
+        "Tools/ImageDiff/ImageDiff.cpp"
+      ];
+      sha256 = "sha256-D+wxfM8AEMBfvpghrwa5v9cYLyK5+Sab3J0RE/xVar8=";
+    })
+    (fetchpatch {
+      name = "string-gcc-12.patch";
+      url  = "https://github.com/WebKit/WebKit/commit/4e3fade6bd89347e041a1938d4ea85fee14e5534.patch";
+      excludes = [
+        "Source/WTF/ChangeLog"
+      ];
+      sha256 = "sha256-NPqZLfMUR6InQuqfVwNoZwuM3Jtbz5KAbm9SUBaprmc=";
+    })
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
