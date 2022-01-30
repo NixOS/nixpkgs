@@ -42,7 +42,9 @@ or the feature is disabled by default.
 
 qt5 used `configure`. for example `./configure -system-ffmpeg`
 
-qt6 uses cmake, so we need
+qt6 uses cmake, so we need ...
+
+### qt6 cmakeFlags
 
 ```nix
 {
@@ -62,12 +64,12 @@ qt_feature("webengine-system-ffmpeg" PRIVATE
 )
 ```
 
-list all features as cmake flags
+### list all features as cmake flags
 
 ```sh
 cd $(mktemp -d)
 
-tar xf /nix/store/*-qtbase-everywhere-src-6.2.2.tar.xz
+tar xf /nix/store/*-qtbase-*6.2.2.tar.xz
 
 find . -name configure.cmake | xargs cat \
   | grep ^qt_feature | cut -d'"' -f2 \
