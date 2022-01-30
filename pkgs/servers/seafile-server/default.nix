@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, pkg-config, python3Packages, autoreconfHook
 , libuuid, sqlite, glib, libevent, libsearpc, openssl, fuse, libarchive, which
-, vala, cmake, oniguruma }:
+, vala, cmake, oniguruma, nixosTests }:
 
 let
   # seafile-server relies on a specific version of libevhtp.
@@ -41,6 +41,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/seafile/sql
     cp -r scripts/sql $out/share/seafile
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) seafile;
+  };
 
   meta = with lib; {
     description = "File syncing and sharing software with file encryption and group sharing, emphasis on reliability and high performance";
