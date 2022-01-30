@@ -16,18 +16,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kime";
-  version = "2.5.5";
+  version = "2.5.6";
 
   src = fetchFromGitHub {
     owner = "Riey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-u2CmehJipXSH1dey5oIyQf8CsRveeae5cSjpY8vWYRs=";
+    sha256 = "sha256-r5luI6B4IjNTbh2tzpqabokgwkmbyXrA61+F2HDEWuo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sha256 = "sha256-ROzEEfIPeWoWDi5McNwub5E/UCAeJpOx5nZS9r/q4K4=";
+    sha256 = "sha256-GvBnNPY51RPt+I73oet5tB/EE2UsEPKbelJZkSY3xNw=";
   };
 
   # Replace autostart path
