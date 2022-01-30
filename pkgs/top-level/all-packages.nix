@@ -8114,7 +8114,9 @@ with pkgs;
     nvidiaGpuSupport = config.cudaSupport or false;
   };
 
-  nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
+  nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler {
+    buildGoModule = buildGo117Module;
+  };
 
   nomad-driver-podman = callPackage ../applications/networking/cluster/nomad-driver-podman { };
 
