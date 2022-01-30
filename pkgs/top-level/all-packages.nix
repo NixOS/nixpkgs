@@ -14992,7 +14992,9 @@ with pkgs;
 
   jpexs = callPackage ../development/tools/jpexs { };
 
-  k0sctl = callPackage ../applications/networking/cluster/k0sctl { };
+  k0sctl = callPackage ../applications/networking/cluster/k0sctl {
+    buildGoModule = buildGo117Module;
+  };
 
   k2tf = callPackage ../development/tools/misc/k2tf { };
 
