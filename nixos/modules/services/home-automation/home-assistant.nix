@@ -59,8 +59,8 @@ let
     # Respect overrides that already exist in the passed package and
     # concat it with values passed via the module.
     extraComponents = oldArgs.extraComponents ++ extraComponents;
+    extraPackages = ps: (oldArgs.extraPackages ps) ++ (cfg.extraPackages ps);
   }));
-
 in {
   imports = [
     # Migrations in NixOS 22.05
@@ -107,6 +107,26 @@ in {
         List of <link xlink:href="https://www.home-assistant.io/integrations/">components</link> that have their dependencies included in the package.
 
         The component name can be found in the URL, for example <literal>https://www.home-assistant.io/integrations/ffmpeg/</literal> would map to <literal>ffmpeg</literal>.
+      '';
+    };
+
+    extraPackages = mkOption {
+      type = types.functionTo (types.listOf types.package);
+      default = _: [];
+      defaultText = literalExpression ''
+        python3Packages: with python3Packages; [];
+      '';
+      example = literalExpression ''
+        python3Packages: with python3Packages; [
+          # postgresql support
+          psycopg2
+        ];
+      '';
+      description = ''
+        List of packages to add to propagatedBuildInputs.
+
+        A popular example is <package>python3Packages.psycopg2</package>
+        for PostgreSQL support in the recorder component.
       '';
     };
 
