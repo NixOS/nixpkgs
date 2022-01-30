@@ -14,8 +14,9 @@ let
     desktopName = "Obsidian";
     comment = "Knowledge base";
     icon = "obsidian";
-    exec = "obsidian";
+    exec = "obsidian %u";
     categories = "Office";
+    mimeType = "text/html;x-scheme-handler/obsidian;";
   };
 
   updateScript = writeScript "obsidian-updater" ''
