@@ -4474,7 +4474,7 @@
   gordias = {
     name = "Gordias";
     email = "gordias@disroot.org";
-    github = "NotGordias";
+    github = "gordiasdot";
     githubId = 94724133;
     keys = [{
       longkeyid = "ed25519/0x5D47284830FAA4FA";

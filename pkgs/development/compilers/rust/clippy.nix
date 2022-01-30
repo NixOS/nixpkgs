@@ -20,10 +20,6 @@ rustPlatform.buildRustPackage {
   #   (/private/tmp/nix-build-clippy-1.36.0.drv-0/rustc-1.36.0-src/src/librustc_llvm)
   doCheck = false;
 
-  preBuild = ''
-    export CARGO_TARGET_DIR="$(pwd)/target"
-  '';
-
   preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -add_rpath "${rustc}/lib" $out/bin/clippy-driver
   '';

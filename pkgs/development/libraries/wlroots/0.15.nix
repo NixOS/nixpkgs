@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner glslang ];
 
   buildInputs = [
     libGL wayland wayland-protocols libinput libxkbcommon pixman
     xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg xcbutilrenderutil seatd vulkan-loader glslang
+    libpng ffmpeg xcbutilrenderutil seatd vulkan-loader
   ]
     ++ lib.optional enableXWayland xwayland
   ;
