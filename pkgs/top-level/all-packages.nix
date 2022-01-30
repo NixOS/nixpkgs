@@ -6469,7 +6469,9 @@ with pkgs;
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
-  httpx = callPackage ../tools/security/httpx { };
+  httpx = callPackage ../tools/security/httpx {
+    buildGoModule = buildGo117Module;
+  };
 
   hurl = callPackage ../tools/networking/hurl { };
 
