@@ -2165,7 +2165,9 @@ with pkgs;
     packetbeat6
     journalbeat6;
 
-  inherit (callPackages ../misc/logging/beats/7.x.nix { })
+  inherit (callPackages ../misc/logging/beats/7.x.nix {
+    buildGoModule = buildGo117Module;
+  })
     filebeat7
     heartbeat7
     metricbeat7
@@ -2722,7 +2724,9 @@ with pkgs;
 
   dapr-cli = callPackage ../development/tools/dapr/cli {};
 
-  dasel = callPackage ../applications/misc/dasel { };
+  dasel = callPackage ../applications/misc/dasel {
+    buildGoModule = buildGo117Module;
+  };
 
   dasher = callPackage ../applications/accessibility/dasher { };
 
@@ -7212,7 +7216,9 @@ with pkgs;
 
   mxt-app = callPackage ../misc/mxt-app { };
 
-  naabu = callPackage ../tools/security/naabu { };
+  naabu = callPackage ../tools/security/naabu {
+    buildGoModule = buildGo117Module;
+  };
 
   nagstamon = callPackage ../tools/misc/nagstamon {
     pythonPackages = python3Packages;
@@ -7230,7 +7236,9 @@ with pkgs;
 
   ncrack = callPackage ../tools/security/ncrack { };
 
-  nerdctl = callPackage ../applications/networking/cluster/nerdctl { };
+  nerdctl = callPackage ../applications/networking/cluster/nerdctl {
+    buildGoModule = buildGo117Module;
+  };
 
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
@@ -14619,7 +14627,9 @@ with pkgs;
 
   cli11 = callPackage ../development/tools/misc/cli11 { };
 
-  datree = callPackage ../development/tools/datree { };
+  datree = callPackage ../development/tools/datree {
+    buildGoModule = buildGo117Module;
+  };
 
   dcadec = callPackage ../development/tools/dcadec { };
 
@@ -14994,7 +15004,9 @@ with pkgs;
 
   jpexs = callPackage ../development/tools/jpexs { };
 
-  k0sctl = callPackage ../applications/networking/cluster/k0sctl { };
+  k0sctl = callPackage ../applications/networking/cluster/k0sctl {
+    buildGoModule = buildGo117Module;
+  };
 
   k2tf = callPackage ../development/tools/misc/k2tf { };
 
@@ -25109,7 +25121,9 @@ with pkgs;
     inherit (gnome2) libgnomeui;
   };
 
-  dyff = callPackage ../development/tools/dyff {};
+  dyff = callPackage ../development/tools/dyff {
+    buildGoModule = buildGo117Module;
+  };
 
   dwl = callPackage ../applications/window-managers/dwl {
     wlroots = wlroots_0_14;
@@ -26797,7 +26811,9 @@ with pkgs;
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
 
-  k9s = callPackage ../applications/networking/cluster/k9s { };
+  k9s = callPackage ../applications/networking/cluster/k9s {
+    buildGoModule = buildGo117Module;
+  };
 
   pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
 

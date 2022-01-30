@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "091s3hyz9p892garanm9zmkbsn6hn3bnnrz7h3dqsyi58806d5yr";
   };
 
-  vendorSha256 = "1psyx8nqzpx3p1ya9y3q9h0hhfx4iqmix089b2h6bp9lgqbj5zn8";
+  vendorSha256 = "1y0k03lg9dh3bpi10xzv03h7gq7h0hgggs304p78p3jkr8pmkqss";
 
   ldflags = [
     "-s" "-w" "-X github.com/tomwright/dasel/internal.Version=${version}"
