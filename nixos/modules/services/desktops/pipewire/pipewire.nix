@@ -6,9 +6,6 @@ with lib;
 let
   json = pkgs.formats.json {};
   cfg = config.services.pipewire;
-  enable32BitAlsaPlugins = cfg.alsa.support32Bit
-                           && pkgs.stdenv.isx86_64
-                           && pkgs.pkgsi686Linux.pipewire != null;
 
   # The package doesn't output to $out/lib/pipewire directly so that the
   # overlays can use the outputs to replace the originals in FHS environments.
@@ -115,7 +112,6 @@ in {
 
       alsa = {
         enable = mkEnableOption "ALSA support";
-        support32Bit = mkEnableOption "32-bit ALSA support on 64-bit systems";
       };
 
       jack = {
@@ -186,14 +182,10 @@ in {
     environment.etc."alsa/conf.d/49-pipewire-modules.conf" = mkIf cfg.alsa.enable {
       text = ''
         pcm_type.pipewire {
-          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
-          ${optionalString enable32BitAlsaPlugins
-            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
+          lib ${cfg.package.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
         }
         ctl_type.pipewire {
-          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;
-          ${optionalString enable32BitAlsaPlugins
-            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;"}
+          lib ${cfg.package.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;
         }
       '';
     };

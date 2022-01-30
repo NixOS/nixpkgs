@@ -33,7 +33,6 @@ let
             imports = [ ./common/wayland-cage.nix ];
             hardware.pulseaudio = {
               enable = true;
-              support32Bit = true;
               inherit systemWide;
             };
 

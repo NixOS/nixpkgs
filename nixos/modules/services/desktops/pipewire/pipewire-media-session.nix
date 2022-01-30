@@ -6,9 +6,6 @@ with lib;
 let
   json = pkgs.formats.json {};
   cfg = config.services.pipewire.media-session;
-  enable32BitAlsaPlugins = cfg.alsa.support32Bit
-                           && pkgs.stdenv.isx86_64
-                           && pkgs.pkgsi686Linux.pipewire != null;
 
   # Use upstream config files passed through spa-json-dump as the base
   # Patched here as necessary for them to work with this module

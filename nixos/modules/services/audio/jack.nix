@@ -8,8 +8,6 @@ let
   pcmPlugin = cfg.jackd.enable && cfg.alsa.enable;
   loopback = cfg.jackd.enable && cfg.loopback.enable;
 
-  enable32BitAlsaPlugins = cfg.alsa.support32Bit && pkgs.stdenv.isx86_64 && pkgs.pkgsi686Linux.alsa-lib != null;
-
   umaskNeeded = versionOlder cfg.jackd.package.version "1.9.12";
   bridgeNeeded = versionAtLeast cfg.jackd.package.version "1.9.12";
 in {
@@ -60,14 +58,6 @@ in {
           default = true;
           description = ''
             Route audio to/from generic ALSA-using applications using ALSA JACK PCM plugin.
-          '';
-        };
-
-        support32Bit = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Whether to support sound for 32-bit ALSA applications on 64-bit system.
           '';
         };
       };
@@ -129,9 +119,7 @@ in {
     (mkIf pcmPlugin {
       sound.extraConfig = ''
         pcm_type.jack {
-          libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;
-          ${lib.optionalString enable32BitAlsaPlugins
-          "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;"}
+          lib ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;
         }
         pcm.!default {
           @func getenv

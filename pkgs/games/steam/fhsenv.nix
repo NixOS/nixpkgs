@@ -299,7 +299,6 @@ in buildFHSUserEnv rec {
     and then run \`sudo nixos-rebuild switch\`:
     {
       hardware.opengl.driSupport32Bit = true;
-      hardware.pulseaudio.support32Bit = true;
     }
     **
     EOF
