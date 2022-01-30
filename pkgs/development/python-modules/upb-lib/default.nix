@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "upb-lib";
-  version = "0.4.12";
+  version = "0.5";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e668055d9c389aefd09203afb96a950a320095f225ef0a1aa611e592db92a71b";
+    sha256 = "sha256-0KTbIDP4lqZ7KNSuPXNbiwkxsqqCxlkiIl8/nnPqohI=";
   };
 
   propagatedBuildInputs = [
