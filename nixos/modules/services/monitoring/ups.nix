@@ -112,6 +112,18 @@ in
         '';
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "nut";
+        description = "User to run the services as";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "nut";
+        description = "Group to run the services as";
+      };
+
       # This option is not used yet.
       mode = mkOption {
         default = "standalone";
@@ -183,7 +195,11 @@ in
       description = "Uninterruptible Power Supplies (Monitor)";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.Type = "forking";
+      serviceConfig = {
+        Type = "forking";
+        User = cfg.user;
+        Group = cfg.group;
+      };
       script = "${pkgs.nut}/sbin/upsmon";
       environment.NUT_CONFPATH = "/etc/nut/";
       environment.NUT_STATEPATH = "/var/lib/nut/";
@@ -193,9 +209,12 @@ in
       description = "Uninterruptible Power Supplies (Daemon)";
       after = [ "network.target" "upsmon.service" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.Type = "forking";
-      # TODO: replace 'root' by another username.
-      script = "${pkgs.nut}/sbin/upsd -u root";
+      serviceConfig = {
+        Type = "forking";
+        User = cfg.user;
+        Group = cfg.group;
+      };
+      script = "${pkgs.nut}/sbin/upsd -u ${cfg.user}";
       environment.NUT_CONFPATH = "/etc/nut/";
       environment.NUT_STATEPATH = "/var/lib/nut/";
     };
@@ -204,11 +223,12 @@ in
       description = "Uninterruptible Power Supplies (Register all UPS)";
       after = [ "upsd.service" ];
       wantedBy = [ "multi-user.target" ];
-      # TODO: replace 'root' by another username.
-      script = "${pkgs.nut}/bin/upsdrvctl -u root start";
+      script = "${pkgs.nut}/bin/upsdrvctl -u ${cfg.user} start";
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        User = cfg.user;
+        Group = cfg.group;
       };
       environment.NUT_CONFPATH = "/etc/nut/";
       environment.NUT_STATEPATH = "/var/lib/nut/";
@@ -243,21 +263,19 @@ in
       ''
         # Used to store pid files of drivers.
         mkdir -p /var/state/ups
+        chown ${cfg.user}:${cfg.group} -R /var/state/ups
       '';
 
-
-/*
-    users.users.nut =
-      { uid = 84;
-        home = "/var/lib/nut";
+    users = {
+      users."${cfg.user}" = {
+        isSystemUser = true;
+        home = "/var/lib/nut/";
         createHome = true;
         group = "nut";
-        description = "UPnP A/V Media Server user";
+        description = "Network UPS Tools";
       };
-
-    users.groups."nut" =
-      { gid = 84; };
-*/
+      groups."${cfg.group}" = { };
+    };
 
   };
 }
