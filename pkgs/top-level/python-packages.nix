@@ -10063,6 +10063,8 @@ in {
     inherit (pkgs.xorg) libX11 libXext;
   };
 
+  ufo2ft = callPackage ../development/python-modules/ufo2ft { };
+
   ufonormalizer = callPackage ../development/python-modules/ufonormalizer { };
 
   ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
