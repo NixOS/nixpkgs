@@ -7214,7 +7214,9 @@ with pkgs;
 
   mxt-app = callPackage ../misc/mxt-app { };
 
-  naabu = callPackage ../tools/security/naabu { };
+  naabu = callPackage ../tools/security/naabu {
+    buildGoModule = buildGo117Module;
+  };
 
   nagstamon = callPackage ../tools/misc/nagstamon {
     pythonPackages = python3Packages;
