@@ -421,8 +421,12 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_libproxy=ON"
     "-DQT_FEATURE_system_sqlite=ON"
     "-DQT_FEATURE_vulkan=ON"
-    #"-DQT_FEATURE_openssl_linked=ON" # TODO? "Qt directly linked to OpenSSL"
+
     #"-DQT_FEATURE_ltcg=ON" # default off
+
+    # trying to fix strawberry TLS errors
+    "-DQT_FEATURE_openssl_linked=ON" # TODO? "Qt directly linked to OpenSSL"
+    "-DQT_FEATURE_dtls=ON" # TLS for UDP # is this default on?
   ];
 
   outputs = [ "out" "bin" "dev" ];
