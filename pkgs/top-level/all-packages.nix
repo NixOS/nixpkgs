@@ -6626,6 +6626,8 @@ with pkgs;
 
   iouyap = callPackage ../tools/networking/iouyap { };
 
+  ioztat = callPackage ../tools/filesystems/ioztat { };
+
   ip2location = callPackage ../tools/networking/ip2location { };
 
   ip2unix = callPackage ../tools/networking/ip2unix { };
