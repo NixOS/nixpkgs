@@ -183,20 +183,6 @@ in
 
   config = mkIf enableDHCP {
 
-    assertions = [ {
-      # dhcpcd doesn't start properly with malloc ∉ [ libc scudo ]
-      # see https://github.com/NixOS/nixpkgs/issues/151696
-      assertion =
-        dhcpcd.enablePrivSep
-          -> elem config.environment.memoryAllocator.provider [ "libc" "scudo" ];
-      message = ''
-        dhcpcd with privilege separation is incompatible with chosen system malloc.
-          Currently only the `libc` and `scudo` allocators are known to work.
-          To disable dhcpcd's privilege separation, overlay Nixpkgs and override dhcpcd
-          to set `enablePrivSep = false`.
-      '';
-    } ];
-
     systemd.services.dhcpcd = let
       cfgN = config.networking;
       hasDefaultGatewaySet = (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")
@@ -214,6 +200,18 @@ in
         # because it brings down the network interfaces configured by
         # dhcpcd.  So do a "systemctl restart" instead.
         stopIfChanged = false;
+
+        # dhcpcd doesn't start properly with malloc ∉ [ libc scudo ]
+        # see https://github.com/NixOS/nixpkgs/issues/151696
+        environment.LD_PRELOAD =
+          let
+            malloc = config.environment.memoryAllocator.provider;
+          in
+            mkIf
+              (dhcpcd.enablePrivSep && ! elem malloc [ "libc" "scudo" ])
+              (builtins.trace
+                "dhcpcd cannot use the configured system memory allocator `${malloc}`, using `scudo` instead"
+                (import ../../config/malloc-providers.nix { inherit pkgs; }).scudo.libPath);
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
