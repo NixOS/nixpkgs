@@ -44,7 +44,7 @@ in
 , util-linuxMinimal
 , xz
 
-, enableDocumentation ? atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
+, enableDocumentation ? !atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
