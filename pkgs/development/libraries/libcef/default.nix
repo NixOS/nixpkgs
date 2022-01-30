@@ -102,6 +102,8 @@ stdenv.mkDerivation rec {
     cp -r ../include $out/
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Simple framework for embedding Chromium-based browsers in other applications";
     homepage = "https://cef-builds.spotifycdn.com/index.html";
