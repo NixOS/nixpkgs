@@ -634,6 +634,6 @@ mount --move /sys $targetRoot/sys
 mount --move /dev $targetRoot/dev
 mount --move /run $targetRoot/run
 
-exec env -i $(type -P switch_root) "$targetRoot" "$stage2Init"
+exec env -i - verbose="$verbose" $(type -P switch_root) "$targetRoot" "$stage2Init"
 
 fail # should never be reached
