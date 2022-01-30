@@ -1,0 +1,11 @@
+# List of revs that can be ignored for git blame with --ignore-revs-file
+#
+# Examples:
+# - command-line invocation:
+# git blame --ignore-revs-file .git-blame-ignore-revs example.nix
+# - through git config:
+# git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# https://git-scm.com/docs/git-blame#Documentation/git-blame.txt---ignore-revs-fileltfilegt
+
+# List of treefmt runs revs:
