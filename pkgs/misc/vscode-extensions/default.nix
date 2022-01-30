@@ -693,8 +693,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.1.0";
-          sha256 = "sha256-lR5BDbDYURCF1Gq5JIm7BcXVvKXPdNBYom0BiVX/3u0=";
+          version = "9.2.0";
+          sha256 = "sha256-ROI312MPMUY1q6IV4qVCW8DD0MQPA/hVW7rfamo/IbI=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -1462,8 +1462,8 @@ let
         mktplcRef = {
           name = "material-icon-theme";
           publisher = "PKief";
-          version = "4.11.0";
-          sha256 = "1l2s8j645riqjmj09i3v71s8ycin5vd6brdp35z472fnk6wyi1y6";
+          version = "4.12.1";
+          sha256 = "sha256-pmWnnZrdk6zb8YFG5ESgK4k875hgeseWyzkA9YUjg7A=";
         };
         meta = {
           license = lib.licenses.mit;
