@@ -22342,7 +22342,9 @@ with pkgs;
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
 
-  gmailctl = callPackage ../applications/networking/gmailctl {};
+  gmailctl = callPackage ../applications/networking/gmailctl {
+    buildGoModule = buildGo117Module;
+  };
 
   gomp = callPackage ../applications/version-management/gomp { };
 
