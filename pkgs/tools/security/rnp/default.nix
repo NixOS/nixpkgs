@@ -15,16 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rnp";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "rnpgp";
     repo = "rnp";
     rev = "v${version}";
-    sha256 = "1jph69nsz245fbv04nalh1qmhniyh88sacsf3nxv1vxm190314i9";
+    sha256 = "u0etVslTBF9fBqnpVBofYsm0uC/eR6gO3lhwzqua5Qw=";
   };
-
-  patches = [ ./cmake_nogit.patch ];
 
   buildInputs = [ zlib bzip2 json_c botan2 ];
 

@@ -14,7 +14,6 @@
 , granite
 , libgee
 , elementary-icon-theme
-, elementary-gtk-theme
 , elementary-settings-daemon
 , gettext
 , libhandy
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-gtk-theme
     elementary-icon-theme
     elementary-settings-daemon # settings schema
     glib

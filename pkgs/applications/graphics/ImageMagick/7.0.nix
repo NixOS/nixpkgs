@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libjxl, libpng, liblqr1, libraw, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
-, ApplicationServices
+, potrace, ApplicationServices
 , Foundation
 , testVersion, imagemagick
 }:
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config libtool ];
 
   buildInputs =
-    [ zlib fontconfig freetype ghostscript
+    [ zlib fontconfig freetype ghostscript potrace
       liblqr1 libpng libraw libtiff libxml2 libheif djvulibre
     ]
     # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
