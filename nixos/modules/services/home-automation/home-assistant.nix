@@ -49,14 +49,17 @@ let
   useComponent = component:
     hasAttrByPath (splitString "." component) cfg.config
     || useComponentPlatform component
-    || useExplicitComponent component;
+    || useExplicitComponent component
+    || builtins.elem component cfg.extraComponents;
 
   # Final list of components passed into the package to include required dependencies
   extraComponents = filter useComponent availableComponents;
 
-  package = (cfg.package.override {
-    inherit extraComponents;
-  });
+  package = (cfg.package.override (oldArgs: {
+    # Respect overrides that already exist in the passed package and
+    # concat it with values passed via the module.
+    extraComponents = oldArgs.extraComponents ++ extraComponents;
+  }));
 
 in {
   imports = [
@@ -80,6 +83,31 @@ in {
       default = "/var/lib/hass";
       type = types.path;
       description = "The config directory, where your <filename>configuration.yaml</filename> is located.";
+    };
+
+    extraComponents = mkOption {
+      type = types.listOf (types.enum availableComponents);
+      default = [
+        # List of components required to complete the onboarding
+        "default_config"
+        "met"
+        "esphome"
+      ];
+      example = literalExpression ''
+        [
+          "analytics"
+          "default_config"
+          "esphome"
+          "my"
+          "shopping_list"
+          "wled"
+        ]
+      '';
+      description = ''
+        List of <link xlink:href="https://www.home-assistant.io/integrations/">components</link> that have their dependencies included in the package.
+
+        The component name can be found in the URL, for example <literal>https://www.home-assistant.io/integrations/ffmpeg/</literal> would map to <literal>ffmpeg</literal>.
+      '';
     };
 
     config = mkOption {
