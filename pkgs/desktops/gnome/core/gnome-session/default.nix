@@ -1,16 +1,42 @@
-{ fetchurl, lib, stdenv, substituteAll, meson, ninja, pkg-config, gnome, glib, gtk3, gsettings-desktop-schemas
-, gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
-, libxslt, gettext, makeWrapper, systemd, xorg, libepoxy, gnugrep, bash, gnome-session-ctl }:
+{ fetchurl
+, lib
+, stdenv
+, substituteAll
+, meson
+, ninja
+, pkg-config
+, gnome
+, glib
+, gtk3
+, gsettings-desktop-schemas
+, gnome-desktop
+, dbus
+, json-glib
+, libICE
+, xmlto
+, docbook_xsl
+, docbook_xml_dtd_412
+, python3
+, libxslt
+, gettext
+, makeWrapper
+, systemd
+, xorg
+, libepoxy
+, bash
+, gnome-session-ctl
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
-  version = "40.1.1";
+  # Also bump ./ctl.nix when bumping major version.
+  version = "41.3";
 
-  outputs = ["out" "sessions"];
+  outputs = [ "out" "sessions" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "10nzyhmgkrzk6i70kj7690na0hmsv6qy5bmr10akxq9jxqlphy4w";
+    sha256 = "7koikFP1ImJAVIiWCTNbiFKHz2e73g3J/YgrAeybWzk=";
   };
 
   patches = [
@@ -18,22 +44,41 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       gsettings = "${glib.bin}/bin/gsettings";
       dbusLaunch = "${dbus.lib}/bin/dbus-launch";
-      grep = "${gnugrep}/bin/grep";
       bash = "${bash}/bin/bash";
     })
   ];
 
-  mesonFlags = [ "-Dsystemd=true" "-Dsystemd_session=default" ];
-
   nativeBuildInputs = [
-    meson ninja pkg-config gettext makeWrapper
-    xmlto libxslt docbook_xsl docbook_xml_dtd_412 python3
+    meson
+    ninja
+    pkg-config
+    gettext
+    makeWrapper
+    xmlto
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_412
+    python3
     dbus # for DTD
   ];
 
   buildInputs = [
-    glib gtk3 libICE gnome-desktop json-glib xorg.xtrans gnome.adwaita-icon-theme
-    gnome.gnome-settings-daemon gsettings-desktop-schemas systemd libepoxy
+    glib
+    gtk3
+    libICE
+    gnome-desktop
+    json-glib
+    xorg.xtrans
+    gnome.adwaita-icon-theme
+    gnome.gnome-settings-daemon
+    gsettings-desktop-schemas
+    systemd
+    libepoxy
+  ];
+
+  mesonFlags = [
+    "-Dsystemd=true"
+    "-Dsystemd_session=default"
   ];
 
   postPatch = ''
@@ -49,17 +94,6 @@ stdenv.mkDerivation rec {
       {} +
   '';
 
-  # `bin/gnome-session` will reset the environment when run in wayland, we
-  # therefor wrap `libexec/gnome-session-binary` instead which is the actual
-  # binary needing wrapping
-  preFixup = ''
-    wrapProgram "$out/libexec/gnome-session-binary" \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_DATA_DIRS : "${gnome.gnome-shell}/share"\
-      --suffix XDG_CONFIG_DIRS : "${gnome.gnome-settings-daemon}/etc/xdg"
-  '';
-
   # We move the GNOME sessions to another output since gnome-session is a dependency of
   # GDM itself. If we do not hide them, it will show broken GNOME sessions when GDM is
   # enabled without proper GNOME installation.
@@ -72,12 +106,26 @@ stdenv.mkDerivation rec {
     rm -rf $out/libexec/gnome-session-ctl
   '';
 
+  # `bin/gnome-session` will reset the environment when run in wayland, we
+  # therefor wrap `libexec/gnome-session-binary` instead which is the actual
+  # binary needing wrapping
+  preFixup = ''
+    wrapProgram "$out/libexec/gnome-session-binary" \
+      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
+      --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
+      --suffix XDG_DATA_DIRS : "${gnome.gnome-shell}/share"\
+      --suffix XDG_CONFIG_DIRS : "${gnome.gnome-settings-daemon}/etc/xdg"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-session";
       attrPath = "gnome.gnome-session";
     };
-    providedSessions = [ "gnome" "gnome-xorg" ];
+    providedSessions = [
+      "gnome"
+      "gnome-xorg"
+    ];
   };
 
   meta = with lib; {
