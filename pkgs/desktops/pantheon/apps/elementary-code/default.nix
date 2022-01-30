@@ -3,29 +3,28 @@
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, pkg-config
+, appstream
+, desktop-file-utils
 , meson
 , ninja
-, vala
+, pkg-config
+, polkit
 , python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, elementary-icon-theme
-, appstream
-, libpeas
+, vala
+, wrapGAppsHook
 , editorconfig-core-c
+, elementary-icon-theme
+, granite
+, gtk3
 , gtksourceview4
 , gtkspell3
+, libgee
+, libgit2-glib
+, libhandy
+, libpeas
 , libsoup
 , vte
-, webkitgtk
 , ctags
-, libgit2-glib
-, wrapGAppsHook
-, polkit
 }:
 
 stdenv.mkDerivation rec {
@@ -61,7 +60,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ctags
     editorconfig-core-c
     elementary-icon-theme
     granite
@@ -74,7 +72,6 @@ stdenv.mkDerivation rec {
     libpeas
     libsoup
     vte
-    webkitgtk
   ];
 
   # ctags needed in path by outline plugin

@@ -594,16 +594,20 @@ stdenv.mkDerivation {
     rm -rf $out/share/doc
   '';
 
-  # The interface version prevents NixOS from switching to an
-  # incompatible systemd at runtime.  (Switching across reboots is
-  # fine, of course.)  It should be increased whenever systemd changes
-  # in a backwards-incompatible way.  If the interface version of two
-  # systemd builds is the same, then we can switch between them at
-  # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 2;
+  passthru = {
+    # The interface version prevents NixOS from switching to an
+    # incompatible systemd at runtime.  (Switching across reboots is
+    # fine, of course.)  It should be increased whenever systemd changes
+    # in a backwards-incompatible way.  If the interface version of two
+    # systemd builds is the same, then we can switch between them at
+    # runtime; otherwise we can't and we need to reboot.
+    interfaceVersion = 2;
 
-  passthru.tests = {
-    inherit (nixosTests) switchTest;
+    inherit withCryptsetup;
+
+    tests = {
+      inherit (nixosTests) switchTest;
+    };
   };
 
   meta = with lib; {

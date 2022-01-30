@@ -2,28 +2,26 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, pkg-config
+, appstream-glib
+, desktop-file-utils
 , meson
 , ninja
+, pkg-config
+, python3
 , vala
-, desktop-file-utils
-, gtk3
+, wrapGAppsHook
+, clutter
+, elementary-icon-theme
+, evolution-data-server
+, folks
+, geoclue2
+, geocode-glib
 , granite
+, gtk3
+, libchamplain
 , libgee
 , libhandy
-, geoclue2
-, libchamplain
-, clutter
-, folks
-, geocode-glib
-, python3
-, libnotify
 , libical
-, libgdata
-, evolution-data-server
-, appstream-glib
-, elementary-icon-theme
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -61,7 +59,6 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     libical
-    libnotify
   ];
 
   postPatch = ''

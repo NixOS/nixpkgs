@@ -5,7 +5,6 @@
 , appstream-glib
 , dbus
 , desktop-file-utils
-, elementary-gtk-theme
 , elementary-icon-theme
 , fetchFromGitHub
 , flatpak
@@ -61,7 +60,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-gtk-theme
     elementary-icon-theme
     flatpak
     glib
