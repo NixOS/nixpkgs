@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   proxyVendor = true;
-  vendorSha256 = "sha256-c+9IZEKiW95JIh6krs9NhdBohUatTTEIYBU13kj9zB8=";
+  vendorSha256 = "sha256-WwHaprq4+4uduiKpNu5iVcV6qJsYX/aSXJAJWpbDVqc=";
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
 
