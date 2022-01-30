@@ -9408,6 +9408,8 @@ in {
 
   statistics = callPackage ../development/python-modules/statistics { };
 
+  statmake = callPackage ../development/python-modules/statmake { };
+
   statsd = callPackage ../development/python-modules/statsd { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
