@@ -34,6 +34,11 @@ in {
         doInstallCheck = false;
       });
 
+      # tests loading components from the module
+      extraComponents = [
+        "wake_on_lan"
+      ];
+
       config = {
         homeassistant = {
           name = "Home";
@@ -69,7 +74,6 @@ in {
         # set up a wake-on-lan switch to test capset capability required
         # for the ping suid wrapper
         # https://www.home-assistant.io/integrations/wake_on_lan/
-        wake_on_lan = {};
         switch = [ {
           platform = "wake_on_lan";
           mac = "00:11:22:33:44:55";
