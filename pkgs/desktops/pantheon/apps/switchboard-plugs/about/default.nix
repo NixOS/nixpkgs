@@ -14,7 +14,6 @@
 , switchboard
 , fwupd
 , appstream
-, nixos-artwork
 }:
 
 stdenv.mkDerivation rec {
