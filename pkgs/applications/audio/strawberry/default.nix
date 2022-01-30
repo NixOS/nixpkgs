@@ -25,7 +25,8 @@
 , p11-kit
 , util-linux
 , qtbase
-, qtx11extras
+, qtx11extras ? null # qt5
+, qt5compat ? null # qt6
 , qttools
 , withGstreamer ? true
 , glib-networking
@@ -61,6 +62,8 @@ mkDerivation rec {
     sqlite
     taglib
     qtbase
+    qtx11extras
+  ] ++ lib.optionals (lib.versions.major qtbase.version == "5") [
     qtx11extras
   ] ++ lib.optionals stdenv.isLinux [
     libpulseaudio

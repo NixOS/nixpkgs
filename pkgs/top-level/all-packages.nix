@@ -5047,6 +5047,7 @@ with pkgs;
   soupault = callPackage ../tools/typesetting/soupault { };
 
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
+  strawberry-qt6 = libsForQt6.callPackage ../applications/audio/strawberry { };
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
@@ -19689,6 +19690,9 @@ with pkgs;
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
 
+  qarma = libsForQt5.callPackage ../tools/misc/qarma { };
+  qarma-qt6 = libsForQt6.callPackage ../tools/misc/qarma { };
+
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
   qjson = callPackage ../development/libraries/qjson { };
@@ -28487,6 +28491,7 @@ with pkgs;
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
   qimgv = libsForQt5.callPackage ../applications/graphics/qimgv { };
+  qimgv-qt6 = libsForQt6.callPackage ../applications/graphics/qimgv { };
 
   qlandkartegt = libsForQt514.callPackage ../applications/misc/qlandkartegt {
     gdal = gdal.override {

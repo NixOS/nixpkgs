@@ -4,25 +4,29 @@
 , wrapQtAppsHook
 , qtbase
 , qmake
-, qtx11extras
+, qtx11extras ? null # qt5
+, qt5compat ? null # qt6
 }:
 
 mkDerivation rec {
   pname = "qarma";
-  version = "2021-10-05";
+  version = "2022-01-16";
 
   src = fetchFromGitHub {
     owner = "luebking";
     repo = pname;
-    rev = "605ea4213406718ba869dd146875195e57488786";
-    sha256 = "KFoFywFeGqNmE1y49DrXJZ1jIK5jMOCOspkkFME+DR8=";
+    rev = "6ee1a72635d0f7974a4e38c348a511f12b593043";
+    sha256 = "P4Hc2Q3id2M9XGexic4hoPTngdV/hYcaizUuc06LuHU=";
   };
 
-  postPatch = ''
-    sed -i.bak -E "s,(target\.path \+=) /usr/bin,\1 $out/bin," qarma.pro
-  '';
+  buildInputs = [
+    qtbase
+  ] ++ lib.optionals (lib.versions.major qtbase.version == "5") [
+    qtx11extras
+  ] ++ lib.optionals (lib.versions.major qtbase.version == "6") [
+    qt5compat
+  ];
 
-  buildInputs = [ qtbase qtx11extras ];
   nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   meta = with lib; {
