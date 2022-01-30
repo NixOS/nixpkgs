@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-# TODO: This is not secure, have a look at the file docs/security.txt inside
-# the project sources.
 with lib;
 
 let
@@ -173,6 +171,38 @@ in
         '';
       };
 
+      upsdConf = mkOption {
+        type = types.str;
+        default = "${pkgs.nut}/etc/upsd.conf.sample";
+        example = "/run/secrets/upsd.conf";
+        description = ''
+          Path to the <filename>upsd.conf</filename> configuration file.
+          For majority of usecases the sample file can be used.
+
+          This file may contain secrets, and should not be in the nix store.
+        '';
+      };
+
+      upsdUsers = mkOption {
+        type = types.str;
+        example = "/run/secrets/upsd.users";
+        description = ''
+          Path to the <filename>upsd.users</filename> configuration file.
+
+          This file often contains secrets, and should not be in the nix store.
+        '';
+      };
+
+      upsmonConf = mkOption {
+        type = types.str;
+        example = "/run/secrets/upsmon.conf";
+        description = ''
+          Path to the <filename>upsmon.conf</filename> configuration file.
+
+          This file often contains secrets, and should not be in the nix store.
+        '';
+      };
+
       ups = mkOption {
         default = {};
         # see nut/etc/ups.conf.sample
@@ -191,9 +221,23 @@ in
 
     environment.systemPackages = [ pkgs.nut ];
 
+    systemd.services.ups-init = {
+      description = "Uninterruptible Power Supplies configuration updater";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        ln -sf ${cfg.upsmonConf} /etc/nut/upsmon.conf
+        ln -sf ${cfg.upsdUsers} /etc/nut/upsd.users
+        ln -sf ${cfg.upsdConf} /etc/nut/upsd.conf
+      '';
+    };
+
     systemd.services.upsmon = {
       description = "Uninterruptible Power Supplies (Monitor)";
-      after = [ "network.target" ];
+      after = [ "network.target" "ups-init.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "forking";
@@ -248,13 +292,6 @@ in
           "}
         '';
       "nut/upssched.conf".source = cfg.schedulerRules;
-      # These file are containing private informations and thus should not
-      # be stored inside the Nix store.
-      /*
-      "nut/upsd.conf".source = "";
-      "nut/upsd.users".source = "";
-      "nut/upsmon.conf".source = "";
-      */
     };
 
     power.ups.schedulerRules = mkDefault "${pkgs.nut}/etc/upssched.conf.sample";
