@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "noto-fonts";
   meta = {
-    maintainers = with lib.maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [ nickcao midchildan ];
   };
 
   machine = {
