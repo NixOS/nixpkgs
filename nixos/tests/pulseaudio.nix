@@ -13,7 +13,7 @@ let
           pkgs.writeScriptBin key ''
             set -euxo pipefail
             ${sox}/bin/play ${testFile}
-            ${sox}/bin/sox ${testFile} -t wav - | ${alsa-utils}/bin/aplay
+            # ${sox}/bin/sox ${testFile} -t wav - | ${alsa-utils}/bin/aplay
             touch /tmp/${key}_success
           '';
 
