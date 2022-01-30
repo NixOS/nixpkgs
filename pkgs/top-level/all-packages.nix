@@ -8123,6 +8123,7 @@ with pkgs;
   };
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler {
+    go = go_1_17;
     buildGoModule = buildGo117Module;
   };
 
