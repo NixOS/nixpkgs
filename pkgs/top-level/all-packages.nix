@@ -25117,7 +25117,9 @@ with pkgs;
     inherit (gnome2) libgnomeui;
   };
 
-  dyff = callPackage ../development/tools/dyff {};
+  dyff = callPackage ../development/tools/dyff {
+    buildGoModule = buildGo117Module;
+  };
 
   dwl = callPackage ../applications/window-managers/dwl {
     wlroots = wlroots_0_14;
