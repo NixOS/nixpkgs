@@ -4,7 +4,6 @@
 # for every Qt version. Qt applications are called from `all-packages.nix` via
 # this file.
 
-
 { lib
 , pkgs
 , qt6
@@ -15,9 +14,10 @@
 let
   libsForQt6 = self;
   callPackage = self.callPackage;
+in
 
-in (qt6 // {
+(qt6 // {
 
-  inherit qt6;
+  qt6ct = callPackage ../tools/misc/qt6ct { };
 
 })))

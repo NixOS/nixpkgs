@@ -1,0 +1,39 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -24,14 +24,14 @@
+ 
+ find_package(Qt6 COMPONENTS BuildInternals Widgets Concurrent LinguistTools REQUIRED)
+ 
+-#get_target_property(QT_QTPATHS_EXECUTABLE Qt6::qtpaths IMPORTED_LOCATION)
++get_target_property(QT_QTPATHS_EXECUTABLE Qt6::qtpaths IMPORTED_LOCATION)
+ get_target_property(QT_LRELEASE_EXECUTABLE Qt6::lrelease IMPORTED_LOCATION)
+ 
+-#if(QT_QTPATHS_EXECUTABLE)
+-#    message(STATUS "Found qtpaths executable: " ${QT_QTPATHS_EXECUTABLE})
+-#else()
+-#    message(FATAL_ERROR "Could NOT find qtpaths executable")
+-#endif()
++if(QT_QTPATHS_EXECUTABLE)
++    message(STATUS "Found qtpaths executable: " ${QT_QTPATHS_EXECUTABLE})
++else()
++    message(FATAL_ERROR "Could NOT find qtpaths executable")
++endif()
+ 
+ if(QT_LRELEASE_EXECUTABLE)
+     message(STATUS "Found lrelease executable: " ${QT_LRELEASE_EXECUTABLE})
+@@ -39,15 +39,6 @@
+     message(FATAL_ERROR "Could NOT find lrelease executable")
+ endif()
+ 
+-get_filename_component(QT_QTPATHS_EXECUTABLE ${QT_LRELEASE_EXECUTABLE} DIRECTORY)
+-set(QT_QTPATHS_EXECUTABLE ${QT_QTPATHS_EXECUTABLE}/qtpaths)
+-
+-if(EXISTS ${QT_QTPATHS_EXECUTABLE})
+-    message(STATUS "Found qtpaths executable: " ${QT_QTPATHS_EXECUTABLE})
+-else()
+-    message(FATAL_ERROR "Could NOT find qtpaths executable")
+-endif()
+-
+ #execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} -query QT_INSTALL_PLUGINS OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+ execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} --plugin-dir OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+ message(STATUS "Plugin path: " ${PLUGINDIR})
