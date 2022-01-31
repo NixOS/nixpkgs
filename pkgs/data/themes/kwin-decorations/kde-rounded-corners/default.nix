@@ -5,7 +5,7 @@
 , wrapQtAppsHook
 , kwin
 , kdelibs4support
-, epoxy
+, libepoxy
 , libXdmcp
 , lib
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
-  buildInputs = [ kwin kdelibs4support epoxy libXdmcp ];
+  buildInputs = [ kwin kdelibs4support libepoxy libXdmcp ];
 
   meta = with lib; {
     description = "Rounds the corners of your windows";
