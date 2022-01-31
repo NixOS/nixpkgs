@@ -8738,7 +8738,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
-  otpauth = callPackage ../tools/security/otpauth { };
+  otpauth = callPackage ../tools/security/otpauth {
+    buildGoModule = buildGo117Module;
+  };
 
   pcsclite = callPackage ../tools/security/pcsclite {
     inherit (darwin.apple_sdk.frameworks) IOKit;
