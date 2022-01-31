@@ -2774,7 +2774,9 @@ with pkgs;
 
   ddate = callPackage ../tools/misc/ddate { };
 
-  ddosify = callPackage ../development/tools/ddosify { };
+  ddosify = callPackage ../development/tools/ddosify {
+    buildGoModule = buildGo117Module;
+  };
 
   dduper = callPackage ../tools/filesystems/dduper { };
 
