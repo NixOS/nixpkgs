@@ -10075,7 +10075,9 @@ with pkgs;
 
   subsonic = callPackage ../servers/misc/subsonic { };
 
-  subfinder = callPackage ../tools/networking/subfinder { };
+  subfinder = callPackage ../tools/networking/subfinder {
+    buildGoModule = buildGo117Module;
+  };
 
   subzerod = with python3Packages; toPythonApplication subzerod;
 
