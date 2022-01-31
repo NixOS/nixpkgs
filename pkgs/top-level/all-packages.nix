@@ -26952,7 +26952,9 @@ with pkgs;
 
   popeye = callPackage ../applications/networking/cluster/popeye { };
 
-  kube-capacity = callPackage ../applications/networking/cluster/kube-capacity { };
+  kube-capacity = callPackage ../applications/networking/cluster/kube-capacity {
+    buildGoModule = buildGo117Module;
+  };
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
 
