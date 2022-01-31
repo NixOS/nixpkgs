@@ -1,0 +1,13 @@
+diff --git a/gst/parse/grammar.y b/gst/parse/grammar.y
+index 24fc87b..24fe906 100644
+--- a/gst/parse/grammar.y
++++ b/gst/parse/grammar.y
+@@ -36,7 +36,7 @@
+ 
+ typedef void* yyscan_t;
+ 
+-int priv_gst_parse_yylex (void * yylval_param , yyscan_t yyscanner);
++int priv_gst_parse_yylex (yyscan_t yyscanner);
+ int priv_gst_parse_yylex_init (yyscan_t scanner);
+ int priv_gst_parse_yylex_destroy (yyscan_t scanner);
+ struct yy_buffer_state * priv_gst_parse_yy_scan_string (char* , yyscan_t);

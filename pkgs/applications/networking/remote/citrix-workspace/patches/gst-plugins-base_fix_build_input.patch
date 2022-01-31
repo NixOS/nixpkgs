@@ -1,0 +1,377 @@
+diff --git a/common/glib-gen.mak b/common/glib-gen.mak
+index ef93a5f..2aef8f8 100644
+--- a/common/glib-gen.mak
++++ b/common/glib-gen.mak
+@@ -1,11 +1,13 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_enum_prefix=gst_color_balance
+ 
+-enum_headers=$(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers=$(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ 
+ # these are all the rules generating the relevant files
+ %-marshal.h: %-marshal.list
+diff --git a/common/gst-glib-gen.mak b/common/gst-glib-gen.mak
+index cc82bbd..ebf8a16 100644
+--- a/common/gst-glib-gen.mak
++++ b/common/gst-glib-gen.mak
+@@ -1,12 +1,14 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+ #glib_gen_basename=colorbalance
+ 
+-enum_headers=$(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers=$(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ 
+ # these are all the rules generating the relevant files
+ $(glib_gen_basename)-marshal.h: $(glib_gen_basename)-marshal.list
+diff --git a/gst-libs/gst/app/Makefile.in b/gst-libs/gst/app/Makefile.in
+index cdca26a..bd2256e 100644
+--- a/gst-libs/gst/app/Makefile.in
++++ b/gst-libs/gst/app/Makefile.in
+@@ -18,6 +18,8 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+@@ -473,14 +475,14 @@ lib_LTLIBRARIES = libgstapp-@GST_MAJORMINOR@.la
+ glib_enum_define = GST_APP
+ glib_gen_prefix = __gst_app
+ glib_gen_basename = gstapp
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ built_sources = gstapp-marshal.c
+ built_headers = gstapp-marshal.h
+ BUILT_SOURCES = $(built_sources) $(built_headers)
+ nodist_libgstapp_@GST_MAJORMINOR@_la_SOURCES = \
+              $(built_sources)
+ 
+-libgstapp_@GST_MAJORMINOR@_la_SOURCES = gstappsrc.c gstappbuffer.c gstappsink.c 
++libgstapp_@GST_MAJORMINOR@_la_SOURCES = gstappsrc.c gstappbuffer.c gstappsink.c
+ libgstapp_@GST_MAJORMINOR@_la_CFLAGS = $(GST_PLUGINS_BASE_CFLAGS) \
+ 	$(GST_BASE_CFLAGS) $(GST_CFLAGS)
+ 
+@@ -576,7 +578,7 @@ clean-libLTLIBRARIES:
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libgstapp-@GST_MAJORMINOR@.la: $(libgstapp_@GST_MAJORMINOR@_la_OBJECTS) $(libgstapp_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstapp_@GST_MAJORMINOR@_la_DEPENDENCIES) 
++libgstapp-@GST_MAJORMINOR@.la: $(libgstapp_@GST_MAJORMINOR@_la_OBJECTS) $(libgstapp_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstapp_@GST_MAJORMINOR@_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgstapp_@GST_MAJORMINOR@_la_LINK) -rpath $(libdir) $(libgstapp_@GST_MAJORMINOR@_la_OBJECTS) $(libgstapp_@GST_MAJORMINOR@_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+diff --git a/gst-libs/gst/audio/Makefile.in b/gst-libs/gst/audio/Makefile.in
+index 5b19b05..4ac7d2f 100644
+--- a/gst-libs/gst/audio/Makefile.in
++++ b/gst-libs/gst/audio/Makefile.in
+@@ -18,6 +18,8 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+@@ -544,7 +546,7 @@ libgstaudio_@GST_MAJORMINOR@_la_LIBADD = \
+   $(GST_BASE_LIBS) $(GST_LIBS)
+ 
+ libgstaudio_@GST_MAJORMINOR@_la_LDFLAGS = $(GST_LIB_LDFLAGS) $(GST_ALL_LDFLAGS) $(GST_LT_LDFLAGS)
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ @HAVE_INTROSPECTION_TRUE@BUILT_GIRSOURCES = GstAudio-@GST_MAJORMINOR@.gir
+ @HAVE_INTROSPECTION_TRUE@gir_headers = $(patsubst %,$(srcdir)/%, \
+ @HAVE_INTROSPECTION_TRUE@	$(libgstaudio_@GST_MAJORMINOR@include_HEADERS)) \
+@@ -632,7 +634,7 @@ clean-libLTLIBRARIES:
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libgstaudio-@GST_MAJORMINOR@.la: $(libgstaudio_@GST_MAJORMINOR@_la_OBJECTS) $(libgstaudio_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstaudio_@GST_MAJORMINOR@_la_DEPENDENCIES) 
++libgstaudio-@GST_MAJORMINOR@.la: $(libgstaudio_@GST_MAJORMINOR@_la_OBJECTS) $(libgstaudio_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstaudio_@GST_MAJORMINOR@_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgstaudio_@GST_MAJORMINOR@_la_LINK) -rpath $(libdir) $(libgstaudio_@GST_MAJORMINOR@_la_OBJECTS) $(libgstaudio_@GST_MAJORMINOR@_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+diff --git a/gst-libs/gst/interfaces/Makefile.in b/gst-libs/gst/interfaces/Makefile.in
+index 84ff57b..66f95f4 100644
+--- a/gst-libs/gst/interfaces/Makefile.in
++++ b/gst-libs/gst/interfaces/Makefile.in
+@@ -18,6 +18,8 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+@@ -543,7 +545,7 @@ nodist_libgstinterfaces_@GST_MAJORMINOR@_la_SOURCES = \
+ 	interfaces-marshal.h
+ 
+ libgstinterfaces_@GST_MAJORMINOR@_la_CFLAGS = $(GST_PLUGINS_BASE_CFLAGS) $(GST_CFLAGS)
+-libgstinterfaces_@GST_MAJORMINOR@_la_LIBADD = $(GST_LIBS) $(LIBM) 
++libgstinterfaces_@GST_MAJORMINOR@_la_LIBADD = $(GST_LIBS) $(LIBM)
+ libgstinterfaces_@GST_MAJORMINOR@_la_LDFLAGS = $(GST_LIB_LDFLAGS) $(GST_ALL_LDFLAGS) $(GST_LT_LDFLAGS)
+ BUILT_SOURCES = \
+ 	$(built_sources) \
+@@ -551,7 +553,7 @@ BUILT_SOURCES = \
+ 
+ EXTRA_DIST = interfaces-marshal.list
+ CLEANFILES = $(BUILT_SOURCES) $(am__append_1)
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ @HAVE_INTROSPECTION_TRUE@BUILT_GIRSOURCES = GstInterfaces-@GST_MAJORMINOR@.gir
+ @HAVE_INTROSPECTION_TRUE@gir_headers = $(patsubst %,$(srcdir)/%, \
+ @HAVE_INTROSPECTION_TRUE@	$(libgstinterfacesinclude_HEADERS)) \
+@@ -639,7 +641,7 @@ clean-libLTLIBRARIES:
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libgstinterfaces-@GST_MAJORMINOR@.la: $(libgstinterfaces_@GST_MAJORMINOR@_la_OBJECTS) $(libgstinterfaces_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstinterfaces_@GST_MAJORMINOR@_la_DEPENDENCIES) 
++libgstinterfaces-@GST_MAJORMINOR@.la: $(libgstinterfaces_@GST_MAJORMINOR@_la_OBJECTS) $(libgstinterfaces_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstinterfaces_@GST_MAJORMINOR@_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgstinterfaces_@GST_MAJORMINOR@_la_LINK) -rpath $(libdir) $(libgstinterfaces_@GST_MAJORMINOR@_la_OBJECTS) $(libgstinterfaces_@GST_MAJORMINOR@_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+diff --git a/gst-libs/gst/pbutils/Makefile.in b/gst-libs/gst/pbutils/Makefile.in
+index 3c716c0..f8dfddd 100644
+--- a/gst-libs/gst/pbutils/Makefile.in
++++ b/gst-libs/gst/pbutils/Makefile.in
+@@ -18,6 +18,8 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+@@ -542,7 +544,7 @@ CLEANFILES = $(BUILT_SOURCES) $(am__append_1)
+ 
+ # DISTCLEANFILES is for files generated by configure
+ DISTCLEANFILES = $(built_headers_configure)
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ @HAVE_INTROSPECTION_TRUE@BUILT_GIRSOURCES = GstPbutils-@GST_MAJORMINOR@.gir
+ @HAVE_INTROSPECTION_TRUE@gir_headers = $(patsubst %,$(srcdir)/%, \
+ @HAVE_INTROSPECTION_TRUE@	$(libgstpbutils_@GST_MAJORMINOR@include_HEADERS)) \
+@@ -632,7 +634,7 @@ clean-libLTLIBRARIES:
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libgstpbutils-@GST_MAJORMINOR@.la: $(libgstpbutils_@GST_MAJORMINOR@_la_OBJECTS) $(libgstpbutils_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstpbutils_@GST_MAJORMINOR@_la_DEPENDENCIES) 
++libgstpbutils-@GST_MAJORMINOR@.la: $(libgstpbutils_@GST_MAJORMINOR@_la_OBJECTS) $(libgstpbutils_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstpbutils_@GST_MAJORMINOR@_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgstpbutils_@GST_MAJORMINOR@_la_LINK) -rpath $(libdir) $(libgstpbutils_@GST_MAJORMINOR@_la_OBJECTS) $(libgstpbutils_@GST_MAJORMINOR@_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+diff --git a/gst-libs/gst/rtsp/Makefile.in b/gst-libs/gst/rtsp/Makefile.in
+index 0cd7652..3716fa9 100644
+--- a/gst-libs/gst/rtsp/Makefile.in
++++ b/gst-libs/gst/rtsp/Makefile.in
+@@ -18,6 +18,8 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+@@ -487,8 +489,8 @@ libgstrtspinclude_HEADERS = gstrtspbase64.h \
+ 			    gstrtsprange.h
+ 
+ 
+-#gstrtspextreal.h    
+-#gstrtspextwms.h     
++#gstrtspextreal.h
++#gstrtspextwms.h
+ lib_LTLIBRARIES = libgstrtsp-@GST_MAJORMINOR@.la
+ built_sources = gstrtsp-marshal.c gstrtsp-enumtypes.c
+ built_headers = gstrtsp-marshal.h gstrtsp-enumtypes.h
+@@ -505,8 +507,8 @@ nodist_libgstrtsp_@GST_MAJORMINOR@_la_SOURCES = $(built_sources)
+ nodist_libgstrtspinclude_HEADERS = gstrtsp-enumtypes.h
+ noinst_HEADERS = gstrtsp.h
+ 
+-#gstrtspextwms.c  
+-#rtspextreal.c    
++#gstrtspextwms.c
++#rtspextreal.c
+ libgstrtsp_@GST_MAJORMINOR@_la_CFLAGS = $(GST_PLUGINS_BASE_CFLAGS) $(GST_BASE_CFLAGS) $(GST_CFLAGS)
+ libgstrtsp_@GST_MAJORMINOR@_la_LIBADD = $(GST_LIBS) $(WIN32_LIBS) $(HSTRERROR_LIBS)
+ libgstrtsp_@GST_MAJORMINOR@_la_LDFLAGS = $(GST_LIB_LDFLAGS) $(GST_ALL_LDFLAGS) $(GST_LT_LDFLAGS)
+@@ -517,7 +519,7 @@ glib_gen_prefix = __gst_rtsp
+ glib_enum_define = gst_rtsp
+ glib_enum_headers = gstrtspdefs.h
+ glib_gen_basename = gstrtsp
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ @HAVE_INTROSPECTION_TRUE@BUILT_GIRSOURCES = GstRtsp-@GST_MAJORMINOR@.gir
+ @HAVE_INTROSPECTION_TRUE@gir_headers = $(patsubst %,$(srcdir)/%, \
+ @HAVE_INTROSPECTION_TRUE@	$(libgstrtspinclude_HEADERS)) \
+@@ -605,7 +607,7 @@ clean-libLTLIBRARIES:
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libgstrtsp-@GST_MAJORMINOR@.la: $(libgstrtsp_@GST_MAJORMINOR@_la_OBJECTS) $(libgstrtsp_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstrtsp_@GST_MAJORMINOR@_la_DEPENDENCIES) 
++libgstrtsp-@GST_MAJORMINOR@.la: $(libgstrtsp_@GST_MAJORMINOR@_la_OBJECTS) $(libgstrtsp_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstrtsp_@GST_MAJORMINOR@_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgstrtsp_@GST_MAJORMINOR@_la_LINK) -rpath $(libdir) $(libgstrtsp_@GST_MAJORMINOR@_la_OBJECTS) $(libgstrtsp_@GST_MAJORMINOR@_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+diff --git a/gst-libs/gst/video/Makefile.in b/gst-libs/gst/video/Makefile.in
+index 33f707e..4e2e190 100644
+--- a/gst-libs/gst/video/Makefile.in
++++ b/gst-libs/gst/video/Makefile.in
+@@ -27,11 +27,11 @@
+ # gstadderorc.orc.
+ #
+ # When 'make dist' is run at the top level, or 'make orc-update'
+-# in a directory including this fragment, the generated source 
++# in a directory including this fragment, the generated source
+ # files will be copied to $(ORC_SOURCE)-dist.[ch].  These files
+ # should be checked in to git, since they are used if Orc is
+ # disabled.
+-# 
++#
+ # Note that this file defines BUILT_SOURCES, so any later usage
+ # of BUILT_SOURCES in the Makefile.am that includes this file
+ # must use '+='.
+@@ -40,6 +40,8 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+@@ -553,7 +555,7 @@ libgstvideo_@GST_MAJORMINOR@_la_LDFLAGS = \
+ 	$(GST_ALL_LDFLAGS) \
+ 	$(GST_LT_LDFLAGS)
+ 
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ @HAVE_INTROSPECTION_TRUE@BUILT_GIRSOURCES = GstVideo-@GST_MAJORMINOR@.gir
+ @HAVE_INTROSPECTION_TRUE@gir_headers = $(patsubst %,$(srcdir)/%, \
+ @HAVE_INTROSPECTION_TRUE@	$(libgstvideo_@GST_MAJORMINOR@include_HEADERS)) \
+@@ -642,7 +644,7 @@ clean-libLTLIBRARIES:
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libgstvideo-@GST_MAJORMINOR@.la: $(libgstvideo_@GST_MAJORMINOR@_la_OBJECTS) $(libgstvideo_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstvideo_@GST_MAJORMINOR@_la_DEPENDENCIES) 
++libgstvideo-@GST_MAJORMINOR@.la: $(libgstvideo_@GST_MAJORMINOR@_la_OBJECTS) $(libgstvideo_@GST_MAJORMINOR@_la_DEPENDENCIES) $(EXTRA_libgstvideo_@GST_MAJORMINOR@_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgstvideo_@GST_MAJORMINOR@_la_LINK) -rpath $(libdir) $(libgstvideo_@GST_MAJORMINOR@_la_OBJECTS) $(libgstvideo_@GST_MAJORMINOR@_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+diff --git a/gst/encoding/Makefile.in b/gst/encoding/Makefile.in
+index 23269c7..b940e21 100644
+--- a/gst/encoding/Makefile.in
++++ b/gst/encoding/Makefile.in
+@@ -18,6 +18,8 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+@@ -493,7 +495,7 @@ noinst_HEADERS = \
+ BUILT_SOURCES = $(built_headers) $(built_sources)
+ EXTRA_DIST = gstencode-marshal.list
+ CLEANFILES = $(BUILT_SOURCES)
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ all: $(BUILT_SOURCES)
+ 	$(MAKE) $(AM_MAKEFLAGS) all-am
+ 
+@@ -561,7 +563,7 @@ clean-pluginLTLIBRARIES:
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libgstencodebin.la: $(libgstencodebin_la_OBJECTS) $(libgstencodebin_la_DEPENDENCIES) $(EXTRA_libgstencodebin_la_DEPENDENCIES) 
++libgstencodebin.la: $(libgstencodebin_la_OBJECTS) $(libgstencodebin_la_DEPENDENCIES) $(EXTRA_libgstencodebin_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgstencodebin_la_LINK) -rpath $(plugindir) $(libgstencodebin_la_OBJECTS) $(libgstencodebin_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+diff --git a/gst/playback/Makefile.in b/gst/playback/Makefile.in
+index eb84daf..eacc7f0 100644
+--- a/gst/playback/Makefile.in
++++ b/gst/playback/Makefile.in
+@@ -18,6 +18,8 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+@@ -569,7 +571,7 @@ noinst_HEADERS = \
+ BUILT_SOURCES = $(built_headers) $(built_sources)
+ EXTRA_DIST = gstplay-marshal.list
+ CLEANFILES = $(BUILT_SOURCES)
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ all: $(BUILT_SOURCES)
+ 	$(MAKE) $(AM_MAKEFLAGS) all-am
+ 
+@@ -637,11 +639,11 @@ clean-pluginLTLIBRARIES:
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libgstdecodebin.la: $(libgstdecodebin_la_OBJECTS) $(libgstdecodebin_la_DEPENDENCIES) $(EXTRA_libgstdecodebin_la_DEPENDENCIES) 
++libgstdecodebin.la: $(libgstdecodebin_la_OBJECTS) $(libgstdecodebin_la_DEPENDENCIES) $(EXTRA_libgstdecodebin_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgstdecodebin_la_LINK) -rpath $(plugindir) $(libgstdecodebin_la_OBJECTS) $(libgstdecodebin_la_LIBADD) $(LIBS)
+-libgstdecodebin2.la: $(libgstdecodebin2_la_OBJECTS) $(libgstdecodebin2_la_DEPENDENCIES) $(EXTRA_libgstdecodebin2_la_DEPENDENCIES) 
++libgstdecodebin2.la: $(libgstdecodebin2_la_OBJECTS) $(libgstdecodebin2_la_DEPENDENCIES) $(EXTRA_libgstdecodebin2_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgstdecodebin2_la_LINK) -rpath $(plugindir) $(libgstdecodebin2_la_OBJECTS) $(libgstdecodebin2_la_LIBADD) $(LIBS)
+-libgstplaybin.la: $(libgstplaybin_la_OBJECTS) $(libgstplaybin_la_DEPENDENCIES) $(EXTRA_libgstplaybin_la_DEPENDENCIES) 
++libgstplaybin.la: $(libgstplaybin_la_OBJECTS) $(libgstplaybin_la_DEPENDENCIES) $(EXTRA_libgstplaybin_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgstplaybin_la_LINK) -rpath $(plugindir) $(libgstplaybin_la_OBJECTS) $(libgstplaybin_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+diff --git a/gst/tcp/Makefile.in b/gst/tcp/Makefile.in
+index 4b0f983..c8eb385 100644
+--- a/gst/tcp/Makefile.in
++++ b/gst/tcp/Makefile.in
+@@ -18,6 +18,8 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+@@ -471,7 +473,7 @@ glib_enum_headers = gsttcp.h
+ glib_enum_define = GST_TCP
+ glib_gen_prefix = gst_tcp
+ glib_gen_basename = gsttcp
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ built_sources = gsttcp-enumtypes.c gsttcp-marshal.c
+ built_headers = gsttcp-enumtypes.h gsttcp-marshal.h
+ BUILT_SOURCES = $(built_sources) $(built_headers)
+@@ -567,7 +569,7 @@ clean-pluginLTLIBRARIES:
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libgsttcp.la: $(libgsttcp_la_OBJECTS) $(libgsttcp_la_DEPENDENCIES) $(EXTRA_libgsttcp_la_DEPENDENCIES) 
++libgsttcp.la: $(libgsttcp_la_OBJECTS) $(libgsttcp_la_DEPENDENCIES) $(EXTRA_libgsttcp_la_DEPENDENCIES)
+ 	$(AM_V_CCLD)$(libgsttcp_la_LINK) -rpath $(plugindir) $(libgsttcp_la_OBJECTS) $(libgsttcp_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:

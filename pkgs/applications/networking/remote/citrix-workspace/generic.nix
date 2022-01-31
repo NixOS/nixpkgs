@@ -3,7 +3,8 @@
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
-, libpulseaudio, pcsclite, glib-networking, llvmPackages_12
+, libpulseaudio, pcsclite, glib-networking, llvmPackages_12, bison, flex, pkg-config
+, perl, python3, fetchurl
 
 , homepage, version, prefix, hash
 
@@ -19,6 +20,36 @@ let
       ln -sf $out/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
       ln -sf $out/lib/libssl.so $out/lib/libssl.so.1.0.0
     '';
+  };
+
+  gstreamer = stdenv.mkDerivation rec {
+    version = "0.10.36";
+
+    pname = "gstreamer";
+
+    src = fetchurl {
+      url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+      sha256 = "sha256-kVGqEIwXcFQ4eIV2P6DkM+dngPfFZVxwpTkPKmxocdo=";
+    };
+
+    nativeBuildInputs = [ bison flex glib libxml2 pkg-config perl python3 ];
+
+    patches = [ ./patches/gstreame_priv_gst_parse_yylex_arguments.patch ];
+  };
+
+  gst-plugins-base = stdenv.mkDerivation rec {
+    version = "0.10.36";
+
+    pname = "gst-plugins-base";
+
+    src = fetchurl {
+      url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+      sha256 = "sha256-H+RcOJSQMAHU0AiwcT2rCJ9Tcm3LWELVtAwllamE5ko=";
+    };
+
+    nativeBuildInputs = [ glib gstreamer libxml2 pkg-config ];
+
+    patches = [ ./patches/gst-plugins-base_fix_build_input.patch ];
   };
 in
 
@@ -62,6 +93,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    (lib.getLib systemd)
     alsa-lib
     atk
     cairo
@@ -69,13 +101,13 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     gdk-pixbuf
-    gnome2.gtkglext
     glib-networking
-    webkitgtk
+    gnome2.gtkglext
+    gst-plugins-base
+    gtk_engines
     gtk2
     gtk2-x11
     gtk3
-    gtk_engines
     heimdal
     krb5
     libcxx
@@ -91,8 +123,8 @@ stdenv.mkDerivation rec {
     openssl'
     pango
     speex
-    (lib.getLib systemd)
     stdenv.cc.cc
+    webkitgtk
     xorg.libXaw
     xorg.libXmu
     xorg.libXScrnSaver
@@ -177,11 +209,6 @@ stdenv.mkDerivation rec {
     # Those files are fallbacks to support older libwekit.so and libjpeg.so
     rm $out/opt/citrix-icaclient/lib/ctxjpeg_fb_8.so || true
     rm $out/opt/citrix-icaclient/lib/UIDialogLibWebKit.so || true
-
-    # We support only Gstreamer 1.0
-    rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so}
-    ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
-    ln -sf $ICAInstDir/util/gst_read1.0 $ICAInstDir/util/gst_read
 
     echo "We arbitrarily set the timezone to UTC. No known consequences at this point."
     echo UTC > "$ICAInstDir/timezone"
