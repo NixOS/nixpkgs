@@ -1,15 +1,122 @@
+diff --git a/src/command-line/install.js b/src/command-line/install.js
+index bc30a851..e35664b5 100644
+--- a/src/command-line/install.js
++++ b/src/command-line/install.js
+@@ -17,6 +17,11 @@ program
+ 		const path = require("path");
+ 		const packageJson = require("package-json");
+ 
++		if (Helper.isUsingNixOSPackages()) {
++			log.error("This command is disabled because packages are being managed via the NixOS module.");
++			return;
++		}
++
+ 		if (!fs.existsSync(Helper.getConfigPath())) {
+ 			log.error(`${Helper.getConfigPath()} does not exist.`);
+ 			return;
+diff --git a/src/command-line/outdated.js b/src/command-line/outdated.js
+index 72c561d4..19455b0e 100644
+--- a/src/command-line/outdated.js
++++ b/src/command-line/outdated.js
+@@ -10,6 +10,11 @@ program
+ 	.description("Check for any outdated packages")
+ 	.on("--help", Utils.extraHelp)
+ 	.action(async () => {
++		if (process.env.THELOUNGE_PACKAGES !== undefined) {
++			log.error("This command is disabled because packages are being managed via the NixOS module.");
++			return;
++		}
++
+ 		log.info("Checking for outdated packages");
+ 
+ 		await packageManager
+diff --git a/src/command-line/uninstall.js b/src/command-line/uninstall.js
+index 8686e668..d4fbbb97 100644
+--- a/src/command-line/uninstall.js
++++ b/src/command-line/uninstall.js
+@@ -14,6 +14,11 @@ program
+ 		const fs = require("fs");
+ 		const path = require("path");
+ 
++		if (Helper.isUsingNixOSPackages()) {
++			log.error("This command is disabled because packages are being managed via the NixOS module.");
++			return;
++		}
++
+ 		const packagesConfig = path.join(Helper.getPackagesPath(), "package.json");
+ 		const packages = JSON.parse(fs.readFileSync(packagesConfig, "utf-8"));
+ 
+diff --git a/src/command-line/upgrade.js b/src/command-line/upgrade.js
+index 6911ad72..b22a8374 100644
+--- a/src/command-line/upgrade.js
++++ b/src/command-line/upgrade.js
+@@ -14,6 +14,11 @@ program
+ 		const fs = require("fs");
+ 		const path = require("path");
+ 
++		if (Helper.isUsingNixOSPackages()) {
++			log.error("This command is disabled because packages are being managed via the NixOS module.");
++			return;
++		}
++
+ 		// Get paths to the location of packages directory
+ 		const packagesConfig = path.join(Helper.getPackagesPath(), "package.json");
+ 		const packagesList = JSON.parse(fs.readFileSync(packagesConfig, "utf-8")).dependencies;
 diff --git a/src/helper.js b/src/helper.js
-index 27352b53..7078e4c5 100644
+index 27352b53..c50fa092 100644
 --- a/src/helper.js
 +++ b/src/helper.js
-@@ -110,6 +110,10 @@ function setHome(newPath) {
+@@ -19,6 +19,7 @@ let packagesPath;
+ let fileUploadPath;
+ let userLogsPath;
+ let clientCertificatesPath;
++let usingNixOSPackages;
+ 
+ const Helper = {
+ 	config: null,
+@@ -44,6 +45,7 @@ const Helper = {
+ 	parseHostmask,
+ 	compareHostmask,
+ 	compareWithWildcard,
++	isUsingNixOSPackages,
+ 
+ 	password: {
+ 		hash: passwordHash,
+@@ -109,6 +111,11 @@ function setHome(newPath) {
+ 	packagesPath = path.join(homePath, "packages");
  	userLogsPath = path.join(homePath, "logs");
  	clientCertificatesPath = path.join(homePath, "certificates");
- 
-+	if (process.env.THELOUNGE_PACKAGES !== undefined) {
++	usingNixOSPackages = process.env.THELOUNGE_PACKAGES !== undefined;
++
++	if (usingNixOSPackages) {
 +		packagesPath = process.env.THELOUNGE_PACKAGES;
 +	}
-+
+ 
  	// Reload config from new home location
  	if (fs.existsSync(configPath)) {
- 		const userConfig = require(configPath);
+@@ -200,6 +207,10 @@ function getPackageModulePath(packageName) {
+ 	return path.join(Helper.getPackagesPath(), "node_modules", packageName);
+ }
+ 
++function isUsingNixOSPackages() {
++	return usingNixOSPackages;
++}
++
+ function ip2hex(address) {
+ 	// no ipv6 support
+ 	if (!net.isIPv4(address)) {
+diff --git a/src/plugins/packages/index.js b/src/plugins/packages/index.js
+index 6db96280..c8863f2b 100644
+--- a/src/plugins/packages/index.js
++++ b/src/plugins/packages/index.js
+@@ -186,6 +186,10 @@ function watchPackages(packageJson) {
+ }
+ 
+ async function outdated(cacheTimeout = TIME_TO_LIVE) {
++	if (Helper.isUsingNixOSPackages()) {
++		return false;
++	}
++
+ 	if (cache.outdated !== undefined) {
+ 		return cache.outdated;
+ 	}

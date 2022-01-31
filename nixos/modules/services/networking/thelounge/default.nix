@@ -185,7 +185,18 @@ in
       };
     };
 
-    environment.systemPackages = [ pkgs.thelounge ];
+    environment.systemPackages =
+      let
+        thelounge =
+          if cfg.plugins != [ ] then
+            pkgs.runCommand "thelounge-wrapper"
+              {
+                buildInputs = [ pkgs.makeWrapper ];
+              }
+              "makeWrapper ${pkgs.thelounge}/bin/thelounge $out/bin/thelounge --prefix THELOUNGE_PACKAGES : ${plugins}"
+          else pkgs.thelounge;
+      in
+      [ thelounge ];
   };
 
   meta = {

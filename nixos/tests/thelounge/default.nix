@@ -118,6 +118,9 @@ import ../make-test-python.nix {
         private.succeed("test-runner john password123")
         private.succeed("test-runner jane password123")
 
+        for command in ["install foo", "uninstall foo", "outdated", "upgrade"]:
+            private.succeed(f"sudo -u thelounge thelounge {command} |& grep NixOS")
+
         private.succeed("/run/current-system/specialisation/rmUser/bin/switch-to-configuration switch")
         wait_for_machine(private)
         private.succeed("test-runner john password321")
