@@ -28717,7 +28717,9 @@ with pkgs;
 
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
-  shadowfox = callPackage ../tools/networking/shadowfox { };
+  shadowfox = callPackage ../tools/networking/shadowfox {
+    buildGoModule = buildGo117Module;
+  };
 
   shfmt = callPackage ../tools/text/shfmt { };
 
