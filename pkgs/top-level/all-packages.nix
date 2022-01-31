@@ -14277,7 +14277,9 @@ with pkgs;
   buildozer = bazel-buildtools;
   unused_deps = bazel-buildtools;
 
-  bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
+  bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote {
+    buildGoModule = buildGo117Module;
+  };
 
   bazel-watcher = callPackage ../development/tools/bazel-watcher { };
 
