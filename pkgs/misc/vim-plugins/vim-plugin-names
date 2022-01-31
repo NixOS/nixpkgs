@@ -203,7 +203,6 @@ github/copilot.vim
 gleam-lang/gleam.vim
 glepnir/dashboard-nvim
 glepnir/galaxyline.nvim
-glepnir/lspsaga.nvim
 glepnir/oceanic-material
 glepnir/zephyr-nvim
 glts/vim-textobj-comment
@@ -779,6 +778,7 @@ tamago324/compe-zsh
 tamago324/lir.nvim
 tami5/compe-conjure
 tami5/lispdocs.nvim
+tami5/lspsaga.nvim
 tami5/sqlite.lua
 tbastos/vim-lua
 tbodt/deoplete-tabnine
