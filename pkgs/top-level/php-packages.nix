@@ -464,6 +464,10 @@ lib.makeScope pkgs.newScope (self: with self; {
           doCheck = false;
         }
         { name = "pcntl"; }
+        {
+          name = "pcov";
+          enable = lib.versionOlder php.version "5.6";
+        }
         { name = "pdo"; doCheck = false; }
         {
           name = "pdo_dblib";
@@ -551,7 +555,11 @@ lib.makeScope pkgs.newScope (self: with self; {
               sha256 = "sha256-EwVb09/zV2vJ8PuyLpKFCovxe6yKct0UBvishZaordM=";
             });
         }
-        { name = "sodium"; buildInputs = [ libsodium ]; }
+        {
+          name = "sodium";
+          buildInputs = [ libsodium ];
+          enable = lib.versionOlder php.version "5.6";
+        }
         { name = "sqlite3"; buildInputs = [ sqlite ]; }
         { name = "sysvmsg"; }
         { name = "sysvsem"; }
