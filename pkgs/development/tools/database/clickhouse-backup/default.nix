@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-ThN1uvofIvV5Dt6dqxLpekTRy9pV4xb0bkVNRcfNJ2c=";
   };
 
-  vendorSha256 = "sha256-OQGpWWerUv2asjpjMLAkgeb0Q+lMAsDXjFCh0I4ze20=";
+  vendorSha256 = "sha256-bz21YeEONXD08HD1/8vn+NfGniXkGo7/8bQXLpRFmaM=";
 
   postConfigure = ''
     export CGO_ENABLED=0
