@@ -30,7 +30,7 @@
 }:
 let
   pname = "gnome-flashback";
-  version = "3.42.0";
+  version = "3.42.1";
 
   # From data/sessions/Makefile.am
   requiredComponentsCommon = enableGnomePanel:
@@ -61,7 +61,7 @@ let
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-      sha256 = "1CcdwHrHOyceS07cgfMfZPVzGqbUSOehXX2TOXbc3Us=";
+      sha256 = "sha256:0kl4m05whm03m2v0y3jd69lghkggn8s0hxdhvchcas7jmhh940n8";
     };
 
     # make .desktop Execs absolute

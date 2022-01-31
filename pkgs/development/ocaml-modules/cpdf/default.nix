@@ -4,7 +4,7 @@ if !lib.versionAtLeast ocaml.version "4.10"
 then throw "cpdf is not available for OCaml ${ocaml.version}"
 else
 
-let version = "2.4"; in
+let version = "2.5"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-cpdf-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "johnwhitington";
     repo = "cpdf-source";
     rev = "v${version}";
-    sha256 = "1a8lmfc76dr8x6pxgm4aypbys02pfma9yh4z3l1qxp2q1909na5l";
+    sha256 = "sha256:0ps6d78i5mp1gcigxfp9rxmjr1k00nkr37vllhr0rdyph97w41s1";
   };
 
   buildInputs = [ ocaml findlib ncurses ];

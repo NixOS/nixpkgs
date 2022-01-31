@@ -31,7 +31,23 @@ let
             default = true;
             description = ''
               Whether the config should be checked at build time.
-              Disabling this might become necessary if the config includes files not present during build time.
+              When the config can't be checked during build time, for example when it includes
+              other files, either disable this option or use <code>preCheckConfig</code> to create
+              the included files before checking.
+            '';
+          };
+          preCheckConfig = mkOption {
+            type = types.lines;
+            default = "";
+            example = ''
+              echo "cost 100;" > include.conf
+            '';
+            description = ''
+              Commands to execute before the config file check. The file to be checked will be
+              available as <code>${variant}.conf</code> in the current directory.
+
+              Files created with this option will not be available at service runtime, only during
+              build time checking.
             '';
           };
         };
@@ -45,7 +61,9 @@ let
           name = "${variant}.conf";
           text = cfg.config;
           checkPhase = optionalString cfg.checkConfig ''
-            ${pkg}/bin/${birdBin} -d -p -c $out
+            ln -s $out ${variant}.conf
+            ${cfg.preCheckConfig}
+            ${pkg}/bin/${birdBin} -d -p -c ${variant}.conf
           '';
         };
 

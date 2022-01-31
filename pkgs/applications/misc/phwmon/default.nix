@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pythonPackages }:
+{ lib, stdenv, fetchFromGitLab, python2Packages }:
 
 stdenv.mkDerivation {
   pname = "phwmon";
@@ -11,11 +11,11 @@ stdenv.mkDerivation {
     sha256 = "1hqmsq66y8bqkpvszw84jyk8haxq3cjnz105hlkmp7786vfmkisq";
   };
 
-  nativeBuildInputs = [ pythonPackages.wrapPython ];
+  nativeBuildInputs = [ python2Packages.wrapPython ];
 
-  buildInputs = [ pythonPackages.pygtk pythonPackages.psutil ];
+  buildInputs = [ python2Packages.pygtk python2Packages.psutil ];
 
-  pythonPath = [ pythonPackages.pygtk pythonPackages.psutil ];
+  pythonPath = [ python2Packages.pygtk python2Packages.psutil ];
 
   patchPhase = ''
     substituteInPlace install.sh --replace "/usr/local" "$out"

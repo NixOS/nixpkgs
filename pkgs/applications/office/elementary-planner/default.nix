@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     pantheon.granite
     sqlite
     webkitgtk
-    libgdata # required by some dependency transitively
     libhandy
     curl
   ];

@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "MPD plugin for Xfce panel";
     platforms = platforms.linux;
     license = licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

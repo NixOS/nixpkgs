@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, nixosTests
   # required
 , libiconv
 , libupnp
@@ -95,6 +96,8 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
   ] ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
+
+  passthru.tests = { inherit (nixosTests) mediatomb; };
 
   meta = with lib; {
     homepage = "https://docs.gerbera.io/";

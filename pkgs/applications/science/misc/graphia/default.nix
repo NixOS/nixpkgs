@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = [ maintainers.bgamari ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/graphia.x86_64-darwin
   };
 }

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "rancher-cli";
-  version = "2.4.13";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner  = "rancher";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "sha256-tkAnbQP35P+ZEE/WTpjgjdmvt0eJ0esKJ+I21cWraEI=";
+    sha256 = "sha256-RfhcTo10nkHmKGwmS8WdjBioZhDIGSQ9vPPOv3Wg0Y4=";
   };
 
   ldflags = [
@@ -19,7 +19,7 @@ buildGoModule rec {
     "-static"
   ];
 
-  vendorSha256 = "sha256-agXztvvrMEoa6bo/bQr3qhinOSj7bFnZ4kzTx4F0VxQ=";
+  vendorSha256 = "sha256-Nay4YkUNXuH7vTK3ergILF0efCF1XyJZd2wBiT6fims=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/rancher

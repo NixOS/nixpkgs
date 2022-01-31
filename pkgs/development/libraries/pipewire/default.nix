@@ -1,6 +1,8 @@
 { stdenv
 , lib
+, buildPackages
 , fetchFromGitLab
+, fetchpatch
 , removeReferencesTo
 , python3
 , meson
@@ -10,7 +12,6 @@
 , docutils
 , doxygen
 , graphviz
-, valgrind
 , glib
 , dbus
 , alsa-lib
@@ -25,44 +26,46 @@
 , webrtc-audio-processing
 , ncurses
 , readline81 # meson can't find <7 as those versions don't have a .pc file
+, lilv
+, openssl
 , makeFontsConf
 , callPackage
 , nixosTests
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
+, valgrind
 , withMediaSession ? true
 , libcameraSupport ? true
 , libcamera
 , libdrm
 , gstreamerSupport ? true
-, gst_all_1 ? null
+, gst_all_1
 , ffmpegSupport ? true
-, ffmpeg ? null
+, ffmpeg
 , bluezSupport ? true
-, bluez ? null
-, sbc ? null
-, libfreeaptx ? null
-, ldacbt ? null
-, fdk_aac ? null
+, bluez
+, sbc
+, libfreeaptx
+, ldacbt
+, fdk_aac
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
 , hsphfpdSupport ? true
 , pulseTunnelSupport ? true
-, libpulseaudio ? null
+, libpulseaudio
 , zeroconfSupport ? true
-, avahi ? null
+, avahi
+, rocSupport ? true
+, roc-toolkit
 }:
 
 let
-  fontsConf = makeFontsConf {
-    fontDirectories = [ ];
-  };
-
-  mesonEnable = b: if b then "enabled" else "disabled";
+  mesonEnableFeature = b: if b then "enabled" else "disabled";
   mesonList = l: "[" + lib.concatStringsSep "," l + "]";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.40";
+    version = "0.3.43";
 
     outputs = [
       "out"
@@ -80,7 +83,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-eY6uQa4+sC6yUWhF4IpAgRoppwhHO4s5fIMXOkS0z7A=";
+      sha256 = "sha256-vjMA9dQvZe7dPbF9BNtCYf1V240RUBdtxeyqFjWA4j4=";
     };
 
     patches = [
@@ -115,13 +118,14 @@ let
       libjack2
       libusb1
       libsndfile
+      lilv
       ncurses
+      openssl
       readline81
       udev
       vulkan-headers
       vulkan-loader
       webrtc-audio-processing
-      valgrind
       SDL2
       systemd
     ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
@@ -129,7 +133,11 @@ let
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
-    ++ lib.optional zeroconfSupport avahi;
+    ++ lib.optional zeroconfSupport avahi
+    ++ lib.optional rocSupport roc-toolkit;
+
+    # Valgrind binary is required for running one optional test.
+    checkInputs = lib.optional withValgrind valgrind;
 
     mesonFlags = [
       "-Ddocs=enabled"
@@ -138,42 +146,47 @@ let
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
-      "-Dlibcamera=${mesonEnable libcameraSupport}"
-      "-Droc=disabled"
-      "-Dlibpulse=${mesonEnable pulseTunnelSupport}"
-      "-Davahi=${mesonEnable zeroconfSupport}"
-      "-Dgstreamer=${mesonEnable gstreamerSupport}"
-      "-Dffmpeg=${mesonEnable ffmpegSupport}"
-      "-Dbluez5=${mesonEnable bluezSupport}"
-      "-Dbluez5-backend-hsp-native=${mesonEnable nativeHspSupport}"
-      "-Dbluez5-backend-hfp-native=${mesonEnable nativeHfpSupport}"
-      "-Dbluez5-backend-ofono=${mesonEnable ofonoSupport}"
-      "-Dbluez5-backend-hsphfpd=${mesonEnable hsphfpdSupport}"
+      "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
+      "-Droc=${mesonEnableFeature rocSupport}"
+      "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
+      "-Davahi=${mesonEnableFeature zeroconfSupport}"
+      "-Dgstreamer=${mesonEnableFeature gstreamerSupport}"
+      "-Dsystemd-system-service=enabled"
+      "-Dffmpeg=${mesonEnableFeature ffmpegSupport}"
+      "-Dbluez5=${mesonEnableFeature bluezSupport}"
+      "-Dbluez5-backend-hsp-native=${mesonEnableFeature nativeHspSupport}"
+      "-Dbluez5-backend-hfp-native=${mesonEnableFeature nativeHfpSupport}"
+      "-Dbluez5-backend-ofono=${mesonEnableFeature ofonoSupport}"
+      "-Dbluez5-backend-hsphfpd=${mesonEnableFeature hsphfpdSupport}"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
       "-Dsession-managers="
       "-Dvulkan=enabled"
     ];
 
-    FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
+    # Fontconfig error: Cannot load default config file
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
     doCheck = true;
 
     postUnpack = ''
-      patchShebangs source/doc/strip-static.sh
       patchShebangs source/doc/input-filter.sh
       patchShebangs source/doc/input-filter-h.sh
-      patchShebangs source/spa/tests/gen-cpp-test.py
     '';
 
     postInstall = ''
       mkdir $out/nix-support
-      pushd $lib/share/pipewire
-      for f in *.conf; do
-        echo "Generating JSON from $f"
-        $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
-      done
-      popd
+      ${if (stdenv.hostPlatform == stdenv.buildPlatform) then ''
+        pushd $lib/share/pipewire
+        for f in *.conf; do
+          echo "Generating JSON from $f"
+
+          $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
+        done
+        popd
+      '' else ''
+        cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
+      ''}
 
       moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"

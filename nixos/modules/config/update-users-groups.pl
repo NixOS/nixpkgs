@@ -351,7 +351,7 @@ foreach my $u (values %usersOut) {
         push @subGids, $value;
     }
 
-    if($u->{isNormalUser}) {
+    if($u->{autoSubUidGidRange}) {
         my $subordinate = allocSubUid($name);
         $subUidMap->{$name} = $subordinate;
         my $value = join(":", ($name, $subordinate, 65536));

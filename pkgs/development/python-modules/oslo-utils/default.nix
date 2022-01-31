@@ -23,12 +23,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "4.11.0";
+  version = "4.12.1";
 
   src = fetchPypi {
     pname = "oslo.utils";
     inherit version;
-    sha256 = "1wl3r4jayzjgzf36iwn05xcjfh227s97qymjxji9hz4ibhy3v83f";
+    sha256 = "sha256-zzEhx2/jwpY+1WOo68PJ/TvDy6XUT76K7LVAfUMMMJI=";
   };
 
   postPatch = ''

@@ -179,4 +179,7 @@ in {
       wantedBy = [ "multi-user.target" ];
     };
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

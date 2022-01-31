@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.37.0";
+  version = "1.37.1";
 
   src = with lib; fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3RrSJ8W7vIM9hRwBcn7ocGo55Kox4PSc5F5QJX75uX8=";
+    sha256 = "sha256-U0NuktwwrbFLZ5fYE50gaWpUYVJfOKN1yD5DXPBC4uc=";
   };
 
   prePatch = ''

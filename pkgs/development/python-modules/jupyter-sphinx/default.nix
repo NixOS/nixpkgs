@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter-sphinx";
-  version = "0.2.4";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit version;
     pname = "jupyter_sphinx";
-    sha256 = "b5ba1efdd1488b385de0068036a665932ed93998e40ce3a342c60f0926781fd9";
+    sha256 = "37fc9408385c45326ac79ca0452fbd7ae2bf0e97842d626d2844d4830e30aaf2";
   };
 
   propagatedBuildInputs = [ nbformat sphinx ipywidgets ];

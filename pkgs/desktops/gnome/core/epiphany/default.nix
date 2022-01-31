@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , meson
 , ninja
 , gettext
@@ -11,7 +12,7 @@
 , wrapGAppsHook
 , gnome
 , pantheon
-, libportal
+, libportal-gtk3
 , libxml2
 , libxslt
 , itstool
@@ -40,21 +41,14 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "41.0";
+  version = "41.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "s50YJUkllbC3TF1qZoaoV/lBnfpMAvgBPCl7yHDibdA=";
+    sha256 = "ugEmjuVPMY39rC4B66OKP8lpQMHL9kDtJhOuKfi8ua0=";
   };
 
-  patches = [
-    # tab-view: Update close button position on startup
-    # https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1025
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/6e9d6d3cf7fa7ddf21a70e9816a5cd4767a79523.patch";
-      sha256 = "sha256-lBVliGCIKwTvsYnWjAcmJxhTg1HS/2x4wlOh+4sx/xQ=";
-    })
-  ] ++ lib.optionals withPantheon [
+  patches = lib.optionals withPantheon [
     # Pantheon specific patches for epiphany
     # https://github.com/elementary/browser
     #
@@ -70,6 +64,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://raw.githubusercontent.com/elementary/browser/cc17559a7ac6effe593712b4f3d0bbefde6e3b62/navigation-buttons.patch";
       sha256 = "sha256-G1/JUjn/8DyO9sgL/5Kq205KbTOs4EMi4Vf3cJ8FHXU=";
+    })
+  ] ++ [
+    # Fix build with latest libportal
+    # https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1051
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/84474398f6e59266b73170838219aa896729ce93.patch";
+      sha256 = "SeiLTo3FcOxuml5sJX9GqyGdyGf1jm1A76SOI0JJvoo=";
     })
   ];
 
@@ -106,7 +107,7 @@ stdenv.mkDerivation rec {
     json-glib
     libdazzle
     libhandy
-    libportal
+    libportal-gtk3
     libnotify
     libarchive
     libsecret

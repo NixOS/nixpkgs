@@ -1,10 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
 let
   # Type for a valid systemd unit option. Needed for correctly passing "timerConfig" to "systemd.timers"
-  unitOption = (import ../../system/boot/systemd-unit-options.nix { inherit config lib; }).unitOption;
+  inherit (utils.systemdUtils.unitOptions) unitOption;
 in
 {
   options.services.restic.backups = mkOption {

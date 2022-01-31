@@ -3,7 +3,7 @@
 , vmopts ? null
 }:
 
-{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [] }@args:
+{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [], extraWrapperArgs ? [] }@args:
 
 with lib;
 
@@ -81,6 +81,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
         stdenv.cc.cc.lib libsecret e2fsprogs
         libnotify
       ] ++ extraLdPath)}" \
+      ${lib.concatStringsSep " " extraWrapperArgs} \
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \
       --set ANDROID_JAVA_HOME "$jdk" \

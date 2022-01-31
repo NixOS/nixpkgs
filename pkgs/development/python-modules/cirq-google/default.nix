@@ -15,7 +15,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "protobuf~=3.13.0" "protobuf" \
       --replace "google-api-core[grpc] >= 1.14.0, < 2.0.0dev" "google-api-core[grpc] >= 1.14.0, < 3.0.0dev"
   '';
 
@@ -28,5 +27,11 @@ buildPythonPackage rec {
   checkInputs = [
     freezegun
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # unittest.mock.InvalidSpecError: Cannot autospec attr 'QuantumEngineServiceClient'
+    "test_get_engine_sampler_explicit_project_id"
+    "test_get_engine_sampler"
   ];
 }

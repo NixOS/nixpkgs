@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/kolloch/crate2nix";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kolloch andir cole-h ];
+    maintainers = with maintainers; [ kolloch cole-h ];
     platforms = platforms.all;
   };
 }

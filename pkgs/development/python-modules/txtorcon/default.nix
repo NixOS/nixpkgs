@@ -1,4 +1,4 @@
-{ lib, python, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, incremental, ipaddress, twisted
+{ lib, stdenv, python, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, incremental, ipaddress, twisted
 , automat, zope_interface, idna, pyopenssl, service-identity, pytest, mock, lsof
 , GeoIP}:
 
@@ -22,6 +22,7 @@ buildPythonPackage rec {
   # as Python 3.5.
   disabled = pythonOlder "3.5";
 
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
   checkPhase = ''
     ${python.interpreter} -m twisted.trial -j $NIX_BUILD_CORES ./test
   '';

@@ -4,6 +4,7 @@
 , flask
 , pytestCheckHook
 , python-http-client
+, pythonOlder
 , pyyaml
 , starkbank-ecdsa
 , werkzeug
@@ -11,14 +12,16 @@
 
 buildPythonPackage rec {
   pname = "sendgrid";
-  version = "6.9.2";
+  version = "6.9.5";
   format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "sendgrid-python";
     rev = version;
-    sha256 = "sha256-eqmYuVW912E8hiVReLAoclmNDc2+gOIcUo9lRUx9AwM=";
+    sha256 = "1r8xh0c6wivrajj6gl1hv25vsb9i79n19nd4x53207i5vz9d55g5";
   };
 
   propagatedBuildInputs = [
@@ -33,10 +36,10 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  # Exclude tests that require network access
-  pytestFlagsArray = [
-    "--ignore test/test_sendgrid.py"
-    "--ignore live_test.py"
+  disabledTestPaths = [
+    # Exclude tests that require network access
+    "test/integ/test_sendgrid.py"
+    "live_test.py"
   ];
 
   pythonImportsCheck = [

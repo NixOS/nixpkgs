@@ -3,14 +3,14 @@
 
 { fetchFromGitHub, }: rec {
   versions = {
-    opentoonz = "1.4.0";
-    libtiff = "4.0.3";
+    opentoonz = "1.5.0";
+    libtiff = "4.0.3";  # The version in thirdparty/tiff-*
   };
 
   src = fetchFromGitHub {
     owner = "opentoonz";
     repo = "opentoonz";
     rev = "v${versions.opentoonz}";
-    sha256 = "0vgclx2yydsm5i2smff3fj8m750nhf35wfhva37kywgws01s189b";
+    sha256 = "1rw30ksw3zjph1cwxkfvqj0330v8wd4333gn0fdf3cln1w0549lk";
   };
 }

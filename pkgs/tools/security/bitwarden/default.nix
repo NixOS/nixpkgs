@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwarden";
-  version = "1.29.1";
+  version = "1.30.0";
 
   src = fetchurl {
     url = "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}-amd64.deb";
-    sha256 = "0rxy19bazi7a6m2bpx6wadg5d9p0k324h369vgr5ppmxb69d6zp8";
+    sha256 = "sha256-x0i7MUVr0nhPy8M/dTVtRjaLfJQlzqhzLQ/JHLRmL6E=";
   };
 
   desktopItem = makeDesktopItem {

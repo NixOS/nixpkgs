@@ -3,7 +3,7 @@
 mkDerivation {
   pname = "kalzium";
   meta = with lib; {
-    homepage = "https://kde.org/applications/en/utilities/org.kde.kalzium";
+    homepage = "https://edu.kde.org/kalzium/";
     description = "Program that shows you the Periodic Table of Elements";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;

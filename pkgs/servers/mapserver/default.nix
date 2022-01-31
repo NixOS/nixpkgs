@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , cairo, curl, fcgi, freetype, fribidi, gdal, geos, giflib, harfbuzz
 , libjpeg, libpng, librsvg, libxml2, postgresql, proj, protobufc, zlib
-, withPython ? true, swig, python
+, withPython ? true, swig, python2
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     proj
     protobufc
     zlib
-  ] ++ lib.optional withPython python;
+  ] ++ lib.optional withPython python2;
 
   cmakeFlags = [
     "-DWITH_KML=ON"

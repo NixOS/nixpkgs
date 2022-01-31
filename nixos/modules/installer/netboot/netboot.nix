@@ -94,7 +94,9 @@ with lib;
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
       #!ipxe
-      kernel ${pkgs.stdenv.hostPlatform.linux-kernel.target} init=${config.system.build.toplevel}/init initrd=initrd ${toString config.boot.kernelParams}
+      # Use the cmdline variable to allow the user to specify custom kernel params
+      # when chainloading this script from other iPXE scripts like netboot.xyz
+      kernel ${pkgs.stdenv.hostPlatform.linux-kernel.target} init=${config.system.build.toplevel}/init initrd=initrd ${toString config.boot.kernelParams} ''${cmdline}
       initrd initrd
       boot
     '';

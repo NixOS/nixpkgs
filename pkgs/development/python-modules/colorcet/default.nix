@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "colorcet";
-  version = "2.0.6";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "efa44b6f4078261e62d0039c76aba17ac8d3ebaf0bc2291a111aee3905313433";
+    sha256 = "21c522346a7aa81a603729f2996c22ac3f7822f4c8c303c59761e27d2dfcf3db";
   };
 
   propagatedBuildInputs = [

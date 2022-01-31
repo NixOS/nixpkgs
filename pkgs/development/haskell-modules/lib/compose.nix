@@ -288,7 +288,11 @@ rec {
     enableLibraryProfiling = false;
     isLibrary = false;
     doHaddock = false;
-    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
+    postFixup = drv.postFixup or "" + ''
+
+      # Remove every directory which could have links to other store paths.
+      rm -rf $out/lib $out/nix-support $out/share/doc
+    '';
   });
 
   /* Build a source distribution tarball instead of using the source files

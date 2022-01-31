@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "py-nightscout";
-  version = "1.3.2";
+  version = "1.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "marciogranzotto";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06i8vc7ykk5112y66cjixbrks46mdx3r0ygkmyah6gfgq1ddc39j";
+    sha256 = "0kslmm3wrxhm307nqmjmq8i8vy1x6mjaqlgba0hgvisj6b4hx65k";
   };
 
   propagatedBuildInputs = [

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gitty";
-  version = "0.3.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "gitty";
     rev = "v${version}";
-    sha256 = "1byjcvzimwn6nmhz0agicq7zq0xhkj4idi9apm1mgd3m2l509ivj";
+    sha256 = "sha256-gjiFaBM6PP937l5EQIeB27kGuZCT7cmVHm0UwuytqfE=";
   };
 
-  vendorSha256 = "1mbl585ja82kss5p8vli3hbykqxa00j8z63ypq6vi464qkh5x3py";
+  vendorSha256 = "sha256-CytlkfOzrmCRjj4tGoDUbqdim5DWElMYo1Tosw7Dhmg=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 

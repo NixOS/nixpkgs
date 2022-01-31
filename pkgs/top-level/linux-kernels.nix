@@ -159,14 +159,14 @@ in {
       ];
     };
 
-    linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
+    linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
     };
 
-    linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
+    linux_5_16 = callPackage ../os-specific/linux/kernel/linux-5.16.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
@@ -229,7 +229,6 @@ in {
     linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 { };
     linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
-    linux_5_14_hardened = hardenedKernelFor kernels.linux_5_14 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
 
   }));
@@ -250,24 +249,27 @@ in {
     inherit (kernel) kernelOlder kernelAtLeast;
     # Obsolete aliases (these packages do not depend on the kernel).
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
+    inherit (pkgs) bcc bpftrace; # added 2021-12
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
     akvcam = callPackage ../os-specific/linux/akvcam { };
 
-    amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
+    amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro {
+      libffi = pkgs.libffi.overrideAttrs (orig: rec {
+        version = "3.3";
+        src = fetchurl {
+          url = "https://github.com/libffi/libffi/releases/download/v${version}/${orig.pname}-${version}.tar.gz";
+          sha256 = "0mi0cpf8aa40ljjmzxb7im6dbj45bb0kllcd09xgmp834y9agyvj";
+        };
+      });
+    };
 
     anbox = callPackage ../os-specific/linux/anbox/kmod.nix { };
 
     apfs = callPackage ../os-specific/linux/apfs { };
 
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
-
-    bcc = callPackage ../os-specific/linux/bcc {
-      python = pkgs.python3;
-    };
-
-    bpftrace = callPackage ../os-specific/linux/bpftrace { };
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
@@ -285,6 +287,8 @@ in {
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
+
+    dpdk = pkgs.dpdk.override { inherit kernel; };
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
@@ -305,9 +309,13 @@ in {
 
     it87 = callPackage ../os-specific/linux/it87 {};
 
+    asus-ec-sensors = callPackage ../os-specific/linux/asus-ec-sensors {};
+
     asus-wmi-sensors = callPackage ../os-specific/linux/asus-wmi-sensors {};
 
     ena = callPackage ../os-specific/linux/ena {};
+
+    liquidtux = callPackage ../os-specific/linux/liquidtux {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
@@ -342,6 +350,8 @@ in {
 
     rtl8192eu = callPackage ../os-specific/linux/rtl8192eu { };
 
+    rtl8189es = callPackage ../os-specific/linux/rtl8189es { };
+
     rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
@@ -361,7 +371,7 @@ in {
     rtw88 = callPackage ../os-specific/linux/rtw88 { };
     rtlwifi_new = rtw88;
 
-    rtw89 = callPackage ../os-specific/linux/rtw89 { };
+    rtw89 = if lib.versionOlder kernel.version "5.16" then callPackage ../os-specific/linux/rtw89 { } else null;
 
     openafs_1_8 = callPackage ../servers/openafs/1.8/module.nix { };
     openafs_1_9 = callPackage ../servers/openafs/1.9/module.nix { };
@@ -440,6 +450,8 @@ in {
 
     vm-tools = callPackage ../os-specific/linux/vm-tools { };
 
+    vmm_clock = callPackage ../os-specific/linux/vmm_clock { };
+
     wireguard = if lib.versionOlder kernel.version "5.6" then callPackage ../os-specific/linux/wireguard { } else null;
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
@@ -472,8 +484,8 @@ in {
     linux_4_19 = recurseIntoAttrs (packagesFor kernels.linux_4_19);
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
-    linux_5_14 = recurseIntoAttrs (packagesFor kernels.linux_5_14);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
+    linux_5_16 = recurseIntoAttrs (packagesFor kernels.linux_5_16);
   };
 
   rtPackages = {
@@ -502,7 +514,6 @@ in {
     linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 { });
     linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 { });
     linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
-    linux_5_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_14 { });
     linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
@@ -519,7 +530,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_5_10;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_5_15;
+    linux_latest = packages.linux_5_16;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_5_10;

@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     homepage = "http://www.f-prot.com";
     description = "A popular proprietary antivirus program";
     license = licenses.unfree;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

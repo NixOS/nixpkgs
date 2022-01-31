@@ -55,7 +55,7 @@
 , gnome-clocks
 , gnome-settings-daemon
 , gnome-autoar
-, asciidoc-full
+, asciidoc
 , bash-completion
 , mesa
 }:
@@ -66,13 +66,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "41.1";
+  version = "41.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "X3QkVt/gBgXA8JCjcoymJ5e8SeUK+FK71yhdoaBRf/Y=";
+    sha256 = "OEZR6wUTk9ur4AbRrQV78p1c1z67h7x3n/Xhwx6AqCc=";
   };
 
   patches = [
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     libxslt.bin
     python3
-    asciidoc-full
+    asciidoc
   ];
 
   buildInputs = [
@@ -179,6 +179,9 @@ stdenv.mkDerivation rec {
     patchShebangs src/data-to-c.pl
     chmod +x meson/postinstall.py
     patchShebangs meson/postinstall.py
+
+    # We can generate it ourselves.
+    rm -f man/gnome-shell.1
 
     substituteInPlace src/gnome-shell-extension-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
     substituteInPlace src/gnome-shell-perf-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"

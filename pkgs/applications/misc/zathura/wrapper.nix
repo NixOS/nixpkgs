@@ -33,5 +33,6 @@ symlinkJoin {
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ smironov globin TethysSvensson ];
+    mainProgram = "zathura";
   };
 }

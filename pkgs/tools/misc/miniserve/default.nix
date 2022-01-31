@@ -41,7 +41,9 @@ rustPlatform.buildRustPackage rec {
     description = "For when you really just want to serve some files over HTTP right now!";
     homepage = "https://github.com/svenstaro/miniserve";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    # https://hydra.nixos.org/build/162650896/nixlog/1
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

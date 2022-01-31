@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = lib.getVersion capstone;
 
   src = capstone.src;
-  sourceRoot = "${capstone.name}/bindings/python";
+  sourceRoot = "source/bindings/python";
 
   postPatch = ''
     ln -s ${capstone}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
@@ -31,7 +31,5 @@ buildPythonPackage rec {
     license = licenses.bsdOriginal;
     description = "Python bindings for Capstone disassembly engine";
     maintainers = with maintainers; [ bennofs ris ];
-    # creates a manylinux2014-x86_64 wheel
-    broken = !stdenv.isx86_64;
   };
 }

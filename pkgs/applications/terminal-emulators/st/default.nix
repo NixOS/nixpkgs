@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "st";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchurl {
     url = "https://dl.suckless.org/st/${pname}-${version}.tar.gz";
-    hash = "sha256-1C087OtNamXjLpClM249RG22EsP72evBeAvGyaAzRqY=";
+    hash = "sha256-6mgyID7QL/dBgry4raqexFTI+YnnkjLLhZZl4vVEqzc=";
   };
 
   inherit patches;
@@ -49,19 +49,17 @@ stdenv.mkDerivation rec {
     libXft
   ] ++ extraLibs;
 
-  installPhase = ''
-    runHook preInstall
-
-    TERMINFO=$out/share/terminfo make install PREFIX=$out
-
-    runHook postInstall
+  preInstall = ''
+    export TERMINFO=$out/share/terminfo
   '';
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     homepage = "https://st.suckless.org/";
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
     maintainers = with maintainers; [ andsild ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

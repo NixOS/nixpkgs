@@ -41,12 +41,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     polkit
+    systemd
   ];
 
   mesonFlags = [
     "-Dadmin_group=wheel"
     "-Dlocalstatedir=/var"
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dsystemd=true"
   ];
 
   postPatch = ''

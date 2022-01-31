@@ -13,20 +13,17 @@
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.0.10689";
+  version = "9.1.11611";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-s3h+SnqCi29B0/BwUHp08x7n4tej+u5aI4exGpeKbxc=";
+    sha256 = "sha256-i2JrV9FEQyAzjdQUJb/b9MnET5h4ISTkcwc3n9poqtI=";
   };
-
-  # Use upstream z3 implementation
-  postPatch = ''
-    substituteInPlace setup.py --replace "z3-solver>=4.8.5.0" ""
-  '';
 
   propagatedBuildInputs = [
     cachetools
@@ -41,7 +38,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "claripy" ];
+  postPatch = ''
+    # Use upstream z3 implementation
+    substituteInPlace setup.py \
+      --replace "z3-solver>=4.8.5.0" ""
+  '';
+
+  pythonImportsCheck = [
+    "claripy"
+  ];
 
   meta = with lib; {
     description = "Python abstraction layer for constraint solvers";

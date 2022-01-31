@@ -1,18 +1,25 @@
-{ stdenv, lib, fetchgit }:
+{ stdenv, lib, fetchgit, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "sfeed";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchgit {
     url = "git://git.codemadness.org/sfeed";
     rev = version;
-    sha256 = "sha256-pLKWq4KIiT6X37EUIOw5SBb1KWopnFcDO+iE++Uie5s=";
+    sha256 = "sha256-0z9PHni/ni4p4nfeStrZmFFHHtyqT8GYJWVWr5IzFKw=";
   };
 
-  makeFlags = [ "RANLIB:=$(RANLIB)" ];
+  buildInputs = [ ncurses ];
+
+  makeFlags = [ "RANLIB:=$(RANLIB)" "SFEED_CURSES_LDFLAGS:=-lncurses" ]
+    # use macOS's strlcat() and strlcpy() instead of vendored ones
+    ++ lib.optional stdenv.isDarwin "COMPATOBJ:=";
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  # otherwise does not find SIGWINCH
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
 
   meta = with lib; {
     homepage = "https://codemadness.org/sfeed-simple-feed-parser.html";

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "socid-extractor";
-  version = "0.0.22";
+  version = "0.0.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "soxoj";
     repo = pname;
     rev = "v${version}";
-    sha256 = "kHF9CBlUKrD/DRVwJveenpFMr7pIrxEBNkFHHLa46KQ=";
+    sha256 = "0vdcxinpnl3vn2l4dybbyggdzm5mpmi3qbpars7lrg5m0mib0cml";
   };
 
   propagatedBuildInputs = [

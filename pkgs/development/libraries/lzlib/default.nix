@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lzlib";
-  version = "1.10";
+  version = "1.12";
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ texinfo ];
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-HWq3gApbQ+Vv0gYH/Sz9qeVQNQ3JX1vrakzhT4W0EEM=";
+    sha256 = "sha256-jl2EJC61LPHcyY5YvZuo7xrvpQFDGr3QJzoiv0zjN7E=";
   };
 
   makeFlags = [ "AR:=$(AR)" "CC:=$(CC)" ];

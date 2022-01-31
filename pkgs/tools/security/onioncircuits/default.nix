@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://tails.boum.org";
     description = "GTK application to display Tor circuits and streams";
     license = licenses.gpl3;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
   };
 }
 

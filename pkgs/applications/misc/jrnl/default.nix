@@ -16,6 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-+kPr7ndY6u1HMw6m0UZJ5jxVIPNjlTfQt7OYEdZkHBE=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'tzlocal = ">2.0, <3.0"' 'tzlocal = ">2.0, !=3.0"'
+  '';
+
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
   ];

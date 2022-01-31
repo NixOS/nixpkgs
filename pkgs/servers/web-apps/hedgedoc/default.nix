@@ -7,7 +7,7 @@
 , nodejs
 , mkYarnPackage
 , fetchYarnDeps
-, python2
+, python3
 , nixosTests
 , buildGoModule
 }:
@@ -43,7 +43,7 @@ mkYarnPackage rec {
   };
 
   nativeBuildInputs = [ which makeWrapper ];
-  extraBuildInputs = [ python2 esbuild-hedgedoc ];
+  extraBuildInputs = [ python3 esbuild-hedgedoc ];
 
   offlineCache = fetchYarnDeps {
     inherit yarnLock;

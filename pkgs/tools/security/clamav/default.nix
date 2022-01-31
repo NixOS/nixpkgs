@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clamav";
-  version = "0.103.3";
+  version = "0.103.5";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
-    sha256 = "sha256-n249GESfPRo5kncdaWaFJJ36EnNv4rKSmFjyx9gnauk=";
+    sha256 = "sha256-HnSx4dKoqQVkScMT9Ippg7nVug1vte8LK+atPIQaVCY=";
   };
 
   # don't install sample config files into the absolute sysconfdir folder
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom robberer qknight fpletz globin ];
+    maintainers = with maintainers; [ robberer qknight fpletz globin ];
     platforms = platforms.unix;
   };
 }

@@ -5,9 +5,9 @@
 , tezos-context
 , ringo-lwt
 , alcotest-lwt
-, crowbar
-, tezos-test-services
-, tezos-test-helpers
+, qcheck-alcotest
+, tezos-base-test-helpers
+, tezos-shell-services-test-helpers
 }:
 
 buildDunePackage {
@@ -23,9 +23,9 @@ buildDunePackage {
 
   checkInputs = [
     alcotest-lwt
-    crowbar
-    tezos-test-services
-    tezos-test-helpers
+    qcheck-alcotest
+    tezos-base-test-helpers
+    tezos-shell-services-test-helpers
   ];
 
   doCheck = true;

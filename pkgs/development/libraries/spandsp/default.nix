@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [raskin];
     license = lib.licenses.gpl2;
     downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
-    updateWalker = true;
   };
 }

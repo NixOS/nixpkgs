@@ -8,6 +8,7 @@
 # as subcomponents (e.g. the container feature, or nixops if network
 # expressions are ever made modular at the top level) can just use
 # types.submodule instead of using eval-config.nix
+evalConfigArgs@
 { # !!! system can be set modularly, would be nice to remove
   system ? builtins.currentSystem
 , # !!! is this argument needed any more? The pkgs argument can
@@ -28,10 +29,16 @@
                  in if e == "" then [] else [(import e)]
 }:
 
-let extraArgs_ = extraArgs; pkgs_ = pkgs;
+let pkgs_ = pkgs;
 in
 
 let
+  evalModulesMinimal = (import ./default.nix {
+    inherit lib;
+    # Implicit use of feature is noted in implementation.
+    featureFlags.minimalModules = { };
+  }).evalModules;
+
   pkgsModule = rec {
     _file = ./eval-config.nix;
     key = _file;
@@ -51,28 +58,42 @@ let
     };
   };
 
-  noUserModules = lib.evalModules {
-    inherit prefix check;
-    modules = baseModules ++ extraModules ++ [ pkgsModule ];
-    args = extraArgs;
-    specialArgs =
-      { modulesPath = builtins.toString ../modules; } // specialArgs;
+  withWarnings = x:
+    lib.warnIf (evalConfigArgs?extraArgs) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
+    lib.warnIf (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
+    x;
+
+  legacyModules =
+    lib.optional (evalConfigArgs?extraArgs) {
+      config = {
+        _module.args = extraArgs;
+      };
+    }
+    ++ lib.optional (evalConfigArgs?check) {
+      config = {
+        _module.check = lib.mkDefault check;
+      };
+    };
+  allUserModules = modules ++ legacyModules;
+
+  noUserModules = evalModulesMinimal ({
+    inherit prefix specialArgs;
+    modules = baseModules ++ extraModules ++ [ pkgsModule modulesModule ];
+  });
+
+  # Extra arguments that are useful for constructing a similar configuration.
+  modulesModule = {
+    config = {
+      _module.args = {
+        inherit noUserModules baseModules extraModules modules;
+      };
+    };
   };
 
-  # These are the extra arguments passed to every module.  In
-  # particular, Nixpkgs is passed through the "pkgs" argument.
-  extraArgs = extraArgs_ // {
-    inherit noUserModules baseModules extraModules modules;
-  };
+  nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
-in rec {
-
-  # Merge the option definitions in all modules, forming the full
-  # system configuration.
-  inherit (noUserModules.extendModules { inherit modules; })
-    config options _module type;
-
+in
+withWarnings nixosWithUserModules // {
   inherit extraArgs;
-
-  inherit (_module.args) pkgs;
+  inherit (nixosWithUserModules._module.args) pkgs;
 }

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "certigo";
-  version = "1.13.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3VysSE4N2MlNDOZ27RbCe8rUuYChU5Z3L/CIhtvMp38=";
+    sha256 = "sha256-P6xXXY0INB3Eyuxs1LEJlm2NBfMbG/HvlbIKUMAOxZE=";
   };
 
   vendorSha256 = "sha256-0wul0f8T7E4cXbsNee1j1orUgjrAToqDLgwCjiyii1Y=";

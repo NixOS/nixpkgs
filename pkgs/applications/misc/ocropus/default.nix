@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchurl, pythonPackages, curl }:
+{ lib, fetchFromGitHub, fetchurl, python2Packages, curl }:
 
 let
   getmodel = name: sha256: {
@@ -17,7 +17,7 @@ let
   ];
 
 in
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "ocropus";
   version = "1.3.3";
 
@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
     owner = "tmbdev";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ curl numpy scipy pillow
+  propagatedBuildInputs = with python2Packages; [ curl numpy scipy pillow
     matplotlib beautifulsoup4 pygtk lxml ];
 
   enableParallelBuilding = true;

@@ -5,6 +5,8 @@
 , fetchurl
 , fetchpatch
 , libedit
+, runCommand
+, dash
 }:
 
 stdenv.mkDerivation rec {
@@ -52,5 +54,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     shellPath = "/bin/dash";
+    tests = {
+      "execute-simple-command" = runCommand "${pname}-execute-simple-command" { } ''
+        mkdir $out
+        ${dash}/bin/dash -c 'echo "Hello World!" > $out/success'
+        [ -s $out/success ]
+        grep -q "Hello World" $out/success
+      '';
+    };
   };
 }

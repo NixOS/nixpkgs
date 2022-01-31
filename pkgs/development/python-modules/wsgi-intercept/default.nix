@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "wsgi-intercept";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchPypi {
     pname = "wsgi_intercept";
     inherit version;
-    sha256 = "1b6251d03jnhqywr54bzj9fnc3qzp2kvz22asxpd27jy984qx21n";
+    sha256 = "0c4dc31dc7aabdd263ba45338c201b89e3096a3baaa7d8e3260c68ff18016fb4";
   };
 
   propagatedBuildInputs = [ six ];

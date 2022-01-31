@@ -1,167 +1,172 @@
-{ lib, stdenv
-, coreutils
-, patchelf
-, requireFile
-, callPackage
+{ lib
+, stdenv
+, autoPatchelfHook
+, buildEnv
 , makeWrapper
+, requireFile
 , alsa-lib
+, cups
 , dbus
+, flite
 , fontconfig
 , freetype
-, gcc
+, gcc-unwrapped
 , glib
-, libssh2
+, gmpxx
+, keyutils
+, libGL
+, libGLU
+, libpcap
+, libtins
+, libuuid
+, libxkbcommon
+, libxml2
+, llvmPackages_12
+, matio
+, mpfr
 , ncurses
 , opencv4
+, openjdk11
 , openssl
+, pciutils
+, tre
 , unixODBC
 , xkeyboard_config
 , xorg
 , zlib
-, libxml2
-, libuuid
 , lang ? "en"
-, libGL
-, libGLU
 }:
 
 let
-  l10n =
-    import ./l10ns.nix {
-      lib = lib;
-      inherit requireFile lang;
-    };
-in
-stdenv.mkDerivation rec {
+  l10n = import ./l10ns.nix {
+    inherit lib requireFile lang;
+  };
+in stdenv.mkDerivation {
   inherit (l10n) version name src;
 
-  buildInputs = [
-    coreutils
-    patchelf
+  nativeBuildInputs = [
+    autoPatchelfHook
     makeWrapper
+  ];
+
+  buildInputs = [
     alsa-lib
-    coreutils
+    cups.lib
     dbus
+    flite
     fontconfig
     freetype
-    gcc.cc
-    gcc.libc
     glib
-    libssh2
-    ncurses
-    opencv4
-    openssl
-    stdenv.cc.cc.lib
-    unixODBC
-    xkeyboard_config
-    libxml2
-    libuuid
-    zlib
+    gmpxx
+    keyutils.lib
     libGL
     libGLU
+    libpcap
+    libtins
+    libuuid
+    libxkbcommon
+    libxml2
+    llvmPackages_12.libllvm.lib
+    matio
+    mpfr
+    ncurses
+    opencv4
+    openjdk11
+    openssl
+    pciutils
+    tre
+    unixODBC
+    xkeyboard_config
   ] ++ (with xorg; [
-    libX11
-    libXext
-    libXtst
-    libXi
-    libXmu
-    libXrender
-    libxcb
-    libXcursor
-    libXfixes
-    libXrandr
     libICE
     libSM
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXinerama
+    libXmu
+    libXrandr
+    libXrender
+    libXtst
+    libxcb
   ]);
 
-  ldpath = lib.makeLibraryPath buildInputs
-    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  wrapProgramFlags = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib zlib ]}"
+    "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
+    # Fix libQt errors - #96490
+    "--set USE_WOLFRAM_LD_LIBRARY_PATH 1"
+    # Fix xkeyboard config path for Qt
+    "--set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb"
+  ];
 
   unpackPhase = ''
-    echo "=== Extracting makeself archive ==="
-    # find offset from file
+    runHook preUnpack
+
+    # Find offset from file
     offset=$(${stdenv.shell} -c "$(grep -axm1 -e 'offset=.*' $src); echo \$offset" $src)
-    dd if="$src" ibs=$offset skip=1 | tar -xf -
-    cd Unix
+    tail -c +$(($offset + 1)) $src | tar -xf -
+
+    runHook postUnpack
   '';
 
   installPhase = ''
-    cd Installer
-    # don't restrict PATH, that has already been done
-    sed -i -e 's/^PATH=/# PATH=/' MathInstaller
+    runHook preInstall
 
-    # Fix the installation script as follows:
-    # 1. Adjust the shebang
-    # 2. Use the wrapper in the desktop items
+    cd "$TMPDIR/Unix/Installer"
+
+    mkdir -p "$out/lib/udev/rules.d"
+
+    # Patch MathInstaller's shebangs and udev rules dir
+    patchShebangs MathInstaller
     substituteInPlace MathInstaller \
-      --replace "/bin/bash" "/bin/sh" \
-      --replace "Executables/Mathematica" "../../bin/mathematica"
+      --replace /etc/udev/rules.d $out/lib/udev/rules.d
 
-    # Install the desktop items
-    export XDG_DATA_HOME="$out/share"
+    # Remove PATH restriction, root and avahi daemon checks, and hostname call
+    sed -i '
+      s/^PATH=/# &/
+      s/isRoot="false"/# &/
+      s/^checkAvahiDaemon$/# &/
+      s/`hostname`/""/
+    ' MathInstaller
 
-    echo "=== Running MathInstaller ==="
-    ./MathInstaller -auto -createdir=y -execdir=$out/bin -targetdir=$out/libexec/Mathematica -silent
+    # NOTE: some files placed under HOME may be useful
+    XDG_DATA_HOME="$out/share" HOME="$TMPDIR/home" vernierLink=y \
+      ./MathInstaller -execdir="$out/bin" -targetdir="$out/libexec/Mathematica" -auto -verbose -createdir=y
 
-    # Fix library paths
-    cd $out/libexec/Mathematica/Executables
-    for path in mathematica MathKernel Mathematica WolframKernel wolfram math; do
-      sed -i -e "2iexport LD_LIBRARY_PATH=${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}\n" $path
-    done
+    # Check if MathInstaller produced any errors
+    errLog="$out/libexec/Mathematica/InstallErrors"
+    if [ -f "$errLog" ]; then
+      echo "Installation errors:"
+      cat "$errLog"
+      return 1
+    fi
 
-    # Fix xkeyboard config path for Qt
-    for path in mathematica Mathematica; do
-      sed -i -e "2iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"\n" $path
-    done
-
-    # Remove some broken libraries
-    rm -f $out/libexec/Mathematica/SystemFiles/Libraries/Linux-x86-64/libz.so*
-
-    # Set environment variable to fix libQt errors - see https://github.com/NixOS/nixpkgs/issues/96490
-    wrapProgram $out/bin/mathematica --set USE_WOLFRAM_LD_LIBRARY_PATH 1
+    runHook postInstall
   '';
 
   preFixup = ''
-    echo "=== PatchElfing away ==="
-    # This code should be a bit forgiving of errors, unfortunately
-    set +e
-    find $out/libexec/Mathematica/SystemFiles -type f -perm -0100 | while read f; do
-      type=$(readelf -h "$f" 2>/dev/null | grep 'Type:' | sed -e 's/ *Type: *\([A-Z]*\) (.*/\1/')
-      if [ -z "$type" ]; then
-        :
-      elif [ "$type" == "EXEC" ]; then
-        echo "patching $f executable <<"
-        patchelf --shrink-rpath "$f"
-        patchelf \
-    --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
-          "$f" \
-          && patchelf --shrink-rpath "$f" \
-          || echo unable to patch ... ignoring 1>&2
-      elif [ "$type" == "DYN" ]; then
-        echo "patching $f library <<"
-        patchelf \
-          --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
-          "$f" \
-          && patchelf --shrink-rpath "$f" \
-          || echo unable to patch ... ignoring 1>&2
-      else
-        echo "not patching $f <<: unknown elf type"
-      fi
+    for bin in $out/libexec/Mathematica/Executables/*; do
+      wrapProgram "$bin" ''${wrapProgramFlags[@]}
     done
   '';
 
+  dontConfigure = true;
   dontBuild = true;
 
-  # This is primarily an IO bound build; there's little benefit to building remotely.
+  # This is primarily an IO bound build; there's little benefit to building remotely
   preferLocalBuild = true;
 
-  # all binaries are already stripped
+  # All binaries are already stripped
   dontStrip = true;
 
-  # we did this in prefixup already
-  dontPatchELF = true;
+  # NOTE: Some deps are still not found; ignore for now
+  autoPatchelfIgnoreMissingDeps = true;
 
   meta = with lib; {
     description = "Wolfram Mathematica computational software system";

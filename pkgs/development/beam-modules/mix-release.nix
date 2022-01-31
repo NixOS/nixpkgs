@@ -4,6 +4,7 @@
 , version
 , src
 , nativeBuildInputs ? [ ]
+, buildInputs ? [ ]
 , meta ? { }
 , enableDebugInfo ? false
 , mixEnv ? "prod"
@@ -27,7 +28,7 @@ assert mixNixDeps != { } -> mixFodDeps == null;
 stdenv.mkDerivation (overridable // {
   # rg is used as a better grep to search for erlang references in the final release
   nativeBuildInputs = nativeBuildInputs ++ [ erlang hex elixir makeWrapper git ripgrep ];
-  buildInputs = builtins.attrValues mixNixDeps;
+  buildInputs = buildInputs ++ builtins.attrValues mixNixDeps;
 
   MIX_ENV = mixEnv;
   MIX_DEBUG = if enableDebugInfo then 1 else 0;

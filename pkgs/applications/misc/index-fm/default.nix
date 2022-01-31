@@ -16,7 +16,7 @@
 }:
 
 mkDerivation rec {
-  pname = "index";
+  pname = "index-fm";
   version = "2.1.0";
 
   src = fetchFromGitLab {
@@ -26,6 +26,11 @@ mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-Os/5igKGYBeY/FxO6I+7mpFohuk3yHGLd7vE2GewFpU=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "-Werror" ""
+  '';
 
   nativeBuildInputs = [
     cmake

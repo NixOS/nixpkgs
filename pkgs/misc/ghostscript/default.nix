@@ -30,22 +30,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghostscript";
-  version = "9.53.3";
+  version = "9.55.0";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/${pname}-${version}.tar.xz";
-    sha512 = "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
+    sha512 = "27g72152mlwlalg232jxdhaf3ykgmqwi2pccbkwfygql1h9iz40plfbwbs1n0fkvm4zwzg5r9cr8g7w2dxih4jldiidv7rflxdy1is2";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/41ef9a0bc36b9db7115fbe9623f989bfb47bbade.patch";
-      sha256 = "1qpc6q1fpxshqc0mqgg36kng47kgljk50bmr8p7wn21jgfkh7m8w";
-    })
-    (fetchpatch {
-      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=a9bd3dec9fde";
-      name = "CVE-2021-3781.patch";
-      sha256 = "FvbH7cb3ZDCbNRz9DF0kDmLdF7OWNYk90wv44pimU58=";
+      name = "fix-non-vendored-lcms2-typo.patch";
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/830afae5454dea3bff903869d82022306890a96c.patch";
+      sha256 = "1w9yspsgxyabvrw9ld6pv6pb7708c44ihjqvag7qqh9v1lhm48j0";
     })
     ./urw-font-files.patch
     ./doc-no-ref.diff
@@ -88,6 +84,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-system-libtiff"
     "--enable-dynamic"
+    "--without-tesseract"
   ]
   ++ lib.optional x11Support "--with-x"
   ++ lib.optionals cupsSupport [

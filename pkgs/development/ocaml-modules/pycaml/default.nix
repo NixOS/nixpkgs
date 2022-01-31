@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ncurses, python, ocaml_make }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ncurses, python2, ocaml_make }:
 
 # This is the original pycaml version with patches from debian.
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "pycaml";
   patches = [ "../debian/patches/*.patch" ];
 
-  buildInputs = [ ncurses ocaml findlib python ocaml_make ];
+  buildInputs = [ ncurses ocaml findlib python2 ocaml_make ];
   createFindlibDestdir = true;
 
   # the Makefile is not shipped with an install target, hence we do it ourselves.

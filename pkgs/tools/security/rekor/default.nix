@@ -1,23 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 let
   generic = { pname, packageToBuild, description }:
     buildGoModule rec {
       inherit pname;
-      version = "0.3.0";
+      version = "0.4.0";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        sha256 = "sha256-FaVZm9C1pewJCZlYgNyD/ZYr/UIRvhqVTUhFTmysxeg=";
+        sha256 = "sha256-15p4hm4Cvs/yLaQIcxctVdMKRWPjIIFwBcbru6QcjXo=";
       };
 
-      vendorSha256 = "sha256-EBKj/+ruE88qvlbOme4GBfAqt3/1jHcqhY0IHxh6Y5U=";
+      vendorSha256 = "sha256-XCCO4Vamzj5pJFmu1A8mpTLlVAtocrn20myYJVWtBrY=";
+
+      nativeBuildInputs = [ installShellFiles ];
 
       subPackages = [ packageToBuild ];
 
-      ldflags = [ "-s" "-w" "-X github.com/sigstore/rekor/${packageToBuild}/app.gitVersion=v${version}" ];
+      ldflags = [ "-s" "-w" "-X github.com/sigstore/rekor/${packageToBuild}/app.GitVersion=v${version}" ];
+
+      postInstall = ''
+        installShellCompletion --cmd ${pname} \
+          --bash <($out/bin/${pname} completion bash) \
+          --fish <($out/bin/${pname} completion fish) \
+          --zsh <($out/bin/${pname} completion zsh)
+      '';
 
       meta = with lib; {
         inherit description;

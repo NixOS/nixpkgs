@@ -110,6 +110,8 @@ qtModule {
     # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
     # TODO: investigate and fix properly
     "-march=westmere"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-elaborated-enum-base"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_12"
     "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_12"
@@ -239,6 +241,10 @@ qtModule {
     platforms = platforms.unix;
     # This build takes a long time; particularly on slow architectures
     timeout = 24 * 3600;
-    broken = stdenv.isDarwin && (lib.versionAtLeast qtCompatVersion "5.14"); # requires a newer SDK
+    # we are still stuck with MacOS SDK 10.12 on x86_64-darwin
+    # and qtwebengine 5.14+ requires at least SDK 10.14
+    # (qtwebengine 5.12 is fine with SDK 10.12)
+    # on aarch64-darwin we are already at MacOS SDK 11.0
+    broken = stdenv.isDarwin && stdenv.isx86_64 && (lib.versionAtLeast qtCompatVersion "5.14");
   };
 }

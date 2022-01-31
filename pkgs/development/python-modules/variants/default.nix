@@ -3,8 +3,7 @@
 , fetchPypi
 , pytest-runner
 , setuptools-scm
-, singledispatch ? null
-, pytest
+, pytestCheckHook
 , lib
 }:
 
@@ -23,8 +22,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
-  ] ++ lib.optionals isPy27 [ singledispatch ];
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Library providing syntactic sugar for creating variant forms of a canonical function";

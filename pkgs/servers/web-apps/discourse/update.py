@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i python3 -p bundix bundler nix-update nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log
+from __future__ import annotations
 
 import click
 import click_log
@@ -13,16 +14,70 @@ import stat
 import json
 import requests
 import textwrap
+from functools import total_ordering
 from distutils.version import LooseVersion
+from itertools import zip_longest
 from pathlib import Path
-from typing import Iterable
+from typing import Union, Iterable
 
 
 logger = logging.getLogger(__name__)
 
 
+@total_ordering
+class DiscourseVersion:
+    """Represents a Discourse style version number and git tag.
+
+    This takes either a tag or version string as input and
+    extrapolates the other. Sorting is implemented to work as expected
+    in regard to A.B.C.betaD version numbers - 2.0.0.beta1 is
+    considered lower than 2.0.0.
+
+    """
+
+    tag: str = ""
+    version: str = ""
+    split_version: Iterable[Union[None, int, str]] = []
+
+    def __init__(self, version: str):
+        """Take either a tag or version number, calculate the other."""
+        if version.startswith('v'):
+            self.tag = version
+            self.version = version.lstrip('v')
+        else:
+            self.tag = 'v' + version
+            self.version = version
+        self.split_version = LooseVersion(self.version).version
+
+    def __eq__(self, other: DiscourseVersion):
+        """Versions are equal when their individual parts are."""
+        return self.split_version == other.split_version
+
+    def __gt__(self, other: DiscourseVersion):
+        """Check if this version is greater than the other.
+
+        Goes through the parts of the version numbers from most to
+        least significant, only continuing on to the next if the
+        numbers are equal and no decision can be made. If one version
+        ends in 'betaX' and the other doesn't, all else being equal,
+        the one without 'betaX' is considered greater, since it's the
+        release version.
+
+        """
+        for (this_ver, other_ver) in zip_longest(self.split_version, other.split_version):
+            if this_ver == other_ver:
+                continue
+            if type(this_ver) is int and type(other_ver) is int:
+                return this_ver > other_ver
+            elif 'beta' in [this_ver, other_ver]:
+                # release version (None) is greater than beta
+                return this_ver is None
+        else:
+            return False
+
+
 class DiscourseRepo:
-    version_regex = re.compile(r'^v\d+\.\d+\.\d+$')
+    version_regex = re.compile(r'^v\d+\.\d+\.\d+(\.beta\d+)?$')
     _latest_commit_sha = None
 
     def __init__(self, owner: str = 'discourse', repo: str = 'discourse'):
@@ -30,15 +85,14 @@ class DiscourseRepo:
         self.repo = repo
 
     @property
-    def tags(self) -> Iterable[str]:
+    def versions(self) -> Iterable[str]:
         r = requests.get(f'https://api.github.com/repos/{self.owner}/{self.repo}/git/refs/tags').json()
         tags = [x['ref'].replace('refs/tags/', '') for x in r]
 
         # filter out versions not matching version_regex
-        versions = list(filter(self.version_regex.match, tags))
-
-        # sort, but ignore v for sorting comparisons
-        versions.sort(key=lambda x: LooseVersion(x.replace('v', '')), reverse=True)
+        versions = filter(self.version_regex.match, tags)
+        versions = [DiscourseVersion(x) for x in versions]
+        versions.sort(reverse=True)
         return versions
 
     @property
@@ -50,24 +104,15 @@ class DiscourseRepo:
 
         return self._latest_commit_sha
 
-    @staticmethod
-    def rev2version(tag: str) -> str:
-        """
-        normalize a tag to a version number.
-        This obviously isn't very smart if we don't pass something that looks like a tag
-        :param tag: the tag to normalize
-        :return: a normalized version number
-        """
-        # strip v prefix
-        return re.sub(r'^v', '', tag)
-
     def get_file(self, filepath, rev):
         """returns file contents at a given rev :param filepath: the path to
         the file, relative to the repo root :param rev: the rev to
         fetch at :return:
 
         """
-        return requests.get(f'https://raw.githubusercontent.com/{self.owner}/{self.repo}/{rev}/{filepath}').text
+        r = requests.get(f'https://raw.githubusercontent.com/{self.owner}/{self.repo}/{rev}/{filepath}')
+        r.raise_for_status()
+        return r.text
 
 
 def _call_nix_update(pkg, version):
@@ -89,13 +134,13 @@ def _get_current_package_version(pkg: str):
     return _nix_eval(f'{pkg}.version')
 
 
-def _diff_file(filepath: str, old_version: str, new_version: str):
+def _diff_file(filepath: str, old_version: DiscourseVersion, new_version: DiscourseVersion):
     repo = DiscourseRepo()
 
     current_dir = Path(__file__).parent
 
-    old = repo.get_file(filepath, 'v' + old_version)
-    new = repo.get_file(filepath, 'v' + new_version)
+    old = repo.get_file(filepath, old_version.tag)
+    new = repo.get_file(filepath, new_version.tag)
 
     if old == new:
         click.secho(f'{filepath} is unchanged', fg='green')
@@ -111,7 +156,7 @@ def _diff_file(filepath: str, old_version: str, new_version: str):
             text=True
         )
 
-    click.secho(f'Diff for {filepath} ({old_version} -> {new_version}):', fg='bright_blue', bold=True)
+    click.secho(f'Diff for {filepath} ({old_version.version} -> {new_version.version}):', fg='bright_blue', bold=True)
     click.echo(diff_proc.stdout + '\n')
     return
 
@@ -119,7 +164,7 @@ def _diff_file(filepath: str, old_version: str, new_version: str):
 def _remove_platforms(rubyenv_dir: Path):
     for platform in ['arm64-darwin-20', 'x86_64-darwin-18',
                      'x86_64-darwin-19', 'x86_64-darwin-20',
-                     'x86_64-linux']:
+                     'x86_64-linux', 'aarch64-linux']:
         with open(rubyenv_dir / 'Gemfile.lock', 'r') as f:
             for line in f:
                 if platform in line:
@@ -153,10 +198,10 @@ def print_diffs(rev, reverse):
     """
     if rev == 'latest':
         repo = DiscourseRepo()
-        rev = repo.tags[0]
+        rev = repo.versions[0].tag
 
-    old_version = _get_current_package_version('discourse')
-    new_version = DiscourseRepo.rev2version(rev)
+    old_version = DiscourseVersion(_get_current_package_version('discourse'))
+    new_version = DiscourseVersion(rev)
 
     if reverse:
         old_version, new_version = new_version, old_version
@@ -170,30 +215,32 @@ def print_diffs(rev, reverse):
 def update(rev):
     """Update gem files and version.
 
-    REV should be the git rev to update to ('vX.Y.Z') or 'latest';
-    defaults to 'latest'.
+    REV should be the git rev to update to ('vX.Y.Z[.betaA]') or
+    'latest'; defaults to 'latest'.
 
     """
     repo = DiscourseRepo()
 
     if rev == 'latest':
-        rev = repo.tags[0]
-    logger.debug(f"Using rev {rev}")
+        version = repo.versions[0]
+    else:
+        version = DiscourseVersion(rev)
 
-    version = repo.rev2version(rev)
-    logger.debug(f"Using version {version}")
+    logger.debug(f"Using rev {version.tag}")
+    logger.debug(f"Using version {version.version}")
 
     rubyenv_dir = Path(__file__).parent / "rubyEnv"
 
     for fn in ['Gemfile.lock', 'Gemfile']:
         with open(rubyenv_dir / fn, 'w') as f:
-            f.write(repo.get_file(fn, rev))
+            f.write(repo.get_file(fn, version.tag))
 
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     _remove_platforms(rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
-    _call_nix_update('discourse', repo.rev2version(rev))
+    _call_nix_update('discourse', version.version)
+
 
 @cli.command()
 def update_plugins():
@@ -212,9 +259,8 @@ def update_plugins():
         {'name': 'discourse-ldap-auth', 'owner': 'jonmbake'},
         {'name': 'discourse-math'},
         {'name': 'discourse-migratepassword', 'owner': 'discoursehosting'},
-        # We can't update this automatically at the moment because the plugin.rb
-        # tries to load a version number which breaks bundler called by this script.
-        # {'name': 'discourse-prometheus'},
+        {'name': 'discourse-prometheus'},
+        {'name': 'discourse-openid-connect'},
         {'name': 'discourse-saved-searches'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
@@ -230,13 +276,34 @@ def update_plugins():
 
         repo = DiscourseRepo(owner=owner, repo=repo_name)
 
+        # implement the plugin pinning algorithm laid out here:
+        # https://meta.discourse.org/t/pinning-plugin-and-theme-versions-for-older-discourse-installs/156971
+        # this makes sure we don't upgrade plugins to revisions that
+        # are incompatible with the packaged Discourse version
+        try:
+            compatibility_spec = repo.get_file('.discourse-compatibility', repo.latest_commit_sha)
+            versions = [(DiscourseVersion(discourse_version), plugin_rev.strip(' '))
+                        for [discourse_version, plugin_rev]
+                        in [line.split(':')
+                            for line
+                            in compatibility_spec.splitlines()]]
+            discourse_version = DiscourseVersion(_get_current_package_version('discourse'))
+            versions = list(filter(lambda ver: ver[0] >= discourse_version, versions))
+            if versions == []:
+                rev = repo.latest_commit_sha
+            else:
+                rev = versions[0][1]
+                print(rev)
+        except requests.exceptions.HTTPError:
+            rev = repo.latest_commit_sha
+
         filename = _nix_eval(f'builtins.unsafeGetAttrPos "src" discourse.plugins.{name}')
         if filename is None:
             filename = Path(__file__).parent / 'plugins' / name / 'default.nix'
             filename.parent.mkdir()
 
             has_ruby_deps = False
-            for line in repo.get_file('plugin.rb', repo.latest_commit_sha).splitlines():
+            for line in repo.get_file('plugin.rb', rev).splitlines():
                 if 'gem ' in line:
                     has_ruby_deps = True
                     break
@@ -278,7 +345,7 @@ def update_plugins():
 
         prev_commit_sha = _nix_eval(f'discourse.plugins.{name}.src.rev')
 
-        if prev_commit_sha == repo.latest_commit_sha:
+        if prev_commit_sha == rev:
             click.echo(f'Plugin {name} is already at the latest revision')
             continue
 
@@ -287,14 +354,14 @@ def update_plugins():
             'nix-universal-prefetch', fetcher,
             '--owner', owner,
             '--repo', repo_name,
-            '--rev', repo.latest_commit_sha,
+            '--rev', rev,
         ], text=True).strip("\n")
 
-        click.echo(f"Update {name}, {prev_commit_sha} -> {repo.latest_commit_sha} in {filename}")
+        click.echo(f"Update {name}, {prev_commit_sha} -> {rev} in {filename}")
 
         with open(filename, 'r+') as f:
             content = f.read()
-            content = content.replace(prev_commit_sha, repo.latest_commit_sha)
+            content = content.replace(prev_commit_sha, rev)
             content = content.replace(prev_hash, new_hash)
             f.seek(0)
             f.write(content)
@@ -302,10 +369,18 @@ def update_plugins():
 
         rubyenv_dir = Path(filename).parent
         gemfile = rubyenv_dir / "Gemfile"
+        version_file_regex = re.compile(r'.*File\.expand_path\("\.\./(.*)", __FILE__\)')
         gemfile_text = ''
-        for line in repo.get_file('plugin.rb', repo.latest_commit_sha).splitlines():
+        for line in repo.get_file('plugin.rb', rev).splitlines():
             if 'gem ' in line:
                 gemfile_text = gemfile_text + line + os.linesep
+
+                version_file_match = version_file_regex.match(line)
+                if version_file_match is not None:
+                    filename = version_file_match.groups()[0]
+                    content = repo.get_file(filename, rev)
+                    with open(rubyenv_dir / filename, 'w') as f:
+                        f.write(content)
 
         if len(gemfile_text) > 0:
             if os.path.isfile(gemfile):

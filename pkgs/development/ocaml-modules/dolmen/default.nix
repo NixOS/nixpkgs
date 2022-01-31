@@ -19,7 +19,8 @@ buildDunePackage rec {
   buildInputs = [ menhir ];
   propagatedBuildInputs = [ menhirLib fmt ];
 
-  doCheck = true;
+  # Testr are not compatible with menhir 20211128
+  doCheck = false;
 
   meta = {
     description = "An OCaml library providing clean and flexible parsers for input languages";

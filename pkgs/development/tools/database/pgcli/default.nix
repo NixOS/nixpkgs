@@ -20,13 +20,13 @@
 
 buildPythonApplication rec {
   pname = "pgcli";
-  version = "3.2.0";
+  version = "3.3.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6cde97e71996bf910a40b579e5285483c10ea04962a08def01c12433d5f7c6b7";
+    sha256 = "sha256-/MyeVcpopK0Ih6z6KZGvs7ivk/PM6a2iSeatiYeZM6E=";
   };
 
   propagatedBuildInputs = [
@@ -46,11 +46,7 @@ buildPythonApplication rec {
 
   checkInputs = [ pytestCheckHook mock ];
 
-  disabledTests = [
-    # tests that expect output from an older version of cli-helpers
-    "test_format_output"
-    "test_format_output_auto_expand"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";

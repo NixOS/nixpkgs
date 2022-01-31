@@ -227,9 +227,9 @@ in
       environment.sessionVariables.GTK_CSD = "1";
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
 
-      xdg.portal.extraPortals = with pkgs; [
-        pantheon.elementary-files
-        pantheon.elementary-settings-daemon
+      xdg.portal.extraPortals = with pkgs.pantheon; [
+        elementary-files
+        elementary-settings-daemon
         xdg-desktop-portal-pantheon
       ];
 

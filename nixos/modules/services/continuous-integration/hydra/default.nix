@@ -203,6 +203,7 @@ in
       buildMachinesFiles = mkOption {
         type = types.listOf types.path;
         default = optional (config.nix.buildMachines != []) "/etc/nix/machines";
+        defaultText = literalExpression ''optional (config.nix.buildMachines != []) "/etc/nix/machines"'';
         example = [ "/etc/nix/machines" "/var/lib/hydra/provisioner/machines" ];
         description = "List of files containing build machines.";
       };
@@ -257,8 +258,6 @@ in
         uid = config.ids.uids.hydra-www;
       };
 
-    nix.trustedUsers = [ "hydra-queue-runner" ];
-
     services.hydra.extraConfig =
       ''
         using_frontend_proxy = 1
@@ -276,16 +275,21 @@ in
 
     environment.variables = hydraEnv;
 
-    nix.extraOptions = ''
-      keep-outputs = true
-      keep-derivations = true
+    nix.settings = mkMerge [
+      {
+        keep-outputs = true;
+        keep-derivations = true;
+        trusted-users = [ "hydra-queue-runner" ];
+      }
 
-
-    '' + optionalString (versionOlder (getVersion config.nix.package.out) "2.4pre") ''
-      # The default (`true') slows Nix down a lot since the build farm
-      # has so many GC roots.
-      gc-check-reachability = false
-    '';
+      (mkIf (versionOlder (getVersion config.nix.package.out) "2.4pre")
+        {
+          # The default (`true') slows Nix down a lot since the build farm
+          # has so many GC roots.
+          gc-check-reachability = false;
+        }
+      )
+    ];
 
     systemd.services.hydra-init =
       { wantedBy = [ "multi-user.target" ];

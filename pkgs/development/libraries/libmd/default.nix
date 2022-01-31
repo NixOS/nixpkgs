@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmd";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchurl {
     url = "https://archive.hadrons.org/software/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0jmga8y94h857ilra3qjaiax3wd5pd6mx1h120zhl9fcjmzhj0js";
+    sha256 = "sha256-9RySEELjS+3e3tS3VVdlZVnPWx8kSAM7TB7sEcB+Uw8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

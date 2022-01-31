@@ -3,7 +3,7 @@
 buildGoModule rec {
   pname = "age";
   version = "1.0.0";
-  vendorSha256 = "sha256-cnFDs5Qos1KHn7TqaEgmt4sSzpjZor615euwxka14mY=";
+  vendorSha256 = "sha256-Hdsd+epcLFLkeHzJ2CUu4ss1qOd0+lTjhfs9MhI5Weg=";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";

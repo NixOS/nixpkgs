@@ -1,33 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , pandas
-, scikit-learn
 , pytestCheckHook
+, pythonOlder
+, scikit-learn
 }:
 
 buildPythonPackage rec {
   pname = "ppscore";
-  version = "1.1.1";
-  disabled = isPy27;
+  version = "unstable-2021-11-25";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "8080labs";
     repo = pname;
-    rev = version;
-    sha256 = "11y6axhj0nlagf7ax6gas1g06krrmddb1jlmf0mmrmyi7z0vldk2";
+    rev = "c9268c16b6305c5c38e2fe2fd84f43d97ec1aaca";
+    hash = "sha256-qiogjUgcLFauAMpVf2CKNC27c9xR9q7nY69n8/go1ms=";
   };
-
-  checkInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [
     pandas
     scikit-learn
   ];
 
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "ppscore"
+  ];
+
   meta = with lib; {
-    description = "A Python implementation of the Predictive Power Score (PPS)";
+    description = "Python implementation of the Predictive Power Score (PPS)";
     homepage = "https://github.com/8080labs/ppscore/";
     license = licenses.mit;
     maintainers = with maintainers; [ evax ];

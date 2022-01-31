@@ -11,12 +11,17 @@
 
 stdenv.mkDerivation rec {
   pname = "notmuch";
-  version = "0.34.1";
+  version = "0.34.3";
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
-    sha256 = "05nq64gp8vnrwrl22d60v7ixgdhm9339ajhcdfkq0ll1qiycyyj5";
+    sha256 = "sha256-P+kQSDv9gVpcO5UOImp7yoFWBT/TLXrR6xoKijrK6Ig=";
   };
+
+  patches = [
+    # https://nmbug.notmuchmail.org/nmweb/show/87o84iza9r.fsf%40starbuck.i-did-not-set--mail-host-address--so-tickle-me
+    ./test-fix-support-for-gpgsm-in-gnupg-2.3.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -40,6 +40,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Failure seems to be related to arrow > 1.0
     "test_event"
+    # Broke with TatSu 5.7:
+    "test_many_lines"
   ];
 
   pythonImportsCheck = [ "ics" ];

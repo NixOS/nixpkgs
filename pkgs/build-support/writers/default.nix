@@ -1,7 +1,9 @@
-{ pkgs, buildPackages, lib, stdenv, libiconv, gawk, gnused, gixy }:
+{ pkgs, config, buildPackages, lib, stdenv, libiconv, gawk, gnused, gixy }:
 
-with lib;
-rec {
+let
+  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else prev: {};
+
+  writers = with lib; rec {
   # Base implementation for non-compiled executables.
   # Takes an interpreter, for example `${pkgs.bash}/bin/bash`
   #
@@ -245,11 +247,11 @@ rec {
     '');
   } name;
 
-  # writePython2 takes a name an attributeset with libraries and some python2 sourcecode and
+  # writePyPy2 takes a name an attributeset with libraries and some pypy2 sourcecode and
   # returns an executable
   #
   # Example:
-  # writePython2 "test_python2" { libraries = [ pkgs.python2Packages.enum ]; } ''
+  # writePyPy2 "test_pypy2" { libraries = [ pkgs.pypy2Packages.enum ]; } ''
   #   from enum import Enum
   #
   #   class Test(Enum):
@@ -257,11 +259,11 @@ rec {
   #
   #   print Test.a
   # ''
-  writePython2 = makePythonWriter pkgs.python2 pkgs.python2Packages;
+  writePyPy2 = makePythonWriter pkgs.pypy2 pkgs.pypy2Packages;
 
-  # writePython2Bin takes the same arguments as writePython2 but outputs a directory (like writeScriptBin)
-  writePython2Bin = name:
-    writePython2 "/bin/${name}";
+  # writePyPy2Bin takes the same arguments as writePyPy2 but outputs a directory (like writeScriptBin)
+  writePyPy2Bin = name:
+    writePyPy2 "/bin/${name}";
 
   # writePython3 takes a name an attributeset with libraries and some python3 sourcecode and
   # returns an executable
@@ -280,4 +282,25 @@ rec {
   # writePython3Bin takes the same arguments as writePython3 but outputs a directory (like writeScriptBin)
   writePython3Bin = name:
     writePython3 "/bin/${name}";
-}
+
+  # writePyPy3 takes a name an attributeset with libraries and some pypy3 sourcecode and
+  # returns an executable
+  #
+  # Example:
+  # writePyPy3 "test_pypy3" { libraries = [ pkgs.pypy3Packages.pyyaml ]; } ''
+  #   import yaml
+  #
+  #   y = yaml.load("""
+  #     - test: success
+  #   """)
+  #   print(y[0]['test'])
+  # ''
+  writePyPy3 = makePythonWriter pkgs.pypy3 pkgs.pypy3Packages;
+
+  # writePyPy3Bin takes the same arguments as writePyPy3 but outputs a directory (like writeScriptBin)
+  writePyPy3Bin = name:
+    writePyPy3 "/bin/${name}";
+
+};
+in
+writers // (aliases writers)

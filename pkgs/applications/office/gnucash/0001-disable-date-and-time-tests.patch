@@ -1,0 +1,43 @@
+diff --git a/libgnucash/engine/test/CMakeLists.txt b/libgnucash/engine/test/CMakeLists.txt
+index 8e44172ff..c7289e4fd 100644
+--- a/libgnucash/engine/test/CMakeLists.txt
++++ b/libgnucash/engine/test/CMakeLists.txt
+@@ -167,22 +167,22 @@ set(test_gnc_numeric_SOURCES
+ gnc_add_test(test-gnc-numeric "${test_gnc_numeric_SOURCES}"
+   gtest_engine_INCLUDES gtest_qof_LIBS)
+ 
+-set(test_gnc_timezone_SOURCES
+-  ${MODULEPATH}/gnc-timezone.cpp
+-  gtest-gnc-timezone.cpp)
+-gnc_add_test(test-gnc-timezone "${test_gnc_timezone_SOURCES}"
+-  gtest_engine_INCLUDES gtest_old_engine_LIBS)
+-
+-set(test_gnc_datetime_SOURCES
+-  ${MODULEPATH}/gnc-datetime.cpp
+-  ${MODULEPATH}/gnc-timezone.cpp
+-  ${MODULEPATH}/gnc-date.cpp
+-  ${MODULEPATH}/qoflog.cpp
+-  ${CMAKE_SOURCE_DIR}/libgnucash/core-utils/gnc-locale-utils.cpp
+-  ${gtest_engine_win32_SOURCES}
+-  gtest-gnc-datetime.cpp)
+-gnc_add_test(test-gnc-datetime "${test_gnc_datetime_SOURCES}"
+-  gtest_engine_INCLUDES gtest_qof_LIBS)
++#set(test_gnc_timezone_SOURCES
++#  ${MODULEPATH}/gnc-timezone.cpp
++#  gtest-gnc-timezone.cpp)
++#gnc_add_test(test-gnc-timezone "${test_gnc_timezone_SOURCES}"
++#  gtest_engine_INCLUDES gtest_old_engine_LIBS)
++
++#set(test_gnc_datetime_SOURCES
++#  ${MODULEPATH}/gnc-datetime.cpp
++#  ${MODULEPATH}/gnc-timezone.cpp
++#  ${MODULEPATH}/gnc-date.cpp
++#  ${MODULEPATH}/qoflog.cpp
++#  ${CMAKE_SOURCE_DIR}/libgnucash/core-utils/gnc-locale-utils.cpp
++#  ${gtest_engine_win32_SOURCES}
++#  gtest-gnc-datetime.cpp)
++#gnc_add_test(test-gnc-datetime "${test_gnc_datetime_SOURCES}"
++#  gtest_engine_INCLUDES gtest_qof_LIBS)
+ 
+ set(test_import_map_SOURCES
+   gtest-import-map.cpp)

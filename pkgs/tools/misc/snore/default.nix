@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.1";
+  version = "0.2";
   pname = "snore";
 
   src = fetchFromGitHub {
     owner = "clamiax";
     repo = pname;
     rev = version;
-    sha256 = "1ic1qy6ybnjlkz5rb1hpvq6dcdmxw5xcx34qcadrsfdjizxcv8pp";
+    sha256 = "sha256-EOwbRqtQEuGZ+aeCBNVfLUq4m/bFWJTvMDM6a+y74qc=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

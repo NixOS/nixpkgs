@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    sha256 = "sha256-R5v1nbfYyIOzdw7LmkGQE4yVxpTVs6YF62jkfFrA1z8=";
+    sha256 = "sha256-nMM4ZQLIth9QHlLu+sXE4AXoDlq1UP20+YuBi+Op+go=";
   };
 
   # Normally, igraph wants us to call bootstrap.sh, which will call

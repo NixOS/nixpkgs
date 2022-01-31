@@ -12,7 +12,7 @@ let
 
     aarch64-darwin = {
       arch = "aarch64";
-      zuluVersion = "17.30.19";
+      zuluVersion = "17.30.15";
       jdkVersion = "17.0.1";
       sha256 = "sha256-zhBCXOnO/fsj6+q+vAlEz7QVMRFKLVvYnjwZzFz6mRM=";
     };

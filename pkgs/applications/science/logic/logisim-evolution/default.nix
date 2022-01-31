@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "logisim-evolution";
-  version = "3.7.1";
+  version = "3.7.2";
 
   src = fetchurl {
     url = "https://github.com/logisim-evolution/logisim-evolution/releases/download/v${version}/logisim-evolution-${version}-all.jar";
-    sha256 = "04q9bzhnzpi8cgv3ly4ii88qvmlw9n09c4p1qmg8dhxqkskdqj6h";
+    sha256 = "sha256-RI+ioOHj13UAGuPzseAAy3oQBQYkja/ucjj4QMeRZhw=";
   };
 
   dontUnpack = true;

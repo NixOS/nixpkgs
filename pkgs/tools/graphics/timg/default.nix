@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, graphicsmagick, libjpeg
-, ffmpeg, zlib, libexif }:
+, ffmpeg, zlib, libexif, openslide }:
 
 stdenv.mkDerivation rec {
   pname = "timg";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "timg";
     rev = "v${version}";
-    sha256 = "1zjcaxnik8imkn22g5kz6zly3yxpknrzd093sfxpgqnfw4sq8149";
+    sha256 = "1lanr2y9rchl0xmycsyl0bhnh9mrmr5dj46pglw4lykz4rxslzcx";
   };
 
-  buildInputs = [ graphicsmagick ffmpeg libexif libjpeg zlib ];
+  buildInputs = [ graphicsmagick ffmpeg libexif libjpeg openslide zlib ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DTIMG_VERSION_FROM_GIT=Off"
     "-DWITH_VIDEO_DECODING=On"
     "-DWITH_VIDEO_DEVICE=On"
-    "-DWITH_OPENSLIDE_SUPPORT=Off" # https://openslide.org/ lib not yet in nix
+    "-DWITH_OPENSLIDE_SUPPORT=On"
   ];
 
   meta = with lib; {

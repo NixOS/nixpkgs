@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
 , pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
 , Cocoa, Foundation
-, enableTools ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +19,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
                   libvorbis fribidi dbus libpng pcre openssl icu ]
                 ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation];
-
-  cmakeFlags = [ "-DENABLE_TOOLS=${if enableTools then "ON" else "OFF"}" ];
 
   meta = with lib; {
     description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";

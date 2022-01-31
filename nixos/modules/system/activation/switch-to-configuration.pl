@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use Config::IniFiles;
 use File::Path qw(make_path);
 use File::Basename;
 use File::Slurp;
@@ -11,7 +12,6 @@ use Cwd 'abs_path';
 
 my $out = "@out@";
 
-# FIXME: maybe we should use /proc/1/exe to get the current systemd.
 my $curSystemd = abs_path("/run/current-system/sw/bin");
 
 # To be robust against interruption, record what units need to be started etc.
@@ -19,13 +19,15 @@ my $startListFile = "/run/nixos/start-list";
 my $restartListFile = "/run/nixos/restart-list";
 my $reloadListFile = "/run/nixos/reload-list";
 
-# Parse restart/reload requests by the activation script
+# Parse restart/reload requests by the activation script.
+# Activation scripts may write newline-separated units to this
+# file and switch-to-configuration will handle them. While
+# `stopIfChanged = true` is ignored, switch-to-configuration will
+# handle `restartIfChanged = false` and `reloadIfChanged = true`.
 my $restartByActivationFile = "/run/nixos/activation-restart-list";
-my $reloadByActivationFile = "/run/nixos/activation-reload-list";
 my $dryRestartByActivationFile = "/run/nixos/dry-activation-restart-list";
-my $dryReloadByActivationFile = "/run/nixos/dry-activation-reload-list";
 
-make_path("/run/nixos", { mode => 0755 });
+make_path("/run/nixos", { mode => oct(755) });
 
 my $action = shift @ARGV;
 
@@ -112,26 +114,77 @@ sub parseFstab {
     return ($fss, $swaps);
 }
 
-sub parseUnit {
-    my ($filename) = @_;
-    my $info = {};
-    parseKeyValues($info, read_file($filename)) if -f $filename;
-    parseKeyValues($info, read_file("${filename}.d/overrides.conf")) if -f "${filename}.d/overrides.conf";
-    return $info;
-}
+# This subroutine takes a single ini file that specified systemd configuration
+# like unit configuration and parses it into a hash where the keys are the sections
+# of the unit file and the values are hashes themselves. These hashes have the unit file
+# keys as their keys (left side of =) and an array of all values that were set as their
+# values. If a value is empty (for example `ExecStart=`), then all current definitions are
+# removed.
+#
+# Instead of returning the hash, this subroutine takes a hashref to return the data in. This
+# allows calling the subroutine multiple times with the same hash to parse override files.
+sub parseSystemdIni {
+    my ($unitContents, $path) = @_;
+    # Tie the ini file to a hash for easier access
+    my %fileContents;
+    tie %fileContents, "Config::IniFiles", (-file => $path, -allowempty => 1, -allowcontinue => 1);
 
-sub parseKeyValues {
-    my $info = shift;
-    foreach my $line (@_) {
-        # FIXME: not quite correct.
-        $line =~ /^([^=]+)=(.*)$/ or next;
-        $info->{$1} = $2;
+    # Copy over all sections
+    foreach my $sectionName (keys %fileContents) {
+        # Copy over all keys
+        foreach my $iniKey (keys %{$fileContents{$sectionName}}) {
+            # Ensure the value is an array so it's easier to work with
+            my $iniValue = $fileContents{$sectionName}{$iniKey};
+            my @iniValues;
+            if (ref($iniValue) eq "ARRAY") {
+                @iniValues = @{$iniValue};
+            } else {
+                @iniValues = $iniValue;
+            }
+            # Go over all values
+            for my $iniValue (@iniValues) {
+                # If a value is empty, it's an override that tells us to clean the value
+                if ($iniValue eq "") {
+                    delete $unitContents->{$sectionName}->{$iniKey};
+                    next;
+                }
+                push(@{$unitContents->{$sectionName}->{$iniKey}}, $iniValue);
+            }
+        }
     }
+    return;
 }
 
-sub boolIsTrue {
-    my ($s) = @_;
-    return $s eq "yes" || $s eq "true";
+# This subroutine takes the path to a systemd configuration file (like a unit configuration),
+# parses it, and returns a hash that contains the contents. The contents of this hash are
+# explained in the `parseSystemdIni` subroutine. Neither the sections nor the keys inside
+# the sections are consistently sorted.
+#
+# If a directory with the same basename ending in .d exists next to the unit file, it will be
+# assumed to contain override files which will be parsed as well and handled properly.
+sub parseUnit {
+    my ($unitPath) = @_;
+
+    # Parse the main unit and all overrides
+    my %unitData;
+    parseSystemdIni(\%unitData, $_) for glob("${unitPath}{,.d/*.conf}");
+    return %unitData;
+}
+
+# Checks whether a specified boolean in a systemd unit is true
+# or false, with a default that is applied when the value is not set.
+sub parseSystemdBool {
+    my ($unitConfig, $sectionName, $boolName, $default) = @_;
+
+    my @values = @{$unitConfig->{$sectionName}{$boolName} // []};
+    # Return default if value is not set
+    if (scalar @values lt 1 || not defined $values[-1]) {
+        return $default;
+    }
+    # If value is defined multiple times, use the last definition
+    my $last = $values[-1];
+    # These are valid values as of systemd.syntax(7)
+    return $last eq "1" || $last eq "yes" || $last eq "true" || $last eq "on";
 }
 
 sub recordUnit {
@@ -145,6 +198,79 @@ sub recordUnit {
 sub fingerprintUnit {
     my ($s) = @_;
     return abs_path($s) . (-f "${s}.d/overrides.conf" ? " " . abs_path "${s}.d/overrides.conf" : "");
+}
+
+sub handleModifiedUnit {
+    my ($unit, $baseName, $newUnitFile, $activePrev, $unitsToStop, $unitsToStart, $unitsToReload, $unitsToRestart, $unitsToSkip) = @_;
+
+    if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target" || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
+        # Do nothing.  These cannot be restarted directly.
+
+        # Slices and Paths don't have to be restarted since
+        # properties (resource limits and inotify watches)
+        # seem to get applied on daemon-reload.
+    } elsif ($unit =~ /\.mount$/) {
+        # Reload the changed mount unit to force a remount.
+        $unitsToReload->{$unit} = 1;
+        recordUnit($reloadListFile, $unit);
+    } elsif ($unit =~ /\.socket$/) {
+        # FIXME: do something?
+        # Attempt to fix this: https://github.com/NixOS/nixpkgs/pull/141192
+        # Revert of the attempt: https://github.com/NixOS/nixpkgs/pull/147609
+        # More details: https://github.com/NixOS/nixpkgs/issues/74899#issuecomment-981142430
+    } else {
+        my %unitInfo = parseUnit($newUnitFile);
+        if (parseSystemdBool(\%unitInfo, "Service", "X-ReloadIfChanged", 0)) {
+            $unitsToReload->{$unit} = 1;
+            recordUnit($reloadListFile, $unit);
+        }
+        elsif (!parseSystemdBool(\%unitInfo, "Service", "X-RestartIfChanged", 1) || parseSystemdBool(\%unitInfo, "Unit", "RefuseManualStop", 0) || parseSystemdBool(\%unitInfo, "Unit", "X-OnlyManualStart", 0)) {
+            $unitsToSkip->{$unit} = 1;
+        } else {
+            # It doesn't make sense to stop and start non-services because
+            # they can't have ExecStop=
+            if (!parseSystemdBool(\%unitInfo, "Service", "X-StopIfChanged", 1) || $unit !~ /\.service$/) {
+                # This unit should be restarted instead of
+                # stopped and started.
+                $unitsToRestart->{$unit} = 1;
+                recordUnit($restartListFile, $unit);
+            } else {
+                # If this unit is socket-activated, then stop the
+                # socket unit(s) as well, and restart the
+                # socket(s) instead of the service.
+                my $socketActivated = 0;
+                if ($unit =~ /\.service$/) {
+                    my @sockets = split(/ /, join(" ", @{$unitInfo{Service}{Sockets} // []}));
+                    if (scalar @sockets == 0) {
+                        @sockets = ("$baseName.socket");
+                    }
+                    foreach my $socket (@sockets) {
+                        if (defined $activePrev->{$socket}) {
+                            $unitsToStop->{$socket} = 1;
+                            # Only restart sockets that actually
+                            # exist in new configuration:
+                            if (-e "$out/etc/systemd/system/$socket") {
+                                $unitsToStart->{$socket} = 1;
+                                recordUnit($startListFile, $socket);
+                                $socketActivated = 1;
+                            }
+                        }
+                    }
+                }
+
+                # If the unit is not socket-activated, record
+                # that this unit needs to be started below.
+                # We write this to a file to ensure that the
+                # service gets restarted if we're interrupted.
+                if (!$socketActivated) {
+                    $unitsToStart->{$unit} = 1;
+                    recordUnit($startListFile, $unit);
+                }
+
+                $unitsToStop->{$unit} = 1;
+            }
+        }
+    }
 }
 
 # Figure out what units need to be stopped, started, restarted or reloaded.
@@ -180,12 +306,12 @@ while (my ($unit, $state) = each %{$activePrev}) {
 
     if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
         if (! -e $newUnitFile || abs_path($newUnitFile) eq "/dev/null") {
-            my $unitInfo = parseUnit($prevUnitFile);
-            $unitsToStop{$unit} = 1 if boolIsTrue($unitInfo->{'X-StopOnRemoval'} // "yes");
+            my %unitInfo = parseUnit($prevUnitFile);
+            $unitsToStop{$unit} = 1 if parseSystemdBool(\%unitInfo, "Unit", "X-StopOnRemoval", 1);
         }
 
         elsif ($unit =~ /\.target$/) {
-            my $unitInfo = parseUnit($newUnitFile);
+            my %unitInfo = parseUnit($newUnitFile);
 
             # Cause all active target units to be restarted below.
             # This should start most changed units we stop here as
@@ -194,7 +320,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # active after the system has resumed, which probably
             # should not be the case.  Just ignore it.
             if ($unit ne "suspend.target" && $unit ne "hibernate.target" && $unit ne "hybrid-sleep.target") {
-                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no") || boolIsTrue($unitInfo->{'X-OnlyManualStart'} // "no")) {
+                unless (parseSystemdBool(\%unitInfo, "Unit", "RefuseManualStart", 0) || parseSystemdBool(\%unitInfo, "Unit", "X-OnlyManualStart", 0)) {
                     $unitsToStart{$unit} = 1;
                     recordUnit($startListFile, $unit);
                     # Don't spam the user with target units that always get started.
@@ -213,71 +339,13 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # Stopping a target generally has no effect on other units
             # (unless there is a PartOf dependency), so this is just a
             # bookkeeping thing to get systemd to do the right thing.
-            if (boolIsTrue($unitInfo->{'X-StopOnReconfiguration'} // "no")) {
+            if (parseSystemdBool(\%unitInfo, "Unit", "X-StopOnReconfiguration", 0)) {
                 $unitsToStop{$unit} = 1;
             }
         }
 
         elsif (fingerprintUnit($prevUnitFile) ne fingerprintUnit($newUnitFile)) {
-            if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target") {
-                # Do nothing.  These cannot be restarted directly.
-            } elsif ($unit =~ /\.mount$/) {
-                # Reload the changed mount unit to force a remount.
-                $unitsToReload{$unit} = 1;
-                recordUnit($reloadListFile, $unit);
-            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
-                # FIXME: do something?
-            } else {
-                my $unitInfo = parseUnit($newUnitFile);
-                if (boolIsTrue($unitInfo->{'X-ReloadIfChanged'} // "no")) {
-                    $unitsToReload{$unit} = 1;
-                    recordUnit($reloadListFile, $unit);
-                }
-                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") || boolIsTrue($unitInfo->{'X-OnlyManualStart'} // "no")) {
-                    $unitsToSkip{$unit} = 1;
-                } else {
-                    if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes")) {
-                        # This unit should be restarted instead of
-                        # stopped and started.
-                        $unitsToRestart{$unit} = 1;
-                        recordUnit($restartListFile, $unit);
-                    } else {
-                        # If this unit is socket-activated, then stop the
-                        # socket unit(s) as well, and restart the
-                        # socket(s) instead of the service.
-                        my $socketActivated = 0;
-                        if ($unit =~ /\.service$/) {
-                            my @sockets = split / /, ($unitInfo->{Sockets} // "");
-                            if (scalar @sockets == 0) {
-                                @sockets = ("$baseName.socket");
-                            }
-                            foreach my $socket (@sockets) {
-                                if (defined $activePrev->{$socket}) {
-                                    $unitsToStop{$socket} = 1;
-                                    # Only restart sockets that actually
-                                    # exist in new configuration:
-                                    if (-e "$out/etc/systemd/system/$socket") {
-                                        $unitsToStart{$socket} = 1;
-                                        recordUnit($startListFile, $socket);
-                                        $socketActivated = 1;
-                                    }
-                                }
-                            }
-                        }
-
-                        # If the unit is not socket-activated, record
-                        # that this unit needs to be started below.
-                        # We write this to a file to ensure that the
-                        # service gets restarted if we're interrupted.
-                        if (!$socketActivated) {
-                            $unitsToStart{$unit} = 1;
-                            recordUnit($startListFile, $unit);
-                        }
-
-                        $unitsToStop{$unit} = 1;
-                    }
-                }
-            }
+            handleModifiedUnit($unit, $baseName, $newUnitFile, $activePrev, \%unitsToStop, \%unitsToStart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
         }
     }
 }
@@ -348,8 +416,14 @@ foreach my $device (keys %$prevSwaps) {
 
 # Should we have systemd re-exec itself?
 my $prevSystemd = abs_path("/proc/1/exe") // "/unknown";
+my $prevSystemdSystemConfig = abs_path("/etc/systemd/system.conf") // "/unknown";
 my $newSystemd = abs_path("@systemd@/lib/systemd/systemd") or die;
+my $newSystemdSystemConfig = abs_path("$out/etc/systemd/system.conf") // "/unknown";
+
 my $restartSystemd = $prevSystemd ne $newSystemd;
+if ($prevSystemdSystemConfig ne $newSystemdSystemConfig) {
+    $restartSystemd = 1;
+}
 
 
 sub filterUnits {
@@ -362,7 +436,6 @@ sub filterUnits {
 }
 
 my @unitsToStopFiltered = filterUnits(\%unitsToStop);
-my @unitsToStartFiltered = filterUnits(\%unitsToStart);
 
 
 # Show dry-run actions.
@@ -375,21 +448,39 @@ if ($action eq "dry-activate") {
     print STDERR "would activate the configuration...\n";
     system("$out/dry-activate", "$out");
 
-    $unitsToRestart{$_} = 1 foreach
-        split('\n', read_file($dryRestartByActivationFile, err_mode => 'quiet') // "");
+    # Handle the activation script requesting the restart or reload of a unit.
+    foreach (split('\n', read_file($dryRestartByActivationFile, err_mode => 'quiet') // "")) {
+        my $unit = $_;
+        my $baseUnit = $unit;
+        my $newUnitFile = "$out/etc/systemd/system/$baseUnit";
 
-    $unitsToReload{$_} = 1 foreach
-        split('\n', read_file($dryReloadByActivationFile, err_mode => 'quiet') // "");
+        # Detect template instances.
+        if (!-e $newUnitFile && $unit =~ /^(.*)@[^\.]*\.(.*)$/) {
+          $baseUnit = "$1\@.$2";
+          $newUnitFile = "$out/etc/systemd/system/$baseUnit";
+        }
+
+        my $baseName = $baseUnit;
+        $baseName =~ s/\.[a-z]*$//;
+
+        # Start units if they were not active previously
+        if (not defined $activePrev->{$unit}) {
+            $unitsToStart{$unit} = 1;
+            next;
+        }
+
+        handleModifiedUnit($unit, $baseName, $newUnitFile, $activePrev, \%unitsToRestart, \%unitsToRestart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
+    }
+    unlink($dryRestartByActivationFile);
 
     print STDERR "would restart systemd\n" if $restartSystemd;
-    print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
-        if scalar(keys %unitsToRestart) > 0;
-    print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n"
-        if scalar @unitsToStartFiltered;
     print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
         if scalar(keys %unitsToReload) > 0;
-    unlink($dryRestartByActivationFile);
-    unlink($dryReloadByActivationFile);
+    print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
+        if scalar(keys %unitsToRestart) > 0;
+    my @unitsToStartFiltered = filterUnits(\%unitsToStart);
+    print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n"
+        if scalar @unitsToStartFiltered;
     exit 0;
 }
 
@@ -400,7 +491,7 @@ if (scalar (keys %unitsToStop) > 0) {
     print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
         if scalar @unitsToStopFiltered;
     # Use current version of systemctl binary before daemon is reexeced.
-    system("$curSystemd/systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
+    system("$curSystemd/systemctl", "stop", "--", sort(keys %unitsToStop));
 }
 
 print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
@@ -413,13 +504,31 @@ print STDERR "activating the configuration...\n";
 system("$out/activate", "$out") == 0 or $res = 2;
 
 # Handle the activation script requesting the restart or reload of a unit.
-# We can only restart and reload (not stop/start) because the units to be
-# stopped are already stopped before the activation script is run.
-$unitsToRestart{$_} = 1 foreach
-    split('\n', read_file($restartByActivationFile, err_mode => 'quiet') // "");
+foreach (split('\n', read_file($restartByActivationFile, err_mode => 'quiet') // "")) {
+    my $unit = $_;
+    my $baseUnit = $unit;
+    my $newUnitFile = "$out/etc/systemd/system/$baseUnit";
 
-$unitsToReload{$_} = 1 foreach
-    split('\n', read_file($reloadByActivationFile, err_mode => 'quiet') // "");
+    # Detect template instances.
+    if (!-e $newUnitFile && $unit =~ /^(.*)@[^\.]*\.(.*)$/) {
+      $baseUnit = "$1\@.$2";
+      $newUnitFile = "$out/etc/systemd/system/$baseUnit";
+    }
+
+    my $baseName = $baseUnit;
+    $baseName =~ s/\.[a-z]*$//;
+
+    # Start units if they were not active previously
+    if (not defined $activePrev->{$unit}) {
+        $unitsToStart{$unit} = 1;
+        recordUnit($startListFile, $unit);
+        next;
+    }
+
+    handleModifiedUnit($unit, $baseName, $newUnitFile, $activePrev, \%unitsToRestart, \%unitsToRestart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
+}
+# We can remove the file now because it has been propagated to the other restart/reload files
+unlink($restartByActivationFile);
 
 # Restart systemd if necessary. Note that this is done using the
 # current version of systemd, just in case the new one has trouble
@@ -460,7 +569,6 @@ if (scalar(keys %unitsToReload) > 0) {
     print STDERR "reloading the following units: ", join(", ", sort(keys %unitsToReload)), "\n";
     system("@systemd@/bin/systemctl", "reload", "--", sort(keys %unitsToReload)) == 0 or $res = 4;
     unlink($reloadListFile);
-    unlink($reloadByActivationFile);
 }
 
 # Restart changed services (those that have to be restarted rather
@@ -469,7 +577,6 @@ if (scalar(keys %unitsToRestart) > 0) {
     print STDERR "restarting the following units: ", join(", ", sort(keys %unitsToRestart)), "\n";
     system("@systemd@/bin/systemctl", "restart", "--", sort(keys %unitsToRestart)) == 0 or $res = 4;
     unlink($restartListFile);
-    unlink($restartByActivationFile);
 }
 
 # Start all active targets, as well as changed units we stopped above.
@@ -478,6 +585,7 @@ if (scalar(keys %unitsToRestart) > 0) {
 # that are symlinks to other units.  We shouldn't start both at the
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
+my @unitsToStartFiltered = filterUnits(\%unitsToStart);
 print STDERR "starting the following units: ", join(", ", @unitsToStartFiltered), "\n"
     if scalar @unitsToStartFiltered;
 system("@systemd@/bin/systemctl", "start", "--", sort(keys %unitsToStart)) == 0 or $res = 4;
@@ -485,36 +593,41 @@ unlink($startListFile);
 
 
 # Print failed and new units.
-my (@failed, @new, @restarting);
+my (@failed, @new);
 my $activeNew = getActiveUnits;
 while (my ($unit, $state) = each %{$activeNew}) {
     if ($state->{state} eq "failed") {
         push @failed, $unit;
+        next;
     }
-    elsif ($state->{state} eq "auto-restart") {
-        # A unit in auto-restart state is a failure *if* it previously failed to start
-        my $lines = `@systemd@/bin/systemctl show '$unit'`;
-        my $info = {};
-        parseKeyValues($info, split("\n", $lines));
 
-        if ($info->{ExecMainStatus} ne '0') {
+    if ($state->{substate} eq "auto-restart") {
+        # A unit in auto-restart substate is a failure *if* it previously failed to start
+        my $main_status = `@systemd@/bin/systemctl show --value --property=ExecMainStatus '$unit'`;
+        chomp($main_status);
+
+        if ($main_status ne "0") {
             push @failed, $unit;
+            next;
         }
     }
-    elsif ($state->{state} ne "failed" && !defined $activePrev->{$unit}) {
+
+    # Ignore scopes since they are not managed by this script but rather
+    # created and managed by third-party services via the systemd dbus API.
+    # This only lists units that are not failed (including ones that are in auto-restart but have not failed previously)
+    if ($state->{state} ne "failed" && !defined $activePrev->{$unit} && $unit !~ /\.scope$/msx) {
         push @new, $unit;
     }
 }
 
-print STDERR "the following new units were started: ", join(", ", sort(@new)), "\n"
-    if scalar @new > 0;
+if (scalar @new > 0) {
+    print STDERR "the following new units were started: ", join(", ", sort(@new)), "\n"
+}
 
 if (scalar @failed > 0) {
-    print STDERR "warning: the following units failed: ", join(", ", sort(@failed)), "\n";
-    foreach my $unit (@failed) {
-        print STDERR "\n";
-        system("COLUMNS=1000 @systemd@/bin/systemctl status --no-pager '$unit' >&2");
-    }
+    my @failed_sorted = sort @failed;
+    print STDERR "warning: the following units failed: ", join(", ", @failed_sorted), "\n\n";
+    system "@systemd@/bin/systemctl status --no-pager --full '" . join("' '", @failed_sorted) . "' >&2";
     $res = 4;
 }
 

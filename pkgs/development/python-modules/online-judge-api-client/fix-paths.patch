@@ -1,0 +1,39 @@
+diff --git a/onlinejudge/service/library_checker.py b/onlinejudge/service/library_checker.py
+index b63c7b7..e062490 100644
+--- a/onlinejudge/service/library_checker.py
++++ b/onlinejudge/service/library_checker.py
+@@ -51,7 +51,7 @@ class LibraryCheckerService(onlinejudge.type.Service):
+             return
+ 
+         try:
+-            subprocess.check_call(['git', '--version'], stdout=sys.stderr, stderr=sys.stderr)
++            subprocess.check_call(['@git@/bin/git', '--version'], stdout=sys.stderr, stderr=sys.stderr)
+         except FileNotFoundError:
+             logger.error('git command not found')
+             raise
+@@ -60,12 +60,12 @@ class LibraryCheckerService(onlinejudge.type.Service):
+         if not path.exists():
+             # init the problem repository
+             url = 'https://github.com/yosupo06/library-checker-problems'
+-            logger.info('$ git clone %s %s', url, path)
+-            subprocess.check_call(['git', 'clone', url, str(path)], stdout=sys.stderr, stderr=sys.stderr)
++            logger.info('$ @git@/bin/git clone %s %s', url, path)
++            subprocess.check_call(['@git@/bin/git', 'clone', url, str(path)], stdout=sys.stderr, stderr=sys.stderr)
+         else:
+             # sync the problem repository
+-            logger.info('$ git -C %s pull', str(path))
+-            subprocess.check_call(['git', '-C', str(path), 'pull'], stdout=sys.stderr, stderr=sys.stderr)
++            logger.info('$ @git@/bin/git -C %s pull', str(path))
++            subprocess.check_call(['@git@/bin/git', '-C', str(path), 'pull'], stdout=sys.stderr, stderr=sys.stderr)
+ 
+         cls.is_repository_updated = True
+ 
+@@ -100,7 +100,7 @@ class LibraryCheckerProblem(onlinejudge.type.Problem):
+             logger.warning("generate.py may not work on Windows")
+ 
+         problem_spec = str(self._get_problem_directory_path() / 'info.toml')
+-        command = [sys.executable, str(path / 'generate.py'), problem_spec]
++        command = ['@pythonInterpreter@', str(path / 'generate.py'), problem_spec]
+         if compile_checker:
+             command.append('--compile-checker')
+         logger.info('$ %s', ' '.join(command))

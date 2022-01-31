@@ -1,4 +1,4 @@
-{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub }:
+{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub, nixosTests }:
 let
   nodeEnv = import ./node-env.nix {
     inherit (pkgs) stdenv lib python2 runCommand writeTextFile;
@@ -52,6 +52,8 @@ with python3Packages; buildPythonApplication rec {
   checkPhase = ''
     ${python.interpreter} setup.py nosetests
   '';
+
+  passthru.tests = { inherit (nixosTests) isso; };
 
   meta = with lib; {
     description = "A commenting server similar to Disqus";

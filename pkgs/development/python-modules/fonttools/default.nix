@@ -4,68 +4,75 @@
 , pythonOlder
 , brotlipy
 , zopfli
-, fs
 , lxml
 , scipy
 , munkres
 , unicodedata2
 , sympy
-, matplotlib
 , reportlab
 , sphinx
-, pytest
-, pytest-randomly
+, pytestCheckHook
 , glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.21.1";
+  version = "4.26.2";
+
+  # Bump to 3.7 when https://github.com/fonttools/fonttools/pull/2417 is merged
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "1x9qrg6ppqhm5214ymwvn0r34qdz8pqvyxd0sj7rkp06wa757z2i";
+    sha256 = "1zp9idjkn4bn1a4pn8x64vi8j1ijdsd4qvgf1f70dfwqvw6ak1i6";
   };
 
   # all dependencies are optional, but
   # we run the checks with them
+
   checkInputs = [
-    pytest
-    pytest-randomly
-    glibcLocales
+    pytestCheckHook
     # etree extra
     lxml
-    # ufo extra
-    fs
     # woff extra
     brotlipy
     zopfli
-    # unicode extra
-    unicodedata2
     # interpolatable extra
     scipy
     munkres
     # symfont
     sympy
-    # varLib
-    matplotlib
     # pens
     reportlab
     sphinx
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    # unicode extra
+    unicodedata2
   ];
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
+    # tests want to execute the "fonttools" executable from $PATH
+    export PATH="$out/bin:$PATH"
   '';
 
-  # avoid timing issues with timestamps in subset_test.py and ttx_test.py
-  checkPhase = ''
-    pytest Tests fontTools \
-      -k 'not ttcompile_timestamp_calcs and not recalc_timestamp'
-  '';
+  # Timestamp tests have timing issues probably related
+  # to our file timestamp normalization
+  disabledTests = [
+    "test_recalc_timestamp_ttf"
+    "test_recalc_timestamp_otf"
+    "test_ttcompile_timestamp_calcs"
+  ];
+
+  disabledTestPaths = [
+    # avoid test which depend on fs and matplotlib
+    # fs and matplotlib were removed to prevent strong cyclic dependencies
+    "Tests/misc/plistlib_test.py"
+    "Tests/pens"
+    "Tests/ufoLib"
+  ];
+
 
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";

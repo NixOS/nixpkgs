@@ -1,10 +1,10 @@
-{ lib, fetchzip, version ? "3.200" }:
+{ lib, fetchzip, version ? "3.300" }:
 
 let
   new = lib.versionAtLeast version "3.000";
   sha256 = {
     "2.100" = "1g5f5f9gzamkq3kqyf7vbzvl4rdj3wmjf6chdrbxksrm3rnb926z";
-    "3.200" = "0qvmpsn6ja3g2hlvq0vb9pjsyk6ibna7s3w3n6q7lnhk0rhjg8bv";
+    "3.300" = "1bja1ma1mnna0qlk3dis31cvq5z1kgcqj7wjp8ml03zc5mpa2wb2";
   }."${version}";
 
 in fetchzip rec {
@@ -16,8 +16,9 @@ in fetchzip rec {
     mkdir -p $out/share/{doc,fonts}
     unzip -l $downloadedFile
     unzip -j $downloadedFile \*.ttf                        -d $out/share/fonts/truetype
+    unzip    $downloadedFile \*/documentation/\*           -d $out/share/doc/
+    mv $out/share/doc/* $out/share/doc/${name}
     unzip -j $downloadedFile \*/FONTLOG.txt  \*/README.txt -d $out/share/doc/${name}
-    unzip -j $downloadedFile \*/documentation/\*           -d $out/share/doc/${name}/documentation
   '';
 
   inherit sha256;
@@ -30,7 +31,7 @@ in fetchzip rec {
       Scheherazade${lib.optionalString new " New"}, named after the heroine of
       the classic Arabian Nights tale, is designed in a similar style to
       traditional typefaces such as Monotype Naskh, extended to cover the
-      Unicode Arabic repertoire through Unicode ${if new then "13.0" else "8.0"}.
+      Unicode Arabic repertoire through Unicode ${if new then "14.0" else "8.0"}.
 
       Scheherazade provides a “simplified” rendering of Arabic script, using
       basic connecting glyphs but not including a wide variety of additional

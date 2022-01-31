@@ -80,4 +80,7 @@ in
       ibusPackage
     ];
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

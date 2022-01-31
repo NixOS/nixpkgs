@@ -2,7 +2,7 @@
 , lib
 , go
 , pkgs
-, nodejs
+, nodejs-14_x
 , nodePackages
 , buildGoModule
 , fetchFromGitHub
@@ -24,11 +24,13 @@ let
   goPackagePath = "github.com/prometheus/prometheus";
 
   codemirrorNode = import ./webui/codemirror-promql {
-    inherit pkgs nodejs;
+    inherit pkgs;
+    nodejs = nodejs-14_x;
     inherit (stdenv.hostPlatform) system;
   };
   webuiNode = import ./webui/webui {
-    inherit pkgs nodejs;
+    inherit pkgs;
+    nodejs = nodejs-14_x;
     inherit (stdenv.hostPlatform) system;
   };
 
@@ -36,7 +38,7 @@ let
     name = "prometheus-webui-codemirror-promql";
     src = "${src}/web/ui/module/codemirror-promql";
 
-    buildInputs = [ nodejs nodePackages.typescript codemirrorNode.nodeDependencies ];
+    buildInputs = [ nodejs-14_x nodePackages.typescript codemirrorNode.nodeDependencies ];
 
     configurePhase = ''
       ln -s ${codemirrorNode.nodeDependencies}/lib/node_modules node_modules
@@ -56,7 +58,7 @@ let
     name = "prometheus-webui";
     src = "${src}/web/ui/react-app";
 
-    buildInputs = [ nodejs webuiNode.nodeDependencies ];
+    buildInputs = [ nodejs-14_x webuiNode.nodeDependencies ];
 
     # create `node_modules/.cache` dir (we need writeable .cache)
     # and then copy the rest over.
@@ -77,7 +79,7 @@ buildGoModule rec {
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 
-  nativeBuildInputs = [ nodejs ];
+  nativeBuildInputs = [ nodejs-14_x ];
 
   postPatch = ''
     # we don't want this anyways, as we

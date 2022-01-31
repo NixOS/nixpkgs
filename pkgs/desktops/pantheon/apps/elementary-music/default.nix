@@ -3,42 +3,34 @@
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, pkg-config
+, desktop-file-utils
 , meson
 , ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
+, pkg-config
 , python3
-, libgee
-, clutter-gtk
-, json-glib
+, vala
+, wrapGAppsHook
+, elementary-icon-theme
+, glib
+, granite
+, gst_all_1
+, gtk3
 , libgda
+, libgee
 , libgpod
 , libhandy
-, libnotify
 , libpeas
-, libsoup
-, zeitgeist
-, gst_all_1
 , taglib
-, libdbusmenu
-, libsignon-glib
-, libaccounts-glib
-, elementary-icon-theme
-, wrapGAppsHook
+, zeitgeist
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
   version = "5.1.1";
 
-  repoName = "music";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "music";
     rev = version;
     sha256 = "1wqsn4ss9acg0scaqpg514ll2dj3bl71wly4mm79qkinhy30yv9n";
   };
@@ -50,13 +42,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/elementary/music/commit/aea97103d59afd213467403a48788e476e47c4c3.patch";
       sha256 = "1ayj8l6lb19hhl9bhsdfbq7jgchfmpjx0qkljnld90czcksn95yx";
     })
+    # Fix build with meson 0.61
+    # https://github.com/elementary/music/pull/674
+    (fetchpatch {
+      url = "https://github.com/elementary/music/commit/fb3d840049c1e2e0bf8fdddea378a2db647dd096.patch";
+      sha256 = "sha256-tQZv7hZExLqbkGXahZxDfg7bkgwCKYbDholC2zuwlNw=";
+    })
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -68,39 +60,36 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
-    clutter-gtk
+  buildInputs = [
     elementary-icon-theme
+    glib
     granite
+    gtk3
+    libgda
+    libgee
+    libgpod
+    libhandy
+    libpeas
+    taglib
+    zeitgeist
+  ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    json-glib
-    libaccounts-glib
-    libdbusmenu
-    libgda
-    libgee
-    libgpod
-    libhandy
-    libnotify
-    libpeas
-    libsignon-glib
-    libsoup
-    taglib
-    zeitgeist
-  ];
-
-  mesonFlags = [
-    "-Dplugins=audioplayer,cdrom,ipod"
-  ];
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Music player and library designed for elementary OS";

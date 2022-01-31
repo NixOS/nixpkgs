@@ -25,7 +25,7 @@ services.discourse = {
   };
   <link linkend="opt-services.discourse.secretKeyBaseFile">secretKeyBaseFile</link> = "/path/to/secret_key_base_file";
 };
-<link linkend="opt-security.acme.email">security.acme.email</link> = "me@example.com";
+<link linkend="opt-security.acme.defaults.email">security.acme.email</link> = "me@example.com";
 <link linkend="opt-security.acme.acceptTerms">security.acme.acceptTerms</link> = true;
 </programlisting>
    </para>
@@ -297,7 +297,7 @@ services.discourse = {
       the script:
       <programlisting language="bash">
 ./update.py update-plugins
-</programlisting>.
+</programlisting>
     </para>
 
     <para>

@@ -20,10 +20,20 @@ let
           sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
         };
       });
-      werkzeug = self.callPackage ../../../development/python-modules/werkzeug/1.nix { };
-      flask = self.callPackage ../../../development/python-modules/flask/1.nix { };
+      werkzeug = self.callPackage ../../../development/python2-modules/werkzeug { };
+      flask = self.callPackage ../../../development/python2-modules/flask { };
       sqlsoup = super.sqlsoup.overrideAttrs ({ meta ? {}, ... }: {
         meta = meta // { broken = false; };
+      });
+      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
+        version = "1.7.1";
+        src = python3.pkgs.fetchPypi {
+          pname = "PyJWT";
+          inherit version;
+          sha256 = "sha256-jVmpdvt3Pz5qOchWNjV8Tw4kJwc5TK2t2YFPXLqiDpY=";
+        };
+        # requires different testing dependencies, and privacyIDEA will test this as well
+        doCheck = false;
       });
     };
   };
@@ -42,7 +52,7 @@ python3'.pkgs.buildPythonPackage rec {
 
   propagatedBuildInputs = with python3'.pkgs; [
     cryptography pyrad pymysql python-dateutil flask-versioned flask_script
-    defusedxml croniter flask_migrate pyjwt1 configobj sqlsoup pillow
+    defusedxml croniter flask_migrate pyjwt configobj sqlsoup pillow
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel
     ldap3 huey pyyaml qrcode oauth2client requests lxml cbor2 psycopg2
     pydash ecdsa google-auth importlib-metadata

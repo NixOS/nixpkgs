@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, which, zstd, pbzip2 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.2";
+  version = "2.4.5";
   pname = "makeself";
 
   src = fetchFromGitHub {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     repo = "makeself";
     rev = "release-${version}";
     fetchSubmodules = true;
-    sha256 = "07cq7q71bv3fwddkp2863ylry2ivds00f8sjy8npjpdbkailxm21";
+    sha256 = "sha256-15lUtErGsbXF2Gn0f0rvA18mMuVMmkKrGO2poeYZU9g=";
   };
 
   postPatch = "patchShebangs test";

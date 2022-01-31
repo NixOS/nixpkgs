@@ -50,5 +50,6 @@ appimageTools.wrapType2 rec {
     license = licenses.mit;
     maintainers = with maintainers; [ nh2 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "marktext";
   };
 }

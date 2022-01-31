@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
  pname = "libexosip2";
- version = "5.2.0";
+ version = "5.3.0";
 
  src = fetchurl {
     url = "mirror://savannah/exosip/${pname}-${version}.tar.gz";
-    sha256 = "09bj7cm6mk8yr68y5a09a625x10ql6an3zi4pj6y1jbkhpgqibp3";
+    sha256 = "sha256-W3gjmGQx6lztyfCV1pZKzpZvCTsq59CwhAR4i/zrycI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

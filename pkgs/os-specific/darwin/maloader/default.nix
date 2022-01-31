@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchgit, opencflite, clang, libcxx }:
+{ lib, stdenv, fetchFromGitHub, opencflite, clang, libcxx }:
 
 stdenv.mkDerivation {
   pname = "maloader";
   version = "unstable-2014-02-25";
 
-  src = fetchgit {
-    url = "git://github.com/shinh/maloader.git";
+  src = fetchFromGitHub {
+    owner = "shinh";
+    repo = "maloader";
     rev = "5f220393e0b7b9ad0cf1aba0e89df2b42a1f0442";
     sha256 = "0dd1pn07x1y8pyn5wz8qcl1c1xwghyya4d060m3y9vx5dhv9xmzw";
   };

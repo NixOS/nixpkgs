@@ -6,11 +6,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "3.0.3";
+  version = "3.1.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-oEK9p6OuqGSm2JdgfnJ+N0sJtRq6wCoVCGcU0GNEMLI=";
+    sha256 = "sha256-hVzTHpAOOuHVMoo3Ejv//irsUBoddLzdEvDSonWAYOQ=";
   };
 
   checkInputs = with python3Packages; [
@@ -31,10 +31,6 @@ python3Packages.buildPythonApplication rec {
   ]) ++ [
     ffmpeg
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg --replace 'lxml >=4.6.4,<5.0' 'lxml'
-  '';
 
   meta = with lib; {
     homepage = "https://streamlink.github.io/";

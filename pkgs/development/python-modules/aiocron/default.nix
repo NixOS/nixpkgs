@@ -9,15 +9,16 @@
 
 buildPythonPackage rec {
   pname = "aiocron";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rX07m9iIl5NP/RiTf/I1q5+wE1goD9QOAUYf1fdjSL0=";
+    sha256 = "sha256-SFRlE/ry63kB5lpk66e2U8gBBu0A7ZyjQZw9ELZVWgE=";
   };
 
   propagatedBuildInputs = [
     croniter
+    tzlocal
   ];
 
   checkInputs = [

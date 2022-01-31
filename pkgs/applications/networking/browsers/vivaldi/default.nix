@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsa-lib, dbus, cups, libexif, ffmpeg, systemd
+, alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , libxml2
@@ -11,6 +11,7 @@
 , isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, vivaldi-widevine ? null
+, commandLineArgs ? ""
 }:
 
 let
@@ -18,11 +19,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "4.3.2439.44-1";
+  version = "5.0.2497.32-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "1bsx8axs438f4p019mdq66pmpimf575r31rv6cibpgv85366xhh9";
+    sha256 = "1l333q002z9rr08np0r0j89j26shmsl8y2clyqwh54h22h7hmypz";
   };
 
   unpackPhase = ''
@@ -35,7 +36,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon libxshmfence
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd
+    atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd libva
     freetype fontconfig libXrender libuuid expat glib nss nspr
     libxml2 pango cairo gnome2.GConf
     libdrm mesa
@@ -85,6 +86,7 @@ in stdenv.mkDerivation rec {
         "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
     done
     wrapProgram "$out/bin/vivaldi" \
+      --add-flags ${lib.escapeShellArg commandLineArgs} \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''

@@ -17,7 +17,7 @@ rec {
       ''-netdev vde,id=vlan${toString nic},sock="$QEMU_VDE_SOCKET_${toString net}"''
     ];
 
-  qemuSerialDevice = if pkgs.stdenv.hostPlatform.isx86 then "ttyS0"
+  qemuSerialDevice = if pkgs.stdenv.hostPlatform.isx86 || pkgs.stdenv.hostPlatform.isRiscV then "ttyS0"
         else if (with pkgs.stdenv.hostPlatform; isAarch32 || isAarch64 || isPower) then "ttyAMA0"
         else throw "Unknown QEMU serial device for system '${pkgs.stdenv.hostPlatform.system}'";
 

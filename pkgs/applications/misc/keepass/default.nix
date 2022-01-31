@@ -2,7 +2,7 @@
   unzip, icoutils, gtk2, xorg, xdotool, xsel, coreutils, unixtools, glib, plugins ? [] }:
 
 with builtins; buildDotnetPackage rec {
-  baseName = "keepass";
+  pname = "keepass";
   version = "2.49";
 
   src = fetchurl {

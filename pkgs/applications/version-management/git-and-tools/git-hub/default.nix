@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-hub";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "sociomantic-tsunami";
     repo = "git-hub";
     rev = "v${version}";
-    sha256 = "sha256-k8sGgDhQn9e0lxM604Wz2sy4lrX5o82xAgWbqscOmQw=";
+    sha256 = "sha256-Iq6IrW2gAGqq56b2gXpEkg+I/5FcmsESWBJQiG1XWWA=";
   };
 
   nativeBuildInputs = [

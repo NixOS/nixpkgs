@@ -110,4 +110,145 @@ in
       assert "updating systemd-boot from (000.0-1-notnixos) to " in output
     '';
   };
+
+  memtest86 = makeTest {
+    name = "systemd-boot-memtest86";
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+
+    machine = { pkgs, lib, ... }: {
+      imports = [ common ];
+      boot.loader.systemd-boot.memtest86.enable = true;
+      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+        "memtest86-efi"
+      ];
+    };
+
+    testScript = ''
+      machine.succeed("test -e /boot/loader/entries/memtest86.conf")
+      machine.succeed("test -e /boot/efi/memtest86/BOOTX64.efi")
+    '';
+  };
+
+  netbootxyz = makeTest {
+    name = "systemd-boot-netbootxyz";
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+
+    machine = { pkgs, lib, ... }: {
+      imports = [ common ];
+      boot.loader.systemd-boot.netbootxyz.enable = true;
+    };
+
+    testScript = ''
+      machine.succeed("test -e /boot/loader/entries/o_netbootxyz.conf")
+      machine.succeed("test -e /boot/efi/netbootxyz/netboot.xyz.efi")
+    '';
+  };
+
+  entryFilename = makeTest {
+    name = "systemd-boot-entry-filename";
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+
+    machine = { pkgs, lib, ... }: {
+      imports = [ common ];
+      boot.loader.systemd-boot.memtest86.enable = true;
+      boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
+      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+        "memtest86-efi"
+      ];
+    };
+
+    testScript = ''
+      machine.fail("test -e /boot/loader/entries/memtest86.conf")
+      machine.succeed("test -e /boot/loader/entries/apple.conf")
+      machine.succeed("test -e /boot/efi/memtest86/BOOTX64.efi")
+    '';
+  };
+
+  extraEntries = makeTest {
+    name = "systemd-boot-extra-entries";
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+
+    machine = { pkgs, lib, ... }: {
+      imports = [ common ];
+      boot.loader.systemd-boot.extraEntries = {
+        "banana.conf" = ''
+          title banana
+        '';
+      };
+    };
+
+    testScript = ''
+      machine.succeed("test -e /boot/loader/entries/banana.conf")
+      machine.succeed("test -e /boot/efi/nixos/.extra-files/loader/entries/banana.conf")
+    '';
+  };
+
+  extraFiles = makeTest {
+    name = "systemd-boot-extra-files";
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+
+    machine = { pkgs, lib, ... }: {
+      imports = [ common ];
+      boot.loader.systemd-boot.extraFiles = {
+        "efi/fruits/tomato.efi" = pkgs.netbootxyz-efi;
+      };
+    };
+
+    testScript = ''
+      machine.succeed("test -e /boot/efi/fruits/tomato.efi")
+      machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
+    '';
+  };
+
+  switch-test = makeTest {
+    name = "systemd-boot-switch-test";
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+
+    nodes = {
+      inherit common;
+
+      machine = { pkgs, ... }: {
+        imports = [ common ];
+        boot.loader.systemd-boot.extraFiles = {
+          "efi/fruits/tomato.efi" = pkgs.netbootxyz-efi;
+        };
+      };
+
+      with_netbootxyz = { pkgs, ... }: {
+        imports = [ common ];
+        boot.loader.systemd-boot.netbootxyz.enable = true;
+      };
+    };
+
+    testScript = { nodes, ... }: let
+      originalSystem = nodes.machine.config.system.build.toplevel;
+      baseSystem = nodes.common.config.system.build.toplevel;
+      finalSystem = nodes.with_netbootxyz.config.system.build.toplevel;
+    in ''
+      machine.succeed("test -e /boot/efi/fruits/tomato.efi")
+      machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
+
+      with subtest("remove files when no longer needed"):
+          machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
+          machine.fail("test -e /boot/efi/fruits/tomato.efi")
+          machine.fail("test -d /boot/efi/fruits")
+          machine.succeed("test -d /boot/efi/nixos/.extra-files")
+          machine.fail("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
+          machine.fail("test -d /boot/efi/nixos/.extra-files/efi/fruits")
+
+      with subtest("files are added back when needed again"):
+          machine.succeed("${originalSystem}/bin/switch-to-configuration boot")
+          machine.succeed("test -e /boot/efi/fruits/tomato.efi")
+          machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
+
+      with subtest("simultaneously removing and adding files works"):
+          machine.succeed("${finalSystem}/bin/switch-to-configuration boot")
+          machine.fail("test -e /boot/efi/fruits/tomato.efi")
+          machine.fail("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
+          machine.succeed("test -e /boot/loader/entries/o_netbootxyz.conf")
+          machine.succeed("test -e /boot/efi/netbootxyz/netboot.xyz.efi")
+          machine.succeed("test -e /boot/efi/nixos/.extra-files/loader/entries/o_netbootxyz.conf")
+          machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/netbootxyz/netboot.xyz.efi")
+    '';
+  };
 }

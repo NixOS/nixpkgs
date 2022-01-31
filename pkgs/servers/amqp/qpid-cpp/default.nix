@@ -11,7 +11,7 @@ let
   };
 
   meta = with lib; {
-    homepage = "http://qpid.apache.org";
+    homepage = "https://qpid.apache.org";
     repositories.git = "git://git.apache.org/qpid.git";
     repositories.svn = "http://svn.apache.org/repos/asf/qpid";
     description = "An AMQP message broker and a C++ messaging API";

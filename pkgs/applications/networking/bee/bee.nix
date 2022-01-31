@@ -62,7 +62,7 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    homepage = "https://swarm.ethereum.org/";
+    homepage = "https://github.com/ethersphere/bee";
     description = "Ethereum Swarm Bee";
     longDescription = ''
       A decentralised storage and communication system for a sovereign digital society.

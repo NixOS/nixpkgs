@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "RustSec";
     repo = "rustsec";
     rev = "cargo-audit%2Fv${version}";
-    sha256 = "1j5ijrjhzqimamhj51qhpbaxx485hcxhaj64lknkn0xrda3apkx8";
+    sha256 = "sha256-6Jb7ViVY4YcnNvGarnHWyBPnpz7xiHQjumOmVaA8rzg=";
   };
 
-  cargoSha256 = "1qvrzaila3wbjmc7ri5asa3di2nzln78ys9innzd84fr36c90kkc";
+  cargoSha256 = "sha256-31zZMjIFnMIzSmTEACFBE4nSMje9SvE9KzZdoxTg4VM=";
 
   nativeBuildInputs = [
     pkg-config

@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4c759ae99979d9f94ed0bdfe4937f41c81634f934ec11d25eb089430781eafec";
+    sha256 = "bcd3b2913c2eb83e356a457ad6e89a2a9505b2e9cb7be37055d6ce1f0fef20cf";
   };
 
   propagatedBuildInputs = [

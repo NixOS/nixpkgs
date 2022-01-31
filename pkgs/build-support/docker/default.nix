@@ -240,7 +240,7 @@ rec {
           # Unpack all of the parent layers into the image.
           lowerdir=""
           extractionID=0
-          for layerTar in $(tac layer-list); do
+          for layerTar in $(cat layer-list); do
             echo "Unpacking layer $layerTar"
             extractionID=$((extractionID + 1))
 

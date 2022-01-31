@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pydeck";
-  version = "0.7.0";
+  version = "0.7.1";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zi0gqzd0byj16ja74m2dm99a1hmrlhk26y0x7am07vb1d8lvvsy";
+    sha256 = "907601c99f7510e16d27d7cb62bfa145216d166a2b5c9c50cfe2b65b032ebd2e";
   };
 
   pythonImportsCheck = [ "pydeck" ];

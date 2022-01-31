@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchurl
 , pkg-config
 , expat
@@ -15,6 +16,8 @@
 , docbook_xml_dtd_44
 , docbook-xsl-nons
 , xmlto
+, autoreconfHook
+, autoconf-archive
 }:
 
 stdenv.mkDerivation rec {
@@ -32,15 +35,23 @@ stdenv.mkDerivation rec {
     # Also applied upstream in https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/189,
     # expected in version 1.14
     ./docs-reproducible-ids.patch
+    # AC_PATH_XTRA doesn't seem to find X11 libs even though libX11 seems
+    # to provide valid pkg-config files. This replace AC_PATH_XTRA with
+    # PKG_CHECK_MODULES.
+    # MR merged cf https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/212/diffs?commit_id=23880a181e82ee7f
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/dbus/dbus/-/commit/6bfaea0707ba1a7788c4b6d30c18fb094f3a1dd4.patch";
+      sha256 = "1d8ay55n2ksw5faqx3hsdpfni3xl3gq9hnjl65073xcfnx67x8d2";
+    })
   ] ++ (lib.optional stdenv.isSunOS ./implement-getgrouplist.patch);
 
   postPatch = ''
-    substituteInPlace tools/Makefile.in \
-      --replace 'install-localstatelibDATA:' 'disabled:' \
+    substituteInPlace bus/Makefile.am \
+      --replace 'install-data-hook:' 'disabled:' \
+      --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
+    substituteInPlace tools/Makefile.am \
       --replace 'install-data-local:' 'disabled:' \
       --replace 'installcheck-local:' 'disabled:'
-    substituteInPlace bus/Makefile.in \
-      --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
   '' + /* cleanup of runtime references */ ''
     substituteInPlace ./dbus/dbus-sysdeps-unix.c \
       --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
@@ -51,6 +62,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "lib" "doc" "man" ];
 
   nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
     pkg-config
     docbook_xml_dtd_44
     docbook-xsl-nons

@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.zabbixServer;
+  opt = options.services.zabbixServer;
   pgsql = config.services.postgresql;
   mysql = config.services.mysql;
 
@@ -95,6 +96,11 @@ in
         port = mkOption {
           type = types.int;
           default = if cfg.database.type == "mysql" then mysql.port else pgsql.port;
+          defaultText = literalExpression ''
+            if config.${opt.database.type} == "mysql"
+            then config.${options.services.mysql.port}
+            else config.${options.services.postgresql.port}
+          '';
           description = "Database host port.";
         };
 

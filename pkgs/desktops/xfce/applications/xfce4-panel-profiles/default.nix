@@ -23,7 +23,8 @@ in mkXfceDerivation {
       --set GI_TYPELIB_PATH ${makeTypelibPath [ gtk3 libxfce4ui libxfce4util pango harfbuzz gdk-pixbuf atk ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple application to manage Xfce panel layouts";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

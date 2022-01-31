@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rnix-lsp";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "rnix-lsp";
     rev = "v${version}";
-    sha256 = "sha256-54dtLkGAbQ4Sln/bs/sI0GaCbXyK8+vDD8QBgxaiCXg=";
+    sha256 = "sha256-D2ItR8z4LqEH1IL53vq/wPh9Pfe3eB0KsA79aLM/BWM=";
   };
 
-  cargoSha256 = "sha256-Tw05eOIMJj+zX0fqtn6wJwolKNkYqfVuo/WO/WvYu2k=";
+  cargoSha256 = "sha256-71vH8oc8DmwbwM2PgxjGmWAbyC4AByx7waHxLsr2koI=";
 
   checkInputs = [ nix ];
 

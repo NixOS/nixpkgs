@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
 
   cfg = config.networking.wireguard;
+  opt = options.networking.wireguard;
 
   kernel = config.boot.kernelPackages;
 
@@ -438,6 +439,7 @@ in
         type = types.bool;
         # 2019-05-25: Backwards compatibility.
         default = cfg.interfaces != {};
+        defaultText = literalExpression "config.${opt.interfaces} != { }";
         example = true;
       };
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python2 }:
+{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "crispy-doom";
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
-    for script in $(grep -lr '^#!/usr/bin/env python$'); do patchShebangs $script; done
+    for script in $(grep -lr '^#!/usr/bin/env python3$'); do patchShebangs $script; done
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config python2 ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
   buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
   enableParallelBuilding = true;
 

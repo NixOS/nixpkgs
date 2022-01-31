@@ -41,9 +41,13 @@ let
     stdenv.mkDerivation ({
       name = "aspell-dict-${shortName}";
 
-      buildInputs = [aspell which];
+      strictDeps = true;
+
+      nativeBuildInputs = [ aspell which ];
 
       dontAddPrefix = true;
+
+      configurePlatforms = [ ];
 
       preBuild = "makeFlagsArray=(dictdir=$out/lib/aspell datadir=$out/lib/aspell)";
 

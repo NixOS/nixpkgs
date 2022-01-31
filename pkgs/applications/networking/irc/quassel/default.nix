@@ -93,7 +93,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
       as WeeChat, but graphical (based on Qt4/KDE4 or Qt5/KF5).
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ phreedom ttuegel ];
+    maintainers = with maintainers; [ ttuegel ];
     repositories.git = "https://github.com/quassel/quassel.git";
     inherit (qtbase.meta) platforms;
   };

@@ -6,8 +6,8 @@ buildGoModule rec {
   pname = "livepeer";
   version = "0.5.20";
 
-  runVend = true;
-  vendorSha256 = "sha256-iFVScV3arPkBjMi8sCHIja4G2QeQDb2sgBrbTFyxKyw=";
+  proxyVendor = true;
+  vendorSha256 = "sha256-aRZoAEnRai8i5H08ReW8lEFlbmarYxU0lBRhR/Llw+M=";
 
   src = fetchFromGitHub {
     owner = "livepeer";

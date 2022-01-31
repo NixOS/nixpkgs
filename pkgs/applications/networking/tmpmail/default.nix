@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tmpmail";
-  version = "1.1.4";
+  version = "1.1.9";
 
    src = fetchFromGitHub {
     owner = "sdushantha";
     repo = "tmpmail";
     rev = "v${version}";
-    sha256 = "sha256-Rcu1qNmUZhMRvPiaWrDlzLtGksv09XBiF2GJUxXKs1Y=";
+    sha256 = "sha256-sWcsmBUHSfo7sICXyhNhbfRFSHumObnWc7stWxcwVTg=";
   };
 
   dontConfigure = true;

@@ -8,18 +8,17 @@
 , prettytable
 , setuptools
 , solc
-  # solc is currently broken on Darwin, default to false
-, withSolc ? !stdenv.isDarwin
+, withSolc ? false
 }:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.8.1";
+  version = "0.8.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5JgF53ip72bne8AlGf126FIIvXi+u7rovJmMSCcZjEQ=";
+    sha256 = "sha256-77045eB7KvHBb0j61qz4zJTtEprg4/aH6MrPlQY1wiM=";
   };
 
   nativeBuildInputs = [

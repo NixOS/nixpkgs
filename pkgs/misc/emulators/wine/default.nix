@@ -1,7 +1,7 @@
 ## Configuration:
 # Control you default wine config in nixpkgs-config:
 # wine = {
-#   release = "stable"; # "stable", "unstable", "staging"
+#   release = "stable"; # "stable", "unstable", "staging", "wayland"
 #   build = "wineWow"; # "wine32", "wine64", "wineWow"
 # };
 # Make additional configurations on demand:
@@ -45,6 +45,7 @@
   faudioSupport ? false,
   vkd3dSupport ? false,
   mingwSupport ? wineRelease != "stable",
+  waylandSupport ? wineRelease == "wayland",
   embedInstallers ? false # The Mono and Gecko MSI installers
 }:
 
@@ -58,7 +59,7 @@ let wine-build = build: release:
                   gsmSupport gphoto2Support ldapSupport fontconfigSupport alsaSupport
                   pulseaudioSupport xineramaSupport gtkSupport openclSupport xmlSupport tlsSupport
                   openglSupport gstreamerSupport udevSupport vulkanSupport sdlSupport faudioSupport
-                  vkd3dSupport mingwSupport embedInstallers;
+                  vkd3dSupport mingwSupport waylandSupport embedInstallers;
         };
       });
 

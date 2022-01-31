@@ -20,7 +20,7 @@
       <title>Configuration Options</title>
       <variablelist xml:id="configuration-variable-list">
         <xsl:for-each select="attrs">
-          <xsl:variable name="id" select="concat('opt-', str:replace(str:replace(str:replace(attr[@name = 'name']/string/@value, '*', '_'), '&lt;', '_'), '>', '_'))" />
+          <xsl:variable name="id" select="concat('opt-', str:replace(str:replace(str:replace(str:replace(attr[@name = 'name']/string/@value, '*', '_'), '&lt;', '_'), '>', '_'), ':', '_'))" />
           <varlistentry>
             <term xlink:href="#{$id}">
               <xsl:attribute name="xml:id"><xsl:value-of select="$id"/></xsl:attribute>
@@ -189,7 +189,7 @@
   </xsl:template>
 
 
-  <xsl:template match="derivation">
+  <xsl:template match="attrs[attr[@name = '_type' and string[@value = 'derivation']]]">
     <replaceable>(build of <xsl:value-of select="attr[@name = 'name']/string/@value" />)</replaceable>
   </xsl:template>
 

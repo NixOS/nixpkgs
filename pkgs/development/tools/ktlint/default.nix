@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
-  version = "0.43.1";
+  version = "0.43.2";
 
   src = fetchurl {
     url = "https://github.com/pinterest/ktlint/releases/download/${version}/ktlint";
-    sha256 = "1qcalpimgsm5s3xhssrnanryra4dp2if9y4647aimydwvfhi05df";
+    sha256 = "sha256-HXTkYwN6U8xyxgFnj69nLSpbDCqWUWeSuqlZbquRD6o=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

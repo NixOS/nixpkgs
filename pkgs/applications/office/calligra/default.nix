@@ -65,7 +65,7 @@ mkDerivation rec {
       vector graphics.
     '';
     homepage = "https://www.calligra.org/";
-    maintainers = with maintainers; [ phreedom ebzzry zraexy ];
+    maintainers = with maintainers; [ ebzzry zraexy ];
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2 ];
   };

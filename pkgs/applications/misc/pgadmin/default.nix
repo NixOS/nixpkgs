@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
     "--with-libxslt=${libxslt.dev}"
   ];
 
+  # starting with C++11 narrowing became an error
+  # and not just a warning. With the current c++ compiler
+  # pgadmin3 will fail with several "narrowing" errors.
+  # see https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html#index-Wno-narrowing
+  makeFlags = "CXXFLAGS=-Wno-narrowing" ;
+
   meta = with lib; {
     description = "PostgreSQL administration GUI tool";
     homepage = "https://www.pgadmin.org";

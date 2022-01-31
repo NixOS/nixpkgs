@@ -7,20 +7,25 @@
 
 buildPythonPackage rec {
   pname = "ailment";
-  version = "9.0.10689";
+  version = "9.1.11611";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U+2R/TlMwRj+FEuO1aOox7dt3RXlDjazjoG7IfN8um8=";
+    hash = "sha256-DN4oH3Ajppj3YDDj8O+WxBS2/5qKvmrK0OTLOdhAmww=";
   };
 
-  propagatedBuildInputs = [ pyvex ];
+  propagatedBuildInputs = [
+    pyvex
+  ];
 
   # Tests depend on angr (possibly a circular dependency)
   doCheck = false;
+
   #pythonImportsCheck = [ "ailment" ];
 
   meta = with lib; {

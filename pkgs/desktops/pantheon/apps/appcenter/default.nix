@@ -5,7 +5,6 @@
 , appstream-glib
 , dbus
 , desktop-file-utils
-, elementary-gtk-theme
 , elementary-icon-theme
 , fetchFromGitHub
 , flatpak
@@ -30,20 +29,21 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.9.0";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-+r19n42FPoBArZNDF4ZAdUBZqsSxpLwpeBoyaRJBCrg=";
+    sha256 = "sha256-xktIHQHmz5gh72NEz9UQ9fMvBlj1BihWxHgxsHmTIB0=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Introduces a packagekit_backend meson flag.
+    # Makes appcenter actually work by using only the flatpak backend.
+    # https://github.com/elementary/appcenter/pull/1739
+    ./add-packagekit-backend-option.patch
+  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-gtk-theme
     elementary-icon-theme
     flatpak
     glib
@@ -78,12 +77,20 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dpayments=false"
     "-Dcurated=false"
+    # This option is introduced in add-packagekit-backend-option.patch
+    "-Dpackagekit_backend=false"
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/elementary/appcenter";

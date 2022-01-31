@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.5.1";
+  version = "1.5.2";
   disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "v${version}";
-    sha256 = "sha256-LtKFdNX2/wSs9Hxplu7rz6rc1hoijCGgCKyLjlcRQoI=";
+    sha256 = "sha256-/wleUwTPkm5l8GgtBM2J0jsdc1A54WRYJPmHqSsdz4c=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

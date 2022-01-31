@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , gettext
@@ -8,7 +9,7 @@
 , libxml2
 , libjpeg
 , libpeas
-, libportal
+, libportal-gtk3
 , gnome
 , gtk3
 , glib
@@ -28,12 +29,21 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "41.0";
+  version = "41.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-kX3ghv2X/T7JMPoHyIut0r4fXQrmueVpyYYATgNZqaw=";
+    sha256 = "sha256-huG5ujnaz3QiavpFermDtBJTuJ9he/VBOcrQiS0C2Kk=";
   };
+
+  patches = [
+    # Fix build with latest libportal
+    # https://gitlab.gnome.org/GNOME/eog/-/merge_requests/115
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/eog/-/commit/a06e6325907e136678b0bbe7058c25d688034afd.patch";
+      sha256 = "ttcsfHubfmIbxA51YLnxXDagLLNutXYmoQyMQ4sHRak=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -49,7 +59,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libjpeg
-    libportal
+    libportal-gtk3
     gtk3
     gdk-pixbuf
     glib

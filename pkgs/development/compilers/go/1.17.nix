@@ -40,6 +40,10 @@ let
     "armv5tel" = "arm";
     "armv6l" = "arm";
     "armv7l" = "arm";
+    "mips" = "mips";
+    "mipsel" = "mipsle";
+    "riscv64" = "riscv64";
+    "s390x" = "s390x";
     "powerpc64le" = "ppc64le";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
@@ -50,11 +54,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.17.4";
+  version = "1.17.6";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-S+82mTge8J4HVihQQYdBZWXXEGYP7GWwV+3xzrGH/Es=";
+    sha256 = "sha256-TcG78/9h8MH/Kxk1Xm2IFRpwEmJopHx2FHdobvlHSMg=";
   };
 
   # perl is used for testing go vet

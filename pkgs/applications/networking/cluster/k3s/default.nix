@@ -18,6 +18,7 @@
 , fetchzip
 , fetchgit
 , zstd
+, nixosTests
 }:
 
 with lib;
@@ -288,6 +289,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = ./update.sh;
+
+  passthru.tests = { inherit (nixosTests) k3s-single-node k3s-single-node-docker; };
 
   meta = baseMeta;
 }

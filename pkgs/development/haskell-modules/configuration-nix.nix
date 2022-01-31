@@ -502,12 +502,15 @@ self: super: builtins.intersectAttrs super {
     postPatch = ''
       sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
       sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
-      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
       sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
       sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
-
+    '' + (if pkgs.stdenv.isAarch64 then ''
+      sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
+    ''
+    else ''
+      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
       sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, cvc4, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
-   '';
+    '');
   }) super.sbv;
 
   # The test-suite requires a running PostgreSQL server.
@@ -715,8 +718,12 @@ self: super: builtins.intersectAttrs super {
   postgresql-pure = dontCheck super.postgresql-pure;
 
   retrie = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git pkgs.mercurial ];
+    testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
   }) super.retrie;
+
+  retrie_1_2_0_0 = overrideCabal (drv: {
+    testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
+  }) super.retrie_1_2_0_0;
 
   nix-output-monitor = overrideCabal {
     # Can't ran the golden-tests with nix, because they call nix
@@ -810,6 +817,12 @@ self: super: builtins.intersectAttrs super {
   geomancy = overrideCabal {
     platforms = pkgs.lib.platforms.x86;
   } super.geomancy;
+
+  hlint = overrideCabal (drv: {
+    postInstall = ''
+      install -Dm644 data/hlint.1 -t "$out/share/man/man1"
+    '' + drv.postInstall or "";
+  }) super.hlint;
 
   hls-brittany-plugin = overrideCabal (drv: {
     testToolDepends = [ pkgs.git ];
@@ -959,11 +972,11 @@ self: super: builtins.intersectAttrs super {
 
   rel8 = addTestToolDepend pkgs.postgresql super.rel8;
 
-  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nix_2_4; });
+  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_4; });
 
-  hercules-ci-agent = appendConfigureFlag "-fnix-2_4" (super.hercules-ci-agent.override { nix = pkgs.nix_2_4; });
-  hercules-ci-cnix-expr = appendConfigureFlag "-fnix-2_4" (super.hercules-ci-cnix-expr.override { nix = pkgs.nix_2_4; });
-  hercules-ci-cnix-store = appendConfigureFlag "-fnix-2_4" (super.hercules-ci-cnix-store.override { nix = pkgs.nix_2_4; });
+  hercules-ci-agent = appendConfigureFlag "-fnix-2_4" (super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_4; });
+  hercules-ci-cnix-expr = appendConfigureFlag "-fnix-2_4" (super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_4; });
+  hercules-ci-cnix-store = appendConfigureFlag "-fnix-2_4" (super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_4; });
 
   # Enable extra optimisations which increase build time, but also
   # later compiler performance, so we should do this for user's benefit.
@@ -1034,4 +1047,29 @@ self: super: builtins.intersectAttrs super {
       })
     ] ++ (drv.patches or []);
   }) super.graphviz;
+
+  # Test case tries to contact the network
+  http-api-data-qq = overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/Can be used with http-client/"
+    ] ++ drv.testFlags or [];
+  }) super.http-api-data-qq;
+
+  # Additionally install documentation
+  jacinda = overrideCabal (drv: {
+    enableSeparateDocOutput = true;
+    postInstall = ''
+      ${drv.postInstall or ""}
+
+      docDir="$doc/share/doc/${drv.pname}-${drv.version}"
+
+      # man page goes to $out, it's small enough and haskellPackages has no
+      # support for a man output at the moment and $doc requires downloading
+      # a full PDF
+      install -Dm644 man/ja.1 -t "$out/share/man/man1"
+      # language guide and examples
+      install -Dm644 doc/guide.pdf -t "$docDir"
+      install -Dm644 test/examples/*.jac -t "$docDir/examples"
+    '';
+  }) super.jacinda;
 }

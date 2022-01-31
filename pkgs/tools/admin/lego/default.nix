@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "lego";
-  version = "4.5.3";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "go-acme";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xvTV6jZmQWs6g8Oq+IrwPZVS3fzY1/adg7IWh189ftU=";
+    sha256 = "sha256-FisQS/qbl7f4aszc2Ft6nmuHNrDreOQdN0jrWMOvaAk=";
   };
 
-  vendorSha256 = "sha256-EK2E2YWdk2X1awdUhMOJh+qr+jnnftnKuPPpiHzXZHk=";
+  vendorSha256 = "sha256-cLM4YGguQf7lO5PUPmd/at1Aqrp9m8zFG6GWqcduJmw=";
 
   doCheck = false;
 

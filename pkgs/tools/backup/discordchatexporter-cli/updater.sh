@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq common-updater-scripts nuget-to-nix dotnet-sdk_5
+#!nix-shell -i bash -p curl jq common-updater-scripts nuget-to-nix dotnet-sdk_6
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 

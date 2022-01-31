@@ -15,7 +15,7 @@ buildLuarocksPackage {
   pname = "alt-getopt";
   version = "0.8.0-1";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/alt-getopt-0.8.0-1.rockspec";
+    url    = "https://luafr.org/luarocks/alt-getopt-0.8.0-1.rockspec";
     sha256 = "17yxi1lsrbkmwzcn1x48x8758d7v1frsz1bmnpqfv4vfnlh0x210";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -159,7 +159,7 @@ buildLuarocksPackage {
   pname = "busted";
   version = "2.0.0-1";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/busted-2.0.0-1.rockspec";
+    url    = "https://luafr.org/luarocks/busted-2.0.0-1.rockspec";
     sha256 = "0cbw95bjxl667n9apcgng2kr5hq6bc7gp3vryw4dzixmfabxkcbw";
   }).outPath;
   src = fetchurl {
@@ -184,7 +184,7 @@ buildLuarocksPackage {
   pname = "cassowary";
   version = "2.3.1-2";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/cassowary-2.3.1-2.rockspec";
+    url    = "https://luafr.org/luarocks/cassowary-2.3.1-2.rockspec";
     sha256 = "04y882f9ai1jhk0zwla2g0fvl56a75rwnxhsl9r3m0qa5i0ia1i5";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -244,7 +244,7 @@ buildLuarocksPackage {
   pname = "cosmo";
   version = "16.06.04-1";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/cosmo-16.06.04-1.rockspec";
+    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/cosmo-16.06.04-1.rockspec";
     sha256 = "0ipv1hrlhvaz1myz6qxabq7b7kb3bz456cya3r292487a3g9h9pb";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -276,7 +276,7 @@ buildLuarocksPackage {
   pname = "coxpcall";
   version = "1.17.0-1";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/coxpcall-1.17.0-1.rockspec";
+    url    = "https://luafr.org/luarocks/coxpcall-1.17.0-1.rockspec";
     sha256 = "0mf0nggg4ajahy5y1q5zh2zx9rmgzw06572bxx6k8b736b8j7gca";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -307,7 +307,7 @@ buildLuarocksPackage {
   pname = "cqueues";
   version = "20200726.52-0";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/cqueues-20200726.52-0.rockspec";
+    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/cqueues-20200726.52-0.rockspec";
     sha256 = "0w2kq9w0wda56k02rjmvmzccz6bc3mn70s9v7npjadh85i5zlhhp";
   }).outPath;
   src = fetchurl {
@@ -393,7 +393,7 @@ buildLuarocksPackage {
   pname = "dkjson";
   version = "2.5-3";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/dkjson-2.5-3.rockspec";
+    url    = "https://luafr.org/luarocks/dkjson-2.5-3.rockspec";
     sha256 = "18xngdzl2q207cil64aj81qi6qvj1g269pf07j5x4pbvamd6a1l3";
   }).outPath;
   src = fetchurl {
@@ -418,7 +418,7 @@ buildLuarocksPackage {
   pname = "fifo";
   version = "0.2-0";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/fifo-0.2-0.rockspec";
+    url    = "https://luafr.org/luarocks/fifo-0.2-0.rockspec";
     sha256 = "0vr9apmai2cyra2n573nr3dyk929gzcs4nm1096jdxcixmvh2ymq";
   }).outPath;
   src = fetchurl {
@@ -444,10 +444,10 @@ buildLuarocksPackage {
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/lewis6991/gitsigns.nvim",
-  "rev": "552f114caeaec4ce97822cb55dfa7c7e5368136b",
-  "date": "2021-10-15T13:31:44+01:00",
-  "path": "/nix/store/40vkv3sc4h6gh9ac88k7pilszxmy38yv-gitsigns.nvim",
-  "sha256": "0qdafm3arjf8bcqpvv085dwzbikad3sr3xzvrn3gfa0dsls8pg6q",
+  "rev": "5eb87a0b05914d3763277ebe257bd5bafcdde8cd",
+  "date": "2021-12-06T18:02:22+00:00",
+  "path": "/nix/store/c5l5bz7m5f48l57p4yrpxfhqga0cxsny-gitsigns.nvim",
+  "sha256": "02cmgc3fgrwx6v6ylzqxdwgk9jsmd8j2q6fdnfbllg3zjwx3agcd",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -496,14 +496,14 @@ inspect = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 }:
 buildLuarocksPackage {
   pname = "inspect";
-  version = "3.1.1-0";
+  version = "3.1.2-0";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/inspect-3.1.1-0.rockspec";
-    sha256 = "00spibq2h4an8v0204vr1hny4vv6za720c37ipsahpjk198ayf1p";
+    url    = "https://luarocks.org/inspect-3.1.2-0.rockspec";
+    sha256 = "13jbv3rhj4mv2farrxns88g7j34ljag7vz0kma0fm2pzdz3686vx";
   }).outPath;
   src = fetchurl {
-    url    = "https://github.com/kikito/inspect.lua/archive/v3.1.1.tar.gz";
-    sha256 = "1nz0yqhkd0nkymghrj99gb2id40g50drh4a96g3v5k7h1sbg94h2";
+    url    = "https://github.com/kikito/inspect.lua/archive/v3.1.2.tar.gz";
+    sha256 = "08ln4p5bmvcs8wj8hzs4ny66m63abyxjkmcxhjji5ay99g85cn3b";
   };
 
   disabled = with lua; (luaOlder "5.1");
@@ -524,14 +524,14 @@ buildLuarocksPackage {
   version = "scm-0";
   knownRockspec = (fetchurl {
     url    = "mirror://luarocks/ldbus-scm-0.rockspec";
-    sha256 = "1yhkw5y8h1qf44vx31934k042cmnc7zcv2k0pv0g27wsmlxrlznx";
+    sha256 = "1c0h6fx7avzh89hl17v6simy1p4mjg8bimlsbjybks0zxznd8rbm";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/daurnimator/ldbus.git",
-  "rev": "9e176fe851006037a643610e6d8f3a8e597d4073",
-  "date": "2019-08-16T14:26:05+10:00",
-  "path": "/nix/store/gg4zldd6kx048d6p65b9cimg3arma8yh-ldbus",
-  "sha256": "06wcz4i5b7kphqbry274q3ivnsh331rxiyf7n4qk3zx2kvarq08s",
+  "rev": "6d4909c983c8a0e2c7384bac8055c628aa524ea2",
+  "date": "2021-11-10T23:58:54+11:00",
+  "path": "/nix/store/j830jk2hkanz7abkdsbvg2warsyr0a2c-ldbus",
+  "sha256": "18q98b98mfvjzbyssf18bpnlx4hsx4s9lwcwia4z9dxiaiw7b77j",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -539,7 +539,7 @@ buildLuarocksPackage {
 }
  '') ["date" "path"]) ;
 
-  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
   propagatedBuildInputs = [ lua ];
 
   meta = {
@@ -572,7 +572,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ penlight markdown ];
 
   meta = {
-    homepage = "http://stevedonovan.github.com/ldoc";
+    homepage = "https://github.com/lunarmodules/LDoc";
     description = "A Lua Documentation Tool";
     license.fullName = "MIT/X11";
   };
@@ -585,7 +585,7 @@ buildLuarocksPackage {
   pname = "lgi";
   version = "0.9.2-1";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/lgi-0.9.2-1.rockspec";
+    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/lgi-0.9.2-1.rockspec";
     sha256 = "1gqi07m4bs7xibsy4vx8qgyp3yb1wnh0gdq1cpwqzv35y6hn5ds3";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -605,7 +605,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://github.com/pavouk/lgi";
+    homepage = "https://github.com/pavouk/lgi";
     description = "Lua bindings to GObject libraries";
     license.fullName = "MIT/X11";
   };
@@ -666,7 +666,7 @@ buildLuarocksPackage {
   pname = "lpeg";
   version = "1.0.2-1";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/lpeg-1.0.2-1.rockspec";
+    url    = "https://luafr.org/luarocks/lpeg-1.0.2-1.rockspec";
     sha256 = "08a8p5cwlwpjawk8sczb7bq2whdsng4mmhphahyklf1bkvl2li89";
   }).outPath;
   src = fetchurl {
@@ -692,7 +692,7 @@ buildLuarocksPackage {
   pname = "lpeg_patterns";
   version = "0.5-0";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/lpeg_patterns-0.5-0.rockspec";
+    url    = "https://luafr.org/luarocks/lpeg_patterns-0.5-0.rockspec";
     sha256 = "1vzl3ryryc624mchclzsfl3hsrprb9q214zbi1xsjcc4ckq5qfh7";
   }).outPath;
   src = fetchurl {
@@ -716,7 +716,7 @@ buildLuarocksPackage {
   pname = "lpeglabel";
   version = "1.6.0-1";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/lpeglabel-1.6.0-1.rockspec";
+    url    = "https://luafr.org/luarocks/lpeglabel-1.6.0-1.rockspec";
     sha256 = "13gc32pggng6f95xx5zw9n9ian518wlgb26mna9kh4q2xa1k42pm";
   }).outPath;
   src = fetchurl {
@@ -741,7 +741,7 @@ buildLuarocksPackage {
   pname = "lpty";
   version = "1.2.2-1";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/lpty-1.2.2-1.rockspec";
+    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/lpty-1.2.2-1.rockspec";
     sha256 = "04af4mhiqrw3br4qzz7yznw9zy2m50wddwzgvzkvhd99ng71fkzg";
   }).outPath;
   src = fetchurl {
@@ -766,7 +766,7 @@ buildLuarocksPackage {
   pname = "lrexlib-gnu";
   version = "2.9.1-1";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/lrexlib-gnu-2.9.1-1.rockspec";
+    url    = "https://luafr.org/luarocks/lrexlib-gnu-2.9.1-1.rockspec";
     sha256 = "1jfjxh26iwsavipkwmscwv52l77qxzvibfmlvpskcpawyii7xcw8";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -799,7 +799,7 @@ buildLuarocksPackage {
   pname = "lrexlib-pcre";
   version = "2.9.1-1";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/lrexlib-pcre-2.9.1-1.rockspec";
+    url    = "https://luafr.org/luarocks/lrexlib-pcre-2.9.1-1.rockspec";
     sha256 = "036k27xaplxn128b3p67xiqm8k40s7bxvh87wc8v2cx1cc4b9ia4";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -833,7 +833,7 @@ buildLuarocksPackage {
   pname = "lrexlib-posix";
   version = "2.9.1-1";
   knownRockspec = (fetchurl {
-    url    = "https://luafr.org/luarocks/lrexlib-posix-2.9.1-1.rockspec";
+    url    = "https://luarocks.org/lrexlib-posix-2.9.1-1.rockspec";
     sha256 = "1zxrx9yifm9ry4wbjgv86rlvq3ff6qivldvib3ha4767azla0j0r";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -1111,17 +1111,17 @@ lua-resty-openssl = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchgit}:
 buildLuarocksPackage {
   pname = "lua-resty-openssl";
-  version = "0.7.5-1";
+  version = "0.8.2-1";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/lua-resty-openssl-0.7.5-1.rockspec";
-    sha256 = "13v14in9cgmjgarmy6br9629ns1qlhw7a30c061y6gncjannnv6y";
+    url    = "https://luarocks.org/lua-resty-openssl-0.8.2-1.rockspec";
+    sha256 = "1dxaxh3l4vhrv5p2pwphl7jn7jpcjq3dmawfl9wbp3a88121gbsx";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/fffonion/lua-resty-openssl.git",
-  "rev": "6a7f4a1649da7e0499b542b73c61e8dbdf91f57e",
-  "date": "2021-09-18T06:15:54+08:00",
-  "path": "/nix/store/01bninsbgix30zl97lk0p10ycqkc37kx-lua-resty-openssl",
-  "sha256": "1ypji678lna9z3a48lhxs7wrw8d1prln7yfvqfm96lbmfvr5wfxw",
+  "rev": "53e2d4ba7e8c31181c1fd71d3817911da0533675",
+  "date": "2021-11-22T12:07:07+08:00",
+  "path": "/nix/store/x7s51wf9ysxs2xs4adixf7ypmadfwp5c-lua-resty-openssl",
+  "sha256": "19cvqz81d0lxql55pgsbgynval0jxh8sicps94nzapvj90xqjviy",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -1176,7 +1176,7 @@ buildLuarocksPackage {
   pname = "lua-term";
   version = "0.7-1";
   knownRockspec = (fetchurl {
-    url    = "https://luafr.org/luarocks/lua-term-0.7-1.rockspec";
+    url    = "https://luarocks.org/lua-term-0.7-1.rockspec";
     sha256 = "0r9g5jw7pqr1dyj6w58dqlr7y7l0jp077n8nnji4phf10biyrvg2";
   }).outPath;
   src = fetchurl {
@@ -1232,7 +1232,7 @@ buildLuarocksPackage {
   pname = "lua-yajl";
   version = "2.0-1";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/lua-yajl-2.0-1.rockspec";
+    url    = "https://luarocks.org/lua-yajl-2.0-1.rockspec";
     sha256 = "0h600zgq5qc9z3cid1kr35q3qb98alg0m3qf0a3mfj33hya6pcxp";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -1266,7 +1266,7 @@ buildLuarocksPackage {
   pname = "lua-zlib";
   version = "1.2-1";
   knownRockspec = (fetchurl {
-    url    = "https://luafr.org/luarocks/lua-zlib-1.2-1.rockspec";
+    url    = "https://luarocks.org/lua-zlib-1.2-1.rockspec";
     sha256 = "18rpbg9b4vsnh3svapiqrvwwshw1abb5l5fd7441byx1nm3fjq9w";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -1385,7 +1385,7 @@ buildLuarocksPackage {
   pname = "luacov";
   version = "0.15.0-1";
   knownRockspec = (fetchurl {
-    url    = "https://luafr.org/luarocks/luacov-0.15.0-1.rockspec";
+    url    = "https://luarocks.org/luacov-0.15.0-1.rockspec";
     sha256 = "18byfl23c73pazi60hsx0vd74hqq80mzixab76j36cyn8k4ni9db";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -1484,7 +1484,7 @@ buildLuarocksPackage {
   pname = "luadbi-postgresql";
   version = "0.7.2-1";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/luadbi-postgresql-0.7.2-1.rockspec";
+    url    = "https://luarocks.org/luadbi-postgresql-0.7.2-1.rockspec";
     sha256 = "07rx4agw4hjyzf8157apdwfqh9s26nqndmkr3wm7v09ygjvdjiix";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -1550,7 +1550,7 @@ buildLuarocksPackage {
   pname = "luaepnf";
   version = "0.3-2";
   knownRockspec = (fetchurl {
-    url    = "https://luafr.org/luarocks/luaepnf-0.3-2.rockspec";
+    url    = "https://luarocks.org/luaepnf-0.3-2.rockspec";
     sha256 = "0kqmnj11wmfpc9mz04zzq8ab4mnbkrhcgc525wrq6pgl3p5li8aa";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -1667,7 +1667,7 @@ buildLuarocksPackage {
   pname = "luafilesystem";
   version = "1.7.0-2";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/luafilesystem-1.7.0-2.rockspec";
+    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/luafilesystem-1.7.0-2.rockspec";
     sha256 = "0xivgn8bbkx1g5a30jrjcv4hg5mpiiyrm3fhlz9lndgbh4cnjrq6";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -1699,17 +1699,17 @@ lualogging = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 }:
 buildLuarocksPackage {
   pname = "lualogging";
-  version = "1.5.2-1";
+  version = "1.6.0-2";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/lualogging-1.5.2-1.rockspec";
-    sha256 = "0jlqjhr5p9ji51bkmz8n9jc55i3vzqjfwjxvxp2ib9h4gmh2zqk3";
+    url    = "https://luarocks.org/lualogging-1.6.0-2.rockspec";
+    sha256 = "1235sfss0gmcw744rnhzfffhd1z732g2b2vsbpbz9kcvvhznmamb";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/lunarmodules/lualogging.git",
-  "rev": "8b4d8dd5a311245a197890405ba9324b9f5f5ab1",
-  "date": "2021-08-12T19:29:39+02:00",
-  "path": "/nix/store/q1v28n04hh3r7aw37cxakzksfa3kw5qa-lualogging",
-  "sha256": "0nj0ik91lgl9rwgizdkn7vy9brddsz1kxfn70c01x861vaxi63iz",
+  "rev": "0bc4415de03ff1a99c92c02a5bed14a45b078079",
+  "date": "2021-11-09T20:20:42+01:00",
+  "path": "/nix/store/p3cyhqjw12bj7s6y4hndzqdkdfwq3958-lualogging",
+  "sha256": "18664k4kfi4zq9n0217j57h42li6ws8s3f6d4yj0rcqsl19fxa7c",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -2060,7 +2060,7 @@ buildLuarocksPackage {
   pname = "lyaml";
   version = "6.2.7-1";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/lyaml-6.2.7-1.rockspec";
+    url    = "https://luarocks.org/lyaml-6.2.7-1.rockspec";
     sha256 = "0m5bnzg24nyk35gcn4rydgzk0ysk1f6rslxwxd0w3drl1bg64zja";
   }).outPath;
   src = fetchurl {
@@ -2252,10 +2252,10 @@ buildLuarocksPackage {
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/nvim-lua/plenary.nvim",
-  "rev": "80bb2b9bb74bdca38a46480b6f2e15af990406e4",
-  "date": "2021-10-06T19:20:08+02:00",
-  "path": "/nix/store/mw4r562qxr7giy1n43iylp3qb8ch0jqs-plenary.nvim",
-  "sha256": "11akcpxcp4m997a2y76ajknnmsifac2hj4nq9i4a8b1j08bxinim",
+  "rev": "c2bb2d8fd5b44bfc6aad3a5463c84576a98dd4a9",
+  "date": "2021-12-06T21:11:29+01:00",
+  "path": "/nix/store/h376md0lpbv31n5wyrq0cilkpx2lkr18-plenary.nvim",
+  "sha256": "12csjz882yv9wwhzx964fq210655m8820491xjsrjlwccfc09i35",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,

@@ -13,7 +13,6 @@
 , curl
 , dconf
 , libepoxy
-, ffmpeg
 , fftw
 , fftwFloat
 , flex
@@ -95,7 +94,6 @@ stdenv.mkDerivation rec {
     curl
     dconf
     libepoxy
-    ffmpeg
     fftw
     fftwFloat
     flex
@@ -133,19 +131,22 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Denable_ffmpeg=true"
-    "-Denable_rtmidi=true"
-    "-Denable_rtaudio=true"
-    "-Denable_sdl=true"
+    "-Drtmidi=enabled"
+    "-Drtaudio=enabled"
+    "-Dsdl=enabled"
+    "-Dcarla=enabled"
     "-Dmanpage=true"
     # "-Duser_manual=true" # needs sphinx-intl
     "-Dlsp_dsp=disabled"
     "-Db_lto=false"
+    "-Ddebug=true"
   ];
 
   NIX_LDFLAGS = ''
     -lfftw3_threads -lfftw3f_threads
   '';
+
+  dontStrip = true;
 
   postPatch = ''
     chmod +x scripts/meson-post-install.sh

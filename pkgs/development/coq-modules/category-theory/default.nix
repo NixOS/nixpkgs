@@ -5,6 +5,8 @@ with lib; mkCoqDerivation {
   pname = "category-theory";
   owner = "jwiegley";
 
+  release."20211213".rev    = "449e30e929d56f6f90c22af2c91ffcc4d79837be";
+  release."20211213".sha256 = "sha256:0vgfmph5l1zn6j4b851rcm43s8y9r83swsz07rpzhmfg34pk0nl0";
   release."20210730".rev    = "d87937faaf7460bcd6985931ac36f551d67e11af";
   release."20210730".sha256 = "04x7433yvibxknk6gy4971yzb4saa3z4dnfy9n6irhyafzlxyf0f";
   release."20190414".rev    = "706fdb4065cc2302d92ac2bce62cb59713253119";
@@ -14,7 +16,7 @@ with lib; mkCoqDerivation {
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.10" "8.13"; out = "20210730"; }
+    { case = range "8.10" "8.14"; out = "20211213"; }
     { case = range "8.8" "8.9"; out = "20190414"; }
     { case = range "8.6" "8.7"; out = "20180709"; }
   ] null;

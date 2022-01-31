@@ -5,6 +5,7 @@
 , google-api-core
 , google-cloud-testutils
 , grpc-google-iam-v1
+, grpcio-status
 , libcst
 , mock
 , proto-plus
@@ -14,6 +15,7 @@
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
   version = "2.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     grpc-google-iam-v1
     google-api-core
+    grpcio-status
     libcst
     proto-plus
   ];

@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "revol-xut";
     repo = "lingua-franca-nix-releases";
-    rev = "11c6d5297cd63bf0b365a68c5ca31ec80083bd05";
-    sha256 = "DgxunzC8Ep0WdwChDHWgG5QJbJZ8UgQRXtP1HZqL9Jg=";
+    rev = "d37bbfa530f0189c3e86ce0191134cdf42c6aec7";
+    sha256 = "/qMBOjffvShCPcbh9rJ7aVgdgZQ1hilHakjLyEhSmgs=";
   };
 
   buildInputs = [ jdk11_headless ];

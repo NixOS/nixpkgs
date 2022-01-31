@@ -21,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-podcasts";
-  version = "0.4.9";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "podcasts";
     rev = version;
-    sha256 = "1ah59ac3xm3sqai8zhil8ar30pviw83cm8in1n4id77rv24xkvgm";
+    sha256 = "00vy1qkkpn76jdpybsq9qp8s6fh1ih10j73p2x43sl97m5g8944h";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "1iihpfvkli09ysn46cnif53xizkwzk0m91bljmlzsygp3ip5i5yw";
+    sha256 = "0y34b5rnr75h7dxbx93mafrmwsh187wq5js7fmkb1m1yyybj1v1x";
   };
 
   nativeBuildInputs = [
@@ -79,5 +79,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-podcasts.x86_64-darwin
   };
 }

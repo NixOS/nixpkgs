@@ -1,23 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGo117Module, fetchFromGitHub, installShellFiles }:
 
-buildGoModule rec {
+buildGo117Module rec {
   pname = "helm";
-  version = "3.7.1";
-  gitCommit = "1d11fcb5d3f3bf00dbe6fe31b8412839a96b3dc4";
+  version = "3.8.0";
+  gitCommit = "d14138609b01886f544b2025f5000351c9eb092e";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-NjBG3yLtvnAXziLH/ALRJVaFW327qo7cvnf1Jpq3QlI=";
+    sha256 = "sha256-/vxf3YfBP1WHFpqll6iq4m+X4NA16qHnuGA0wvrVRsg=";
   };
-  vendorSha256 = "sha256-gmyF/xuf5dTxorgqvW4PNA1l2SQ2oJuZCAFw7d8ufGc=";
+  vendorSha256 = "sha256-M7XId+2HIh1mFzU54qQZEisWdVq67RlGJjlw+2dpiDc=";
 
   doCheck = false;
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X helm.sh/helm/v3/internal/version.version=v${version}"
     "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
   ];

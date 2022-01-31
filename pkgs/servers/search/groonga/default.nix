@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mecab, kytea, libedit, pkg-config
+{ lib, stdenv, fetchurl, autoreconfHook, mecab, kytea, libedit, pkg-config
 , suggestSupport ? false, zeromq, libevent, msgpack, openssl
 , lz4Support  ? false, lz4
 , zlibSupport ? true, zlib
@@ -14,11 +14,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yE/Ok0QNY9+a4vfNJWZjR4W8E/i+lw7T85X2+oOw8m4=";
   };
 
+  preConfigure = ''
+    # To avoid problems due to libc++abi 11 using `#include <version>`.
+    rm version
+  '';
+
   buildInputs = with lib;
-     [ pkg-config mecab kytea libedit openssl ]
+     [ mecab kytea libedit openssl ]
     ++ optional lz4Support lz4
     ++ optional zlibSupport zlib
     ++ optionals suggestSupport [ zeromq libevent msgpack ];
+
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   configureFlags = with lib;
        optional zlibSupport "--with-zlib"

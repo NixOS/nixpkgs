@@ -6,8 +6,7 @@ let
   libtorrent = (python3.pkgs.toPythonModule (
     libtorrent-rasterbar-1_2_x.override { python = python3; })).python;
 
-  aiohttp-apispec = python3.pkgs.callPackage 
-    ../../../../development/python-modules/aiohttp-apispec/unstable.nix { };
+  aiohttp-apispec = python3.pkgs.callPackage ./aiohttp-apispec.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "tribler";

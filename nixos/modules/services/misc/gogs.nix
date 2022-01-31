@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.gogs;
+  opt = options.services.gogs;
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
@@ -129,6 +130,7 @@ in
         path = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/gogs.db";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/gogs.db"'';
           description = "Path to the sqlite3 database file.";
         };
       };
@@ -142,6 +144,7 @@ in
       repositoryRoot = mkOption {
         type = types.str;
         default = "${cfg.stateDir}/repositories";
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = "Path to the git repositories.";
       };
 

@@ -2,10 +2,11 @@
 }:
 
 stdenv.mkDerivation (rec {
-  name = "readline-6.2";
+  pname = "readline";
+  version = "6.2";
 
   src = fetchurl {
-    url = "mirror://gnu/readline/${name}.tar.gz";
+    url = "mirror://gnu/readline/readline-${version}.tar.gz";
     sha256 = "10ckm2bd2rkxhvdmj7nmbsylmihw0abwcsnxf8y27305183rd9kr";
   };
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation (rec {
     (let
        patch = nr: sha256:
          fetchurl {
-           url = "mirror://gnu/readline/${name}-patches/readline62-${nr}";
+           url = "mirror://gnu/readline/readline-${version}-patches/readline62-${nr}";
            inherit sha256;
          };
      in

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "vertica-python";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce0abfc5909d06031dc612ec321d7f75df50bcb47a31e14e882a299cea2ea7a3";
+    sha256 = "cfe1794c5ba9fdfbd470a55d82f60c2e08e129828367753bf64199a58a539bc2";
   };
 
   propagatedBuildInputs = [ future python-dateutil six ];

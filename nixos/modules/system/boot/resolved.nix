@@ -32,6 +32,7 @@ in
 
     services.resolved.domains = mkOption {
       default = config.networking.search;
+      defaultText = literalExpression "config.networking.search";
       example = [ "example.com" ];
       type = types.listOf types.str;
       description = ''

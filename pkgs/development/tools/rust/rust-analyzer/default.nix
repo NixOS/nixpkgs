@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , CoreServices
 , cmake
@@ -12,46 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2021-10-25";
-  cargoSha256 = "sha256-PCQxXNpv4krdLBhyINoZT5QxV2hCqXpp1mqs0dUu4Ag=";
+  version = "2021-12-27";
+  cargoSha256 = "sha256-yok7kLcvKvDwrdgJR0540QLJi5/zXi0NyZxhtoQ8Xno=";
 
   src = fetchFromGitHub {
     owner = "rust-analyzer";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-3AMRwtEmITIvUdR/NINQTPatkjhmS1dQsbbsefIDYAE=";
+    sha256 = "sha256-/195+NsV6Mku2roi8zVy4dw8QGL6rQcnPcQ29Os8oqs=";
   };
 
   patches = [
     # Code format and git history check require more dependencies but don't really matter for packaging.
     # So just ignore them.
     ./ignore-git-and-rustfmt-tests.patch
-  ];
-
-  # Revert edition 2021 related code since we have rust 1.55.0 in nixpkgs currently.
-  # Remove them when we have rust >= 1.56.0
-  # They change Cargo.toml so go `cargoPatches`.
-  cargoPatches = [
-    (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/f0ad6fa68bf98d317518bb75da01b7bb7abe98d3.patch";
-      revert = true;
-      sha256 = "sha256-ksX2j1Pgtd+M+FmXTEljm1nUxJwcY8GDQ9784Lb1uM4=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/8457ae34bdbca117b2ef73787b214161440e21f9.patch";
-      revert = true;
-      sha256 = "sha256-w1Py1bvZ2/tDQDZVMNmPRo6i6uA4H3YYZY4rXlo0iqg=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/ca44b6892e3e66765355d4e645f74df3d184c03b.patch";
-      revert = true;
-      sha256 = "sha256-N1TWlLxEg6oxFkns1ieVVvLAkrHq2WOr1tbkNvZvDFg=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/1294bfce865c556184c9327af4a8953ca940aec8.patch";
-      revert = true;
-      sha256 = "sha256-65eZxAjsuUln6lzSihIP26x15PELLDL4yk9wiVzJ0hE=";
-    })
   ];
 
   buildAndTestSubdir = "crates/rust-analyzer";
@@ -84,8 +57,8 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "An experimental modular compiler frontend for the Rust language";
-    homepage = "https://github.com/rust-analyzer/rust-analyzer";
+    description = "A modular compiler frontend for the Rust language";
+    homepage = "https://rust-analyzer.github.io";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ oxalica ];
   };

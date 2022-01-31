@@ -6,7 +6,7 @@ rec {
     { version, nativeVersion, sha256, defaultJava ? jdk8 }:
 
     { lib, stdenv, fetchurl, makeWrapper, unzip, java ? defaultJava
-    , javaToolchains ? [ ] }:
+    , javaToolchains ? [ ], ncurses5, ncurses6 }:
 
     stdenv.mkDerivation rec {
       pname = "gradle";
@@ -52,18 +52,25 @@ rec {
 
       fixupPhase = let arch = if stdenv.is64bit then "amd64" else "i386";
       in ''
-        mkdir patching
-        pushd patching
-        jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-${nativeVersion}.jar
-        patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
-        jar cf native-platform-linux-${arch}-${nativeVersion}.jar .
-        mv native-platform-linux-${arch}-${nativeVersion}.jar $out/lib/gradle/lib/
-        popd
+        for variant in "" "-ncurses5" "-ncurses6"; do
+          mkdir "patching$variant"
+          pushd "patching$variant"
+          jar xf $out/lib/gradle/lib/native-platform-linux-${arch}$variant-${nativeVersion}.jar
+          patchelf \
+            --set-rpath "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}" \
+            net/rubygrapefruit/platform/linux-${arch}$variant/libnative-platform*.so
+          jar cf native-platform-linux-${arch}$variant-${nativeVersion}.jar .
+          mv native-platform-linux-${arch}$variant-${nativeVersion}.jar $out/lib/gradle/lib/
+          popd
+        done
 
         # The scanner doesn't pick up the runtime dependency in the jar.
         # Manually add a reference where it will be found.
         mkdir $out/nix-support
         echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
+        # Gradle will refuse to start without _both_ 5 and 6 versions of ncurses.
+        echo ${ncurses5} >> $out/nix-support/manual-runtime-dependencies
+        echo ${ncurses6} >> $out/nix-support/manual-runtime-dependencies
       '';
 
       meta = with lib; {
@@ -81,7 +88,7 @@ rec {
         downloadPage = "https://gradle.org/next-steps/?version=${version}";
         license = licenses.asl20;
         platforms = platforms.unix;
-        maintainers = with maintainers; [ lorenzleutgeb ];
+        maintainers = with maintainers; [ lorenzleutgeb liff ];
       };
     };
 
@@ -89,16 +96,16 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_7 = gen {
-    version = "7.3.1";
+    version = "7.3.3";
     nativeVersion = "0.22-milestone-21";
-    sha256 = "0rkb9pdmvq0zidv8lv4im2j7gs949lg35r79l1hwf4pwi2k3ryws";
+    sha256 = "00h3z0vxc4hv31sc71gb88r8yabyqgz304wpr0bxhbx2d14f11mm";
     defaultJava = jdk17;
   };
 
   gradle_6 = gen {
-    version = "6.9.1";
+    version = "6.9.2";
     nativeVersion = "0.22-milestone-20";
-    sha256 = "1zmjfwlh34b65rdx9izgavw3qwqqwm39h5siyj2bf0m55111a4lc";
+    sha256 = "13qyk3f6namw27ynh6nxljxpk9r3l12vxl3f0qpglprdf3c6ydcb";
     defaultJava = jdk11;
   };
 

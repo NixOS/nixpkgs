@@ -1,22 +1,26 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, ncurses, openssl, libiconv
-, withALSA ? true, alsa-lib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
-, withMPRIS ? false, dbus ? null
+, withALSA ? true, alsa-lib
+, withPulseAudio ? false, libpulseaudio
+, withPortAudio ? false, portaudio
+, withMPRIS ? false, dbus
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "0.9.2";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    sha256 = "sha256-fZ0yQGLGnEFxt+OiG9J+niYzvttybudfciu5xo104Qo=";
+    sha256 = "sha256-HnP0dXKkMssDAhrsA99bTCVGdov9t5+1y8fJ+BWTM80=";
   };
 
-  cargoSha256 = "sha256-i3/96rVfP8TbIz3pNArTp8w27rfp1aPhohfFMMHgubo=";
+  # Upstream now only supports rust 1.58+, but this version is not yet available in nixpkgs.
+  # See https://github.com/hrkfdn/ncspot/issues/714
+  patches = [ ./rust_1_57_support.patch ];
+
+  cargoSha256 = "sha256-g6UMwirsSV+/NtFIfEZrz5h/OitPQcDeSawh7wq4TLI=";
 
   nativeBuildInputs = [ pkg-config ];
 

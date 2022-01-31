@@ -24,6 +24,17 @@ pythonNamespacesHook() {
                 rm -v "$pathToRemove"
             fi
 
+            # remove ${pname}-${version}-${python-interpeter}-nspkg.pth
+            #
+            # Still need to check that parent directory exists in the
+            # event of a "meta-package" package, which will just install
+            # other packages, but not produce anything in site-packages
+            # besides meta information
+            if [ -d "${constructedPath}/../" -a -z ${dontRemovePth-} ]; then
+                # .pth files are located in the parent directory of a module
+                @findutils@/bin/find ${constructedPath}/../ -name '*-nspkg.pth' -exec rm -v "{}" +
+            fi
+
             # remove __pycache__/ entry, can be interpreter specific. E.g. __init__.cpython-38.pyc
             # use null characters to perserve potential whitespace in filepath
             if [ -d "$pycachePath" ]; then

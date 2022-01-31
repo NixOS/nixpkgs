@@ -224,7 +224,7 @@ let
 
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
-    exec ${pkgs.i2pd}/bin/i2pd \
+    exec ${cfg.package}/bin/i2pd \
       ${if cfg.address == null then "" else "--host="+cfg.address} \
       --service \
       --conf=${i2pdConf} \
@@ -250,6 +250,15 @@ in
           Enables I2Pd as a running service upon activation.
           Please read http://i2pd.readthedocs.io/en/latest/ for further
           configuration help.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.i2pd;
+        defaultText = literalExpression "pkgs.i2pd";
+        description = ''
+          i2pd package to use.
         '';
       };
 

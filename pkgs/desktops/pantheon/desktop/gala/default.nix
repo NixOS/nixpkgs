@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/elementary/gala/commit/cc83db8fe398feae9f3e4caa8352b65f0c8c96d4.patch";
       sha256 = "sha256-CPO3EHIzqHAV6ZLHngivCdsD8je8CK/NHznfxSEkhzc=";
     })
+    # WindowSwitcher: Clear indicator background
+    # https://github.com/elementary/gala/pull/1318
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/cce53acffecba795b6cc48916d4621a47996d2c9.patch";
+      sha256 = "sha256-5aTZE6poo4sQMTLfk9Nhw4G4BW8i9dvpWktizRIS58Q=";
+    })
   ];
 
   nativeBuildInputs = [

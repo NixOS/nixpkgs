@@ -44,4 +44,5 @@ in {
   boost173 = makeBoost ./1.73.nix;
   boost174 = makeBoost ./1.74.nix;
   boost175 = makeBoost ./1.75.nix;
+  boost177 = makeBoost ./1.77.nix;
 }

@@ -18,12 +18,20 @@ stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
   version = "0.17.8";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-crt-cpp";
     rev = "v${version}";
     sha256 = "sha256-eHABIg3v5ycpQzacW/8C74PT6yDOXGmJqDa9P1hN7Mo=";
   };
+
+  patches = [
+    # Correct include path for split outputs.
+    # https://github.com/awslabs/aws-crt-cpp/pull/325
+    ./0001-build-Make-includedir-properly-overrideable.patch
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace '-Werror' ""
@@ -52,6 +60,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
+
+  postInstall = ''
+    # Prevent dependency cycle.
+    moveToOutput lib/aws-crt-cpp/cmake "$dev"
+  '';
 
   meta = with lib; {
     description = "C++ wrapper around the aws-c-* libraries";

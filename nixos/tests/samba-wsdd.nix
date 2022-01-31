@@ -38,7 +38,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     server_wsdd.wait_for_unit("samba-wsdd")
 
     client_wsdd.wait_until_succeeds(
-        "echo list | ${pkgs.libressl.nc}/bin/nc -U /run/wsdd/wsdd.sock | grep -i SERVER-WSDD"
+        "echo list | ${pkgs.libressl.nc}/bin/nc -N -U /run/wsdd/wsdd.sock | grep -i SERVER-WSDD"
     )
   '';
 })

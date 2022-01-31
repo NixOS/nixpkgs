@@ -94,7 +94,6 @@ mapAliases (with prev; {
   neosnippet          = neosnippet-vim;
   The_NERD_Commenter  = nerdcommenter;
   The_NERD_tree       = nerdtree;
-  onedark-nvim        = onedarkpro-nvim; # added 2021-10-22
   open-browser        = open-browser-vim;
   pathogen            = vim-pathogen;
   polyglot            = vim-polyglot;

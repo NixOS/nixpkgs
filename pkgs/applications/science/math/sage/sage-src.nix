@@ -109,6 +109,14 @@ stdenv.mkDerivation rec {
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
 
+    # fonttools 4.26.2, used by matplotlib, uses deprecated methods internally.
+    # This is fixed in fonttools 4.27.0, but since fonttools is a dependency of
+    # 2000+ packages and DeprecationWarnings are hidden almost everywhere by
+    # default (not on Sage's doctest harness, though), it doesn't make sense to
+    # backport the fix (see https://github.com/NixOS/nixpkgs/pull/151415).
+    # Let's just assume warnings are expected until we update to 4.27.0.
+    ./patches/fonttools-deprecation-warnings.patch
+
     # https://trac.sagemath.org/ticket/32305
     (fetchSageDiff {
       base = "9.4";
@@ -125,12 +133,36 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-3eJPfWfCrCAQ5filIn7FbzjRQeO9QyTIVl/HyRuqFtE=";
     })
 
+    # https://trac.sagemath.org/ticket/32567
+    (fetchSageDiff {
+      base = "9.5.beta2";
+      name = "arb-2.21.0-update.patch";
+      rev = "eb3304dd521a3d5a9334e747a08e234bbf16b4eb";
+      sha256 = "sha256-XDkaY4VQGyESXI6zuD7nCNzyQOl/fmBFvAESH9+RRvk=";
+    })
+
     # https://trac.sagemath.org/ticket/32797
     (fetchSageDiff {
       base = "9.5.beta7";
       name = "pari-2.13.3-update.patch";
       rev = "f5f7a86908daf60b25e66e6a189c51ada7e0a732";
       sha256 = "sha256-H/caGx3q4KcdsyGe+ojV9bUTQ5y0siqM+QHgDbeEnbw=";
+    })
+
+    # https://trac.sagemath.org/ticket/32909
+    (fetchSageDiff {
+      base = "9.5.beta7";
+      name = "matplotlib-3.5-deprecation-warnings.patch";
+      rev = "a5127dc56fdf5c2e82f6bc781cfe78dbd04e97b7";
+      sha256 = "sha256-p23qUu9mgEUbdbX6cy7ArxZAtpcFjCKbgyxN4jWvj1o=";
+    })
+
+    # https://trac.sagemath.org/ticket/32968
+    (fetchSageDiff {
+      base = "9.5.beta8";
+      name = "sphinx-4.3-update.patch";
+      rev = "fc84f82f52b6f05f512cb359ec7c100f93cf8841";
+      sha256 = "sha256-bBbfdcnw/9LUOlY8rHJRbFJEdMXK4shosqTNaobTS1Q=";
     })
   ];
 

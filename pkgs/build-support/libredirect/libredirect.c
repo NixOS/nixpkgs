@@ -112,7 +112,8 @@ WRAPPER(int, open)(const char * path, int flags, ...)
 }
 WRAPPER_DEF(open)
 
-#ifndef __APPLE__
+// In musl libc, open64 is simply a macro for open
+#if !defined(__APPLE__) && !defined(open64)
 WRAPPER(int, open64)(const char * path, int flags, ...)
 {
     int (*open64_real) (const char *, int, mode_t) = LOOKUP_REAL(open64);
@@ -152,7 +153,7 @@ WRAPPER(FILE *, fopen)(const char * path, const char * mode)
 }
 WRAPPER_DEF(fopen)
 
-#ifndef __APPLE__
+#ifdef __GLIBC__
 WRAPPER(FILE *, __nss_files_fopen)(const char * path)
 {
     FILE * (*__nss_files_fopen_real) (const char *) = LOOKUP_REAL(__nss_files_fopen);
@@ -162,7 +163,8 @@ WRAPPER(FILE *, __nss_files_fopen)(const char * path)
 WRAPPER_DEF(__nss_files_fopen)
 #endif
 
-#ifndef __APPLE__
+// In musl libc, fopen64 is simply a macro for fopen
+#if !defined(__APPLE__) && !defined(fopen64)
 WRAPPER(FILE *, fopen64)(const char * path, const char * mode)
 {
     FILE * (*fopen64_real) (const char *, const char *) = LOOKUP_REAL(fopen64);
@@ -172,7 +174,7 @@ WRAPPER(FILE *, fopen64)(const char * path, const char * mode)
 WRAPPER_DEF(fopen64)
 #endif
 
-#ifndef __APPLE__
+#ifdef __linux__
 WRAPPER(int, __xstat)(int ver, const char * path, struct stat * st)
 {
     int (*__xstat_real) (int ver, const char *, struct stat *) = LOOKUP_REAL(__xstat);
@@ -182,7 +184,7 @@ WRAPPER(int, __xstat)(int ver, const char * path, struct stat * st)
 WRAPPER_DEF(__xstat)
 #endif
 
-#ifndef __APPLE__
+#ifdef __linux__
 WRAPPER(int, __xstat64)(int ver, const char * path, struct stat64 * st)
 {
     int (*__xstat64_real) (int ver, const char *, struct stat64 *) = LOOKUP_REAL(__xstat64);

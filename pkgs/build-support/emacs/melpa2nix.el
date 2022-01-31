@@ -8,6 +8,9 @@
 (setq package-build-archive-dir (expand-file-name "packages/"))
 (setq package-build-recipes-dir (expand-file-name "recipes/"))
 
+;; Allow installing package tarfiles larger than 10MB
+(setq large-file-warning-threshold nil)
+
 (defun melpa2nix-build-package ()
   (if (not noninteractive)
       (error "`melpa2nix-build-package' is to be used only with -batch"))

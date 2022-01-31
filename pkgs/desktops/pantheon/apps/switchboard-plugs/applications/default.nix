@@ -24,12 +24,6 @@ stdenv.mkDerivation rec {
     sha256 = "18izmzhqp6x5ivha9yl8gyz9adyrsylw7w5p0cwm1bndgqbi7yh5";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     meson
     ninja
@@ -44,6 +38,12 @@ stdenv.mkDerivation rec {
     libgee
     switchboard
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Applications Plug";

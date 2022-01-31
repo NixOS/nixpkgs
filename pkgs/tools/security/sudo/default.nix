@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, buildPackages
 , coreutils
 , pam
 , groff
@@ -13,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.7p2";
+  version = "1.9.8p2";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    sha256 = "sha256-KLXucl2/iaeFL0LzCcqHfSgQqVMbTuz+WfOoS2tK/Kg=";
+    sha256 = "sha256-njuLjafe9DtuYMJXq+gEZyBWcP0PfAgd4UI8QUtoDy0=";
   };
 
   prePatch = ''
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
       installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy DESTDIR=/"
     '';
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ groff ];
   buildInputs = [ pam ];
 

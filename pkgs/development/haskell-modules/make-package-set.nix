@@ -87,8 +87,11 @@ let
       drv = if lib.isFunction fn then fn else import fn;
       auto = builtins.intersectAttrs (lib.functionArgs drv) scope;
 
+      # Converts a returned function to a functor attribute set if necessary
+      ensureAttrs = v: if builtins.isFunction v then { __functor = _: v; } else v;
+
       # this wraps the `drv` function to add a `overrideScope` function to the result.
-      drvScope = allArgs: drv allArgs // {
+      drvScope = allArgs: ensureAttrs (drv allArgs) // {
         overrideScope = f:
           let newScope = mkScope (fix' (extends f scope.__unfix__));
           # note that we have to be careful here: `allArgs` includes the auto-arguments that
@@ -116,11 +119,6 @@ let
     in ps // ps.xorg // ps.gnome2 // { inherit stdenv; } // scopeSpliced;
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
-
-  withPackages = packages: buildPackages.callPackage ./with-packages-wrapper.nix {
-    inherit (self) ghc llvmPackages;
-    inherit packages;
-  };
 
   # Use cabal2nix to create a default.nix for the package sources found at 'src'.
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
@@ -266,22 +264,53 @@ in package-set { inherit pkgs lib callPackage; } self // {
            then (modifier drv).envFunc {inherit withHoogle;}
            else modifier drv;
 
-    ghcWithPackages = selectFrom: withPackages (selectFrom self);
+    # This can be used to easily create a derivation containing GHC and the specified set of Haskell packages.
+    #
+    # Example:
+    #   $ nix-shell -p 'haskellPackages.ghcWithPackages (hpkgs: [ hpkgs.mtl hpkgs.lens ])'
+    #   $ ghci    # in the nix-shell
+    #   Prelude > import Control.Lens
+    #
+    # GHC is setup with a package database with all the specified Haskell packages.
+    #
+    # ghcWithPackages :: (HaskellPkgSet -> [ HaskellPkg ]) -> Derivation
+    ghcWithPackages = self.callPackage ./with-packages-wrapper.nix {
+      haskellPackages = self;
+    };
+
 
     # Put 'hoogle' into the derivation's PATH with a database containing all
     # the package's dependencies; run 'hoogle server --local' in a shell to
     # host a search engine for the dependencies.
     #
+    # Example usage:
+    #  $ nix-shell -p 'haskellPackages.hoogleWithPackages (p: [ p.mtl p.lens ])'
+    #  [nix-shell] $ hoogle server
+    #
+    # hoogleWithPackages :: (HaskellPkgSet -> [ HaskellPkg ]) -> Derivation
+    #
     # To reload the Hoogle server automatically on .cabal file changes try
     # this:
     # echo *.cabal | entr -r -- nix-shell --run 'hoogle server --local'
-    ghcWithHoogle = selectFrom:
-      let
-        packages = selectFrom self;
-        hoogle = callPackage ./hoogle.nix {
-          inherit packages;
-        };
-      in withPackages (packages ++ [ hoogle ]);
+    hoogleWithPackages = self.callPackage ./hoogle.nix {
+      haskellPackages = self;
+    };
+    hoogleLocal =
+      { packages ? [] }:
+      lib.warn "hoogleLocal is deprecated, use hoogleWithPackages instead" (
+        self.hoogleWithPackages (_: packages)
+      );
+    # This is like a combination of ghcWithPackages and hoogleWithPackages.
+    # It provides a derivation containing both GHC and Hoogle with an index of
+    # the given Haskell package database.
+    #
+    # Example:
+    #   $ nix-shell -p 'haskellPackages.ghcWithHoogle (hpkgs: [ hpkgs.conduit hpkgs.lens ])'
+    #
+    # ghcWithHoogle :: (HaskellPkgSet -> [ HaskellPkg ]) -> Derivation
+    ghcWithHoogle = self.ghcWithPackages.override {
+      withHoogle = true;
+    };
 
     # Returns a derivation whose environment contains a GHC with only
     # the dependencies of packages listed in `packages`, not the

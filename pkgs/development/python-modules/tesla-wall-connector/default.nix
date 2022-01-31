@@ -1,25 +1,28 @@
 { lib
 , aiohttp
-, backoff
 , aioresponses
+, aresponses
+, backoff
 , buildPythonPackage
-, fetchPypi
-, pytest-aiohttp
-, pytestCheckHook
+, fetchFromGitHub
 , poetry-core
+, pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tesla-wall-connector";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "PVgM6tC8jy/tXytkAVC0Y4Oatap5YFA3vpkUgAdyTxM=";
+  src = fetchFromGitHub {
+    owner = "einarhauks";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-JBtlGd9aHY8ikhpJ5v7ZcNu3BfLdBmOBZCMa6C0s6gE=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +34,12 @@ buildPythonPackage rec {
     backoff
   ];
 
-  # https://github.com/einarhauks/tesla-wall-connector/issues/1
-  doCheck = false;
+  checkInputs = [
+    aresponses
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
 
   pythonImportsCheck = [
     "tesla_wall_connector"

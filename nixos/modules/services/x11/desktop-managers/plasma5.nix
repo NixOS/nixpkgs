@@ -394,7 +394,8 @@ in
 
       # Extra UDEV rules used by Solid
       services.udev.packages = [
-        pkgs.libmtp
+        # libmtp has "bin", "dev", "out" outputs. UDEV rules file is in "out".
+        pkgs.libmtp.out
         pkgs.media-player-info
       ];
 

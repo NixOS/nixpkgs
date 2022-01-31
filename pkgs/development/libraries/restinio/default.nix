@@ -2,12 +2,12 @@
 
 let
   pname = "restinio";
-  version = "0.6.13";
+  version = "0.6.14";
 in
 fetchzip {
   name = "${pname}-${version}";
   url = "https://github.com/Stiffstream/restinio/releases/download/v.${version}/${pname}-${version}-full.tar.bz2";
-  sha256 = "0cwbd5ni5pm25c7njs3wllrblb2i853ibjvpbb1iicy833zais8d";
+  sha256 = "sha256-v/t3Lo1D6rHMx3GywPpEhOnHrT7JVC8n++YxpMTRfDM=";
 
   postFetch = ''
     mkdir -p $out/include/restinio

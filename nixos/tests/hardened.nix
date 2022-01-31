@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ pkgs, ... } : {
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];
       environment.memoryAllocator.provider = "graphene-hardened";
-      nix.useSandbox = false;
+      nix.settings.sandbox = false;
       virtualisation.emptyDiskImages = [ 4096 ];
       boot.initrd.postDeviceCommands = ''
         ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb

@@ -4,6 +4,7 @@
 { pkgs, ... }@args:
 let
   inherit (import ../../lib/testing-python.nix args) makeTest;
+  inherit (pkgs) lib;
 
   dmarcTestReport = builtins.fetchurl {
     name = "dmarc-test-report";
@@ -54,7 +55,7 @@ in
   localMail = makeTest
     {
       name = "parsedmarc-local-mail";
-      meta = with pkgs.lib.maintainers; {
+      meta = with lib.maintainers; {
         maintainers = [ talyz ];
       };
 
@@ -83,7 +84,7 @@ in
             };
           };
 
-          services.elasticsearch.package = pkgs.elasticsearch7-oss;
+          services.elasticsearch.package = pkgs.elasticsearch-oss;
 
           environment.systemPackages = [
             (sendEmail "dmarc@localhost")
@@ -94,6 +95,7 @@ in
       testScript = { nodes }:
         let
           esPort = toString nodes.parsedmarc.config.services.elasticsearch.port;
+          valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.config.services.elasticsearch.package.version "7") ".value";
         in ''
           parsedmarc.start()
           parsedmarc.wait_for_unit("postfix.service")
@@ -104,11 +106,15 @@ in
           )
 
           parsedmarc.fail(
-              "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940 | jq -e 'if .hits.total.value > 0 then true else null end'"
+              "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+              + " | tee /dev/console"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
           )
           parsedmarc.succeed("send-email")
           parsedmarc.wait_until_succeeds(
-              "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940 | jq -e 'if .hits.total.value > 0 then true else null end'"
+              "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+              + " | tee /dev/console"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
           )
         '';
     };
@@ -121,7 +127,7 @@ in
     in
       makeTest {
         name = "parsedmarc-external-mail";
-        meta = with pkgs.lib.maintainers; {
+        meta = with lib.maintainers; {
           maintainers = [ talyz ];
         };
 
@@ -153,7 +159,7 @@ in
                 };
               };
 
-              services.elasticsearch.package = pkgs.elasticsearch7-oss;
+              services.elasticsearch.package = pkgs.elasticsearch-oss;
 
               environment.systemPackages = [
                 pkgs.jq
@@ -201,6 +207,7 @@ in
         testScript = { nodes }:
           let
             esPort = toString nodes.parsedmarc.config.services.elasticsearch.port;
+            valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.config.services.elasticsearch.package.version "7") ".value";
           in ''
             mail.start()
             mail.wait_for_unit("postfix.service")
@@ -213,11 +220,15 @@ in
             )
 
             parsedmarc.fail(
-                "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940 | jq -e 'if .hits.total.value > 0 then true else null end'"
+                "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+                + " | tee /dev/console"
+                + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
             )
             mail.succeed("send-email")
             parsedmarc.wait_until_succeeds(
-                "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940 | jq -e 'if .hits.total.value > 0 then true else null end'"
+                "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+                + " | tee /dev/console"
+                + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
             )
           '';
       };

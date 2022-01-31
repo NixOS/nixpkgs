@@ -65,7 +65,7 @@ python3Packages.buildPythonApplication rec {
     description = "GUI tool to find duplicate files in a system";
     homepage = "https://github.com/arsenetar/dupeguru";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.novoxudonoser ];
   };
 }

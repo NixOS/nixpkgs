@@ -16,67 +16,8 @@ rec {
 
   inherit pkgs;
 
-  # Reifies and correctly wraps the python test driver for
-  # the respective qemu version and with or without ocr support
-  pythonTestDriver = {
-      qemu_pkg ? pkgs.qemu_test
-    , enableOCR ? false
-  }:
-    let
-      name = "nixos-test-driver";
-      testDriverScript = ./test-driver/test-driver.py;
-      ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
-      imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
-    in stdenv.mkDerivation {
-      inherit name;
-
-      nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ (python3.withPackages (p: [ p.ptpython p.colorama ])) ];
-      checkInputs = with python3Packages; [ pylint black mypy ];
-
-      dontUnpack = true;
-
-      preferLocalBuild = true;
-
-      buildPhase = ''
-        python <<EOF
-        from pydoc import importfile
-        with open('driver-symbols', 'w') as fp:
-          t = importfile('${testDriverScript}')
-          d = t.Driver([],[],"")
-          test_symbols = d.test_symbols()
-          fp.write(','.join(test_symbols.keys()))
-        EOF
-      '';
-
-      doCheck = true;
-      checkPhase = ''
-        mypy --disallow-untyped-defs \
-             --no-implicit-optional \
-             --ignore-missing-imports ${testDriverScript}
-        pylint --errors-only ${testDriverScript}
-        black --check --diff ${testDriverScript}
-      '';
-
-      installPhase =
-        ''
-          mkdir -p $out/bin
-          cp ${testDriverScript} $out/bin/nixos-test-driver
-          chmod u+x $out/bin/nixos-test-driver
-          # TODO: copy user script part into this file (append)
-
-          wrapProgram $out/bin/nixos-test-driver \
-            --argv0 ${name} \
-            --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils socat ]}" \
-            ${lib.optionalString enableOCR
-              "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
-
-          install -m 0644 -vD driver-symbols $out/nix-support/driver-symbols
-        '';
-    };
-
   # Run an automated test suite in the given virtual network.
-  runTests = { driver, pos }:
+  runTests = { driver, driverInteractive, pos }:
     stdenv.mkDerivation {
       name = "vm-test-run-${driver.testName}";
 
@@ -89,11 +30,11 @@ rec {
           # effectively mute the XMLLogger
           export LOGFILE=/dev/null
 
-          ${driver}/bin/nixos-test-driver
+          ${driver}/bin/nixos-test-driver -o $out
         '';
 
       passthru = driver.passthru // {
-        inherit driver;
+        inherit driver driverInteractive;
       };
 
       inherit pos; # for better debugging
@@ -110,10 +51,18 @@ rec {
     , enableOCR ? false
     , skipLint ? false
     , passthru ? {}
+    , interactive ? false
   }:
     let
-      # FIXME: get this pkg from the module system
-      testDriver = pythonTestDriver { inherit qemu_pkg enableOCR;};
+      # Reifies and correctly wraps the python test driver for
+      # the respective qemu version and with or without ocr support
+      testDriver = pkgs.callPackage ./test-driver {
+        inherit enableOCR;
+        qemu_pkg = qemu_test;
+        imagemagick_light = imagemagick_light.override { inherit libtiff; };
+        tesseract4 = tesseract4.override { enableLanguages = [ "eng" ]; };
+      };
+
 
       testDriverName =
         let
@@ -178,10 +127,11 @@ rec {
         echo -n "$testScript" > $out/test-script
         ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
 
+        ${testDriver}/bin/generate-driver-symbols
         ${lib.optionalString (!skipLint) ''
           PYFLAKES_BUILTINS="$(
             echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
-            < ${lib.escapeShellArg "${testDriver}/nix-support/driver-symbols"}
+            < ${lib.escapeShellArg "driver-symbols"}
           )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
 
@@ -190,7 +140,8 @@ rec {
         wrapProgram $out/bin/nixos-test-driver \
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
-          --set vlans '${toString vlans}'
+          --set vlans '${toString vlans}' \
+          ${lib.optionalString (interactive) "--add-flags --interactive"}
       '');
 
   # Make a full-blown test
@@ -268,6 +219,7 @@ rec {
         testName = name;
         qemu_pkg = pkgs.qemu;
         nodes = nodes pkgs.qemu;
+        interactive = true;
       };
 
       test =
@@ -275,7 +227,7 @@ rec {
           passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
             meta = (drv.meta or { }) // t.meta;
           };
-        in passMeta (runTests { inherit driver pos; });
+        in passMeta (runTests { inherit driver pos driverInteractive; });
 
     in
       test // {

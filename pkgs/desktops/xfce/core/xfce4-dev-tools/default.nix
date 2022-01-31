@@ -1,4 +1,5 @@
-{ mkXfceDerivation
+{ lib
+, mkXfceDerivation
 , autoreconfHook
 , libxslt
 , docbook_xsl
@@ -34,7 +35,8 @@ mkXfceDerivation {
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Autoconf macros and scripts to augment app build systems";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

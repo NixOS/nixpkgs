@@ -25,17 +25,19 @@
 , python
 , tqdm
 , typing-extensions
+, spacy-loggers
+, langcodes
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.1.3";
+  version = "3.2.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WAhOZKJ5lxkupI8Yq7MOwUjFu+edBNF7pNL8JiEAwqI=";
+    sha256 = "sha256-9uusURYndAqMorEXuR71UVyPCy+xF6aevgHQEN1PxTw=";
   };
 
   propagatedBuildInputs = [
@@ -58,6 +60,8 @@ buildPythonPackage rec {
     tqdm
     typer
     wasabi
+    spacy-loggers
+    langcodes
   ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
 
   checkInputs = [

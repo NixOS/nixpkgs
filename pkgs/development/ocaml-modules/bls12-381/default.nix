@@ -1,21 +1,26 @@
-{ lib, buildDunePackage, bls12-381-gen, ff-sig, zarith, ctypes, alcotest }:
+{ lib, buildDunePackage, fetchFromGitLab, ff-sig, zarith }:
 
 buildDunePackage rec {
   pname = "bls12-381";
+  version = "1.1.0";
 
-  inherit (bls12-381-gen) version src useDune2 doCheck;
+  src = fetchFromGitLab {
+    owner = "dannywillems";
+    repo = "ocaml-bls12-381";
+    rev = "22247018c0651ea62ae898c8ffcc388cc73f758f";
+    sha256 = "ku6Rc+/lwFDoHTZTxgkhiF+kLkagi7944ntcu9vXWgI=";
+  };
+
+  useDune2 = true;
 
   minimalOCamlVersion = "4.08";
+
   propagatedBuildInputs = [
     ff-sig
     zarith
-    ctypes
-    bls12-381-gen
   ];
 
-  checkInputs = [
-    alcotest
-  ];
+  doCheck = true;
 
   meta = {
     homepage = "https://gitlab.com/dannywillems/ocaml-bls12-381";

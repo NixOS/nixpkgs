@@ -1,50 +1,24 @@
-{ stdenvNoCC, fetchurl, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
-let
-  version = "4.26.9";
-
-  srcs = {
-    x86_64-linux = fetchurl {
-      url = "https://github.com/symfony/cli/releases/download/v${version}/symfony_linux_amd64.gz";
-      sha256 = "0ivqqrpzbpyzp60bv25scarmvisj401rp7h2s3cxa7d17prja91v";
-    };
-
-    i686-linux = fetchurl {
-      url = "https://github.com/symfony/cli/releases/download/v${version}/symfony_linux_386.gz";
-      sha256 = "0ag5w70bkvj9wgp4yzzy824shj907sa5l20sqcgivi3r5gy0p277";
-    };
-
-    aarch64-linux = fetchurl {
-      url = "https://github.com/symfony/cli/releases/download/v${version}/symfony_linux_arm64.gz";
-      sha256 = "00325xz7xl3bprj5zbg5yhn36jf4n37zlyag10m8zcmq8asa6k51";
-    };
-
-    x86_64-darwin = fetchurl {
-        url = "https://github.com/symfony/cli/releases/download/v${version}/symfony_darwin_amd64.gz";
-        sha256 = "00325xz7xl3bprj5zbg5yhn36jf4n37zlyag10m8zcmq8asa6k51";
-      };
-  };
-in stdenvNoCC.mkDerivation rec {
-  inherit version;
+buildGoModule rec {
   pname = "symfony-cli";
+  version = "5.2.2";
+  vendorSha256 = "sha256-/ct1DNSCB1KzajyHWe6guF5iYm5AAEbPunn7xYLw25I=";
 
-  src = srcs.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+  src = fetchFromGitHub {
+    owner = "symfony-cli";
+    repo = "symfony-cli";
+    rev = "v${version}";
+    sha256 = "sha256-qTt9FxphGi8o5hc3IaQGuIN+6t3KE/9xH9dv7i+C4ec=";
+  };
 
-  dontBuild = true;
-
-  unpackPhase = ''
-    gunzip <$src >symfony
-  '';
-
-  installPhase = ''
-    install -D -t $out/bin symfony
-  '';
+  # Tests requires network access
+  doCheck = false;
 
   meta = with lib; {
     description = "Symfony CLI";
-    homepage = "https://symfony.com/download";
-    license = licenses.unfree;
+    homepage = "https://github.com/symfony-cli/symfony-cli";
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ drupol ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }

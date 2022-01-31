@@ -72,7 +72,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "dwarf_fortress_unfuck-${release.unfuckRelease}";
+  pname = "dwarf_fortress_unfuck";
+  version = release.unfuckRelease;
 
   src = fetchFromGitHub {
     owner = "svenstaro";

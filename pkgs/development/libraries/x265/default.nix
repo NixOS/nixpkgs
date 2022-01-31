@@ -95,8 +95,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake nasm ] ++ lib.optional numaSupport numactl;
 
   meta = with lib; {
-    description = "Library for encoding h.265/HEVC video streams";
-    homepage    = "http://x265.org";
+    description = "Library for encoding H.265/HEVC video streams";
+    homepage    = "https://www.x265.org/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

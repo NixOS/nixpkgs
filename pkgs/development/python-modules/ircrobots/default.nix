@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , anyio
+, asyncio-rlock
 , asyncio-throttle
 , dataclasses
 , ircstates
@@ -13,23 +14,26 @@
 
 buildPythonPackage rec {
   pname = "ircrobots";
-  version = "0.3.8";
+  version = "0.4.6";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jesopo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06q86dqllxvi3nssfplmjk9yxaybighwh87lrxfpfhl8yy4z68jz";
+    sha256 = "sha256-+BrS1+ZkgwT/qvqD0PwRZi2LF+31biS738SzKH1dy7w=";
   };
 
   postPatch = ''
     # too specific pins https://github.com/jesopo/ircrobots/issues/3
     sed -iE 's/anyio.*/anyio/' requirements.txt
+    sed -iE 's/ircstates.*/ircstates/' requirements.txt
+    sed -iE 's/async_timeout.*/async_timeout/' requirements.txt
   '';
 
   propagatedBuildInputs = [
     anyio
+    asyncio-rlock
     asyncio-throttle
     ircstates
     async_stagger

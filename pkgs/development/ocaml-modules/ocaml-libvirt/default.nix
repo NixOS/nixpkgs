@@ -17,11 +17,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml ];
 
-  createFindlibDestdir = true;
-
-  buildPhase = "make all opt CPPFLAGS=-Wno-error";
-
-  installPhase = "make install-opt";
+  buildFlags = [ "all" "opt" "CPPFLAGS=-Wno-error" ];
+  installTargets = "install-opt";
+  preInstall = ''
+    # Fix 'dllmllibvirt.so' install failure into non-existent directory.
+    mkdir -p $OCAMLFIND_DESTDIR/stublibs
+  '';
 
   meta = with lib; {
     description = "OCaml bindings for libvirt";

@@ -4,7 +4,7 @@
 , cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
 , AppKit, Cocoa
-, fetchpatch
+, fetchpatch, buildPackages
 }:
 
 with lib;
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     ./hooks/drop-icon-theme-cache.sh
     gtkCleanImmodulesCache
   ];
+
 
   nativeBuildInputs = setupHooks ++ [ perl pkg-config gettext gobject-introspection ];
 
@@ -72,6 +73,9 @@ stdenv.mkDerivation rec {
     "--disable-glibtest"
     "--disable-introspection"
     "--disable-visibility"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_path_GTK_UPDATE_ICON_CACHE=${buildPackages.gtk2}/bin/gtk-update-icon-cache"
+    "ac_cv_path_GDK_PIXBUF_CSOURCE=${buildPackages.gdk-pixbuf.dev}/bin/gdk-pixbuf-csource"
   ];
 
   doCheck = false; # needs X11

@@ -11,6 +11,7 @@
 , click
 , pydot
 , ipython
+, packaging
 , pyqt5
 , pyperclip
 , nose
@@ -39,6 +40,12 @@ buildPythonPackage rec {
     sha256 = "1aparxiq11y0hbvkayp92w684nyxyyx7mi0n1x6x51g5z6c58vmy";
   };
 
+  nativeBuildInputs = [
+    packaging
+  ] ++ lib.optionals withGui [
+    qt5.wrapQtAppsHook
+  ];
+
   propagatedBuildInputs = [
     asn1crypto
     click
@@ -66,10 +73,6 @@ buildPythonPackage rec {
     python_magic
   ];
   inherit doCheck;
-
-  nativeBuildInputs = lib.optionals withGui [
-    qt5.wrapQtAppsHook
-  ];
 
   # If it won't be verbose, you'll see nothing going on for a long time.
   checkPhase = ''

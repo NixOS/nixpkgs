@@ -343,11 +343,6 @@ if [[ -n $flake ]]; then
     fi
 fi
 
-# Resolve the flake.
-if [[ -n $flake ]]; then
-    flake=$(nix "${flakeFlags[@]}" flake metadata --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
-fi
-
 # Find configuration.nix and open editor instead of building.
 if [ "$action" = edit ]; then
     if [[ -z $flake ]]; then

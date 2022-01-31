@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.20.6";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FLMfXloAAIz/9KAtKFfB8uokQz/J8R+WsGarq/5cblo=";
+    sha256 = "sha256-m0Yq6uxo4FAmwvUK/b3zTb79AT9h/fgdm4Q9sf1DYe0=";
   };
 
-  cargoSha256 = "sha256-UVAF2rz0y6h3/rcTJ+31mMyJDLG7q40n6vBK8Wxultg=";
+  cargoSha256 = "sha256-J+829GzZ4lKrn3MSip/weaI8pExBt3uex86bKZOofg4=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 

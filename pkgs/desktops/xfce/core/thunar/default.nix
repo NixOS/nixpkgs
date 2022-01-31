@@ -58,8 +58,9 @@ let unwrapped = mkXfceDerivation {
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Xfce file manager";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 };
 

@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libaec";
-  version  = "1.0.5";
+  version  = "1.0.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.dkrz.de";
     owner = "k202009";
     repo = "libaec";
     rev = "v${version}";
-    sha256 = "sha256-Vi0fCd9V/EH+PcD+e6RZK2/isR1xGX25POhm1Xen5ak=";
+    sha256 = "sha256-N0YwJuVqv8jv/uSbpn/eJBTMhlHDcY/74+anH2vNvpI=";
   };
 
   nativeBuildInputs = [

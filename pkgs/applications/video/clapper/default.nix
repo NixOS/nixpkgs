@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clapper";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner  = "Rafostar";
     repo   = pname;
     rev    = version;
-    sha256 = "1gf4z9lib5rxi1xilkxxyywakm9zlq5915w2wib09jyh0if82ahr";
+    sha256 = "sha256-ccvg8yxPCN7OYmJvq0SPY6iyiuFuWJyiu+mRoykEzqI=";
   };
 
   nativeBuildInputs = [

@@ -5,20 +5,27 @@
 , gobject-introspection, gdk-pixbuf, wrapGAppsHook
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "avizo";
-  version = "unstable-2021-07-21";
+  # Note: remove the 'use-sysconfig' patch on the next update
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "misterdanb";
     repo = "avizo";
-    rev = "7b3874e5ee25c80800b3c61c8ea30612aaa6e8d1";
-    sha256 = "sha256-ixAdiAH22Nh19uK5GoAXtAZJeAfCGSWTcGbrvCczWYc=";
+    rev = version;
+    sha256 = "sha256-0BJodJ6WaHhuSph2D1AC+DMafctgiSCyaZ8MFn89AA8=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config vala gobject-introspection wrapGAppsHook ];
 
   buildInputs = [ dbus dbus-glib gdk-pixbuf glib gtk-layer-shell gtk3 librsvg ];
+
+  patches = [
+    # Remove on next update
+    # See https://github.com/misterdanb/avizo/pull/30
+    ./use-sysconfdir-instead-of-etc.patch
+  ];
 
   postInstall = ''
     substituteInPlace "$out"/bin/volumectl \

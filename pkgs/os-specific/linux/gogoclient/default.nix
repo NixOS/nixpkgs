@@ -1,11 +1,8 @@
 {lib, stdenv, fetchurl, openssl, nettools, iproute2, sysctl}:
 
-let baseName = "gogoclient";
-    version  = "1.2";
-in
-
 stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
+  pname = "gogoclient";
+  version  = "1.2";
 
   src = fetchurl {
     #url = "http://gogo6.com/downloads/gogoc-1_2-RELEASE.tar.gz";
@@ -21,9 +18,9 @@ stdenv.mkDerivation rec {
   buildInputs = [openssl];
 
   preFixup = ''
-    mkdir -p $out/share/${name}
+    mkdir -p $out/share/gogoclient-${version}
     chmod 444 $out/bin/gogoc.conf
-    mv $out/bin/gogoc.conf $out/share/${name}/gogoc.conf.sample
+    mv $out/bin/gogoc.conf $out/share/gogoclient-${version}/gogoc.conf.sample
     rm $out/bin/gogoc.conf.sample
 
     substituteInPlace "$out/template/linux.sh" \

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , sqlite
@@ -12,22 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "proj";
-  version = "8.1.1";
+  version = "8.2.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "sha256-Z2nruyowC3NG4Wb8AFBL0PME/zp9D7SwQdMSl6VjH/w=";
+    hash = "sha256-tnaIqYKgYHY1Tg33jsKYn9QL8YUobgXKbQsodoCXNys=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "Make-CApi-test-cross-platform.patch";
-      url = "https://github.com/OSGeo/PROJ/commit/ac113a8898cded7f5359f1edd3abc17a78eee9b4.patch";
-      sha256 = "0gz2xa5nxzck5c0yr7cspv3kw4cz3fxb2yic76w7qfvxidi7z1s1";
-    })
-  ];
 
   outputs = [ "out" "dev"];
 

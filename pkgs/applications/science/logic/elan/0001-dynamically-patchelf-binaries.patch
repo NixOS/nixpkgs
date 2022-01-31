@@ -22,13 +22,13 @@ index c51e76d..ae8159e 100644
 +            .output();
 +    }
 +
-+    if dest_path.extension() == Some(::std::ffi::OsStr::new("lld")) {
++    if dest_path.file_name() == Some(::std::ffi::OsStr::new("leanc")) {
 +        use std::os::unix::fs::PermissionsExt;
 +        let new_path = dest_path.with_extension("orig");
 +        ::std::fs::rename(dest_path, &new_path)?;
 +        ::std::fs::write(dest_path, format!(r#"#! @shell@
-+exec -a "$0" {} "$@" --dynamic-linker=@dynamicLinker@
-+"#, new_path.to_str().unwrap()))?;
++LEAN_CC="${{LEAN_CC:-@cc@}}" exec -a "$0" {} "$@" -L {}/lib  # use bundled libraries, but not bundled compiler that doesn't know about NIX_LDFLAGS
++"#, new_path.to_str().unwrap(), dest_path.parent().unwrap().parent().unwrap().to_str().unwrap()))?;
 +        ::std::fs::set_permissions(dest_path, ::std::fs::Permissions::from_mode(0o755))?;
      }
  

@@ -11,6 +11,10 @@ under the terms of [COPYING](COPYING), which is an MIT-like license.
 
 ## Submitting changes
 
+Read the ["Submitting changes"](https://nixos.org/nixpkgs/manual/#chap-submitting-changes) section of the nixpkgs manual. It explains how to write, test, and iterate on your change, and which branch to base your pull request against.
+
+Below is a short excerpt of some points in there:
+
 * Format the commit messages in the following way:
 
   ```
@@ -40,7 +44,7 @@ under the terms of [COPYING](COPYING), which is an MIT-like license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
 * `meta.maintainers` must be set.
 
-See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes) and on how to [submit changes to nixpkgs](https://nixos.org/nixpkgs/manual/#chap-submitting-changes).
+See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
 ## Writing good commit messages
 

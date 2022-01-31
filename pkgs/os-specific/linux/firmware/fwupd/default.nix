@@ -214,7 +214,7 @@ let
       "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
     ] ++ lib.optionals (!haveDell) [
       "-Dplugin_dell=false"
-      "-Dplugin_synaptics=false"
+      "-Dplugin_synaptics_mst=false"
     ] ++ lib.optionals (!haveRedfish) [
       "-Dplugin_redfish=false"
     ] ++ lib.optionals haveFlashrom [

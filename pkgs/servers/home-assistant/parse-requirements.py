@@ -62,6 +62,7 @@ def get_version():
 
 def parse_components(version: str = "master"):
     components = {}
+    components_with_tests = []
     with tempfile.TemporaryDirectory() as tmp:
         with urlopen(
             f"https://github.com/home-assistant/home-assistant/archive/{version}.tar.gz"
@@ -69,9 +70,13 @@ def parse_components(version: str = "master"):
             tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp)
         # Use part of a script from the Home Assistant codebase
         core_path = os.path.join(tmp, f"core-{version}")
+
+        for entry in os.scandir(os.path.join(core_path, "tests/components")):
+            if entry.is_dir():
+                components_with_tests.append(entry.name)
+
         sys.path.append(core_path)
         from script.hassfest.model import Integration
-
         integrations = Integration.load_dir(
             pathlib.Path(
                 os.path.join(core_path, "homeassistant/components")
@@ -79,8 +84,10 @@ def parse_components(version: str = "master"):
         )
         for domain in sorted(integrations):
             integration = integrations[domain]
-            components[domain] = integration.manifest
-    return components
+            if not integration.disabled:
+                components[domain] = integration.manifest
+
+    return components, components_with_tests
 
 
 # Recursively get the requirements of a component and its dependencies
@@ -161,7 +168,7 @@ def main() -> None:
     packages = dump_packages()
     version = get_version()
     print("Generating component-packages.nix for version {}".format(version))
-    components = parse_components(version=version)
+    components, components_with_tests = parse_components(version=version)
     build_inputs = {}
     outdated = {}
     for component in sorted(components.keys()):
@@ -204,6 +211,13 @@ def main() -> None:
                 f.write(f" # missing inputs: {' '.join(missing)}")
             f.write("\n")
         f.write("  };\n")
+        f.write("  # components listed in tests/components for which all dependencies are packaged\n")
+        f.write("  supportedComponentsWithTests = [\n")
+        for component, deps in build_inputs.items():
+            available, missing = deps
+            if len(missing) == 0 and component in components_with_tests:
+                f.write(f'    "{component}"' + "\n")
+        f.write("  ];\n")
         f.write("}\n")
 
     supported_components = reduce(lambda n, c: n + (build_inputs[c][1] == []),

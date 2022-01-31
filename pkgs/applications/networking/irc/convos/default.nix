@@ -6,23 +6,24 @@ with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "convos";
-  version = "6.26";
+  version = "6.42";
 
   src = fetchFromGitHub {
     owner = "convos-chat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wh3ryhd4b7nanh0yp2nycmhky5afw8lpfx34858p6wfimsv9794";
+    sha256 = "sha256-W7ZVZUCNllpFIQpNz2m/8VFOXDZfuppB+g3qibY6wt8=";
   };
 
   nativeBuildInputs = [ makeWrapper ]
     ++ optional stdenv.isDarwin [ shortenPerlShebang ];
 
   buildInputs = with perlPackages; [
-    CryptEksblowfish FileHomeDir FileReadBackwards HTTPAcceptLanguage
+    CryptPassphrase CryptPassphraseArgon2 CryptPassphraseBcrypt
+    FileHomeDir FileReadBackwards HTTPAcceptLanguage
     IOSocketSSL IRCUtils JSONValidator LinkEmbedder ModuleInstall
-    Mojolicious MojoliciousPluginOpenAPI MojoliciousPluginWebpack
-    ParseIRC TextMarkdown TimePiece UnicodeUTF8
+    Mojolicious MojoliciousPluginOpenAPI MojoliciousPluginSyslog MojoliciousPluginWebpack
+    ParseIRC TextMarkdownHoedown TimePiece UnicodeUTF8
     CpanelJSONXS EV
   ];
 

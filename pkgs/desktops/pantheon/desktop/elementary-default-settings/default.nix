@@ -17,11 +17,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
   version = "6.0.2";
 
-  repoName = "default-settings";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "default-settings";
     rev = version;
     sha256 = "sha256-qaPj/Qp7RYzHgElFdM8bHV42oiPUbCMTC9Q+MUj4Q6Y=";
   };

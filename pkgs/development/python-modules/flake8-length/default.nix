@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "flake8-length";
-  version = "0.2.0";
+  version = "0.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15frvccm1qx783jlx8fw811ks9jszln3agbb58lg4dhbmjaf2cxw";
+    sha256 = "6e3c068005b0b3b5c8345923fe3e9a107c980baa1354dd19d820018f87409427";
   };
 
   propagatedBuildInputs = [

@@ -9,14 +9,17 @@
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8MP8YHIkxDqjPsUYv6ROmuRwcGMzPpsVCRwxga3XdYU=";
+    sha256 = "42ea423f44beafee0e985009124968e300447f6e3be4180e83568cf21520d1b1";
   };
 
   postPatch = ''
+    # relax version constraint, https://storyboard.openstack.org/#!/story/2009723
+    substituteInPlace requirements.txt --replace 'PyYAML>=3.10.0,<6' 'PyYAML>=3.10.0'
+
     export HOME=$TMPDIR
   '';
 

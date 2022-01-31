@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.238";
+  version = "0.239";
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${builtins.replaceStrings [ "." ] [ "" ] version}";
-    sha256 = "sha256-kh0kvtl+zPJjBWUXyzb/LSbPoJRxh55vUwF2G06tzoo=";
+    sha256 = "sha256-svclBaFkp4d6db+zWZNvZP8vWIFz/7M5N1M6WseOFEk=";
   };
 
   hardeningDisable = [ "fortify" ];

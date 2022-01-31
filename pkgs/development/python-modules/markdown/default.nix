@@ -8,17 +8,18 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Markdown";
-  version = "3.3.4";
+  pname = "markdown";
+  version = "3.3.6";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "31b5b491868dcc87d6c24b7e3d19a0d730d59d3e46f4eea6430a321bed387a49";
+    pname = "Markdown";
+    inherit version;
+    sha256 = "sha256-dt+K4yKU7Dnc+JNAOCiC36Epdfh/RcPtHs2x6M78cAY=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
 

@@ -67,6 +67,9 @@ in {
       serviceDependencies = mkOption {
         type = with types; listOf str;
         default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        defaultText = literalExpression ''
+          optional config.services.matrix-synapse.enable "matrix-synapse.service"
+        '';
         description = ''
           List of Systemd services to require and wait for when starting the application service.
         '';
@@ -76,10 +79,7 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.mx-puppet-discord = {
-      description = ''
-        mx-puppet-discord is a discord puppeting bridge for matrix.
-        It handles bridging private and group DMs, as well as Guilds (servers).
-      '';
+      description = "Matrix to Discord puppeting bridge";
 
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "portaudio";
-  version =  "190700_20210406";
+  version = "190700_20210406";
 
   src = fetchurl {
     url = "http://files.portaudio.com/archives/pa_stable_v${version}.tgz";
@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
-  postConfigure = ''
-    substituteInPlace Makefile --replace "-Werror" ""
-  '';
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays -Wno-error=implicit-const-int-float-conversion";
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
 

@@ -42,6 +42,6 @@ in stdenv.mkDerivation rec {
     description = "Sticky notes plugin for Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

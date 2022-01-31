@@ -5,7 +5,6 @@
 , aiofiles
 , anyio
 , contextlib2
-, graphene
 , itsdangerous
 , jinja2
 , python-multipart
@@ -23,14 +22,16 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.16.0";
+  version = "0.17.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/NYhRRZdi6I7CtLCohAqK4prsSUayOxa6sBKIJhPv+w=";
+    sha256 = "sha256-qT/w7r8PsrauLoBolwCGpxiwhDZo3z6hIqKVXeY5yqA=";
   };
 
   postPatch = ''
@@ -41,7 +42,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiofiles
     anyio
-    graphene
     itsdangerous
     jinja2
     python-multipart
@@ -64,19 +64,15 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  disabledTestPaths = [
-    # fails to import graphql, but integrated graphql support is about to
-    # be removed in 0.15, see https://github.com/encode/starlette/pull/1135.
-    "tests/test_graphql.py"
-  ];
-
   disabledTests = [
     # asserts fail due to inclusion of br in Accept-Encoding
     "test_websocket_headers"
     "test_request_headers"
   ];
 
-  pythonImportsCheck = [ "starlette" ];
+  pythonImportsCheck = [
+    "starlette"
+  ];
 
   meta = with lib; {
     homepage = "https://www.starlette.io/";
