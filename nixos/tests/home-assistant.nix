@@ -43,6 +43,11 @@ in {
         psycopg2
       ];
 
+      # test loading lovelace modules
+      customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
+        mini-graph-card
+      ];
+
       config = {
         homeassistant = {
           name = "Home";
@@ -160,6 +165,10 @@ in {
         wait_for_homeassistant(cursor)
         hass.wait_for_open_port(8123)
         hass.succeed("curl --fail http://localhost:8123/lovelace")
+
+    with subtest("Check that lovelace modules are referenced and fetchable"):
+        hass.succeed("grep -q 'mini-graph-card-bundle.js' '${configDir}/ui-lovelace.yaml'")
+        hass.succeed("curl --fail http://localhost:8123/local/nixos-lovelace-modules/mini-graph-card-bundle.js")
 
     with subtest("Check that optional dependencies are in the PYTHONPATH"):
         env = get_unit_property("Environment")
