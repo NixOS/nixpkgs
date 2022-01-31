@@ -1494,6 +1494,18 @@ let
         };
       };
 
+      roman.ayu-next = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ayu-next";
+          publisher = "roman";
+          version = "1.2.9";
+          sha256 = "sha256-rwZnqvHRmMquNq9PnU176vI4g8PtS6wSNvQaZ1BMa4I=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       rubbersheep.gi = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gi";

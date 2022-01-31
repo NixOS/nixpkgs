@@ -13,7 +13,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  vendorSha256 = "sha256-bFTmr/xQ12cboH1MGvHDUpLM0dMkxMeLgwG0VbhMEnc=";
+  vendorSha256 = "sha256-ICGnjI9sFwt81rZCnap/rggfSs4+pZNmLouoTY7CYKw=";
 
   meta = with lib; {
     description = "More expressive universal gRPC client";
