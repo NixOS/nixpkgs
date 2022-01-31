@@ -56,8 +56,9 @@ buildPythonPackage rec {
     pillow
     scikitimage
     scipy
-    tensorflow
   ];
+
+  checkInputs = [ tensorflow ];
 
   meta = with lib; {
     description = "Mask R-CNN for object detection and instance segmentation on Keras and TensorFlow";
