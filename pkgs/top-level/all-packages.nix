@@ -33825,7 +33825,9 @@ with pkgs;
 
   go-swag = callPackage ../development/tools/go-swag { };
 
-  go-swagger = callPackage ../development/tools/go-swagger { };
+  go-swagger = callPackage ../development/tools/go-swagger {
+    buildGoModule = buildGo117Module;
+  };
 
   jx = callPackage ../applications/networking/cluster/jx {};
 
