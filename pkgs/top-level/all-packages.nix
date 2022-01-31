@@ -34244,7 +34244,9 @@ with pkgs;
 
   zimg = callPackage ../development/libraries/zimg { };
 
-  wtf = callPackage ../applications/misc/wtf { };
+  wtf = callPackage ../applications/misc/wtf {
+    buildGoModule = buildGo117Module;
+  };
 
   zk-shell = callPackage ../applications/misc/zk-shell { };
 
