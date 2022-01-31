@@ -1473,7 +1473,9 @@ with pkgs;
 
   chaos = callPackage ../tools/networking/chaos {  };
 
-  charm = callPackage ../applications/misc/charm { };
+  charm = callPackage ../applications/misc/charm {
+    buildGoModule = buildGo117Module;
+  };
 
   chars = callPackage ../tools/text/chars {
     inherit (darwin.apple_sdk.frameworks) Security;
