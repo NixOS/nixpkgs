@@ -48,7 +48,12 @@ in
         what = "tmpfs";
         where = "/tmp";
         type = "tmpfs";
-        mountConfig.Options = [ "mode=1777" "strictatime" "rw" "nosuid" "nodev" "size=${toString cfg.tmpOnTmpfsSize}" ];
+        mountConfig.Options = concatStringsSep "," [ "mode=1777"
+                                                     "strictatime"
+                                                     "rw"
+                                                     "nosuid"
+                                                     "nodev"
+                                                     "size=${toString cfg.tmpOnTmpfsSize}" ];
       }
     ];
 
