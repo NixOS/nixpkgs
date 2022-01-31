@@ -179,6 +179,7 @@ in
       environment.THELOUNGE_PACKAGES = mkIf (cfg.plugins != [ ]) "${plugins}";
       serviceConfig = {
         User = "thelounge";
+        Group = "thelounge";
         StateDirectory = builtins.baseNameOf dataDir;
         ExecStart = "${pkgs.thelounge}/bin/thelounge start";
       };
