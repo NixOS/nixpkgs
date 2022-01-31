@@ -1021,7 +1021,9 @@ with pkgs;
 
   gofu = callPackage ../applications/misc/gofu { };
 
-  godns = callPackage ../tools/networking/godns { };
+  godns = callPackage ../tools/networking/godns {
+    buildGoModule = buildGo117Module;
+  };
 
   godspeed = callPackage ../tools/networking/godspeed { };
 
