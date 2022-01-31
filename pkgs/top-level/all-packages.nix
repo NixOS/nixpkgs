@@ -28146,7 +28146,9 @@ with pkgs;
 
   pdfchain = callPackage ../tools/typesetting/pdfchain { };
 
-  pdfcpu = callPackage ../applications/graphics/pdfcpu { };
+  pdfcpu = callPackage ../applications/graphics/pdfcpu {
+    buildGoModule = buildGo117Module;
+  };
   pdftk = callPackage ../tools/typesetting/pdftk {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
