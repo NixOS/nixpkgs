@@ -3734,7 +3734,9 @@ with pkgs;
 
   string-machine = callPackage ../applications/audio/string-machine { };
 
-  stripe-cli = callPackage ../tools/admin/stripe-cli { };
+  stripe-cli = callPackage ../tools/admin/stripe-cli {
+    buildGoModule = buildGo117Module;
+  };
 
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
