@@ -5611,7 +5611,9 @@ with pkgs;
 
   garmintools = callPackage ../development/libraries/garmintools {};
 
-  gau = callPackage ../tools/security/gau { };
+  gau = callPackage ../tools/security/gau {
+    buildGoModule = buildGo117Module;
+  };
 
   gauge = callPackage ../development/tools/gauge { };
 
