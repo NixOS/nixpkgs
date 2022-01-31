@@ -2949,7 +2949,9 @@ with pkgs;
 
   ekam = callPackage ../development/tools/build-managers/ekam { };
 
-  eksctl = callPackage ../tools/admin/eksctl { };
+  eksctl = callPackage ../tools/admin/eksctl {
+    buildGoModule = buildGo117Module;
+  };
 
   electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
 
