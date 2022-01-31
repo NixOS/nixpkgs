@@ -26,6 +26,7 @@
 , at-spi2-core
 , cups
 , libxshmfence
+, obs-studio
 }:
 
 let
@@ -102,6 +103,9 @@ stdenv.mkDerivation rec {
     cp -r ../include $out/
   '';
 
+  passthru.tests = {
+    inherit obs-studio; # frequently breaks on CEF updates
+  };
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
