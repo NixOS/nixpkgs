@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-4kFd2ULap9kcMu81Lu0SxER7xDAnVVyi9yAVsS1yhnw=";
   };
 
-  vendorSha256 = "sha256-tZarz6xwZo9IFfKB9qGxqezYaFrPyQp3wcug5jGaElY=";
+  vendorSha256 = "sha256-MGNv1mEIOvhcpL40MuQob5Uu4qqIGhJxPZTi8BvqQ0s=";
 
   postInstall = ''
     mkdir -p $data/share/vale

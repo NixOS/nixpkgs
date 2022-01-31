@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  python = pkgs.python3Packages.python;
   cfg = config.services.seafile;
   settingsFormat = pkgs.formats.ini { };
 
@@ -221,9 +220,7 @@ in {
         '';
       };
 
-      seahub = let
-        penv = (pkgs.python3.withPackages (ps: with ps; [ gunicorn seahub ]));
-      in {
+      seahub = {
         description = "Seafile Server Web Frontend";
         wantedBy = [ "seafile.target" ];
         partOf = [ "seafile.target" ];
@@ -231,8 +228,7 @@ in {
         requires = [ "seaf-server.service" ];
         restartTriggers = [ seahubSettings ];
         environment = {
-          PYTHONPATH =
-            "${pkgs.python3Packages.seahub}/thirdpart:${pkgs.python3Packages.seahub}:${penv}/${python.sitePackages}";
+          PYTHONPATH = "${pkgs.seahub.pythonPath}:${pkgs.seahub}/thirdpart:${pkgs.seahub}";
           DJANGO_SETTINGS_MODULE = "seahub.settings";
           CCNET_CONF_DIR = ccnetDir;
           SEAFILE_CONF_DIR = dataDir;
@@ -249,7 +245,7 @@ in {
           LogsDirectory = "seafile";
           ConfigurationDirectory = "seafile";
           ExecStart = ''
-            ${penv}/bin/gunicorn seahub.wsgi:application \
+            ${pkgs.seahub.python.pkgs.gunicorn}/bin/gunicorn seahub.wsgi:application \
             --name seahub \
             --workers ${toString cfg.workers} \
             --log-level=info \
@@ -262,27 +258,27 @@ in {
         preStart = ''
           mkdir -p ${seahubDir}/media
           # Link all media except avatars
-          for m in `find ${pkgs.python3Packages.seahub}/media/ -maxdepth 1 -not -name "avatars"`; do
+          for m in `find ${pkgs.seahub}/media/ -maxdepth 1 -not -name "avatars"`; do
             ln -sf $m ${seahubDir}/media/
           done
           if [ ! -e "${seafRoot}/.seahubSecret" ]; then
-              ${penv}/bin/python ${pkgs.python3Packages.seahub}/tools/secret_key_generator.py > ${seafRoot}/.seahubSecret
+              ${pkgs.seahub.python}/bin/python ${pkgs.seahub}/tools/secret_key_generator.py > ${seafRoot}/.seahubSecret
               chmod 400 ${seafRoot}/.seahubSecret
           fi
           if [ ! -f "${seafRoot}/seahub-setup" ]; then
               # avatars directory should be writable
-              install -D -t ${seahubDir}/media/avatars/ ${pkgs.python3Packages.seahub}/media/avatars/default.png
-              install -D -t ${seahubDir}/media/avatars/groups ${pkgs.python3Packages.seahub}/media/avatars/groups/default.png
+              install -D -t ${seahubDir}/media/avatars/ ${pkgs.seahub}/media/avatars/default.png
+              install -D -t ${seahubDir}/media/avatars/groups ${pkgs.seahub}/media/avatars/groups/default.png
               # init database
-              ${pkgs.python3Packages.seahub}/manage.py migrate
+              ${pkgs.seahub}/manage.py migrate
               # create admin account
-              ${pkgs.expect}/bin/expect -c 'spawn ${pkgs.python3Packages.seahub}/manage.py createsuperuser --email=${cfg.adminEmail}; expect "Password: "; send "${cfg.initialAdminPassword}\r"; expect "Password (again): "; send "${cfg.initialAdminPassword}\r"; expect "Superuser created successfully."'
-              echo "${pkgs.python3Packages.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
+              ${pkgs.expect}/bin/expect -c 'spawn ${pkgs.seahub}/manage.py createsuperuser --email=${cfg.adminEmail}; expect "Password: "; send "${cfg.initialAdminPassword}\r"; expect "Password (again): "; send "${cfg.initialAdminPassword}\r"; expect "Superuser created successfully."'
+              echo "${pkgs.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
           fi
-          if [ $(cat "${seafRoot}/seahub-setup" | cut -d"-" -f1) != "${pkgs.python3Packages.seahub.version}" ]; then
+          if [ $(cat "${seafRoot}/seahub-setup" | cut -d"-" -f1) != "${pkgs.seahub.version}" ]; then
               # update database
-              ${pkgs.python3Packages.seahub}/manage.py migrate
-              echo "${pkgs.python3Packages.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
+              ${pkgs.seahub}/manage.py migrate
+              echo "${pkgs.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
           fi
         '';
       };
