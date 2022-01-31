@@ -15,6 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/Cb/HkD4UQ9gXsRpvRiEuQBoRd0THxNHsBaAAa+CqQo=";
   };
 
+  cmakeFlags = [
+    "-DBUILD_STATIC_LIBS=OFF"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_TESTS=ON"
+    "-DBUILD_PRIMECOUNT=ON"
+    "-DBUILD_LIBPRIMESIEVE=ON"
+  ];
+
   meta = with lib; {
     description = "Fast prime counting function implementations";
     homepage = "https://github.com/kimwalisch/primecount";

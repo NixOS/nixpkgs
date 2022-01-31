@@ -1,8 +1,8 @@
 diff --git a/src/sage_docbuild/__init__.py b/src/sage_docbuild/__init__.py
-index 79005b903a..fbe6fe2595 100644
+index 8a5c1a19d2..21fd192642 100644
 --- a/src/sage_docbuild/__init__.py
 +++ b/src/sage_docbuild/__init__.py
-@@ -85,27 +85,6 @@ def builder_helper(type):
+@@ -89,27 +89,6 @@ def builder_helper(type):
      """
      Returns a function which builds the documentation for
      output type ``type``.
@@ -12,7 +12,7 @@ index 79005b903a..fbe6fe2595 100644
 -    Check that :trac:`25161` has been resolved::
 -
 -        sage: from sage_docbuild import DocBuilder, setup_parser
--        sage: DocBuilder._options = setup_parser().parse_args([])[0] # builder_helper needs _options to be set
+-        sage: DocBuilder._options = setup_parser().parse_args([]) # builder_helper needs _options to be set
 -
 -        sage: import sage_docbuild.sphinxbuild
 -        sage: def raiseBaseException():
@@ -30,7 +30,7 @@ index 79005b903a..fbe6fe2595 100644
      """
      def f(self, *args, **kwds):
          output_dir = self._output_dir(type)
-@@ -127,10 +106,9 @@ def builder_helper(type):
+@@ -131,10 +110,9 @@ def builder_helper(type):
          logger.debug(build_command)
  
          # Run Sphinx with Sage's special logger
@@ -44,10 +44,10 @@ index 79005b903a..fbe6fe2595 100644
              if ABORT_ON_ERROR:
                  raise
 diff --git a/src/sage_docbuild/sphinxbuild.py b/src/sage_docbuild/sphinxbuild.py
-index f58f6c61d7..ef51a55411 100644
+index d917c3e9d4..551cc8028a 100644
 --- a/src/sage_docbuild/sphinxbuild.py
 +++ b/src/sage_docbuild/sphinxbuild.py
-@@ -326,3 +326,8 @@ def runsphinx():
+@@ -327,3 +327,8 @@ def runsphinx():
          sys.stderr = saved_stderr
          sys.stdout.flush()
          sys.stderr.flush()
