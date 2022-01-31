@@ -1491,7 +1491,9 @@ with pkgs;
 
   ec2-ami-tools = callPackage ../tools/virtualization/ec2-ami-tools { };
 
-  ec2-metadata-mock = callPackage ../development/tools/ec2-metadata-mock { };
+  ec2-metadata-mock = callPackage ../development/tools/ec2-metadata-mock {
+    buildGoModule = buildGo117Module;
+  };
 
   ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
 
