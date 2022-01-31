@@ -15654,7 +15654,9 @@ with pkgs;
 
   swiftformat = callPackage ../development/tools/swiftformat { };
 
-  symfony-cli = callPackage ../development/tools/symfony-cli { };
+  symfony-cli = callPackage ../development/tools/symfony-cli {
+    buildGoModule = buildGo117Module;
+  };
 
   swiftshader = callPackage ../development/libraries/swiftshader { };
 
