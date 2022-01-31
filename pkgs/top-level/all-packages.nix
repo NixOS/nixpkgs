@@ -30517,7 +30517,9 @@ with pkgs;
 
   scaleft = callPackage ../applications/networking/scaleft { };
 
-  scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
+  scaleway-cli = callPackage ../tools/admin/scaleway-cli {
+    buildGoModule = buildGo117Module;
+  };
 
   beancount = with python3.pkgs; toPythonApplication beancount;
 
