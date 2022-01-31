@@ -19,7 +19,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  vendorSha256 = "sha256-1TupDdiG8hnbAM+JJRTJWCYQBGN/o+C3H2e0w9muYog=";
+  vendorSha256 = "sha256-gB1/WkGC3sgMqmA4F9/dGU0R0hIDwwTVBNNsY6Yj8KU=";
 
   ldflags = [
     "-s"
