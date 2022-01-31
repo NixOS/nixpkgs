@@ -209,16 +209,6 @@ self: super: builtins.intersectAttrs super {
   # Help the test suite find system timezone data.
   tz = overrideCabal (drv: {
     preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo";
-    patches = [
-      # Fix tests failing with libSystem, musl etc. due to a lack of
-      # support for glibc's non-POSIX TZDIR environment variable.
-      # https://github.com/nilcons/haskell-tz/pull/29
-      (pkgs.fetchpatch {
-        name = "support-non-glibc-tzset.patch";
-        url = "https://github.com/sternenseemann/haskell-tz/commit/64928f1a50a1a276a718491ae3eeef63abcdb393.patch";
-        sha256 = "1f53w8k1vpy39hzalyykpvm946ykkarj2714w988jdp4c2c4l4cf";
-      })
-    ] ++ (drv.patches or []);
   }) super.tz;
 
   # Nix-specific workaround
