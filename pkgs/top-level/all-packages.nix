@@ -3217,7 +3217,9 @@ with pkgs;
 
   gosu = callPackage ../tools/misc/gosu { };
 
-  gotify-cli = callPackage ../tools/misc/gotify-cli { };
+  gotify-cli = callPackage ../tools/misc/gotify-cli {
+    buildGoModule = buildGo117Module;
+  };
 
   gotify-desktop = callPackage ../tools/misc/gotify-desktop { };
 
