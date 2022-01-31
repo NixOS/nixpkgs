@@ -369,7 +369,9 @@ with pkgs;
 
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
-  protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
+  protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php {
+    buildGoModule = buildGo117Module;
+  };
 
   protoc-gen-twirp_swagger = callPackage ../development/tools/protoc-gen-twirp_swagger { };
 
