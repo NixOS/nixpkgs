@@ -27,6 +27,8 @@ buildPythonPackage {
     sha256 = "0j2ck7rsrcyny9qbmrw9aqvzfhv70nbign8iva2dsisa2x24gbcl";
   };
 
+  buildInputs = [ tensorflow ];
+
   propagatedBuildInputs = [
     gym
     scipy
@@ -37,7 +39,6 @@ buildPythonPackage {
     progressbar2
     mpi4py
     cloudpickle
-    tensorflow
     click
   ];
 
