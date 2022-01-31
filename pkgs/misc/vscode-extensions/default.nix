@@ -243,8 +243,8 @@ let
         mktplcRef = {
           name = "vscode-pylance";
           publisher = "MS-python";
-          version = "2020.11.2";
-          sha256 = "0n2dm21vgzir3hx1m3pmx7jq4zy3hdxfsandd2wv5da4fs9b5g50";
+          version = "2022.1.5";
+          sha256 = "1b5ihrac9xsq35a39vlq7krr1ffqpdjxdlhv9s056hs033kayazl";
         };
 
         buildInputs = [ nodePackages.pyright ];
