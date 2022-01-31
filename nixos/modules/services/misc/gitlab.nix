@@ -1129,8 +1129,8 @@ in {
 
         ExecStartPre = let
           preStartFullPrivileges = ''
-            shopt -s dotglob nullglob
-            set -eu
+            set -o errexit -o pipefail -o nounset
+            shopt -s dotglob nullglob inherit_errexit
 
             chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/*
             if [[ -n "$(ls -A '${cfg.statePath}'/config/)" ]]; then
@@ -1140,7 +1140,8 @@ in {
         in "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}";
 
         ExecStart = pkgs.writeShellScript "gitlab-config" ''
-          set -eu
+          set -o errexit -o pipefail -o nounset
+          shopt -s inherit_errexit
 
           umask u=rwx,g=rx,o=
 
@@ -1169,7 +1170,8 @@ in {
             rm -f '${cfg.statePath}/config/database.yml'
 
             ${if cfg.databasePasswordFile != null then ''
-                export db_password="$(<'${cfg.databasePasswordFile}')"
+                db_password="$(<'${cfg.databasePasswordFile}')"
+                export db_password
 
                 if [[ -z "$db_password" ]]; then
                   >&2 echo "Database password was an empty string!"
@@ -1193,10 +1195,11 @@ in {
 
             rm -f '${cfg.statePath}/config/secrets.yml'
 
-            export secret="$(<'${cfg.secrets.secretFile}')"
-            export db="$(<'${cfg.secrets.dbFile}')"
-            export otp="$(<'${cfg.secrets.otpFile}')"
-            export jws="$(<'${cfg.secrets.jwsFile}')"
+            secret="$(<'${cfg.secrets.secretFile}')"
+            db="$(<'${cfg.secrets.dbFile}')"
+            otp="$(<'${cfg.secrets.otpFile}')"
+            jws="$(<'${cfg.secrets.jwsFile}')"
+            export secret db otp jws
             jq -n '{production: {secret_key_base: $ENV.secret,
                     otp_key_base: $ENV.otp,
                     db_key_base: $ENV.db,
@@ -1230,7 +1233,8 @@ in {
         RemainAfterExit = true;
 
         ExecStart = pkgs.writeShellScript "gitlab-db-config" ''
-          set -eu
+          set -o errexit -o pipefail -o nounset
+          shopt -s inherit_errexit
           umask u=rwx,g=rx,o=
 
           initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
