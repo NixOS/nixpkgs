@@ -22229,7 +22229,9 @@ with pkgs;
 
   cachefilesd = callPackage ../os-specific/linux/cachefilesd { };
 
-  cariddi = callPackage ../tools/security/cariddi { };
+  cariddi = callPackage ../tools/security/cariddi {
+    buildGoModule = buildGo117Module;
+  };
 
   checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
 
