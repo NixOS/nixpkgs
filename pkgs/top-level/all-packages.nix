@@ -34566,7 +34566,9 @@ with pkgs;
 
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
-  kcli = callPackage ../development/tools/kcli {};
+  kcli = callPackage ../development/tools/kcli {
+    buildGoModule = buildGo117Module;
+  };
 
   pxlib = callPackage ../development/libraries/pxlib {};
 
