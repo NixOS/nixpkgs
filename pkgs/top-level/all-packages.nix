@@ -15145,7 +15145,9 @@ with pkgs;
 
   kubeprompt = callPackage ../development/tools/kubeprompt { };
 
-  kubescape = callPackage ../tools/security/kubescape { };
+  kubescape = callPackage ../tools/security/kubescape {
+    buildGoModule = buildGo117Module;
+  };
 
   kubesec = callPackage ../tools/security/kubesec { };
 
