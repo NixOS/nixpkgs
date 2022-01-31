@@ -23963,7 +23963,9 @@ with pkgs;
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
-  nuclei = callPackage ../tools/security/nuclei { };
+  nuclei = callPackage ../tools/security/nuclei {
+    buildGoModule = buildGo117Module;
+  };
 
   nullmailer = callPackage ../servers/mail/nullmailer {
     stdenv = gccStdenv;
