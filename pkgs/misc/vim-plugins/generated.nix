@@ -11169,6 +11169,18 @@ final: prev:
     meta.homepage = "https://github.com/liuchengxu/vim-which-key/";
   };
 
+  vim-windowswap = buildVimPluginFrom2Nix {
+    pname = "vim-windowswap";
+    version = "2018-05-16";
+    src = fetchFromGitHub {
+      owner = "wesQ3";
+      repo = "vim-windowswap";
+      rev = "15db3f697aa1fa696d99fcdc920c90cd2cec855e";
+      sha256 = "1zzgwxv0a4i1qlig1c3n6n9ns2fqkkv6jqc2qxcipn6v6v88sl2b";
+    };
+    meta.homepage = "https://github.com/wesQ3/vim-windowswap/";
+  };
+
   vim-wordmotion = buildVimPluginFrom2Nix {
     pname = "vim-wordmotion";
     version = "2021-12-28";
