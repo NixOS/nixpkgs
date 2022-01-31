@@ -3012,7 +3012,9 @@ with pkgs;
 
   eternal-terminal = callPackage ../tools/networking/eternal-terminal {};
 
-  extrude = callPackage ../tools/security/extrude { };
+  extrude = callPackage ../tools/security/extrude {
+    buildGoModule = buildGo117Module;
+  };
 
   f3 = callPackage ../tools/filesystems/f3 { };
 
