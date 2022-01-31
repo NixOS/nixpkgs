@@ -375,7 +375,9 @@ with pkgs;
 
   protoc-gen-twirp_swagger = callPackage ../development/tools/protoc-gen-twirp_swagger { };
 
-  protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript { };
+  protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript {
+    buildGoModule = buildGo117Module;
+  };
 
   proton-caller = callPackage ../misc/emulators/proton-caller { };
 
