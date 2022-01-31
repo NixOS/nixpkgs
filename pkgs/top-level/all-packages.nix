@@ -353,7 +353,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  proto-contrib = callPackage ../development/tools/proto-contrib {};
+  proto-contrib = callPackage ../development/tools/proto-contrib {
+    buildGoModule = buildGo117Module;
+  };
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
 
