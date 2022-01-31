@@ -746,7 +746,7 @@ class Machine:
 
         def capture_info() -> Optional[Tuple[int, int]]:
             output = self.send_monitor_command("info capture")
-            lines = output.split("\r\n")
+            lines = output.splitlines()
             for line in lines:
                 match = info_capture_regex.match(line)
                 if match is None:
