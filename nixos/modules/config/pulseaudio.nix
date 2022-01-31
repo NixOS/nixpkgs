@@ -101,6 +101,14 @@ in {
         '';
       };
 
+      support32Bit = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          This option is no longer supported, and will eventually be removed.
+        '';
+      };
+
       configFile = mkOption {
         type = types.nullOr types.path;
         description = ''
@@ -210,6 +218,11 @@ in {
     }
 
     (mkIf cfg.enable {
+      assertions = [{
+        assertion = !cfg.support32Bit;
+        message = "`hardware.pulseaudio.support32Bit` is no longer supported.";
+      }];
+
       environment.systemPackages = [ overriddenPackage ];
 
       sound.enable = true;
