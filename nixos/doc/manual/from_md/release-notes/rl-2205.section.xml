@@ -454,6 +454,20 @@
       </listitem>
       <listitem>
         <para>
+          The existing <literal>pkgs.opentelemetry-collector</literal>
+          has been moved to
+          <literal>pkgs.opentelemetry-collector-contrib</literal> to
+          match the actual source being the <quote>contrib</quote>
+          edition. <literal>pkgs.opentelemetry-collector</literal> is
+          now the actual core release of opentelemetry-collector. If you
+          use the community contributions you should change the package
+          you refer to. If you don’t need them update your commands from
+          <literal>otelcontribcol</literal> to
+          <literal>otelcorecol</literal> and enjoy a 7x smaller binary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.noto-fonts-cjk</literal> is now deprecated in
           favor of <literal>pkgs.noto-fonts-cjk-sans</literal> and
           <literal>pkgs.noto-fonts-cjk-serif</literal> because they each
