@@ -9583,7 +9583,9 @@ with pkgs;
 
   scmpuff = callPackage ../applications/version-management/git-and-tools/scmpuff { };
 
-  scorecard = callPackage ../tools/security/scorecard { };
+  scorecard = callPackage ../tools/security/scorecard {
+    buildGoModule = buildGo117Module;
+  };
 
   scream = callPackage ../applications/audio/scream { };
 
