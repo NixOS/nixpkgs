@@ -325,7 +325,9 @@ with pkgs;
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
-  evans = callPackage ../development/tools/evans { };
+  evans = callPackage ../development/tools/evans {
+    buildGoModule = buildGo117Module;
+  };
 
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
 
@@ -1019,9 +1021,13 @@ with pkgs;
 
   gofu = callPackage ../applications/misc/gofu { };
 
-  godns = callPackage ../tools/networking/godns { };
+  godns = callPackage ../tools/networking/godns {
+    buildGoModule = buildGo117Module;
+  };
 
-  godspeed = callPackage ../tools/networking/godspeed { };
+  godspeed = callPackage ../tools/networking/godspeed {
+    buildGoModule = buildGo117Module;
+  };
 
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
@@ -3010,7 +3016,9 @@ with pkgs;
 
   eternal-terminal = callPackage ../tools/networking/eternal-terminal {};
 
-  extrude = callPackage ../tools/security/extrude { };
+  extrude = callPackage ../tools/security/extrude {
+    buildGoModule = buildGo117Module;
+  };
 
   f3 = callPackage ../tools/filesystems/f3 { };
 
@@ -3058,7 +3066,9 @@ with pkgs;
 
   firestarter = callPackage ../applications/misc/firestarter { };
 
-  fits-cloudctl = callPackage ../tools/admin/fits-cloudctl { };
+  fits-cloudctl = callPackage ../tools/admin/fits-cloudctl {
+    buildGoModule = buildGo117Module;
+  };
 
   flitter = callPackage ../tools/misc/flitter { };
 
@@ -5605,7 +5615,9 @@ with pkgs;
 
   garmintools = callPackage ../development/libraries/garmintools {};
 
-  gau = callPackage ../tools/security/gau { };
+  gau = callPackage ../tools/security/gau {
+    buildGoModule = buildGo117Module;
+  };
 
   gauge = callPackage ../development/tools/gauge { };
 
@@ -5920,7 +5932,9 @@ with pkgs;
 
   gl2ps = callPackage ../development/libraries/gl2ps { };
 
-  glab = callPackage ../applications/version-management/git-and-tools/glab { };
+  glab = callPackage ../applications/version-management/git-and-tools/glab {
+    buildGoModule = buildGo117Module;
+  };
 
   glitter = callPackage ../applications/version-management/git-and-tools/glitter { };
 
@@ -8530,7 +8544,12 @@ with pkgs;
 
   opae = callPackage ../development/libraries/opae { };
 
-  opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
+  opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector {
+      buildGoModule = buildGo117Module;
+  };
+  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix {
+      buildGoModule = buildGo117Module;
+  };
 
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
@@ -25359,7 +25378,9 @@ with pkgs;
 
   exercism = callPackage ../applications/misc/exercism { };
 
-  expenses = callPackage ../applications/misc/expenses { };
+  expenses = callPackage ../applications/misc/expenses {
+    buildGoModule = buildGo117Module;
+  };
 
   fnott = callPackage ../applications/misc/fnott { };
 
@@ -30334,7 +30355,9 @@ with pkgs;
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
-  erigon = callPackage ../applications/blockchains/erigon.nix { };
+  erigon = callPackage ../applications/blockchains/erigon.nix {
+    buildGoModule = buildGo117Module;
+  };
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
@@ -33806,7 +33829,9 @@ with pkgs;
 
   go-swag = callPackage ../development/tools/go-swag { };
 
-  go-swagger = callPackage ../development/tools/go-swagger { };
+  go-swagger = callPackage ../development/tools/go-swagger {
+    buildGoModule = buildGo117Module;
+  };
 
   jx = callPackage ../applications/networking/cluster/jx {};
 

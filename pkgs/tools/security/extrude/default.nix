@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-7gCEBhnNU5CqC5n0KP4Dd/fmddPRwNqyMFXTrRrJjfU=";
   };
 
-  vendorSha256 = "sha256-auhRXKt5dcQ+gr3a9Wfen8/BISP17HVsIRP16sBmiZM=";
+  vendorSha256 = "sha256-8qjIYPkWtYTvl7wAnefpZAjbNSQLQFqRnGGccYZ8ZmU=";
 
   meta = with lib; {
     description = "Tool to analyse binaries for missing security features";
