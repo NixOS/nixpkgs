@@ -2352,7 +2352,9 @@ with pkgs;
     asciidoc = asciidoc-full;
   };
 
-  buildpack = callPackage ../development/tools/buildpack { };
+  buildpack = callPackage ../development/tools/buildpack {
+    buildGoModule = buildGo117Module;
+  };
 
   bottom-rs = callPackage ../tools/misc/bottom-rs { };
 
