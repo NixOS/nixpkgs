@@ -20596,7 +20596,9 @@ with pkgs;
 
   yubikey-personalization-gui = libsForQt5.callPackage ../tools/misc/yubikey-personalization-gui { };
 
-  yubikey-agent = callPackage ../tools/security/yubikey-agent { };
+  yubikey-agent = callPackage ../tools/security/yubikey-agent {
+    buildGoModule = buildGo117Module;
+  };
 
   yubikey-touch-detector = callPackage ../tools/security/yubikey-touch-detector { };
 
