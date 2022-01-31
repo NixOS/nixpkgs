@@ -9241,7 +9241,9 @@ with pkgs;
 
   ratools = callPackage ../tools/networking/ratools { };
 
-  ratt = callPackage ../applications/misc/ratt { };
+  ratt = callPackage ../applications/misc/ratt {
+    buildGoModule = buildGo117Module;
+  };
 
   rc = callPackage ../shells/rc { };
 
