@@ -10516,7 +10516,9 @@ with pkgs;
 
   typos = callPackage ../development/tools/typos { };
 
-  tz = callPackage ../tools/misc/tz { };
+  tz = callPackage ../tools/misc/tz {
+    buildGoModule = buildGo117Module;
+  };
 
   u9fs = callPackage ../servers/u9fs { };
 
