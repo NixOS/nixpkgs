@@ -2969,7 +2969,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
     electron = electron_13;
   };
-  element-desktop-wayland = writeScript "element-desktop-wayland" ''
+  element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
     NIXOS_OZONE_WL=1 exec ${element-desktop}/bin/element-desktop "$@"
   '';
@@ -4976,7 +4976,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
     electron = electron_13;
   };
-  schildichat-desktop-wayland = writeScript "schildichat-desktop-wayland" ''
+  schildichat-desktop-wayland = writeScriptBin "schildichat-desktop" ''
     #!/bin/sh
     NIXOS_OZONE_WL=1 exec ${schildichat-desktop}/bin/schildichat-desktop "$@"
   '';
