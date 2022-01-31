@@ -27676,7 +27676,9 @@ with pkgs;
 
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
 
-  nwg-menu = callPackage ../applications/misc/nwg-menu { };
+  nwg-menu = callPackage ../applications/misc/nwg-menu {
+    buildGoModule = buildGo117Module;
+  };
 
   nwg-panel = callPackage ../applications/misc/nwg-panel { };
 
