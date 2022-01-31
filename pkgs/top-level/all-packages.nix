@@ -33851,7 +33851,9 @@ with pkgs;
 
   steamcontroller = callPackage ../misc/drivers/steamcontroller { };
 
-  stern = callPackage ../applications/networking/cluster/stern { };
+  stern = callPackage ../applications/networking/cluster/stern {
+    buildGoModule = buildGo117Module;
+  };
 
   streamripper = callPackage ../applications/audio/streamripper { };
 
