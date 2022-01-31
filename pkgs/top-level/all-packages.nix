@@ -5928,7 +5928,9 @@ with pkgs;
 
   gl2ps = callPackage ../development/libraries/gl2ps { };
 
-  glab = callPackage ../applications/version-management/git-and-tools/glab { };
+  glab = callPackage ../applications/version-management/git-and-tools/glab {
+    buildGoModule = buildGo117Module;
+  };
 
   glitter = callPackage ../applications/version-management/git-and-tools/glitter { };
 
