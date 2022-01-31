@@ -1433,7 +1433,9 @@ with pkgs;
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
 
-  aws-vault = callPackage ../tools/admin/aws-vault { };
+  aws-vault = callPackage ../tools/admin/aws-vault {
+    buildGoModule = buildGo117Module;
+  };
 
   aws-workspaces = callPackage ../applications/networking/remote/aws-workspaces { };
 
