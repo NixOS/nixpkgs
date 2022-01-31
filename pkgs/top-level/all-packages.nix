@@ -20886,7 +20886,9 @@ with pkgs;
 
   alerta-server = callPackage ../servers/monitoring/alerta { };
 
-  alps = callPackage ../servers/alps {};
+  alps = callPackage ../servers/alps {
+    buildGoModule = buildGo117Module;
+  };
 
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = apacheHttpd_2_4;
