@@ -34124,8 +34124,6 @@ with pkgs;
 
   wraith = callPackage ../applications/networking/irc/wraith { };
 
-  wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
-
   wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
     wxGTK = wxGTK30;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
