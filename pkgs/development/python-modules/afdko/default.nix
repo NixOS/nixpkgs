@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder
 , fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
 , brotli, fontmath, mutatormath, booleanoperations
 , ufoprocessor, ufonormalizer, psautohint, tqdm
@@ -39,6 +39,14 @@ buildPythonPackage rec {
     ./no-pypi-build-tools.patch
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
+
+    # Pull upstream fix for fonttools compatibility:
+    #  https://github.com/adobe-type-tools/afdko/pull/1423
+    (fetchpatch {
+      name = "fonttools-4.28.patch";
+      url = "https://github.com/adobe-type-tools/afdko/commit/120752c50a562e4f6c12ff4be1e3bd96ed664e82.patch";
+      sha256 = "1hz30kd7dwdrkmfgma3fs2ps7l3mpgi7hkm6rsz642ifs2j8hca4";
+    })
   ];
 
   # setup.py will always (re-)execute cmake in buildPhase
