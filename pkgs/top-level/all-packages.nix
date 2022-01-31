@@ -3062,7 +3062,9 @@ with pkgs;
 
   firestarter = callPackage ../applications/misc/firestarter { };
 
-  fits-cloudctl = callPackage ../tools/admin/fits-cloudctl { };
+  fits-cloudctl = callPackage ../tools/admin/fits-cloudctl {
+    buildGoModule = buildGo117Module;
+  };
 
   flitter = callPackage ../tools/misc/flitter { };
 

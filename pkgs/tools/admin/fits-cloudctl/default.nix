@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-GSdVwpYmJ3VnZaMQ8SjzcHpeefFjSaZXRcUAXEI9PKo=";
   };
 
-  vendorSha256 = "sha256-RZ4cy9XHpWRP85G4A1/qYPjt/4CZ7pgECf+rsViPjGE=";
+  vendorSha256 = "sha256-4iQxqhXMGeMgHarjVY/rCLr7Am1mniqxTkMxbcp3fGI=";
 
   meta = with lib; {
     description = "Command-line client for FI-TS Finance Cloud Native services";
