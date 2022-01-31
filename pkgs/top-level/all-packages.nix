@@ -15679,7 +15679,9 @@ with pkgs;
 
   tytools = libsForQt5.callPackage ../development/embedded/tytools { };
 
-  terracognita = callPackage ../development/tools/misc/terracognita { };
+  terracognita = callPackage ../development/tools/misc/terracognita {
+    buildGoModule = buildGo117Module;
+  };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
   terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
