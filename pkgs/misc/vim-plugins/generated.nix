@@ -2195,14 +2195,14 @@ final: prev:
 
   galaxyline-nvim = buildVimPluginFrom2Nix {
     pname = "galaxyline.nvim";
-    version = "2021-04-25";
+    version = "2022-01-21";
     src = fetchFromGitHub {
-      owner = "glepnir";
+      owner = "NTBBloodbath";
       repo = "galaxyline.nvim";
-      rev = "d544cb9d0b56f6ef271db3b4c3cf19ef665940d5";
-      sha256 = "1390lqsqdcj1q89zn6y5qrm1id7p8fnpy07vlz6mm4cki47211mb";
+      rev = "4d4f5fc8e20a10824117e5beea7ec6e445466a8f";
+      sha256 = "0xgk64d7dyihrjir8mxchwzi65nimm9w23r24m99w6p0f9qr56gk";
     };
-    meta.homepage = "https://github.com/glepnir/galaxyline.nvim/";
+    meta.homepage = "https://github.com/NTBBloodbath/galaxyline.nvim/";
   };
 
   gen_tags-vim = buildVimPluginFrom2Nix {
