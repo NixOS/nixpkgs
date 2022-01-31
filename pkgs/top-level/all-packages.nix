@@ -18346,7 +18346,9 @@ with pkgs;
 
   libmad = callPackage ../development/libraries/libmad { };
 
-  llama = callPackage ../applications/misc/llama { };
+  llama = callPackage ../applications/misc/llama {
+    buildGoModule = buildGo117Module;
+  };
 
   malcontent = callPackage ../development/libraries/malcontent { };
 
