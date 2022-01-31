@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "foliate";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "johnfactotum";
     repo = pname;
     rev = version;
-    sha256 = "0ribqaxl8g1i83fxbn288afwbzzls48ni57xqi07d19p9ka892mr";
+    sha256 = "sha256-Pr2YA2MHXD4W7lyCxGAVLKyoZarZ8t92RSkWle3LNuc=";
   };
 
   nativeBuildInputs = [ meson ninja python3 wrapGAppsHook ];

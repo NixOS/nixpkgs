@@ -7,11 +7,16 @@ let
     canary = "0.0.132";
   } else {
     stable = "0.0.264";
-    ptb = "0.0.58";
+    ptb = "0.0.59";
     canary = "0.0.280";
   };
   version = versions.${branch};
-  srcs = {
+  srcs = let
+    darwin-ptb = fetchurl {
+      url = "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
+      sha256 = "sha256-LS7KExVXkOv8O/GrisPMbBxg/pwoDXIOo1dK9wk1yB8=";
+    };
+  in {
     x86_64-linux = {
       stable = fetchurl {
         url =
@@ -34,11 +39,7 @@ let
         url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
         sha256 = "1jvlxmbfqhslsr16prsgbki77kq7i3ipbkbn67pnwlnis40y9s7p";
       };
-      ptb = fetchurl {
-        url =
-          "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        sha256 = "sha256-GwYUoPBbx9lSaRP1JwzI0UE9gEU+rV4a9BNPVSxHki0=";
-      };
+      ptb = darwin-ptb;
       canary = fetchurl {
         url =
           "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
@@ -46,13 +47,7 @@ let
       };
     };
     # Only PTB bundles a MachO Universal binary with ARM support.
-    aarch64-darwin = {
-      ptb = fetchurl {
-        url =
-          "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        sha256 = "sha256-GwYUoPBbx9lSaRP1JwzI0UE9gEU+rV4a9BNPVSxHki0=";
-      };
-    };
+    aarch64-darwin = { ptb = darwin-ptb; };
   };
   src = srcs.${stdenv.hostPlatform.system}.${branch};
 

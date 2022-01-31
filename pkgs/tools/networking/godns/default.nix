@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-U8fmjcPeTcKlf721UIbA4/JYeM4l+OIyAPGNp8IPvSk=";
   };
 
-  vendorSha256 = "sha256-8fluCDKrMNnIAlJFlDAisk/P+IYHBCdl7hkSbQtgy1A=";
+  vendorSha256 = "sha256-OyqkjA90zcfqRL6pfISR/6WXbv5LwVhKDECBtlqords=";
 
   # Some tests require internet access, broken in sandbox
   doCheck = false;
