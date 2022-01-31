@@ -29262,7 +29262,9 @@ with pkgs;
 
   ticpp = callPackage ../development/libraries/ticpp { };
 
-  ticker = callPackage ../applications/misc/ticker { };
+  ticker = callPackage ../applications/misc/ticker {
+    buildGoModule = buildGo117Module;
+  };
 
   tickrs = callPackage ../applications/misc/tickrs {
     inherit (darwin.apple_sdk.frameworks) Security;
