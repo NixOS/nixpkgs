@@ -4370,7 +4370,9 @@ with pkgs;
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
-  checkmate = callPackage ../development/tools/checkmate { };
+  checkmate = callPackage ../development/tools/checkmate {
+    buildGoModule = buildGo117Module;
+  };
 
   civetweb = callPackage ../development/libraries/civetweb { };
 
