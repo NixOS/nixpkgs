@@ -1049,7 +1049,9 @@ with pkgs;
 
   tnat64 = callPackage ../tools/networking/tnat64 { };
 
-  topicctl = callPackage ../tools/misc/topicctl { };
+  topicctl = callPackage ../tools/misc/topicctl {
+    buildGoModule = buildGo117Module;
+  };
 
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
