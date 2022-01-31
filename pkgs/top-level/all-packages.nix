@@ -20600,7 +20600,9 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
-  yubikey-touch-detector = callPackage ../tools/security/yubikey-touch-detector { };
+  yubikey-touch-detector = callPackage ../tools/security/yubikey-touch-detector {
+    buildGoModule = buildGo117Module;
+  };
 
   zchunk = callPackage ../development/libraries/zchunk { };
 
