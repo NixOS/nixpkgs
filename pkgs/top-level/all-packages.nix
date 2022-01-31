@@ -533,7 +533,9 @@ with pkgs;
 
   perseus-cli = callPackage ../development/tools/perseus-cli { };
 
-  pet = callPackage ../development/tools/pet { };
+  pet = callPackage ../development/tools/pet {
+    buildGoModule = buildGo117Module;
+  };
 
   pkger = callPackage ../development/libraries/pkger { };
 
