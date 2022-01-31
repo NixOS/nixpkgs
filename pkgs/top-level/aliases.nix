@@ -1064,6 +1064,7 @@ guile-gnome = throw "guile-gnome has been removed"; # Added 2022-01-16
   smbclient = samba; # Added 2018-04-25
   smugline = throw "smugline has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries."; # Added 2020-11-04
   solr_8 = solr; # Added 2021-01-30
+  sqlite-interactive = sqlite.bin; # Added 2022-01-31
 
   # Added 2020-02-10
   sourceHanSansPackages = {
