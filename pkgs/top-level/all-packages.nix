@@ -7305,7 +7305,9 @@ with pkgs;
 
   nyxt = callPackage ../applications/networking/browsers/nyxt { };
 
-  nfpm = callPackage ../tools/package-management/nfpm { };
+  nfpm = callPackage ../tools/package-management/nfpm {
+    buildGoModule = buildGo117Module;
+  };
 
   nginx-config-formatter = callPackage ../tools/misc/nginx-config-formatter { };
 
