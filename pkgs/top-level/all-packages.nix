@@ -25364,7 +25364,9 @@ with pkgs;
 
   exercism = callPackage ../applications/misc/exercism { };
 
-  expenses = callPackage ../applications/misc/expenses { };
+  expenses = callPackage ../applications/misc/expenses {
+    buildGoModule = buildGo117Module;
+  };
 
   fnott = callPackage ../applications/misc/fnott { };
 
