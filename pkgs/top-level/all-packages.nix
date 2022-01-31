@@ -9769,7 +9769,9 @@ with pkgs;
   # Not updated upstream since 2018, doesn't support qt newer than 5.12
   sleepyhead = libsForQt512.callPackage ../applications/misc/sleepyhead {};
 
-  slides = callPackage ../applications/misc/slides { };
+  slides = callPackage ../applications/misc/slides {
+    buildGoModule = buildGo117Module;
+  };
 
   slirp4netns = callPackage ../tools/networking/slirp4netns { };
 
