@@ -21480,7 +21480,9 @@ with pkgs;
 
   quark = callPackage ../servers/http/quark { };
 
-  soft-serve = callPackage ../servers/soft-serve { };
+  soft-serve = callPackage ../servers/soft-serve {
+    buildGoModule = buildGo117Module;
+  };
 
   sympa = callPackage ../servers/mail/sympa { };
 
