@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = pname;
     rev = version;
-    sha256 = "sha256-nE718NA3oLkBTTjewypYyUVRgTm4xiDTui5kEPYYCBc=";
+    sha256 = "sha256-GX/p1fzwqVxqRLkbW4ZHZgCoBwleCbdn1SlVqeIJwY8=";
   };
 
   prePatch = ''
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  cargoSha256 = "sha256-M6LgriXjhxlnoky+TNU7Eb15M+uTgbVKk3g/Sk90xsg=";
+  cargoSha256 = "sha256-peHTEPxi9kA3yy2T+QLUil2CLMfW9dePpA6Ac6g/aZ8=";
 
   doCheck = false;
 
