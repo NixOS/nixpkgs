@@ -3371,14 +3371,14 @@ final: prev:
 
   lspsaga-nvim = buildVimPluginFrom2Nix {
     pname = "lspsaga.nvim";
-    version = "2021-04-25";
+    version = "2022-01-19";
     src = fetchFromGitHub {
-      owner = "glepnir";
+      owner = "tami5";
       repo = "lspsaga.nvim";
-      rev = "cb0e35d2e594ff7a9c408d2e382945d56336c040";
-      sha256 = "0ywhdgh6aqs0xlm8a4d9jhkik254ywagang12r5nyqxawjsmjnib";
+      rev = "9968d7378a4bb3c13445bb6fd7937f3e757bfa0d";
+      sha256 = "04p138pkix3h02710r1812r0c1lkzga6pj35k0c7yic0p040ba35";
     };
-    meta.homepage = "https://github.com/glepnir/lspsaga.nvim/";
+    meta.homepage = "https://github.com/tami5/lspsaga.nvim/";
   };
 
   lua-dev-nvim = buildVimPluginFrom2Nix {
