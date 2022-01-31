@@ -1481,7 +1481,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  checkip = callPackage ../tools/networking/checkip { };
+  checkip = callPackage ../tools/networking/checkip {
+    buildGoModule = buildGo117Module;
+  };
 
   ec2-api-tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
