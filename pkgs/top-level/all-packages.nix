@@ -4123,7 +4123,9 @@ with pkgs;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
-  circleci-cli = callPackage ../development/tools/misc/circleci-cli { };
+  circleci-cli = callPackage ../development/tools/misc/circleci-cli {
+    buildGoModule = buildGo117Module;
+  };
 
   circus = callPackage ../tools/networking/circus { };
 
