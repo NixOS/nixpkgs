@@ -8826,7 +8826,9 @@ with pkgs;
 
   phodav = callPackage ../tools/networking/phodav { };
 
-  photon-rss = callPackage ../applications/networking/feedreaders/photon { };
+  photon-rss = callPackage ../applications/networking/feedreaders/photon {
+    buildGoModule = buildGo117Module;
+  };
 
   pim6sd = callPackage ../servers/pim6sd { };
 
