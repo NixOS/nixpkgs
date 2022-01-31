@@ -1,17 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "biblatex-check";
-  version = "2019-11-09";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "Pezmc";
     repo = "BibLatex-Check";
-    rev = "2db50bf94d1480f37edf1b3619e73baf4ef85938";
-    sha256 = "1bq0yqckhssazwkivipdjmn1jpsf301i4ppyl88qhc5igx39wg25";
+    rev = "v${version}";
+    sha256 = "sha256-SNftPSwkG8mOddwHJCguyPPOjQ3/tBYFsEUbr0Z7cuk=";
   };
 
   buildInputs = [ python3 ];
+
+  patches = [
+    # Merged, but not in tagged release yet
+    (fetchpatch {
+      url = "https://github.com/Pezmc/BibLatex-Check/pull/55.patch";
+      sha256 = "sha256-W2CpYAGrWVYALe55H7Q2GtGiN+6EGU2Y3wLldFo+BAY=";
+    })
+    # Submitted
+    (fetchpatch {
+      url = "https://github.com/Pezmc/BibLatex-Check/pull/56.patch";
+      sha256 = "sha256-Xp/8HZHZMjgyl66GlLBNFslo8fVXgUE+VNvy2XHwQC8=";
+    })
+  ];
 
   strictDeps = true;
 
