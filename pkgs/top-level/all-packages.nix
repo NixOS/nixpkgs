@@ -19579,7 +19579,9 @@ with pkgs;
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
-  protolock = callPackage ../development/libraries/protolock { };
+  protolock = callPackage ../development/libraries/protolock {
+    buildGoModule = buildGo117Module;
+  };
 
   protozero = callPackage ../development/libraries/protozero { };
 
