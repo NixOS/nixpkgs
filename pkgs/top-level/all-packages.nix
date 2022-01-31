@@ -7583,7 +7583,9 @@ with pkgs;
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
-  lmp = callPackage ../tools/security/lmp { };
+  lmp = callPackage ../tools/security/lmp {
+    buildGoModule = buildGo117Module;
+  };
 
   localtime = callPackage ../tools/system/localtime { };
 
