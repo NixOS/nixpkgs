@@ -21484,7 +21484,9 @@ with pkgs;
 
   nsq = callPackage ../servers/nsq { };
 
-  oauth2-proxy = callPackage ../servers/oauth2-proxy { };
+  oauth2-proxy = callPackage ../servers/oauth2-proxy {
+    buildGoModule = buildGo117Module;
+  };
 
   openbgpd = callPackage ../servers/openbgpd { };
 
