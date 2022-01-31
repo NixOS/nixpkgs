@@ -14,7 +14,6 @@
 , libgee
 , libhandy
 , elementary-icon-theme
-, elementary-gtk-theme
 , gettext
 , wrapGAppsHook
 , appstream
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
     elementary-icon-theme
     granite
     gtk3
-    elementary-gtk-theme
     libgee
     libhandy
     glib

@@ -3,31 +3,25 @@
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, pkg-config
+, desktop-file-utils
 , meson
 , ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
+, pkg-config
 , python3
-, libgee
-, clutter-gtk
-, json-glib
+, vala
+, wrapGAppsHook
+, elementary-icon-theme
+, glib
+, granite
+, gst_all_1
+, gtk3
 , libgda
+, libgee
 , libgpod
 , libhandy
-, libnotify
 , libpeas
-, libsoup
-, zeitgeist
-, gst_all_1
 , taglib
-, libdbusmenu
-, libsignon-glib
-, libaccounts-glib
-, elementary-icon-theme
-, wrapGAppsHook
+, zeitgeist
 }:
 
 stdenv.mkDerivation rec {
@@ -66,34 +60,25 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
-    clutter-gtk
+  buildInputs = [
     elementary-icon-theme
+    glib
     granite
+    gtk3
+    libgda
+    libgee
+    libgpod
+    libhandy
+    libpeas
+    taglib
+    zeitgeist
+  ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    json-glib
-    libaccounts-glib
-    libdbusmenu
-    libgda
-    libgee
-    libgpod
-    libhandy
-    libnotify
-    libpeas
-    libsignon-glib
-    libsoup
-    taglib
-    zeitgeist
-  ];
-
-  mesonFlags = [
-    "-Dplugins=audioplayer,cdrom,ipod"
-  ];
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

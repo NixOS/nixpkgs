@@ -12,13 +12,13 @@
 
 let
   pname = "plausible";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "plausible";
     repo = "analytics";
     rev = "v${version}";
-    sha256 = "1aa5nkwb4qz599zb77dhwrvn5gwcdiyji4vbxmayn2zhv2vhj36d";
+    sha256 = "1ckw5cd4z96jkjhmzjq7k3kzjj7bvj38i5xq9r43cz0sn7w3470k";
   };
 
   # TODO consider using `mix2nix` as soon as it supports git dependencies.

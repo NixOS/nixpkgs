@@ -27,7 +27,7 @@ buildGoModule rec {
     sha256 = "1jb195chy3kbspmv9vyg7llw6kgykkmvz3znd97mxf24f4q622jv";
   };
 
-  vendorSha256 = "0d17qaqn33wi7lzw4hlym56d9v4qnmvs6plpm5jiby2g5yckq0mz";
+  vendorSha256 = "1w9c0qzah2f9rbjdxqajwrfkia25cwbn30gidviaid3b7ddpd7r8";
 
   nativeBuildInputs = [ pkg-config ];
 
