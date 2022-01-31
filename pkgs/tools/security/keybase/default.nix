@@ -1,7 +1,6 @@
 { stdenv, substituteAll, lib, buildGoModule, fetchFromGitHub
 , AVFoundation, AudioToolbox, ImageIO, CoreMedia
-, Foundation, CoreGraphics, MediaToolbox
-, gnupg, ...
+, Foundation, CoreGraphics, MediaToolbox, gnupg
 }:
 
 buildGoModule rec {
