@@ -26070,7 +26070,9 @@ with pkgs;
     withPortAudio = stdenv.isDarwin;
   };
 
-  limesctl = callPackage ../applications/misc/limesctl { };
+  limesctl = callPackage ../applications/misc/limesctl {
+    buildGoModule = buildGo117Module;
+  };
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
