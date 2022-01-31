@@ -3,6 +3,7 @@
 , fetchPypi
 , fonttools
 , pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -15,6 +16,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "azFBLc9JyPqEZkvahn4u3cVbb+b6aW/yU8TxOp/y/Fw=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     fonttools
