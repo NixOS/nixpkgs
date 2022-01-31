@@ -3,6 +3,7 @@
 , fetchurl
 , alsa-lib
 , pkg-config
+, jack2
 , AudioUnit
 , AudioToolbox
 , CoreAudio
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional (!stdenv.isDarwin) alsa-lib;
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ alsa-lib jack2 ];
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
