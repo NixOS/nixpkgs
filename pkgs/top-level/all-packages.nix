@@ -1025,7 +1025,9 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
-  godspeed = callPackage ../tools/networking/godspeed { };
+  godspeed = callPackage ../tools/networking/godspeed {
+    buildGoModule = buildGo117Module;
+  };
 
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
