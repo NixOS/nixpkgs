@@ -28,7 +28,7 @@ let
       sha256 = "sha256-SmlcQH+K/axl6Gj+bX0Quk6K/usP0c1hWnIdFjS1dn8=";
     };
 
-    vendorSha256 = "sha256-tO8vi9jBV6rVcGk/OoaXzpnQi4yPdozYZZwAMFCz2+c=";
+    vendorSha256 = "sha256-g3INNvAQ124kBJSe5cnsIq1y8sWpPYKLwJONgbIUaoM=";
 
     subPackages = [ "." ];
 

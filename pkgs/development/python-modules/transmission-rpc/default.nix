@@ -6,6 +6,8 @@
 , requests
 , yarl
 , pythonOlder
+, fetchFromGitHub
+, poetry-core
 }:
 
 buildPythonPackage rec {
@@ -13,10 +15,24 @@ buildPythonPackage rec {
   version = "3.3.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ef3a931fc1f1db74edf8660e475b9295e0904ee922030ef0e45b0c73f4be65ae";
+  format = "pyproject";
+
+  src = fetchFromGitHub {
+      owner = "Trim21";
+      repo = "transmission-rpc";
+      rev = "v${version}";
+      sha256 = "sha256-Ys9trQMCHqxBSaTobWt8WZwi1F8HKTUKaIxvyo6ZPP0=";
   };
+
+  # remove once upstream has tagged version with dumped typing-extensions
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'typing_extensions = ">=3.7.4.2,<4.0.0.0"' 'typing_extensions = "*"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     six

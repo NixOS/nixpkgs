@@ -907,7 +907,9 @@ with pkgs;
     wxGTK = wxGTK30;
   } // (config.aegisub or {}));
 
-  aerc = callPackage ../applications/networking/mailreaders/aerc { };
+  aerc = callPackage ../applications/networking/mailreaders/aerc {
+    buildGoModule = buildGo117Module;
+  };
 
   aerospike = callPackage ../servers/nosql/aerospike { };
 
@@ -1909,7 +1911,9 @@ with pkgs;
 
   pass = callPackage ../tools/security/pass { };
 
-  passphrase2pgp = callPackage ../tools/security/passphrase2pgp { };
+  passphrase2pgp = callPackage ../tools/security/passphrase2pgp {
+    buildGoModule = buildGo117Module;
+  };
 
   pass-git-helper = python3Packages.callPackage ../applications/version-management/git-and-tools/pass-git-helper { };
 
@@ -2201,7 +2205,9 @@ with pkgs;
 
   blitz = callPackage ../development/libraries/blitz { };
 
-  blockbook = callPackage ../servers/blockbook { };
+  blockbook = callPackage ../servers/blockbook {
+    buildGoModule = buildGo117Module;
+  };
 
   blockhash = callPackage ../tools/graphics/blockhash { };
 
@@ -2479,7 +2485,9 @@ with pkgs;
 
   cassowary = callPackage ../tools/networking/cassowary { };
 
-  croc = callPackage ../tools/networking/croc { };
+  croc = callPackage ../tools/networking/croc {
+    buildGoModule = buildGo117Module;
+  };
 
   cbftp = callPackage ../tools/networking/cbftp { };
 
@@ -6314,7 +6322,9 @@ with pkgs;
 
   haskell-language-server = callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix { };
 
-  hasmail = callPackage ../applications/networking/mailreaders/hasmail { };
+  hasmail = callPackage ../applications/networking/mailreaders/hasmail {
+    buildGoModule = buildGo117Module;
+  };
 
   haste-client = callPackage ../tools/misc/haste-client { };
 
@@ -6465,7 +6475,9 @@ with pkgs;
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
-  httpx = callPackage ../tools/security/httpx { };
+  httpx = callPackage ../tools/security/httpx {
+    buildGoModule = buildGo117Module;
+  };
 
   hurl = callPackage ../tools/networking/hurl { };
 
@@ -8110,7 +8122,10 @@ with pkgs;
     nvidiaGpuSupport = config.cudaSupport or false;
   };
 
-  nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
+  nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler {
+    go = go_1_17;
+    buildGoModule = buildGo117Module;
+  };
 
   nomad-driver-podman = callPackage ../applications/networking/cluster/nomad-driver-podman { };
 
@@ -9491,7 +9506,7 @@ with pkgs;
 
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
 
-  sasview = callPackage ../applications/science/misc/sasview {};
+  sasview = libsForQt5.callPackage ../applications/science/misc/sasview {};
 
   scallion = callPackage ../tools/security/scallion { };
 
@@ -21162,7 +21177,9 @@ with pkgs;
 
   https-dns-proxy = callPackage ../servers/dns/https-dns-proxy { };
 
-  hydron = callPackage ../servers/hydron { };
+  hydron = callPackage ../servers/hydron {
+    buildGoModule = buildGo117Module;
+  };
 
   hyprspace = callPackage ../applications/networking/hyprspace { inherit (darwin) iproute2mac; };
 
@@ -21230,7 +21247,9 @@ with pkgs;
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
-  livepeer = callPackage ../servers/livepeer { };
+  livepeer = callPackage ../servers/livepeer {
+    buildGoModule = buildGo117Module;
+  };
 
   lwan = callPackage ../servers/http/lwan { };
 
@@ -22338,7 +22357,9 @@ with pkgs;
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
 
-  gmailctl = callPackage ../applications/networking/gmailctl {};
+  gmailctl = callPackage ../applications/networking/gmailctl {
+    buildGoModule = buildGo117Module;
+  };
 
   gomp = callPackage ../applications/version-management/gomp { };
 
@@ -22807,7 +22828,9 @@ with pkgs;
 
   gotools = callPackage ../development/tools/gotools { };
 
-  gotop = callPackage ../tools/system/gotop { };
+  gotop = callPackage ../tools/system/gotop {
+    buildGoModule = buildGo117Module;
+  };
 
   go-migrate = callPackage ../development/tools/go-migrate { };
 
@@ -28583,6 +28606,8 @@ with pkgs;
   scribusUnstable = libsForQt5.callPackage ../applications/office/scribus/unstable.nix { };
 
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
+
+  seahub = callPackage ../applications/networking/seahub { };
 
   seatd = callPackage ../applications/misc/seatd { };
 
