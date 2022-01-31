@@ -1179,6 +1179,8 @@ let
 
     printbox = callPackage ../development/ocaml-modules/printbox { };
 
+    printbox-text = callPackage ../development/ocaml-modules/printbox/text.nix { };
+
     process = callPackage ../development/ocaml-modules/process { };
 
     prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
