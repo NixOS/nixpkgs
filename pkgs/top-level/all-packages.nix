@@ -281,7 +281,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  conftest = callPackage ../development/tools/conftest { };
+  conftest = callPackage ../development/tools/conftest {
+    buildGoModule = buildGo117Module;
+  };
 
   corgi = callPackage ../development/tools/corgi { };
 
