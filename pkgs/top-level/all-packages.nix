@@ -29100,7 +29100,9 @@ with pkgs;
 
   tamgamp.lv2 = callPackage ../applications/audio/tamgamp.lv2 { };
 
-  tanka = callPackage ../applications/networking/cluster/tanka { };
+  tanka = callPackage ../applications/networking/cluster/tanka {
+    buildGoModule = buildGo117Module;
+  };
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
