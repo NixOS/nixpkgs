@@ -13,9 +13,9 @@ let
   };
   plugins = pkgs.runCommandLocal "thelounge-plugins" { } ''
     mkdir -p $out/node_modules
-    echo ${escapeShellArg (builtins.toJSON pluginManifest)} >> $out/package.json
+    echo ${escapeShellArg (builtins.toJSON pluginManifest)} > $out/package.json
     ${concatMapStringsSep "\n" (pkg: ''
-    ln -s ${pkg}/lib/node_modules/${getName pkg} $out/node_modules/${getName pkg}
+      ln -s ${pkg}/lib/node_modules/${getName pkg} $out/node_modules/${getName pkg}
     '') cfg.plugins}
   '';
   userOptions = {
@@ -71,16 +71,18 @@ in
     };
 
     extraConfig = mkOption {
-      default = { };
       type = types.attrs;
-      example = literalExpression ''{
-        reverseProxy = true;
-        defaults = {
-          name = "Your Network";
-          host = "localhost";
-          port = 6697;
-        };
-      }'';
+      default = { };
+      example = literalExpression ''
+        {
+          reverseProxy = true;
+          defaults = {
+            name = "Your Network";
+            host = "localhost";
+            port = 6697;
+          };
+        }
+      '';
       description = ''
         The Lounge's <filename>config.js</filename> contents as attribute set (will be
         converted to JSON to generate the configuration file).
@@ -93,8 +95,8 @@ in
     };
 
     plugins = mkOption {
-      default = [ ];
       type = types.listOf types.package;
+      default = [ ];
       example = literalExpression "[ pkgs.theLoungePlugins.themes.solarized ]";
       description = ''
         The Lounge plugins to install. Plugins can be found in
@@ -177,7 +179,7 @@ in
       environment.THELOUNGE_PACKAGES = mkIf (cfg.plugins != [ ]) "${plugins}";
       serviceConfig = {
         User = "thelounge";
-        StateDirectory = baseNameOf dataDir;
+        StateDirectory = builtins.baseNameOf dataDir;
         ExecStart = "${pkgs.thelounge}/bin/thelounge start";
       };
     };
