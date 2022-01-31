@@ -13,7 +13,7 @@ buildGoModule rec {
     sha256 = "01ph9jzh18bnidrsbnnxm3gxh0cgfllnjvf7a5haqz51lm6a9pny";
   };
 
-  vendorSha256 = "17d845lwlbk19lsc937c22b1l0ikimhlagknm2i7mn8s8xrs57q8";
+  vendorSha256 = "1fd1k5by4wcjmzfgi3gnrwnb38b0wa3w67kzjlx8s0nwapyfgx0b";
 
   subPackages = [ "cmd/spire-agent" "cmd/spire-server" ];
 

@@ -9838,7 +9838,9 @@ with pkgs;
 
   spicy = callPackage ../development/tools/spicy { };
 
-  spire = callPackage ../tools/security/spire { };
+  spire = callPackage ../tools/security/spire {
+    buildGoModule = buildGo117Module;
+  };
   # to match naming of other package repositories
   spire-agent = spire.agent;
   spire-server = spire.server;
