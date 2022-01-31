@@ -33166,7 +33166,9 @@ with pkgs;
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
-  helmsman = callPackage ../applications/networking/cluster/helmsman { };
+  helmsman = callPackage ../applications/networking/cluster/helmsman {
+    buildGoModule = buildGo117Module;
+  };
 
   velero = callPackage ../applications/networking/cluster/velero { };
 
