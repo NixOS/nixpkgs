@@ -15149,7 +15149,9 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
-  kubesec = callPackage ../tools/security/kubesec { };
+  kubesec = callPackage ../tools/security/kubesec {
+    buildGoModule = buildGo117Module;
+  };
 
   kubespy = callPackage ../applications/networking/cluster/kubespy { };
 
