@@ -2101,7 +2101,7 @@ self: super: {
 
   # Needs brick > 0.64
   nix-tree = super.nix-tree.override {
-    brick = self.brick_0_66_1;
+    brick = self.brick_0_67;
   };
 
   # build newer version for `pkgs.shellcheck`
