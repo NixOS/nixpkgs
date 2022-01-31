@@ -15713,7 +15713,9 @@ with pkgs;
 
   time-ghc-modules = callPackage ../development/tools/time-ghc-modules { };
 
-  tflint = callPackage ../development/tools/analysis/tflint { };
+  tflint = callPackage ../development/tools/analysis/tflint {
+    buildGoModule = buildGo117Module;
+  };
 
   tfsec = callPackage ../development/tools/analysis/tfsec { };
 
