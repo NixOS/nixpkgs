@@ -1,25 +1,25 @@
-{ lib, stdenv, fetchFromGitHub
-, libX11, libXext, libXi
+{ lib, stdenv, fetchFromGitLab
+, libX11, libXcursor, libXext, libXi
 , freetype, fontconfig
-, libpng, libjpeg
+, libjpeg, libpng, libtiff, libwebp
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "azpainter";
-  version = "2.1.6";
+  version = "3.0.4";
 
-  src = fetchFromGitHub {
-    owner = "Symbian9";
+  src = fetchFromGitLab {
+    owner = "azelpg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i5g67s4ysnvbaxmi7dhan0hfcfk8an14xykkafl47pqfx33npva";
+    sha256 = "sha256-2gTTF1ti9bO24d75mhwyvJISSgMKdmp+oJVmgzEQHdY=";
   };
 
   buildInputs = [
-    libX11 libXext libXi
+    libX11 libXcursor libXext libXi
     freetype fontconfig
-    libpng libjpeg
+    libjpeg libpng libtiff libwebp
     zlib
   ];
 
