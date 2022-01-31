@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ dtzWill ];
     platforms = [
-      { kernel.name = "linux"; cpu.family = "x86"; }
-      { kernel.name = "linux"; cpu.family = "power"; }
+      "i686-linux" "x86_64-linux"
+      "powerpc64-linux" "powerpc64le-linux"
     ];
   };
 }
