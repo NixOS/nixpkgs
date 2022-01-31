@@ -14400,7 +14400,9 @@ with pkgs;
 
   buildkite-cli = callPackage ../development/tools/continuous-integration/buildkite-cli { };
 
-  bump = callPackage ../development/tools/github/bump { };
+  bump = callPackage ../development/tools/github/bump {
+    buildGoModule = buildGo117Module;
+  };
 
   libbpf = callPackage ../os-specific/linux/libbpf { };
 
