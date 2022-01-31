@@ -15789,7 +15789,9 @@ with pkgs;
 
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
 
-  yq-go = callPackage ../development/tools/yq-go { };
+  yq-go = callPackage ../development/tools/yq-go {
+    buildGoModule = buildGo117Module;
+  };
 
   ytt = callPackage ../development/tools/ytt {};
 
