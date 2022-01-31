@@ -60,6 +60,14 @@ in {
             Route audio to/from generic ALSA-using applications using ALSA JACK PCM plugin.
           '';
         };
+
+        support32Bit = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            This option is no longer supported, and will eventually be removed.
+          '';
+        };
       };
 
       loopback = {
@@ -204,6 +212,10 @@ in {
         {
           assertion = !(cfg.alsa.enable && cfg.loopback.enable);
           message = "For JACK both alsa and loopback options shouldn't be used at the same time.";
+        }
+        {
+          assertion = !cfg.alsa.support32Bit;
+          message = "`services.jack.alsa.support32Bit` is no longer supported.";
         }
       ];
 

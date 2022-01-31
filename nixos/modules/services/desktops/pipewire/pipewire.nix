@@ -112,6 +112,7 @@ in {
 
       alsa = {
         enable = mkEnableOption "ALSA support";
+        support32Bit = mkEnableOption "This option is no longer supported, and will eventually be removed";
       };
 
       jack = {
@@ -151,6 +152,10 @@ in {
       {
         assertion = cfg.jack.enable -> !config.services.jack.jackd.enable;
         message = "PipeWire based JACK emulation doesn't use the JACK service. This option requires `services.jack.jackd.enable` to be set to false";
+      }
+      {
+        assertion = !cfg.alsa.support32Bit;
+        message = "`services.pipewire.alsa.support32Bit` is no longer supported.";
       }
     ];
 
