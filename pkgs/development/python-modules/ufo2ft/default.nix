@@ -51,15 +51,12 @@ buildPythonPackage rec {
     "--deselect=tests/preProcessor_test.py::TTFInterpolatablePreProcessorTest::test_custom_filters_as_argument"
   ];
 
-  postPatch = ''
-    # Does not seem to find 0.2.9.post1 for some reason.
-    substituteInPlace setup.py \
-      --replace '"cffsubr>=0.2.8"' '"cffsubr"'
-  '';
+  pythonImportsCheck = [ "ufo2ft" ];
 
   meta = with lib; {
     description = "Bridge from UFOs to FontTools objects";
     homepage = "https://github.com/googlefonts/ufo2ft";
     license = licenses.mit;
+    maintainers = with maintainers; [ jtojnar ];
   };
 }
