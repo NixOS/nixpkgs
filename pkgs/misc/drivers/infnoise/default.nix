@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libftdi ];
 
-  sourceRoot = "source/software";
+  sourceRoot = "${src.name}/software";
   makefile = "Makefile.linux";
   makeFlags = [ "PREFIX=$(out)" ];
   postPatch = ''

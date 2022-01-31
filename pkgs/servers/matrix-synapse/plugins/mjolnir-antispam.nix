@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0fvdzn5l1a6bhr1qzgs30a3kh6nj0byqichnl149sjgr0v4lpkz1";
   };
 
-  sourceRoot = "./source/synapse_antispam";
+  sourceRoot = "./${src.name}/synapse_antispam";
 
   propagatedBuildInputs = [ matrix-synapse ];
 

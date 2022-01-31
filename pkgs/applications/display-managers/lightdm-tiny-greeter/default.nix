@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ lightdm gtk3 glib ];
 
   postUnpack = if conf != "" then ''
-    cp ${builtins.toFile "config.h" conf} source/config.h
+    cp ${builtins.toFile "config.h" conf} ${src.name}/config.h
   '' else "";
 
   buildPhase = ''

@@ -212,7 +212,7 @@ stdenv.mkDerivation {
   inherit version src;
 
   postUnpack = lib.optionalString buildContrib ''
-    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
+    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/${src.name}/opencv_contrib"
   '';
 
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
@@ -230,7 +230,7 @@ stdenv.mkDerivation {
     installExtraFile ade +
     lib.optionalString enableIpp (installExtraFiles ippicv) + (
       lib.optionalString buildContrib ''
-        cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/source/opencv_contrib")
+        cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/${src.name}/opencv_contrib")
 
         ${installExtraFiles vgg}
         ${installExtraFiles boostdesc}

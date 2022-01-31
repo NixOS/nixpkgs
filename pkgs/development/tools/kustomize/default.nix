@@ -23,7 +23,7 @@ buildGoModule rec {
   doCheck = true;
 
   # avoid finding test and development commands
-  sourceRoot = "source/kustomize";
+  sourceRoot = "${src.name}/kustomize";
 
   vendorSha256 = "sha256-2GbRk7A8VwGONmL74cc2TA+MLyJrSSOQPLaded5s90k=";
 

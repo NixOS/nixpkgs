@@ -15,7 +15,7 @@ mkDerivation rec {
       sha256 = "q7F4FuK/moKkouXTNPZDVon/W/ZmgtNHJka4MiTxA0U=";
   };
 
-  sourceRoot = "source/DSView";
+  sourceRoot = "${src.name}/DSView";
 
   patches = [
     # Fix absolute install paths

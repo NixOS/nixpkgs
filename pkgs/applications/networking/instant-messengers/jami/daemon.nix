@@ -79,7 +79,7 @@ in
 stdenv.mkDerivation {
   pname = "jami-daemon";
   inherit src version;
-  sourceRoot = "source/daemon";
+  sourceRoot = "${src.name}/daemon";
 
   nativeBuildInputs = [
     autoreconfHook

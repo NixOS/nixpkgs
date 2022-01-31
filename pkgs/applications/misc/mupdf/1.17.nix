@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   ;
 
   postPatch = ''
-    sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
+    sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" ${src.name}/fitz/load-jpx.c
   '';
 
   makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];

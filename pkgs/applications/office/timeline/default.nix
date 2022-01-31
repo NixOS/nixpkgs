@@ -47,16 +47,16 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   patchPhase = ''
-    sed -i "s|_ROOT =.*|_ROOT = \"$out/usr/share/timeline/\"|" source/timelinelib/config/paths.py
+    sed -i "s|_ROOT =.*|_ROOT = \"$out/usr/share/timeline/\"|" ${src.name}/timelinelib/config/paths.py
   '';
 
   installPhase = ''
     runHook preInstall
 
     site_packages=$out/${python3.pkgs.python.sitePackages}
-    install -D -m755 source/timeline.py $out/bin/timeline
+    install -D -m755 ${src.name}/timeline.py $out/bin/timeline
     mkdir -p $site_packages
-    cp -r source/timelinelib $site_packages/
+    cp -r ${src.name}/timelinelib $site_packages/
 
     mkdir -p $out/usr/share/timeline/locale
     cp -r icons $out/usr/share/timeline/

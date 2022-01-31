@@ -4,7 +4,7 @@
 , sdl2
 , lib
 }:
-build-idris-package  {
+build-idris-package rec {
   name = "pacman";
   version = "2017-11-10";
 
@@ -18,7 +18,7 @@ build-idris-package  {
   };
 
   postUnpack = ''
-    mv source/src/board.idr source/src/Board.idr
+    mv ${src.name}/src/board.idr ${src.name}/src/Board.idr
   '';
 
   meta = {

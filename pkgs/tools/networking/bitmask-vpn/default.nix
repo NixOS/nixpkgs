@@ -39,7 +39,7 @@ let
   # and may one day be replaced by pkg/helper
   bitmask-root = mkDerivation {
     inherit src version;
-    sourceRoot = "source/helpers";
+    sourceRoot = "${src.name}/helpers";
     pname = "bitmask-root";
     nativeBuildInputs = [ python3Packages.wrapPython ];
     postPatch = ''

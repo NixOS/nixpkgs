@@ -55,15 +55,15 @@ buildPythonPackage rec {
     };
 
   unpackPhase = ''
-    mkdir -p source/External/AvalonTools/avalon source/External/YAeHMOP/yaehmop source/External/FreeSASA/freesasa
+    mkdir -p ${src.name}/External/AvalonTools/avalon ${src.name}/External/YAeHMOP/yaehmop ${src.name}/External/FreeSASA/freesasa
     cp -r ${src}/* source
-    cp -r ${external.avalon}/SourceDistribution/* source/External/AvalonTools/avalon
-    cp -r ${external.yaehmop}/* source/External/YAeHMOP/yaehmop
-    cp -r ${external.freesasa}/* source/External/FreeSASA/freesasa
+    cp -r ${external.avalon}/SourceDistribution/* ${src.name}/External/AvalonTools/avalon
+    cp -r ${external.yaehmop}/* ${src.name}/External/YAeHMOP/yaehmop
+    cp -r ${external.freesasa}/* ${src.name}/External/FreeSASA/freesasa
 
     find source -type d -exec chmod 755 {} +
-    cp source/External/FreeSASA/freesasa2.c source/External/FreeSASA/freesasa/src
-    ln -s ${rapidjson} source/External/rapidjson-1.1.0
+    cp ${src.name}/External/FreeSASA/freesasa2.c ${src.name}/External/FreeSASA/freesasa/src
+    ln -s ${rapidjson} ${src.name}/External/rapidjson-1.1.0
   '';
 
   sourceRoot = "source";

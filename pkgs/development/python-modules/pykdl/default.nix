@@ -4,7 +4,7 @@ toPythonModule (stdenv.mkDerivation {
   pname = "pykdl";
   inherit (orocos-kdl) version src;
 
-  sourceRoot = "source/python_orocos_kdl";
+  prePatch  = "cd python_orocos_kdl";
 
   # Fix hardcoded installation path
   postPatch = ''

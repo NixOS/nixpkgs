@@ -43,7 +43,7 @@ pypkgs.buildPythonApplication rec {
     sha256 = "sha256-u0R0uJMQxHnJUDenxglhQkZza3/1DcyXCILcZVceygA=";
   };
 
-  sourceRoot = "source/py-kms";
+  sourceRoot = "${src.name}/py-kms";
 
   propagatedBuildInputs = with pypkgs; [ systemd pytz tzlocal ];
 

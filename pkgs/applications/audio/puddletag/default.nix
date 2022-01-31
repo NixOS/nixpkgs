@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-9l8Pc77MX5zFkOqU00HFS8//3Bzd2OMnVV1brmWsNAQ=";
   };
 
-  sourceRoot = "source/source";
+  sourceRoot = "${src.name}/source";
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 

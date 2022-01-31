@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # fix build with bison3
-    sed -i 's/define "parser_class_name"/define parser_class_name/' source/iked/conf.parse.yy
+    sed -i 's/define "parser_class_name"/define parser_class_name/' ${src.name}/iked/conf.parse.yy
   '';
 
   configurePhase = ''

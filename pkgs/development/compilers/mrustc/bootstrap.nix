@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   version = "${mrustc.version}_${rustcVersion}";
 
   inherit (mrustc) src;
-  postUnpack = "tar -xf ${rustcSrc} -C source/";
+  postUnpack = "tar -xf ${rustcSrc} -C ${src.name}/";
 
   # the rust build system complains that nix alters the checksums
   dontFixLibtool = true;

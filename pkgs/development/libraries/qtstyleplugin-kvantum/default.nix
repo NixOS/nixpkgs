@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     qtbase qtsvg qtx11extras kwindowsystem libX11 libXext
   ];
 
-  sourceRoot = "source/Kvantum";
+  sourceRoot = "${src.name}/Kvantum";
 
   postPatch = ''
     # Fix plugin dir

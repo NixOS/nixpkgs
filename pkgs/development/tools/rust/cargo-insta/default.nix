@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1qzzkhailxjqwp3rmdcpp112wn3x0gfi788vwj77pfdyclhpj0a7";
   };
 
-  sourceRoot = "source/cargo-insta";
+  sourceRoot = "${src.name}/cargo-insta";
   cargoSha256 = "01fj2j7ibrk5dyrfkmc610lh1p6f6bgzbgivq3dsd64vslhqmabw";
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

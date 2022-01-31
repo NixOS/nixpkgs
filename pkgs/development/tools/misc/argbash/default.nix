@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xdhpbnc0xjv6ydcm122hhdjcl77jhiqnccjfqjp3cd1lfmzvg8v";
   };
 
-  sourceRoot = "source/resources";
+  sourceRoot = "${src.name}/resources";
 
   postPatch = ''
     chmod -R +w ..

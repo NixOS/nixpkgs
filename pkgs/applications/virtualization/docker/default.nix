@@ -247,6 +247,6 @@ rec {
     containerdRev = "v1.4.12";
     containerdSha256 = "sha256-g30kshXyGVew5tVaXFAOQUOYvvo0JBqIj1YaC5nTiS8=";
     tiniRev = "v0.19.0"; # v0.19.0
-    tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
+    tiniSha256 = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
 }

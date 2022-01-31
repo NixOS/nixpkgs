@@ -3,7 +3,7 @@
 , contrib
 , lib
 }:
-build-idris-package  {
+build-idris-package rec {
   name = "dict";
   version = "2016-12-26";
 
@@ -17,7 +17,7 @@ build-idris-package  {
   };
 
   postUnpack = ''
-    sed -i 's/\"//g' source/dict.ipkg
+    sed -i 's/\"//g' ${src.name}/dict.ipkg
   '';
 
   meta = {

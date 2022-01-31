@@ -231,6 +231,22 @@
       </listitem>
       <listitem>
         <para>
+          <literal>pkgs.fetchFromGitHub</literal> will now default to
+          using the repo and rev to create a default name for the
+          derivation. This helps to avoid the cases in which an
+          unchanged sha256 doesn’t expose the misaligned behavior.
+          However, this also means that usage of <quote>source/</quote>
+          as the derivation’s sourceRoot may be broken. This can be
+          mitigated by using <literal>${src.name}</literal> instead of
+          <quote>source</quote>. For usage such as
+          <literal>sourceRoot = &quot;source/sub_dir&quot;;</literal>
+          may be replaced with
+          <literal>prePatch = &quot;cd sub_dir&quot;;</literal> in most
+          cases.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.kubernetes.addons.dashboard</literal> was
           removed due to it being an outdated version.
         </para>

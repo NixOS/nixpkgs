@@ -5,7 +5,7 @@ buildPythonPackage {
   pname = "python-olm";
   inherit (olm) src version;
 
-  sourceRoot = "source/python";
+  sourceRoot = "${olm.src.name}/python";
   buildInputs = [ olm ];
 
   preBuild = ''

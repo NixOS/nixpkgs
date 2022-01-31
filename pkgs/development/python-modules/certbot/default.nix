@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1wrk5rhds6a69vbs1bda0zhwpvjhd8i20did6j3kydbas3zbr516";
   };
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   propagatedBuildInputs = [
     configargparse

@@ -7,7 +7,7 @@ buildPythonPackage rec {
   inherit (antlr4.runtime.cpp) version src;
   disabled = !isPy3k;
 
-  sourceRoot = "source/runtime/Python3";
+  sourceRoot = "${src.name}/runtime/Python3";
 
   checkPhase = ''
     cd test

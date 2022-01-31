@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     sha256 = "0d3ymw747frl40w5d6r33lf1s72v7fiv742yjr1m6la2phb9h834";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
+
   makeFlags = "release CONFIG_LIBRARY_PATHS= CONFIG_PKG_PATHS= GLOBAL_CC=$(CC) GLOBAL_CXX=$(CXX) GLOBAL_LD=$(CXX) SHELL=${stdenv.shell}";
   enableParallelBuilding = true;
 

@@ -14,7 +14,7 @@ apk = stdenv.mkDerivation {
   '';
 };
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "gnirehtet";
   inherit version;
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
       rev = "v${version}";
       sha256 = "0wk6n082gnj9xk46n542h1012h8gyhldca23bs7vl73g0534g878";
   };
-  sourceRoot = "source/relay-rust";
+  sourceRoot = "${src.name}/relay-rust";
   cargoSha256 = "03r8ivsvmhi5f32gj4yacbyzanziymszya18dani53bq9zis9z31";
 
   nativeBuildInputs = [ makeWrapper ];

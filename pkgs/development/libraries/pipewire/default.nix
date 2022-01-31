@@ -170,8 +170,8 @@ let
     doCheck = true;
 
     postUnpack = ''
-      patchShebangs source/doc/input-filter.sh
-      patchShebangs source/doc/input-filter-h.sh
+      patchShebangs ${src.name}/doc/input-filter.sh
+      patchShebangs ${src.name}/doc/input-filter-h.sh
     '';
 
     postInstall = ''

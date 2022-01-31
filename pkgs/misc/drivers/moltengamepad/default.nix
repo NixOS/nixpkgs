@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, udev }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "moltengamepad";
   version = "unstable-2016-05-04";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   patchPhase = ''
-    sed -i -e '159d;161d;472d;473d;474d;475d' source/eventlists/key_list.cpp
+    sed -i -e '159d;161d;472d;473d;474d;475d' ${src.name}/eventlists/key_list.cpp
   '';
 
   meta = with lib; {

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pname = "paperwork-backend";
   inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
 
-  sourceRoot = "source/paperwork-backend";
+  sourceRoot = "${src.name}/paperwork-backend";
 
   # Python 2.x is not supported.
   disabled = !isPy3k && !isPyPy;

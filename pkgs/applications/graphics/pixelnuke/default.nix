@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "03dp0p00chy00njl4w02ahxqiwqpjsrvwg8j4yi4dgckkc3gbh40";
   };
 
-  sourceRoot = "source/pixelnuke";
+  prePatch = "cd pixelnuke";
 
   buildInputs = [ libevent glew glfw ];
 

@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1c262xarslicn9ildndl66sf97i5pzwzra54zh2rp11j7kkvvbyr";
   };
 
-  setSourceRoot = ''
-    export sourceRoot=$(pwd)/source/src
+  prePatch = ''
+    cd src
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(sourceRoot)"
+    "M=$(PWD)"
   ];
 
   buildFlags = [ "modules" ];

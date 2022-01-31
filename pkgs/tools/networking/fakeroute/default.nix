@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "12dhahwlpjzv79wpdpryjihamfbh4d8cfzfw4wi1jkl0dv2d41jg";
   };
 
-  sourceRoot = "source/fakeroute-0.3";
+  sourceRoot = "${src.name}/fakeroute-0.3";
 
   meta = with lib; {
     description = ''

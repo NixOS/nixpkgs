@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     libX11 libXft readline
   ];
 
-  patchPhase = ''sed "s@ldconfig.*@@" -i source/Makefile'';
+  patchPhase = ''sed "s@ldconfig.*@@" -i ${src.name}/Makefile'';
 
   preBuild = "cd source";
 

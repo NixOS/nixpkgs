@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
 
-  sourceRoot = "source/certbot-dns-rfc2136";
+  sourceRoot = "${src.name}/certbot-dns-rfc2136";
 
   meta = certbot.meta // {
     description = "RFC 2136 DNS Authenticator plugin for Certbot";

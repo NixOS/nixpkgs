@@ -13,10 +13,10 @@
      # Simplest version
 
  nix-gitignore.gitignoreSource "supplemental-ignores\n" ./source
-     # This one reads the ./source/.gitignore and concats the auxiliary ignores
+     # This one reads the ./${src.name}/.gitignore and concats the auxiliary ignores
 
  nix-gitignore.gitignoreSourcePure "ignore-this\nignore-that\n" ./source
-     # Use this string as gitignore, don't read ./source/.gitignore.
+     # Use this string as gitignore, don't read ./${src.name}/.gitignore.
 
  nix-gitignore.gitignoreSourcePure ["ignore-this\nignore-that\n", ~/.gitignore] ./source
      # It also accepts a list (of strings and paths) that will be concatenated

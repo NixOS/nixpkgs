@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "11sap7qv0rlhw8q25azvhgjcwiql3zam09q0gim3i04cg6fkh0vp";
   };
   postUnpack = ''
-    pushd source/3rdparty
+    pushd ${src.name}/3rdparty
     ln -s ${fmt.src} fmt
     ln -s ${gtest.src} googletest
     popd

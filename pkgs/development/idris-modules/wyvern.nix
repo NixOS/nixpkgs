@@ -4,7 +4,7 @@
 , effects
 , lib
 }:
-build-idris-package  {
+build-idris-package rec {
   name = "wyvern";
   version = "2017-06-26";
 
@@ -18,7 +18,7 @@ build-idris-package  {
   };
 
   postUnpack = ''
-    sed -i "s/Wyvern.Core/Wyvern.Main/g" source/src/Wyvern.idr
+    sed -i "s/Wyvern.Core/Wyvern.Main/g" ${src.name}/src/Wyvern.idr
   '';
 
   meta = {

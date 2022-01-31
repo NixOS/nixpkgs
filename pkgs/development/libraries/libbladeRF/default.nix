@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
 
   postUnpack = ''
-    cp -r ${noos}/* source/thirdparty/analogdevicesinc/no-OS/
+    cp -r ${noos}/* ${src.name}/thirdparty/analogdevicesinc/no-OS/
   '';
 
   # Fixup shebang

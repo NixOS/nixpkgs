@@ -3,7 +3,7 @@
 , lightyear
 , lib
 }:
-build-idris-package  {
+build-idris-package rec {
   name = "graphviz";
   version = "2017-01-16";
 
@@ -17,7 +17,7 @@ build-idris-package  {
   };
 
   postUnpack = ''
-    sed -i "/^author /cauthor = Merlin Goettlinger" source/graphviz.ipkg
+    sed -i "/^author /cauthor = Merlin Goettlinger" ${src.name}/graphviz.ipkg
   '';
 
   meta = {

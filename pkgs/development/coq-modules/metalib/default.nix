@@ -1,6 +1,8 @@
 { lib, mkCoqDerivation, coq, version ? null }:
 
-with lib; mkCoqDerivation {
+with lib;
+
+mkCoqDerivation rec {
   pname = "metalib";
   owner = "plclub";
   inherit version;
@@ -8,7 +10,9 @@ with lib; mkCoqDerivation {
   release."20200527".rev    = "597fd7d0c93eb159274e84a39d554f10f1efccf8";
   release."20200527".sha256 = "0wbypc05d2lqfm9qaw98ynr5yc1p0ipsvyc3bh1rk9nz7zwirmjs";
 
-  sourceRoot = "source/Metalib";
+  prePatch = ''
+    cd Metalib
+  '';
   installFlags = "COQMF_COQLIB=$(out)/lib/coq/${coq.coq-version}";
 
   meta = {

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = "flask-limiter";
     rev = version;
-    sha256 = "1k1b4b3s1acphqnar0y5g747bh1y7w35gcl5g819idq2a5vqnass";
+    sha256 = "sha256-btnJmRnF9dEzkEbLp2gCni1/S2l7yUbbZTemYHlLOGE=";
   };
 
   propagatedBuildInputs = [ flask limits ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "12mwl7vxc3xi0qar386mkhkpah9zzgjb74mzc2qqsgz9zzxp16dm";
   };
 
-  sourceRoot = "source/libvmaf";
+  sourceRoot = "${src.name}/libvmaf";
 
   nativeBuildInputs = [ meson ninja nasm ];
 

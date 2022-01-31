@@ -25,19 +25,16 @@ buildGoPackage rec {
   };
 
   unpackPhase = ''
-    mkdir source/
-    tar xvf $src -C source/
+    mkdir ${src.name}/
+    tar xvf $src -C ${src.name}/
   '';
 
-  sourceRoot = "source";
-
-  patches = [
-    ./static-root-path.patch
-  ];
+  sourceRoot = "${src.name}";
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace modules/setting/setting.go --subst-var data
+    substituteInPlace modules/setting/setting.go \
+      --replace "StaticRootPath = AppWorkPath" "StaticRootPath = \"${placeholder "data"}\""
   '';
 
   nativeBuildInputs = [ makeWrapper ];

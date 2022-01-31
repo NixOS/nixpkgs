@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "11rjdaxmsp9n3r9xhmgd7ksy8bh5fazwsxdj0xvl4hsy6bcn4n97";
   };
 
-  sourceRoot = "source/gdal";
+  sourceRoot = "${src.name}/gdal";
 
   nativeBuildInputs = [ autoreconfHook pkg-config unzip ];
 

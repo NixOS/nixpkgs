@@ -12,7 +12,8 @@ stdenv.mkDerivation {
   };
   nativeBuildInputs = [ autoconf automake ];
   buildInputs = [ libtool popt ];
-  sourceRoot = "source/pico";
+
+  prePatch = "cd pico";
   preConfigure = "./autogen.sh";
   meta = {
     description = "Text to speech voice sinthesizer from SVox";

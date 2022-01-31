@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "avian2";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "07789mrq0gjxrg1b9a3ypzzfww224sbj25wl0h9nik22sjwi8qhh";
+    sha256 = "sha256-IY/be5052KmCXcpbU1s/SK8JxwYin4YX571cTTNbd/8=";
   };
 
   checkInputs = [

@@ -1,6 +1,6 @@
 { lib, fetchgit, fetchzip }:
 
-{ owner, repo, rev, name ? "source"
+{ owner, repo, rev, name ? lib.strings.sanitizeDerivationName "${repo}-${rev}-src"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
 , sparseCheckout ? ""

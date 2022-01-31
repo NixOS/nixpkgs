@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-piKpaylzuanhGR+7BzApplv8e/CWPoR9tG3vHrF7WXw=";
   };
 
-  sourceRoot = "source/javascript/net/grpc/web/generator";
+  sourceRoot = "${src.name}/javascript/net/grpc/web/generator";
 
   strictDeps = true;
   nativeBuildInputs = [ protobuf ];

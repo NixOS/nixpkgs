@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "134vb6214hn00qy84m4djg4hqs6hw19gkp8d0wlq8gb9m3mfx7na";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [ cmake ];
 

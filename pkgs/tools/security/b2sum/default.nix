@@ -2,7 +2,7 @@
 
 with lib;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "b2sum";
   version = "unstable-2018-06-11";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "E60M9oP/Sdfg/L3ZxUcDtUXhFz9oP72IybdtVUJh9Sk=";
   };
 
-  sourceRoot = "source/b2sum";
+  sourceRoot = "${src.name}/b2sum";
 
   buildInputs = [ openmp ];
 

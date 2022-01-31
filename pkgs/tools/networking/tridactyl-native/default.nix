@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-BjjRB9VadQ/MSwNK2QLbcTDoRs6Ua+5MONHtmfq4xz0=";
   };
-  sourceRoot = "source/native";
+  sourceRoot = "${src.name}/native";
 
   nativeBuildInputs = [
     python3.pkgs.wrapPython

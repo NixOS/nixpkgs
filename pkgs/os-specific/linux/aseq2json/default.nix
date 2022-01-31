@@ -1,15 +1,17 @@
 { stdenv, lib, fetchFromGitHub, pkg-config, alsa-lib, glib, json-glib }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "aseq2json";
   version = "unstable-2018-04-28";
+
   src = fetchFromGitHub {
     owner = "google";
     repo = "midi-dump-tools";
     rev = "8572e6313a0d7ec95492dcab04a46c5dd30ef33a";
     sha256 = "LQ9LLVumi3GN6c9tuMSOd1Bs2pgrwrLLQbs5XF+NZeA=";
   };
-  sourceRoot = "source/aseq2json";
+
+  sourceRoot = "${src.name}/aseq2json";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsa-lib glib json-glib ];

@@ -26,7 +26,7 @@ buildPythonApplication rec {
     sha256 = "1ivd5dy9f2gq07w8n2gywa0n0d9wv8644l53ni9fz7i69jf8q2fm";
   };
 
-  sourceRoot = "source/server";
+  sourceRoot = "${src.name}/server";
 
   postPatch = ''
     substituteInPlace setup.py \

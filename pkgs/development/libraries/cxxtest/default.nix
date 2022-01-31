@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "19w92kipfhp5wvs47l0qpibn3x49sbmvkk91yxw6nwk6fafcdl17";
   };
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
   postCheck = ''
     python scripts/cxxtestgen --error-printer -o build/GoodSuite.cpp ../test/GoodSuite.h

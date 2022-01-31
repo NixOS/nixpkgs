@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  sourceRoot = "./source/raw";
+  sourceRoot = "./${src.name}/raw";
 
   minimalOCamlVersion = "4.08";
 

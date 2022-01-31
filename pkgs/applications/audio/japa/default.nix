@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsa-lib libjack2 fftwFloat libclthreads libclxclient libX11 libXft zita-alsa-pcmi ];
 
   preConfigure = ''
-    cd ./source/
+    cd ./${src.name}/
   '';
 
   makeFlags = [

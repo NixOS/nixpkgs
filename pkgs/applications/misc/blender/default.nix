@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   '' +
     (if stdenv.isDarwin then ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake
-      substituteInPlace source/creator/CMakeLists.txt \
+      substituteInPlace ${src.name}/creator/CMakeLists.txt \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
         --replace '${"$"}{LIBDIR}/openmp' \

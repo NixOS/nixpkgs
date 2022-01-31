@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   pname = "jami-client-gnome";
   inherit version src;
 
-  sourceRoot = "source/client-gnome";
+  sourceRoot = "${src.name}/client-gnome";
 
   preConfigure = ''
     echo ${version} > version.txt

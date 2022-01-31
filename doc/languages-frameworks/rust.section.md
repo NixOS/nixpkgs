@@ -503,7 +503,7 @@ buildPythonPackage rec {
     hash = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
   };
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
     cargoSetupHook

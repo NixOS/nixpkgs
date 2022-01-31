@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "04hsh1z2ngfslmvi8fdzfccssg6i0ziksil84j129f049m96wd51";
   };
 
-  sourceRoot = "source/packages/python/chart-studio";
+  sourceRoot = "${src.name}/packages/python/chart-studio";
 
   propagatedBuildInputs = [
     plotly

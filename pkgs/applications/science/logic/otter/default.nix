@@ -11,7 +11,7 @@ let
     tcsh libXaw libXt libX11
   ];
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${s.name}-${s.version}";
   inherit buildInputs;
   src = fetchurl {
@@ -27,18 +27,18 @@ stdenv.mkDerivation {
     find . -perm -0100 -type f | xargs sed -i -e "s@/bin/rm@$(type -P rm)@g"
     find . -perm -0100 -type f | xargs sed -i -e "s@/bin/mv@$(type -P mv)@g"
 
-    sed -i -e "s/^XLIBS *=.*/XLIBS=-lXaw -lXt -lX11/" source/formed/Makefile
+    sed -i -e "s/^XLIBS *=.*/XLIBS=-lXaw -lXt -lX11/" ${src.name}/formed/Makefile
 
     make all
     make -C examples all
     make -C examples-mace2 all
-    make -C source/formed realclean
-    make -C source/formed formed
+    make -C ${src.name}/formed realclean
+    make -C ${src.name}/formed formed
   '';
 
   installPhase = ''
     mkdir -p "$out"/{bin,share/otter}
-    cp bin/* source/formed/formed "$out/bin/"
+    cp bin/* ${src.name}/formed/formed "$out/bin/"
     cp -r examples examples-mace2 documents README* Legal Changelog Contents index.html "$out/share/otter/"
   '';
 
