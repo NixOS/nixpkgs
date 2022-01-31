@@ -20325,7 +20325,9 @@ with pkgs;
 
   vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau { };
 
-  vale = callPackage ../tools/text/vale { };
+  vale = callPackage ../tools/text/vale {
+    buildGoModule = buildGo117Module;
+  };
 
   valhalla = callPackage ../development/libraries/valhalla {
     boost = boost.override { enablePython = true; python = python38; };
