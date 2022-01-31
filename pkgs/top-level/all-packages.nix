@@ -11380,7 +11380,9 @@ with pkgs;
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
 
-  zsh-history = callPackage ../shells/zsh/zsh-history { };
+  zsh-history = callPackage ../shells/zsh/zsh-history {
+    buildGoModule = buildGo117Module;
+  };
 
   zsh-history-search-multi-word = callPackage ../shells/zsh/zsh-history-search-multi-word { };
 
