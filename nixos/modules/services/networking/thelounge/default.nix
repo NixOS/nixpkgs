@@ -18,6 +18,33 @@ let
     ln -s ${pkg}/lib/node_modules/${getName pkg} $out/node_modules/${getName pkg}
     '') cfg.plugins}
   '';
+  userOptions = {
+    options =
+      let
+        passwordDesc = ''
+          This can be generated with <literal>mkpasswd -m bcrypt -R 11</literal>.
+        '';
+      in
+      {
+        hashedPassword = mkOption {
+          type = types.nullOr types.nonEmptyStr;
+          default = null;
+          description = ''
+            The hashed password for this user. ${passwordDesc}
+          '';
+        };
+
+        hashedPasswordFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          description = ''
+            The path to a file containing the hashed password for this user. ${passwordDesc}
+          '';
+        };
+
+        enableLogging = (mkEnableOption "message logging for this user") // { default = true; };
+      };
+  };
 in
 {
   imports = [ (mkRemovedOptionModule [ "services" "thelounge" "private" ] "The option was renamed to `services.thelounge.public` to follow upstream changes.") ];
@@ -74,9 +101,58 @@ in
         <literal>pkgs.theLoungePlugins.plugins</literal> and <literal>pkgs.theLoungePlugins.themes</literal>.
       '';
     };
+
+    users = mkOption {
+      type = types.attrsOf (types.submodule userOptions);
+      default = { };
+      example = literalExpression ''
+        john = {
+          hashedPassword = "$2b$05$fK.qf8vOxvOeSA4D3W0znOhkASuXTceypm6uwqPkrAHh7bWaji7U2";
+        };
+      '';
+      description = ''
+        A list of The Lounge users.
+      '';
+    };
+
+    mutableUsers = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        If set to <literal>true</literal>, you are free to add new users to The Lounge
+        with the ordinary <literal>thelounge add</literal> command.
+        On system activation, the existing list of users will be merged with the
+        list generated from the <literal>services.thelounge.users</literal> option.
+        The initial password for a user will be set
+        according to <literal>services.thelounge.users</literal>, but existing passwords
+        will not be changed.
+        <warning><para>
+        If set to <literal>false</literal>, the users list will simply
+        be replaced on system activation. This also
+        holds for the user passwords; all changed
+        passwords will be reset according to the
+        <literal>services.thelounge.users</literal> configuration on activation.
+        </para></warning>
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = (builtins.length (builtins.attrNames cfg.users)) == 0 || !cfg.public;
+        message = "services.thelounge.users cannot be set if services.thelounge.public is true. (${toString (builtins.length (builtins.attrNames cfg.users))})";
+      }
+    ]
+    ++ mapAttrsToList
+      (name: user:
+        {
+          assertion = (user.hashedPassword != null && user.hashedPasswordFile == null) || (user.hashedPasswordFile != null && user.hashedPassword == null);
+          message = "Exactly one of services.thelounge.users.${name}.hashedPassword or services.thelounge.users.${name}.hashedPasswordFile must be set.";
+        }
+      )
+      cfg.users;
+
     users.users.thelounge = {
       description = "The Lounge service user";
       group = "thelounge";
@@ -88,7 +164,16 @@ in
     systemd.services.thelounge = {
       description = "The Lounge web IRC client";
       wantedBy = [ "multi-user.target" ];
-      preStart = "ln -sf ${pkgs.writeText "config.js" configJsData} ${dataDir}/config.js";
+      preStart =
+        let
+          script = pkgs.writers.writePython3 "thelounge-pre-start" { flakeIgnore = [ "E501" ]; } (builtins.readFile ./update-users.py);
+        in
+        ''
+          ${script} ${dataDir} \
+            ${pkgs.writeText "thelounge-config" configJsData} \
+            ${boolToString cfg.mutableUsers} \
+            ${escapeShellArg (builtins.toJSON cfg.users)}
+        '';
       environment.THELOUNGE_PACKAGES = mkIf (cfg.plugins != [ ]) "${plugins}";
       serviceConfig = {
         User = "thelounge";
@@ -104,3 +189,4 @@ in
     maintainers = with lib.maintainers; [ winter ];
   };
 }
+

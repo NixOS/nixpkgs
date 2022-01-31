@@ -939,7 +939,7 @@
   ./services/networking/tedicross.nix
   ./services/networking/tetrd.nix
   ./services/networking/teleport.nix
-  ./services/networking/thelounge.nix
+  ./services/networking/thelounge
   ./services/networking/tinc.nix
   ./services/networking/tinydns.nix
   ./services/networking/tftpd.nix
