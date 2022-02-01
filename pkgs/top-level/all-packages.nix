@@ -26479,6 +26479,8 @@ with pkgs;
 
   pixeluvo = callPackage ../applications/graphics/pixeluvo { };
 
+  pixinsight = libsForQt5.callPackage ../applications/graphics/pixinsight { };
+
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
   shepherd = nodePackages."@nerdwallet/shepherd";
