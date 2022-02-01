@@ -160,12 +160,9 @@ let
       krb5
     ]) ++ additionalPkgs pkgs;
 
-    # restore desktop item icons
+    # symlink shared assets, including icons and desktop entries
     extraInstallCommands = ''
-      mkdir -p "$out/share/applications"
-      for item in ${unwrapped}/share/applications/*.desktop; do
-        ln -s "$item" "$out/share/applications/"
-      done
+      ln -s "${unwrapped}/share" "$out/"
     '';
 
     runScript = "${unwrapped}/bin/${executableName}";
