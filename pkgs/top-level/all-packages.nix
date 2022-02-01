@@ -26541,6 +26541,8 @@ with pkgs;
 
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
 
+  swaynotificationcenter = callPackage ../applications/misc/swaynotificationcenter { };
+
   tiramisu = callPackage ../applications/misc/tiramisu { };
 
   rootbar = callPackage ../applications/misc/rootbar {};
