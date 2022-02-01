@@ -12496,6 +12496,13 @@ with pkgs;
     buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
 
+  go_1_18 = callPackage ../development/compilers/go/1.18.nix ({
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
+    stdenv = gcc8Stdenv;
+    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
+  });
+
   go_2-dev = callPackage ../development/compilers/go/2-dev.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
@@ -20831,6 +20838,9 @@ with pkgs;
   buildGo117Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_17;
   };
+  buildGo118Package = callPackage ../development/go-packages/generic {
+    go = buildPackages.go_1_18;
+  };
 
   buildGoPackage = buildGo116Package;
 
@@ -20844,6 +20854,9 @@ with pkgs;
   # That's why `buildGoModule != buildGo117Module`.
   buildGo117Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_17;
+  };
+  buildGo118Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_18;
   };
 
   buildGoModule = buildGo116Module;
