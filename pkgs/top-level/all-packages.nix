@@ -30254,6 +30254,8 @@ with pkgs;
 
   faraday = callPackage ../applications/blockchains/faraday { };
 
+  fulcrum = libsForQt5.callPackage ../applications/blockchains/fulcrum { };
+
   go-ethereum = callPackage ../applications/blockchains/go-ethereum {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
