@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
-    repo = "engine";
+    repo = "vengi";
     rev = "v${version}";
     sha256 = "sha256-h+R9L0BBD3NSFWUh43g4V2LBcNyqVInBeJiOLY03nRk=";
   };
@@ -133,8 +133,8 @@ in stdenv.mkDerivation rec {
       filemanager and a command line tool to convert between several voxel
       formats.
     '';
-    homepage = "https://mgerhardy.github.io/engine/";
-    downloadPage = "https://github.com/mgerhardy/engine/releases";
+    homepage = "https://mgerhardy.github.io/vengi/";
+    downloadPage = "https://github.com/mgerhardy/vengi/releases";
     license = [ licenses.mit licenses.cc-by-sa-30 ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
