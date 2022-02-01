@@ -26461,6 +26461,8 @@ with pkgs;
 
   musikcube = callPackage ../applications/audio/musikcube {};
 
+  libmt32emu = callPackage ../applications/audio/munt/libmt32emu.nix { };
+
   p2pool = callPackage ../applications/misc/p2pool { };
 
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv {};
