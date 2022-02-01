@@ -24619,6 +24619,8 @@ with pkgs;
 
   artha = callPackage ../applications/misc/artha { };
 
+  atlas = callPackage ../tools/misc/atlas { };
+
   atlassian-cli = callPackage ../applications/office/atlassian-cli { };
 
   atomEnv = callPackage ../applications/editors/atom/env.nix {
