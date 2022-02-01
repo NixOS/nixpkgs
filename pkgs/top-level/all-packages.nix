@@ -353,7 +353,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  proto-contrib = callPackage ../development/tools/proto-contrib {};
+  proto-contrib = callPackage ../development/tools/proto-contrib {
+    buildGoModule = buildGo117Module;
+  };
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
 
@@ -367,11 +369,15 @@ with pkgs;
 
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
-  protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
+  protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php {
+    buildGoModule = buildGo117Module;
+  };
 
   protoc-gen-twirp_swagger = callPackage ../development/tools/protoc-gen-twirp_swagger { };
 
-  protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript { };
+  protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript {
+    buildGoModule = buildGo117Module;
+  };
 
   proton-caller = callPackage ../misc/emulators/proton-caller { };
 
@@ -533,7 +539,9 @@ with pkgs;
 
   perseus-cli = callPackage ../development/tools/perseus-cli { };
 
-  pet = callPackage ../development/tools/pet { };
+  pet = callPackage ../development/tools/pet {
+    buildGoModule = buildGo117Module;
+  };
 
   pkger = callPackage ../development/libraries/pkger { };
 
@@ -3217,7 +3225,9 @@ with pkgs;
 
   gosu = callPackage ../tools/misc/gosu { };
 
-  gotify-cli = callPackage ../tools/misc/gotify-cli { };
+  gotify-cli = callPackage ../tools/misc/gotify-cli {
+    buildGoModule = buildGo117Module;
+  };
 
   gotify-desktop = callPackage ../tools/misc/gotify-desktop { };
 
@@ -6089,7 +6099,9 @@ with pkgs;
 
   gopro = callPackage ../tools/video/gopro { };
 
-  goreleaser = callPackage ../tools/misc/goreleaser { };
+  goreleaser = callPackage ../tools/misc/goreleaser {
+    buildGoModule = buildGo117Module;
+  };
 
   goreplay = callPackage ../tools/networking/goreplay { };
 
@@ -7305,7 +7317,9 @@ with pkgs;
 
   nyxt = callPackage ../applications/networking/browsers/nyxt { };
 
-  nfpm = callPackage ../tools/package-management/nfpm { };
+  nfpm = callPackage ../tools/package-management/nfpm {
+    buildGoModule = buildGo117Module;
+  };
 
   nginx-config-formatter = callPackage ../tools/misc/nginx-config-formatter { };
 
@@ -7583,7 +7597,9 @@ with pkgs;
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
-  lmp = callPackage ../tools/security/lmp { };
+  lmp = callPackage ../tools/security/lmp {
+    buildGoModule = buildGo117Module;
+  };
 
   localtime = callPackage ../tools/system/localtime { };
 
@@ -8736,7 +8752,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
-  otpauth = callPackage ../tools/security/otpauth { };
+  otpauth = callPackage ../tools/security/otpauth {
+    buildGoModule = buildGo117Module;
+  };
 
   pcsclite = callPackage ../tools/security/pcsclite {
     inherit (darwin.apple_sdk.frameworks) IOKit;
@@ -8822,7 +8840,9 @@ with pkgs;
 
   phodav = callPackage ../tools/networking/phodav { };
 
-  photon-rss = callPackage ../applications/networking/feedreaders/photon { };
+  photon-rss = callPackage ../applications/networking/feedreaders/photon {
+    buildGoModule = buildGo117Module;
+  };
 
   pim6sd = callPackage ../servers/pim6sd { };
 
@@ -9239,7 +9259,9 @@ with pkgs;
 
   ratools = callPackage ../tools/networking/ratools { };
 
-  ratt = callPackage ../applications/misc/ratt { };
+  ratt = callPackage ../applications/misc/ratt {
+    buildGoModule = buildGo117Module;
+  };
 
   rc = callPackage ../shells/rc { };
 
@@ -9569,7 +9591,9 @@ with pkgs;
 
   scmpuff = callPackage ../applications/version-management/git-and-tools/scmpuff { };
 
-  scorecard = callPackage ../tools/security/scorecard { };
+  scorecard = callPackage ../tools/security/scorecard {
+    buildGoModule = buildGo117Module;
+  };
 
   scream = callPackage ../applications/audio/scream { };
 
@@ -12466,13 +12490,6 @@ with pkgs;
 
   glslang = callPackage ../development/compilers/glslang { };
 
-  go_1_15 = callPackage ../development/compilers/go/1.15.nix ({
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
-    stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
-  });
-
   go_1_16 = callPackage ../development/compilers/go/1.16.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
@@ -15022,6 +15039,8 @@ with pkgs;
 
   ccloud-cli = callPackage ../development/tools/ccloud-cli { };
 
+  confluent-cli = callPackage ../development/tools/confluent-cli { };
+
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
 
   hyenae = callPackage ../tools/networking/hyenae { };
@@ -15130,9 +15149,13 @@ with pkgs;
 
   kubeprompt = callPackage ../development/tools/kubeprompt { };
 
-  kubescape = callPackage ../tools/security/kubescape { };
+  kubescape = callPackage ../tools/security/kubescape {
+    buildGoModule = buildGo117Module;
+  };
 
-  kubesec = callPackage ../tools/security/kubesec { };
+  kubesec = callPackage ../tools/security/kubesec {
+    buildGoModule = buildGo117Module;
+  };
 
   kubespy = callPackage ../applications/networking/cluster/kubespy { };
 
@@ -15636,7 +15659,9 @@ with pkgs;
 
   swiftformat = callPackage ../development/tools/swiftformat { };
 
-  symfony-cli = callPackage ../development/tools/symfony-cli { };
+  symfony-cli = callPackage ../development/tools/symfony-cli {
+    buildGoModule = buildGo117Module;
+  };
 
   swiftshader = callPackage ../development/libraries/swiftshader { };
 
@@ -15681,7 +15706,9 @@ with pkgs;
 
   tytools = libsForQt5.callPackage ../development/embedded/tytools { };
 
-  terracognita = callPackage ../development/tools/misc/terracognita { };
+  terracognita = callPackage ../development/tools/misc/terracognita {
+    buildGoModule = buildGo117Module;
+  };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
   terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
@@ -15713,7 +15740,9 @@ with pkgs;
 
   time-ghc-modules = callPackage ../development/tools/time-ghc-modules { };
 
-  tflint = callPackage ../development/tools/analysis/tflint { };
+  tflint = callPackage ../development/tools/analysis/tflint {
+    buildGoModule = buildGo117Module;
+  };
 
   tfsec = callPackage ../development/tools/analysis/tfsec { };
 
@@ -18346,7 +18375,9 @@ with pkgs;
 
   libmad = callPackage ../development/libraries/libmad { };
 
-  llama = callPackage ../applications/misc/llama { };
+  llama = callPackage ../applications/misc/llama {
+    buildGoModule = buildGo117Module;
+  };
 
   malcontent = callPackage ../development/libraries/malcontent { };
 
@@ -19561,7 +19592,9 @@ with pkgs;
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
-  protolock = callPackage ../development/libraries/protolock { };
+  protolock = callPackage ../development/libraries/protolock {
+    buildGoModule = buildGo117Module;
+  };
 
   protozero = callPackage ../development/libraries/protozero { };
 
@@ -20791,9 +20824,6 @@ with pkgs;
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo115Package = callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_15;
-  };
   buildGo116Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_16;
   };
@@ -20808,9 +20838,6 @@ with pkgs;
 
   buildGoPackage = buildGo116Package;
 
-  buildGo115Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_15;
-  };
   buildGo116Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_16;
   };
@@ -21478,7 +21505,9 @@ with pkgs;
 
   nsq = callPackage ../servers/nsq { };
 
-  oauth2-proxy = callPackage ../servers/oauth2-proxy { };
+  oauth2-proxy = callPackage ../servers/oauth2-proxy {
+    buildGoModule = buildGo117Module;
+  };
 
   openbgpd = callPackage ../servers/openbgpd { };
 
@@ -23957,7 +23986,9 @@ with pkgs;
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
-  nuclei = callPackage ../tools/security/nuclei { };
+  nuclei = callPackage ../tools/security/nuclei {
+    buildGoModule = buildGo117Module;
+  };
 
   nullmailer = callPackage ../servers/mail/nullmailer {
     stdenv = gccStdenv;
@@ -25223,9 +25254,7 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
-  dwl = callPackage ../applications/window-managers/dwl {
-    wlroots = wlroots_0_14;
-  };
+  dwl = callPackage ../applications/window-managers/dwl { };
 
   dwm = callPackage ../applications/window-managers/dwm {
     # dwm is configured entirely through source modification. Allow users to
@@ -26060,7 +26089,9 @@ with pkgs;
     withPortAudio = stdenv.isDarwin;
   };
 
-  limesctl = callPackage ../applications/misc/limesctl { };
+  limesctl = callPackage ../applications/misc/limesctl {
+    buildGoModule = buildGo117Module;
+  };
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
@@ -26339,7 +26370,9 @@ with pkgs;
 
   haunt = callPackage ../applications/misc/haunt { };
 
-  hugo = callPackage ../applications/misc/hugo { };
+  hugo = callPackage ../applications/misc/hugo {
+    buildGoModule = buildGo117Module;
+  };
 
   go-org = callPackage ../applications/misc/go-org { };
 
@@ -26919,7 +26952,9 @@ with pkgs;
 
   popeye = callPackage ../applications/networking/cluster/popeye { };
 
-  kube-capacity = callPackage ../applications/networking/cluster/kube-capacity { };
+  kube-capacity = callPackage ../applications/networking/cluster/kube-capacity {
+    buildGoModule = buildGo117Module;
+  };
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
 
@@ -27662,7 +27697,9 @@ with pkgs;
 
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
 
-  nwg-menu = callPackage ../applications/misc/nwg-menu { };
+  nwg-menu = callPackage ../applications/misc/nwg-menu {
+    buildGoModule = buildGo117Module;
+  };
 
   nwg-panel = callPackage ../applications/misc/nwg-panel { };
 
@@ -28126,7 +28163,9 @@ with pkgs;
 
   pdfchain = callPackage ../tools/typesetting/pdfchain { };
 
-  pdfcpu = callPackage ../applications/graphics/pdfcpu { };
+  pdfcpu = callPackage ../applications/graphics/pdfcpu {
+    buildGoModule = buildGo117Module;
+  };
   pdftk = callPackage ../tools/typesetting/pdftk {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
@@ -29092,7 +29131,9 @@ with pkgs;
 
   tamgamp.lv2 = callPackage ../applications/audio/tamgamp.lv2 { };
 
-  tanka = callPackage ../applications/networking/cluster/tanka { };
+  tanka = callPackage ../applications/networking/cluster/tanka {
+    buildGoModule = buildGo117Module;
+  };
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
@@ -29216,7 +29257,9 @@ with pkgs;
 
   ticpp = callPackage ../development/libraries/ticpp { };
 
-  ticker = callPackage ../applications/misc/ticker { };
+  ticker = callPackage ../applications/misc/ticker {
+    buildGoModule = buildGo117Module;
+  };
 
   tickrs = callPackage ../applications/misc/tickrs {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -30503,7 +30546,9 @@ with pkgs;
 
   scaleft = callPackage ../applications/networking/scaleft { };
 
-  scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
+  scaleway-cli = callPackage ../tools/admin/scaleway-cli {
+    buildGoModule = buildGo117Module;
+  };
 
   beancount = with python3.pkgs; toPythonApplication beancount;
 
@@ -33123,7 +33168,9 @@ with pkgs;
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
-  helmsman = callPackage ../applications/networking/cluster/helmsman { };
+  helmsman = callPackage ../applications/networking/cluster/helmsman {
+    buildGoModule = buildGo117Module;
+  };
 
   velero = callPackage ../applications/networking/cluster/velero { };
 
@@ -34556,7 +34603,9 @@ with pkgs;
 
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
-  kcli = callPackage ../development/tools/kcli {};
+  kcli = callPackage ../development/tools/kcli {
+    buildGoModule = buildGo117Module;
+  };
 
   pxlib = callPackage ../development/libraries/pxlib {};
 
