@@ -3219,7 +3219,9 @@ with pkgs;
 
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
 
-  godu = callPackage ../tools/misc/godu { };
+  godu = callPackage ../tools/misc/godu {
+    buildGoModule = buildGo116Module;
+  };
 
   goss = callPackage ../tools/misc/goss { };
 
