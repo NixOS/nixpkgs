@@ -26463,6 +26463,8 @@ with pkgs;
 
   libmt32emu = callPackage ../applications/audio/munt/libmt32emu.nix { };
 
+  mt32emu-smf2wav = callPackage ../applications/audio/munt/mt32emu-smf2wav.nix { };
+
   p2pool = callPackage ../applications/misc/p2pool { };
 
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv {};
