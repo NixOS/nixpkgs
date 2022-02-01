@@ -364,7 +364,13 @@ in {
 
     systemd.services.home-assistant = {
       description = "Home Assistant";
-      after = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+
+        # prevent races with database creation
+        "mysql.service"
+        "postgresql.service"
+      ];
       preStart = optionalString (cfg.config != null) (if cfg.configWritable then ''
         cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
       '' else ''
