@@ -5,6 +5,8 @@
 , stdenv
 , pkg-config
 , openssl
+, just
+, pandoc
 , Security
 }:
 
@@ -19,15 +21,22 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-y3T0vXg7631FZ4bzcbQjz3Buui/DFxh9LG8BZWwynp0=";
   };
 
-  nativeBuildInputs = [ installShellFiles ]
+  nativeBuildInputs = [ installShellFiles just pandoc ]
     ++ lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  outputs = [ "out" "man" ];
+
+  postBuild = ''
+    just man
+  '';
 
   cargoSha256 = "sha256-agepQVJbqbjzFbEBKbM7BNxc8FlklOrCsTgCAOcuptc=";
 
   postInstall = ''
     installShellCompletion completions/dog.{bash,fish,zsh}
+    installManPage ./target/man/*.1
   '';
 
   meta = with lib; {
