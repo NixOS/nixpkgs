@@ -85,6 +85,9 @@ in buildFHSUserEnv rec {
     steamPackages.steam
     # License agreement
     gnome.zenity
+
+    # Dota
+    gnome2.pango
   ] ++ commonTargetPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
