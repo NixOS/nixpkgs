@@ -1,8 +1,8 @@
-{ mkDerivation, lib, extra-cmake-modules, qtbase, ki18n }:
+{ mkDerivation, lib, extra-cmake-modules, qtbase, kcoreaddons, ki18n }:
 
 mkDerivation {
   name = "kdecoration";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtbase ki18n ];
+  buildInputs = [ qtbase kcoreaddons ki18n ];
   outputs = [ "out" "dev" ];
 }

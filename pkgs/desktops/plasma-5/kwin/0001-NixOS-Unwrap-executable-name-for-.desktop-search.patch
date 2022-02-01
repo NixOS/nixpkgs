@@ -11,17 +11,17 @@ Wrappers cannot affect the `/proc/.../exe` symlink!
 
 Co-authored-by: Yaroslav Bolyukin <iam@lach.pw>
 ---
- src/nixos_utils.h     | 41 +++++++++++++++++++++++++++++++++++++++++
- src/service_utils.h   |  4 +++-
- src/waylandclient.cpp |  5 ++++-
+ src/utils/nixos_utils.h   | 41 +++++++++++++++++++++++++++++++++++++++++
+ src/utils/serviceutils.h  |  4 +++-
+ src/waylandclient.cpp     |  5 ++++-
  3 files changed, 48 insertions(+), 2 deletions(-)
- create mode 100644 src/nixos_utils.h
+ create mode 100644 src/utils/nixos_utils.h
 
-diff --git a/src/nixos_utils.h b/src/nixos_utils.h
+diff --git a/src/utils/nixos_utils.h b/src/utils/nixos_utils.h
 new file mode 100644
 index 0000000..726065d
 --- /dev/null
-+++ b/src/nixos_utils.h
++++ b/src/utils/nixos_utils.h
 @@ -0,0 +1,41 @@
 +#ifndef NIXOS_UTILS_H
 +#define NIXOS_UTILS_H
@@ -64,10 +64,10 @@ index 0000000..726065d
 +}// namespace
 +
 +#endif // SERVICE_UTILS_H
-diff --git a/src/service_utils.h b/src/service_utils.h
+diff --git a/src/utils/serviceutils.h b/src/utils/serviceutils.h
 index 8a70c1f..475b15d 100644
---- a/src/service_utils.h
-+++ b/src/service_utils.h
+--- a/src/utils/serviceutils.h
++++ b/src/utils/serviceutils.h
 @@ -19,6 +19,7 @@
  #include <QLoggingCategory>
  //KF
@@ -95,7 +95,7 @@ index fd2c0c1..ae8cf96 100644
  #include "screens.h"
  #include "wayland_server.h"
  #include "workspace.h"
-+#include "nixos_utils.h"
++#include "utils/nixos_utils.h"
  
  #include <KWaylandServer/display.h>
  #include <KWaylandServer/clientbuffer.h>
