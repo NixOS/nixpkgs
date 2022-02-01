@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-LGDeNkCxVLDVpwi5VFFL0DFsf8CexI7Nc5l+l2ASHaw=";
   };
 
-  vendorSha256 = "sha256-fwO3cmlnmuD682vGB8X06yGHZqBadeltRrsEUjQWazc=";
+  vendorSha256 = "sha256-TU5crhmQAhSfURdfPe/xaa3RgGyc+UFn2E+jJ0flNsg=";
   doCheck = true;
 
   meta = with lib; {
