@@ -1433,7 +1433,9 @@ with pkgs;
 
   awslogs = callPackage ../tools/admin/awslogs { };
 
-  aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator { };
+  aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator {
+    buildGoModule = buildGo116Module;
+  };
 
   aws-env = callPackage ../tools/admin/aws-env { };
 
@@ -3219,7 +3221,9 @@ with pkgs;
 
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
 
-  godu = callPackage ../tools/misc/godu { };
+  godu = callPackage ../tools/misc/godu {
+    buildGoModule = buildGo116Module;
+  };
 
   goss = callPackage ../tools/misc/goss { };
 
@@ -3722,7 +3726,9 @@ with pkgs;
 
   statserial = callPackage ../tools/misc/statserial { };
 
-  steampipe = callPackage ../tools/misc/steampipe { };
+  steampipe = callPackage ../tools/misc/steampipe {
+    buildGoModule = buildGo117Module;
+  };
 
   step-ca = callPackage ../tools/security/step-ca {
     inherit (darwin.apple_sdk.frameworks) PCSC;
@@ -3732,7 +3738,9 @@ with pkgs;
 
   string-machine = callPackage ../applications/audio/string-machine { };
 
-  stripe-cli = callPackage ../tools/admin/stripe-cli { };
+  stripe-cli = callPackage ../tools/admin/stripe-cli {
+    buildGoModule = buildGo117Module;
+  };
 
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
@@ -5045,7 +5053,9 @@ with pkgs;
 
   vowpal-wabbit = callPackage ../applications/science/machine-learning/vowpal-wabbit { };
 
-  utahfs = callPackage ../applications/networking/utahfs { };
+  utahfs = callPackage ../applications/networking/utahfs {
+    buildGoPackage = buildGo116Package;
+  };
 
   wakeonlan = callPackage ../tools/networking/wakeonlan { };
 
@@ -6058,7 +6068,9 @@ with pkgs;
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
-  goofys = callPackage ../tools/filesystems/goofys { };
+  goofys = callPackage ../tools/filesystems/goofys {
+    buildGoModule = buildGo116Module;
+  };
 
   go-sct = callPackage ../tools/X11/go-sct { };
 
@@ -6186,7 +6198,9 @@ with pkgs;
     inherit (xorg) libXdmcp;
   };
 
-  gron = callPackage ../development/tools/gron { };
+  gron = callPackage ../development/tools/gron {
+    buildGoModule = buildGo116Module;
+  };
 
   groonga = callPackage ../servers/search/groonga { };
 
@@ -8365,7 +8379,9 @@ with pkgs;
 
   obexd = callPackage ../tools/bluetooth/obexd { };
 
-  obfs4 = callPackage ../tools/networking/obfs4 { };
+  obfs4 = callPackage ../tools/networking/obfs4 {
+    buildGoModule = buildGo116Module;
+  };
 
   oci-image-tool = callPackage ../tools/misc/oci-image-tool { };
 
@@ -9637,7 +9653,9 @@ with pkgs;
 
   skim = callPackage ../tools/misc/skim { };
 
-  seaweedfs = callPackage ../applications/networking/seaweedfs { };
+  seaweedfs = callPackage ../applications/networking/seaweedfs {
+    buildGoModule = buildGo117Module;
+  };
 
   sec = callPackage ../tools/admin/sec { };
 
@@ -9791,7 +9809,9 @@ with pkgs;
   # Not updated upstream since 2018, doesn't support qt newer than 5.12
   sleepyhead = libsForQt512.callPackage ../applications/misc/sleepyhead {};
 
-  slides = callPackage ../applications/misc/slides { };
+  slides = callPackage ../applications/misc/slides {
+    buildGoModule = buildGo117Module;
+  };
 
   slirp4netns = callPackage ../tools/networking/slirp4netns { };
 
@@ -9858,7 +9878,9 @@ with pkgs;
 
   spicy = callPackage ../development/tools/spicy { };
 
-  spire = callPackage ../tools/security/spire { };
+  spire = callPackage ../tools/security/spire {
+    buildGoModule = buildGo117Module;
+  };
   # to match naming of other package repositories
   spire-agent = spire.agent;
   spire-server = spire.server;
@@ -10089,7 +10111,9 @@ with pkgs;
 
   subsonic = callPackage ../servers/misc/subsonic { };
 
-  subfinder = callPackage ../tools/networking/subfinder { };
+  subfinder = callPackage ../tools/networking/subfinder {
+    buildGoModule = buildGo117Module;
+  };
 
   subzerod = with python3Packages; toPythonApplication subzerod;
 
@@ -10929,7 +10953,9 @@ with pkgs;
 
   testdisk-qt = testdisk.override { enableQt = true; };
 
-  textql = callPackage ../development/tools/textql { };
+  textql = callPackage ../development/tools/textql {
+    buildGoPackage = buildGo116Package;
+  };
 
   html2text = callPackage ../tools/text/html2text { };
 
@@ -11335,7 +11361,9 @@ with pkgs;
 
   yafaray-core = callPackage ../tools/graphics/yafaray-core { };
 
-  yajsv = callPackage ../tools/misc/yajsv { };
+  yajsv = callPackage ../tools/misc/yajsv {
+    buildGoModule = buildGo116Module;
+  };
 
   yallback = callPackage ../development/tools/analysis/yallback { };
 
@@ -11889,7 +11917,9 @@ with pkgs;
 
   dasm = callPackage ../development/compilers/dasm { };
 
-  dbmate = callPackage ../development/tools/database/dbmate { };
+  dbmate = callPackage ../development/tools/database/dbmate {
+    buildGoModule = buildGo117Module;
+  };
 
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
 
@@ -15097,7 +15127,9 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
-  k2tf = callPackage ../development/tools/misc/k2tf { };
+  k2tf = callPackage ../development/tools/misc/k2tf {
+    buildGoModule = buildGo116Module;
+  };
 
   kafka-delta-ingest = callPackage ../development/tools/kafka-delta-ingest { };
 
@@ -15621,7 +15653,9 @@ with pkgs;
 
   spooles = callPackage ../development/libraries/science/math/spooles {};
 
-  spruce = callPackage ../development/tools/misc/spruce { };
+  spruce = callPackage ../development/tools/misc/spruce {
+    buildGoModule = buildGo116Module;
+  };
 
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
@@ -21439,7 +21473,9 @@ with pkgs;
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
 
-  mycorrhiza = callPackage ../servers/mycorrhiza { };
+  mycorrhiza = callPackage ../servers/mycorrhiza {
+    buildGoModule = buildGo116Module;
+  };
 
   myserver = callPackage ../servers/http/myserver { };
 
@@ -21994,7 +22030,9 @@ with pkgs;
 
   sambaFull = samba4Full;
 
-  sampler = callPackage ../applications/misc/sampler { };
+  sampler = callPackage ../applications/misc/sampler {
+    buildGoModule = buildGo116Module;
+  };
 
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
@@ -22112,7 +22150,9 @@ with pkgs;
 
   urserver = callPackage ../servers/urserver { };
 
-  vouch-proxy = callPackage ../servers/vouch-proxy { };
+  vouch-proxy = callPackage ../servers/vouch-proxy {
+    buildGoModule = buildGo116Module;
+  };
 
   victoriametrics = callPackage ../servers/nosql/victoriametrics { };
 
@@ -22872,7 +22912,9 @@ with pkgs;
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools { };
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
-  air = callPackage ../development/tools/air { };
+  air = callPackage ../development/tools/air {
+    buildGoModule = buildGo117Module;
+  };
 
   delve = callPackage ../development/tools/delve { };
 
@@ -26437,7 +26479,9 @@ with pkgs;
 
   shepherd = nodePackages."@nerdwallet/shepherd";
 
-  skate = callPackage ../applications/misc/skate { };
+  skate = callPackage ../applications/misc/skate {
+    buildGoModule = buildGo117Module;
+  };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
@@ -28754,7 +28798,9 @@ with pkgs;
 
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
-  shadowfox = callPackage ../tools/networking/shadowfox { };
+  shadowfox = callPackage ../tools/networking/shadowfox {
+    buildGoModule = buildGo117Module;
+  };
 
   shfmt = callPackage ../tools/text/shfmt { };
 
@@ -33886,7 +33932,9 @@ with pkgs;
 
   steamcontroller = callPackage ../misc/drivers/steamcontroller { };
 
-  stern = callPackage ../applications/networking/cluster/stern { };
+  stern = callPackage ../applications/networking/cluster/stern {
+    buildGoModule = buildGo117Module;
+  };
 
   streamripper = callPackage ../applications/audio/streamripper { };
 
