@@ -10842,6 +10842,12 @@
     githubId = 17243347;
     name = "Sebastian Sellmeier";
   };
+  selene57 = {
+    email = "selene57.dev@gmail.com";
+    github = "selene57";
+    githubId = 46847208;
+    name = "Selene Hines";
+  };
   sellout = {
     email = "greg@technomadic.org";
     github = "sellout";
