@@ -956,10 +956,10 @@
     "owner": "selectel",
     "provider-source-address": "registry.terraform.io/selectel/selectel",
     "repo": "terraform-provider-selectel",
-    "rev": "v3.7.1",
-    "sha256": "02sfzrs3k907djcyjz7qn42b21wccykw0fw65ms34h5vz5ld73mx",
-    "vendorSha256": null,
-    "version": "3.7.1"
+    "rev": "v3.8.0",
+    "sha256": "0qc08v217cv2i43cxcx854rvhihrlhlakfark37vcdrh9z6swf1n",
+    "vendorSha256": "1mjp5yqwl1nya82yf5v6l3sq7iv0m94xy5w7y5avn8h40dl1wfnf",
+    "version": "3.8.0"
   },
   "sentry": {
     "owner": "jianyuan",

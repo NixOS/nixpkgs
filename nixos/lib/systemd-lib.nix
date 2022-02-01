@@ -11,6 +11,9 @@ in rec {
 
   mkPathSafeName = lib.replaceChars ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""];
 
+  # a type for options that take a unit name
+  unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
+
   makeUnit = name: unit:
     if unit.enable then
       pkgs.runCommand "unit-${mkPathSafeName name}"

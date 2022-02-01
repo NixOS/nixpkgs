@@ -17,7 +17,7 @@ buildGoModule rec {
     "-X github.com/derailed/k9s/cmd.commit=${src.rev}"
   ];
 
-  vendorSha256 = "sha256-jWZ1N1A8VECBQvkXyuzMUkI4u2NLr5/gSvJUfK5VgzM=";
+  vendorSha256 = "sha256-mMob7M9RQlqaVK0DgHpaAK9d1btzfQetnliUqFTvjJQ=";
 
   preCheck = "export HOME=$(mktemp -d)";
 

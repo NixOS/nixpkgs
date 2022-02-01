@@ -106,8 +106,6 @@ mapAliases ({
   bsod = throw "bsod has been removed: deleted by upstream"; # added 2022-01-07
   btc1 = throw "btc1 has been removed, it was abandoned by upstream"; # added 2020-11-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
-  buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
-  buildGo112Module = throw "buildGo112Module has been removed"; # added 2020-04-26
   buildkite-agent3 = buildkite-agent; # added 2018-09-26
   bundler_HEAD = bundler; # added 2015-11-15
   bunny = throw "bunny has been removed: deleted by upstream"; # added 2022-01-07
@@ -360,7 +358,6 @@ mapAliases ({
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
   gmock = gtest; # moved from top-level 2021-03-14
-  go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobby5 = gobby; # added 2021-02-01
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
@@ -408,6 +405,7 @@ mapAliases ({
   imagemagick7_light = imagemagick_light; # added 2021-02-22
   imagemagick7 = imagemagick; # added 2021-02-22
   imagemagick7Big = imagemagickBig; # added 2021-02-22
+  impressive = throw "impressive has been removed due to lack of released python 2 support and maintainership in nixpkgs"; # added 2022-01-27
   inboxer = throw "inboxer has been removed as it is no longer maintained and no longer works as Google shut down the inbox service this package wrapped.";
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
@@ -1100,6 +1098,7 @@ mapAliases ({
   winswitch = throw "winswitch has been removed from nixpkgs."; # added 2019-12-10
   wireshark-gtk = throw "wireshark-gtk is not supported anymore. Use wireshark-qt or wireshark-cli instead."; # added 2019-11-18
   wireguard = wireguard-tools; # added 2018-05-19
+  wxmupen64plus = throw "wxmupen64plus was removed because the upstream disappeared."; # 2022-01-31
   morituri = whipper; # added 2018-09-13
   xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers; # added 2021-11-19
   xp-pen-g430 = pentablet-driver; # added 2020-05-03

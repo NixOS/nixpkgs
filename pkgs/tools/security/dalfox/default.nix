@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-QSIaqHUNsVpb1qbQLIxxjoDH1DMM1XpXxWZtImMV1yM=";
   };
 
-  vendorSha256 = "sha256-QtSWlGsbCxLpb4+TZgV0/wfSb5flGG3qHquO2maIOKU=";
+  vendorSha256 = "sha256-F0uIV4T/dCqPY/gsSOrzJTxFGlDh9NfxKhJxrftj0Lo=";
 
   meta = with lib; {
     description = "Tool for analysing parameter and XSS scanning";

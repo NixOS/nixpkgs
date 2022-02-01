@@ -13,11 +13,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.35.7";
+  version = "0.35.8";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-rMeaKzCGY9jRrw8GaGtgm1rg3FIdaX/P+bOZRAtAI/s=";
+    sha256 = "sha256-YNPAIdN9FDUHs/5aCYJN+1/12ZYk1YJsUjjB1a09KvA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration libiconv ];
 
-  cargoSha256 = "sha256-ZXQM2ij9Cpa5WCEHhcDc/tThfKZ7s1URmYsmqRg73m0=";
+  cargoSha256 = "sha256-xLFBF8fEbupLgFNdYC1NzM6p7O2gvsv0Utk4Et2oBDc=";
 
   # Some tests fail because they need network access.
   # However, Travis ensures a proper build.

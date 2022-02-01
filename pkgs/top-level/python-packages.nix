@@ -568,6 +568,8 @@ in {
 
   apptools = callPackage ../development/python-modules/apptools { };
 
+  appthreat-vulnerability-db = callPackage ../development/python-modules/appthreat-vulnerability-db { };
+
   aprslib = callPackage ../development/python-modules/aprslib { };
 
   APScheduler = callPackage ../development/python-modules/APScheduler { };
@@ -3925,6 +3927,8 @@ in {
 
   impacket = callPackage ../development/python-modules/impacket { };
 
+  importlab = callPackage ../development/python-modules/importlab { };
+
   importlib-metadata = callPackage ../development/python-modules/importlib-metadata { };
 
   importlib-resources = callPackage ../development/python-modules/importlib-resources { };
@@ -4124,6 +4128,14 @@ in {
   };
 
   jaxlib = self.jaxlib-build;
+
+  jaxlibWithCuda = self.jaxlib-build.override {
+    cudaSupport = true;
+  };
+
+  jaxlibWithoutCuda = self.jaxlib-build.override {
+    cudaSupport = false;
+  };
 
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi { };
 
@@ -6309,6 +6321,8 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
+  primecountpy = callPackage ../development/python-modules/primecountpy { };
+
   primer3 = callPackage ../development/python-modules/primer3 { };
 
   priority = callPackage ../development/python-modules/priority { };
@@ -6577,6 +6591,8 @@ in {
   pycflow2dot = callPackage ../development/python-modules/pycflow2dot {
     inherit (pkgs) graphviz;
   };
+
+  pycfmodel = callPackage ../development/python-modules/pycfmodel { };
 
   pychannels = callPackage ../development/python-modules/pychannels { };
 
@@ -8363,6 +8379,8 @@ in {
   };
 
   qscintilla = self.qscintilla-qt5;
+
+  qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 
   qtawesome = callPackage ../development/python-modules/qtawesome { };
 
@@ -10308,6 +10326,8 @@ in {
 
   wandb = callPackage ../development/python-modules/wandb { };
 
+  warcio = callPackage ../development/python-modules/warcio { };
+
   warlock = callPackage ../development/python-modules/warlock { };
 
   warrant = callPackage ../development/python-modules/warrant { };
@@ -10582,6 +10602,8 @@ in {
   xvfbwrapper = callPackage ../development/python-modules/xvfbwrapper {
     inherit (pkgs.xorg) xorgserver;
   };
+
+  xxh = callPackage ../tools/networking/xxh { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 

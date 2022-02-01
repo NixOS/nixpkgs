@@ -513,12 +513,6 @@
     githubId = 38869148;
     name = "Alex Eyre";
   };
-  algorith = {
-    email = "dries_van_daele@telenet.be";
-    github = "DriesVanDaele";
-    githubId = 1141488;
-    name = "Dries Van Daele";
-  };
   alibabzo = {
     email = "alistair.bill@gmail.com";
     github = "alibabzo";
@@ -4474,7 +4468,7 @@
   gordias = {
     name = "Gordias";
     email = "gordias@disroot.org";
-    github = "NotGordias";
+    github = "gordiasdot";
     githubId = 94724133;
     keys = [{
       longkeyid = "ed25519/0x5D47284830FAA4FA";
@@ -6535,6 +6529,12 @@
     github = "kquick";
     githubId = 787421;
     name = "Kevin Quick";
+  };
+  kradalby = {
+    name = "Kristoffer Dalby";
+    email = "kristoffer@dalby.cc";
+    github = "kradalby";
+    githubId = 98431;
   };
   kraem = {
     email = "me@kraem.xyz";

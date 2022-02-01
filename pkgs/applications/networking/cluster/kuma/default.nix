@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, buildGoModule
+, buildGo117Module
 , coredns
 , installShellFiles
 , isFull ? false
@@ -14,11 +14,11 @@
   ]
 }:
 
-buildGoModule rec {
+buildGo117Module rec {
   inherit pname ;
   version = "1.4.0";
   tags = lib.optionals enableGateway ["gateway"];
-  vendorSha256 = "1fc5psvbd9bpc6c3y2cpx5dx8cgr2fcp7nln3kwfgbryahq2y8wl";
+  vendorSha256 = "19rd450gmc51gmwa13991lbkva7r80d2camikkxmmgywyhrd06sf";
 
   src = fetchFromGitHub {
     owner = "kumahq";

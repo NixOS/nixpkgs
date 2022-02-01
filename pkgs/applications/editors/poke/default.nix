@@ -13,17 +13,20 @@
 , nbdSupport ? !stdenv.isDarwin, libnbd
 , textStylingSupport ? true
 , dejagnu
+
+# update script only
+, writeScript
 }:
 
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in stdenv.mkDerivation rec {
   pname = "poke";
-  version = "1.4";
+  version = "2.0";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-zgVN8pVgySEjATJwPuRJ/hMLbiWrA6psx5a7QBUGqiQ=";
+    sha256 = "sha256-W4Ir8+ESyftcDJqyKjCkWl1eTRbj90NgUrtyCqJrmlg=";
   };
 
   outputs = [ "out" "dev" "info" "lib" "man" ];
@@ -64,6 +67,20 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput share/emacs "$out"
   '';
+
+  passthru = {
+    updateScript = writeScript "update-poke" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of '<a href="...">poke 2.0</a>'
+      new_version="$(curl -s https://www.jemarch.net/poke |
+          pcregrep -o1 '>poke ([0-9.]+)</a>')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = with lib; {
     description = "Interactive, extensible editor for binary data";

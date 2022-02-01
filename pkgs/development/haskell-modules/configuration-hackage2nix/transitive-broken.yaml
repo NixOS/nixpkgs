@@ -752,6 +752,7 @@ dont-distribute-packages:
  - clckwrks-theme-clckwrks
  - clckwrks-theme-geo-bootstrap
  - cless
+ - cleveland
  - click-clack
  - clifford
  - clippings
@@ -1771,6 +1772,7 @@ dont-distribute-packages:
  - indentation-trifecta
  - indexation
  - indieweb-algorithms
+ - indigo
  - infernu
  - inline-java
  - inspector-wrecker
@@ -2161,6 +2163,8 @@ dont-distribute-packages:
  - moo
  - moo-nad
  - morley
+ - morley-client
+ - morley-upgradeable
  - morloc
  - morpheus-graphql-client_0_18_0
  - morpheus-graphql_0_18_0
@@ -3221,6 +3225,7 @@ dont-distribute-packages:
  - web-routes-regular
  - web-routing
  - web3
+ - web3-ethereum
  - webcrank-wai
  - webdriver-w3c
  - webserver

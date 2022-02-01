@@ -306,6 +306,9 @@ let
           # The test cannot access the network, so any packages we
           # need must be included in the VM.
           system.extraDependencies = with pkgs; [
+            brotli
+            brotli.dev
+            brotli.lib
             desktop-file-utils
             docbook5
             docbook_xsl_ns
@@ -315,6 +318,7 @@ let
             ntp
             perlPackages.ListCompare
             perlPackages.XMLLibXML
+            python3Minimal
             shared-mime-info
             sudo
             texinfo

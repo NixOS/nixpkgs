@@ -34,7 +34,7 @@ let
         boehmgc = boehmgc-nix;
         aws-sdk-cpp = aws-sdk-cpp-nix;
       };
-in rec {
+in lib.makeExtensible (self: {
   nix_2_3 = (common rec {
     version = "2.3.16";
     src = fetchurl {
@@ -63,16 +63,16 @@ in rec {
   };
 
   # FIXME: nix_2_6 is broken on aarch64-darwin for now.
-  stable = nix_2_5;
+  stable = self.nix_2_5;
 
   unstable = lib.lowPrio (common rec {
     version = "2.7";
-    suffix = "pre20220124_${lib.substring 0 7 src.rev}";
+    suffix = "pre20220127_${lib.substring 0 7 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "0a70b37b5694c769fb855c1afe7642407d1db64f";
-      sha256 = "sha256-aOM9MPNlnWNMobx4CuD4JIXH2poRlG8AKkuxY7FysWg=";
+      rev = "558c4ee3e370c9f9a6ea293df54ed6914a999f1c";
+      sha256 = "sha256-hMzKQflpgf3P7OdYKSnD1VMBSnF48XSRjaNX3bUJct4=";
     };
   });
-}
+})

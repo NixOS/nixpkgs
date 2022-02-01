@@ -19,7 +19,7 @@
 
 version: hashes:
 let
-  name = "electron-${version}";
+  pname = "electron";
 
   meta = with lib; {
     description = "Cross platform desktop application shell";
@@ -54,7 +54,7 @@ let
     "Unsupported system: ${platform.system}";
 
   common = platform: {
-    inherit name version meta;
+    inherit pname version meta;
     src = fetcher version (get tags platform) (get hashes platform);
     passthru.headers = headersFetcher version hashes.headers;
   };
