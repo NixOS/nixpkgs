@@ -1513,8 +1513,6 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
-  ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
-
   exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
 
   altermime = callPackage ../tools/networking/altermime {};
