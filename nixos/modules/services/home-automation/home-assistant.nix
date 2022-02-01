@@ -63,7 +63,9 @@ let
     # Respect overrides that already exist in the passed package and
     # concat it with values passed via the module.
     extraComponents = oldArgs.extraComponents or [] ++ extraComponents;
-    extraPackages = ps: (oldArgs.extraPackages or (_: []) ps) ++ (cfg.extraPackages ps);
+    extraPackages = ps: (oldArgs.extraPackages or (_: []) ps)
+      ++ (cfg.extraPackages ps)
+      ++ (lib.concatMap (component: component.propagatedBuildInputs or []) cfg.customComponents);
   }));
 
   # Create a directory that holds all lovelace modules
@@ -149,6 +151,21 @@ in {
 
         A popular example is `python3Packages.psycopg2`
         for PostgreSQL support in the recorder component.
+      '';
+    };
+
+    customComponents = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      example = literalExpression ''
+        with pkgs.home-assistant-custom-components; [
+          prometheus-sensor
+        ];
+      '';
+      description = lib.mdDoc ''
+        List of custom component packages to install.
+
+        Available components can be found below `pkgs.home-assistant-custom-components`.
       '';
     };
 
@@ -449,10 +466,29 @@ in {
         '' else ''
           rm -f "${cfg.configDir}/www/nixos-lovelace-modules"
         '';
+        copyCustomComponents = ''
+          mkdir -p "${cfg.configDir}/custom_components"
+
+          # remove components symlinked in from below the /nix/store
+          components="$(find "${cfg.configDir}/custom_components" -maxdepth 1 -type l)"
+          for component in "$components"; do
+            if [[ "$(readlink "$component")" =~ ^${escapeShellArg builtins.storeDir} ]]; then
+              rm "$component"
+            fi
+          done
+
+          # recreate symlinks for desired components
+          declare -a components=(${escapeShellArgs cfg.customComponents})
+          for component in "''${components[@]}"; do
+            path="$(dirname $(find "$component" -name "manifest.json"))"
+            ln -fns "$path" "${cfg.configDir}/custom_components/"
+          done
+        '';
       in
         (optionalString (cfg.config != null) copyConfig) +
         (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig) +
-        copyCustomLovelaceModules
+        copyCustomLovelaceModules +
+        copyCustomComponents
       ;
       environment.PYTHONPATH = package.pythonPath;
       serviceConfig = let
