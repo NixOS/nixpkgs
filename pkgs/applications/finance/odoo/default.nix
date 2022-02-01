@@ -5,9 +5,14 @@
 , python3Packages
 , nodePackages
 , wkhtmltopdf
+, callPackage
 }:
 
 with python3Packages;
+
+let
+  werkzeug = python3Packages.callPackage ../../../development/python-modules/werkzeug/1.nix {};
+in
 
 buildPythonApplication rec {
   pname = "odoo";
