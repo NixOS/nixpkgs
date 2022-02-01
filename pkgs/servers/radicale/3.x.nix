@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.1.3";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = "v${version}";
-    hash = "sha256-a1oapCktJPvNO+MTsB9COtxSFB/ZIZvJiuqX+s+lncY=";
+    hash = "sha256-vX6lYiDqpQeWVLotyt2ODwcjskWB6EuCky3/V8m1m7Q=";
   };
 
   postPatch = ''
