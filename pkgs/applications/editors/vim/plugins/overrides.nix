@@ -846,6 +846,16 @@ self: super: {
     dependencies = with self; [ vim-maktaba ];
   });
 
+  # Due to case-sensitivety issues, the hash differs on Darwin systems, see:
+  # https://github.com/NixOS/nixpkgs/issues/157609
+  vim-colorschemes = super.vim-colorschemes.overrideAttrs (old: {
+    src = old.src.overrideAttrs (srcOld: {
+      postFetch = (srcOld.postFetch or "") + lib.optionalString (!stdenv.isDarwin) ''
+        rm $out/colors/darkBlue.vim
+      '';
+    });
+  });
+
   vim-dasht = super.vim-dasht.overrideAttrs (old: {
     preFixup = ''
       substituteInPlace $out/autoload/dasht.vim \
