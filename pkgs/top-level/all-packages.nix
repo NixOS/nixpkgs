@@ -6192,7 +6192,9 @@ with pkgs;
     inherit (xorg) libXdmcp;
   };
 
-  gron = callPackage ../development/tools/gron { };
+  gron = callPackage ../development/tools/gron {
+    buildGoModule = buildGo116Module;
+  };
 
   groonga = callPackage ../servers/search/groonga { };
 
