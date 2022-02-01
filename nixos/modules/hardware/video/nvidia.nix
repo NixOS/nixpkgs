@@ -179,11 +179,6 @@ in
   in mkIf enabled {
     assertions = [
       {
-        assertion = with config.services.xserver.displayManager; (gdm.enable && gdm.nvidiaWayland) -> cfg.modesetting.enable;
-        message = "You cannot use wayland with GDM without modesetting enabled for NVIDIA drivers, set `hardware.nvidia.modesetting.enable = true`";
-      }
-
-      {
         assertion = primeEnabled -> pCfg.intelBusId == "" || pCfg.amdgpuBusId == "";
         message = ''
           You cannot configure both an Intel iGPU and an AMD APU. Pick the one corresponding to your processor.
