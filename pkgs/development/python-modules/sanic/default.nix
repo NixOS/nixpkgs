@@ -41,6 +41,7 @@ buildPythonPackage rec {
       --replace '"pytest==6.2.5"' '"pytest"' \
       --replace '"gunicorn==20.0.4"' '"gunicorn"' \
       --replace '"pytest-sanic",' "" \
+      --replace '"multidict>=5.0,<6.0"' '"multidict>=5.0"' \
     # Patch a request headers test to allow brotli encoding
     # (we build httpx with brotli support, upstream doesn't).
     substituteInPlace tests/test_headers.py \
