@@ -1428,8 +1428,6 @@ with pkgs;
 
   ec2-metadata-mock = callPackage ../development/tools/ec2-metadata-mock { };
 
-  ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
-
   exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
 
   altermime = callPackage ../tools/networking/altermime {};
