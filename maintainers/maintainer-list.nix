@@ -13613,10 +13613,10 @@
     github = "nagisa";
     githubId = 679122;
   };
-  yevhenshymotiuk = {
+  yshym = {
     name = "Yevhen Shymotiuk";
-    email = "yevhenshymotiuk@gmail.com";
-    github = "yevhenshymotiuk";
+    email = "yshym@pm.me";
+    github = "yshym";
     githubId = 44244245;
   };
   hmenke = {
