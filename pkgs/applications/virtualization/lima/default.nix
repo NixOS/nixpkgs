@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "lima";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vOoRwV4BO40cUWNxmWubgbN1q7WPKe2vifg8F1duaVA=";
+    sha256 = "sha256-kz+gyl7BuC0G97Lj3T1a859TYhwfAGB1hTiYXq66wwY=";
   };
 
-  vendorSha256 = "sha256-118TYmpGUNMZgFKsOzqOy71SabG9tN6IeOkpgwVSXTY=";
+  vendorSha256 = "sha256-x0VmidGV9TsGOyL+OTUHXOxJ2cgvIqph56MrwfR2SP4=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
