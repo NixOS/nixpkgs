@@ -2378,9 +2378,7 @@ with pkgs;
 
   btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
 
-  btrbk = callPackage ../tools/backup/btrbk {
-    asciidoc = asciidoc-full;
-  };
+  btrbk = callPackage ../tools/backup/btrbk { };
 
   buildpack = callPackage ../development/tools/buildpack {
     buildGoModule = buildGo117Module;
