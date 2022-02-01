@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdg-launch";
-  version = "1.11";
+  version = "1.12";
 
   postPatch = ''
     # fix gettext configuration
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "bbidulock";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qrBxyJ3dUNdnE1nANLKKL0cXw/Hc4qxDoY1anIRN+VA=";
+    sha256 = "sha256-S/0Wn1T5MSOPN6QXkzfmygHL6XTAnnMJr5Z3fBzsHEw=";
   };
 
   preConfigure = "./autogen.sh";

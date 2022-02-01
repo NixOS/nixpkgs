@@ -62,8 +62,7 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-xEPeMcNJVOeZtoN+d+aRwolpW8mFSEQx76HTRdlhPhg=";
   };
 
-  # FIXME: nix_2_6 is broken on aarch64-darwin for now.
-  stable = self.nix_2_5;
+  stable = self.nix_2_6;
 
   unstable = lib.lowPrio (common rec {
     version = "2.7";
