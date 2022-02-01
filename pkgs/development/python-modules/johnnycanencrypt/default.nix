@@ -31,7 +31,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit patches src;
     name = "${pname}-${version}";
-    hash = "sha256-2XhXCKyXVlFgbcOoMy/A5ajiIVxBii56YeI29mO720U=";
+    hash = "sha256-1dRFC59GY7M99LvQWy2eXPesmLX5k46rN8l4suLYkQY=";
   };
 
   format = "pyproject";
