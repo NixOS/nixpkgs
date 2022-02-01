@@ -435,6 +435,12 @@
     github = "akho";
     githubId = 104951;
   };
+  akirak = {
+    email = "akira.komamura@gmail.com";
+    github = "akirak";
+    githubId = 6270544;
+    name = "Akira Komamura";
+  };
   akru = {
     email = "mail@akru.me";
     github = "akru";
