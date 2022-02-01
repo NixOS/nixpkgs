@@ -23,6 +23,17 @@ in {
       } ];
     };
 
+    services.postgresql = {
+      enable = true;
+      ensureDatabases = [ "hass" ];
+      ensureUsers = [{
+        name = "hass";
+        ensurePermissions = {
+          "DATABASE hass" = "ALL PRIVILEGES";
+        };
+      }];
+    };
+
     services.home-assistant = {
       enable = true;
       inherit configDir;
@@ -39,6 +50,11 @@ in {
         "wake_on_lan"
       ];
 
+      # test extra package passing from the module
+      extraPackages = python3Packages: with python3Packages; [
+        psycopg2
+      ];
+
       config = {
         homeassistant = {
           name = "Home";
@@ -47,6 +63,9 @@ in {
           longitude = "0.0";
           elevation = 0;
         };
+
+        # configure the recorder component to use the postgresql db
+        recorder.db_url = "postgresql://@/hass";
 
         # we can't load default_config, because the updater requires
         # network access and would cause an error, so load frontend
