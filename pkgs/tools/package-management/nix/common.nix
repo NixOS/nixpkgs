@@ -168,7 +168,8 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "profiledir=$(out)/etc/profile.d"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0";
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
