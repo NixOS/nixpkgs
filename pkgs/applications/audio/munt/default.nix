@@ -1,50 +1,52 @@
 { lib
-, mkDerivation
 , stdenv
+, mkDerivation
 , fetchFromGitHub
-, makeDesktopItem
+, alsa-lib
 , cmake
+, glib
 , pkg-config
 , qtbase
-, glib
-, alsa-lib
 , withJack ? stdenv.hostPlatform.isUnix, jack
 }:
 
-let
-  mainProgram = "mt32emu-qt";
-in
 mkDerivation rec {
   pname = "munt";
-  version = "2.5.0";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "munt_${lib.replaceChars [ "." ] [ "_" ] version}";
-    sha256 = "1lknq2a72gv1ddhzr7f967wpa12lh805jj4gjacdnamgrc1h22yn";
+    rev = "libmt32emu_${lib.replaceChars [ "." ] [ "_" ] version}";
+    hash = "sha256-n5VV5Swh1tOVQGT3urEKl64A/w7cY95/0y5wC5ZuLm4=";
   };
 
   dontFixCmake = true;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ qtbase glib ]
-    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-    ++ lib.optional withJack jack;
+  buildInputs = [
+    glib
+    qtbase
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+  ++ lib.optional withJack jack;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
-    mv $out/bin/${mainProgram}.app $out/Applications/
-    ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}/${mainProgram}
+    mv $out/bin/${meta.mainProgram}.app $out/Applications/
+    ln -s $out/{Applications/${meta.mainProgram}.app/Contents/MacOS,bin}/${meta.mainProgram}
   '';
 
   meta = with lib; {
-    inherit mainProgram;
-    description = "Multi-platform software synthesiser emulating Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
     homepage = "http://munt.sourceforge.net/";
+    description = "An emulator of Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
     license = with licenses; [ lgpl21 gpl3 ];
-    platforms = platforms.all;
     maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.all;
+    mainProgram = "mt32emu-qt";
   };
 }
