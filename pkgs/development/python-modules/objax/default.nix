@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "objax";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "objax";
     rev = "v${version}";
-    sha256 = "09gm61ghn5mi92q5mhx22mcv6aa6z78jsrnfar1hd3nwwyn9dq42";
+    sha256 = "sha256-/6tZxVDe/3C53Re14odU9VA3mKvSj9X3/xt6bHFLHwQ=";
   };
 
   # Avoid propagating the dependency on `jaxlib`, see

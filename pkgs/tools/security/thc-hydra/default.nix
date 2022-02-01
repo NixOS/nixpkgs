@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-V9rr5fbJWm0pa+Kp8g95XvLPo/uWcDwyU2goImnIq58=";
   };
 
+  patches = lib.optionals stdenv.isDarwin [
+    ./darwin-remove-ldflag.patch
+  ];
+
   postPatch = let
     makeDirs = output: subDir: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) buildInputs);
   in ''
@@ -43,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.thc.org/thc-hydra/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
