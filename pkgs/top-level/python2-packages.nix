@@ -130,6 +130,8 @@ with self; with super; {
       };
     };
 
+  pytest-forked = callPackage ../development/python2-modules/pytest-forked { };
+
   pytest-runner = callPackage ../development/python2-modules/pytest-runner { };
 
   pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
