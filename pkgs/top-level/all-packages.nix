@@ -6064,7 +6064,9 @@ with pkgs;
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
-  goofys = callPackage ../tools/filesystems/goofys { };
+  goofys = callPackage ../tools/filesystems/goofys {
+    buildGoModule = buildGo116Module;
+  };
 
   go-sct = callPackage ../tools/X11/go-sct { };
 
