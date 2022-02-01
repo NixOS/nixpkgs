@@ -2,12 +2,11 @@
   pkg-config, pure, glpk, gmp, libtool, libmysqlclient, libiodbc }:
 
 stdenv.mkDerivation rec {
-  baseName = "glpk";
+  pname = "pure-glpk";
   version = "0.5";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-glpk-${version}.tar.gz";
     sha256 = "5d6dc11706985dda02d96d481ea5f164c9e95ee446432fc4fc3d0db61a076346";
   };
 
