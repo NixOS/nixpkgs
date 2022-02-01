@@ -23830,6 +23830,8 @@ with pkgs;
 
   ledger-udev-rules = callPackage ../os-specific/linux/ledger-udev-rules {};
 
+  levuaska-gtk-theme = callPackage ../data/themes/levuaska-gtk-theme {  };
+
   inherit (callPackages ../data/fonts/liberation-fonts { })
     liberation_ttf_v1
     liberation_ttf_v2
