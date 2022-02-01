@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.14.7";
+  version = "0.14.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-P4yibI2KQQtIK8G28rkutaaMejiygZY1l/EjTl9Mju8=";
+    sha256 = "sha256-0GB6LDsZlWmNS3O01nHWu20JCgSptyih7iBjbEFoZaE=";
   };
 
   propagatedBuildInputs = [
