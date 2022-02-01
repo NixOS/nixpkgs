@@ -25231,9 +25231,7 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
-  dwl = callPackage ../applications/window-managers/dwl {
-    wlroots = wlroots_0_14;
-  };
+  dwl = callPackage ../applications/window-managers/dwl { };
 
   dwm = callPackage ../applications/window-managers/dwm {
     # dwm is configured entirely through source modification. Allow users to
