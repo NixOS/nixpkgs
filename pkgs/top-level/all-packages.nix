@@ -7901,6 +7901,10 @@ with pkgs;
 
   mole = callPackage ../tools/networking/mole { };
 
+  morgen = callPackage ../applications/office/morgen {
+    electron = electron_15;
+  };
+
   mosh = callPackage ../tools/networking/mosh { };
 
   mpage = callPackage ../tools/text/mpage { };
@@ -27477,6 +27481,8 @@ with pkgs;
 
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
 
+  edgetx = libsForQt5.callPackage ../applications/misc/edgetx { };
+
   easytag = callPackage ../applications/audio/easytag { };
 
   mp3gain = callPackage ../applications/audio/mp3gain { };
@@ -32300,6 +32306,8 @@ with pkgs;
 
   sherpa = callPackage ../applications/science/physics/sherpa {};
 
+  shtns = callPackage ../applications/science/physics/shtns { };
+
   xfitter = callPackage ../applications/science/physics/xfitter {};
 
   xflr5 = libsForQt5.callPackage ../applications/science/physics/xflr5 { };
@@ -34115,8 +34123,6 @@ with pkgs;
   wprecon = callPackage ../tools/security/wprecon { };
 
   wraith = callPackage ../applications/networking/irc/wraith { };
-
-  wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
   wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
     wxGTK = wxGTK30;

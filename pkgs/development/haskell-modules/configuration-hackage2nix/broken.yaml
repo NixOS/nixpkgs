@@ -201,6 +201,7 @@ broken-packages:
   - arrow-list
   - arrowp
   - arrowp-qq
+  - arrow-utils
   - ArrowVHDL
   - artery
   - artifact
@@ -5379,6 +5380,7 @@ broken-packages:
   - wavefront-obj
   - weak-bag
   - weather-api
+  - web3-polkadot
   - webapi
   - webapp
   - webauthn

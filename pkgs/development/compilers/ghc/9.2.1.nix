@@ -21,9 +21,10 @@
   # build-time dependency too.
   buildTargetLlvmPackages, llvmPackages
 
-, # If enabled, GHC will be built with the GPL-free but slower integer-simple
-  # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(lib.meta.availableOn stdenv.hostPlatform gmp), gmp
+, # If enabled, GHC will be built with the GPL-free but slightly slower native
+  # bignum backend instead of the faster but GPLed gmp backend.
+  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp)
+, gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -62,7 +63,7 @@
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
 }:
 
-assert !enableIntegerSimple -> gmp != null;
+assert !enableNativeBignum -> gmp != null;
 
 # Cross cannot currently build the `haddock` program for silly reasons,
 # see note [HADDOCK_DOCS].
@@ -99,7 +100,7 @@ let
   ''
     HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
+    BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
   '' + lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
@@ -115,7 +116,7 @@ let
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
     ++ [libffi]
-    ++ lib.optional (!enableIntegerSimple) gmp
+    ++ lib.optional (!enableNativeBignum) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
   # TODO(@sternenseemann): is buildTarget LLVM unnecessary?
@@ -153,7 +154,7 @@ let
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
     (lib.optionalString stdenv.hostPlatform.isMusl "-musl")
-    (lib.optionalString enableIntegerSimple "-integer-simple")
+    (lib.optionalString enableNativeBignum "-native-bignum")
   ];
 
 in
@@ -252,7 +253,7 @@ stdenv.mkDerivation (rec {
     "--with-system-libffi"
     "--with-ffi-includes=${targetPackages.libffi.dev}/include"
     "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
-  ] ++ lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
+  ] ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [

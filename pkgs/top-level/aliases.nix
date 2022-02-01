@@ -1098,6 +1098,7 @@ mapAliases ({
   winswitch = throw "winswitch has been removed from nixpkgs."; # added 2019-12-10
   wireshark-gtk = throw "wireshark-gtk is not supported anymore. Use wireshark-qt or wireshark-cli instead."; # added 2019-11-18
   wireguard = wireguard-tools; # added 2018-05-19
+  wxmupen64plus = throw "wxmupen64plus was removed because the upstream disappeared."; # 2022-01-31
   morituri = whipper; # added 2018-09-13
   xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers; # added 2021-11-19
   xp-pen-g430 = pentablet-driver; # added 2020-05-03
