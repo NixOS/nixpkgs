@@ -15641,7 +15641,9 @@ with pkgs;
 
   spooles = callPackage ../development/libraries/science/math/spooles {};
 
-  spruce = callPackage ../development/tools/misc/spruce { };
+  spruce = callPackage ../development/tools/misc/spruce {
+    buildGoModule = buildGo116Module;
+  };
 
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
