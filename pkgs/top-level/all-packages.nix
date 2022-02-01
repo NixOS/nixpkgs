@@ -21459,7 +21459,9 @@ with pkgs;
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
 
-  mycorrhiza = callPackage ../servers/mycorrhiza { };
+  mycorrhiza = callPackage ../servers/mycorrhiza {
+    buildGoModule = buildGo116Module;
+  };
 
   myserver = callPackage ../servers/http/myserver { };
 
