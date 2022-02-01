@@ -15018,6 +15018,8 @@ with pkgs;
 
   ccloud-cli = callPackage ../development/tools/ccloud-cli { };
 
+  confluent-cli = callPackage ../development/tools/confluent-cli { };
+
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
 
   hyenae = callPackage ../tools/networking/hyenae { };
@@ -27481,6 +27483,8 @@ with pkgs;
 
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
 
+  edgetx = libsForQt5.callPackage ../applications/misc/edgetx { };
+
   easytag = callPackage ../applications/audio/easytag { };
 
   mp3gain = callPackage ../applications/audio/mp3gain { };
@@ -32304,6 +32308,8 @@ with pkgs;
 
   sherpa = callPackage ../applications/science/physics/sherpa {};
 
+  shtns = callPackage ../applications/science/physics/shtns { };
+
   xfitter = callPackage ../applications/science/physics/xfitter {};
 
   xflr5 = libsForQt5.callPackage ../applications/science/physics/xflr5 { };
@@ -34119,8 +34125,6 @@ with pkgs;
   wprecon = callPackage ../tools/security/wprecon { };
 
   wraith = callPackage ../applications/networking/irc/wraith { };
-
-  wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
   wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
     wxGTK = wxGTK30;
