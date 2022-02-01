@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook
-, jdk8_headless, jdk11_headless
-, bash, coreutils, which
-, bzip2, cyrus_sasl , protobuf3_7, snappy, zlib, zstd
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+, jdk8_headless
+, jdk11_headless
+, bash
+, coreutils
+, which
+, bzip2
+, cyrus_sasl
+, protobuf3_7
+, snappy
+, zlib
+, zstd
 , openssl
 }:
 
@@ -9,15 +21,25 @@ with lib;
 
 let
   common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl, nativeLibs ? [ ], libPatches ? "" }:
+    let
+      platformUrlSuffix =
+        if stdenv.isx86_64 && (stdenv.isLinux || stdenv.isDarwin)
+        then ""
+        else
+          if stdenv.isAarch64 && (stdenv.isLinux || stdenv.isDarwin)
+          then "-aarch64"
+          else throw "Hadoop does not currently support ${stdenv.system}.";
+    in
     stdenv.mkDerivation rec {
       inherit pname version jdk libPatches untarDir openssl;
       src = fetchurl {
-        url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}.tar.gz";
-        inherit sha256;
+        url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}${platformUrlSuffix}.tar.gz";
+        sha256 = sha256.${stdenv.system};
       };
+      doCheck = true;
 
       nativeBuildInputs = [ makeWrapper ]
-        ++ optional (nativeLibs != [] || libPatches != "") [ autoPatchelfHook ];
+        ++ optional (stdenv.isLinux && (nativeLibs != [ ] || libPatches != "")) [ autoPatchelfHook ];
       buildInputs = [ openssl ] ++ nativeLibs;
 
       installPhase = ''
@@ -51,7 +73,7 @@ let
           computers, each of which may be prone to failures.
         '';
         maintainers = with maintainers; [ volth illustris ];
-        platforms = [ "x86_64-linux" ];
+        platforms = builtins.attrNames sha256;
       };
 
     };
@@ -59,12 +81,22 @@ in
 {
   # Different version of hadoop support different java runtime versions
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
-  hadoop_3_3 = common rec {
-    pname = "hadoop";
-    version = "3.3.1";
-    sha256 = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
-    untarDir = "${pname}-${version}";
-    jdk = jdk11_headless;
+  hadoop_3_3 = common
+    rec {
+      pname = "hadoop";
+      version = "3.3.1";
+      sha256 = {
+        x86_64-linux = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
+        x86_64-darwin = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
+        aarch64-linux = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
+        aarch64-darwin = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
+      };
+      jdk = jdk11_headless;
+      untarDir = "${pname}-${version}";
+      openssl = null;
+    } // optionalAttrs stdenv.isLinux {
+    # Only include native libraries if we're using Linux.
+    # TODO: Figure out how to get the libraries to link properly for darwin.
     inherit openssl;
     # TODO: Package and add Intel Storage Acceleration Library
     nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
@@ -80,7 +112,9 @@ in
   hadoop_3_2 = common rec {
     pname = "hadoop";
     version = "3.2.2";
-    sha256 = "1hxq297cqvkfgz2yfdiwa3l28g44i2abv5921k2d6b4pqd33prwp";
+    sha256 = {
+      x86_64-linux = "1hxq297cqvkfgz2yfdiwa3l28g44i2abv5921k2d6b4pqd33prwp";
+    };
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
     # can be manually overriden
@@ -89,7 +123,9 @@ in
   hadoop2 = common rec {
     pname = "hadoop";
     version = "2.10.1";
-    sha256 = "1w31x4bk9f2swnx8qxx0cgwfg8vbpm6cy5lvfnbbpl3rsjhmyg97";
+    sha256 = {
+      x86_64-linux = "1w31x4bk9f2swnx8qxx0cgwfg8vbpm6cy5lvfnbbpl3rsjhmyg97";
+    };
     jdk = jdk8_headless;
     openssl = null;
   };
