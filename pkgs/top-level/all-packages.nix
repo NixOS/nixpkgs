@@ -22016,7 +22016,9 @@ with pkgs;
 
   sambaFull = samba4Full;
 
-  sampler = callPackage ../applications/misc/sampler { };
+  sampler = callPackage ../applications/misc/sampler {
+    buildGoModule = buildGo116Module;
+  };
 
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
