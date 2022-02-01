@@ -15115,7 +15115,9 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
-  k2tf = callPackage ../development/tools/misc/k2tf { };
+  k2tf = callPackage ../development/tools/misc/k2tf {
+    buildGoModule = buildGo116Module;
+  };
 
   kafka-delta-ingest = callPackage ../development/tools/kafka-delta-ingest { };
 
