@@ -11917,7 +11917,9 @@ with pkgs;
 
   dasm = callPackage ../development/compilers/dasm { };
 
-  dbmate = callPackage ../development/tools/database/dbmate { };
+  dbmate = callPackage ../development/tools/database/dbmate {
+    buildGoModule = buildGo117Module;
+  };
 
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
 
