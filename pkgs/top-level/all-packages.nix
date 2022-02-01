@@ -32385,6 +32385,8 @@ with pkgs;
 
   eprover-ho = callPackage ../applications/science/logic/eprover { enableHO = true; };
 
+  formula = callPackage ../applications/science/logic/formula { };
+
   gappa = callPackage ../applications/science/logic/gappa { };
 
   gfan = callPackage ../applications/science/math/gfan {};
