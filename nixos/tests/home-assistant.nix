@@ -43,6 +43,11 @@ in {
         psycopg2
       ];
 
+      # test loading custom components
+      customComponents = with pkgs.home-assistant-custom-components; [
+        prometheus-sensor
+      ];
+
       # test loading lovelace modules
       customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
         mini-graph-card
@@ -165,6 +170,10 @@ in {
         wait_for_homeassistant(cursor)
         hass.wait_for_open_port(8123)
         hass.succeed("curl --fail http://localhost:8123/lovelace")
+
+    with subtest("Check that custom components get installed"):
+        hass.succeed("test -f ${configDir}/custom_components/prometheus_sensor/manifest.json")
+        hass.wait_until_succeeds("journalctl -u home-assistant.service | grep -q 'We found a custom integration prometheus_sensor which has not been tested by Home Assistant'")
 
     with subtest("Check that lovelace modules are referenced and fetchable"):
         hass.succeed("grep -q 'mini-graph-card-bundle.js' '${configDir}/ui-lovelace.yaml'")
