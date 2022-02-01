@@ -2,6 +2,7 @@
 , buildPythonPackage
 , callPackage
 , fetchFromGitHub
+, pythonOlder
 , flit-core
 
 # important downstream dependencies
@@ -13,8 +14,10 @@
 
 buildPythonPackage rec {
   pname = "tomli";
-  version = "1.2.2";
+  version = "2.0.1";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   outputs = [
     "out"
@@ -25,13 +28,8 @@ buildPythonPackage rec {
     owner = "hukkin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-oDjpNzWxTaCC1+WyBKrkR6kp90ZomcZQfyW+xKddDoM=";
+    sha256 = "sha256-v0ZMrHIIaGeORwD4JiBeLthmnKZODK5odZVL0SY4etA=";
   };
-
-  patches = [
-    # required for mypy
-    ./fix-backwards-compatibility-load.patch
-  ];
 
   nativeBuildInputs = [ flit-core ];
 
