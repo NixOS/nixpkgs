@@ -8,24 +8,25 @@
 , notmuch
 , openssl
 , ethtool
+, lm_sensors
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.21.2";
+  version = "0.21.4";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-m0Yq6uxo4FAmwvUK/b3zTb79AT9h/fgdm4Q9sf1DYe0=";
+    sha256 = "sha256-D/+SDKkrYfdzFw+cNBJrCshpDuFSLbr70jvFMbX3B0w=";
   };
 
-  cargoSha256 = "sha256-J+829GzZ4lKrn3MSip/weaI8pExBt3uex86bKZOofg4=";
+  cargoSha256 = "sha256-tNwf2ShnzoSrb1R/g0hOGwQMulWYXyVCILU3Jb+Sfpg=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  buildInputs = [ dbus libpulseaudio notmuch openssl ];
+  buildInputs = [ dbus libpulseaudio notmuch openssl lm_sensors ];
 
   buildFeatures = [
     "notmuch"
