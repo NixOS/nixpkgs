@@ -830,7 +830,6 @@ broken-packages:
   - ContextAlgebra
   - context-free-grammar
   - context-stack
-  - contiguous
   - contiguous-checked
   - continue
   - Contract
