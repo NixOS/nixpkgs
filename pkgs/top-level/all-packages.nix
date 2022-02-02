@@ -8392,6 +8392,8 @@ with pkgs;
 
   open-ecard = callPackage ../tools/security/open-ecard { };
 
+  open-fprintd = callPackage ../tools/security/open-fprintd { };
+
   openjade = callPackage ../tools/text/sgml/openjade { };
 
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
