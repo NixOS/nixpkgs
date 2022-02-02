@@ -154,7 +154,7 @@ let
       mkdir -p $out/{Applications/${appName},bin}
       cp -R . $out/Applications/${appName}
       makeWrapper $out/Applications/${appName}/Contents/MacOS/Teams $out/bin/teams
-      runHook postInstallPhase
+      runHook postInstall
     '';
   };
 in
