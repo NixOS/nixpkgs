@@ -7,6 +7,7 @@ use String::ShellQuote;
 use Config;
 
 my $program = $ARGV[0];
+my $cmd = shell_quote("exec", @ARGV);
 
 my $dbPath = "@dbPath@";
 
@@ -26,20 +27,19 @@ if (!defined $res || scalar @$res == 0) {
 } elsif (scalar @$res == 1) {
     my $package = @$res[0]->{package};
     if ($ENV{"NIX_AUTO_RUN"} // "") {
-        exec("nix-shell", "-p", $package, "--run", shell_quote("exec", @ARGV));
+        exec("nix-shell", "-p", $package, "--run", $cmd);
     } else {
         print STDERR <<EOF;
-The program '$program' is not in your PATH. You can make it available in an
-ephemeral shell by typing:
-  nix-shell -p $package
+The program '$program' is not in your PATH. You can run it by typing:
+  nix-shell -p $package --run \"$cmd\"
 EOF
     }
 } else {
     print STDERR <<EOF;
 The program '$program' is not in your PATH. It is provided by several packages.
-You can make it available in an ephemeral shell by typing one of the following:
+You can run it by typing one of the following:
 EOF
-    print STDERR "  nix-shell -p $_->{package}\n" foreach @$res;
+    print STDERR "  nix-shell -p $_->{package} --run \"$cmd\"\n" foreach @$res;
 }
 
 exit 127;
