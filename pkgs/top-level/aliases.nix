@@ -3,11 +3,11 @@ lib: self: super:
 with self;
 
 let
-  # Removing recurseForDerivation prevents derivations of aliased attribute
-  # set to appear while listing all the packages available.
+  # Removing recurseForDerivation prevents derivations of aliased attribute set
+  # to appear while listing all the packages available.
   removeRecurseForDerivations = alias: with lib;
-    if alias.recurseForDerivations or false then
-      removeAttrs alias ["recurseForDerivations"]
+    if alias.recurseForDerivations or false
+    then removeAttrs alias ["recurseForDerivations"]
     else alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
@@ -17,20 +17,23 @@ let
       dontDistribute alias
     else alias;
 
-  # Make sure that we are not shadowing something from
-  # all-packages.nix.
-  checkInPkgs = n: alias: if builtins.hasAttr n super
-                          then throw "Alias ${n} is still in all-packages.nix"
-                          else alias;
+  # Make sure that we are not shadowing something from all-packages.nix.
+  checkInPkgs = n: alias:
+    if builtins.hasAttr n super
+    then throw "Alias ${n} is still in all-packages.nix"
+    else alias;
 
   mapAliases = aliases:
-    lib.mapAttrs (n: alias: removeDistribute
-                             (removeRecurseForDerivations
-                              (checkInPkgs n alias)))
-                     aliases;
+    lib.mapAttrs (n: alias:
+      removeDistribute
+        (removeRecurseForDerivations
+          (checkInPkgs n alias)))
+      aliases;
 in
 
-  ### Deprecated aliases - for backward compatibility
+### Deprecated aliases - for backward compatibility
+### Please maintain this list in ASCIIbetical ordering.
+### Hint: the "sections" are delimited by ### <letter> ###
 
 mapAliases ({
   _0x0 = throw "0x0 upstream is abandoned and no longer exists: https://gitlab.com/somasis/scripts/";
