@@ -68,6 +68,6 @@ buildPythonPackage rec {
       "Install and Run Python Applications in Isolated Environments";
     homepage = "https://github.com/pipxproject/pipx";
     license = licenses.mit;
-    maintainers = with maintainers; [ yevhenshymotiuk ];
+    maintainers = with maintainers; [ yshym ];
   };
 }
