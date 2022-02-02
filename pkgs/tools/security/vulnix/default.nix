@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , python3Packages
 , nix
 , ronn
@@ -12,6 +13,14 @@ python3Packages.buildPythonApplication rec {
     inherit pname version;
     sha256 = "1d5mqpc4g1wkqcwxp8m9k130i3ii3q7n1n4b1fyb5wijidmyn3xv";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "allow-pyyaml-6.patch";
+      url = "https://github.com/flyingcircusio/vulnix/commit/a42372c7ed65a8bc4831871a5821b22a8345ba26.patch";
+      sha256 = "sha256-aBrZNI2k1qv5EkOIjfH3qzjYnwF5LLNod+msoSPzegI=";
+    })
+  ];
 
   outputs = [ "out" "doc" "man" ];
   nativeBuildInputs = [ ronn ];
