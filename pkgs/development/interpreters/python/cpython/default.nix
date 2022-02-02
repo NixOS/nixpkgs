@@ -344,7 +344,6 @@ in with passthru; stdenv.mkDerivation {
     done
   '' + optionalString stdenv.isDarwin ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
-    export MACOSX_DEPLOYMENT_TARGET=10.6
     # Override the auto-detection in setup.py, which assumes a universal build
     export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
   '' + optionalString (isPy3k && pythonOlder "3.7") ''
