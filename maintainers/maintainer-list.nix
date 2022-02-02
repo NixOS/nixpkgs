@@ -6233,6 +6233,12 @@
     githubId = 1047859;
     name = "Kaz Wesley";
   };
+  kazenyuk = {
+    email = "kazenyuk@gmail.com";
+    github = "nvmd";
+    githubId = 524492;
+    name = "Sergey Kazenyuk";
+  };
   kcalvinalvin = {
     email = "calvin@kcalvinalvin.info";
     github = "kcalvinalvin";
