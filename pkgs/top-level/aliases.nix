@@ -687,7 +687,6 @@ mapAliases ({
   nylas-mail-bin = throw "nylas-mail-bin was deprecated on 2019-09-11: abandoned by upstream";
   oauth2_proxy = oauth2-proxy; # added 2021-04-18
   opencascade_oce = opencascade; # added 2018-04-25
-  obconf = throw "obconf has been removed"; # added 2022-01-16
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set."; # added 2021-01-24
   ofp = throw "ofp is not compatible with odp-dpdk";
