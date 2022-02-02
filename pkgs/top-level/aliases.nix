@@ -302,6 +302,7 @@ mapAliases ({
   foomatic_filters = foomatic-filters;  # 2016-08
   fscryptctl-experimental = throw "The package fscryptctl-experimental has been removed. Please switch to fscryptctl."; # 2021-11-07
   fsharp41 = throw "fsharp41 has been removed, please use dotnet-sdk_5 or later";
+  fslint = throw "fslint has been removed: end of life. Upstream recommends using czkawka (https://qarmin.github.io/czkawka/) instead"; # 2022-01-15
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
   fwupdate = throw "fwupdate was merged into fwupd"; # added 2020-05-19
@@ -312,6 +313,7 @@ mapAliases ({
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
   gettextWithExpat = gettext; # 2016-02-19
   getmail = throw "getmail has been removed from nixpkgs, migrate to getmail6."; # added 2022-01-12
+  gfm = throw "gfm has been removed"; # 2021-01-15
   giflib_4_1 = throw "giflib_4_1 has been removed; use giflib instead"; # 2020-02-12
   git-bz = throw "giz-bz has been removed from nixpkgs as it is stuck on python2."; # added 2022-01-01
   gitAndTools = self // { # added 2021-01-14
@@ -325,12 +327,14 @@ mapAliases ({
   };
   gitin = throw "gitin has been remove because it was unmaintained and depended on an insecure version of libgit2"; # added 2021-12-07
   gitinspector = throw "gitinspector has been removed because it doesn't work with python3."; # added 2022-01-12
+  gksu = throw "gksu has been removed"; # added 2022-01-16
   glib_networking = glib-networking; # added 2018-02-25
   gmailieer = lieer; # added 2020-04-19
   gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # added 2021-03-08
   gnome-mpv = celluloid; # added 2019-08-22
   gnome15 = throw "gnome15 has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries."; # added 2019-12-10
   gmic_krita_qt = gmic-qt-krita; # added 2019-09-07
+  gnome-sharp = throw "gnome-sharp has been removed from nixpkgs"; # added 2022-01-15
   gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
   gnome_doc_utils = gnome-doc-utils; # added 2018-02-25
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
@@ -377,7 +381,8 @@ mapAliases ({
   gtk_doc = gtk-doc; # added 2018-02-25
   gtklick = throw "gtklick has been removed from nixpkgs as the project is stuck on python2"; # added 2022-01-01
   guileCairo = guile-cairo; # added 2017-09-24
-  guileGnome = guile-gnome; # added 2017-09-24
+  guileGnome = throw "guile-gnome has been removed"; # 2022-01-16
+  guile-gnome = throw "guile-gnome has been removed"; # 2022-01-16
   gnome3 = gnome; # added 2021-05-07
   guileLint = guile-lint; # added 2017-09-27
   guile_lib = guile-lib; # added 2017-09-24
@@ -478,6 +483,7 @@ mapAliases ({
   liberation_ttf_v1_from_source = liberation_ttf_v1; # added 2018-12-12
   liberation_ttf_v2_from_source = liberation_ttf_v2; # added 2018-12-12
   liberationsansnarrow = liberation-sans-narrow; # added 2018-12-12
+  libgksu = throw "libgksu has been removed"; # added 2022-01-16
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgpgerror = libgpg-error; # added 2021-09-04
@@ -610,6 +616,7 @@ mapAliases ({
   minergate-cli = throw "minergatecli has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # added 2021-08-13
   minetime = throw "minetime has been removed from nixpkgs, because it was discontinued 2021-06-22"; # added 2021-10-14
   monero = monero-cli; # added 2021-11-28
+  monodevelop = throw "monodevelop has been removed from nixpgks"; # added 2022-01-15
   mopidy-gmusic = throw "mopidy-gmusic has been removed because Google Play Music was discontinued"; # added 2021-03-07
   mopidy-local-images = throw "mopidy-local-images has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension."; # added 2020-10-18
   mopidy-local-sqlite = throw "mopidy-local-sqlite has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension."; # added 2020-10-18
@@ -680,6 +687,7 @@ mapAliases ({
   nylas-mail-bin = throw "nylas-mail-bin was deprecated on 2019-09-11: abandoned by upstream";
   oauth2_proxy = oauth2-proxy; # added 2021-04-18
   opencascade_oce = opencascade; # added 2018-04-25
+  obconf = throw "obconf has been removed"; # added 2022-01-16
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set."; # added 2021-01-24
   ofp = throw "ofp is not compatible with odp-dpdk";
@@ -712,6 +720,7 @@ mapAliases ({
   parity-ui = throw "parity-ui was removed because it was broken and unmaintained by upstream"; # added 2022-01-10
   parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
+  pdfmod = throw "pdfmod has been removed"; # added 2022-01-15
   pdfread = throw "pdfread has been remove because it is unmaintained for years and the sources are no longer available"; # added 2021-07-22
   pdf-redact-tools = throw "pdf-redact-tools has been removed from nixpkgs because the upstream has abandoned the project."; # added 2022-01-01
   pdf2htmlEx = throw "pdf2htmlEx has been removed from nixpkgs, as it was unmaintained"; # added 2020-11-03
@@ -800,6 +809,8 @@ mapAliases ({
   pg_similarity = postgresqlPackages.pg_similarity;
   pgtap = postgresqlPackages.pgtap;
   plv8 = postgresqlPackages.plv8;
+  tilp2 = throw "tilp2 has been removed"; # added 2022-01-15
+  timekeeper = throw "timekeeper has been removed"; # added 2022-01-16
   timescaledb = postgresqlPackages.timescaledb;
   tlauncher = throw "tlauncher has been removed because there questionable practices and legality concerns";
   tsearch_extras = postgresqlPackages.tsearch_extras;
@@ -1127,6 +1138,7 @@ mapAliases ({
   xv = xxv; # added 2020-02-22
   xvfb_run = xvfb-run; # added 2021-05-07
   yacc = bison; # moved from top-level 2021-03-14
+  yarssr = throw "yarssr has been removed as part of the python2 deprecation"; # added 2022-01-15
   youtubeDL = youtube-dl;  # added 2014-10-26
   ytop = throw "ytop has been abandoned by upstream. Consider switching to bottom instead";
   yubikey-neo-manager = throw "yubikey-neo-manager has been removed because it was broken. Use yubikey-manager-qt instead."; # added 2021-03-08
