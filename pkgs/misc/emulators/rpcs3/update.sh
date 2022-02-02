@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p gnused jq nix-prefetch-git curl
+#!nix-shell -i bash --pure --keep GITHUB_TOKEN -p gnused jq nix-prefetch-git curl cacert
 
 set -eou pipefail
 
@@ -14,7 +14,7 @@ if [[ ! -v GITHUB_TOKEN ]]; then
     exit 1
 fi
 
-PAYLOAD=$(jq -cn --rawfile query /dev/stdin '{"query": $query}' <<EOF | curl -s -H "Authorization: bearer $GITHUB_TOKEN" -d '@-' https://api.github.com/graphql
+payload=$(jq -cn --rawfile query /dev/stdin '{"query": $query}' <<EOF | curl -s -H "Authorization: bearer $GITHUB_TOKEN" -d '@-' https://api.github.com/graphql
 {
   repository(owner: "RPCS3", name: "rpcs3") {
     branch: ref(qualifiedName: "refs/heads/master") {
@@ -37,20 +37,23 @@ PAYLOAD=$(jq -cn --rawfile query /dev/stdin '{"query": $query}' <<EOF | curl -s 
 }
 EOF
 )
-RPCS3_COMMIT=$(jq -r .data.repository.branch.target.oid <<< "$PAYLOAD")
-RPCS3_MAJORVER=$(jq -r .data.repository.tag.nodes[0].name <<< "$PAYLOAD" | sed 's/^v//g')
-RPCS3_COUNT=$(jq -r .data.repository.branch.target.history.totalCount <<< "$PAYLOAD")
 
-RPCS3_GITVER="$RPCS3_COUNT-${RPCS3_COMMIT::9}"
-echo "INFO: Latest commit is $RPCS3_COMMIT"
-echo "INFO: Latest version is $RPCS3_MAJORVER-$RPCS3_GITVER"
+commit_sha=$(jq -r .data.repository.branch.target.oid <<< "$payload")
+major_ver=$(jq -r .data.repository.tag.nodes[0].name <<< "$payload" | sed 's/^v//g')
+commit_count=$(jq -r .data.repository.branch.target.history.totalCount <<< "$payload")
+git_ver="$commit_count-${commit_sha::9}"
+final_ver="$major_ver-$git_ver"
 
-RPCS3_SHA256=$(nix-prefetch-git --quiet --fetch-submodules https://github.com/RPCS3/rpcs3.git "$RPCS3_COMMIT" | jq -r .sha256)
-echo "INFO: SHA256 is $RPCS3_SHA256"
+
+echo "INFO: Latest commit is $commit_sha"
+echo "INFO: Latest version is $final_ver"
+
+nix_sha256=$(nix-prefetch-git --quiet --fetch-submodules https://github.com/RPCS3/rpcs3.git "$commit_sha" | jq -r .sha256)
+echo "INFO: SHA256 is $nix_sha256"
 
 sed -i -E \
-    -e "s/majorVersion\s+.+$/majorVersion = \"${RPCS3_MAJORVER}\";/g" \
-    -e "s/gitVersion\s+.+$/gitVersion = \"${RPCS3_GITVER}\";/g" \
-    -e "s/rev\s*=\s*\"[a-z0-9]+\";$/rev = \"${RPCS3_COMMIT}\";/g" \
-    -e "s/sha256\s*=\s*\"[a-z0-9]+\";$/sha256 = \"${RPCS3_SHA256}\";/g" \
+    -e "s/rpcs3GitVersion\s*=\s*\"[\.a-z0-9-]+\";$/rpcs3GitVersion = \"${git_ver}\";/g" \
+    -e "s/rpcs3Version\s*=\s*\"[\.a-z0-9-]+\";$/rpcs3Version = \"${final_ver}\";/g" \
+    -e "s/rpcs3Revision\s*=\s*\"[a-z0-9]+\";$/rpcs3Revision = \"${commit_sha}\";/g" \
+    -e "s/rpcs3Sha256\s*=\s*\"[a-z0-9]+\";$/rpcs3Sha256 = \"${nix_sha256}\";/g" \
     "$ROOT/default.nix"
