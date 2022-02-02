@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -10,7 +11,7 @@
 , wrapGAppsHook
 , gtk3
 , libhandy
-, libportal
+, libportal-gtk3
 , gnome
 , gnome-autoar
 , glib-networking
@@ -52,6 +53,17 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit tracker;
     })
+
+    # Fix build with latest libportal
+    # https://gitlab.gnome.org/GNOME/nautilus/-/merge_requests/749
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/nautilus/-/commit/55cfd66ccca391fc144f5863ff6bfc1f3b137e2d.patch";
+      sha256 = "xSb9l7xxEYpAwmdmeWT/t7Z9Ck3DPtsODzbReQW/Q70=";
+      excludes = [
+        "build-aux/flatpak/org.gnome.Nautilus.json"
+        "build-aux/flatpak/org.gnome.Nautilus.yml"
+      ];
+    })
   ];
 
   nativeBuildInputs = [
@@ -76,7 +88,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gtk3
     libhandy
-    libportal
+    libportal-gtk3
     libexif
     libnotify
     libseccomp

@@ -206,17 +206,26 @@ in python.pkgs.buildPythonApplication rec {
     ./patches/tests-ignore-OSErrors-in-hass-fixture.patch
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp==3.8.1" "aiohttp" \
-      --replace "async_timeout==4.0.0" "async_timeout" \
-      --replace "bcrypt==3.1.7" "bcrypt" \
-      --replace "cryptography==35.0.0" "cryptography" \
-      --replace "httpx==0.21.0" "httpx" \
-      --replace "pip>=8.0.3,<20.3" "pip" \
-      --replace "PyJWT==2.1.0" "PyJWT" \
-      --replace "pyyaml==6.0" "pyyaml" \
-      --replace "yarl==1.6.3" "yarl"
+  postPatch = let
+    relaxedConstraints = [
+      "aiohttp"
+      "async_timeout"
+      "attrs"
+      "awesomeversion"
+      "bcrypt"
+      "cryptography"
+      "httpx"
+      "pip"
+      "PyJWT"
+      "requests"
+      "yarl"
+    ];
+  in ''
+    sed -r -i \
+      ${lib.concatStringsSep "\n" (map (package:
+        ''-e 's@${package}[<>=]+.*@${package}",@g' \''
+      ) relaxedConstraints)}
+    setup.py
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 

@@ -466,6 +466,8 @@ let
           inherit version;
           sha256 = "sha256-109FuBMXRU2W6YL9HFDm+1yZrCIjcorqh2RDOjn1ZvE=";
         };
+        # sdist lacks tests
+        doCheck = false;
       });
 
       semver = super.semver.overridePythonAttrs(oldAttrs: rec {

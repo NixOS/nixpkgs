@@ -81,6 +81,12 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/linux-apfs/linux-apfs-rw">apfs</link>,
+          a kernel module for mounting the Apple File System (APFS).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://frrouting.org/">FRRouting</link>, a
           popular suite of Internet routing protocol daemons (BGP, BFD,
           OSPF, IS-IS, VVRP and others). Available as
@@ -171,6 +177,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/audreyt/ethercalc">ethercalc</link>,
+          an online collaborative spreadsheet. Available as
+          <link xlink:href="options.html#opt-services.ethercalc.enable">services.ethercalc</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://timetagger.app">timetagger</link>,
           an open source time-tracker with an intuitive user experience
           and powerful reporting.
@@ -183,6 +196,15 @@
           a browser-based version of the RStudio IDE for the R
           programming language. Available as
           <link xlink:href="options.html#opt-services.rstudio-server.enable">services.rstudio-server</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/juanfont/headscale">headscale</link>,
+          an Open Source implementation of the
+          <link xlink:href="https://tailscale.io">Tailscale</link>
+          Control Server. Available as
+          <link xlink:href="options.html#opt-services.headscale.enable">services.headscale</link>
         </para>
       </listitem>
     </itemizedlist>
@@ -226,6 +248,23 @@
         <para>
           <literal>services.kubernetes.addons.dashboard</literal> was
           removed due to it being an outdated version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The DHCP server (<literal>services.dhcpd4</literal>,
+          <literal>services.dhcpd6</literal>) has been hardened. The
+          service is now using the systemd’s
+          <literal>DynamicUser</literal> mechanism to run as an
+          unprivileged dynamically-allocated user with limited
+          capabilities. The dhcpd state files are now always stored in
+          <literal>/var/lib/dhcpd{4,6}</literal> and the
+          <literal>services.dhcpd4.stateDir</literal> and
+          <literal>service.dhcpd6.stateDir</literal> options have been
+          removed. If you were depending on root privileges or
+          set{uid,gid,cap} binaries in dhcpd shell hooks, you may give
+          dhcpd more capabilities with e.g.
+          <literal>systemd.services.dhcpd6.serviceConfig.AmbientCapabilities</literal>.
         </para>
       </listitem>
       <listitem>
@@ -358,6 +397,19 @@
       </listitem>
       <listitem>
         <para>
+          The iputils package, which is installed by default, no longer
+          provides the legacy tools <literal>tftpd</literal> and
+          <literal>traceroute6</literal>. More tools
+          (<literal>ninfod</literal>, <literal>rarpd</literal>, and
+          <literal>rdisc</literal>) are going to be removed in the next
+          release. See
+          <link xlink:href="https://github.com/iputils/iputils/releases/tag/20211215">upstream’s
+          release notes</link> for more details and available
+          replacements.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.thelounge.private</literal> was removed in
           favor of <literal>services.thelounge.public</literal>, to
           follow with upstream changes.
@@ -367,6 +419,11 @@
         <para>
           <literal>pkgs.docbookrx</literal> was removed since it’s
           unmaintained
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>tilp2</literal> was removed together with its module
         </para>
       </listitem>
       <listitem>
@@ -417,6 +474,20 @@
       </listitem>
       <listitem>
         <para>
+          The existing <literal>pkgs.opentelemetry-collector</literal>
+          has been moved to
+          <literal>pkgs.opentelemetry-collector-contrib</literal> to
+          match the actual source being the <quote>contrib</quote>
+          edition. <literal>pkgs.opentelemetry-collector</literal> is
+          now the actual core release of opentelemetry-collector. If you
+          use the community contributions you should change the package
+          you refer to. If you don’t need them update your commands from
+          <literal>otelcontribcol</literal> to
+          <literal>otelcorecol</literal> and enjoy a 7x smaller binary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.noto-fonts-cjk</literal> is now deprecated in
           favor of <literal>pkgs.noto-fonts-cjk-sans</literal> and
           <literal>pkgs.noto-fonts-cjk-serif</literal> because they each
@@ -429,13 +500,49 @@
       </listitem>
       <listitem>
         <para>
-          The interface that allows activation scripts to restart units
-          has been reworked. Restarting and reloading is now done by a
-          single file
-          <literal>/run/nixos/activation-restart-list</literal> that
-          honors <literal>restartIfChanged</literal> and
-          <literal>reloadIfChanged</literal> of the units.
+          <literal>switch-to-configuration</literal> (the script that is
+          run when running <literal>nixos-rebuild switch</literal> for
+          example) has been reworked
         </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The interface that allows activation scripts to restart
+              units has been streamlined. Restarting and reloading is
+              now done by a single file
+              <literal>/run/nixos/activation-restart-list</literal> that
+              honors <literal>restartIfChanged</literal> and
+              <literal>reloadIfChanged</literal> of the units.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The script now uses a proper ini-file parser to parse
+              systemd units. Some values are now only searched in one
+              section instead of in the entire unit. This is only
+              relevant for units that don’t use the NixOS systemd moule.
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  <literal>RefuseManualStop</literal>,
+                  <literal>X-OnlyManualStart</literal>,
+                  <literal>X-StopOnRemoval</literal>,
+                  <literal>X-StopOnReconfiguration</literal> are only
+                  searched in the <literal>[Unit]</literal> section
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <literal>X-ReloadIfChanged</literal>,
+                  <literal>X-RestartIfChanged</literal>,
+                  <literal>X-StopIfChanged</literal> are only searched
+                  in the <literal>[Service]</literal> section
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
@@ -464,6 +571,14 @@
           message less cluttered). This will not impact the behaviour of
           code using these functions as intended, namely as top-level
           wrapper for <literal>assert</literal> conditions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.vimPlugins.onedark-nvim</literal> now refers to
+          <link xlink:href="https://github.com/navarasu/onedark.nvim">navarasu/onedark.nvim</link>
+          (formerly refers to
+          <link xlink:href="https://github.com/olimorris/onedarkpro.nvim">olimorris/onedarkpro.nvim</link>).
         </para>
       </listitem>
     </itemizedlist>
@@ -520,12 +635,48 @@
       </listitem>
       <listitem>
         <para>
+          The configuration portion of the <literal>nix-daemon</literal>
+          module has been reworked and exposed as
+          <link xlink:href="options.html#opt-nix-settings">nix.settings</link>:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Legacy options have been mapped to the corresponding
+              options under under
+              <link xlink:href="options.html#opt-nix.settings">nix.settings</link>
+              but may be deprecated in the future.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <link xlink:href="options.html#opt-nix.buildMachines.publicHostKey">nix.buildMachines.publicHostKey</link>
+              has been added.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           The
           <literal>writers.writePyPy2</literal>/<literal>writers.writePyPy3</literal>
           and corresponding
           <literal>writers.writePyPy2Bin</literal>/<literal>writers.writePyPy3Bin</literal>
           convenience functions to create executable Python 2/3 scripts
           using the PyPy interpreter were added.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          If you are using Wayland you can choose to use the Ozone
+          Wayland support in Chrome and several Electron apps by setting
+          the environment variable <literal>NIXOS_OZONE_WL=1</literal>
+          (for example via
+          <literal>environment.sessionVariables.NIXOS_OZONE_WL = &quot;1&quot;</literal>).
+          This is not enabled by default because Ozone Wayland is still
+          under heavy development and behavior is not always flawless.
+          Furthermore, not all Electron apps use the latest Electron
+          versions.
         </para>
       </listitem>
       <listitem>
@@ -649,6 +800,14 @@
       </listitem>
       <listitem>
         <para>
+          The default value for
+          <literal>programs.spacefm.settings.graphical_su</literal> got
+          unset. It previously pointed to <literal>gksu</literal> which
+          has been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the
           <link xlink:href="https://starship.rs/">Starship</link> shell
           prompt, providing the options
@@ -697,6 +856,15 @@
           Reason is that the old name has been deprecated upstream.
           Using the old option name will still work, but produce a
           warning.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>programs.tmux</literal> has a new option
+          <literal>plugins</literal> that accepts a list of packages
+          from the <literal>tmuxPlugins</literal> group. The specified
+          packages are added to the system and loaded by
+          <literal>tmux</literal>.
         </para>
       </listitem>
     </itemizedlist>

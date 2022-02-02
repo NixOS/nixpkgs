@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "20.11.0";
+  version = "22.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VAUQcrzMnNs+u9ivBVkZUTemHTCPBL/xlnjkthNQ6xI=";
+    hash = "sha256-FRDGWHqPnGSiRmQbcAM8vF696Z8CrSRWk2eAOOghrrU=";
   };
 
   propagatedBuildInputs = [

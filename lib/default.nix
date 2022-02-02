@@ -122,8 +122,9 @@ let
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
       mkAliasOptionModule mkDerivedConfig doRename;
     inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
-      mergeDefaultOption mergeOneOption mergeEqualOption getValues
-      getFiles optionAttrSetToDocList optionAttrSetToDocList'
+      mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
+      getValues getFiles
+      optionAttrSetToDocList optionAttrSetToDocList'
       scrubOptionValue literalExpression literalExample literalDocBook
       showOption showFiles unknownModule mkOption;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor

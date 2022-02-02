@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "od";
-  version = "1.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1az30snc3w6s4k1pi7mspcv8y0kp3ihf3ly44z517nszmz9lrjfi";
+    sha256 = "180fb0d13c3af1384047b8296c95683816b5d0c68a60c22d07c703be8bd755cb";
   };
 
   # repeated_test no longer exists in nixpkgs

@@ -498,6 +498,22 @@
       </varlistentry>
       <varlistentry>
         <term>
+          <literal>types.unique</literal>
+          <literal>{ message = m }</literal>
+          <emphasis><literal>t</literal></emphasis>
+        </term>
+        <listitem>
+          <para>
+            Ensures that type <emphasis><literal>t</literal></emphasis>
+            cannot be merged. Prints the message
+            <emphasis><literal>m</literal></emphasis>, after the line
+            <literal>The option &lt;option path&gt; is defined multiple times.</literal>
+            and before a list of definition locations.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
           <literal>types.either</literal>
           <emphasis><literal>t1 t2</literal></emphasis>
         </term>

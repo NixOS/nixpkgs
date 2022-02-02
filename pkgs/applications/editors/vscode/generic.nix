@@ -108,6 +108,7 @@ let
       gappsWrapperArgs+=(
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
         --prefix PATH : ${glib.bin}/bin
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
       )
     '';
 
@@ -160,12 +161,9 @@ let
       krb5
     ]) ++ additionalPkgs pkgs;
 
-    # restore desktop item icons
+    # symlink shared assets, including icons and desktop entries
     extraInstallCommands = ''
-      mkdir -p "$out/share/applications"
-      for item in ${unwrapped}/share/applications/*.desktop; do
-        ln -s "$item" "$out/share/applications/"
-      done
+      ln -s "${unwrapped}/share" "$out/"
     '';
 
     runScript = "${unwrapped}/bin/${executableName}";

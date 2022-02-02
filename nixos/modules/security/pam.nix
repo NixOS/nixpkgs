@@ -1035,7 +1035,7 @@ in
         setuid = true;
         owner = "root";
         group = "root";
-        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
+        source = "${pkgs.pam}/bin/unix_chkpwd";
       };
     };
 

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "nmapthon2";
-  version = "0.1.3";
+  version = "0.1.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "cblopez";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-t4gAcDwHHejfipQmJvMLhKmdz8D6UN/Mmsrhpq0cygY=";
+    hash = "sha256-4Na75TdKDywUomJF4tDWUWwCCtcOSxBUMOF7+FDhbpY=";
   };
 
   checkInputs = [

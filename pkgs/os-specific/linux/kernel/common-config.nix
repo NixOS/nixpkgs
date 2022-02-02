@@ -452,6 +452,8 @@ let
     };
 
     security = {
+      FORTIFY_SOURCE                   = whenAtLeast "4.13" (option yes);
+
       # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
       DEBUG_LIST                       = yes;
       # Detect writes to read-only module pages

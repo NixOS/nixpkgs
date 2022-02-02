@@ -8,11 +8,6 @@
 , libjpeg
 , xz
 , zlib
-
-, Cocoa
-, GLUT
-, libGL
-, libGLU
 }:
 
 #FIXME: fix aarch64-darwin build and get rid of ./aarch64-darwin.nix
@@ -52,8 +47,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
 
-  buildInputs = [ libdeflate ] # TODO: move all propagatedBuildInputs to buildInputs.
-    ++ lib.optionals (stdenv.isDarwin) [ Cocoa GLUT libGL libGLU ];
+  buildInputs = [ libdeflate ];
 
   enableParallelBuilding = true;
 

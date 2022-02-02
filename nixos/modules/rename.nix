@@ -32,6 +32,7 @@ with lib;
     '')
     (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
     (mkRemovedOptionModule [ "networking" "wicd" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
       "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
@@ -80,6 +81,9 @@ with lib;
       libinput and synaptics.
     '')
     (mkRemovedOptionModule [ "virtualisation" "rkt" ] "The rkt module has been removed, it was archived by upstream")
+    (mkRemovedOptionModule [ "services" "racoon" ] ''
+      The racoon module has been removed, because the software project was abandoned upstream.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];

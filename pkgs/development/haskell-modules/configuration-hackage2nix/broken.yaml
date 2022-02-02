@@ -201,6 +201,7 @@ broken-packages:
   - arrow-list
   - arrowp
   - arrowp-qq
+  - arrow-utils
   - ArrowVHDL
   - artery
   - artifact
@@ -2032,6 +2033,7 @@ broken-packages:
   - hasql-dynamic-statements
   - hasql-generic
   - hasql-simple
+  - hasql-transaction-io
   - hastache
   - haste
   - haste-prim
@@ -2219,6 +2221,7 @@ broken-packages:
   - hlongurl
   - hlrdb-core
   - hls-exactprint-utils
+  - hls-rename-plugin
   - hlwm
   - hmarkup
   - hmatrix-banded
@@ -2598,6 +2601,7 @@ broken-packages:
   - introduction
   - intro-prelude
   - invert
+  - invertible
   - invertible-syntax
   - io-capture
   - io-choice
@@ -5376,8 +5380,10 @@ broken-packages:
   - wavefront-obj
   - weak-bag
   - weather-api
+  - web3-polkadot
   - webapi
   - webapp
+  - webauthn
   - WebBits
   - webby
   - webcloud

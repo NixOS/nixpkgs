@@ -202,8 +202,6 @@ gioele/vim-autoswap
 github/copilot.vim
 gleam-lang/gleam.vim
 glepnir/dashboard-nvim
-glepnir/galaxyline.nvim
-glepnir/lspsaga.nvim
 glepnir/oceanic-material
 glepnir/zephyr-nvim
 glts/vim-textobj-comment
@@ -277,6 +275,7 @@ itchyny/vim-gitbranch
 itspriddle/vim-shellcheck
 ivalkeen/vim-simpledb
 ivanov/vim-ipython
+j-hui/fidget.nvim
 jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
 jakwings/vim-pony
@@ -557,6 +556,7 @@ noc7c9/vim-iced-coffee-script
 norcalli/nvim-colorizer.lua
 norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
+NTBBloodbath/galaxyline.nvim
 ntpeters/vim-better-whitespace
 numirias/semshi
 numtostr/comment.nvim
@@ -778,6 +778,7 @@ tamago324/compe-zsh
 tamago324/lir.nvim
 tami5/compe-conjure
 tami5/lispdocs.nvim
+tami5/lspsaga.nvim
 tami5/sqlite.lua
 tbastos/vim-lua
 tbodt/deoplete-tabnine
@@ -943,6 +944,7 @@ wbthomason/packer.nvim
 weilbith/nvim-code-action-menu
 wellle/targets.vim
 wellle/tmux-complete.vim
+wesQ3/vim-windowswap
 wfxr/minimap.vim
 whonore/Coqtail
 will133/vim-dirdiff

@@ -175,6 +175,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
+    ds = callPackage ../development/php-packages/ds { };
+
     event = callPackage ../development/php-packages/event { };
 
     gnupg = callPackage ../development/php-packages/gnupg { };
@@ -540,7 +542,15 @@ lib.makeScope pkgs.newScope (self: with self; {
             ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
           doCheck = false;
         }
-        { name = "sockets"; doCheck = false; }
+        {
+          name = "sockets";
+          doCheck = false;
+          patches = lib.optional (php.version == "8.1.2")
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/07aaa34cd418c44f7bc653fafbf49f07fc71b2bf.patch";
+              sha256 = "sha256-EwVb09/zV2vJ8PuyLpKFCovxe6yKct0UBvishZaordM=";
+            });
+        }
         { name = "sodium"; buildInputs = [ libsodium ]; }
         { name = "sqlite3"; buildInputs = [ sqlite ]; }
         { name = "sysvmsg"; }

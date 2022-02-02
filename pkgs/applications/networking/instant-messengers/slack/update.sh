@@ -22,7 +22,7 @@ if [[ "$nixpkgs_linux_version" == "$latest_linux_version" && "$nixpkgs_mac_versi
   exit 0
 fi
 
-linux_url="https://downloads.slack-edge.com/linux_releases/slack-desktop-${latest_linux_version}-amd64.deb"
+linux_url="https://downloads.slack-edge.com/releases/linux/${latest_linux_version}/prod/x64/slack-desktop-${latest_linux_version}-amd64.deb"
 mac_url="https://downloads.slack-edge.com/releases/macos/${latest_mac_version}/prod/x64/Slack-${latest_mac_version}-macOS.dmg"
 linux_sha256=$(nix-prefetch-url ${linux_url})
 mac_sha256=$(nix-prefetch-url ${mac_url})

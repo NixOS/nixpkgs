@@ -3,15 +3,16 @@
 , fetchFromGitHub
 , fetchpatch
 , fetchzip
-, callPackage
 , autoconf
 , automake
 , binutils
+, callPackage
 , cmake
 , file
 , gdb
 , git
 , libtool
+, linkFarmFromDrvs
 , nasm
 , ocaml
 , ocamlPackages
@@ -20,6 +21,7 @@
 , python3
 , texinfo
 , validatePkgConfig
+, writeShellApplication
 , writeShellScript
 , writeText
 , debug ? false
@@ -46,6 +48,11 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
+    # Fix missing pthread_compat.h, see https://github.com/intel/linux-sgx/pull/784
+    (fetchpatch {
+      url = "https://github.com/intel/linux-sgx/commit/254b58f922a6bd49c308a4f47f05f525305bd760.patch";
+      sha256 = "sha256-sHU++K7NJ+PdITx3y0PwstA9MVh10rj2vrLn01N9F4w=";
+    })
     # Commit to add missing sgx_ippcp.h not yet part of this release
     (fetchpatch {
       name = "add-missing-sgx_ippcp-header.patch";
@@ -257,7 +264,25 @@ stdenv.mkDerivation rec {
     postHooks+=(sgxsdk)
   '';
 
-  passthru.tests = callPackage ./samples.nix { };
+  passthru.tests = callPackage ../samples { sgxMode = "SIM"; };
+
+  # Run tests in SGX hardware mode on an SGX-enabled machine
+  # $(nix-build -A sgx-sdk.runTestsHW)/bin/run-tests-hw
+  passthru.runTestsHW =
+    let
+      testsHW = lib.filterAttrs (_: v: v ? "name") (callPackage ../samples { sgxMode = "HW"; });
+      testsHWLinked = linkFarmFromDrvs "sgx-samples-hw-bundle" (lib.attrValues testsHW);
+    in
+    writeShellApplication {
+      name = "run-tests-hw";
+      text = ''
+        for test in ${testsHWLinked}/*; do
+          printf '*** Running test %s ***\n\n' "$(basename "$test")"
+          printf 'a\n' | "$test/bin/app"
+          printf '\n'
+        done
+      '';
+    };
 
   meta = with lib; {
     description = "Intel SGX SDK for Linux built with IPP Crypto Library";

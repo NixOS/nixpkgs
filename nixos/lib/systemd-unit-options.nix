@@ -45,7 +45,7 @@ in rec {
 
     requiredBy = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         Units that require (i.e. depend on and need to go down with)
         this unit. The discussion under <literal>wantedBy</literal>
@@ -56,7 +56,7 @@ in rec {
 
     wantedBy = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         Units that want (i.e. depend on) this unit. The standard way
         to make a unit start by default at boot is to set this option
@@ -73,7 +73,7 @@ in rec {
 
     aliases = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = "Aliases of that unit.";
     };
 
@@ -98,7 +98,7 @@ in rec {
 
     description = mkOption {
       default = "";
-      type = types.str;
+      type = types.singleLineStr;
       description = "Description of this unit used in systemd messages and progress indicators.";
     };
 
@@ -110,7 +110,7 @@ in rec {
 
     requires = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         Start the specified units when this unit is started, and stop
         this unit when the specified units are stopped or fail.
@@ -119,7 +119,7 @@ in rec {
 
     wants = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         Start the specified units when this unit is started.
       '';
@@ -127,7 +127,7 @@ in rec {
 
     after = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         If the specified units are started at the same time as
         this unit, delay this unit until they have started.
@@ -136,7 +136,7 @@ in rec {
 
     before = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         If the specified units are started at the same time as
         this unit, delay them until this unit has started.
@@ -145,7 +145,7 @@ in rec {
 
     bindsTo = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         Like ‘requires’, but in addition, if the specified units
         unexpectedly disappear, this unit will be stopped as well.
@@ -154,7 +154,7 @@ in rec {
 
     partOf = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         If the specified units are stopped or restarted, then this
         unit is stopped or restarted as well.
@@ -163,7 +163,7 @@ in rec {
 
     conflicts = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         If the specified units are started, then this unit is stopped
         and vice versa.
@@ -172,7 +172,7 @@ in rec {
 
     requisite = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         Similar to requires. However if the units listed are not started,
         they will not be started and the transaction will fail.
@@ -203,7 +203,7 @@ in rec {
 
     onFailure = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = types.listOf unitNameType;
       description = ''
         A list of one or more units that are activated when
         this unit enters the "failed" state.

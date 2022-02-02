@@ -1,4 +1,4 @@
-{ stdenv, runCommand, lib, coreutils }:
+{ lib, stdenv, bintools-unwrapped, llvmPackages_13, coreutils }:
 
 if stdenv.hostPlatform.isStatic
 then throw ''
@@ -25,17 +25,36 @@ else stdenv.mkDerivation rec {
     cp ${./test.c} test.c
   '';
 
-  libName = "libredirect" + stdenv.targetPlatform.extensions.sharedLibrary;
-
   outputs = ["out" "hook"];
+
+  libName = "libredirect" + stdenv.targetPlatform.extensions.sharedLibrary;
 
   buildPhase = ''
     runHook preBuild
 
-    $CC -Wall -std=c99 -O3 -fPIC -ldl -shared \
-      ${lib.optionalString stdenv.isDarwin "-Wl,-install_name,$out/lib/$libName"} \
-      -o "$libName" \
-      libredirect.c
+    ${if stdenv.isDarwin && stdenv.isAarch64 then ''
+    # We need the unwrapped binutils and clang:
+    # We also want to build a fat library with x86_64, arm64, arm64e in there.
+    # Because we use the unwrapped tools, we need to provide -isystem for headers
+    # and the library search directory for libdl.
+    # We can't build this on x86_64, because the libSystem we point to doesn't
+    # like arm64(e).
+    PATH=${bintools-unwrapped}/bin:${llvmPackages_13.clang-unwrapped}/bin:$PATH \
+      clang -arch x86_64 -arch arm64 -arch arm64e \
+      -isystem ${llvmPackages_13.clang.libc}/include \
+      -isystem ${llvmPackages_13.libclang.lib}/lib/clang/*/include \
+      -L${llvmPackages_13.clang.libc}/lib \
+      -Wl,-install_name,$libName \
+      -Wall -std=c99 -O3 -fPIC libredirect.c \
+      -ldl -shared -o "$libName"
+    '' else if stdenv.isDarwin then ''
+    $CC -Wall -std=c99 -O3 -fPIC libredirect.c \
+      -Wl,-install_name,$out/lib/$libName \
+      -ldl -shared -o "$libName"
+    '' else ''
+    $CC -Wall -std=c99 -O3 -fPIC libredirect.c \
+      -ldl -shared -o "$libName"
+    ''}
 
     if [ -n "$doInstallCheck" ]; then
       $CC -Wall -std=c99 -O3 test.c -o test
@@ -54,6 +73,12 @@ else stdenv.mkDerivation rec {
 
     install -vD "$libName" "$out/lib/$libName"
 
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # dylib will be rejected unless dylib rpath gets explictly set
+    install_name_tool \
+      -change $libName $out/lib/$libName \
+      $out/lib/$libName
+  '' + ''
     # Provide a setup hook that injects our library into every process.
     mkdir -p "$hook/nix-support"
     cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"

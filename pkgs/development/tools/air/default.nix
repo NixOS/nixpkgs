@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "air";
-  version = "1.27.8";
+  version = "1.27.9";
 
   src = fetchFromGitHub {
     owner = "cosmtrek";
     repo = "air";
     rev = "v${version}";
-    sha256 = "sha256-CVx4TDDAVIrJ3lnD2AIuxhmTV+/sIA0viX20zFkznNc=";
+    sha256 = "sha256-8VuCZoAV54TG8MiF6n5O8ZStGujfJ/7w95BYhe5/7dE=";
   };
 
-  vendorSha256 = "sha256-dloXz1hiKAQUmSQv1rLbE5vYrZpKAcwakC71AFXWZqM=";
+  vendorSha256 = "sha256-u/v6RnzBU+zQEy3jjVITjUQiU7AT3wZoeeRFF+KqOvI=";
 
   subPackages = [ "." ];
 

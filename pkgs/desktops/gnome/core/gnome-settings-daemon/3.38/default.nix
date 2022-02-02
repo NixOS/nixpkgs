@@ -68,6 +68,12 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/82d88014dfca2df7e081712870e1fb017c16b808.patch";
       sha256 = "H5k/v+M2bRaswt5nrDJFNn4gS4BdB0UfzdjUCT4yLKg=";
     })
+
+    # Fix build with new meson
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/28e28e9e598342c897ae5ca350d0da6f4aea057b.diff";
+      sha256 = "U+suR7wYjLWPqmkJpHm6pPOWL7sjL6GhIFX8MHrBRAY=";
+    })
   ];
 
   nativeBuildInputs = [

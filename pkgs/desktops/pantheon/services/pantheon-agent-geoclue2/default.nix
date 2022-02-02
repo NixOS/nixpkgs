@@ -25,12 +25,6 @@ stdenv.mkDerivation rec {
     sha256 = "0hx3sky0vd2vshkscy3w5x3s18gd45cfqh510xhbmvc0sa32q9gd";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     desktop-file-utils
     meson
@@ -50,6 +44,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Pantheon Geoclue2 Agent";

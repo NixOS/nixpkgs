@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, python, pkg-config, gtk2, pygobject2, pycairo, pango
-, buildPythonPackage, libglade ? null, isPy3k }:
+, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pygtk";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pango
-  ] ++ lib.optional (libglade != null) libglade;
+  ];
 
   propagatedBuildInputs = [ gtk2 pygobject2 pycairo ];
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   installPhase = "installPhase";
 
-  checkPhase = lib.optionalString (libglade == null)
+  checkPhase =
     ''
       sed -i -e "s/glade = importModule('gtk.glade', buildDir)//" \
              tests/common.py

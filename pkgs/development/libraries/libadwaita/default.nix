@@ -5,7 +5,7 @@
 , gi-docgen
 , gtk-doc
 , libxml2
-, meson_0_60
+, meson
 , ninja
 , pkg-config
 , sassc
@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.0.0.alpha.4";
+  version = "1.0.1";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    sha256 = "sha256-3aVeBaKSl6SaPQLodsyJHwnNOlXlWfIaLnbbl3+mlDA=";
+    sha256 = "sha256-2+elMEZwDPWkPDrmvLH5rxulh1tq6fgsMhbTdbrWe54=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gi-docgen
     gtk-doc
     libxml2 # for xmllint
-    meson_0_60
+    meson
     ninja
     pkg-config
     sassc
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
     platforms = platforms.linux;
   };
 }

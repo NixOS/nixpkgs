@@ -16,15 +16,17 @@
 
 buildPythonApplication rec {
   pname = "gigalixir";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "894b7e5bef30abc2c003e6df47f7758de5649b6f593e33926fcd398cc88d9ce2";
+    sha256 = "sha256-P70xsI/zwsoSgK1XCPzJSI5NQ58M431kmgo5gHXbaNw=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'pytest-runner'," ""
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," "" \
+      --replace "cryptography==" "cryptography>="
   '';
 
   propagatedBuildInputs = [

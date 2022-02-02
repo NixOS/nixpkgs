@@ -113,8 +113,10 @@ in
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
-    # For treesitter plugins, libstdc++.so.6 will be needed
-    NIX_LDFLAGS = [ "-lstdc++"];
+    # For treesitter plugins, libstdc++.so.6, or equivalent will be needed
+    NIX_LDFLAGS =
+      lib.optionals stdenv.cc.isGNU [ "-lstdc++"]
+      ++ lib.optionals stdenv.cc.isClang [ "-lc++" ];
 
     # export PATH=$PWD/build/bin:${PATH}
     shellHook=''

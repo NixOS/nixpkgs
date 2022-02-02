@@ -214,7 +214,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gtk = pkgs.gtk2;
   libxfcegui4 = throw "libxfcegui4 is the deprecated Xfce GUI library. It has been superseded by the libxfce4ui library";
   xinitrc = xfce4-session.xinitrc;
-  inherit (pkgs.gnome2) libglade;
+  libglade = throw "libglade has been removed";
   inherit (pkgs.gnome) gtksourceview;
   xfce4-mixer-pulse = xfce4-mixer;
   thunar-bare = thunar.override {

@@ -243,8 +243,8 @@ let
         mktplcRef = {
           name = "vscode-pylance";
           publisher = "MS-python";
-          version = "2020.11.2";
-          sha256 = "0n2dm21vgzir3hx1m3pmx7jq4zy3hdxfsandd2wv5da4fs9b5g50";
+          version = "2022.1.5";
+          sha256 = "1b5ihrac9xsq35a39vlq7krr1ffqpdjxdlhv9s056hs033kayazl";
         };
 
         buildInputs = [ nodePackages.pyright ];
@@ -664,8 +664,8 @@ let
         mktplcRef = {
           name = "elm-ls-vscode";
           publisher = "Elmtooling";
-          version = "2.0.1";
-          sha256 = "06x5ld2r1hzns2s052mvhmfiaawjzcn0jf5lkfprhmrkxnmfdd43";
+          version = "2.4.0";
+          sha256 = "sha256-5hYlkx8hlwS8iWTlfupX8XjTLAY/KUi0bd3jf/tm92o=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/Elmtooling.elm-ls-vscode/changelog";
@@ -693,8 +693,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.1.0";
-          sha256 = "sha256-lR5BDbDYURCF1Gq5JIm7BcXVvKXPdNBYom0BiVX/3u0=";
+          version = "9.2.0";
+          sha256 = "sha256-ROI312MPMUY1q6IV4qVCW8DD0MQPA/hVW7rfamo/IbI=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -1448,13 +1448,13 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform";
           homepage = "https://github.com/ocamllabs/vscode-ocaml-platform";
           license = licenses.isc;
-          maintainers = with maintainers; [ ];
+          maintainers = with maintainers; [ ratsclub ];
         };
         mktplcRef = {
           name = "ocaml-platform";
           publisher = "ocamllabs";
-          version = "1.5.1";
-          sha256 = "0jkxpcrbr8xmwfl8jphmarjz2jk54hvmc24ww89d4bgx1awayqfh";
+          version = "1.8.4";
+          sha256 = "sha256-T1eYAuYMv4B7rdECxYzNfIpydjzCDjeo7gmb1uhr6VM=";
         };
       };
 
@@ -1462,8 +1462,8 @@ let
         mktplcRef = {
           name = "material-icon-theme";
           publisher = "PKief";
-          version = "4.11.0";
-          sha256 = "1l2s8j645riqjmj09i3v71s8ycin5vd6brdp35z472fnk6wyi1y6";
+          version = "4.12.1";
+          sha256 = "sha256-pmWnnZrdk6zb8YFG5ESgK4k875hgeseWyzkA9YUjg7A=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1491,6 +1491,18 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      roman.ayu-next = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ayu-next";
+          publisher = "roman";
+          version = "1.2.9";
+          sha256 = "sha256-rwZnqvHRmMquNq9PnU176vI4g8PtS6wSNvQaZ1BMa4I=";
+        };
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1682,8 +1694,8 @@ let
         mktplcRef = {
           name = "markdown-memo";
           publisher = "svsool";
-          version = "0.3.9";
-          sha256 = "sha256-BsKFHR3wkSRHS8QOi63vLwGj3T2CPzvqXhgtEOq6gJM=";
+          version = "0.3.18";
+          sha256 = "sha256-ypYqVH1ViJE7+mAJnxmpvUSmiImOo7rE7m+ijTEpmwg=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/svsool.markdown-memo/changelog";

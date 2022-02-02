@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-aVR1xNmL6M/m+1znt70vrCtuABCqDz0sDp8mDFI2uIg=";
+    sha256 = "sha256-VGdYnynEm0ShG96W0uKiWBbUy/EitX3od5Nnho6T0pg=";
   };
 
   vendorSha256 = null;
@@ -22,10 +22,14 @@ buildGoModule rec {
   excludedPackages = "\\(third_party\\|cmd/docs\\)";
 
   preCheck = ''
-    # Some tests try to write to the home dir
+    # some tests try to write to the home dir
     export HOME="$TMPDIR"
-    # Change the golden files to match our desired version
-    sed -i "s/dev/${version}/" pkg/cmd/version/testdata/{TestGetVersions-,TestGetComponentVersions/}*.golden
+
+    # the tests expect the clientVersion ldflag not to be set
+    unset ldflags
+
+    # remove tests with networking
+    rm pkg/cmd/version/version_test.go
   '';
 
   postInstall = ''

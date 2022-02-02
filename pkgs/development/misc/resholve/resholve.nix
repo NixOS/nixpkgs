@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , callPackage
 , python27Packages
 , installShellFiles
@@ -17,7 +18,18 @@ python27Packages.buildPythonApplication {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [ oildev python27Packages.configargparse ];
+  propagatedBuildInputs = [
+    oildev
+    /*
+    Disable configargparse's tests on aarch64-darwin.
+    Several of py27 scandir's tests fail on aarch64-darwin. Chain:
+    configargparse -> pytest-check-hook -> pytest -> pathlib2 -> scandir
+    TODO: drop if https://github.com/NixOS/nixpkgs/issues/156807 resolves?
+    */
+    (python27Packages.configargparse.overridePythonAttrs (old: {
+      doCheck = stdenv.hostPlatform.system != "aarch64-darwin";
+    }))
+  ];
 
   patchPhase = ''
     for file in resholve; do

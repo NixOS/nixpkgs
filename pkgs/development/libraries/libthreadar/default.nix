@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ izorkin ];
     license = licenses.lgpl3;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/libthreadar.x86_64-darwin
   };
 }

@@ -108,10 +108,6 @@ with self; with super; {
 
   pygtk = callPackage ../development/python2-modules/pygtk { };
 
-  pyGtkGlade = self.pygtk.override {
-    inherit (pkgs.gnome2) libglade;
-  };
-
   pyjwt = callPackage ../development/python2-modules/pyjwt { };
 
   pyroma = callPackage ../development/python2-modules/pyroma { };

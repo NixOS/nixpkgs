@@ -1,9 +1,19 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update yarn yarn2nix-moretea.yarn2nix
+#!nix-shell -i bash -p common-updater-scripts curl jq yarn yarn2nix-moretea.yarn2nix
 
 set -euo pipefail
 
-nix-update sharedown
+owner=kylon
+repo=Sharedown
+latestVersion=$(curl "https://api.github.com/repos/$owner/$repo/releases/latest" | jq -r '.tag_name')
+currentVersion=$(nix-instantiate --eval --expr 'with import ./. {}; sharedown.version' | tr -d '"')
+
+if [[ "$currentVersion" == "$latestVersion" && "${BUMP_LOCK-}" != "1" ]]; then
+    # Skip update when already on the latest version.
+    exit 0
+fi
+
+update-source-version sharedown "$latestVersion"
 
 dirname="$(realpath "$(dirname "$0")")"
 sourceDir="$(nix-build -A sharedown.src --no-out-link)"

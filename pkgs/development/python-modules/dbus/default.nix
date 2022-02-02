@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '' else null;
 
   configureFlags = [
-    "PYTHON_VERSION=${lib.versions.major python.version}"
+    "PYTHON=${python.pythonForBuild.interpreter}"
   ];
 
   nativeBuildInputs = [ pkg-config ];

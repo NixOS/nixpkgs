@@ -12,10 +12,14 @@ let
     "ghcjs810"
     "integer-simple"
     "native-bignum"
+    "ghc902"
+    "ghc921"
     "ghcHEAD"
   ];
 
   nativeBignumIncludes = [
+    "ghc902"
+    "ghc921"
     "ghcHEAD"
   ];
 
