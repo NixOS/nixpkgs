@@ -543,11 +543,11 @@ class Machine:
 
         Should only be used during test development, not in the production test."""
         self.connect()
-        self.log("Terminal is ready (there is no prompt):")
+        self.log("Terminal is ready (there is no initial prompt):")
 
         assert self.shell
         subprocess.run(
-            ["socat", "READLINE", f"FD:{self.shell.fileno()}"],
+            ["socat", "READLINE,prompt=$ ", f"FD:{self.shell.fileno()}"],
             pass_fds=[self.shell.fileno()],
         )
 
