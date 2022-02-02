@@ -31766,6 +31766,8 @@ with pkgs;
 
   _0verkill = callPackage ../games/0verkill { };
 
+  _7kaa = callPackage ../games/7kaa { };
+
   hhexen = callPackage ../games/hhexen { };
 
   wyvern = callPackage ../games/wyvern { };
