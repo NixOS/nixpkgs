@@ -7,6 +7,7 @@
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
+, jackSupport ? !stdenv.isDarwin && !nixosTestRunner, libjack2
 , pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
 , gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
@@ -35,7 +36,8 @@
 let
   audio = lib.optionalString alsaSupport "alsa,"
     + lib.optionalString pulseSupport "pa,"
-    + lib.optionalString sdlSupport "sdl,";
+    + lib.optionalString sdlSupport "sdl,"
+    + lib.optionalString pulseSupport "jack,";
 
 in
 
