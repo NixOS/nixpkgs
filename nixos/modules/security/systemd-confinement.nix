@@ -175,8 +175,8 @@ in {
       serviceName = "${name}.service";
       excludedPath = rootPaths;
     } ''
-      mkdir -p "$out/lib/systemd/system"
-      serviceFile="$out/lib/systemd/system/$serviceName"
+      mkdir -p "$out/lib/systemd/system/$serviceName.d"
+      serviceFile="$out/lib/systemd/system/$serviceName.d/confinement.conf"
 
       echo '[Service]' > "$serviceFile"
 
