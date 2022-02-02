@@ -4001,6 +4001,8 @@ in {
 
   installer = callPackage ../development/python-modules/installer { };
 
+  instaloader = callPackage ../tools/misc/instaloader { };
+
   intake = callPackage ../development/python-modules/intake { };
 
   intake-parquet = callPackage ../development/python-modules/intake-parquet { };

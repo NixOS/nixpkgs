@@ -17468,6 +17468,8 @@ with pkgs;
 
   iniparser = callPackage ../development/libraries/iniparser { };
 
+  instaloader = with python3Packages; toPythonApplication instaloader;
+
   intel-gmmlib = callPackage ../development/libraries/intel-gmmlib { };
 
   intel-media-driver = callPackage ../development/libraries/intel-media-driver { };
