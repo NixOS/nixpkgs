@@ -208,6 +208,8 @@ with pkgs;
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
 
+  bada-bib = callPackage ../applications/science/misc/bada-bib {};
+
   bakelite = callPackage ../tools/backup/bakelite { };
 
   beyond-identity = callPackage ../tools/security/beyond-identity {};
@@ -2376,9 +2378,7 @@ with pkgs;
 
   btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
 
-  btrbk = callPackage ../tools/backup/btrbk {
-    asciidoc = asciidoc-full;
-  };
+  btrbk = callPackage ../tools/backup/btrbk { };
 
   buildpack = callPackage ../development/tools/buildpack {
     buildGoModule = buildGo117Module;
@@ -8796,8 +8796,6 @@ with pkgs;
 
   pdfminer = with python3Packages; toPythonApplication pdfminer;
 
-  pdfmod = callPackage ../applications/misc/pdfmod { };
-
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
   jbig2enc = callPackage ../tools/graphics/jbig2enc { };
@@ -10354,8 +10352,6 @@ with pkgs;
 
   tilem = callPackage ../misc/emulators/tilem { };
 
-  tilp2 = callPackage ../applications/science/math/tilp2 { };
-
   timemachine = callPackage ../applications/audio/timemachine { };
 
   timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
@@ -10363,8 +10359,6 @@ with pkgs;
   timetrap = callPackage ../applications/office/timetrap { };
 
   timetagger = callPackage ../servers/timetagger { };
-
-  timekeeper = callPackage ../applications/office/timekeeper { };
 
   timezonemap = callPackage ../development/libraries/timezonemap { };
 
@@ -14096,12 +14090,6 @@ with pkgs;
 
   guile-git = callPackage ../development/guile-modules/guile-git { };
 
-  guile-gnome = callPackage ../development/guile-modules/guile-gnome {
-    gconf = gnome2.GConf;
-    guile = guile_2_0;
-    inherit (gnome2) gnome_vfs libglade libgnome libgnomecanvas libgnomeui;
-  };
-
   guile-json = callPackage ../development/guile-modules/guile-json { };
 
   guile-lib = callPackage ../development/guile-modules/guile-lib { };
@@ -17009,8 +16997,6 @@ with pkgs;
 
   gflags = callPackage ../development/libraries/gflags { };
 
-  gfm = callPackage ../applications/science/math/gfm { };
-
   gperftools = callPackage ../development/libraries/gperftools { };
 
   grab-site = callPackage ../tools/backup/grab-site { };
@@ -17157,8 +17143,6 @@ with pkgs;
 
   gdk-pixbuf-xlib = callPackage ../development/libraries/gdk-pixbuf/xlib.nix { };
 
-  gnome-sharp = callPackage ../development/libraries/gnome-sharp { };
-
   gnome-menus = callPackage ../development/libraries/gnome-menus { };
 
   elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
@@ -17201,17 +17185,9 @@ with pkgs;
 
   gtk-engine-murrine = callPackage ../development/libraries/gtk-engine-murrine { };
 
-  gtk-sharp-2_0 = callPackage ../development/libraries/gtk-sharp/2.0.nix {
-    inherit (gnome2) libglade libgtkhtml gtkhtml
-              libgnomecanvas libgnomeui libgnomeprint
-              libgnomeprintui GConf;
-  };
+  gtk-sharp-2_0 = callPackage ../development/libraries/gtk-sharp/2.0.nix { };
 
-  gtk-sharp-3_0 = callPackage ../development/libraries/gtk-sharp/3.0.nix {
-    inherit (gnome2) libglade libgtkhtml gtkhtml
-              libgnomecanvas libgnomeui libgnomeprint
-              libgnomeprintui GConf;
-  };
+  gtk-sharp-3_0 = callPackage ../development/libraries/gtk-sharp/3.0.nix { };
 
   gtk-sharp-beans = callPackage ../development/libraries/gtk-sharp-beans { };
 
@@ -18116,8 +18092,6 @@ with pkgs;
   libgdiplus = callPackage ../development/libraries/libgdiplus {
       inherit (darwin.apple_sdk.frameworks) Carbon;
   };
-
-  libgksu = callPackage ../development/libraries/libgksu { };
 
   libgnt = callPackage ../development/libraries/libgnt { };
 
@@ -25626,8 +25600,6 @@ with pkgs;
 
   gitweb = callPackage ../applications/version-management/git-and-tools/gitweb { };
 
-  gksu = callPackage ../applications/misc/gksu { };
-
   gnss-sdr = callPackage ../applications/radio/gnss-sdr { };
 
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
@@ -27484,8 +27456,6 @@ with pkgs;
 
   monkeysphere = callPackage ../tools/security/monkeysphere { };
 
-  monodevelop = callPackage ../applications/editors/monodevelop {};
-
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
     boost = boost170;
@@ -28009,10 +27979,6 @@ with pkgs;
   nvi = callPackage ../applications/editors/nvi { };
 
   nvpy = callPackage ../applications/editors/nvpy { };
-
-  obconf = callPackage ../tools/X11/obconf {
-    inherit (gnome2) libglade;
-  };
 
   oberon-risc-emu = callPackage ../misc/emulators/oberon-risc-emu { };
 
@@ -30198,8 +30164,6 @@ with pkgs;
 
   yarp = callPackage ../applications/science/robotics/yarp {};
 
-  yarssr = callPackage ../applications/misc/yarssr { };
-
   yate = callPackage ../applications/misc/yate { };
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
@@ -30613,8 +30577,6 @@ with pkgs;
   nux = callPackage ../tools/misc/nux { };
 
   tts = callPackage ../tools/audio/tts { };
-
-  fslint = callPackage ../applications/misc/fslint { };
 
   ### GAMES
 
@@ -33978,7 +33940,9 @@ with pkgs;
 
   tgswitch = callPackage ../applications/networking/cluster/tgswitch {};
 
-  tilt = callPackage ../applications/networking/cluster/tilt {};
+  tilt = callPackage ../applications/networking/cluster/tilt {
+    buildGoModule = buildGo117Module;
+  };
 
   timeular = callPackage ../applications/office/timeular {};
 

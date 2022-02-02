@@ -304,7 +304,7 @@ let
       orga = "victorhqc";
       repo = "tree-sitter-prisma";
     };
-    "tree-sitter-org" = {
+    "tree-sitter-org-nvim" = {
       orga = "milisims";
       repo = "tree-sitter-org";
     };
