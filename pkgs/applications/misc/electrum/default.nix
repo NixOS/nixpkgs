@@ -74,7 +74,7 @@ python3.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum/tests
   '';
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
       --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
   '';
