@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyefergy";
-  version = "0.1.5";
+  version = "22.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "tkdrob";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8xcKgsZ6buaQdrKD8Qn7jB5IlQ0NkR0nZGuFk+Dd8Q8=";
+    sha256 = "sha256-AdoM+PcVoajxhnEfkyN9UuNufChu8XGmZDLNC3mjrps=";
   };
 
   propagatedBuildInputs = [
