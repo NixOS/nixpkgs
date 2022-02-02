@@ -6,6 +6,7 @@
 , lib
 , libsodium
 , libuv
+, nix-update-script
 , openssl
 , pkg-config
 , zeromq
@@ -33,6 +34,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "Decentralized pool for Monero mining";
