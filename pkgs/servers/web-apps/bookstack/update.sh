@@ -40,6 +40,10 @@ sed -e "s/stdenv\.lib/lib/g" \
 sed -e '7s/stdenv writeTextFile/stdenv lib writeTextFile/' \
     -i composition.nix
 
+# quote links
+sed -E -e 's/(url = )(https:.*);/\1"\2";/g' \
+    -i php-packages.nix
+
 # fix missing newline
 echo "" >> composition.nix
 echo "" >> php-packages.nix
