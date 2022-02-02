@@ -182,8 +182,8 @@ in stdenv.mkDerivation {
   in with lib; ''
     mkdir -p "$out/bin"
 
-    eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)}
+    makeWrapper "${browserBinary}" "$out/bin/chromium" \
+      --add-flags ${escapeShellArg commandLineArgs}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i
