@@ -2583,7 +2583,9 @@ with pkgs;
 
   clprover = callPackage ../applications/science/logic/clprover/clprover.nix { };
 
-  clusterctl = callPackage ../applications/networking/cluster/clusterctl { };
+  clusterctl = callPackage ../applications/networking/cluster/clusterctl {
+    buildGoModule = buildGo117Module;
+  };
 
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
 
