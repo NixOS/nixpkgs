@@ -7,7 +7,6 @@
 , perl
 , perlPackages
 , util-linux
-, asciidoc
 , asciidoctor
 , mbuffer
 , makeWrapper
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lx7vnf386nsik8mxrrfyx1h7mkqk5zs26sy0s0lynfxcm4lkxb2";
   };
 
-  nativeBuildInputs = [ asciidoc asciidoctor makeWrapper ];
+  nativeBuildInputs = [ asciidoctor makeWrapper ];
 
   buildInputs = with perlPackages; [ perl DateCalc ];
 

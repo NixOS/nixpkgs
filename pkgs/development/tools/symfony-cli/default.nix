@@ -3,7 +3,7 @@
 buildGoModule rec {
   pname = "symfony-cli";
   version = "5.2.2";
-  vendorSha256 = "sha256-/ct1DNSCB1KzajyHWe6guF5iYm5AAEbPunn7xYLw25I=";
+  vendorSha256 = "sha256-i4p9kEe0eT2L4U/DjkWlLVqgGT5ZJaoGyFAoYyxmoyI=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";

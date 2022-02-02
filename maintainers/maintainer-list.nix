@@ -2303,6 +2303,13 @@
     githubId = 5561189;
     name = "Cody Opel";
   };
+  Cogitri = {
+    email = "oss@cogitri.dev";
+    github = "Cogitri";
+    githubId = 8766773;
+    matrix = "@cogitri:cogitri.dev";
+    name = "Rasmus Thomsen";
+  };
   cohei = {
     email = "a.d.xvii.kal.mai@gmail.com";
     github = "cohei";
@@ -12163,6 +12170,7 @@
   };
   toastal = {
     email = "toastal+nix@posteo.net";
+    matrix = "@toastal:matrix.org";
     github = "toastal";
     githubId = 561087;
     name = "toastal";

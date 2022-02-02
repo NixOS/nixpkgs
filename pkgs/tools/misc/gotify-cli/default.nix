@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-X41m7bCilDgnTMJy3ISz8g7dAtaz/lphwaCPZDGMDXk=";
   };
 
-  vendorSha256 = "sha256-EKscJM8r1dbKRQPSZFwFqJYACkQynIS347460PuxQiU=";
+  vendorSha256 = "sha256-DvpdmURhOxDVFJiRtTGVw6u6y+s5XteT1owmdBJcKHA=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/gotify
