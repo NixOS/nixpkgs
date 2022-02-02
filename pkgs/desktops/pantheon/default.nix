@@ -161,7 +161,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanel-indicator-notifications = callPackage ./desktop/wingpanel-indicators/notifications { };
 
-  wingpanel-indicator-power = callPackage ./desktop/wingpanel-indicators/power { };
+  wingpanel-indicator-power = callPackage ./desktop/wingpanel-indicators/power {
+    inherit (gnome) gnome-power-manager;
+  };
 
   wingpanel-indicator-session = callPackage ./desktop/wingpanel-indicators/session { };
 
