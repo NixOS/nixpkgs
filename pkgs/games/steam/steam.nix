@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     sha256 = "sha256-sO07g3j1Qejato2LWJ2FrW3AzfMCcBz46HEw7aKxojQ=";
   };
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     rm $out/bin/steamdeps
@@ -33,10 +33,6 @@ in stdenv.mkDerivation {
     cp ./subprojects/steam-devices/*.rules $out/etc/udev/rules.d/
     substituteInPlace $out/etc/udev/rules.d/60-steam-input.rules \
       --replace "/bin/sh" "${bash}/bin/bash"
-
-    # this just installs a link, "steam.desktop -> /lib/steam/steam.desktop"
-    rm $out/share/applications/steam.desktop
-    sed -e 's,/usr/bin/steam,steam,g' steam.desktop > $out/share/applications/steam.desktop
   '';
 
   meta = with lib; {
