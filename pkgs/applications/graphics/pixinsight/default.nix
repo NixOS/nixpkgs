@@ -1,5 +1,5 @@
 { stdenv, lib, requireFile, wrapQtAppsHook, autoPatchelfHook, makeWrapper, unixtools, fakeroot
-, mime-types, libGL, libpulseaudio, alsa-lib, nss, gd, gst_all_1, nspr, expat, fontconfig
+, mailcap, libGL, libpulseaudio, alsa-lib, nss, gd, gst_all_1, nspr, expat, fontconfig
 , dbus, glib, zlib, openssl, libdrm, cups, avahi-compat, xorg, wayland, libudev0-shim
 # Qt 5 subpackages
 , qtbase, qtgamepad, qtserialport, qtserialbus, qtvirtualkeyboard, qtmultimedia, qtwebkit, qt3d, mlt
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     fakeroot
     wrapQtAppsHook
     autoPatchelfHook
-    mime-types
+    mailcap
     libudev0-shim
   ];
 
