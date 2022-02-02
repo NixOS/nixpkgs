@@ -22,7 +22,8 @@ else stdenv.mkDerivation rec {
 
   unpackPhase = ''
     cp ${./libredirect.c} libredirect.c
-    cp ${./test.c} test.c
+    cp ${./test-files.c} test-files.c
+    cp ${./test-sockets.c} test-sockets.c
   '';
 
   outputs = ["out" "hook"];
@@ -57,7 +58,8 @@ else stdenv.mkDerivation rec {
     ''}
 
     if [ -n "$doInstallCheck" ]; then
-      $CC -Wall -std=c99 -O3 test.c -o test
+      $CC -Wall -std=c99 -O3 test-files.c -o test-files
+      $CC -Wall -std=c99 -O3 test-sockets.c -o test-sockets
     fi
 
     runHook postBuild
@@ -97,7 +99,12 @@ else stdenv.mkDerivation rec {
   installCheckPhase = ''
     (
       source "$hook/nix-support/setup-hook"
-      NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true" ./test
+      NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true" ./test-files
+
+      ./test-sockets occupy-ports &
+      OCCUPY_PID="$!"
+      NIX_PORT_REMAP_SEED="$RANDOM" ./test-sockets
+      kill $OCCUPY_PID
     )
   '';
 

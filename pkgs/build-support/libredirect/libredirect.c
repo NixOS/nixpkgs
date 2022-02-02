@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <dlfcn.h>
+#include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -11,8 +12,10 @@
 #include <string.h>
 #include <spawn.h>
 #include <dirent.h>
+#include <netinet/in.h>
 
 #define MAX_REDIRECTS 128
+#define RESERVED_PORT_MAX 1023
 
 #ifdef __APPLE__
   struct dyld_interpose {
@@ -33,23 +36,14 @@
 static int nrRedirects = 0;
 static char * from[MAX_REDIRECTS];
 static char * to[MAX_REDIRECTS];
+static int portRemapSeed = -1;
 
 static int isInitialized = 0;
 
-// FIXME: might run too late.
-static void init() __attribute__((constructor));
-
-static void init()
+static void init_redirects()
 {
-    if (isInitialized) return;
-
     char * spec = getenv("NIX_REDIRECTS");
     if (!spec) return;
-
-    // Ensure we only run this code once.
-    // We do not do `unsetenv("NIX_REDIRECTS")` to ensure that redirects
-    // also get initialized for subprocesses.
-    isInitialized = 1;
 
     char * spec2 = malloc(strlen(spec) + 1);
     strcpy(spec2, spec);
@@ -67,7 +61,40 @@ static void init()
         *end = 0;
         pos = end + 1;
     }
+}
 
+static void init_port_remapping()
+{
+    char * seed_str = getenv("NIX_PORT_REMAP_SEED");
+    if (!seed_str) return;
+    // also perform no remapping if var is set but empty
+    if (seed_str[0] == '\0') return;
+
+    const uint32_t FNV_offset_basis = 0x811c9dc5;
+    const uint32_t FNV_prime = 0x01000193;
+
+    uint32_t seed = FNV_offset_basis;
+    for (int i=0; seed_str[i] != '\0'; i++) {
+        seed ^= seed_str[i];
+        seed *= FNV_prime;
+    }
+
+    portRemapSeed = (seed ^ (seed>>16)) % (USHRT_MAX - RESERVED_PORT_MAX);
+}
+
+// FIXME: might run too late.
+static void init() __attribute__((constructor));
+
+static void init()
+{
+    if (isInitialized) return;
+    // Ensure we only run this code once.
+    // We do not do `unsetenv("NIX_REDIRECTS")` to ensure that redirects
+    // also get initialized for subprocesses.
+    isInitialized = 1;
+
+    init_redirects();
+    init_port_remapping();
 }
 
 static const char * rewrite(const char * path, char * buf)
@@ -354,3 +381,226 @@ WRAPPER(int, mkdirat)(int dirfd, const char *path, mode_t mode)
     return mkdirat_real(dirfd, rewrite(path, buf), mode);
 }
 WRAPPER_DEF(mkdirat)
+
+// without this trick we aren't able to subtract past zero properly
+static uint16_t positive_modulo(int32_t v, uint16_t m) {
+    int32_t mod = v % m;
+    if (mod < 0) {
+        mod += m;
+    }
+    return (uint16_t)mod;
+}
+
+static in_port_t port_internal_to_external(in_port_t internal) {
+    if (ntohs(internal) <= RESERVED_PORT_MAX) {
+        return internal;
+    }
+
+    return htons(
+        RESERVED_PORT_MAX + positive_modulo(
+            ((((int32_t)ntohs(internal)) - RESERVED_PORT_MAX) + portRemapSeed),
+            USHRT_MAX - RESERVED_PORT_MAX
+        )
+    );
+}
+
+static in_port_t port_external_to_internal(in_port_t external) {
+    if (ntohs(external) <= RESERVED_PORT_MAX) {
+        return external;
+    }
+
+    return htons(
+        RESERVED_PORT_MAX + positive_modulo(
+            ((((int32_t)ntohs(external)) - RESERVED_PORT_MAX) - portRemapSeed),
+            USHRT_MAX - RESERVED_PORT_MAX
+        )
+    );
+}
+
+
+WRAPPER(int, bind)(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+{
+    int (*bind_real) (
+        int sockfd,
+        const struct sockaddr *addr,
+        socklen_t addrlen
+    ) = LOOKUP_REAL(bind);
+
+    struct sockaddr_in addr_in_new;
+
+    if (portRemapSeed >= 0 && addr != NULL && addr->sa_family == AF_INET) {
+        memcpy(&addr_in_new, addr, sizeof addr_in_new);
+        addr_in_new.sin_port = port_internal_to_external(addr_in_new.sin_port);
+        addr = (struct sockaddr *)&addr_in_new;
+    }
+
+    return bind_real(sockfd, addr, addrlen);
+}
+WRAPPER_DEF(bind)
+
+WRAPPER(int, connect)(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+{
+    int (*connect_real) (
+        int sockfd,
+        const struct sockaddr *addr,
+        socklen_t addrlen
+    ) = LOOKUP_REAL(connect);
+
+    struct sockaddr_in addr_in_new;
+
+    if (portRemapSeed >= 0 && addr != NULL && addr->sa_family == AF_INET) {
+        memcpy(&addr_in_new, addr, sizeof addr_in_new);
+        addr_in_new.sin_port = port_internal_to_external(addr_in_new.sin_port);
+        addr = (struct sockaddr *)&addr_in_new;
+    }
+
+    return connect_real(sockfd, addr, addrlen);
+}
+WRAPPER_DEF(connect)
+
+WRAPPER(int, accept)(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
+{
+    int (*accept_real) (
+        int sockfd,
+        struct sockaddr *addr,
+        socklen_t *addrlen
+    ) = LOOKUP_REAL(accept);
+
+    int retval = accept_real(sockfd, addr, addrlen);
+
+    if (portRemapSeed >= 0 && addr != NULL && addr->sa_family == AF_INET) {
+        struct sockaddr_in *addr_in = (struct sockaddr_in *)addr;
+        addr_in->sin_port = port_external_to_internal(addr_in->sin_port);
+    }
+
+    return retval;
+}
+WRAPPER_DEF(accept)
+
+WRAPPER(ssize_t, recvfrom)(
+    int sockfd,
+    void *buf,
+    size_t len,
+    int flags,
+    struct sockaddr *src_addr,
+    socklen_t *addrlen
+) {
+    ssize_t (*recvfrom_real) (
+        int sockfd,
+        void *buf,
+        size_t len,
+        int flags,
+        struct sockaddr *src_addr,
+        socklen_t *addrlen
+    ) = LOOKUP_REAL(recvfrom);
+
+    ssize_t retval = recvfrom_real(sockfd, buf, len, flags, src_addr, addrlen);
+
+    if (portRemapSeed >= 0 && src_addr != NULL && src_addr->sa_family == AF_INET) {
+        struct sockaddr_in *src_addr_in = (struct sockaddr_in *)src_addr;
+        src_addr_in->sin_port = port_external_to_internal(src_addr_in->sin_port);
+    }
+
+    return retval;
+}
+WRAPPER_DEF(recvfrom)
+
+WRAPPER(ssize_t, recvmsg)(int sockfd, struct msghdr *msg, int flags)
+{
+    ssize_t (*recvmsg_real) (
+        int sockfd,
+        struct msghdr *msg,
+        int flags
+    ) = LOOKUP_REAL(recvmsg);
+
+    ssize_t retval = recvmsg_real(sockfd, msg, flags);
+
+    if (
+        portRemapSeed >= 0
+        && msg != NULL
+        && msg->msg_name != NULL
+        && ((struct sockaddr*)msg->msg_name)->sa_family == AF_INET
+    ) {
+        struct sockaddr_in *addr_in = (struct sockaddr_in *)msg->msg_name;
+        addr_in->sin_port = port_external_to_internal(addr_in->sin_port);
+    }
+
+    return retval;
+}
+WRAPPER_DEF(recvmsg)
+
+WRAPPER(ssize_t, sendto)(
+    int sockfd,
+    const void *buf,
+    size_t len,
+    int flags,
+    const struct sockaddr *dest_addr,
+    socklen_t addrlen
+) {
+    ssize_t (*sendto_real) (
+        int sockfd,
+        const void *buf,
+        size_t len,
+        int flags,
+        const struct sockaddr *dest_addr,
+        socklen_t addrlen
+    ) = LOOKUP_REAL(sendto);
+
+    struct sockaddr_in dest_addr_in_new;
+
+    if (portRemapSeed >= 0 && dest_addr != NULL && dest_addr->sa_family == AF_INET) {
+        memcpy(&dest_addr_in_new, dest_addr, sizeof dest_addr_in_new);
+        dest_addr_in_new.sin_port = port_internal_to_external(dest_addr_in_new.sin_port);
+        dest_addr = (struct sockaddr *)&dest_addr_in_new;
+    }
+
+    return sendto_real(sockfd, buf, len, flags, dest_addr, addrlen);
+}
+WRAPPER_DEF(sendto)
+
+WRAPPER(ssize_t, sendmsg)(int sockfd, const struct msghdr *msg, int flags)
+{
+    ssize_t (*sendmsg_real) (
+        int sockfd,
+        const struct msghdr *msg,
+        int flags
+    ) = LOOKUP_REAL(sendmsg);
+
+    struct msghdr msg_new;
+    struct sockaddr_in msg_name_new;
+
+    if (
+        portRemapSeed >= 0
+        && msg != NULL
+        && msg->msg_name != NULL
+        && ((struct sockaddr*)msg->msg_name)->sa_family == AF_INET
+    ) {
+        memcpy(&msg_new, msg, sizeof msg_new);
+        memcpy(&msg_name_new, msg->msg_name, sizeof msg_name_new);
+        msg_name_new.sin_port = port_internal_to_external(msg_name_new.sin_port);
+        msg_new.msg_name = &msg_name_new;
+        msg = &msg_new;
+    }
+
+    return sendmsg_real(sockfd, msg, flags);
+}
+WRAPPER_DEF(sendmsg)
+
+WRAPPER(int, getsockname)(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
+{
+    int (*getsockname_real) (
+        int sockfd,
+        struct sockaddr *addr,
+        socklen_t *addrlen
+    ) = LOOKUP_REAL(getsockname);
+
+    int retval = getsockname_real(sockfd, addr, addrlen);
+
+    if (portRemapSeed >= 0 && addr != NULL && addr->sa_family == AF_INET) {
+        struct sockaddr_in *addr_in = (struct sockaddr_in *)addr;
+        addr_in->sin_port = port_external_to_internal(addr_in->sin_port);
+    }
+
+    return retval;
+}
+WRAPPER_DEF(getsockname)

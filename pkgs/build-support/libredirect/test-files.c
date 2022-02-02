@@ -10,7 +10,7 @@
 #include <sys/wait.h>
 
 #define TESTPATH "/foo/bar/test"
-#define SUBTEST "./test sub"
+#define SUBTEST "./test-files sub"
 
 extern char **environ;
 
