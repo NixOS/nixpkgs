@@ -182,6 +182,8 @@ with pkgs;
 
   althttpd = callPackage ../servers/althttpd { };
 
+  anders = callPackage ../applications/science/logic/anders { };
+
   ankisyncd = callPackage ../servers/ankisyncd { };
 
   aocd = with python3Packages; toPythonApplication aocd;
