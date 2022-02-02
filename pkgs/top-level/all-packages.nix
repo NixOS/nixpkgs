@@ -19200,10 +19200,6 @@ with pkgs;
 
   neon = callPackage ../development/libraries/neon { };
 
-  neon_0_29 = callPackage ../development/libraries/neon/0.29.nix {
-    openssl = openssl_1_0_2;
-  };
-
   nettle = import ../development/libraries/nettle { inherit callPackage fetchurl; };
 
   newman = callPackage ../development/web/newman {};
