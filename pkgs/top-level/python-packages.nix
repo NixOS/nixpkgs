@@ -3891,6 +3891,8 @@ in {
 
   ijson = callPackage ../development/python-modules/ijson { };
 
+  ilua = callPackage ../development/python-modules/ilua { };
+
   imagecodecs-lite = callPackage ../development/python-modules/imagecodecs-lite { };
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
@@ -9996,6 +9998,8 @@ in {
   txrequests = callPackage ../development/python-modules/txrequests { };
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
+
+  txzmq = callPackage ../development/python-modules/txzmq { };
 
   typecode = callPackage ../development/python-modules/typecode { };
 

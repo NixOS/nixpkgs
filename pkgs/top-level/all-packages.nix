@@ -7999,10 +7999,6 @@ with pkgs;
 
   munge = callPackage ../tools/security/munge { };
 
-  munt = libsForQt5.callPackage ../applications/audio/munt {
-    jack = libjack2;
-  };
-
   mutagen = callPackage ../tools/misc/mutagen { };
 
   mycli = callPackage ../tools/admin/mycli { };
@@ -26438,6 +26434,12 @@ with pkgs;
   marker = callPackage ../applications/editors/marker { };
 
   musikcube = callPackage ../applications/audio/musikcube {};
+
+  libmt32emu = callPackage ../applications/audio/munt/libmt32emu.nix { };
+
+  mt32emu-qt = libsForQt5.callPackage ../applications/audio/munt/mt32emu-qt.nix { };
+
+  mt32emu-smf2wav = callPackage ../applications/audio/munt/mt32emu-smf2wav.nix { };
 
   p2pool = callPackage ../applications/misc/p2pool { };
 
