@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "httpie";
-  version = "2.6.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
     rev = version;
-    sha256 = "1y77dg27dn6bajwp3w6qvw1ls5wfhd1j1788l3fjhxg7j4qjki4g";
+    sha256 = "sha256-s3IFzEUQmPBocgspVGx1nINkUamsi7tzwW37IqdBMxo=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     charset-normalizer
     defusedxml
+    multidict
     pygments
     requests
     requests-toolbelt

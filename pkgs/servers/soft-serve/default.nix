@@ -27,6 +27,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A tasty, self-hosted Git server for the command line";
     homepage = "https://github.com/charmbracelet/soft-serve";
+    mainProgram = "soft";
     license = licenses.mit;
     maintainers = with maintainers; [ penguwin ];
   };
