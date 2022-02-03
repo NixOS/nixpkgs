@@ -1,6 +1,9 @@
 { lib, stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
-, libwebp, quantumdepth ? 8, fixDarwinDylibNames, nukeReferences }:
+, libwebp, quantumdepth ? 8, fixDarwinDylibNames, nukeReferences
+, runCommand
+, graphicsmagick  # for passthru.tests
+}:
 
 stdenv.mkDerivation rec {
   pname = "graphicsmagick";
@@ -39,6 +42,16 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i 's/-ltiff.*'\'/\'/ $out/bin/*
   '';
+
+  passthru = {
+    tests = {
+      issue-157920 = runCommand "issue-157920-regression-test" {
+        buildInputs = [ graphicsmagick ];
+      } ''
+        gm convert ${graphviz}/share/graphviz/doc/pdf/neatoguide.pdf jpg:$out
+      '';
+    };
+  };
 
   meta = {
     homepage = "http://www.graphicsmagick.org";
