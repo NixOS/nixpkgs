@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt, writeTextFile
+{ lib, fetchFromGitHub, rustPlatform, clang, rustfmt, writeTextFile
 , runtimeShell
 , bash
 }:
@@ -19,19 +19,19 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-zhENlrqj611RkKDvpDtDFWc58wfQVamkJnpe2nvRieE=";
 
   #for substituteAll
-  libclang = llvmPackages_latest.libclang.lib;
+  libclang = clang.cc.lib; # use the same version of clang for cxxincludes and libclang
   inherit bash;
 
   buildInputs = [ libclang ];
 
-  propagatedBuildInputs = [ clang ]; # to populate NIX_CXXSTDLIB_COMPILE
-
-  configurePhase = ''
-    export LIBCLANG_PATH="${libclang.lib}/lib"
+  preConfigure = ''
+    export LIBCLANG_PATH="${lib.getLib libclang}/lib"
   '';
 
   postInstall = ''
     mv $out/bin/{bindgen,.bindgen-wrapped};
+    export cincludes="$(< ${clang}/nix-support/cc-cflags) $(< ${clang}/nix-support/libc-cflags)"
+    export cxxincludes="$(< ${clang}/nix-support/libcxx-cxxflags)"
     substituteAll ${./wrapper.sh} $out/bin/bindgen
     chmod +x $out/bin/bindgen
   '';
@@ -66,6 +66,9 @@ rustPlatform.buildRustPackage rec {
       rust ffi declarations.
       As with most compiler related software, this will only work
       inside a nix-shell with the required libraries as buildInputs.
+      This version of bindgen is wrapped with the required compiler flags
+      required to find the c and c++ standard libary of the input clang
+      derivation.
     '';
     homepage = "https://github.com/rust-lang/rust-bindgen";
     license = with licenses; [ bsd3 ];
