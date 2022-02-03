@@ -3525,6 +3525,8 @@ with pkgs;
 
   mrkd = with python3Packages; toPythonApplication mrkd;
 
+  nautilus-open-any-terminal = callPackage ../tools/misc/nautilus-open-any-terminal { };
+
   n2n = callPackage ../tools/networking/n2n { };
 
   nextdns = callPackage ../applications/networking/nextdns { };
