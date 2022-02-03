@@ -1,22 +1,24 @@
 { lib, stdenv, fetchFromGitHub, cmake, openssh
-, gfortran, mpi, blas, lapack
+, mpi, blas, lapack
 } :
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "scalapack";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c10d18gj3kvpmyv5q246x35hjxaqn4ygy1cygaydhyxnm4klzdj";
+    sha256 = "0hiap5i9ik6xpvl721n2slanlqygagc1pg2bcjb27ans6balhsfh";
   };
 
-  nativeBuildInputs = [ cmake openssh gfortran ];
-  buildInputs = [ mpi blas lapack ];
+  nativeBuildInputs = [ cmake ];
+  checkInputs = [ openssh ];
+  buildInputs = [ blas lapack ];
+  propagatedBuildInputs = [ mpi ];
 
   doCheck = true;
 
@@ -25,6 +27,7 @@ stdenv.mkDerivation rec {
       -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
       -DLAPACK_LIBRARIES="-llapack"
       -DBLAS_LIBRARIES="-lblas"
+      -DCMAKE_Fortran_COMPILER=${mpi}/bin/mpif90
       )
   '';
 
