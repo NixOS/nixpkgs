@@ -8725,6 +8725,8 @@ in {
 
   rtslib = callPackage ../development/python-modules/rtslib { };
 
+  rtsp-to-webrtc = callPackage ../development/python-modules/rtsp-to-webrtc { };
+
   ruamel-base = callPackage ../development/python-modules/ruamel-base { };
 
   ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml { };
