@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config
 , cunit, file, ncurses
-, jemalloc, libev, nghttp3, quictls
+, libev, nghttp3, quictls
+, withJemalloc ? false, jemalloc
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config file ];
-  buildInputs = [ jemalloc libev nghttp3 quictls ];
+  buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
   checkInputs = [ cunit ncurses ];
 
   preConfigure = ''
