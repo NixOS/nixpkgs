@@ -7355,6 +7355,8 @@ in {
 
   pyquil = callPackage ../development/python-modules/pyquil { };
 
+  pyqvrpro = callPackage ../development/python-modules/pyqvrpro { };
+
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
 
   pyrad = callPackage ../development/python-modules/pyrad { };
