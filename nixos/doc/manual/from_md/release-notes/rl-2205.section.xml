@@ -792,6 +792,14 @@
       </listitem>
       <listitem>
         <para>
+          It is now possible to specify wordlists to include as handy to
+          access environment variables using the
+          <literal>config.environment.wordlist</literal> configuration
+          options.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.mbpfan</literal> module was converted to
           a
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
