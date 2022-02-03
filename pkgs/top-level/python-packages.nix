@@ -194,6 +194,8 @@ in {
 
   adax = callPackage ../development/python-modules/adax { };
 
+  adax-local = callPackage ../development/python-modules/adax-local { };
+
   adb-enhanced = callPackage ../development/python-modules/adb-enhanced { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
