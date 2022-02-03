@@ -1173,6 +1173,18 @@ let
         };
       };
 
+      kubukoz.nickel-syntax = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nickel-syntax";
+          publisher = "kubukoz";
+          version = "0.0.1";
+          sha256 = "010zn58j9kdb2jpxmlfyyyais51pwn7v2c5cfi4051ayd02b9n3s";
+        };
+        meta = {
+          license = lib.licenses.asl20;
+        };
+      };
+
       llvm-vs-code-extensions.vscode-clangd = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-clangd";
