@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "awesomeversion";
-  version = "21.11.0";
+  version = "22.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qxN5AdLlzadG0/raeAyJ/37PLgYLndl1JQSVkgdLv/4=";
+    sha256 = "sha256-eoY920c8mgunvZd0M/vR7+bMCPFqqCm3F/fq0vo6K/0=";
   };
 
   postPatch = ''
