@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-JRJjuVF0MkV7KVmbAZhiWPWVwDORByCsZqPwdTuVRoA=";
   };
 
-  vendorSha256 = "sha256-nsuI8z0xJYZwhlYHasxHpAAYycpqN0qmS8c0APvxxwc=";
+  vendorSha256 = "sha256-/N/RYqt+lhhECK+uq99vkm3Mg7PWpdE0GYLXkIYthNw=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
 

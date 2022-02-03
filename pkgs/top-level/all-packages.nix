@@ -12541,7 +12541,7 @@ with pkgs;
     buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
 
-  go = go_1_16;
+  go = go_1_17;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -20846,30 +20846,20 @@ with pkgs;
   buildGo116Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_16;
   };
-  # go_1_17 has go module changes which may not be portable
-  # across different go versions and/or platforms:
-  # https://github.com/NixOS/nixpkgs/issues/144667
-  #
-  # That's why `buildGoPackage != buildGo117Package`.
   buildGo117Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_17;
   };
 
-  buildGoPackage = buildGo116Package;
+  buildGoPackage = buildGo117Package;
 
   buildGo116Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_16;
   };
-  # go_1_17 has go module changes which may not be portable
-  # across different go versions and/or platforms:
-  # https://github.com/NixOS/nixpkgs/issues/144667
-  #
-  # That's why `buildGoModule != buildGo117Module`.
   buildGo117Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_17;
   };
 
-  buildGoModule = buildGo116Module;
+  buildGoModule = buildGo117Module;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -21958,7 +21948,9 @@ with pkgs;
 
   redstore = callPackage ../servers/http/redstore { };
 
-  reproxy = callPackage ../servers/reproxy { };
+  reproxy = callPackage ../servers/reproxy {
+    buildGoModule = buildGo116Module;
+  };
 
   restic = callPackage ../tools/backup/restic { };
 
@@ -22135,7 +22127,9 @@ with pkgs;
     buildGoModule = buildGo116Module;
   };
 
-  victoriametrics = callPackage ../servers/nosql/victoriametrics { };
+  victoriametrics = callPackage ../servers/nosql/victoriametrics {
+    buildGoModule = buildGo116Module;
+  };
 
   virtiofsd = callPackage ../servers/misc/virtiofsd { };
 
@@ -27748,7 +27742,9 @@ with pkgs;
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
-  open-policy-agent = callPackage ../development/tools/open-policy-agent { };
+  open-policy-agent = callPackage ../development/tools/open-policy-agent {
+    buildGoModule = buildGo116Module;
+  };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
