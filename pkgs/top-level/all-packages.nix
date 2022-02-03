@@ -1923,6 +1923,10 @@ with pkgs;
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
 
+  itch = callPackage ../games/itch {};
+
+  itch-setup = callPackage ../games/itch-setup {};
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
