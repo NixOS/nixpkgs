@@ -981,7 +981,7 @@
     "waze_travel_time" = ps: with ps; [ wazeroutecalculator ];
     "weather" = ps: with ps; [ ];
     "webhook" = ps: with ps; [ aiohttp-cors ];
-    "webostv" = ps: with ps; [ sqlalchemy ]; # missing inputs: aiowebostv
+    "webostv" = ps: with ps; [ aiowebostv sqlalchemy ];
     "websocket_api" = ps: with ps; [ aiohttp-cors ];
     "wemo" = ps: with ps; [ pywemo ];
     "whirlpool" = ps: with ps; [ whirlpool-sixth-sense ];
@@ -1584,6 +1584,7 @@
     "waze_travel_time"
     "weather"
     "webhook"
+    "webostv"
     "websocket_api"
     "wemo"
     "whirlpool"
