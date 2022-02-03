@@ -867,6 +867,18 @@ let
         };
       };
 
+      humao.rest-client = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "humao";
+          name = "rest-client";
+          version = "0.24.6";
+          sha256 = "196pm7gv0488bpv1lklh8hpwmdqc4yimz389gad6nsna368m4m43";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       jkillian.custom-local-formatters = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "jkillian";
