@@ -11,6 +11,14 @@ with lib;
     console.earlySetup = mkDefault true;
     boot.loader.systemd-boot.consoleMode = mkDefault "1";
 
+
+    # Grayscale anti-aliasing for fonts
+    fonts.fontconfig.antialias = mkDefault true;
+    fonts.fontconfig.subpixel = {
+      rgba = mkDefault "none";
+      lcdfilter = mkDefault "none";
+    };
+
     # TODO Find reasonable defaults X11 & wayland
   };
 }
