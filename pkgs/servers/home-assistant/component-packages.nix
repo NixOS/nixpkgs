@@ -66,7 +66,7 @@
     "august" = ps: with ps; [ yalexs ];
     "aurora" = ps: with ps; [ auroranoaa ];
     "aurora_abb_powerone" = ps: with ps; [ ]; # missing inputs: aurorapy
-    "aussie_broadband" = ps: with ps; [ ]; # missing inputs: pyaussiebb
+    "aussie_broadband" = ps: with ps; [ pyaussiebb ];
     "auth" = ps: with ps; [ aiohttp-cors ];
     "automation" = ps: with ps; [ aiohttp-cors ];
     "avea" = ps: with ps; [ avea ];
@@ -1069,6 +1069,7 @@
     "atag"
     "august"
     "aurora"
+    "aussie_broadband"
     "auth"
     "automation"
     "awair"
