@@ -54,11 +54,6 @@ rustPlatform.buildRustPackage rec {
     longDescription = ''
       Bindgen takes a c or c++ header file and turns them into
       rust ffi declarations.
-      As with most compiler related software, this will only work
-      inside a nix-shell with the required libraries as buildInputs.
-      This version of bindgen is wrapped with the required compiler flags
-      required to find the c and c++ standard libary of the input clang
-      derivation.
     '';
     homepage = "https://github.com/rust-lang/rust-bindgen";
     license = with licenses; [ bsd3 ];

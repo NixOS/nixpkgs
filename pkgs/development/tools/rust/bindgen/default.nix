@@ -7,6 +7,13 @@ let
       inherit bash;
       unwrapped = rust-bindgen-unwrapped;
       libclang = clang.cc.lib;
+      meta = rust-bindgen-unwrapped.meta // {
+        longDescription = rust-bindgen-unwrapped.meta.longDescription + ''
+          This version of bindgen is wrapped with the required compiler flags
+          required to find the c and c++ standard libary, as well as the libraries
+          specified in the buildInputs of your derivation.
+        '';
+      };
       passthru.tests = {
         simple-c = runCommandCC "simple-c-bindgen-tests" { } ''
           echo '#include <stdlib.h>' > a.c
