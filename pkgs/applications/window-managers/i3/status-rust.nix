@@ -9,6 +9,8 @@
 , openssl
 , ethtool
 , lm_sensors
+, iw
+, iproute2
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/i3status-rs --prefix PATH : "${ethtool}/bin"
+    wrapProgram $out/bin/i3status-rs --prefix PATH : ${lib.makeBinPath [ iproute2 ethtool iw ]}
   '';
 
   # Currently no tests are implemented, so we avoid building the package twice

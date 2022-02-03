@@ -50,17 +50,14 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
       ++ extraPytestFlagsArray.${component} or [ ]
       ++ [ "tests/components/${component}" ];
 
-    preCheck = old.preCheck + lib.optionalString (component != "network") ''
+    preCheck = old.preCheck + lib.optionalString (builtins.elem component [ "emulated_hue" "songpal" "system_log" ]) ''
       patch -p1 < ${./patches/tests-mock-source-ip.patch}
     '';
 
     meta = old.meta // {
       broken = lib.elem component [
         "airtouch4"
-        "glances"
-        "ridwell"
-        "venstar"
-        "yamaha_musiccast"
+        "dnsip"
       ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;

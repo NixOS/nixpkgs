@@ -114,14 +114,6 @@ stdenv.mkDerivation rec {
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
 
-    # fonttools 4.26.2, used by matplotlib, uses deprecated methods internally.
-    # This is fixed in fonttools 4.27.0, but since fonttools is a dependency of
-    # 2000+ packages and DeprecationWarnings are hidden almost everywhere by
-    # default (not on Sage's doctest harness, though), it doesn't make sense to
-    # backport the fix (see https://github.com/NixOS/nixpkgs/pull/151415).
-    # Let's just assume warnings are expected until we update to 4.27.0.
-    ./patches/fonttools-deprecation-warnings.patch
-
     # https://trac.sagemath.org/ticket/32968
     (fetchSageDiff {
       base = "9.5.beta8";
