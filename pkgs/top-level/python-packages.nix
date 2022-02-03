@@ -3999,6 +3999,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  intellifire4py = callPackage ../development/python-modules/intellifire4py { };
+
   intensity-normalization = callPackage ../development/python-modules/intensity-normalization { };
 
   internetarchive = callPackage ../development/python-modules/internetarchive { };

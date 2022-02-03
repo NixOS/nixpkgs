@@ -414,7 +414,7 @@
     "input_text" = ps: with ps; [ ];
     "insteon" = ps: with ps; [ pyinsteon ];
     "integration" = ps: with ps; [ ];
-    "intellifire" = ps: with ps; [ ]; # missing inputs: intellifire4py
+    "intellifire" = ps: with ps; [ intellifire4py ];
     "intent" = ps: with ps; [ aiohttp-cors ];
     "intent_script" = ps: with ps; [ ];
     "intesishome" = ps: with ps; [ pyintesishome ];
@@ -1277,6 +1277,7 @@
     "input_text"
     "insteon"
     "integration"
+    "intellifire"
     "intent"
     "intent_script"
     "ios"
