@@ -1,14 +1,11 @@
 # nix-build '<nixpkgs/nixos>' -A config.system.build.openstackImage --arg configuration "{ imports = [ ./nixos/maintainers/scripts/openstack/openstack-image.nix ]; }"
 
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
-  imports =
-    [ ../../../modules/installer/cd-dvd/channel.nix
-      ../../../modules/virtualisation/openstack-config.nix
-    ];
+  imports = [
+    ../../../modules/installer/cd-dvd/channel.nix
+    ../../../modules/virtualisation/openstack-config.nix
+  ];
 
   system.build.openstackImage = import ../../../lib/make-disk-image.nix {
     inherit lib config;
