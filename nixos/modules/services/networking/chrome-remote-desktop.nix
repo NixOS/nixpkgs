@@ -1,6 +1,6 @@
 { lib, config, options, pkgs, ... }:
 with lib;
-let 
+let
   cfg = config.services.chrome-remote-desktop;
 in {
   options.services.chrome-remote-desktop = {
@@ -54,7 +54,7 @@ in {
     systemd.packages = [
       pkgs.chrome-remote-desktop_final
     ];
-    
+
     # Reference : ${pkgs.chrome-remote-desktop}/lib/systemd/system/chrome-remote-desktop@.service
     systemd.services."chrome-remote-desktop@${cfg.user}" = {
       enable = true;

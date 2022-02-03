@@ -1,7 +1,9 @@
 { enableNewSession ? false, stdenv, pkgs, lib, config, fetchurl, fetchgit, dpkg, python3, glibc, glib, pam, nss
 , nspr, expat, gtk3, dconf, xorg, fontconfig, dbus_daemon, alsaLib, shadow, mesa, libdrm, libxkbcommon, wayland }:
 stdenv.mkDerivation rec {
-  name = "chrome-remote-desktop";
+  pname = "chrome-remote-desktop";
+  version = "unstable-2022-02-03";
+
   src = fetchurl {
     sha256 = "sha256-CNE3kvAj7Jp4cB5x2D/YUA1H9Ri397C6rxQBRmstz1c=";
     url = "https://dl.google.com/linux/direct/chrome-remote-desktop_current_amd64.deb";
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
   replacePrefix = "/opt/google/chrome-remote-desktop";
   replaceTarget = "/run/current-system/sw/bin/./././";
 
-  patchPhase = 
+  patchPhase =
   ''
     sed \
     -e '/^.*sudo_command =/ s/"gksudo .*"/"pkexec"/' \
