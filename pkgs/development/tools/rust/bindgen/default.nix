@@ -1,18 +1,38 @@
-{ rust-bindgen-unwrapped, bash, runCommand }:
+{ rust-bindgen-unwrapped, zlib, bash, runCommand, runCommandCC }:
 let
   clang = rust-bindgen-unwrapped.clang;
+  self = runCommand "rust-bindgen-${rust-bindgen-unwrapped.version}"
+    {
+      #for substituteAll
+      inherit bash;
+      unwrapped = rust-bindgen-unwrapped;
+      libclang = clang.cc.lib;
+      passthru.tests = {
+        simple-c = runCommandCC "simple-c-bindgen-tests" { } ''
+          echo '#include <stdlib.h>' > a.c
+          ${self}/bin/bindgen a.c --whitelist-function atoi | tee output
+          grep atoi output
+          touch $out
+        '';
+        simple-cpp = runCommandCC "simple-cpp-bindgen-tests" { } ''
+          echo '#include <cmath>' > a.cpp
+          ${self}/bin/bindgen a.cpp --whitelist-function erf -- -xc++ | tee output
+          grep erf output
+          touch $out
+        '';
+        with-lib = runCommandCC "zlib-bindgen-tests" { buildInputs = [ zlib ]; } ''
+          echo '#include <zlib.h>' > a.c
+          ${self}/bin/bindgen a.c --whitelist-function compress | tee output
+          grep compress output
+          touch $out
+        '';
+      };
+    } ''
+    mkdir -p $out/bin
+    export cincludes="$(< ${clang}/nix-support/cc-cflags) $(< ${clang}/nix-support/libc-cflags)"
+    export cxxincludes="$(< ${clang}/nix-support/libcxx-cxxflags)"
+    substituteAll ${./wrapper.sh} $out/bin/bindgen
+    chmod +x $out/bin/bindgen
+  '';
 in
-runCommand "rust-bindgen-${rust-bindgen-unwrapped.version}"
-{
-  #for substituteAll
-  inherit bash;
-  unwrapped = rust-bindgen-unwrapped;
-  libclang = clang.cc.lib;
-} ''
-  mkdir -p $out/bin
-  export cincludes="$(< ${clang}/nix-support/cc-cflags) $(< ${clang}/nix-support/libc-cflags)"
-  export cxxincludes="$(< ${clang}/nix-support/libcxx-cxxflags)"
-  substituteAll ${./wrapper.sh} $out/bin/bindgen
-  chmod +x $out/bin/bindgen
-''
-
+self
