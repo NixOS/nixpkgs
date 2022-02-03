@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 }:
+
 buildGoModule rec {
   pname = "gocyclo";
   version = "0.4.0";
@@ -20,6 +21,5 @@ buildGoModule rec {
     homepage = "https://github.com/fzipp/gocyclo";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }
