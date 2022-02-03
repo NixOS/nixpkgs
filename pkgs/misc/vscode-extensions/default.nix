@@ -931,8 +931,8 @@ let
           mktplcRef = {
             publisher = "github";
             name = "copilot";
-            version = "1.7.4421";
-            sha256 = "1wvzf8rq8ligj079f1m74zzna2mfmhcbgvvrsw6w0wxw9x8fn4wy";
+            version = "1.7.4812";
+            sha256 = "1yl7m90m38pv8nz4dwcszjsa1sf253459xln17mngmc8z9wd3d3a";
           };
           meta = { license = lib.licenses.unfree; };
         };
