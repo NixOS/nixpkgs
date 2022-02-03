@@ -2174,6 +2174,8 @@ in {
 
   discordpy = callPackage ../development/python-modules/discordpy { };
 
+  discovery30303 = callPackage ../development/python-modules/discovery30303 { };
+
   diskcache = callPackage ../development/python-modules/diskcache { };
 
   dissononce = callPackage ../development/python-modules/dissononce { };
