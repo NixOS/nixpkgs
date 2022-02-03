@@ -752,6 +752,8 @@ in {
 
   auroranoaa = callPackage ../development/python-modules/auroranoaa { };
 
+  aurorapy = callPackage ../development/python-modules/aurorapy { };
+
   auth0-python = callPackage ../development/python-modules/auth0-python { };
 
   authcaptureproxy = callPackage ../development/python-modules/authcaptureproxy { };
