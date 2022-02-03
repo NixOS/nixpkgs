@@ -923,7 +923,7 @@
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
-    "twinkly" = ps: with ps; [ ]; # missing inputs: ttls
+    "twinkly" = ps: with ps; [ ttls ];
     "twitch" = ps: with ps; [ python-twitch-client ];
     "twitter" = ps: with ps; [ twitterapi ];
     "ubus" = ps: with ps; [ openwrt-ubus-rpc ];
@@ -1546,6 +1546,7 @@
     "tuya"
     "twentemilieu"
     "twilio"
+    "twinkly"
     "twitch"
     "uk_transport"
     "unifi"
