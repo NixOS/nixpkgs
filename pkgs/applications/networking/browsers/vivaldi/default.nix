@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
+{ lib, stdenv, config, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
 , alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
@@ -12,6 +12,7 @@
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, vivaldi-widevine ? null
 , commandLineArgs ? ""
+, pulseSupport ? stdenv.isLinux, libpulseaudio
 }:
 
 let
@@ -40,7 +41,8 @@ in stdenv.mkDerivation rec {
     freetype fontconfig libXrender libuuid expat glib nss nspr
     libxml2 pango cairo gnome2.GConf
     libdrm mesa
-  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
+  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
+    ++ lib.optional pulseSupport libpulseaudio;
 
   libPath = lib.makeLibraryPath buildInputs
     + lib.optionalString (stdenv.is64bit)
