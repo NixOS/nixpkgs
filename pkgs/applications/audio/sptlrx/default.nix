@@ -16,7 +16,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Spotify lyrics in your terminal.";
+    description = "Spotify lyrics in your terminal";
     homepage = "https://github.com/raitonoberu/sptlrx";
     license = licenses.mit;
     maintainers = with maintainers; [ MoritzBoehme ];
