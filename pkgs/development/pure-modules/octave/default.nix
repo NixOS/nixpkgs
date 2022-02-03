@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, octave }:
 
 stdenv.mkDerivation rec {
-  baseName = "octave";
+  pname = "pure-octave";
   version = "0.9";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-octave-${version}.tar.gz";
     sha256 = "0l1mvmi3rpabzjcrk6p04rdn922mvdm9x67zby3dha5iiccc47q0";
   };
 

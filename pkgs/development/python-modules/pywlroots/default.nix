@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "pywlroots";
-  version = "0.15.4";
+  version = "0.15.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "Cyj3B9uK1RoIuStCO+z9/bq7RjTPdjTqVhfc+tCRofo=";
+    sha256 = "vOdmwsMyDzz1kbA7+W2irax/1SFSNYTrRCQjfW7Npzk=";
   };
 
   # The XWayland detection uses some hard-coded FHS paths. Since we

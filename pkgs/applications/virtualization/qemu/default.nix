@@ -243,13 +243,7 @@ stdenv.mkDerivation rec {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
-    install -m755 -D $emitKvmWarningsPath $out/libexec/emit-kvm-warnings
-    if [ -x $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
-      makeWrapper $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} \
-                  $out/bin/qemu-kvm \
-                  --run $out/libexec/emit-kvm-warnings \
-                  --add-flags "\$([ -r /dev/kvm -a -w /dev/kvm ] && echo -enable-kvm)"
-    fi
+    ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
   passthru = {
@@ -258,26 +252,6 @@ stdenv.mkDerivation rec {
 
   # Builds in ~3h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
-
-  emitKvmWarnings = ''
-    #!${runtimeShell}
-    WARNCOL='\033[1;35m'
-    NEUTRALCOL='\033[0m'
-    WARNING="''${WARNCOL}warning:''${NEUTRALCOL}"
-    if [ ! -e /dev/kvm ]; then
-      echo -e "''${WARNING} KVM is not available - execution will be slow" >&2
-      echo "Consider installing KVM for hardware-accelerated execution." >&2
-      echo "If KVM is already installed make sure the kernel module is loaded." >&2
-    elif [ ! -r /dev/kvm -o ! -w /dev/kvm ]; then
-      echo -e "''${WARNING} /dev/kvm is not read-/writable - execution will be slow" >&2
-      echo "/dev/kvm needs to be read-/writable by the user executing QEMU." >&2
-      echo "" >&2
-      echo "For hardware-acceleration inside the nix build sandbox /dev/kvm" >&2
-      echo "must be world-read-/writable (rw-rw-rw-)." >&2
-    fi
-  '';
-
-  passAsFile = [ "emitKvmWarnings" ];
 
   meta = with lib; {
     homepage = "http://www.qemu.org/";

@@ -56,10 +56,10 @@ let inherit (lib) optionals; in
 
 stdenv.mkDerivation rec {
   pname = "connman";
-  version = "1.40";
+  version = "1.41";
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
-    sha256 = "sha256-GleufOI0qjoXRKrDvlwhIdmNzpmUQO+KucxO39XtyxI=";
+    sha256 = "sha256-eftA9P3VUwxFqo5ZL7Froj02dPOpjPELiaZXbxmN5Yk=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
