@@ -161,7 +161,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanel-indicator-notifications = callPackage ./desktop/wingpanel-indicators/notifications { };
 
-  wingpanel-indicator-power = callPackage ./desktop/wingpanel-indicators/power { };
+  wingpanel-indicator-power = callPackage ./desktop/wingpanel-indicators/power {
+    inherit (gnome) gnome-power-manager;
+  };
 
   wingpanel-indicator-session = callPackage ./desktop/wingpanel-indicators/session { };
 
@@ -232,18 +234,20 @@ lib.makeScope pkgs.newScope (self: with self; {
   # Please call these packages in pkgs/top-level/all-packages.nix instead of this file.
   # https://github.com/NixOS/nixpkgs/issues/115222#issuecomment-906868654
 
-} // lib.optionalAttrs (config.allowAliases or true) {
+}) // lib.optionalAttrs (config.allowAliases or true) {
 
   ### ALIASES
 
-  inherit (pkgs) vala; # added 2019-10-10
+  # They need to be outside the scope or they will shadow the attributes from parent scope.
 
-  cerbere = throw "Cerbere is now obsolete https://github.com/elementary/cerbere/releases/tag/2.5.1.";
+  vala = throw "The ‘pantheon.vala’ alias was removed on 2022-02-02, please use ‘pkgs.vala’ directly."; # added 2019-10-10
 
-  elementary-screenshot-tool = elementary-screenshot; # added 2021-07-21
+  cerbere = throw "Cerbere is now obsolete https://github.com/elementary/cerbere/releases/tag/2.5.1."; # added 2020-04-06
+
+  elementary-screenshot-tool = throw "The ‘pantheon.elementary-screenshot-tool’ alias was removed on 2022-02-02, please use ‘pantheon.elementary-screenshot’ directly."; # added 2021-07-21
 
   extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
 
-  inherit (pkgs) notes-up; # added 2021-12-18
+  notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
 
-})
+}
