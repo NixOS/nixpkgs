@@ -258,6 +258,8 @@ in {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  aioaseko = callPackage ../development/python-modules/aioaseko { };
+
   aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
