@@ -295,6 +295,18 @@ let
         };
       };
 
+      benfradet.vscode-unison = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-unison";
+          publisher = "benfradet";
+          version = "0.3.0";
+          sha256 = "1x80s8l8djchg17553aiwaf4b49hf6awiayk49wyii0i26hlpjk1";
+        };
+        meta = with lib; {
+          license = licenses.asl20;
+        };
+      };
+
       betterthantomorrow.calva = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "calva";
