@@ -62,6 +62,12 @@ lib.makeScope pkgs.newScope (self: with self; {
     autoreconfHook = pkgs.autoreconfHook269;
   };
 
+  vte = callPackage ./desktop/vte { };
+
+#### BINDINGS
+
+  libglademm = callPackage ./bindings/libglademm { };
+
 } // lib.optionalAttrs (config.allowAliases or true) {
   inherit (pkgs)
     # GTK Libs
