@@ -1,5 +1,5 @@
 { enableNewSession ? false, stdenv, pkgs, lib, config, fetchurl, fetchgit, dpkg, python3, glibc, glib, pam, nss
-, nspr, expat, gtk3, dconf, xorg, fontconfig, dbus_daemon, alsaLib, shadow, mesa, libdrm, libxkbcommon, wayland }:
+, nspr, expat, gtk3, dconf, xorg, fontconfig, dbus, alsaLib, shadow, mesa, libdrm, libxkbcommon, wayland }:
 stdenv.mkDerivation rec {
   pname = "chrome-remote-desktop";
   version = "unstable-2022-02-03";
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
       xorg.libxcb
       xorg.libXScrnSaver
       fontconfig
-      dbus_daemon.lib
+      dbus.daemon.lib
       alsaLib
       shadow
       mesa
