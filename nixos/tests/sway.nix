@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-
-{
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "sway";
   meta = {
     maintainers = with lib.maintainers; [ primeos synthetica ];
