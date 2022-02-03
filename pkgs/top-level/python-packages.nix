@@ -9931,6 +9931,8 @@ in {
 
   trytond = callPackage ../development/python-modules/trytond { };
 
+  ttls = callPackage ../development/python-modules/ttls { };
+
   ttp = callPackage ../development/python-modules/ttp { };
 
   tubes = callPackage ../development/python-modules/tubes { };
