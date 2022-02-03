@@ -56,7 +56,7 @@
     "arris_tg2492lg" = ps: with ps; [ ]; # missing inputs: arris-tg2492lg
     "aruba" = ps: with ps; [ pexpect ];
     "arwn" = ps: with ps; [ aiohttp-cors paho-mqtt ];
-    "aseko_pool_live" = ps: with ps; [ ]; # missing inputs: aioaseko
+    "aseko_pool_live" = ps: with ps; [ aioaseko ];
     "asterisk_cdr" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
     "asterisk_mbox" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
     "asuswrt" = ps: with ps; [ aioasuswrt ];
@@ -1065,6 +1065,7 @@
     "aprs"
     "arcam_fmj"
     "arlo"
+    "aseko_pool_live"
     "asuswrt"
     "atag"
     "august"
