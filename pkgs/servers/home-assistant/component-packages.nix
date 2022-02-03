@@ -65,7 +65,7 @@
     "atome" = ps: with ps; [ pyatome ];
     "august" = ps: with ps; [ yalexs ];
     "aurora" = ps: with ps; [ auroranoaa ];
-    "aurora_abb_powerone" = ps: with ps; [ ]; # missing inputs: aurorapy
+    "aurora_abb_powerone" = ps: with ps; [ aurorapy ];
     "aussie_broadband" = ps: with ps; [ pyaussiebb ];
     "auth" = ps: with ps; [ aiohttp-cors ];
     "automation" = ps: with ps; [ aiohttp-cors ];
@@ -1070,6 +1070,7 @@
     "atag"
     "august"
     "aurora"
+    "aurora_abb_powerone"
     "aussie_broadband"
     "auth"
     "automation"
