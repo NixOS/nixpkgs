@@ -93,8 +93,8 @@ let
         mktplcRef = {
           name = "vscode-tlaplus";
           publisher = "alygin";
-          version = "1.5.3";
-          sha256 = "1cy0qn8iyjrinscn9p5ckpsa2hyryapxfi7is6s2zk2mpligbb1d";
+          version = "1.5.4";
+          sha256 = "0mf98244z6wzb0vj6qdm3idgr2sr5086x7ss2khaxlrziif395dx";
         };
         meta = {
           license = lib.licenses.mit;
