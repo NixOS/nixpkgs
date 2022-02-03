@@ -6536,6 +6536,8 @@ in {
 
   pyaudio = callPackage ../development/python-modules/pyaudio { };
 
+  pyaussiebb = callPackage ../development/python-modules/pyaussiebb { };
+
   pyautogui = callPackage ../development/python-modules/pyautogui { };
 
   pyavm = callPackage ../development/python-modules/pyavm { };
