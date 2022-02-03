@@ -24949,6 +24949,8 @@ with pkgs;
 
   CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
 
+  chrome-remote-desktop = callPackage ../applications/networking/remote/chrome-remote-desktop { };
+
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
   chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
