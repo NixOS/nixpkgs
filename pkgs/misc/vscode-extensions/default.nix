@@ -569,6 +569,16 @@ let
         meta = { license = lib.licenses.mit; };
       };
 
+      disneystreaming.smithy = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "disneystreaming";
+          name = "smithy";
+          version = "0.0.2";
+          sha256 = "0rdh7b5s7ynsyfrq1r1170g65q9vvvfl3qbfvbh1b38ndvj2f0yq";
+        };
+        meta = { license = lib.licenses.asl20; };
+      };
+
       divyanshuagrawal.competitive-programming-helper = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "competitive-programming-helper";
