@@ -36,6 +36,58 @@ makeWrapper() {
 
     assertExecutable "$original"
 
+    # Write wrapper code which adds `value` to the beginning or end of
+    # the list variable named by `varName`, depending on the `mode`
+    # specified.
+    #
+    # A value which is already part of the list will not be added
+    # again. If this is the case and the `suffix` mode is used, the
+    # list won't be touched at all. The `prefix` mode will however
+    # move the last matching instance of the value to the beginning
+    # of the list. Any remaining duplicates of the value will be left
+    # as-is.
+    addValue() {
+        local mode="$1"       # `prefix` or `suffix` to add to the beginning or end respectively
+        local varName="$2"    # name of list variable to add to
+        local separator="$3"  # character used to separate elements of list
+        local value="$4"      # one value, or multiple values separated by `separator`, to add to list
+        if test -n "$value"; then
+            local old_ifs=$IFS
+            IFS=$separator
+
+            if [[ "$mode" == '--prefix'* ]]; then
+                # Keep the order of the components as written when
+                # prefixing; normally, they would be added in the
+                # reverse order.
+                local tmp=
+                for v in $value; do
+                    tmp=$v${tmp:+$separator}$tmp
+                done
+                value="$tmp"
+            fi
+            for v in $value; do
+                {
+                    echo "$varName=\${$varName:+${separator@Q}\$$varName${separator@Q}}"               # add separators on both ends unless empty
+                    if [[ "$mode" == '--prefix'* ]]; then                                              # -- in prefix mode --
+                        echo "$varName=\${$varName/${separator@Q}${v@Q}${separator@Q}/${separator@Q}}" # remove the first instance of the value (if any)
+                        echo "$varName=${v@Q}\$$varName"                                               # prepend the value
+                    elif [[ "$mode" == '--suffix'* ]]; then                                            # -- in suffix mode --
+                        echo "if [[ \$$varName != *${separator@Q}${v@Q}${separator@Q}* ]]; then"       # if the value isn't already in the list
+                        echo "    $varName=\$$varName${v@Q}"                                           # append the value
+                        echo "fi"
+                    else
+                        echo "unknown mode $mode!" 1>&2
+                        exit 1
+                    fi
+                    echo "$varName=\${$varName#${separator@Q}}"                                        # remove leading separator
+                    echo "$varName=\${$varName%${separator@Q}}"                                        # remove trailing separator
+                    echo "export $varName"
+                } >> "$wrapper"
+            done
+            IFS=$old_ifs
+        fi
+    }
+
     mkdir -p "$(dirname "$wrapper")"
 
     echo "#! @shell@ -e" > "$wrapper"
@@ -67,28 +119,14 @@ makeWrapper() {
             separator="${params[$((n + 2))]}"
             value="${params[$((n + 3))]}"
             n=$((n + 3))
-            if test -n "$value"; then
-                if test "$p" = "--suffix"; then
-                    echo "export $varName=\$$varName\${$varName:+${separator@Q}}${value@Q}" >> "$wrapper"
-                else
-                    echo "export $varName=${value@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
-                fi
-            fi
-        elif [[ "$p" == "--prefix-each" ]]; then
+            addValue "$p" "$varName" "$separator" "$value"
+        elif [[ ("$p" == "--suffix-each") || ("$p" == "--prefix-each") ]]; then
             varName="${params[$((n + 1))]}"
             separator="${params[$((n + 2))]}"
             values="${params[$((n + 3))]}"
             n=$((n + 3))
             for value in $values; do
-                echo "export $varName=${value@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
-            done
-        elif [[ "$p" == "--suffix-each" ]]; then
-            varName="${params[$((n + 1))]}"
-            separator="${params[$((n + 2))]}"
-            values="${params[$((n + 3))]}"
-            n=$((n + 3))
-            for value in $values; do
-                echo "export $varName=\$$varName\${$varName:+$separator}${value@Q}" >> "$wrapper"
+                addValue "$p" "$varName" "$separator" "$value"
             done
         elif [[ ("$p" == "--suffix-contents") || ("$p" == "--prefix-contents") ]]; then
             varName="${params[$((n + 1))]}"
@@ -97,11 +135,7 @@ makeWrapper() {
             n=$((n + 3))
             for fileName in $fileNames; do
                 contents="$(cat "$fileName")"
-                if test "$p" = "--suffix-contents"; then
-                    echo "export $varName=\$$varName\${$varName:+$separator}${contents@Q}" >> "$wrapper"
-                else
-                    echo "export $varName=${contents@Q}\${$varName:+$separator}\$$varName" >> "$wrapper"
-                fi
+                addValue "$p" "$varName" "$separator" "$contents"
             done
         elif [[ "$p" == "--add-flags" ]]; then
             flags="${params[$((n + 1))]}"

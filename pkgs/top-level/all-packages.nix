@@ -715,8 +715,14 @@ with pkgs;
 
   makeInitrd = callPackage ../build-support/kernel/make-initrd.nix; # Args intentionally left out
 
-  makeWrapper = makeSetupHook { deps = [ dieHook ]; substitutions = { shell = targetPackages.runtimeShell; }; }
-                              ../build-support/setup-hooks/make-wrapper.sh;
+  makeWrapper = makeSetupHook
+    { deps = [ dieHook ];
+      substitutions = {
+        shell = targetPackages.runtimeShell;
+        passthru.tests = tests.makeWrapper;
+      };
+    }
+    ../build-support/setup-hooks/make-wrapper.sh;
 
   makeBinaryWrapper = let
     f = { cc, sanitizers }: let
