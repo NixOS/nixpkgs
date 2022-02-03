@@ -3191,6 +3191,8 @@ in {
 
   geomet = callPackage ../development/python-modules/geomet { };
 
+  geometric = callPackage ../development/python-modules/geometric { };
+
   geopandas = callPackage ../development/python-modules/geopandas { };
 
   geopy = callPackage ../development/python-modules/geopy { };
