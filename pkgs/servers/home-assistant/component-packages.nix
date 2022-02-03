@@ -609,7 +609,7 @@
     "ombi" = ps: with ps; [ pyombi ];
     "omnilogic" = ps: with ps; [ omnilogic ];
     "onboarding" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow sqlalchemy ];
-    "oncue" = ps: with ps; [ ]; # missing inputs: aiooncue
+    "oncue" = ps: with ps; [ aiooncue ];
     "ondilo_ico" = ps: with ps; [ aiohttp-cors ondilo ];
     "onewire" = ps: with ps; [ ]; # missing inputs: pi1wire pyownet
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
@@ -1379,6 +1379,7 @@
     "octoprint"
     "omnilogic"
     "onboarding"
+    "oncue"
     "ondilo_ico"
     "open_meteo"
     "openalpr_cloud"
