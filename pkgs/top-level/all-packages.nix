@@ -3525,6 +3525,8 @@ with pkgs;
 
   mrkd = with python3Packages; toPythonApplication mrkd;
 
+  nautilus-open-any-terminal = callPackage ../tools/misc/nautilus-open-any-terminal { };
+
   n2n = callPackage ../tools/networking/n2n { };
 
   nextdns = callPackage ../applications/networking/nextdns { };
@@ -11900,7 +11902,7 @@ with pkgs;
   copper = callPackage ../development/compilers/copper {};
 
   inherit (callPackages ../development/compilers/crystal {
-    llvmPackages = llvmPackages_10;
+    llvmPackages = if stdenv.system == "aarch64-darwin" then llvmPackages_11 else llvmPackages_10;
   })
     crystal_1_0
     crystal_1_1
