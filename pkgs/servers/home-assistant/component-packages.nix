@@ -9,7 +9,7 @@
     "acer_projector" = ps: with ps; [ pyserial ];
     "acmeda" = ps: with ps; [ aiopulse ];
     "actiontec" = ps: with ps; [ ];
-    "adax" = ps: with ps; [ adax ]; # missing inputs: Adax-local
+    "adax" = ps: with ps; [ adax-local adax ];
     "adguard" = ps: with ps; [ adguardhome ];
     "ads" = ps: with ps; [ pyads ];
     "advantage_air" = ps: with ps; [ advantage-air ];
@@ -1037,6 +1037,7 @@
     "abode"
     "accuweather"
     "acmeda"
+    "adax"
     "adguard"
     "advantage_air"
     "aemet"
