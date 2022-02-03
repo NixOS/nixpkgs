@@ -2069,8 +2069,8 @@ let
         mktplcRef = {
           name = "material-theme";
           publisher = "zhuangtongfa";
-          version = "3.9.12";
-          sha256 = "017h9hxplf2rhmlhn3vag0wypcx6gxi7p9fgllj5jzwrl2wsjl0g";
+          version = "3.13.17";
+          sha256 = "100riqnvc2j315i1lvnwxmgga17s369xxvds5skgnk2yi2xnm2g9";
         };
         meta = {
           license = lib.licenses.mit;
