@@ -193,6 +193,18 @@ let
         };
       };
 
+      Arjun.swagger-viewer = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "Arjun";
+          name = "swagger-viewer";
+          version = "3.1.2";
+          sha256 = "1cjvc99x1q5w3i2vnbxrsl5a1dr9gb3s6s9lnwn6mq5db6iz1nlm";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       arrterian.nix-env-selector = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nix-env-selector";
