@@ -416,6 +416,8 @@ in {
 
   aiowatttime = callPackage ../development/python-modules/aiowatttime { };
 
+  aiowebostv = callPackage ../development/python-modules/aiowebostv { };
+
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
   aioymaps = callPackage ../development/python-modules/aioymaps { };
