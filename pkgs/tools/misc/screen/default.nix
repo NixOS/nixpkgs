@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       # Fixes denial of services in encoding.c, remove > 4.8.0
       name = "CVE-2021-26937.patch";
-      url = "https://salsa.debian.org/debian/screen/-/raw/master/debian/patches/99_CVE-2021-26937.patch";
+      url = "https://salsa.debian.org/debian/screen/-/raw/4f7494f943e8941528e651bd967fa3f837435140/debian/patches/99_CVE-2021-26937.patch";
       sha256 = "05f3p1c7s83nccwkhmavjzgaysxnvq41c7jffs31ra65kcpabqy0";
     })
   ] ++ lib.optional stdenv.hostPlatform.isMusl
