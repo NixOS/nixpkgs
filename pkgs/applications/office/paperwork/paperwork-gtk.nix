@@ -130,7 +130,6 @@ python3Packages.buildPythonApplication rec {
     openpaperwork-core
     pypillowfight
     pyxdg
-    python-dateutil
     setuptools
   ];
 
