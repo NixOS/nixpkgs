@@ -37,11 +37,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'httpx = ">=0.20,<1"' 'httpx = ">=0.19,<1"'
-  '';
-
   pythonImportsCheck = [
     "glances_api"
   ];
