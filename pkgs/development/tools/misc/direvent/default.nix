@@ -1,13 +1,14 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 }:
 
 stdenv.mkDerivation rec {
-  name = "direvent-${version}";
+  pname = "direvent";
   version = "5.2";
 
   src = fetchurl {
-    url = "mirror://gnu/direvent/${name}.tar.gz";
+    url = "mirror://gnu/direvent/direvent-${version}.tar.gz";
     sha256 = "0m9vi01b1km0cpknflyzsjnknbava0s1n6393b2bpjwyvb6j5613";
   };
 
