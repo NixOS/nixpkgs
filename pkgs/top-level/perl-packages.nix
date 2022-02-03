@@ -8982,6 +8982,8 @@ let
     buildInputs = [ TestPod ];
   };
 
+  findimagedupes = callPackage ../development/perl-modules/findimagedupes { };
+
   FindLib = buildPerlPackage {
     pname = "Find-Lib";
     version = "1.04";
@@ -9683,21 +9685,6 @@ let
       license = lib.licenses.lgpl21Plus;
     };
     propagatedBuildInputs = [ Pango ];
-  };
-
-  Gtk2GladeXML = buildPerlPackage {
-    pname = "Gtk2-GladeXML";
-    version = "1.007";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TS/TSCH/Gtk2-GladeXML-1.007.tar.gz";
-      sha256 = "50240a2bddbda807c8f8070de941823b7bf3d288a13be6d0d6563320b42c445a";
-    };
-    propagatedBuildInputs = [ pkgs.gnome2.libglade pkgs.gtk2 Gtk2 ];
-    meta = {
-      description = "Create user interfaces directly from Glade XML files";
-      license = lib.licenses.lgpl2Plus;
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2GladeXML.x86_64-darwin
-    };
   };
 
   Gtk2TrayIcon = buildPerlPackage {
@@ -25456,4 +25443,5 @@ let
   SubExporterUtil = self.SubExporter;
   version = self.Version;
 
+  Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
 }; in self

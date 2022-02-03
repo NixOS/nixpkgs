@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchPypi
+, fetchpatch
 , imageio-ffmpeg
 , numpy
 , pillow
@@ -12,13 +13,22 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.13.2";
+  version = "2.13.5";
   disabled = isPy27;
 
   src = fetchPypi {
-    sha256 = "5b7a55d07de88a2fd70f18a1608ca05ba2b55596a942fb2c390240201009a6c3";
+    sha256 = "0gc41aiz2i0napk1y00v9bgb4m7dd21sz3lghfm6w6s0ivjjpv67";
     inherit pname version;
   };
+
+  patches = [
+    # already present in master, remove on next bump
+    (fetchpatch {
+      name = "pillow-9-gif-rgba.patch";
+      url = "https://github.com/imageio/imageio/commit/836b7a9b077a96de8adab5b67ea53b1292048275.patch";
+      sha256 = "0rlyppa4w16n6qn5hr4wrg8xiy7ifs8c5dhmq8a9yncypx87glpv";
+    })
+  ];
 
   propagatedBuildInputs = [
     imageio-ffmpeg

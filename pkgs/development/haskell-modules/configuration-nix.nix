@@ -605,17 +605,7 @@ self: super: builtins.intersectAttrs super {
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
 
-      spagoWithPatches = appendPatch (
-        # Spago needs a small patch to work with versions-5.0.0:
-        # https://github.com/purescript/spago/pull/798
-        # This can probably be removed with >spago-0.20.3.
-        pkgs.fetchpatch {
-          url = "https://github.com/purescript/spago/commit/dd4bf4413d9675c1c8065d24d0ed7b345c7fa5dd.patch";
-          sha256 = "1i1r3f4n9mlkckx15bfrdy5m7gjf0zx7ycwyqra6qn34zpcbzpmf";
-        }
-      ) super.spago;
-
-      spagoWithOverrides = spagoWithPatches.override {
+      spagoWithOverrides = super.spago.override {
         # spago has not yet been updated for the latest dhall.
         dhall = self.dhall_1_38_1;
       };
