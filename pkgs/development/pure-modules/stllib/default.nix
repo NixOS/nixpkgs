@@ -1,9 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
-  baseName = "stllib";
+  pname = "pure-stllib";
   version = "0.6";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
     url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-stllib-${version}.tar.gz";
