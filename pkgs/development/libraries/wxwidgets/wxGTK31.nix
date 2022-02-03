@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # https://github.com/wxWidgets/wxWidgets/issues/17942
-    ../0001-fix-assertion-using-hide-in-destroy.patch
+    ./0001-fix-assertion-using-hide-in-destroy.patch
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -138,13 +138,12 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.wxWindows;
     maintainers = with maintainers; [ AndersonTorres tfmoraes ];
-    platforms = platforms.linux ++ platforms.darwin;
-    broken = stdenv.isDarwin; # ofBorg is failing, don't know if internal
+    platforms = platforms.unix;
+    badPlatforms = platforms.darwin; # ofBorg is failing, don't know if internal
   };
 
   passthru = {
     inherit gtk;
     inherit compat28 compat30 unicode;
   };
-
 }

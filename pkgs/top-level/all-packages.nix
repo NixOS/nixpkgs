@@ -20544,30 +20544,17 @@ with pkgs;
 
   wxGTK = wxGTK28;
 
-  wxGTK30 = wxGTK30-gtk2;
-  wxGTK31 = wxGTK31-gtk2;
+  wxGTK28 = callPackage ../development/libraries/wxwidgets/wxGTK28.nix { };
+  wxGTK29 = callPackage ../development/libraries/wxwidgets/wxGTK29.nix { };
+  wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix { };
+  wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix { };
+  wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix { };
 
-  wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 { };
+  wxGTK30-gtk2 = wxGTK30.override { withGtk2 = true; };
+  wxGTK30-gtk3 = wxGTK30.override { withGtk2 = false; };
 
-  wxGTK29 = callPackage ../development/libraries/wxwidgets/2.9 { };
-
-  wxGTK30-gtk2 = callPackage ../development/libraries/wxwidgets/3.0 {
-    withGtk2 = true;
-  };
-
-  wxGTK30-gtk3 = callPackage ../development/libraries/wxwidgets/3.0 {
-    withGtk2 = false;
-  };
-
-  wxGTK31-gtk2 = callPackage ../development/libraries/wxwidgets/3.1 {
-    withGtk2 = true;
-  };
-
-  wxGTK31-gtk3 = callPackage ../development/libraries/wxwidgets/3.1 {
-    withGtk2 = false;
-  };
-
-  wxmac = callPackage ../development/libraries/wxwidgets/3.0/mac.nix { };
+  wxGTK31-gtk2 = wxGTK30.override { withGtk2 = true; };
+  wxGTK31-gtk3 = wxGTK30.override { withGtk2 = false; };
 
   wxSVG = callPackage ../development/libraries/wxSVG {
     wxGTK = wxGTK30-gtk3;
