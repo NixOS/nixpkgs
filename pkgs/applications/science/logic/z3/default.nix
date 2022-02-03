@@ -34,14 +34,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ python.pkgs.setuptools ];
   enableParallelBuilding = true;
 
-  cmakeFlags = []
-    ++ optional javaBindings ''
-        -DZ3_BUILD_JAVA_BINDINGS=True
-        -DZ3_INSTALL_JAVA_BINDINGS=True
-       ''
-  ;
+  cmakeFlags = lib.optionals javaBindings [
+    "-DZ3_BUILD_JAVA_BINDINGS=True"
+    "-DZ3_INSTALL_JAVA_BINDINGS=True"
+  ];
 
-  outputs = [ "out" "lib" "dev" ] ;
+  outputs = [ "out" "lib" "dev" ];
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";
