@@ -13588,6 +13588,8 @@ with pkgs;
 
   janet = callPackage ../development/interpreters/janet {};
 
+  jpm = callPackage ../development/interpreters/janet/jpm.nix {};
+
   jelly = callPackage ../development/interpreters/jelly {};
 
   jimtcl = callPackage ../development/interpreters/jimtcl {};
