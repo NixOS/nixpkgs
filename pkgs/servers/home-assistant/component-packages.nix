@@ -122,7 +122,7 @@
     "cast" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa ifaddr mutagen plexapi plexauth plexwebsocket PyChromecast zeroconf ];
     "cert_expiry" = ps: with ps; [ ];
     "channels" = ps: with ps; [ pychannels ];
-    "circuit" = ps: with ps; [ ]; # missing inputs: circuit-webhook
+    "circuit" = ps: with ps; [ circuit-webhook ];
     "cisco_ios" = ps: with ps; [ pexpect ];
     "cisco_mobility_express" = ps: with ps; [ ciscomobilityexpress ];
     "cisco_webex_teams" = ps: with ps; [ webexteamssdk ];
