@@ -22125,7 +22125,9 @@ with pkgs;
     buildGoModule = buildGo116Module;
   };
 
-  victoriametrics = callPackage ../servers/nosql/victoriametrics { };
+  victoriametrics = callPackage ../servers/nosql/victoriametrics {
+    buildGoModule = buildGo116Module;
+  };
 
   virtiofsd = callPackage ../servers/misc/virtiofsd { };
 
