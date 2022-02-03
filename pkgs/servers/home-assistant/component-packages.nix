@@ -740,7 +740,7 @@
     "rpi_rf" = ps: with ps; [ ]; # missing inputs: RPi.GPIO rpi-rf
     "rss_feed_template" = ps: with ps; [ aiohttp-cors ];
     "rtorrent" = ps: with ps; [ ];
-    "rtsp_to_webrtc" = ps: with ps; [ pyturbojpeg aiohttp-cors ]; # missing inputs: rtsp-to-webrtc
+    "rtsp_to_webrtc" = ps: with ps; [ pyturbojpeg aiohttp-cors rtsp-to-webrtc ];
     "ruckus_unleashed" = ps: with ps; [ pyruckus ];
     "russound_rio" = ps: with ps; [ ]; # missing inputs: russound_rio
     "russound_rnet" = ps: with ps; [ ]; # missing inputs: russound
@@ -1443,6 +1443,7 @@
     "roon"
     "rpi_power"
     "rss_feed_template"
+    "rtsp_to_webrtc"
     "ruckus_unleashed"
     "safe_mode"
     "samsungtv"
