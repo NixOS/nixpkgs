@@ -71,8 +71,8 @@ self: super: {
   vector-th-unbox = doJailbreak super.vector-th-unbox;
   zlib = doJailbreak super.zlib;
   weeder = self.weeder_2_3_0;
-  generic-lens-core = self.generic-lens-core_2_2_0_0;
-  generic-lens = self.generic-lens_2_2_0_0;
+  generic-lens-core = self.generic-lens-core_2_2_1_0;
+  generic-lens = self.generic-lens_2_2_1_0;
   th-desugar = self.th-desugar_1_13;
   # 2021-11-08: Fixed in autoapply-0.4.2
   autoapply = doJailbreak self.autoapply_0_4_1_1;
@@ -83,7 +83,7 @@ self: super: {
   });
 
   # Upstream also disables test for GHC 9: https://github.com/kcsongor/generic-lens/pull/130
-  generic-lens_2_2_0_0 = dontCheck super.generic-lens_2_2_0_0;
+  generic-lens_2_2_1_0 = dontCheck super.generic-lens_2_2_1_0;
 
   # Apply patches from head.hackage.
   alex = appendPatch (pkgs.fetchpatch {
