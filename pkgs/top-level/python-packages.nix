@@ -1581,6 +1581,8 @@ in {
 
   ci-py = callPackage ../development/python-modules/ci-py { };
 
+  circuit-webhook = callPackage ../development/python-modules/circuit-webhook { };
+
   circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
 
   cirq = callPackage ../development/python-modules/cirq { };
