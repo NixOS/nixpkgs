@@ -4,7 +4,7 @@
 , tag ? "-kf5" # tag added to the package name
 , static ? false # link statically
 
-, lib, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
+, lib, stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, dconf
 , mkDerivation, qtbase, qtscript
 , phonon, libdbusmenu, qca-qt5
 
@@ -46,6 +46,16 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
     # fixes build with Qt 5.14
     # source: https://github.com/quassel/quassel/pull/518/commits/8a46d983fc99204711cdff1e4c542e272fef45b9
     ./0001-common-Disable-enum-type-stream-operators-for-Qt-5.1.patch
+    (fetchpatch {
+      url = "https://github.com/quassel/quassel/commit/f20d380a36e11a7591dacbf0a62d7c11d997f9db.patch";
+      sha256 = "sha256-ffQoDWNtupv+Jr9zMyCjY1Yl+LwGh0rr0chSHsiSgUk=";
+      name = "CVE-2021-34825.patch";
+    })
+    (fetchpatch {
+      url = "https://github.com/quassel/quassel/commit/0674fae039bbc79bfe3f7e42b12ec9015b9b879b.patch";
+      sha256 = "sha256-pimA7a44KNVe09s9G09664mn08zf8p9+cg6fEegHuUU=";
+      name = "CVE-2021-34825-2.patch";
+    })
   ];
 
   # Prevent ``undefined reference to `qt_version_tag''' in SSL check
