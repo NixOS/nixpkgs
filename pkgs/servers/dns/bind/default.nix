@@ -9,18 +9,17 @@
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.16.16";
+  version = "9.16.25";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-bJE5Aq34eOfcXiKc6pT678nUD0R3WjAhPt0Ihg92HXs=";
+    sha256 = "sha256-n6MohQ+ChD74t78f9TIstosRAnOjPzdbpB81Jw9eH/M=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
 
   patches = [
     ./dont-keep-configure-flags.patch
-    ./remove-mkdir-var.patch
   ];
 
   nativeBuildInputs = [ perl pkg-config ];
