@@ -27738,7 +27738,9 @@ with pkgs;
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
-  open-policy-agent = callPackage ../development/tools/open-policy-agent { };
+  open-policy-agent = callPackage ../development/tools/open-policy-agent {
+    buildGoModule = buildGo116Module;
+  };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
