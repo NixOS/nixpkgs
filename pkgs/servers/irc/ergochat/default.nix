@@ -1,6 +1,6 @@
-{ buildGo117Module, fetchFromGitHub, lib, nixosTests }:
+{ buildGoModule, fetchFromGitHub, lib, nixosTests }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "ergo";
   version = "2.9.1";
 

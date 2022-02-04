@@ -1,13 +1,13 @@
 { lib
-, buildGo117Module
+, buildGoModule
 , fetchFromGitHub
 , makeWrapper
 , git
-, go_1_17
+, go
 , gnumake
 }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "kubebuilder";
   version = "3.3.0";
 
@@ -23,8 +23,8 @@ buildGo117Module rec {
 
   ldflags = [
     "-X main.kubeBuilderVersion=v${version}"
-    "-X main.goos=${go_1_17.GOOS}"
-    "-X main.goarch=${go_1_17.GOARCH}"
+    "-X main.goos=${go.GOOS}"
+    "-X main.goarch=${go.GOARCH}"
     "-X main.gitCommit=v${version}"
     "-X main.buildDate=v${version}"
   ];
@@ -34,7 +34,7 @@ buildGo117Module rec {
   postInstall = ''
     mv $out/bin/cmd $out/bin/kubebuilder
     wrapProgram $out/bin/kubebuilder \
-      --prefix PATH : ${lib.makeBinPath [ go_1_17 gnumake ]}
+      --prefix PATH : ${lib.makeBinPath [ go gnumake ]}
   '';
 
   allowGoReference = true;

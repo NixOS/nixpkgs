@@ -1,6 +1,6 @@
-{ lib, buildGo117Module, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "kopia";
   version = "0.10.4";
 

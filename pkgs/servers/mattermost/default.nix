@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, buildGo117Package, buildEnv
+{ lib, stdenv, fetchurl, fetchFromGitHub, buildGoPackage, buildEnv
 
 # The suffix for the Mattermost version.
 , versionSuffix ? "nixpkgs"
@@ -14,7 +14,7 @@ let
 
   goPackagePath = "github.com/mattermost/mattermost-server";
 
-  mattermost-server-build = buildGo117Package rec {
+  mattermost-server-build = buildGoPackage rec {
     pname = "mattermost-server";
     inherit version goPackagePath;
 
