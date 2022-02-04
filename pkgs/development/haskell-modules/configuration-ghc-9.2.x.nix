@@ -112,6 +112,7 @@ self: super: {
     libraryHaskellDepends = [
       self.fail
       self.ordered-containers
+      self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
   ghc-lib = self.ghc-lib_9_2_1_20220109;
