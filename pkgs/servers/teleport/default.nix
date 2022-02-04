@@ -1,5 +1,5 @@
 { lib
-, buildGo117Module
+, buildGoModule
 , rustPlatform
 , fetchFromGitHub
 , makeWrapper
@@ -43,7 +43,7 @@ let
     sha256 = "sha256-oKvDXkxA73IJOi+ciBFVLkYcmeRUsTC+3rcYf64vDoY=";
   };
 in
-buildGo117Module rec {
+buildGoModule rec {
   pname = "teleport";
 
   inherit src version;

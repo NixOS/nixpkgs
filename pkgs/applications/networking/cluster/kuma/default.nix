@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, buildGo117Module
+, buildGoModule
 , coredns
 , installShellFiles
 , isFull ? false
@@ -14,7 +14,7 @@
   ]
 }:
 
-buildGo117Module rec {
+buildGoModule rec {
   inherit pname ;
   version = "1.4.0";
   tags = lib.optionals enableGateway ["gateway"];
