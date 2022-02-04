@@ -69,12 +69,6 @@ let
     };
   };
 
-  v4 = {
-    version = "0.4.17.1";
-    sha256 = "19sfblgh9mchkgw32n7gdvm7a8a9jxsl9cdlgmxn9bk9m939a2sg";
-    dataSha256 = "1g8iw2pya32ifljbdx6z6rpcinmzm81i9minhi2bi1d500ailn7s";
-  };
-
   v5 = {
     version = "5.4.1";
     sha256 = "062ilb7s377q3hwfhl8q06vvcw2raydz5ljzlzwy2dmyzmdcndb8";
@@ -82,9 +76,6 @@ let
   };
 
 in {
-  minetestclient_4 = generic (v4 // { buildClient = true; buildServer = false; });
-  minetestserver_4 = generic (v4 // { buildClient = false; buildServer = true; });
-
   minetestclient_5 = generic (v5 // { buildClient = true; buildServer = false; });
   minetestserver_5 = generic (v5 // { buildClient = false; buildServer = true; });
 }
