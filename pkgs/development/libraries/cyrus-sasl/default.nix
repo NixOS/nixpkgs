@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
       url = "https://sources.debian.org/data/main/c/cyrus-sasl2/2.1.27+dfsg-1+deb10u1/debian/patches/0021-CVE-2019-19906.patch";
       sha256 = "1n4c5wg7l9j8rlbvx8i605j5d39xmj5wm618k8acxl4fmglcmfls";
     })
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1003355
+    (fetchpatch {
+      name = "autoconf-270-fix.patch";
+      url = "https://sources.debian.org/data/main/c/cyrus-sasl2/2.1.27+dfsg2-3/debian/patches/0033-autoconf-270-fix.patch";
+      sha256 = "sha256-ms0nf7SrKzm6HInz7PT0qNdehxucJDGsxMRqvinhmf0=";
+    })
   ];
 
   configureFlags = [
