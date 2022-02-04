@@ -11,11 +11,15 @@ let
   opt = options.networking.wireless;
 
   wpa3Protocols = [ "SAE" "FT-SAE" ];
-  hasWPA3 = opts: !mutuallyExclusive opts.authProtocols wpa3Protocols;
+  hasMixedWPA = opts:
+    let
+      hasWPA3 = !mutuallyExclusive opts.authProtocols wpa3Protocols;
+      others = subtractLists wpa3Protocols opts.authProtocols;
+    in hasWPA3 && others != [];
 
   # Gives a WPA3 network higher priority
   increaseWPA3Priority = opts:
-    opts // optionalAttrs (hasWPA3 opts)
+    opts // optionalAttrs (hasMixedWPA opts)
       { priority = if opts.priority == null
                      then 1
                      else opts.priority + 1;
@@ -33,7 +37,7 @@ let
   allNetworks =
     if cfg.fallbackToWPA2
       then map increaseWPA3Priority networkList
-           ++ map mkWPA2Fallback (filter hasWPA3 networkList)
+           ++ map mkWPA2Fallback (filter hasMixedWPA networkList)
       else networkList;
 
   # Content of wpa_supplicant.conf

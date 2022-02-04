@@ -161,7 +161,7 @@
   (fetchNuGet { pname = "runtime.win.System.Net.Primitives"; version = "4.3.0"; sha256 = "1dixh195bi7473n17hspll6i562gghdz9m4jk8d4kzi1mlzjk9cf"; })
   (fetchNuGet { pname = "runtime.win.System.Net.Sockets"; version = "4.3.0"; sha256 = "0lr3zki831vs6qhk5wckv2b9qbfk9rcj0ds2926qvj1b9y9m6sck"; })
   (fetchNuGet { pname = "runtime.win.System.Runtime.Extensions"; version = "4.3.0"; sha256 = "1700famsxndccfbcdz9q14qb20p49lax67mqwpgy4gx3vja1yczr"; })
-  (fetchNuGet { pname = "SteamKit2"; version = "2.4.0"; sha256 = "14hi47zyp3nc21zjc4a7g6cg8zyq41y9gv35vb96yp1lab6kwa9r"; })
+  (fetchNuGet { pname = "SteamKit2"; version = "2.4.1"; sha256 = "13f7jra2d0kjlvnk4dghzhx8nhkd001i4xrkf6m19gisjvpjhpdr"; })
   (fetchNuGet { pname = "Swashbuckle.AspNetCore"; version = "6.2.3"; sha256 = "1kx50vliqcqw72aygkm2cs2q82pxdxz17gvz4chz6k858qj4gv0l"; })
   (fetchNuGet { pname = "Swashbuckle.AspNetCore.Annotations"; version = "6.2.3"; sha256 = "189i1ziv3xkdxpxhkpfx3xfji3iw124s88sqn3ga2vh04fbdak8x"; })
   (fetchNuGet { pname = "Swashbuckle.AspNetCore.Newtonsoft"; version = "6.2.3"; sha256 = "1r4z1mmgihnmcqb8zd1q6jbz1g72y5ggl833qhmd1q0wnq8awbs8"; })

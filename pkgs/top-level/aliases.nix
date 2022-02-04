@@ -786,7 +786,6 @@ guile-gnome = throw "guile-gnome has been removed"; # Added 2022-01-16
   OVMF-CSM = throw "OVMF-CSM has been removed in favor of OVMFFull"; # Added 2021-10-16
   OVMF-secureBoot = throw "OVMF-secureBoot has been removed in favor of OVMFFull"; # Added 2021-10-16
   oauth2_proxy = oauth2-proxy; # Added 2021-04-18
-  obconf = throw "obconf has been removed"; # Added 2022-01-16
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # Added 2019-12-10
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set."; # Added 2021-01-24
   ocz-ssd-guru = throw "ocz-ssd-guru has been removed due to there being no source available"; # Added 2021-07-12
