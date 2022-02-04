@@ -1,9 +1,6 @@
-
-diff --git a/meson.build b/meson.build
-index 86af7243e..e2d48ab94 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -65,6 +65,11 @@ datadir = join_paths(prefix, get_option('datadir'))
+@@ -67,6 +67,11 @@ datadir = join_paths(prefix, get_option('datadir'))
  localedir = join_paths(prefix, get_option('localedir'))
  localstatedir = join_paths(prefix, get_option('localstatedir'))
  sysconfdir = join_paths(prefix, get_option('sysconfdir'))
@@ -14,8 +11,8 @@ index 86af7243e..e2d48ab94 100644
 +endif
  privlibdir = join_paths(libdir, 'pulseaudio')
  
- alsadatadir = get_option('alsadatadir')
-@@ -75,6 +80,11 @@ endif
+ if host_machine.system() == 'windows'
+@@ -82,6 +87,11 @@ endif
  pkgconfigdir = join_paths(libdir, 'pkgconfig')
  pulselibexecdir = join_paths(libexecdir, 'pulse')
  pulsesysconfdir = join_paths(sysconfdir, 'pulse')
@@ -27,11 +24,9 @@ index 86af7243e..e2d48ab94 100644
  
  modlibexecdir = get_option('modlibexecdir')
  if modlibexecdir == ''
-diff --git a/meson_options.txt b/meson_options.txt
-index 824f24e08..59a2b57ab 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -66,6 +66,9 @@ option('bashcompletiondir',
+@@ -72,6 +72,9 @@ option('bashcompletiondir',
  option('zshcompletiondir',
         type : 'string',
         description : 'Directory for zsh completion scripts ["no" disables]')
@@ -41,11 +36,18 @@ index 824f24e08..59a2b57ab 100644
  
  # Optional features
  
-diff --git a/src/daemon/meson.build b/src/daemon/meson.build
-index 9c9f807e7..425cecb46 100644
 --- a/src/daemon/meson.build
 +++ b/src/daemon/meson.build
-@@ -53,7 +53,7 @@ if x11_dep.found()
+@@ -52,7 +52,7 @@ if x11_dep.found()
+     output : '00-pulseaudio-x11',
+     configuration : conf,
+     install : true,
+-    install_dir : join_paths(sysconfdir, 'xdg', 'Xwayland-session.d'),
++    install_dir : join_paths(sysconfdir_install, 'xdg', 'Xwayland-session.d'),
+   )
+ 
+   desktop_file = i18n.merge_file(
+@@ -61,7 +61,7 @@ if x11_dep.found()
      po_dir : po_dir,
      type : 'desktop',
      install : true,
@@ -54,7 +56,7 @@ index 9c9f807e7..425cecb46 100644
    )
  
    desktop_utils = find_program('desktop-file-validate', required: false)
-@@ -85,7 +85,7 @@ custom_target('daemon.conf',
+@@ -93,7 +93,7 @@ custom_target('daemon.conf',
    command : [m4, '@INPUT@'],
    build_by_default : true,
    install : true,
@@ -63,7 +65,7 @@ index 9c9f807e7..425cecb46 100644
  )
  
  default_conf = configuration_data()
-@@ -111,7 +111,7 @@ custom_target('default.pa',
+@@ -117,7 +117,7 @@ custom_target('default.pa',
    command : [m4, '@INPUT@'],
    build_by_default : true,
    install : true,
@@ -72,7 +74,7 @@ index 9c9f807e7..425cecb46 100644
  )
  
  system_conf = configuration_data()
-@@ -132,12 +132,12 @@ custom_target('system.pa',
+@@ -136,12 +136,12 @@ custom_target('system.pa',
    command : [m4, '@INPUT@'],
    build_by_default : true,
    install : true,
@@ -87,11 +89,9 @@ index 9c9f807e7..425cecb46 100644
    )
  endif
  
-diff --git a/src/pulse/meson.build b/src/pulse/meson.build
-index aaebff53e..05a29a0d0 100644
 --- a/src/pulse/meson.build
 +++ b/src/pulse/meson.build
-@@ -130,5 +130,5 @@ client_conf_file = configure_file(
+@@ -134,5 +134,5 @@ client_conf_file = configure_file(
    input : 'client.conf.in',
    output : 'client.conf',
    configuration : client_conf,
