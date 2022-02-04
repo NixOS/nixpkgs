@@ -692,7 +692,7 @@ self: super: {
     let
       # Based on the comment at the top of https://github.com/gittup/tup/blob/master/contrib/syntax/tup.vim
       ftdetect = builtins.toFile "tup.vim" ''
-        au BufNewFile,BufRead Tupfile, *.tup set filetype=tup
+        au BufNewFile,BufRead Tupfile,*.tup setf tup
       '';
     in
     buildVimPluginFrom2Nix {
