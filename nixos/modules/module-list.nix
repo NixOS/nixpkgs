@@ -53,6 +53,7 @@
   ./hardware/device-tree.nix
   ./hardware/drivers.nix
   ./hardware/gkraken.nix
+  ./hardware/gpu.nix
   ./hardware/flirc.nix
   ./hardware/gpgsmartcards.nix
   ./hardware/i2c.nix

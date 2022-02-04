@@ -6,10 +6,10 @@ let
 
   # Abbreviations.
   cfg = config.services.xserver;
+  gpuCfg = config.hardware.gpu;
   xorg = pkgs.xorg;
 
 
-  # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
     # Alias so people can keep using "virtualbox" instead of "vboxvideo".
     virtualbox = { modules = [ xorg.xf86videovboxvideo ]; driverName = "vboxvideo"; };
@@ -155,6 +155,9 @@ in
         "Use services.xserver.fontPath instead of useXFS")
       (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
         "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
+      (mkRemovedOptionModule ["services" "xserver" "videoDriver" ]
+        "Use hardware.gpu.drivers instead")
+      (mkRenamedOptionModule [ "services" "xserver" "videoDrivers" ] [ "hardware" "gpu" "drivers" ])
     ];
 
 
@@ -251,43 +254,6 @@ in
           The screen resolutions for the X server.  The first element
           is the default resolution.  If this list is empty, the X
           server will automatically configure the resolution.
-        '';
-      };
-
-      videoDrivers = mkOption {
-        type = types.listOf types.str;
-        default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
-        example = [
-          "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
-          "amdgpu-pro"
-        ];
-        # TODO(@oxij): think how to easily add the rest, like those nvidia things
-        relatedPackages = concatLists
-          (mapAttrsToList (n: v:
-            optional (hasPrefix "xf86video" n) {
-              path  = [ "xorg" n ];
-              title = removePrefix "xf86video" n;
-            }) pkgs.xorg);
-        description = lib.mdDoc ''
-          The names of the video drivers the configuration
-          supports. They will be tried in order until one that
-          supports your card is found.
-          Don't combine those with "incompatible" OpenGL implementations,
-          e.g. free ones (mesa-based) with proprietary ones.
-
-          For unfree "nvidia*", the supported GPU lists are on
-          https://www.nvidia.com/object/unix.html
-        '';
-      };
-
-      videoDriver = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "i810";
-        description = lib.mdDoc ''
-          The name of the video driver for your graphics card.  This
-          option is obsolete; please set the
-          {option}`services.xserver.videoDrivers` instead.
         '';
       };
 
@@ -604,12 +570,10 @@ in
                     || dmConf.lightdm.enable);
       in mkIf (noDmUsed) (mkDefault false);
 
-    hardware.opengl.enable = mkDefault true;
-
-    services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
+    hardware.drivers.enable = mkDefault true;
 
     # FIXME: somehow check for unknown driver names.
-    services.xserver.drivers = flip concatMap cfg.videoDrivers (name:
+    services.xserver.drivers = flip concatMap gpuCfg.drivers (name:
       let driver =
         attrByPath [name]
           (if xorg ? ${"xf86video" + name}
@@ -698,7 +662,7 @@ in
         restartIfChanged = false;
 
         environment =
-          optionalAttrs config.hardware.opengl.setLdLibraryPath
+          optionalAttrs config.hardware.drivers.setLdLibraryPath
             { LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.addOpenGLRunpath.driverLink ]; }
           // cfg.displayManager.job.environment;
 
