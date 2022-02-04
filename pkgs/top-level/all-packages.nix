@@ -9118,6 +9118,8 @@ with pkgs;
 
   py-spy = callPackage ../development/tools/py-spy { };
 
+  python-validity = callPackage ../tools/security/python-validity { };
+
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   pywal = with python3Packages; toPythonApplication pywal;
