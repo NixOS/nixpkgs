@@ -109,6 +109,10 @@ in
       # Allow very slow start
       DefaultTimeoutStartSec=300
     '';
+    systemd.user.extraConfig = ''
+      # Allow very slow start
+      DefaultTimeoutStartSec=300
+    '';
 
     boot.consoleLogLevel = 7;
 

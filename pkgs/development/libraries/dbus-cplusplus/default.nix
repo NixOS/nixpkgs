@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       name = "gcc-4.7.patch";
-      url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/"
-          + "dbus-c%2B%2B/files/dbus-c%2B%2B-0.9.0-gcc-4.7.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/"
+          + "dbus-c++/files/dbus-c++-0.9.0-gcc-4.7.patch";
       sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
     })
     (fetchurl {

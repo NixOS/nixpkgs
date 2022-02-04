@@ -680,12 +680,13 @@ guile-gnome = throw "guile-gnome has been removed"; # Added 2022-01-16
   manpages = man-pages; # Added 2015-12-06
   marathon = throw "marathon has been removed from nixpkgs, as it's unmaintained"; # Added 2020-08-15
   mariadb-client = hiPrio mariadb.client; #added 2019.07.28
-  matcha = throw "matcha was renamed to matcha-gtk-theme"; # Added 2020-05-09
+  matcha = throw "matcha was renamed to matcha-gtk-theme"; # added 2020-05-09
   mathics = throw "mathics has been removed from nixpkgs, as it's unmaintained"; # Added 2020-08-15
   matrique = spectral; # Added 2020-01-27
   mbedtls_1_3 = throw "mbedtls_1_3 is end of life, see https://tls.mbed.org/kb/how-to/upgrade-2.0"; # Added 2019-12-08
   mcgrid = throw "mcgrid has been removed from nixpkgs, as it's not compatible with rivet 3"; # Added 2020-05-23
   mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained; try mcomix3 a Python 3 fork"; # Added 2019-12-10, modified 2020-11-25
+  mediatomb = throw "mediatomb is no longer maintained upstream, use gerbera instead"; # added 2022-01-04
   meme = meme-image-generator; # Added 2021-04-21
   memtest86 = memtest86plus; # Added 2019-05-08
   mercurial_4 = throw "mercurial_4 has been removed as it's unmaintained"; # Added 2021-10-18
@@ -696,8 +697,8 @@ guile-gnome = throw "guile-gnome has been removed"; # Added 2022-01-16
   midoriWrapper = midori; # Added 2015-01
   mime-types = mailcap; # Added 2022-01-21
   mimms = throw "mimms has been removed from nixpkgs as the upstream project is stuck on python2."; # Added 2022-01-01
-  minergate = throw "minergate has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # Added 2021-08-13
   minergate-cli = throw "minergatecli has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # Added 2021-08-13
+  minergate = throw "minergate has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # Added 2021-08-13
   minetime = throw "minetime has been removed from nixpkgs, because it was discontinued 2021-06-22"; # Added 2021-10-14
   mirage = throw "mirage has been removed from nixpkgs, as it's unmaintained"; # Added 2019-12-10
   mist = throw "mist has been removed as the upstream project has been abandoned, see https://github.com/ethereum/mist#mist-browser-deprecated"; # Added 2020-08-15
@@ -710,9 +711,10 @@ guile-gnome = throw "guile-gnome has been removed"; # Added 2022-01-16
   mopidy-gmusic = throw "mopidy-gmusic has been removed because Google Play Music was discontinued"; # Added 2021-03-07
   mopidy-local-images = throw "mopidy-local-images has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension."; # Added 2020-10-18
   mopidy-local-sqlite = throw "mopidy-local-sqlite has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension."; # Added 2020-10-18
+
   morituri = whipper; # Added 2018-09-13
-  mozart = mozart2-binary; # Added 2019-09-23
   mozart-binary = mozart2-binary; # Added 2019-09-23
+  mozart = mozart2-binary; # Added 2019-09-23
   mpc_cli = mpc-cli; # moved from top-level 2022-01-24
   mpd_clientlib = libmpdclient; # Added 2021-02-11
   mpich2 = mpich; # Added 2018-08-06
@@ -720,9 +722,8 @@ guile-gnome = throw "guile-gnome has been removed"; # Added 2022-01-16
   multimc = throw "multimc was removed from nixpkgs; use polymc instead"; # Added 2022-01-08
   mumble_git = pkgs.mumble; # Added 2019-08-01
   murmur_git = pkgs.murmur; # Added 2019-08-01
-  mysql = mariadb; # moved from top-level 2021-03-14
   mysql-client = hiPrio mariadb.client;
-
+  mysql = mariadb; # moved from top-level 2021-03-14
 
   # NOTE: 2018-07-12: legacy alias:
   # grsecurity business is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
@@ -1089,24 +1090,25 @@ guile-gnome = throw "guile-gnome has been removed"; # Added 2022-01-16
   source-sans-pro = source-sans; # Added 2021-10-20
   source-serif-pro = source-serif; # Added 2021-10-20
 
-  spaceOrbit = space-orbit; # Added 2016-05-23
+  spaceOrbit = space-orbit; # added 2016-05-23
   spectral = neochat; # Added 2020-12-27
-  speech_tools = speech-tools; # Added 2018-04-25
-  speedtest_cli = speedtest-cli; # Added 2015-02-17
-  spice_gtk = spice-gtk; # Added 2018-02-25
-  spice_protocol = spice-protocol; # Added 2018-02-25
-  # spidermonkey is not ABI upwards-compatible, so only allow this for nix-shell
-  spidermonkey = spidermonkey_78; # Added 2020-10-09
-  spidermonkey_1_8_5 = throw "spidermonkey_1_8_5 has been removed, because it is based on Firefox 4.0 from 2011."; # Added 2021-05-03
+  speech_tools = speech-tools; # added 2018-04-25
+  speedtest_cli = speedtest-cli;  # added 2015-02-17
+  spice_gtk = spice-gtk; # added 2018-02-25
+  spice_protocol = spice-protocol; # added 2018-02-25
+  spidermonkey_1_8_5 = throw "spidermonkey_1_8_5 has been removed, because it is based on Firefox 4.0 from 2011."; # added 2021-05-03
   spidermonkey_38 = throw "spidermonkey_38 has been removed. Please use spidermonkey_78 instead."; # Added 2021-03-21
   spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_78 instead."; # Added 2019-10-16
   spidermonkey_60 = throw "spidermonkey_60 has been removed. Please use spidermonkey_78 instead."; # Added 2021-03-21
-  spring-boot = spring-boot-cli; # Added 2020-04-24
-  sqlite3_analyzer = sqlite-analyzer; # Added 2018-05-22
+  spidermonkey_68 = throw "spidermonkey_68 has been removed. Please use spidermonkey_91 instead."; # added 2022-01-04
+  # spidermonkey is not ABI upwards-compatible, so only allow this for nix-shell
+  spidermonkey = spidermonkey_78; # Added 2020-10-09
+  spring-boot = spring-boot-cli; # added 2020-04-24
+  sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive; # Added 2014-12-06
-  squid4 = squid; # Added 2019-08-22
-  sshfsFuse = sshfs-fuse; # Added 2016-09
-  stanchion = throw "Stanchion was part of riak-cs which is not maintained anymore"; # Added 2020-10-14
+  squid4 = squid;  # added 2019-08-22
+  sshfsFuse = sshfs-fuse; # added 2016-09
+  stanchion = throw "Stanchion was part of riak-cs which is not maintained anymore"; # added 2020-10-14
   stumpwm-git = throw "stumpwm-git has been broken for a long time and lispPackages.stumpwm follows Quicklisp that is close to git version"; # Added 2021-05-09
   subversion19 = throw "subversion19 has been removed as it has reached its end of life"; # Added 2021-03-31
   sundials_3 = throw "sundials_3 was removed in 2020-02. outdated and no longer needed";

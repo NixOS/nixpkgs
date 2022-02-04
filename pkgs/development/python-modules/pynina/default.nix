@@ -1,22 +1,21 @@
 { lib
 , aiohttp
 , buildPythonPackage
-, fetchFromGitLab
+, fetchPypi
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pynina";
-  version = "unstable-2021-11-11";
+  version = "0.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitLab {
-    owner = "DeerMaximum";
-    repo = pname;
-    rev = "0ac42b28d48af7bcd9c83f5d425b5b23c4c19f02";
-    sha256 = "FSrFCs/4tfYcSPz9cgR+LFsRbWIHE1X+ZUl8BWSEaWQ=";
+  src = fetchPypi {
+    pname = "PyNINA";
+    inherit version;
+    sha256 = "1q382b70ydzzbqb9sa5y5w7039rp6q0wyffarrsdw916kbc4zyqd";
   };
 
   propagatedBuildInputs = [

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyMillLocal";
     rev = version;
-    sha256 = "1qkv5a1fadxpfdw6cgyp9n5va4d9y5hi49micrd1jm2d3b9939iq";
+    sha256 = "sha256-OKaR0hpNVBlaZrEmEmHxqRG1i03XP2Z4c7c35YIqe+I=";
   };
 
   propagatedBuildInputs = [

@@ -2508,8 +2508,6 @@ in {
 
   edward = callPackage ../development/python-modules/edward { };
 
-  eebrightbox = callPackage ../development/python-modules/eebrightbox { };
-
   effect = callPackage ../development/python-modules/effect { };
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
@@ -3189,6 +3187,8 @@ in {
 
   geomet = callPackage ../development/python-modules/geomet { };
 
+  geometric = callPackage ../development/python-modules/geometric { };
+
   geopandas = callPackage ../development/python-modules/geopandas { };
 
   geopy = callPackage ../development/python-modules/geopy { };
@@ -3463,6 +3463,8 @@ in {
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
+
+  grapheme = callPackage ../development/python-modules/grapheme { };
 
   graphite_api = callPackage ../development/python-modules/graphite-api { };
 
@@ -3884,6 +3886,8 @@ in {
   ihatemoney = callPackage ../development/python-modules/ihatemoney { };
 
   ijson = callPackage ../development/python-modules/ijson { };
+
+  ilua = callPackage ../development/python-modules/ilua { };
 
   imagecodecs-lite = callPackage ../development/python-modules/imagecodecs-lite { };
 
@@ -9998,6 +10002,8 @@ in {
   txrequests = callPackage ../development/python-modules/txrequests { };
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
+
+  txzmq = callPackage ../development/python-modules/txzmq { };
 
   typecode = callPackage ../development/python-modules/typecode { };
 

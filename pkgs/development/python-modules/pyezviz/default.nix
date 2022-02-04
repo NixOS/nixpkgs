@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "baqs";
     repo = "pyEzviz";
     rev = version;
-    sha256 = "1zspymv8nz0gkx9m0fgls33hsw7rl0x4za87xx84ml4alcrp4r6w";
+    sha256 = "sha256-3GRyM6OK0EpQ7wepTzqg+XANx9D0OVBTnw98i3b1V/8=";
   };
 
   propagatedBuildInputs = [

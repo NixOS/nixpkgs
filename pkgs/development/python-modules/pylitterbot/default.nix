@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "natekspencer";
     repo = pname;
     rev = version;
-    sha256 = "1vm6fzsw10j9v9ki3ds5f7by5p8dqc3aflz2j34gwvb87i0qqgw7";
+    sha256 = "sha256-hz+MQTxobf7IkOJTpwbDDd3i13FFtxFn2kmCwPV3pu4=";
   };
 
   propagatedBuildInputs = [

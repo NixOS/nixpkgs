@@ -17,12 +17,15 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = pname;
     rev = version;
-    hash = "sha256-Uqw1Xa0pBQmQsFEBv/l1gtsPy+owYcTZITOYUmMvT5Y=";
+    sha256 = "sha256-Uqw1Xa0pBQmQsFEBv/l1gtsPy+owYcTZITOYUmMvT5Y=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'requests = ">=2.27,<3"' 'requests = "*"'
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     requests

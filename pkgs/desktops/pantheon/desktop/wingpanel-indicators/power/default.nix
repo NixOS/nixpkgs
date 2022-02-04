@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , nix-update-script
-, gnome
+, gnome-power-manager
 , pkg-config
 , meson
 , python3
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      gnome_power_manager = gnome.gnome-power-manager;
+      gnome_power_manager = gnome-power-manager;
     })
   ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nasm }:
+{ lib, stdenv, fetchFromGitHub, nasm, windows }:
 
 stdenv.mkDerivation rec {
   pname = "openh264";
@@ -13,10 +13,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ nasm ];
 
+  buildInputs = lib.optional stdenv.hostPlatform.isWindows windows.pthreads;
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isWindows "OS=mingw_nt";
+
+  enableParallelBuilding = true;
+
+  hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "stackprotector";
 
   meta = with lib; {
     description = "A codec library which supports H.264 encoding and decoding";

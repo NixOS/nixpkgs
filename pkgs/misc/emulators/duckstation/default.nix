@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "duckstation";
-  version = "0.pre+date=2021-12-16";
+  version = "0.pre+date=2022-01-18";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = pname;
-    rev = "59cb7c03432f5f8d9f6283c71a34825d05e118c6";
-    sha256 = "sha256-vF3YEpicbwCtR6QW2huNk0+pJ7BBjn/x9/Ae1c00gN4=";
+    rev = "51041e47f70123eda41d999701f5651830a0a95e";
+    sha256 = "sha256-nlF6ctDU8KCK7MN2pniPLLqUbPUygX9rl0hjzVQ+mPo=";
   };
 
   nativeBuildInputs = [

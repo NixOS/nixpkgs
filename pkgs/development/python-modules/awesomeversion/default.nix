@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "1z9b7bxd5spp2yvjka3ay44crrpgs7xk6x4ppnkhp6iw8zdkv1ks";
+    sha256 = "sha256-eoY920c8mgunvZd0M/vR7+bMCPFqqCm3F/fq0vo6K/0=";
   };
 
   postPatch = ''
