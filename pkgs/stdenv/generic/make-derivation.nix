@@ -318,7 +318,8 @@ else let
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
     } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
-      requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
+      # Prefer --cores <a-lot> on hyrda
+      requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ] ++ [ "big-parallel" ];
     } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
       inherit __darwinAllowLocalNetworking;
       # TODO: remove lib.unique once nix has a list canonicalization primitive
