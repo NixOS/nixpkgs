@@ -1,8 +1,8 @@
-diff --git a/src/daemon/pipewire.conf.in b/src/daemon/pipewire.conf.in
-index 648e13069..50f767f0c 100644
---- a/src/daemon/pipewire.conf.in
-+++ b/src/daemon/pipewire.conf.in
-@@ -131,7 +131,7 @@ context.modules = [
+diff --git a/src/daemon/minimal.conf.in b/src/daemon/minimal.conf.in
+index 6464839a0..05546201f 100644
+--- a/src/daemon/minimal.conf.in
++++ b/src/daemon/minimal.conf.in
+@@ -110,7 +110,7 @@ context.modules = [
              # access.allowed to list an array of paths of allowed
              # apps.
              #access.allowed = [
@@ -11,7 +11,27 @@ index 648e13069..50f767f0c 100644
              #]
  
              # An array of rejected paths.
-@@ -235,12 +235,12 @@ context.exec = [
+@@ -298,5 +298,5 @@ context.exec = [
+     # It can be interesting to start another daemon here that listens
+     # on another address with the -a option (eg. -a tcp:4713).
+     #
+-    #@pulse_comment@{ path = "@pipewire_path@" args = "-c pipewire-pulse.conf" }
++    #@pulse_comment@{ path = "<pipewire_path>" args = "-c pipewire-pulse.conf" }
+ ]
+diff --git a/src/daemon/pipewire.conf.in b/src/daemon/pipewire.conf.in
+index a948a1b9b..4ece43c6f 100644
+--- a/src/daemon/pipewire.conf.in
++++ b/src/daemon/pipewire.conf.in
+@@ -132,7 +132,7 @@ context.modules = [
+             # access.allowed to list an array of paths of allowed
+             # apps.
+             #access.allowed = [
+-            #    @session_manager_path@
++            #    <session_manager_path>
+             #]
+ 
+             # An array of rejected paths.
+@@ -246,12 +246,12 @@ context.exec = [
      # but it is better to start it as a systemd service.
      # Run the session manager with -h for options.
      #

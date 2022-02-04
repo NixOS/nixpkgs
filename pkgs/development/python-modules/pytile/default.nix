@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytile";
-  version = "2022.01.0";
+  version = "2022.02.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7iR2R/ESaBd29Xf6ZKMGY41/uU55tB62QOvT3dFSZaE=";
+    sha256 = "sha256-IGjM9yU/3EjO9sV1ZZUX7RUL/a6CcMPzANhVMTcbZGU=";
   };
 
   nativeBuildInputs = [
