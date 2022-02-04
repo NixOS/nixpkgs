@@ -1,14 +1,12 @@
 { mkDerivation, fetchurl, lib, php, makeWrapper }:
-let
+
+mkDerivation rec {
   pname = "phpcbf";
-  version = "3.6.0";
-in
-mkDerivation {
-  inherit pname version;
+  version = "3.6.2";
 
   src = fetchurl {
     url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-    sha256 = "04wb1imm4934mpy2hxcmqh4cn7md1vwmfii39p6mby809325b5z1";
+    sha256 = "sha256-KNdKqqetJRxO0jSB5/oYt1VFDuV4ctIr4Oy4/iH1Dcg=";
   };
 
   dontUnpack = true;
@@ -16,10 +14,12 @@ mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phpcbf/phpcbf.phar
     makeWrapper ${php}/bin/php $out/bin/phpcbf \
       --add-flags "$out/libexec/phpcbf/phpcbf.phar"
+    runHook postInstall
   '';
 
   meta = with lib; {
