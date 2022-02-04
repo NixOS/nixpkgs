@@ -3177,6 +3177,8 @@ with pkgs;
 
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
+  gh2md = callPackage ../tools/backup/gh2md { };
+
   gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
 
   giph = callPackage ../applications/video/giph { };
