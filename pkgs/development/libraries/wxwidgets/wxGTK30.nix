@@ -12,8 +12,8 @@
 , pkg-config
 , xorgproto
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, compat24 ? false
-, compat26 ? true
+, compat26 ? false
+, compat28 ? true
 , unicode ? true
 , withGtk2 ? true
 , withWebKit ? false, webkitgtk
@@ -72,8 +72,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-precomp-headers"
     "--enable-mediactrl"
-    (if compat24 then "--enable-compat24" else "--disable-compat24")
     (if compat26 then "--enable-compat26" else "--disable-compat26")
+    (if compat28 then "--enable-compat28" else "--disable-compat28")
   ]
   ++ lib.optional unicode "--enable-unicode"
   ++ lib.optional withMesa "--with-opengl"
@@ -133,6 +133,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit gtk;
-    inherit compat24 compat26 unicode;
+    inherit compat26 compat28 unicode;
   };
 }
