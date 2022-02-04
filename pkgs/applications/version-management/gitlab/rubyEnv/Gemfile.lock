@@ -1049,7 +1049,7 @@ GEM
     rexml (3.2.5)
     rinku (2.0.0)
     rotp (6.2.0)
-    rouge (3.26.1)
+    rouge (3.27.0)
     rqrcode (0.7.0)
       chunky_png
     rqrcode-rails3 (0.1.7)
@@ -1597,7 +1597,7 @@ DEPENDENCIES
   responders (~> 3.0)
   retriable (~> 3.1.2)
   rexml (~> 3.2.5)
-  rouge (~> 3.26.1)
+  rouge (~> 3.27.0)
   rqrcode-rails3 (~> 0.1.7)
   rspec-parameterized
   rspec-rails (~> 5.0.1)
@@ -1663,4 +1663,4 @@ DEPENDENCIES
   yajl-ruby (~> 1.4.1)
 
 BUNDLED WITH
-   2.2.24
+   2.2.33

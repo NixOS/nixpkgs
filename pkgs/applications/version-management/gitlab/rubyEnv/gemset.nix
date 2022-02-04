@@ -4479,10 +4479,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "197k0vskf72wxx0gzwld2jzg27bb7982xlvnzy9adlvkzp7nh8vf";
+      sha256 = "0530ri0p60km0bg0ib6swkhfnas427cva7vcdmnwl8df52a10y1k";
       type = "gem";
     };
-    version = "3.26.1";
+    version = "3.27.0";
   };
   rqrcode = {
     dependencies = ["chunky_png"];
