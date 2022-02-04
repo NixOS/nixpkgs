@@ -51,6 +51,7 @@
   ./hardware/corectrl.nix
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
+  ./hardware/drivers.nix
   ./hardware/gkraken.nix
   ./hardware/flirc.nix
   ./hardware/gpgsmartcards.nix
@@ -70,7 +71,6 @@
   ./hardware/network/intel-2200bg.nix
   ./hardware/new-lg4ff.nix
   ./hardware/nitrokey.nix
-  ./hardware/opengl.nix
   ./hardware/openrazer.nix
   ./hardware/pcmcia.nix
   ./hardware/printers.nix

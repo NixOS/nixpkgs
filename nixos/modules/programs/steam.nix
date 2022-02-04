@@ -8,8 +8,8 @@ let
   steam = pkgs.steam.override {
     extraLibraries = pkgs: with config.hardware.opengl;
       if pkgs.hostPlatform.is64bit
-      then [ package ] ++ extraPackages
-      else [ package32 ] ++ extraPackages32;
+      then packages
+      else packages32;
   };
 in {
   options.programs.steam = {
