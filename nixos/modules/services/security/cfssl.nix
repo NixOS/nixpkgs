@@ -31,7 +31,7 @@ in {
 
     port = mkOption {
       default = 8888;
-      type = types.ints.u16;
+      type = types.port;
       description = "Port to bind.";
     };
 
@@ -156,11 +156,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups.cfssl = {
+    users.groups.cfssl = {
       gid = config.ids.gids.cfssl;
     };
 
-    users.extraUsers.cfssl = {
+    users.users.cfssl = {
       description = "cfssl user";
       home = cfg.dataDir;
       group = "cfssl";
@@ -177,6 +177,7 @@ in {
           WorkingDirectory = cfg.dataDir;
           Restart = "always";
           User = "cfssl";
+          Group = "cfssl";
 
           ExecStart = with cfg; let
             opt = n: v: optionalString (v != null) ''-${n}="${v}"'';
