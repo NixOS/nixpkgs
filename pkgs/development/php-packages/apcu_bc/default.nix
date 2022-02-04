@@ -1,10 +1,15 @@
-{ buildPecl, lib, pcre2, php }:
+{ buildPecl, lib, pcre2, php, fetchFromGitHub }:
 
-buildPecl {
+buildPecl rec {
   pname = "apcu_bc";
-
   version = "1.0.5";
-  sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
+
+  src = fetchFromGitHub {
+    owner = "krakjoe";
+    repo = "apcu-bc";
+    rev = version;
+    sha256 = "sha256-CDhNDk78D15MtljbtyYj8euPnCruLZnc2NEHqXDX8HY=";
+  };
 
   peclDeps = [ php.extensions.apcu ];
 

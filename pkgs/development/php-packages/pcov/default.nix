@@ -1,10 +1,15 @@
-{ buildPecl, lib, pcre2 }:
+{ buildPecl, lib, pcre2, fetchFromGitHub }:
 
-buildPecl {
+buildPecl rec {
   pname = "pcov";
-
   version = "1.0.11";
-  sha256 = "sha256-rSLmTNOvBlMwGCrBQsHDq0Dek0SCzUAPi9dgZBMKwkI=";
+
+  src = fetchFromGitHub {
+    owner = "krakjoe";
+    repo = "pcov";
+    rev = "v${version}";
+    sha256 = "sha256-lyY17Y9chpTO8oeWmDGSh0YSnipYqCuy1qmn9su5Eu8=";
+  };
 
   buildInputs = [ pcre2 ];
 

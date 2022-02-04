@@ -1,10 +1,15 @@
-{ buildPecl, lib, pcre2, php }:
+{ buildPecl, lib, pcre2, php, fetchFromGitHub }:
 
-buildPecl {
+buildPecl rec {
   pname = "ds";
-
   version = "1.4.0";
-  sha256 = "1vwk5d27zd746767l8cvbcdr8r70v74vw0im38mlw1g85mc31fd9";
+
+  src = fetchFromGitHub {
+    owner = "php-ds";
+    repo = "ext-ds";
+    rev = "v${version}";
+    sha256 = "sha256-IqNv2jVW1Hg1hV8H9vEyLT5BWsFkGHR+WlAOHJhlW84=";
+  };
 
   buildInputs = [ pcre2 ];
 
@@ -12,8 +17,8 @@ buildPecl {
 
   meta = with lib; {
     description = "An extension providing efficient data structures for PHP";
-    license = licenses.mit;
     homepage = "https://github.com/php-ds/ext-ds";
+    license = licenses.mit;
     maintainers = teams.php.members;
   };
 }

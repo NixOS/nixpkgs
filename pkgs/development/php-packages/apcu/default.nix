@@ -1,10 +1,15 @@
-{ buildPecl, lib, pcre2 }:
+{ buildPecl, lib, pcre2, fetchFromGitHub }:
 
-buildPecl {
+buildPecl rec {
   pname = "apcu";
-
   version = "5.1.21";
-  sha256 = "sha256-EDNTBEhpbufK3shQUPbfUTX7EzAHLvKnRWk5Ks/s+8E=";
+
+  src = fetchFromGitHub {
+    owner = "krakjoe";
+    repo = "apcu";
+    rev = "v${version}";
+    sha256 = "sha256-NSVCvShjDbeDrBH0EOUD1EwlYVnMODdANvwohE+P7kI=";
+  };
 
   buildInputs = [ pcre2 ];
   doCheck = true;

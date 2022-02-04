@@ -14,14 +14,18 @@ mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phpstan/phpstan.phar
     makeWrapper ${php}/bin/php $out/bin/phpstan \
       --add-flags "$out/libexec/phpstan/phpstan.phar"
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "PHP Static Analysis Tool";
+    description = "PHP Static Analysis Tool - discover bugs in your code without running it";
+    homepage = "https://github.com/phpstan/phpstan";
+    license = licenses.mit;
     longDescription = ''
       PHPStan focuses on finding errors in your code without actually
       running it. It catches whole classes of bugs even before you write
@@ -29,8 +33,6 @@ mkDerivation rec {
       sense that the correctness of each line of the code can be checked
       before you run the actual line.
     '';
-    license = licenses.mit;
-    homepage = "https://github.com/phpstan/phpstan";
     maintainers = teams.php.members;
   };
 }

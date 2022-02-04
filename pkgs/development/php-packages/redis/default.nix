@@ -1,10 +1,15 @@
-{ buildPecl, lib, php }:
+{ buildPecl, lib, php, fetchFromGitHub }:
 
-buildPecl {
+buildPecl rec {
   pname = "redis";
-
   version = "5.3.7";
-  sha256 = "sha256-uVgWbM2k9AvRfGmY+eIjkCGuZERnzYrVwV3vQgqtZbA=";
+
+  src = fetchFromGitHub {
+    owner = "phpredis";
+    repo = "phpredis";
+    rev = version;
+    sha256 = "sha256-Cc9Mtx28j3kpyV8Yq+JSYQt5XQnELaVjuUbkkbG45kw=";
+  };
 
   internalDeps = with php.extensions; [
     session

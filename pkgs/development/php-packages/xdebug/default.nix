@@ -1,10 +1,15 @@
-{ buildPecl, lib }:
+{ buildPecl, lib, fetchFromGitHub }:
 
-buildPecl {
+buildPecl rec {
   pname = "xdebug";
-
   version = "3.1.3";
-  sha256 = "sha256-N9CmcBlV9bNAbGwye3cCvXwhRi5lbztMziSgUlgBPU4=";
+
+  src = fetchFromGitHub {
+    owner = "xdebug";
+    repo = "xdebug";
+    rev = version;
+    sha256 = "sha256-4KmFlbs5nluJfKLbIcpVeArlaimyd5JjZEJ2Vj5NlBE=";
+  };
 
   doCheck = true;
   checkTarget = "test";
