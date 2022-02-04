@@ -20924,7 +20924,7 @@ with pkgs;
     go = buildPackages.go_1_16;
   };
   buildGo117Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_17;
+    go = buildPackages.go_1_18;
   };
   buildGo118Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_18;
