@@ -1,19 +1,17 @@
-{ lib, stdenv, fetchurl, openssl, openldap, libkrb5, db, gettext
+{ lib, stdenv, fetchFromGitHub, openssl, openldap, libkrb5, db, gettext
 , pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
-, buildPackages, pruneLibtoolFiles, fetchpatch }:
+, buildPackages, pruneLibtoolFiles }:
 
 with lib;
 stdenv.mkDerivation rec {
   pname = "cyrus-sasl";
-  version = "2.1.27";
+  version = "791631a33d855dcac97c1b940478e87e1161cb9d";
 
-  src = fetchurl {
-    urls =
-      [ "https://github.com/cyrusimap/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz"
-        "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
-        "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
-      ];
-    sha256 = "1m85zcpgfdhm43cavpdkhb1s2zq1b31472hq1w1gs3xh94anp1i6";
+  src = fetchFromGitHub {
+    owner = "cyrusimap";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-/dPJUZyTlNGLxE22pBxKk1qbtGHpsugw+4e7gJmHLto=";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -27,13 +25,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux pam;
 
   patches = [
-    ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
+    # SPNEGO support is detected using AC_TRY_RUN, which can't be used when cross-compiling
+    # set action-if-cross-compiling to pessimistically disable it
     ./cyrus-sasl-ac-try-run-fix.patch
-    (fetchpatch {
-      name = "CVE-2019-19906.patch";
-      url = "https://sources.debian.org/data/main/c/cyrus-sasl2/2.1.27+dfsg-1+deb10u1/debian/patches/0021-CVE-2019-19906.patch";
-      sha256 = "1n4c5wg7l9j8rlbvx8i605j5d39xmj5wm618k8acxl4fmglcmfls";
-    })
   ];
 
   configureFlags = [
