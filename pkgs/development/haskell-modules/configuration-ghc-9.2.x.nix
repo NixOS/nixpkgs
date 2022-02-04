@@ -188,11 +188,6 @@ self: super: {
     sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
   }) (doJailbreak super.language-haskell-extract);
 
-  haskell-src-meta = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/haskell-src-meta-0.8.7.patch";
-    sha256 = "013k8hpxac226j47cdzgdf9a1j91kmm0cvv7n8zwlajbj3y9bzjp";
-  }) (doJailbreak super.haskell-src-meta);
-
   # Tests depend on `parseTime` which is no longer available
   hourglass = dontCheck super.hourglass;
 
