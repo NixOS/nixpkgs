@@ -203,8 +203,9 @@ let
       runtime = [ gsl ];
     };
     gr-zeromq = {
-      runtime = [ cppzmq zeromq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+      pythonRuntime = with python.pkgs; [ pyzmq ];
+      runtime = [ cppzmq zeromq ];
     };
   };
   shared = (import ./shared.nix {

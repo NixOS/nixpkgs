@@ -222,8 +222,9 @@ let
       runtime = [ gsl libsodium ];
     };
     gr-zeromq = {
-      runtime = [ cppzmq zeromq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+      pythonRuntime = with python.pkgs; [ pyzmq ];
+      runtime = [ cppzmq zeromq ];
     };
     gr-network = {
       cmakeEnableFlag = "GR_NETWORK";
