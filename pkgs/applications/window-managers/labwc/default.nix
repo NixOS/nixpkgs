@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-O9jVDR7UROt5u8inUsZjbzB3dQTosiLYqXkeOyGrbaM=";
   };
 
+  patches = [
+    # Required to fix the build with wlroots 0.15.1:
+    ./relax-the-version-constraint-for-wlroots.patch
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
