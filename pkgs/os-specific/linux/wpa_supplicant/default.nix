@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     CONFIG_TLS=openssl
     CONFIG_TLSV11=y
     CONFIG_VHT_OVERRIDES=y
+    CONFIG_WNM=y
     CONFIG_WPS=y
     CONFIG_WPS_ER=y
     CONFIG_WPS_NFS=y
