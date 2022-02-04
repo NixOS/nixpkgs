@@ -17,6 +17,6 @@ rustPlatform.buildRustPackage rec {
     description = "A Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pstn piegames ];
+    maintainers = with maintainers; [ pstn piegames pimeys ];
   };
 }
