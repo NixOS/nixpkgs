@@ -3,6 +3,7 @@
 let
   pname = "bloomrpc";
   version = "1.5.3";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/uw-labs/${pname}/releases/download/${version}/BloomRPC-${version}.AppImage";
@@ -11,10 +12,10 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname src version;
   };
 in appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname src version;
 
   multiPkgs = null; # no 32bit needed
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
@@ -33,7 +34,7 @@ in appimageTools.wrapType2 {
 BloomRPC aims to provide the simplest and most efficient developer experience for exploring and querying your GRPC services.";
     homepage = "https://github.com/uw-labs/bloomrpc";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ matdsoupe ];
+    maintainers = with maintainers; [ zoedsoupe ];
     platforms = [ "x86_64-linux" ];
   };
 }
