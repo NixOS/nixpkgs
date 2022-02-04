@@ -3,7 +3,7 @@
   runCommand,
   autoreconfHook,
   autoconf, automake, libtool,
-  enablePython ? true, python, swig,
+  enablePython ? true, python3, swig,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optionals enablePython [ python swig ];
+  buildInputs = lib.optionals enablePython [ python3 swig ];
 
   configureFlags = [
     # z/OS plugin is not useful on Linux,
