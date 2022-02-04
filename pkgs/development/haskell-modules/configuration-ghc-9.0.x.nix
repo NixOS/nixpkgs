@@ -60,6 +60,7 @@ self: super: {
   lukko = doJailbreak super.lukko;
   parallel = doJailbreak super.parallel;
   primitive = doJailbreak (dontCheck super.primitive);
+  primitive-extras = doDistribute (self.primitive-extras_0_10_1_4);
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
