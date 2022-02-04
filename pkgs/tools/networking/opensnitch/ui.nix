@@ -6,17 +6,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "opensnitch-ui";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "v${version}";
-    sha256 = "sha256-amtDSDJOyNSxmJICEqN5lKhGyfF5C6I0EWViB1EXW7A=";
+    sha256 = "sha256-vtD82v0VlaJtCICXduD3IxJ0xjlBuzGKLWLoCiwPX2I=";
   };
 
-  nativeBuildInputs = [
-    python3Packages.pyqt5
+  nativeBuildInputs = with python3Packages; [
+    pyqt5
     wrapQtAppsHook
   ];
 
@@ -44,6 +44,9 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     mv $out/lib/python3.9/site-packages/usr/* $out/
   '';
+
+  # the unit tests for opensnitch-ui added in 1.5.0 require X
+  doCheck = false;
 
   dontWrapQtApps = true;
   makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
