@@ -138,7 +138,9 @@ stdenv.mkDerivation rec {
     darwin.DarwinTools
     python3.pkgs.setuptools
   ];
-  buildInputs = [ glib icu ];
+  buildInputs = [ glib icu ] ++ lib.optionals stdenv.isDarwin [
+    darwin.Libsystem
+  ];
 
   ninjaFlags = [ ":d8" "v8_monolith" ];
 
