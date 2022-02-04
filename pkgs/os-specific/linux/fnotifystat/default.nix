@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "File activity monitoring tool";
     homepage = "https://github.com/ColinIanKing/fnotifystat";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ womfoo dtzWill ];
   };
