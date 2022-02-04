@@ -194,6 +194,8 @@ in {
 
   adax = callPackage ../development/python-modules/adax { };
 
+  adax-local = callPackage ../development/python-modules/adax-local { };
+
   adb-enhanced = callPackage ../development/python-modules/adb-enhanced { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
@@ -257,6 +259,8 @@ in {
   ailment = callPackage ../development/python-modules/ailment { };
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
+
+  aioaseko = callPackage ../development/python-modules/aioaseko { };
 
   aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
@@ -362,6 +366,8 @@ in {
 
   aionotion = callPackage ../development/python-modules/aionotion { };
 
+  aiooncue = callPackage ../development/python-modules/aiooncue { };
+
   aiopg = callPackage ../development/python-modules/aiopg { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
@@ -415,6 +421,8 @@ in {
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
   aiowatttime = callPackage ../development/python-modules/aiowatttime { };
+
+  aiowebostv = callPackage ../development/python-modules/aiowebostv { };
 
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
@@ -745,6 +753,8 @@ in {
   };
 
   auroranoaa = callPackage ../development/python-modules/auroranoaa { };
+
+  aurorapy = callPackage ../development/python-modules/aurorapy { };
 
   auth0-python = callPackage ../development/python-modules/auth0-python { };
 
@@ -1580,6 +1590,8 @@ in {
   ci-info = callPackage ../development/python-modules/ci-info { };
 
   ci-py = callPackage ../development/python-modules/ci-py { };
+
+  circuit-webhook = callPackage ../development/python-modules/circuit-webhook { };
 
   circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
 
@@ -3996,6 +4008,8 @@ in {
   intbitset = callPackage ../development/python-modules/intbitset { };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
+
+  intellifire4py = callPackage ../development/python-modules/intellifire4py { };
 
   intensity-normalization = callPackage ../development/python-modules/intensity-normalization { };
 
@@ -6534,6 +6548,8 @@ in {
 
   pyaudio = callPackage ../development/python-modules/pyaudio { };
 
+  pyaussiebb = callPackage ../development/python-modules/pyaussiebb { };
+
   pyautogui = callPackage ../development/python-modules/pyautogui { };
 
   pyavm = callPackage ../development/python-modules/pyavm { };
@@ -7338,6 +7354,8 @@ in {
   pyquaternion = callPackage ../development/python-modules/pyquaternion { };
 
   pyquil = callPackage ../development/python-modules/pyquil { };
+
+  pyqvrpro = callPackage ../development/python-modules/pyqvrpro { };
 
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
 
@@ -8725,6 +8743,8 @@ in {
 
   rtslib = callPackage ../development/python-modules/rtslib { };
 
+  rtsp-to-webrtc = callPackage ../development/python-modules/rtsp-to-webrtc { };
+
   ruamel-base = callPackage ../development/python-modules/ruamel-base { };
 
   ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml { };
@@ -9930,6 +9950,8 @@ in {
   trustme = callPackage ../development/python-modules/trustme { };
 
   trytond = callPackage ../development/python-modules/trytond { };
+
+  ttls = callPackage ../development/python-modules/ttls { };
 
   ttp = callPackage ../development/python-modules/ttp { };
 
