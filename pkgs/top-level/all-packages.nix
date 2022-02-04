@@ -1133,6 +1133,8 @@ with pkgs;
 
   iterm2 = callPackage ../applications/terminal-emulators/iterm2 { };
 
+  kermit-terminal = callPackage ../applications/terminal-emulators/kermit-terminal { };
+
   kitty = callPackage ../applications/terminal-emulators/kitty {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel OpenGL;
