@@ -2857,7 +2857,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_13;
+    electron = electron_15;
   };
   element-desktop-wayland = element-desktop.override {
     useWayland = true;
