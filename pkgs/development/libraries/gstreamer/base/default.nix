@@ -41,18 +41,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-base";
-  version = "1.18.5";
+  version = "1.20.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-lgt69FhXANsP3VuENVThHiVk/tngYfWR+uiKe+ZEb6M=";
+    sha256 = "sha256-TLZvzPcwsQN+ZTOGLCEomQkSpttOW70U4O+RRFDrTHw=";
   };
-
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-  ];
 
   nativeBuildInputs = [
     meson
@@ -121,7 +117,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs \
       common/scangobj-merge.py \
-      scripts/extract-release-date-from-doap-file.py
+      scripts/
   '';
 
   # This package has some `_("string literal")` string formats
