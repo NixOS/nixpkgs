@@ -52,6 +52,7 @@ mapAliases ({
   dns = dnspython; # added 2017-12-10
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
+  eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28

@@ -329,7 +329,7 @@ in {
           "zwave_js"
         ];
       in {
-        ExecStart = "${package}/bin/hass --runner --config '${cfg.configDir}'";
+        ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "hass";
         Group = "hass";

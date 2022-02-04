@@ -18,10 +18,8 @@
 , avahi ? null
 , libpaper ? null
 , coreutils
+, nixosTests
 }:
-
-### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
-### works at least for your platform.
 
 with lib;
 stdenv.mkDerivation rec {
@@ -136,6 +134,8 @@ stdenv.mkDerivation rec {
       substituteInPlace "$out"/share/applications/cups.desktop \
         --replace "Exec=htmlview" "Exec=xdg-open"
     '';
+
+  passthru.tests.nixos = nixosTests.printing;
 
   meta = {
     homepage = "https://openprinting.github.io/cups/";

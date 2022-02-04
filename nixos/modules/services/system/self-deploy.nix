@@ -128,6 +128,8 @@ in
     systemd.services.self-deploy = {
       wantedBy = [ "multi-user.target" ];
 
+      startAt = cfg.startAt;
+
       requires = lib.mkIf (!(isPathType cfg.repository)) [ "network-online.target" ];
 
       environment.GIT_SSH_COMMAND = lib.mkIf (!(isNull cfg.sshKeyFile))
