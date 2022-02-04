@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perlPackages, gettext, makeWrapper, ImageMagick, which, highlight
+{ lib, stdenv, fetchurl, fetchpatch, perlPackages, gettext, makeWrapper, ImageMagick, which, highlight
 , gitSupport ? false, git
 , docutilsSupport ? false, python, docutils
 , monotoneSupport ? false, monotone
@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
       TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
       RpcXML XMLSimple ImageMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
       NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
-    ++ lib.optionals docutilsSupport [python docutils]
+    ++ lib.optionals docutilsSupport [
+         (python.withPackages (pp: with pp; [ pygments ]))
+         docutils
+       ]
     ++ lib.optionals gitSupport [git]
     ++ lib.optionals monotoneSupport [monotone]
     ++ lib.optionals bazaarSupport [breezy]
@@ -31,9 +34,17 @@ stdenv.mkDerivation rec {
     ++ lib.optionals subversionSupport [subversion]
     ++ lib.optionals mercurialSupport [mercurial];
 
-  # A few markdown tests fail, but this is expected when using Text::Markdown
-  # instead of Text::Markdown::Discount.
-  patches = [ ./remove-markdown-tests.patch ];
+  patches = [
+    # A few markdown tests fail, but this is expected when using Text::Markdown
+    # instead of Text::Markdown::Discount.
+    ./remove-markdown-tests.patch
+
+    (fetchpatch {
+      name = "Catch-up-to-highlight-4.0-API-change";
+      url = "http://source.ikiwiki.branchable.com/?p=source.git;a=patch;h=9ea3f9dfe7c0341f4e002b48728b8139293e19d0";
+      sha256 = "16s4wvsfclx0a5cm2awr69dvw2vsi8lpm0d7kyl5w0kjlmzfc7h9";
+    })
+  ];
 
   postPatch = ''
     sed -i s@/usr/bin/perl@${perlPackages.perl}/bin/perl@ pm_filter mdwn2man
@@ -42,6 +53,9 @@ stdenv.mkDerivation rec {
     # State the gcc dependency, and make the cgi use our wrapper
     sed -i -e 's@$0@"'$out/bin/ikiwiki'"@' \
         -e "s@'cc'@'${stdenv.cc}/bin/gcc'@" IkiWiki/Wrapper.pm
+    # Without patched plugin shebangs, some tests like t/rst.t fail
+    # (with docutilsSupport enabled)
+    patchShebangs plugins/*
   '';
 
   configurePhase = "perl Makefile.PL PREFIX=$out";
@@ -74,5 +88,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ikiwiki.info/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = [ maintainers.wentasah ];
   };
 }

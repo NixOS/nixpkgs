@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_STATIC_LIBS=OFF"
     "-DBUILD_OBJECT_LIBS=OFF"
     "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
-  ];
+  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DJSONCPP_WITH_TESTS=OFF";
 
   meta = with lib; {
     homepage = "https://github.com/open-source-parsers/jsoncpp";

@@ -23,6 +23,12 @@ let
       # branches (wip patches from tickets), but exports each commit as a separate
       # patch, so merge commits can lead to conflicts. Used if squashed == false.
       #
+      # The above is the preferred option. To use it, find a Trac ticket and pass the
+      # "Commit" field from the ticket as "rev", choosing "base" as an appropriate
+      # release tag, i.e. a tag that doesn't cause the patch to include a lot of
+      # unrelated changes. If there is no such tag (due to nonlinear history, for
+      # example), there are two other options, listed below.
+      #
       # 2) From GitHub's sagemath/sage repo. This lets us use a GH feature that allows
       # us to choose between a .patch file, with one patch per commit, or a .diff file,
       # which squashes all commits into a single diff. This is used if squashed ==
@@ -51,24 +57,29 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.4";
+  version = "9.5";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-jqkr4meG02KbTCMsGvyr1UbosS4ZuUJhPXU/InuS+9A=";
+    sha256 = "sha256-uOsLpsGpcIGs8Xr82X82MElnTB2E908gytyNJ8WVD5w=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
   # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
-    # Make sure py2/py3 tests are only run when their expected context (all "sage"
-    # tests) are also run. That is necessary to test dochtml individually. See
-    # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
-    # TODO: Determine if it is still necessary.
-    ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
+    # Since https://trac.sagemath.org/ticket/32174, some external features are
+    # marked as "safe" and get auto-detected, in which case the corresponding
+    # optional tests are executed. We disable auto-detection of safe features if
+    # we are doctesting with an "--optional" argument which does not include
+    # "sage", because tests from autodetected features expect context provided
+    # by running basic sage tests. This is necessary to test sagemath_doc_html
+    # separately. See https://trac.sagemath.org/ticket/26110 for a related
+    # upstream discussion (from the time when Sage still had optional py2/py3
+    # tags).
+    ./patches/Only-test-external-software-when-all-of-sage-is.patch
 
     # Fixes a potential race condition which can lead to transient doctest failures.
     ./patches/fix-ecl-race.patch
@@ -103,13 +114,18 @@ stdenv.mkDerivation rec {
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
 
-    # https://trac.sagemath.org/ticket/32305
+    # https://trac.sagemath.org/ticket/32968
     (fetchSageDiff {
-      base = "9.4";
-      name = "networkx-2.6-upgrade.patch";
-      rev = "9808325853ba9eb035115e5b056305a1c9d362a0";
-      sha256 = "sha256-gJSqycCtbAVr5qnVEbHFUvIuTOvaxFIeffpzd6nH4DE=";
+      base = "9.5.beta8";
+      name = "sphinx-4.3-update.patch";
+      rev = "fc84f82f52b6f05f512cb359ec7c100f93cf8841";
+      sha256 = "sha256-bBbfdcnw/9LUOlY8rHJRbFJEdMXK4shosqTNaobTS1Q=";
     })
+
+    # Upstream has not upgraded to linbox 1.7 yet because it conflicts with
+    # pre-4.2.1p3 versions of Singular, but we don't have this problem.
+    # https://trac.sagemath.org/ticket/32959
+    ./patches/linbox-1.7-upgrade.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

@@ -1,26 +1,17 @@
-{ lib, python3Packages, fetchFromGitHub, glibcLocales }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-with python3Packages;
-buildPythonApplication rec {
+buildGoModule rec {
   pname = "wakatime";
-  version = "13.0.7";
+  version = "1.18.7";
 
   src = fetchFromGitHub {
     owner = "wakatime";
-    repo = "wakatime";
-    rev = version;
-    sha256 = "1rnapzaabg962wxrmfcq9lxz0yyqd3mxqbx3dq1ih4w33lf4fi8d";
+    repo = "wakatime-cli";
+    rev = "v${version}";
+    sha256 = "171x4pixmh5ni89iawdjl1fk9gr10bgp5bnslpskhspcqzyl1y5b";
   };
 
-  # needs more dependencies from https://github.com/wakatime/wakatime/blob/191b302bfb5f272ae928c6d3867d06f3dfcba4a8/dev-requirements.txt
-  # especially nose-capturestderr, which we do not package yet.
-  doCheck = false;
-  checkInputs = [ mock testfixtures pytest glibcLocales ];
-
-  checkPhase = ''
-    export HOME=$(mktemp -d) LC_ALL=en_US.utf-8
-    pytest tests
-  '';
+  vendorSha256 = "01c2vbnafhhm345nyfmvbvj5mga6laf9w46lhh0flq6kdgdw168s";
 
   meta = with lib; {
     inherit (src.meta) homepage;

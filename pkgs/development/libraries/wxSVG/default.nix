@@ -11,16 +11,17 @@
 
 stdenv.mkDerivation rec {
   pname = "wxSVG";
-  version = "1.5.22";
+  version = "1.5.23";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/wxsvg/wxsvg/${version}/wxsvg-${version}.tar.bz2";
-    hash = "sha256-DeFozZ8MzTCbhkDBtuifKpBpg7wS7+dbDFzTDx6v9Sk=";
+    hash = "sha256-Pwc2H6zH0YzBmpQN1zx4FC7V7sOMFNmTqFvwwGHcq7k=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
+
   buildInputs = [
     cairo
     ffmpeg
@@ -39,5 +40,6 @@ stdenv.mkDerivation rec {
     license = with licenses; gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = wxGTK.meta.platforms;
+    broken = stdenv.isDarwin;
   };
 }

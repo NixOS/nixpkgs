@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme, jdupes }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, hicolor-icon-theme
+, jdupes
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "qogir-icon-theme";
-  version = "2021-10-14";
+  version = "2022-01-12";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0qbbg0hcdda7apk892b8nhbrsvji12nv97ss7lv412xwcmxsj9fp";
+    sha256 = "1daayxsqh7di3bvfnl39h1arsj1fypd3ba30mas6dl1d0qy17z1p";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
@@ -26,7 +32,7 @@ stdenv.mkDerivation rec {
     patchShebangs install.sh
     mkdir -p $out/share/icons
     name= ./install.sh -d $out/share/icons
-    jdupes -l -r $out/share/icons
+    jdupes -L -r $out/share/icons
     runHook postInstall
   '';
 

@@ -14,8 +14,7 @@ let
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
 
   deps = map (package: stdenv.mkDerivation (with package; {
-    pname = name;
-    inherit version src;
+    inherit pname version src;
 
     buildInputs = [ unzip ];
     unpackPhase = ''
@@ -41,7 +40,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      package=$out/lib/dotnet/${name}/${version}
+      package=$out/lib/dotnet/${pname}/${version}
       mkdir -p $package
       cp -r . $package
       echo "{}" > $package/.nupkg.metadata
@@ -68,26 +67,23 @@ let
 in stdenv.mkDerivation rec {
 
   pname = "omnisharp-roslyn";
-  version = "1.37.12";
+  version = "1.37.15";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gyy49v3pslr0l0q6h8hzah4s0iwkhkyckyrj3g2cg08w20b10gw";
+    sha256 = "070wqs667si3f78fy6w4rrfm8qncnabg0yckjhll0yv1pzbj9q42";
   };
 
   nativeBuildInputs = [ makeWrapper msbuild ];
 
-  # NuGetPackageVersion is overridden to be to be compatible with msbuild 16.10,
-  # it needs to be kept in sync with ./create-deps.sh
   buildPhase = ''
     runHook preBuild
 
     HOME=$(pwd)/fake-home msbuild -r \
       -p:Configuration=Release \
       -p:RestoreConfigFile=${nuget-config} \
-      -p:NuGetPackageVersion=5.9.1-rc.8 \
       src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj
 
     runHook postBuild

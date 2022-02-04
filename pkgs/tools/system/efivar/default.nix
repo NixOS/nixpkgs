@@ -39,9 +39,11 @@ stdenv.mkDerivation rec {
       sha256 = "1ajj11wwsvamfspq4naanvw08h63gr0g71q0dfbrrywrhc0jlmdw";
     })
   ];
-  # We have no LTO here since commit 22284b07.  With GCC 10 that triggers a warning.
-  postPatch = "sed '/^OPTIMIZE /s/-flto//' -i Make.defaults";
-  NIX_CFLAGS_COMPILE = "-Wno-error=stringop-truncation";
+
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=stringop-truncation"
+    "-flto-partition=none"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ popt ];

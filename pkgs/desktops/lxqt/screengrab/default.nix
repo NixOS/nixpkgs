@@ -17,13 +17,13 @@
 
 mkDerivation rec {
   pname = "screengrab";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "16dycq40lbvk6jvpj7zp85m23cgvh8nj38fz99gxjfzn2nz1gy4a";
+    sha256 = "1ca5yyvcahabyrdjcsznz9j66yrdlvnfa3650iwlz6922c3dkn2k";
   };
 
   nativeBuildInputs = [

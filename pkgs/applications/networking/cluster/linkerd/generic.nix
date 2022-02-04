@@ -1,8 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{ lib, fetchFromGitHub, buildGo117Module, installShellFiles }:
 
 { channel, version, sha256, vendorSha256 }:
 
-buildGoModule rec {
+# Fix-Me: Unlock buildGoModule version when #154059 is merged.
+buildGo117Module rec {
   pname = "linkerd-${channel}";
   inherit version vendorSha256;
 
@@ -14,7 +15,6 @@ buildGoModule rec {
   };
 
   subPackages = [ "cli" ];
-  runVend = true;
 
   preBuild = ''
     env GOFLAGS="" go generate ./pkg/charts/static
@@ -54,6 +54,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih bryanasdev000 superherointj ];
+    maintainers = with maintainers; [ Gonzih bryanasdev000 ];
   };
 }

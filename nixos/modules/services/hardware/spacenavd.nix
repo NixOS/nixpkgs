@@ -15,7 +15,6 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.spacenavd = {
       description = "Daemon for the Spacenavigator 6DOF mice by 3Dconnexion";
-      after = [ "syslog.target" ];
       wantedBy = [ "graphical.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.spacenavd}/bin/spacenavd -d -l syslog";

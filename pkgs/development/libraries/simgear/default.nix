@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simulation construction toolkit";
-    homepage = "https://gitorious.org/fg/simgear";
+    homepage = "https://wiki.flightgear.org/SimGear";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.lgpl2;

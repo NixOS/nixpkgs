@@ -3,18 +3,17 @@
 , fetchFromGitHub
 , krakenex
 , pandas
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pykrakenapi";
-  version = "0.2.1";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "dominiktraxl";
     repo = "pykrakenapi";
     rev = "v${version}";
-    sha256 = "0byqa4qk6a8ww1y822izpcfscv4frcfjysw6lx1pqyqjr23bfnbh";
+    hash = "sha256-i2r6t+JcL6INI8Y26gvVvNjv6XxMj4G+pF9Xf/hsx1A=";
   };
 
   propagatedBuildInputs = [

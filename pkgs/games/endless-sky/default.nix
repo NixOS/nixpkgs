@@ -1,26 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , SDL2, libpng, libjpeg, glew, openal, scons, libmad
 }:
 
 stdenv.mkDerivation rec {
   pname = "endless-sky";
-  version = "0.9.12";
+  version = "0.9.14";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     rev = "v${version}";
-    sha256 = "1hly68ljm7yv01jfxyr7g6jivhj0igg6xx7vi92zqymick0hlh7a";
+    sha256 = "sha256-Vcck+zGcv39DXyhZF2DLUrXq3gDwkgL0NtPT5rVOpHs=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "endless-sky-gcc10.patch";
-      url = "https://github.com/endless-sky/endless-sky/commit/bc3cab5992694547f9c6c067b5579ef06224781b.patch";
-      sha256 = "0v3913jyzhh1d81dxv738kcd3xhh7mrl06qnmj7a3ya2xd9pq4dk";
-    })
     ./fixes.patch
   ];
+
+  preBuild = ''
+    export AR="${stdenv.cc.targetPrefix}gcc-ar"
+  '';
 
   enableParallelBuilding = true;
 

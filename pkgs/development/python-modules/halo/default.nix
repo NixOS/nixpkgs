@@ -4,7 +4,6 @@
 , isPy27
 , lib
 , log-symbols
-, pytestCheckHook
 , six
 , spinners
 , termcolor }:

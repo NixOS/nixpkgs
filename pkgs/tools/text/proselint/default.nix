@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "proselint";
-  version = "0.12.0";
+  version = "0.13.0";
 
   doCheck = false; # fails to pass because it tries to run in home directory
 
   src = fetchurl {
     url = "mirror://pypi/p/proselint/${pname}-${version}.tar.gz";
-    sha256 = "2a98d9c14382d94ed9122a6c0b0657a814cd5c892c77d9477309fc99f86592e6";
+    sha256 = "7dd2b63cc2aa390877c4144fcd3c80706817e860b017f04882fbcd2ab0852a58";
   };
 
   propagatedBuildInputs = [ click future six ];

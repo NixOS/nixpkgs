@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
   };
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # Fix broken install command
+    substituteInPlace Makefile --replace "-pm755" "-pDm755"
+  '';
+
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   makeFlags = [

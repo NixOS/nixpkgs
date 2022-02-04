@@ -6,13 +6,12 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "knockpy";
   version = "5.2.0";
-  disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "guelfoweb";
     repo = "knock";
     rev = version;
-    sha256 = "sha256-QPOIpgJt+09zRvSavRxuVEN+GGk4Z1CYCXti37YaO7o=";
+    hash = "sha256-QPOIpgJt+09zRvSavRxuVEN+GGk4Z1CYCXti37YaO7o=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -27,7 +26,9 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "knockpy" ];
+  pythonImportsCheck = [
+    "knockpy"
+  ];
 
   meta = with lib; {
     description = "Tool to scan subdomains";

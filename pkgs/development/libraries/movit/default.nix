@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, SDL2, eigen, epoxy, fftw, gtest, pkg-config }:
+{ lib, stdenv, fetchurl, SDL2, eigen, libepoxy, fftw, gtest, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "movit";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   GTEST_DIR = "${gtest.src}/googletest";
 
-  propagatedBuildInputs = [ eigen epoxy ];
+  propagatedBuildInputs = [ eigen libepoxy ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL2 fftw gtest ];

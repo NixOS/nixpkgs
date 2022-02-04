@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, liblo }:
 
 stdenv.mkDerivation rec {
-  baseName = "liblo";
+  pname = "pure-liblo";
   version = "0.9";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-liblo-${version}.tar.gz";
     sha256 = "c2ba4d6f94489acf8a8fac73982ae03d5ad4113146eb1f7d6558a956c57cb8ee";
   };
 

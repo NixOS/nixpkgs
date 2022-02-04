@@ -1,4 +1,4 @@
-{ mkXfceDerivation, exo, gtk3, libxfce4ui, libxfce4util, libwnck, xfconf, libnotify, garcon, thunar }:
+{ lib, mkXfceDerivation, exo, gtk3, libxfce4ui, libxfce4util, libwnck, xfconf, libnotify, garcon, thunar }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -19,7 +19,8 @@ mkXfceDerivation {
     thunar
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Xfce's desktop manager";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

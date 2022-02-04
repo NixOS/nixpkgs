@@ -2,12 +2,14 @@
 , buildPythonPackage
 , isPy27
 , fetchFromGitHub
+, poetry-core
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "spiderpy";
-  version = "1.5.0";
+  version = "1.7.2";
+  format = "pyproject";
 
   disabled = isPy27;
 
@@ -15,14 +17,18 @@ buildPythonPackage rec {
     owner = "peternijssen";
     repo = "spiderpy";
     rev = version;
-    sha256 = "1nbfjqwiyyl7lhkb4rvickxiy9nwynr2sxr1hpyv0vm09h6q8hsc";
+    sha256 = "sha256-Yujy8HSMbK2DQ/913r2c74hKPYDfcHFKq04ysqxG+go=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     requests
   ];
 
-  # no unit tests implemented
+  # tests don't mock remote resources
   doCheck = false;
 
   pythonImportsCheck = [ "spiderpy.spiderapi" ];

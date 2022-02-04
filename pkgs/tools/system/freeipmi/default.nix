@@ -37,7 +37,5 @@ stdenv.mkDerivation rec {
 
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
-
-    updateWalker = true;
   };
 }

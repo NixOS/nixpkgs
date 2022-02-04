@@ -5,13 +5,13 @@
 
 trivialBuild {
   pname = "bqn-mode";
-  version = "0.pre+unstable=2021-10-26";
+  version = "0.pre+date=2022-01-07";
 
   src = fetchFromGitHub {
-    owner = "AndersonTorres";
+    owner = "museoa";
     repo = "bqn-mode";
-    rev = "89d6928d0653518c97bcb06ae156f8b1de1b8768";
-    sha256 = "0pnvfssglaqbjw6hw7vf7vffzjdbqscqhyl62vknml29yl7mjq05";
+    rev = "86ef8b4d32d272b2765cd4a6e6e0b70a4f3e99a2";
+    hash = "sha256-6ygV/iNzzpZ77w+Dh/snHAzUxrbfaU9TxuNOtJK6pNQ=";
   };
 
   meta = with lib; {

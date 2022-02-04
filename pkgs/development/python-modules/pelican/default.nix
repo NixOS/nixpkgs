@@ -7,7 +7,6 @@
 , fetchFromGitHub
 , git
 , glibcLocales
-, isPy27
 , jinja2
 , lxml
 , markdown

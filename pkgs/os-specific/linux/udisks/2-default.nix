@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, libtool, pkg-config, gettext, gnused
+{ lib, stdenv, fetchFromGitHub, substituteAll, libtool, pkg-config, gettext, gnused
 , gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, util-linux, mdadm, libgudev, libblockdev, parted
 , gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "udisks";
-  version = "2.8.4";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
     rev = "${pname}-${version}";
-    sha256 = "01wx2x8xyal595dhdih7rva2bz7gqzgwdp56gi0ikjdzayx17wcf";
+    sha256 = "sha256-MYQztzIyp5kh9t1bCIlj08/gaOmZfuu/ZOwo3F+rZiw=";
   };
 
   outputs = [ "out" "man" "dev" ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
@@ -37,12 +37,6 @@ stdenv.mkDerivation rec {
         xfsprogs ntfs3g parted util-linux
       ];
     })
-
-    # Fix tests: https://github.com/storaged-project/udisks/issues/724
-    (fetchpatch {
-      url = "https://github.com/storaged-project/udisks/commit/60a0c1c967821d317046d9494e45b9a8e4e7a1c1.patch";
-      sha256 = "0rlgqsxn7rb074x6ivm0ya5lywc4llifj5br0zr31mwwckv7hsdm";
-    })
   ];
 
   nativeBuildInputs = [
@@ -57,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    expat libgudev libblockdev acl systemd glib libatasmart polkit
+    expat libgudev libblockdev acl systemd glib libatasmart polkit util-linux
   ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";

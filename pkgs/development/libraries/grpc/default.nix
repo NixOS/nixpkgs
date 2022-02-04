@@ -13,17 +13,22 @@
 , grpc
 , abseil-cpp
 , libnsl
+
+# tests
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.41.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+  version = "1.43.0"; # N.B: if you change this, please update:
+    # pythonPackages.grpcio-tools
+    # pythonPackages.grpcio-status
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "1mcgnzwc2mcdpcfhc1b37vff0biwyd3v0a2ack58wgf4336pzlsb";
+    sha256 = "sha256-NPyCQsrmD/gBs4UHPGbBACmGRTNQDj6WfnfLNdWulK4=";
     fetchSubmodules = true;
   };
 
@@ -57,14 +62,13 @@ stdenv.mkDerivation rec {
     "-DgRPC_ABSL_PROVIDER=package"
     "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+  ] ++ lib.optionals ((stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0") [
     # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
     # only an issue with the useLLVM stdenv, not the darwin stdenv…
     # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
-    (if (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0"
-     then "-DCMAKE_CXX_STANDARD=11"
-     else "-DCMAKE_CXX_STANDARD=17")
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+    "-DCMAKE_CXX_STANDARD=11"
   ];
 
   # CMake creates a build directory by default, this conflicts with the
@@ -82,9 +86,14 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option"
+    + lib.optionalString stdenv.isAarch64 "-Wno-error=format-security";
 
   enableParallelBuilds = true;
+
+  passthru.tests = {
+    inherit (python3.pkgs) grpcio-status grpcio-tools;
+  };
 
   meta = with lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";

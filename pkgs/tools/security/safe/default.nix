@@ -1,22 +1,22 @@
 { lib
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 }:
 
-with builtins;
-
-buildGoPackage rec {
+buildGoModule rec {
   pname = "safe";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "starkandwayne";
     repo = "safe";
     rev = "v${version}";
-    sha256 = "12gzxrnyl890h79z9yx23m1wwgy8ahm74q4qwi8n2nh7ydq6mn2d";
+    sha256 = "sha256-ankX4BeMvBEd0e01mQHfaPg4z1z+IZqELaSEJ5deF8Y=";
   };
 
-  goPackagePath = "github.com/starkandwayne/safe";
+  vendorSha256 = "sha256-7hX35FfFxfoiI/dSxWhZH8iJoRWa4slAJF0lULq8KL4=";
+
+  subPackages = [ "." ];
 
   ldflags = [
     "-X main.Version=${version}"

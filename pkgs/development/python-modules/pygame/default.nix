@@ -1,15 +1,21 @@
-{ stdenv, lib, substituteAll, fetchPypi, buildPythonPackage, python, pkg-config, libX11
+{ stdenv, lib, substituteAll, fetchFromGitHub, buildPythonPackage, python, pkg-config, libX11
 , SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, libpng, libjpeg, portmidi, freetype, fontconfig
-, AppKit, CoreMIDI
+, AppKit
 }:
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.0.1";
+  version = "2.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8b1e7b63f47aafcdd8849933b206778747ef1802bd3d526aca45ed77141e4001";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    # Unicode file names lead to different checksums on HFS+ vs. other
+    # filesystems because of unicode normalisation. The documentation
+    # has such files and will be removed.
+    sha256 = "sha256-Pe7BJ+8rXw+hhRv64fI+79gJcU1npQFFAXxECx2+Trw=";
+    extraPostFetch = "rm -rf $out/docs/reST";
   };
 
   patches = [
@@ -41,11 +47,11 @@ buildPythonPackage rec {
     SDL2 SDL2_image SDL2_mixer SDL2_ttf libpng libjpeg
     portmidi libX11 freetype
   ] ++ lib.optionals stdenv.isDarwin [
-    AppKit CoreMIDI
+    AppKit
   ];
 
   preConfigure = ''
-    LOCALBASE=/ ${python.interpreter} buildconfig/config.py
+    ${python.interpreter} buildconfig/config.py
   '';
 
   checkPhase = ''

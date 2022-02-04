@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , writeScript
 , cmake
+, ninja
 , python3
 , libxml2
 , libffi
@@ -30,7 +31,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "python" ]
     ++ lib.optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [ cmake ninja python3 ];
 
   buildInputs = [ libxml2 libffi ];
 
@@ -74,7 +75,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
   postInstall = ''

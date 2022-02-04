@@ -1,11 +1,8 @@
-{ stdenv
-, lib
+{ lib
+, buildDotnetModule
 , fetchFromGitHub
 , fetchurl
-, linkFarmFromDrvs
 , dotnetCorePackages
-, dotnetPackages
-, dpkg
 , gtk3
 , libX11
 , libXrandr
@@ -15,47 +12,42 @@
 , udev
 , copyDesktopItems
 , makeDesktopItem
-, makeWrapper
 , nixosTests
 , wrapGAppsHook
+, dpkg
 }:
 
-let
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-runtime = dotnetCorePackages.runtime_5_0;
-in
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "OpenTabletDriver";
-  version = "0.5.3.3";
+  version = "0.6.0.2";
 
   src = fetchFromGitHub {
-    owner = "InfinityGhost";
+    owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "k4SoOMKAwHeYSQ80M8Af1DiiDSZIi3gS7lGr2ZrXrEI=";
+    sha256 = "sha256-qPlya5f12Cc1yAK8dliWelA7drAoeeIkFXOD+aDeToo=";
   };
 
   debPkg = fetchurl {
-    url = "https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
-    sha256 = "0v03qiiz28k1yzgxf5qc1mdg2n7kjx6h8vpx9dxz342wwbgqg6ic";
+    url = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
+    sha256 = "sha256-LJqH3+JckPF7S/1uBE2X81jxWg0MF9ff92Ei8WPEA2w=";
   };
 
-  nativeBuildInputs = [
-    dotnet-sdk
-    dotnetPackages.Nuget
-    dpkg
-    copyDesktopItems
-    makeWrapper
-    wrapGAppsHook
-  ];
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
-  nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./deps.nix {
-    fetchNuGet = { name, version, sha256 }: fetchurl {
-      name = "nuget-${name}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
-      inherit sha256;
-    };
-  });
+  dotnetInstallFlags = [ "--framework=net6.0" ];
+
+  projectFile = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
+  nugetDeps = ./deps.nix;
+
+  executables = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapGAppsHook
+    dpkg
+  ];
 
   runtimeDeps = [
     gtk3
@@ -67,80 +59,38 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  configurePhase = ''
-    runHook preConfigure
+  doCheck = true;
+  testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";
 
-    export HOME=$(mktemp -d)
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+  disabledTests = [
+    # Require networking
+    "OpenTabletDriver.Tests.PluginRepositoryTest.ExpandRepositoryTarballFork"
+    "OpenTabletDriver.Tests.PluginRepositoryTest.ExpandRepositoryTarball"
+    # Require networking & unused in Linux build
+    "OpenTabletDriver.Tests.UpdaterTests.UpdaterBase_ProperlyChecks_Version_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_PreventsUpdate_WhenAlreadyUpToDate_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_AllowsReupdate_WhenInstallFailed_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_HasUpdateReturnsFalse_During_UpdateInstall_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_HasUpdateReturnsFalse_After_UpdateInstall_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_Prevents_ConcurrentAndConsecutive_Updates_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_ProperlyBackups_BinAndAppDataDirectory_Async"
+    # Intended only to be run in continuous integration, unnecessary for functionality
+    "OpenTabletDriver.Tests.ConfigurationTest.Configurations_DeviceIdentifier_IsNotConflicting"
+    # Depends on processor load
+    "OpenTabletDriver.Tests.TimerTests.TimerAccuracy"
+  ];
 
-    nuget sources Add -Name nixos -Source "$PWD/nixos"
-    nuget init "$nugetDeps" "$PWD/nixos"
-
-    # FIXME: https://github.com/NuGet/Home/issues/4413
-    mkdir -p $HOME/.nuget/NuGet
-    cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
-
-    for project in OpenTabletDriver.{Console,Daemon,UX.Gtk}; do
-        dotnet restore --source "$PWD/nixos" $project
-    done
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    for project in OpenTabletDriver.{Console,Daemon,UX.Gtk}; do
-        dotnet build $project \
-            --no-restore \
-            --configuration Release \
-            --framework net5
-    done
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    for project in OpenTabletDriver.{Console,Daemon,UX.Gtk}; do
-      dotnet publish $project \
-          --no-build \
-          --no-self-contained \
-          --configuration Release \
-          --framework net5 \
-          --output $out/lib
-    done
-
+  postFixup = ''
     # Give a more "*nix" name to the binaries
-    makeWrapper $out/lib/OpenTabletDriver.Console $out/bin/otd \
-        "''${gappsWrapperArgs[@]}" \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --set DOTNET_ROOT "${dotnet-runtime}" \
-        --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
+    mv $out/bin/OpenTabletDriver.Console $out/bin/otd
+    mv $out/bin/OpenTabletDriver.Daemon $out/bin/otd-daemon
+    mv $out/bin/OpenTabletDriver.UX.Gtk $out/bin/otd-gui
 
-    makeWrapper $out/lib/OpenTabletDriver.Daemon $out/bin/otd-daemon \
-        "''${gappsWrapperArgs[@]}" \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --set DOTNET_ROOT "${dotnet-runtime}" \
-        --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
-
-    makeWrapper $out/lib/OpenTabletDriver.UX.Gtk $out/bin/otd-gui \
-        "''${gappsWrapperArgs[@]}" \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --set DOTNET_ROOT "${dotnet-runtime}" \
-        --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
-
-    mkdir -p $out/lib/OpenTabletDriver
-    cp -rv ./OpenTabletDriver/Configurations $out/lib/OpenTabletDriver
     install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
 
     # TODO: Ideally this should be build from OpenTabletDriver/OpenTabletDriver-udev instead
     dpkg-deb --fsys-tarfile ${debPkg} | tar xf - ./usr/lib/udev/rules.d/99-opentabletdriver.rules
     install -Dm644 ./usr/lib/udev/rules.d/99-opentabletdriver.rules -t $out/lib/udev/rules.d
-
-    runHook postInstall
   '';
 
   desktopItems = [
@@ -155,9 +105,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  dontWrapGApps = true;
-  dontStrip = true;
-
   passthru = {
     updateScript = ./update.sh;
     tests = {
@@ -167,9 +114,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open source, cross-platform, user-mode tablet driver";
-    homepage = "https://github.com/InfinityGhost/OpenTabletDriver";
+    homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.linux;
+    mainProgram = "otd";
   };
 }

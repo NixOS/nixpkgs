@@ -1,18 +1,22 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 buildGoModule rec {
   pname = "kapp";
-  version = "0.40.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-kapp";
     rev = "v${version}";
-    sha256 = "sha256-9nvYxLE35IwmVB1Dzw7t3DZw4/kSiMPIqzl2PUKODtU=";
+    sha256 = "sha256-4l1Hlkk9+X7mKqkAkUTigAR3v0Z6XXt8QC2QQvqad7I=";
   };
 
   vendorSha256 = null;
 
   subPackages = [ "cmd/kapp" ];
+
+  ldflags = [
+    "-X github.com/k14s/kapp/pkg/kapp/version.Version=${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

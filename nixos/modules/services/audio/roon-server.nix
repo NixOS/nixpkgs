@@ -42,7 +42,7 @@ in {
       environment.ROON_DATAROOT = "/var/lib/${name}";
 
       serviceConfig = {
-        ExecStart = "${pkgs.roon-server}/start.sh";
+        ExecStart = "${pkgs.roon-server}/bin/RoonServer";
         LimitNOFILE = 8192;
         User = cfg.user;
         Group = cfg.group;
@@ -51,7 +51,10 @@ in {
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPortRanges = [{ from = 9100; to = 9200; }];
+      allowedTCPPortRanges = [
+        { from = 9100; to = 9200; }
+        { from = 9330; to = 9332; }
+      ];
       allowedUDPPorts = [ 9003 ];
       extraCommands = ''
         iptables -A INPUT -s 224.0.0.0/4 -j ACCEPT

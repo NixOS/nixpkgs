@@ -3,14 +3,15 @@
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
+, sparseCheckout ? ""
 , githubBase ? "github.com", varPrefix ? null
 , ... # For hash agility
 }@args:
 let
   baseUrl = "https://${githubBase}/${owner}/${repo}";
-  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
+  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
-  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit;
+  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || (sparseCheckout != "");
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
   fetcher = if useFetchGit then fetchgit else fetchzip;
@@ -30,7 +31,7 @@ let
   };
   fetcherArgs = (if useFetchGit
     then {
-      inherit rev deepClone fetchSubmodules; url = "${baseUrl}.git";
+      inherit rev deepClone fetchSubmodules sparseCheckout; url = "${baseUrl}.git";
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else { url = "${baseUrl}/archive/${rev}.tar.gz"; }
   ) // privateAttrs // passthruAttrs // { inherit name; };

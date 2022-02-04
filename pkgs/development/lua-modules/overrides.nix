@@ -88,7 +88,7 @@ with prev;
     ];
   });
 
-  ljsyscall = prev.ljsyscall.overrideAttrs(oa: rec {
+  ljsyscall = prev.lib.overrideLuarocks prev.ljsyscall (drv: rec {
     version = "unstable-20180515";
     # package hasn't seen any release for a long time
     src = pkgs.fetchFromGitHub {

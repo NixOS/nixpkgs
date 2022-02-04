@@ -1,25 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, withAnimation ? true
+, withTranscoder ? true
 }:
 
+let
+  cmakeBool = b: if b then "ON" else "OFF";
+in
 stdenv.mkDerivation rec {
-  version = "1.4.1";
+  version = "1.5.0";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = version;
-    sha256 = "14ln4la52x38pf8syr7i5v4vd65ya4zij8zj5kgihah03cih0qcd";
+    hash = "sha256-BoJg2lZBPVVm6Nc0XK8QSISpe+B8tpgRg9PFncN4+fY=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake python3 ];
 
   cmakeFlags = [
-    # Fake these since we are building from a tarball
-    "-Ddraco_git_hash=${version}"
-    "-Ddraco_git_desc=${version}"
-
-    "-DBUILD_UNITY_PLUGIN=1"
+    "-DDRACO_ANIMATION_ENCODING=${cmakeBool withAnimation}"
+    "-DDRACO_TRANSCODER_SUPPORTED=${cmakeBool withTranscoder}"
+    "-DBUILD_SHARED_LIBS=${cmakeBool true}"
   ];
 
   meta = with lib; {

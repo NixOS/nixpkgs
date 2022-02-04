@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools
 , bootPkgs
@@ -10,11 +10,13 @@
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
-, useLLVM ? !stdenv.targetPlatform.isx86
+, useLLVM ? !(stdenv.targetPlatform.isx86
+              || stdenv.targetPlatform.isPowerPC
+              || stdenv.targetPlatform.isSparc)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildLlvmPackages, llvmPackages
+  buildTargetLlvmPackages, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
@@ -54,7 +56,7 @@
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-  disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
+  disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -128,9 +130,11 @@ let
     ++ lib.optional (!enableIntegerSimple) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
+  # TODO(@sternenseemann): is buildTarget LLVM unnecessary?
+  # GHC doesn't seem to have {LLC,OPT}_HOST
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
-  ] ++ lib.optional useLLVM buildLlvmPackages.llvm;
+  ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
 
@@ -138,16 +142,7 @@ let
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.linker == "gold" ||
-    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
-
-  runtimeDeps = [
-    targetPackages.stdenv.cc.bintools
-    coreutils
-  ]
-  # On darwin, we need unwrapped bintools as well (for otool)
-  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-    targetPackages.stdenv.cc.bintools.bintools
-  ];
+    (targetPlatform.linker == "bfd" && (targetCC.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
@@ -156,6 +151,14 @@ let
   ];
 
 in
+
+# C compiler, bintools and LLVM are used at build time, but will also leak into
+# the resulting GHC's settings file and used at runtime. This means that we are
+# currently only able to build GHC if hostPlatform == buildPlatform.
+assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
+assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
+assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
+
 stdenv.mkDerivation (rec {
   version = "8.8.4";
   pname = "${targetPrefix}ghc${variantSuffix}";
@@ -197,6 +200,7 @@ stdenv.mkDerivation (rec {
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.
+  # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
   preConfigure =
     # Aarch64 allow backward bootstrapping since earlier versions are unstable.
     # Same for musl, as earlier versions do not provide a musl bindist for bootstrapping.
@@ -220,6 +224,13 @@ stdenv.mkDerivation (rec {
     export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+  '' + lib.optionalString useLLVM ''
+    export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
+    export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
+  '' + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
+    # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
+    export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+  '' + ''
 
     echo -n "${buildMK dontStrip}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -293,9 +304,6 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
-  propagatedBuildInputs = [ targetPackages.stdenv.cc ]
-    ++ lib.optional useLLVM llvmPackages.llvm;
-
   depsTargetTarget = map lib.getDev (libDeps targetPlatform);
   depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
 
@@ -319,13 +327,6 @@ stdenv.mkDerivation (rec {
   postInstall = ''
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
-
-    # Patch scripts to include "readelf" and "cat" in $PATH.
-    for i in "$out/bin/"*; do
-      test ! -h $i || continue
-      egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath runtimeDeps}"' $i
-    done
   '';
 
   passthru = {
@@ -345,7 +346,17 @@ stdenv.mkDerivation (rec {
       guibou
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
-    inherit (ghc.meta) license platforms;
+    inherit (ghc.meta) license;
+    # hardcode platforms because the bootstrap GHC differs depending on the platform,
+    # with differing platforms available for each of them; See HACK comment in
+    # 8.10.2-binary.nix for an explanation of the musl special casing.
+    platforms = [
+      "x86_64-linux"
+    ] ++ lib.optionals (!hostPlatform.isMusl) [
+      "i686-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+    ];
     # integer-simple builds are broken with musl when bootstrapping using
     # GHC 8.10.2 and below, however it is not possible to reverse bootstrap
     # GHC 8.8.4 with GHC 8.10.7.

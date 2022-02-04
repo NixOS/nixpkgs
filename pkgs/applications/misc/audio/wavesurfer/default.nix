@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, snack, tcl, tk, makeWrapper }:
 
-stdenv.mkDerivation {
-  name = "wavesurfer-1.8.5";
+stdenv.mkDerivation rec {
+  pname = "wavesurfer";
+  version = "1.8.5";
 
   src = fetchurl {
-    url = "https://www.speech.kth.se/wavesurfer/wavesurfer-1.8.5.tar.gz";
+    url = "https://www.speech.kth.se/wavesurfer/wavesurfer-${version}.tar.gz";
     sha256 = "1yx9s1j47cq0v40cwq2gn7bdizpw46l95ba4zl9z4gg31mfvm807";
   };
 

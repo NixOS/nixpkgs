@@ -8,7 +8,6 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
 
   machine = { ... }: {
     virtualisation.cores = 2;
-    virtualisation.memorySize = 512;
 
     services.privacyidea = {
       enable = true;

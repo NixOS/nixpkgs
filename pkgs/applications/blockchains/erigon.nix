@@ -11,8 +11,8 @@ buildGoModule rec {
     sha256 = "0l0w1badhvlh1rgqzvlmy5k7xhb1nf4f5dmhkl935a5ila08aak3";
   };
 
-  vendorSha256 = "1hbfmq76zm50zwmlh3jblriwq2k1mp99d8lg8xzxwy56hncgfj8k";
-  runVend = true;
+  vendorSha256 = "sha256-i8BaT9C39tmHU3GGgd0hUB1PHXnoAdNYRIqZA1ggbjQ=";
+  proxyVendor = true;
 
   # Build errors in mdbx when format hardening is enabled:
   #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]

@@ -21,6 +21,7 @@ stdenv.mkDerivation {
     sha256 = "0vffnf48rzw6d0as4c3x1f31b4kapmdzr1hfj5rz5ngah72gqrph";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   propagatedBuildInputs = [ p4est-sc ];
   buildInputs = lib.optional withMetis metis;

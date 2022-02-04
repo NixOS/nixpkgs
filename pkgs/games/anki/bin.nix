@@ -3,16 +3,16 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.48";
+  version = "2.1.49";
 
   sources = {
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux.tar.bz2";
-      sha256 = "sha256-1ZvC8CPnYMzCxxrko1FfmTvKiJT+7BhOdk52zLTnLGE=";
+      sha256 = "sha256-uG39g9CXnquArFsxtFHWWoDaNwu8y2KKh+SqGt8aqi0=";
     };
     darwin = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
-      sha256 = "sha256-HXYTpOxFxjQoqjs+04diy5d+GmS69dFNEfLI/E4NCXw=";
+      sha256 = "sha256-sEVWZQpICL7RYrOuPm1Y5XhzPxCwNk1WGP1rctTtE4Y=";
     };
   };
 

@@ -4,23 +4,37 @@
 lib.makeScope pkgs.newScope (self: with self; {
 
   switchboardPlugs = [
-    switchboard-plug-a11y switchboard-plug-about
-    switchboard-plug-applications switchboard-plug-bluetooth
-    switchboard-plug-datetime switchboard-plug-display
-    switchboard-plug-keyboard switchboard-plug-mouse-touchpad
-    switchboard-plug-network switchboard-plug-notifications
-    switchboard-plug-onlineaccounts switchboard-plug-pantheon-shell
-    switchboard-plug-power switchboard-plug-printers
-    switchboard-plug-security-privacy switchboard-plug-sharing
-    switchboard-plug-sound switchboard-plug-wacom
+    switchboard-plug-a11y
+    switchboard-plug-about
+    switchboard-plug-applications
+    switchboard-plug-bluetooth
+    switchboard-plug-datetime
+    switchboard-plug-display
+    switchboard-plug-keyboard
+    switchboard-plug-mouse-touchpad
+    switchboard-plug-network
+    switchboard-plug-notifications
+    switchboard-plug-onlineaccounts
+    switchboard-plug-pantheon-shell
+    switchboard-plug-power
+    switchboard-plug-printers
+    switchboard-plug-security-privacy
+    switchboard-plug-sharing
+    switchboard-plug-sound
+    switchboard-plug-wacom
   ];
 
   wingpanelIndicators = [
-    wingpanel-applications-menu wingpanel-indicator-a11y
-    wingpanel-indicator-bluetooth wingpanel-indicator-datetime
-    wingpanel-indicator-keyboard wingpanel-indicator-network
-    wingpanel-indicator-nightlight wingpanel-indicator-notifications
-    wingpanel-indicator-power wingpanel-indicator-session
+    wingpanel-applications-menu
+    wingpanel-indicator-a11y
+    wingpanel-indicator-bluetooth
+    wingpanel-indicator-datetime
+    wingpanel-indicator-keyboard
+    wingpanel-indicator-network
+    wingpanel-indicator-nightlight
+    wingpanel-indicator-notifications
+    wingpanel-indicator-power
+    wingpanel-indicator-session
     wingpanel-indicator-sound
   ];
 
@@ -32,8 +46,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon338;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
-
-  notes-up = pkgs.notes-up.override { withPantheon = true; };
 
   touchegg = pkgs.touchegg.override { withPantheon = true; };
 
@@ -93,12 +105,16 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-shortcut-overlay = callPackage ./desktop/elementary-shortcut-overlay { };
 
-  extra-elementary-contracts = callPackage ./desktop/extra-elementary-contracts {
-    inherit (gnome) file-roller gnome-bluetooth;
+  file-roller-contract = callPackage ./desktop/file-roller-contract {
+    inherit (gnome) file-roller;
   };
 
   gala = callPackage ./desktop/gala {
     inherit (gnome) gnome-desktop;
+  };
+
+  gnome-bluetooth-contract = callPackage ./desktop/gnome-bluetooth-contract {
+    inherit (gnome) gnome-bluetooth;
   };
 
   wingpanel = callPackage ./desktop/wingpanel { };
@@ -125,6 +141,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   pantheon-agent-polkit = callPackage ./services/pantheon-agent-polkit { };
 
+  xdg-desktop-portal-pantheon = callPackage ./services/xdg-desktop-portal-pantheon { };
+
   #### WINGPANEL INDICATORS
 
   wingpanel-applications-menu = callPackage ./desktop/wingpanel-indicators/applications-menu { };
@@ -143,7 +161,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanel-indicator-notifications = callPackage ./desktop/wingpanel-indicators/notifications { };
 
-  wingpanel-indicator-power = callPackage ./desktop/wingpanel-indicators/power { };
+  wingpanel-indicator-power = callPackage ./desktop/wingpanel-indicators/power {
+    inherit (gnome) gnome-power-manager;
+  };
 
   wingpanel-indicator-session = callPackage ./desktop/wingpanel-indicators/session { };
 
@@ -207,14 +227,27 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };
 
-} // lib.optionalAttrs (config.allowAliases or true) {
+  ### THIRD-PARTY
+
+  # Put packages that ONLY works with Pantheon in pkgs/desktops/pantheon/third-party,
+  # specifically third party switchboard plugins and wingpanel indicators.
+  # Please call these packages in pkgs/top-level/all-packages.nix instead of this file.
+  # https://github.com/NixOS/nixpkgs/issues/115222#issuecomment-906868654
+
+}) // lib.optionalAttrs (config.allowAliases or true) {
 
   ### ALIASES
 
-  inherit (pkgs) vala; # added 2019-10-10
+  # They need to be outside the scope or they will shadow the attributes from parent scope.
 
-  cerbere = throw "Cerbere is now obsolete https://github.com/elementary/cerbere/releases/tag/2.5.1.";
+  vala = throw "The ‘pantheon.vala’ alias was removed on 2022-02-02, please use ‘pkgs.vala’ directly."; # added 2019-10-10
 
-  elementary-screenshot-tool = elementary-screenshot; # added 2021-07-21
+  cerbere = throw "Cerbere is now obsolete https://github.com/elementary/cerbere/releases/tag/2.5.1."; # added 2020-04-06
 
-})
+  elementary-screenshot-tool = throw "The ‘pantheon.elementary-screenshot-tool’ alias was removed on 2022-02-02, please use ‘pantheon.elementary-screenshot’ directly."; # added 2021-07-21
+
+  extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
+
+  notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
+
+}

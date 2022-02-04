@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, indent}:
 
-stdenv.mkDerivation {
-  name = "libdwg-0.6";
+stdenv.mkDerivation rec {
+  pname = "libdwg";
+  version = "0.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libdwg/libdwg-0.6.tar.bz2";
+    url = "mirror://sourceforge/libdwg/libdwg-${version}.tar.bz2";
     sha256 = "0l8ks1x70mkna1q7mzy1fxplinz141bd24qhrm1zkdil74mcsryc";
   };
 

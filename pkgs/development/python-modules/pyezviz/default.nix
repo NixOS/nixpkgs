@@ -11,14 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pyezviz";
-  version = "0.1.9.4";
+  version = "0.2.0.6";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "baqs";
     repo = "pyEzviz";
     rev = version;
-    sha256 = "sha256-MS4icrTjjcPx3Pb8fpcKAd/JXWqknqp9wb4lQmRwFls=";
+    sha256 = "sha256-3GRyM6OK0EpQ7wepTzqg+XANx9D0OVBTnw98i3b1V/8=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +34,9 @@ buildPythonPackage rec {
   # Project has no tests. test_cam_rtsp.py is more a sample for using the module
   doCheck = false;
 
-  pythonImportsCheck = [ "pyezviz" ];
+  pythonImportsCheck = [
+    "pyezviz"
+  ];
 
   meta = with lib; {
     description = "Python interface for for Ezviz cameras";

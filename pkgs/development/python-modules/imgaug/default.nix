@@ -59,6 +59,9 @@ buildPythonPackage rec {
     "test_alpha_is_080"
     "test_face_and_lines_at_half_visibility"
     "test_polygon_fully_inside_image__no_rectangular_shape"
+    # flaky due to timing-based assertions
+    "test_imap_batches_output_buffer_size"
+    "test_imap_batches_unordered_output_buffer_size"
   ];
 
   disabledTestPaths = [

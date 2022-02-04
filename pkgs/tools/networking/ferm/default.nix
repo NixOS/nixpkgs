@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables, nixosTests }:
+{ lib, stdenv, fetchurl, makeWrapper, perl, iptables, nixosTests }:
 
 let
   inherit (lib.versions) majorMinor;
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     rm -r $out/lib/systemd
     for i in "$out/sbin/"*; do
-      wrapProgram "$i" --prefix PATH : "${lib.makeBinPath [ iptables ipset ebtables ]}"
+      wrapProgram "$i" --prefix PATH : "${lib.makeBinPath [ iptables ]}"
     done
   '';
 

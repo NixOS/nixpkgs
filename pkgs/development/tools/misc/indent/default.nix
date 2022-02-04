@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, texinfo }:
+{ lib, stdenv, fetchurl, texinfo, buildPackages, pkgsStatic }:
 
 stdenv.mkDerivation rec {
   pname = "indent";
@@ -10,14 +10,18 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./darwin.patch ];
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
-  buildInputs = [ texinfo ];
+  strictDeps = true;
+  nativeBuildInputs = [ texinfo ];
+  pkgsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-implicit-function-declaration";
 
   hardeningDisable = [ "format" ];
 
+  passthru.tests.static = pkgsStatic.indent;
   meta = {
     homepage = "https://www.gnu.org/software/indent/";
     description = "A source code reformatter";

@@ -17,9 +17,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ why3 ] ++ provers;
 
+  dontUnpack = true;
+
   buildPhase = ''
     mkdir -p $out/share/why3/
-    why3 config --detect-provers -C $out/share/why3/why3.conf
+    why3 config detect -C $out/share/why3/why3.conf
     awk -i inplace -f ${configAwkScript} $out/share/why3/why3.conf
   '';
 

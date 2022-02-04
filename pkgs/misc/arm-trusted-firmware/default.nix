@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, openssl, pkgsCross, buildPackages }:
+{ lib, stdenv, fetchFromGitHub, openssl, pkgsCross, buildPackages }:
 
 let
   buildArmTrustedFirmware = { filesToInstall
@@ -6,18 +6,18 @@ let
             , platform ? null
             , extraMakeFlags ? []
             , extraMeta ? {}
-            , version ? "2.5"
+            , version ? "2.6"
             , ... } @ args:
            stdenv.mkDerivation ({
 
-    name = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}-${version}";
+    pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
     inherit version;
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
-      sha256 = "0w3blkqgmyb5bahlp04hmh8abrflbzy0qg83kmj1x9nv4mw66f3b";
+      sha256 = "sha256-qT9DdTvMcUrvRzgmVf2qmKB+Rb1WOB4p1rM+fsewGcg=";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];

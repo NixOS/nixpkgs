@@ -38,6 +38,8 @@ buildPythonPackage rec {
     psutil
   ];
 
+  LIBUV_CONFIGURE_HOST = stdenv.hostPlatform.config;
+
   pytestFlagsArray = [
     # from pytest.ini, these are NECESSARY to prevent failures
     "--capture=no"

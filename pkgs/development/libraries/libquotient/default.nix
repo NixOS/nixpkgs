@@ -1,19 +1,24 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, qtbase, qtmultimedia }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, qtmultimedia }:
 
 mkDerivation rec {
   pname = "libquotient";
-  version = "0.6.9";
+  version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    sha256 = "sha256-1YiS2b4lYknNSB+8LKB/s6AcF0yQVsakrkp6/Sjkczo=";
+    sha256 = "sha256-FPtxeZOfChIPi4e/h/eZkByH1QL3Fn0OJxe0dnMcTRw=";
   };
 
-  buildInputs = [ qtbase qtmultimedia ];
+  buildInputs = [ qtmultimedia ];
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    # we need libqtolm for this
+    "-DQuotient_ENABLE_E2EE=OFF"
+  ];
 
   meta = with lib; {
     description = "A Qt5 library to write cross-platform clients for Matrix";

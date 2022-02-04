@@ -1,18 +1,19 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p nix-prefetch-scripts
 
+set -eou pipefail
+
 version=$1
 
-bucket="https://download.pytorch.org/whl/cu111"
+bucket="https://download.pytorch.org/whl/cu113"
 
 url_and_key_list=(
-"x86_64-linux-37 $bucket/torch-${version}%2Bcu111-cp37-cp37m-linux_x86_64.whl torch-${version}-cp37-cp37m-linux_x86_64.whl"
-"x86_64-linux-38 $bucket/torch-${version}%2Bcu111-cp38-cp38-linux_x86_64.whl torch-${version}-cp38-cp38-linux_x86_64.whl"
-"x86_64-linux-39 $bucket/torch-${version}%2Bcu111-cp39-cp39-linux_x86_64.whl torch-${version}-cp39-cp39-linux_x86_64.whl"
+  "x86_64-linux-37 $bucket/torch-${version}%2Bcu113-cp37-cp37m-linux_x86_64.whl torch-${version}-cp37-cp37m-linux_x86_64.whl"
+  "x86_64-linux-38 $bucket/torch-${version}%2Bcu113-cp38-cp38-linux_x86_64.whl torch-${version}-cp38-cp38-linux_x86_64.whl"
+  "x86_64-linux-39 $bucket/torch-${version}%2Bcu113-cp39-cp39-linux_x86_64.whl torch-${version}-cp39-cp39-linux_x86_64.whl"
 )
 
-hashfile=binary-hashes-"$version".nix
-rm -f $hashfile
+hashfile="binary-hashes-$version.nix"
 echo "  \"$version\" = {" >> $hashfile
 
 for url_and_key in "${url_and_key_list[@]}"; do

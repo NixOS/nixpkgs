@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dmenu-5.0";
+  pname = "dmenu";
+  version = "5.0";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/tools/${name}.tar.gz";
+    url = "https://dl.suckless.org/tools/dmenu-${version}.tar.gz";
     sha256 = "1lvfxzg3chsgcqbc2vr0zic7vimijgmbvnspayx73kyvqi1f267y";
   };
 
@@ -24,10 +25,10 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC:=$(CC)" ];
 
   meta = with lib; {
-      description = "A generic, highly customizable, and efficient menu for the X Window System";
-      homepage = "https://tools.suckless.org/dmenu";
-      license = licenses.mit;
-      maintainers = with maintainers; [ pSub globin ];
-      platforms = platforms.all;
+    description = "A generic, highly customizable, and efficient menu for the X Window System";
+    homepage = "https://tools.suckless.org/dmenu";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pSub globin ];
+    platforms = platforms.all;
   };
 }

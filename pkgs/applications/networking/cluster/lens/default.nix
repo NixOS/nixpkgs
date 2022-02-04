@@ -1,14 +1,14 @@
-{ lib, fetchurl, appimageTools }:
+{ lib, fetchurl, appimageTools, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "lens";
-  version = "5.1.3";
-  build = "${version}-latest.20210722.1";
+  version = "5.2.6";
+  build = "${version}-latest.20211104.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://api.k8slens.dev/binaries/Lens-${build}.x86_64.AppImage";
-    sha256 = "1iwwyqpn1x1m8n22f99snlhcbcr65i4przx697hlbpmnm40dw7q9";
+    sha256 = "1lkxzgwrgafraimpnciv89fs6r399275vb73drxlg5z83acacf5z";
     name="${pname}.AppImage";
   };
 
@@ -18,6 +18,10 @@ let
 
 in appimageTools.wrapType2 {
   inherit name src;
+
+  profile = ''
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+  '';
 
   extraInstallCommands =
     ''

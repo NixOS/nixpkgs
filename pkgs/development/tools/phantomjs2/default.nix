@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , bison, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg
-, libpng, perl, python, ruby, sqlite, qtwebkit, qmake, qtbase
+, libpng, perl, python2, ruby, sqlite, qtwebkit, qmake, qtbase
 , darwin, writeScriptBin, cups, makeWrapper
 }:
 
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake ];
   buildInputs = [
     bison flex fontconfig freetype gperf icu openssl
-    libjpeg libpng perl python ruby sqlite qtwebkit qtbase
+    libjpeg libpng perl python2 ruby sqlite qtwebkit qtbase
     makeWrapper
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AGL ApplicationServices AppKit Cocoa OpenGL

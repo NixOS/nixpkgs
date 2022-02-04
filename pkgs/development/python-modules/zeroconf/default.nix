@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.36.9";
+  version = "0.38.3";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
-  # no tests in pypi sdist
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = version;
-    sha256 = "sha256-V2AiKmL3laA6Kd2lOXZ7f+7L08zMtDfvhLxayylp1CQ=";
+    sha256 = "sha256-pLTqnIbe7rTZrQFe//0/h5Tyx0GzJW+q9mUuDNifo/0=";
   };
 
   propagatedBuildInputs = [

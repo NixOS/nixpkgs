@@ -3,7 +3,7 @@
 let
   pkg = import ./base.nix {
     version = "3.2.5";
-    pkgName = "gcdemu";
+    pname = "gcdemu";
     pkgSha256 = "1nvpbq4mz8caw91q5ny9gf206g9bypavxws9nxyfcanfkc4zfkl4";
   };
   inherit (python3Packages) python pygobject3;

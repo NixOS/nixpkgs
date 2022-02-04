@@ -24,11 +24,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.6.2";
+  version = "3.6.4";
 
   src = fetchurl {
     url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "sha256-UHMj0g17P3BfSc+MB9Q3xtgJC+0H4Vo8DsQF7a1Up9Q=";
+    hash = "sha256-jeBhnc8vp8IVqAz4S4KrcWMdTUciy6CUlyXOPhgDHU4=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];

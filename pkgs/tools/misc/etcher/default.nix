@@ -5,27 +5,29 @@
 , util-linux
 , bash
 , makeWrapper
-, electron_12
+, electron
 }:
 
 let
+  inherit (stdenv.hostPlatform) system;
+
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+
   sha256 = {
-    "x86_64-linux" = "sha256-Tasynkzyy8UIalQn6qhIuPWDflf4pL76D2czgEijrPw=";
-    "i686-linux" = "0z6y45sz086njpywg7f0jn6n02qynb1qbi889g2kcgwbfjvmcpm1";
-  }."${stdenv.system}";
+    "x86_64-linux" = "sha256-n8i4ZqjugeUfXpTzVgIwVomfPk6HvPEbTZLe/jFgwFg=";
+    "i686-linux" = "sha256-lLGfhW6el2ZOcaykH1kTjGldXo7/0q5O8QnslnDlWAQ=";
+  }."${system}" or throwSystem;
 
   arch = {
     "x86_64-linux" = "amd64";
     "i686-linux" = "i386";
-  }."${stdenv.system}";
-
-  electron = electron_12;
+  }."${system}" or throwSystem;
 
 in
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.5.122";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";

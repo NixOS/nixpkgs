@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.8";
 
   src = fetchurl {
-    url = "http://archive.ubuntu.com/ubuntu/pool/universe/d/dhcpdump/dhcpdump_${version}.orig.tar.gz";
+    url = "mirror://ubuntu/pool/universe/d/dhcpdump/dhcpdump_${version}.orig.tar.gz";
     sha256 = "143iyzkqvhj4dscwqs75jvfr4wvzrs11ck3fqn5p7yv2h50vjpkd";
   };
 

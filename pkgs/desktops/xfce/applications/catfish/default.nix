@@ -62,6 +62,6 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

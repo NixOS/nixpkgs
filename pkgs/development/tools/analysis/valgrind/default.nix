@@ -1,24 +1,36 @@
-{ lib, stdenv, fetchurl, perl, gdb, cctools, xnu, bootstrap_cmds }:
+{ lib, stdenv, fetchurl, fetchpatch
+, autoreconfHook, perl
+, gdb, cctools, xnu, bootstrap_cmds
+}:
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.17.0";
+  version = "3.18.1";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "18l5jbk301j3462gipqn9bkfx44mdmwn0pwr73r40gl1irkfqfmd";
+    sha256 = "sha256-AIWaoTp3Lt33giIl9LRu4NOa++Bx0yd42k2ZmECB9/U=";
   };
+
+  patches = [
+    # Fix tests on Musl.
+    # https://bugs.kde.org/show_bug.cgi?id=445300
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=143535";
+      sha256 = "036zyk30rixjvpylw3c7n171n4gpn6zcp7h6ya2dz4h5r478l9i6";
+    })
+  ];
 
   outputs = [ "out" "dev" "man" "doc" ];
 
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [ "pie" "stackprotector" ];
 
   # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
   buildInputs = [ gdb perl ]  ++ lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   # Perl is also a native build input.
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ autoreconfHook perl ];
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
@@ -87,6 +99,6 @@ stdenv.mkDerivation rec {
       "riscv32-linux" "riscv64-linux"
       "alpha-linux"
     ];
-    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
+    broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

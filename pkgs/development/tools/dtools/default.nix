@@ -1,33 +1,24 @@
-{stdenv, lib, fetchFromGitHub, ldc, curl}:
+{stdenv, lib, fetchFromGitHub, fetchpatch, ldc, curl}:
 
 stdenv.mkDerivation rec {
   pname = "dtools";
   version = "2.095.1";
 
-  srcs = [
-    (fetchFromGitHub {
-      owner = "dlang";
-      repo = "dmd";
-      rev = "v${version}";
-      sha256 = "sha256:0faca1y42a1h16aml4lb7z118mh9k9fjx3xlw3ki5f1h3ln91xhk";
-      name = "dmd";
-    })
-    (fetchFromGitHub {
-      owner = "dlang";
-      repo = "tools";
-      rev = "v${version}";
-      sha256 = "sha256:0rdfk3mh3fjrb0h8pr8skwlq6ac9hdl1fkrkdl7n1fa2806b740b";
-      name = "dtools";
+  src = fetchFromGitHub {
+    owner = "dlang";
+    repo = "tools";
+    rev = "v${version}";
+    sha256 = "sha256:0rdfk3mh3fjrb0h8pr8skwlq6ac9hdl1fkrkdl7n1fa2806b740b";
+    name = "dtools";
+  };
+
+  patches = [
+    (fetchpatch {
+      # part of https://github.com/dlang/tools/pull/441
+      url = "https://github.com/dlang/tools/commit/6c6a042d1b08e3ec1790bd07a7f69424625ee866.patch"; # Fix LDC arm64 build
+      sha256 = "sha256-x6EclTYN1Y5FG57KLhbBK0BZicSYcZoWO7MTVcP4T18=";
     })
   ];
-
-  sourceRoot = ".";
-
-  postUnpack = ''
-      mv dmd dtools
-      cd dtools
-
-  '';
 
   nativeBuildInputs = [ ldc ];
   buildInputs = [ curl ];

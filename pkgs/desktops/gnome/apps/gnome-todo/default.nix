@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , fetchpatch
 , meson
 , ninja
@@ -16,28 +16,34 @@
 , libpeas
 , gnome-online-accounts
 , gsettings-desktop-schemas
-, libportal
+, libportal-gtk4
 , evolution-data-server
 , libical
 , librest
 , json-glib
 , itstool
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-todo";
-  version = "41.0";
+  version = "unstable-2022-01-01";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1r94880d4khbjhhfnhaba3y3d4hv2bri82rzfzxn27s5iybpqras";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnome-todo";
+    rev = "4a6be8c38510d909a9f94ec34c4da1f31ac9f1ab";
+    sha256 = "5UGo9vMb8scPWK91gftYOjqkJs9tGMiH1lqyEqedF2A=";
   };
 
   patches = [
     # fix build race bug https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=257667
     (fetchpatch {
-      url = "https://cgit.freebsd.org/ports/patch/?id=a4faaf6cf7835014b5f69a337b544ea4ee7f9655";
-      sha256 = "sha256-IMBfqtrqBw3DdmJG0qchZFR6Am1PICMnM5P6BcS8oqI=";
+      url = "https://cgit.freebsd.org/ports/plain/deskutils/gnome-todo/files/patch-src_meson.build?id=a4faaf6cf7835014b5f69a337b544ea4ee7f9655";
+      sha256 = "sha256:0ihixyq72yhx6njij7bldsqb80x3y217yh6livknlf5r1wr3hakn";
+      extraPrefix = "";
+      name = "gnome-todo_meson-build.patch";
     })
   ];
 
@@ -62,7 +68,7 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
 
     # Plug-ins
-    libportal # background
+    libportal-gtk4 # background
     evolution-data-server # eds
     libical
     librest # todoist
@@ -75,9 +81,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+    updateScript = unstableGitUpdater {
+      url = "https://gitlab.gnome.org/GNOME/gnome-todo.git";
     };
   };
 

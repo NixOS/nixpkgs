@@ -16,15 +16,17 @@
 
 buildPythonApplication rec {
   pname = "gigalixir";
-  version = "1.2.3";
+  version = "1.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b7a9aed7e61a3828f5a11774803edc39358e2ac463b3b5e52af267f3420dc66";
+    sha256 = "sha256-P70xsI/zwsoSgK1XCPzJSI5NQ58M431kmgo5gHXbaNw=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'pytest-runner'," ""
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," "" \
+      --replace "cryptography==" "cryptography>="
   '';
 
   propagatedBuildInputs = [
@@ -50,6 +52,6 @@ buildPythonApplication rec {
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

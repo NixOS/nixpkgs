@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "bunnyfetch";
-  version = "unstable-2021-06-19";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Rosettea";
     repo = "bunnyfetch";
-    rev = "24370338b936bae1ebdefea73e8372ac0b4d2858";
-    sha256 = "09wcffx6ak4djm2lrxq43n27p9qmczng4rf11qpwx3w4w67jvpz9";
+    rev = "v${version}";
+    sha256 = "sha256-6MnjCXc9/8twdf8PHKsVJY1yWYwUf5R01vtQFJbyy7M=";
   };
 
-  vendorSha256 = "1vv69y0x06kn99lw995sbkb7vgd0yb18flkr2ml8ss7q2yvz37vi";
+  vendorSha256 = "sha256-w+O1dU8t7uNvdlFnYhCdJCDixpWWZAnj9GrtsCbu9SM=";
 
   # No upstream tests
   doCheck = false;

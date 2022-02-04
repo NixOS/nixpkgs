@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     ./fno-common.patch
   ];
 
+  # Disable parallel build as it fails as:
+  #    ld: cannot find -lomxil-bellagio
+  enableParallelBuilding = false;
+
   doCheck = false; # fails
 
   # Fix for #40213, probably permanent, because upstream doesn't seem to be

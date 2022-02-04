@@ -2,7 +2,6 @@
 , lib
 , config
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , alsaSupport ? stdenv.hostPlatform.isLinux
@@ -16,30 +15,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.1.0";
   pname = "rtaudio";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtaudio";
     rev = version;
-    sha256 = "1pglnjz907ajlhnlnig3p0sx7hdkpggr8ss7b3wzf1lykzgv9l52";
+    sha256 = "0xvahlfj3ysgsjsp53q81hayzw7f99n1g214gh7dwdr52kv2l987";
   };
-
-  patches = [
-    # Fixes missing headers & install location
-    # Drop with version > 5.1.0
-    (fetchpatch {
-      name = "RtAudio-Adjust-CMake-public-header-installs-to-match-autotools.patch";
-      url = "https://github.com/thestk/rtaudio/commit/4273cf7572b8f51b5996cf6b42e3699cc6b165da.patch";
-      sha256 = "1p0idll0xsfk3jwjg83jkxkaf20gk0wqa7l982ni389rn6i4n26p";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace rtaudio.pc.in \
-      --replace 'Requires:' 'Requires.private:'
-  '';
 
   nativeBuildInputs = [ cmake pkg-config ];
 

@@ -7,13 +7,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.3.2";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    sha256 = "sha256-fla3EMDmuW0+vmmU0sgtLsGfO7dDApLQ2EoKJeR/1IM=";
+    sha256 = "11rjdaxmsp9n3r9xhmgd7ksy8bh5fazwsxdj0xvl4hsy6bcn4n97";
   };
 
   sourceRoot = "source/gdal";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     expat
     libxml2
     postgresql
-  ] ++ (with pythonPackages; [ python numpy wrapPython ])
+  ] ++ (with pythonPackages; [ python setuptools numpy wrapPython ])
     ++ lib.optional stdenv.isDarwin libiconv
     ++ lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 
@@ -62,7 +62,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  CXXFLAGS = "-fpermissive";
+  CXXFLAGS = lib.concatStringsSep " " [
+    "-fpermissive"
+    # poppler uses std::optional
+    "-std=c++17"
+  ];
 
   # - Unset CC and CXX as they confuse libtool.
   # - teach gdal that libdf is the legacy name for libhdf

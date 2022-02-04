@@ -1,4 +1,4 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, python3, vala_0_46
+{ lib, stdenv, pkg-config, fetchFromGitHub, python3, vala
 , gtk3, libwnck, libxfce4util, xfce4-panel, wafHook, xfce }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aKrJzf9rwCyXAJsRIXdBzmJBASuXD5I5kZrp+atx4FA=";
   };
 
-  nativeBuildInputs = [ pkg-config vala_0_46 wafHook python3 ];
+  nativeBuildInputs = [ pkg-config vala wafHook python3 ];
   buildInputs = [ gtk3 libwnck libxfce4util xfce4-panel ];
 
   postPatch = ''
@@ -32,6 +32,13 @@ stdenv.mkDerivation rec {
     description = "Plugin which integrates titlebar and window controls into the xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.volth ];
+    maintainers = with maintainers; [ volth ] ++ teams.xfce.members;
+    # Does not build with vala 0.48 or later
+    # libxfce4panel-2.0.vapi:92.3-92.41: error: overriding method `Xfce.PanelPlugin.remote_event' is incompatible
+    # with base method `bool Xfce.PanelPluginProvider.remote_event (string, GLib.Value, uint)': too few parameters.
+    #               public virtual signal bool remote_event (string name, GLib.Value value);
+    #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    # Upstream has no activity since 20 May 2020
+    broken = true;
   };
 }

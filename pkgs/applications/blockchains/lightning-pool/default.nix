@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "lightning-pool";
-  version = "0.5.1-alpha";
+  version = "0.5.3-alpha";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "pool";
     rev = "v${version}";
-    sha256 = "147s0p4arfxl2akzm267p8zfy6hgssym5rwxv78kp8i39mfinpkn";
+    sha256 = "1nc3hksk9qcxrsyqpz9vcfc8x093rc8yx8ppfk177j9fhdnn8bk7";
   };
 
-  vendorSha256 = "0zd3bwqi0hnk0562x9hd62cwjw1xj386m83jagg41kzz0cpcr7zl";
+  vendorSha256 = "09yxaa74814l1rp0arqhqpplr2j0p8dj81zqcbxlwp5ckjv9r2za";
 
   subPackages = [ "cmd/pool" "cmd/poold" ];
 

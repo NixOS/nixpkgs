@@ -21,6 +21,7 @@ repo=$tmpdir/repo
 trap "rm -rf $tmpdir" EXIT
 
 git clone --depth 1 --branch v${version} -c advice.detachedHead=false https://github.com/romanz/electrs $repo
+git -C $repo checkout tags/v${version}
 
 export GNUPGHOME=$tmpdir
 echo

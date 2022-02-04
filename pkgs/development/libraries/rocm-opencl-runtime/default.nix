@@ -13,7 +13,8 @@
 , lld
 , llvm
 , mesa
-, python2
+, numactl
+, python3
 , rocclr
 , rocm-comgr
 , rocm-device-libs
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-opencl-runtime";
-  version = "4.3.1";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-OpenCL-Runtime";
     rev = "rocm-${version}";
-    hash = "sha256-4+PNxRqvAvU0Nj2igYl3WiS5h5HGV63J+cHbIVW89LE=";
+    hash = "sha256-0OGYF4urlscr8tMkQwo2yATXwN0DjB092KQ+CBEhfIA=";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
     lld
     llvm
     mesa
-    python2
-    rocclr
+    numactl
+    python3
     rocm-comgr
     rocm-device-libs
     rocm-runtime
@@ -52,12 +53,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DAMDGPU_TARGET_TRIPLE='amdgcn-amd-amdhsa'"
-    "-DCLANG_OPTIONS_APPEND=-Wno-bitwise-conditional-parentheses"
-    "-DClang_DIR=${clang-unwrapped}/lib/cmake/clang"
-    "-DLIBROCclr_STATIC_DIR=${rocclr}/lib/cmake"
-    "-DLLVM_DIR=${llvm.out}/lib/cmake/llvm"
-    "-DUSE_COMGR_LIBRARY='yes'"
+    "-DAMD_OPENCL_PATH=${src}"
+    "-DROCCLR_PATH=${rocclr}"
   ];
 
   dontStrip = true;
@@ -72,7 +69,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace khronos/icd/loader/linux/icd_linux.c \
       --replace 'ICD_VENDOR_PATH' '"${addOpenGLRunpath.driverLink}/etc/OpenCL/vendors/"'
-    echo 'add_dependencies(amdocl64 OpenCL)' >> amdocl/CMakeLists.txt
   '';
 
   passthru.updateScript = writeScript "update.sh" ''

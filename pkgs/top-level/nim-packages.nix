@@ -30,6 +30,8 @@ lib.makeScope newScope (self:
 
     jsonschema = callPackage ../development/nim-packages/jsonschema { };
 
+    jsony = callPackage ../development/nim-packages/jsony { };
+
     karax = callPackage ../development/nim-packages/karax { };
 
     lscolors = callPackage ../development/nim-packages/lscolors { };
@@ -54,15 +56,30 @@ lib.makeScope newScope (self:
 
     regex = callPackage ../development/nim-packages/regex { };
 
+    rocksdb = callPackage ../development/nim-packages/rocksdb {
+      inherit (pkgs) rocksdb;
+    };
+
     sass = callPackage ../development/nim-packages/sass { };
 
     sdl2 = callPackage ../development/nim-packages/sdl2 { };
 
     segmentation = callPackage ../development/nim-packages/segmentation { };
 
+    snappy =
+      callPackage ../development/nim-packages/snappy { inherit (pkgs) snappy; };
+
+    spry = callPackage ../development/nim-packages/spry { };
+
+    spryvm = callPackage ../development/nim-packages/spryvm { };
+
+    stew = callPackage ../development/nim-packages/stew { };
+
     supersnappy = callPackage ../development/nim-packages/supersnappy { };
 
-    typography = callPackage ../development/nim-packages/typography { };
+    tempfile = callPackage ../development/nim-packages/tempfile { };
+
+    ui = callPackage ../development/nim-packages/ui { inherit (pkgs) libui; };
 
     unicodedb = callPackage ../development/nim-packages/unicodedb { };
 

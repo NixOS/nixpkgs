@@ -2,7 +2,8 @@
 
 
 mkDerivation {
-  name = "openbrf-unstable-2016-01-09";
+  pname = "openbrf";
+  version = "unstable-2016-01-09";
 
   src = fetchFromGitHub {
     owner = "cfcohen";

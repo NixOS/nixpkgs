@@ -22,11 +22,21 @@ stdenv.mkDerivation rec {
       url = "https://github.com/epam/nfstrace/commit/4562a895ed3ac0e811bdd489068ad3ebe4d7b501.patch";
       sha256 = "1fbicbllyykjknik7asa81x0ixxmbwqwkiz74cnznagv10jlkj3p";
     })
+
+    # Fix pending upstream inclusion for ncurses-6.3 support:
+    #  https://github.com/epam/nfstrace/pull/50
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://github.com/epam/nfstrace/commit/29c7c415f5412df1aae9b1e6ed3a2760d2c227a0.patch";
+      sha256 = "134709w6bld010jx3xdy9imcjzal904a84n9f8vv0wnas5clxdmx";
+    })
   ];
 
   postPatch = ''
+   # -Wall -Wextra -Werror fails on clang and newer gcc
     substituteInPlace CMakeLists.txt \
-      --replace "-Wno-braced-scalar-init" ""
+      --replace "-Wno-braced-scalar-init" "" \
+      --replace "-Werror" ""
   '';
 
   buildInputs = [ json_c libpcap ncurses libtirpc ];

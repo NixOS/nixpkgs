@@ -74,6 +74,8 @@ in {
         TTYVTDisallocate = "yes";
         # Fail to start if not controlling the virtual terminal.
         StandardInput = "tty-fail";
+        StandardOutput = "journal";
+        StandardError = "journal";
         # Set up a full (custom) user session for the user, required by Cage.
         PAMName = "cage";
       };

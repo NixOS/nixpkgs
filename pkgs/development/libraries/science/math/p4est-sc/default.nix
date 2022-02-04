@@ -22,11 +22,12 @@ stdenv.mkDerivation {
     sha256 = "14vm0b162jh8399pgpsikbwq4z5lkrw9vfzy3drqykw09n6nc53z";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  propagatedBuildInputs = [ zlib ]
-    ++ lib.optional mpiSupport mpi
+  propagatedNativeBuildInputs = lib.optional mpiSupport mpi
     ++ lib.optional isOpenmpi openssh
   ;
+  propagatedBuildInputs = [ zlib ];
   inherit debugEnable mpiSupport;
 
   postPatch = ''

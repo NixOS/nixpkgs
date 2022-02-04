@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 #
 # TODO: zfs tunables
 
@@ -8,6 +8,7 @@ with lib;
 let
 
   cfgZfs = config.boot.zfs;
+  optZfs = options.boot.zfs;
   cfgExpandOnBoot = config.services.zfs.expandOnBoot;
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;
@@ -112,6 +113,7 @@ in
         readOnly = true;
         type = types.bool;
         default = inInitrd || inSystem;
+        defaultText = literalDocBook "<literal>true</literal> if ZFS filesystem support is enabled";
         description = "True if ZFS filesystem support is enabled";
       };
 
@@ -346,6 +348,7 @@ in
     services.zfs.zed = {
       enableMail = mkEnableOption "ZED's ability to send emails" // {
         default = cfgZfs.package.enableMail;
+        defaultText = literalExpression "config.${optZfs.package}.enableMail";
       };
 
       settings = mkOption {
@@ -561,7 +564,8 @@ in
                                   then cfgZfs.requestEncryptionCredentials
                                   else cfgZfs.requestEncryptionCredentials != []) ''
                   ${cfgZfs.package}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
-                    (${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
+                    {
+                      ${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
                          if ! echo '${concatStringsSep "\n" cfgZfs.requestEncryptionCredentials}' | grep -qFx "$ds"; then
                            continue
                          fi
@@ -575,7 +579,8 @@ in
                       * )
                         ${cfgZfs.package}/sbin/zfs load-key "$ds"
                         ;;
-                    esac) < /dev/null # To protect while read ds kl in case anything reads stdin
+                    esac
+                    } < /dev/null # To protect while read ds kl in case anything reads stdin
                   done
                 ''}
                 echo "Successfully imported ${pool}"

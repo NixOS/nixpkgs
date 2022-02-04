@@ -3,9 +3,7 @@
 , fetchPypi
 , pytestCheckHook
 , typer
-, dataclasses
 , smart-open
-, pytest
 , mock
 , google-cloud-storage
 }:

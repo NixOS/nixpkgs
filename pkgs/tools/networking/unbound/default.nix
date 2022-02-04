@@ -12,6 +12,8 @@
 , pkg-config
 , makeWrapper
 , symlinkJoin
+, bison
+, nixosTests
   #
   # By default unbound will not be built with systemd support. Unbound is a very
   # commmon dependency. The transitive dependency closure of systemd also
@@ -30,16 +32,19 @@
 , withDNSTAP ? false
 , withTFO ? false
 , withRedis ? false
+# Avoid .lib depending on openssl.out
+# The build gets a little hacky, so in some cases we disable this approach.
+, withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
 , libnghttp2
 }:
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.13.2";
+  version = "1.14.0";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    sha256 = "sha256-ChO1R/O5KgJrXr0EI/VMmR5XGAN/2fckRYF/agQOGoM=";
+    sha256 = "sha256-bvkcvwLVKZ6rOTKMCFc5Pee0iFov5yM93+PBJP9aicg=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -82,7 +87,7 @@ stdenv.mkDerivation rec {
     "--with-libhiredis=${hiredis}"
   ];
 
-  PROTOC_C = if withDNSTAP then "${protobufc}/bin/protoc-c" else null;
+  PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
 
   # Remove references to compile-time dependencies that are included in the configure flags
   postConfigure = let
@@ -90,6 +95,10 @@ stdenv.mkDerivation rec {
   in ''
     sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
   '';
+
+  checkInputs = [ bison ];
+
+  doCheck = true;
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
@@ -99,14 +108,16 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
 
-  preFixup = lib.optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) # XXX: revisit
+  preFixup = lib.optionalString withSlimLib
     # Build libunbound again, but only against nettle instead of openssl.
     # This avoids gnutls.out -> unbound.lib -> openssl.out.
-    # There was some problem with this on Darwin; let's not complicate non-Linux.
     ''
       configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
       configurePhase
       buildPhase
+      if [ -n "$doCheck" ]; then
+          checkPhase
+      fi
       installPhase
     ''
   # get rid of runtime dependencies on $dev outputs
@@ -114,6 +125,8 @@ stdenv.mkDerivation rec {
   + lib.concatMapStrings
     (pkg: lib.optionalString (pkg ? dev) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
     (builtins.filter (p: p != null) buildInputs);
+
+  passthru.tests = nixosTests.unbound;
 
   meta = with lib; {
     description = "Validating, recursive, and caching DNS resolver";

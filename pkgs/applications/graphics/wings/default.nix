@@ -1,9 +1,11 @@
 { fetchurl, lib, stdenv, erlang, cl, libGL, libGLU, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "wings-2.2.4";
+  pname = "wings";
+  version = "2.2.4";
+
   src = fetchurl {
-    url = "mirror://sourceforge/wings/${name}.tar.bz2";
+    url = "mirror://sourceforge/wings/wings-${version}.tar.bz2";
     sha256 = "1xcmifs4vq2810pqqvsjsm8z3lz24ys4c05xkh82nyppip2s89a3";
   };
 
@@ -24,13 +26,13 @@ stdenv.mkDerivation rec {
 
   # I did not test the *cl* part. I added the -pa just by imitation.
   installPhase = ''
-    mkdir -p $out/bin $out/lib/${name}/ebin
-    cp ebin/* $out/lib/${name}/ebin
-    cp -R textures shaders plugins $out/lib/$name
+    mkdir -p $out/bin $out/lib/wings-${version}/ebin
+    cp ebin/* $out/lib/wings-${version}/ebin
+    cp -R textures shaders plugins $out/lib/wings-${version}
     cat << EOF > $out/bin/wings
     #!${runtimeShell}
     ${erlang}/bin/erl \
-      -pa $out/lib/${name}/ebin -run wings_start start_halt "$@"
+      -pa $out/lib/wings-${version}/ebin -run wings_start start_halt "$@"
     EOF
     chmod +x $out/bin/wings
   '';
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.wings3d.com/";
     description = "Subdivision modeler inspired by Nendo and Mirai from Izware";
     license = lib.licenses.tcltk;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

@@ -1,0 +1,25 @@
+diff --git a/libdm/Makefile.in b/libdm/Makefile.in
+index 66ec39513..ab7123dae 100644
+--- a/libdm/Makefile.in
++++ b/libdm/Makefile.in
+@@ -44,7 +44,6 @@ endif
+ 
+ LIB_SHARED = $(interface)/libdevmapper.$(LIB_SUFFIX)
+ LIB_VERSION = $(LIB_VERSION_DM)
+-TARGETS = libdevmapper.$(LIB_SUFFIX) libdevmapper.$(LIB_SUFFIX).$(LIB_VERSION)
+ 
+ CFLOW_LIST = $(SOURCES)
+ CFLOW_LIST_TARGET = libdevmapper.cflow
+diff --git a/make.tmpl.in b/make.tmpl.in
+index e7780e8d4..ca4aa9fdd 100644
+--- a/make.tmpl.in
++++ b/make.tmpl.in
+@@ -346,7 +346,7 @@ SUBDIRS.cflow := $(SUBDIRS:=.cflow)
+ SUBDIRS.clean := $(SUBDIRS:=.clean)
+ SUBDIRS.distclean := $(SUBDIRS:=.distclean)
+ 
+-TARGETS += $(LIB_SHARED) $(LIB_STATIC)
++TARGETS += $(LIB_STATIC)
+ 
+ all: $(SUBDIRS) $(TARGETS)
+ 

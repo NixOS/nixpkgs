@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, nix-update-script
 , fetchpatch
-, pantheon
+, nix-update-script
 , pkg-config
 , meson
 , ninja
@@ -24,31 +24,23 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "6.0.0";
-
-  repoName = "terminal";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "terminal";
     rev = version;
-    sha256 = "08akr4sv4jy9kd4s26kib6j7i8hc3vs0sp71fifv7ww4mi9cm6jc";
+    sha256 = "sha256-4q7YQ4LxuiM/TRae1cc3ncmw7QwE1soC2Sh+GZ+Gpq0=";
   };
 
   patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/terminal/pull/611
+    # Fix build with meson 0.61
+    # https://github.com/elementary/terminal/pull/649
     (fetchpatch {
-      url = "https://github.com/elementary/terminal/commit/4f6f2d9f58642ed904240c247cc0a0846baecb6b.patch";
-      sha256 = "04pbd72migxw8i949v3bmw8kfi5nr02rjcwfrx3b6xkiic9825sv";
+      url = "https://github.com/elementary/terminal/commit/15e3ace08cb25e53941249fa1ee680a1e2f871b4.patch";
+      sha256 = "sha256-XVs+kq5qbX5KlxtkqxwJnatNYNeJiVLBec7sLjQsUxg=";
     })
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     appstream
@@ -81,6 +73,12 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Terminal emulator designed for elementary OS";
     longDescription = ''
@@ -88,7 +86,7 @@ stdenv.mkDerivation rec {
       smart copy/paste, and little to no configuration.
     '';
     homepage = "https://github.com/elementary/terminal";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.terminal";

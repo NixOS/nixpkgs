@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tonelib.net/";
     license = licenses.unfree;
     maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

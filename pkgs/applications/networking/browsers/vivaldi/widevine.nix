@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "widevine";
-  version = "4.10.1582.1";
+  version = "4.10.2391.0";
 
   src = fetchurl {
     url = "https://dl.google.com/widevine-cdm/${version}-linux-x64.zip";
-    sha256 = "0l743f2yyaq1vvc3iicajgnfpjxjsfvjcqvanndbxs23skgjcv6r";
+    sha256 = "sha256-7gH808C67m/s09e4rQUQHb/t+iGVdzW+YzrB1ZxGIdo=";
   };
 
   nativeBuildInputs = [ unzip ];

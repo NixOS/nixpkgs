@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "riemann-c-client";
-  version = "1.10.4";
+  version = "1.10.5";
 
   src = fetchFromGitHub {
     owner = "algernon";
     repo = "riemann-c-client";
     rev = "riemann-c-client-${version}";
-    sha256 = "01gzqxqm1xvki2vd78c7my2kgp4fyhkcf5j5fmy8z0l93lgj82rr";
+    sha256 = "sha256-LuI9XFDPx0qw/+kkpXd0FOMESERAp31R1+ttkGuJnPA=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

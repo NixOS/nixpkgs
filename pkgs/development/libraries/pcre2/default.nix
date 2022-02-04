@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   pname = "pcre2";
   version = "10.37";
   src = fetchurl {
-    url = "https://ftp.pcre.org/pub/pcre/${pname}-${version}.tar.bz2";
+    url = "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
     hash = "sha256-TZWpbouAUpiTtFYr4SZI15i5V7G6Gq45YGu8KrlW0nA=";
   };
 

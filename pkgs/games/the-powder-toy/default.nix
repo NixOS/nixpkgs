@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm 755 powder $out/bin/powder
+
+    mkdir -p $out/share/applications
+    mv ../resources/powder.desktop $out/share/applications
+    mv ../resources $out/share
   '';
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];

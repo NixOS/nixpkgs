@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, buildPythonPackage, cython, slurm }:
+{ lib, fetchFromGitHub, buildPythonPackage, cython, slurm }:
 
 buildPythonPackage rec {
   pname = "pyslurm";

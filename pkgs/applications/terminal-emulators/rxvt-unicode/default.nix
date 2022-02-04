@@ -2,6 +2,7 @@
 , libX11, libXt, libXft, libXrender
 , ncurses, fontconfig, freetype
 , pkg-config, gdk-pixbuf, perl
+, libptytty
 , perlSupport      ? true
 , gdkPixbufSupport ? true
 , unicode3Support  ? true
@@ -9,7 +10,7 @@
 
 let
   pname = "rxvt-unicode";
-  version = "9.26";
+  version = "9.30";
   description = "A clone of the well-known terminal emulator rxvt";
 
   desktopItem = makeDesktopItem {
@@ -31,12 +32,13 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
-    sha256 = "12y9p32q0v7n7rhjla0j2g9d5rj2dmwk20c9yhlssaaxlawiccb4";
+    sha256 = "0badnkjsn3zps24r5iggj8k5v4f00npc77wqg92pcn1q5z8r677y";
   };
 
   buildInputs =
     [ libX11 libXt libXft ncurses  # required to build the terminfo file
       fontconfig freetype pkg-config libXrender
+      libptytty
     ] ++ optional perlSupport perl
       ++ optional gdkPixbufSupport gdk-pixbuf;
 

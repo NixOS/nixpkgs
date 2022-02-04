@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     })
 
     ./uncompress2.patch
+    ./0001-libpcsxcore-fix-build-with-ffmpeg-4.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];

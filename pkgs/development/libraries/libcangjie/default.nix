@@ -1,13 +1,15 @@
-{ lib, stdenv, autoconf, automake, libtool, m4, fetchurl, bash, pkg-config, sqlite }:
+{ lib, stdenv, autoconf, automake, libtool, m4, fetchFromGitLab, bash, pkg-config, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "libcangjie";
   version = "1.4_rev_${rev}";
   rev = "a73c1d8783f7b6526fd9b2cc44a669ffa5518d3d";
 
-  src = fetchurl {
-    url = "https://github.com/Cangjians/libcangjie/archive/${rev}.tar.gz";
-    sha256 = "0i5svvcx099fc9hh5dvr3gpb1041v6vn5fnylxy82zjy239114lg";
+  src = fetchFromGitLab {
+    owner = "Cangjians";
+    repo = "libcangjie";
+    inherit rev;
+    sha256 = "sha256-R7WqhxciaTxhTiwPp2EUNTOh477gi/Pj3VpMtat5qXw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       libcangjie is a library implementing the Cangjie input method.
     '';
-    homepage = "http://cangjians.github.io/projects/libcangjie/";
+    homepage = "https://gitlab.freedesktop.org/cangjie/libcangjie";
     license = lib.licenses.lgpl3Plus;
 
     maintainers = [ lib.maintainers.linquize ];

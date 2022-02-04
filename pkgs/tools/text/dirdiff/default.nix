@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.1";
 
   src = fetchurl {
-    url = "https://www.samba.org/ftp/paulus/${pname}-${version}.tar.gz";
+    url = "mirror://samba/paulus/${pname}-${version}.tar.gz";
     sha256 = "0lljd8av68j70733yshzzhxjr1lm0vgmbqsm8f02g03qsma3cdyb";
   };
 

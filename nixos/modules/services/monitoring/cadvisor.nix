@@ -111,6 +111,8 @@ in {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" "docker.service" "influxdb.service" ];
 
+        path = optionals config.boot.zfs.enabled [ pkgs.zfs ];
+
         postStart = mkBefore ''
           until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
             sleep 1;

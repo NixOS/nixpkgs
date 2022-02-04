@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "azure-synapse-artifacts";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "5e1d8f03939eafe29c301659c7b819053513be6f224861388b0048ca62e7a75d";
+    sha256 = "79eb973280ea89c0e6e2872d8f3f175b172b7438c2e2b9b4e655ae206be705fa";
   };
 
   propagatedBuildInputs = [

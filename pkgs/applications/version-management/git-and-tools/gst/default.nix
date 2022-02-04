@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gst";
-  version = "5.0.4";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     owner = "uetchy";
     repo = "gst";
     rev = "v${version}";
-    sha256 = "0fqgkmhn84402hidxv4niy9himcdwm1h80prkfk9vghwcyynrbsj";
+    sha256 = "07cixz5wlzzb4cwcrncg2mz502wlhd3awql5js1glw9f6qfwc5in";
   };
 
   vendorSha256 = "0k5xl55vzpl64gwsgaff92jismpx6y7l2ia0kx7gamd1vklf0qwh";

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.graphite;
+  opt = options.services.graphite;
   writeTextOrNull = f: t: mapNullable (pkgs.writeTextDir f) t;
 
   dataDir = cfg.dataDir;
@@ -171,6 +172,13 @@ in {
             directories:
                 - ${dataDir}/whisper
         '';
+        defaultText = literalExpression ''
+          '''
+            whisper:
+              directories:
+                - ''${config.${opt.dataDir}}/whisper
+          '''
+        '';
         example = ''
           allowed_origins:
             - dashboard.example.com
@@ -312,18 +320,21 @@ in {
 
       seyrenUrl = mkOption {
         default = "http://localhost:${toString cfg.seyren.port}/";
+        defaultText = literalExpression ''"http://localhost:''${toString config.${opt.seyren.port}}/"'';
         description = "Host where seyren is accessible.";
         type = types.str;
       };
 
       graphiteUrl = mkOption {
         default = "http://${cfg.web.listenAddress}:${toString cfg.web.port}";
+        defaultText = literalExpression ''"http://''${config.${opt.web.listenAddress}}:''${toString config.${opt.web.port}}"'';
         description = "Host where graphite service runs.";
         type = types.str;
       };
 
       mongoUrl = mkOption {
         default = "mongodb://${config.services.mongodb.bind_ip}:27017/seyren";
+        defaultText = literalExpression ''"mongodb://''${config.services.mongodb.bind_ip}:27017/seyren"'';
         description = "Mongodb connection string.";
         type = types.str;
       };

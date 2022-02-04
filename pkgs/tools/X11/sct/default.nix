@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, libX11, libXrandr }:
 
 stdenv.mkDerivation rec {
-  name = "sct";
+  pname = "sct";
+  version = "unstable-2015-11-16";
 
   src = fetchurl {
     url = "http://www.tedunangst.com/flak/files/sct.c";

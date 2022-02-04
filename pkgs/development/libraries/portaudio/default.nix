@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "portaudio";
-  version =  "190700_20210406";
+  version = "190700_20210406";
 
   src = fetchurl {
     url = "http://files.portaudio.com/archives/pa_stable_v${version}.tgz";
@@ -23,11 +23,16 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
-  postConfigure = ''
-    substituteInPlace Makefile --replace "-Werror" ""
-  '';
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays -Wno-error=implicit-const-int-float-conversion";
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
+
+  # Disable parallel build as it fails as:
+  #   make: *** No rule to make target '../../../lib/libportaudio.la',
+  #     needed by 'libportaudiocpp.la'.  Stop.
+  # Next release should address it with
+  #     https://github.com/PortAudio/portaudio/commit/28d2781d9216115543aa3f0a0ffb7b4ee0fac551.patch
+  enableParallelBuilding = false;
 
   # not sure why, but all the headers seem to be installed by the make install
   installPhase = ''

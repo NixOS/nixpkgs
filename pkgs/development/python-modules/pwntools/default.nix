@@ -6,7 +6,7 @@
 , packaging
 , pysocks
 , pygments
-, ROPGadget
+, ropgadget
 , capstone
 , colored-traceback
 , paramiko
@@ -27,12 +27,12 @@ let
   debuggerName = lib.strings.getName debugger;
 in
 buildPythonPackage rec {
-  version = "4.6.0";
+  version = "4.7.0";
   pname = "pwntools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FWnmE+XgbtRztgo/xxN2xK1bz1YhbqdywlrQIANHAww=";
+    sha256 = "sha256-dDiOKGdeehkp92PfWhzsaj1YlkEEm2z0drscVuxQqI4=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     packaging
     pysocks
     pygments
-    ROPGadget
+    ropgadget
     capstone
     colored-traceback
     paramiko

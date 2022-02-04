@@ -1,28 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, gtest }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, gtest, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "lucene++";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "luceneplusplus";
     repo = "LucenePlusPlus";
     rev = "rel_${version}";
-    sha256 = "06b37fly6l27zc6kbm93f6khfsv61w792j8xihfagpcm9cfz2zi1";
+    sha256 = "12v7r62f7pqh5h210pb74sfx6h70lj4pgfpva8ya2d55fn0qxrr2";
   };
 
-  postPatch = ''
-    sed -i -e '/Subversion *REQUIRED/d' \
-           -e '/include.*CMakeExternal/d' \
-           CMakeLists.txt
-  '';
-
-  cmakeFlags = [ "-DGTEST_INCLUDE_DIR=${gtest}/include" ];
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost gtest ];
+  buildInputs = [ boost gtest zlib ];
 
   doCheck = true;
-  checkTarget = "test";
+
+  postPatch = ''
+     substituteInPlace src/test/CMakeLists.txt \
+            --replace "add_subdirectory(gtest)" ""
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    LD_LIBRARY_PATH=$PWD/src/contrib:$PWD/src/core \
+            src/test/lucene++-tester
+    runHook postCheck
+  '';
+
+  postInstall = ''
+    mv $out/include/pkgconfig $out/lib/
+  '';
 
   meta = {
     description = "C++ port of the popular Java Lucene search engine";

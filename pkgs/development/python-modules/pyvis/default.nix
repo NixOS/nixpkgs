@@ -1,5 +1,4 @@
 { lib
-, isPy3k
 , fetchFromGitHub
 , fetchpatch
 , buildPythonPackage

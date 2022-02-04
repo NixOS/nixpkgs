@@ -1,17 +1,21 @@
 { lib
+, beautifulsoup4
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , requests
-, beautifulsoup4
 }:
 
 buildPythonPackage rec {
   pname = "schiene";
-  version = "0.23";
+  version = "0.24";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "014aaxmk7yxyml1xgfk3zqallyb5zi04m0v7jgqjkbjqq4n4j3ck";
+    sha256 = "sha256-y1gbeavZNFniRiOBbJ4Mgmb0F01HedSmpAWaeZEv0Go=";
   };
 
   propagatedBuildInputs = [
@@ -19,10 +23,12 @@ buildPythonPackage rec {
     beautifulsoup4
   ];
 
-  # tests are not present
+  # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "schiene" ];
+  pythonImportsCheck = [
+    "schiene"
+  ];
 
   meta = with lib; {
     description = "Python library for interacting with Bahn.de";

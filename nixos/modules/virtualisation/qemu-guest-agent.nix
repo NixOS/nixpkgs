@@ -14,8 +14,8 @@ in {
       };
       package = mkOption {
         type = types.package;
-        default = pkgs.qemu.ga;
-        defaultText = literalExpression "pkgs.qemu.ga";
+        default = pkgs.qemu_kvm.ga;
+        defaultText = literalExpression "pkgs.qemu_kvm.ga";
         description = "The QEMU guest agent package.";
       };
   };

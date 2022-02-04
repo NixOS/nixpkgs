@@ -5,7 +5,6 @@
 , pkg-config
 , dbus
 , lndir
-, python
 , dbus-python
 , sip
 , pyqt-builder
@@ -14,6 +13,7 @@
 , withMultimedia ? false
 , withWebKit ? false
 , withWebSockets ? false
+, withLocation ? false
 }:
 
 let
@@ -60,6 +60,7 @@ in buildPythonPackage rec {
     ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation
   ;
 
   buildInputs = with libsForQt5; [
@@ -72,6 +73,7 @@ in buildPythonPackage rec {
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation
   ;
 
   propagatedBuildInputs = [
@@ -108,6 +110,7 @@ in buildPythonPackage rec {
     ++ lib.optional withWebKit "PyQt5.QtWebKit"
     ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
     ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
+    ++ lib.optional withLocation "PyQt5.QtPositioning"
   ;
 
   meta = with lib; {

@@ -6,20 +6,25 @@
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.12.35";
+  version = "8.12.42";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f426d419aabf6366c27ef1193918cc55217ef0e8be8f09cbf0667131037ca229";
+    sha256 = "sha256-i1SHHtZOz85JSgeOnVazY8I+JMWRbf2J6EuYWhiVW+4=";
   };
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  pytestFlagsArray = [
+    "tests/*.py"
+  ];
 
-  pythonImportsCheck = [ "phonenumbers" ];
+  pythonImportsCheck = [
+    "phonenumbers"
+  ];
 
   meta = with lib; {
     description = "Python module for handling international phone numbers";

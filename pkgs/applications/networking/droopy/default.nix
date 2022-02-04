@@ -18,6 +18,10 @@ stdenv.mkDerivation {
       url = "https://patch-diff.githubusercontent.com/raw/stackp/Droopy/pull/30.patch";
       sha256 = "Y6jBraKvVQAiScbvLwezSKeWY3vaAbhaNXEGNaItigQ=";
     })
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/stackp/Droopy/pull/31.patch";
+      sha256 = "1ig054rxn5r0ph4w4fhmrxlh158c97iqqc7dbnc819adn9nw96l5";
+    })
   ];
 
   nativeBuildInputs = [ wrapPython ];

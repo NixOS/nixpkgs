@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, efl, pcre, mesa }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, efl }:
 
 stdenv.mkDerivation rec {
   pname = "terminology";
-  version = "1.10.0";
+  version = "1.12.1";
 
   src = fetchurl {
     url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0imk7cjkcjss3zf4hjwmy54pbizm6l6pq553jcx7bpsnhs56bbsz";
+    sha256 = "1aasddf2343qj798b5s8qwif3lxj4pyjax6fa9sfi6if9icdkkpq";
   };
 
   nativeBuildInputs = [
@@ -18,12 +18,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     efl
-    pcre
-    mesa
-  ];
-
-  mesonFlags = [
-    "-D edje-cc=${efl}/bin/edje_cc"
   ];
 
   postPatch = ''

@@ -22,7 +22,7 @@ buildEnv {
   paths = [ kodi ] ++ addons;
   pathsToLink = [ "/share" ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     mkdir $out/bin
@@ -35,5 +35,11 @@ buildEnv {
           (lib.concatMap
             (plugin: plugin.extraRuntimeDependencies or []) addons)}"
     done
+
+    # makeWrapper just created webinterface.default as a symlink. However,
+    # kodi's webserver carefully refuses to follow symlinks, so we need to copy
+    # these assets instead.
+    rm $out/share/kodi/addons/webinterface.default
+    cp -r ${kodi}/share/kodi/addons/webinterface.default/ $out/share/kodi/addons/webinterface.default
   '';
 }

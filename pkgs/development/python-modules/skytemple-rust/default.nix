@@ -2,19 +2,19 @@
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "unstable-2021-05-30"; # Contains build bug fixes, but is otherwise identical to 0.0.1.post0
+  version = "unstable-2021-08-11";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
-    rev = "cff8b2930af6d25d41331fab8c04f56a4fd75e95";
-    sha256 = "18y6wwvzyw062zlv3gcirr1hgld9d97ffyrvy0jvw8nr3b9h9x0i";
+    rev = "e306e5edc096cb3fef25585d9ca5a2817543f1cd";
+    sha256 = "0ja231gsy9i1z6jsaywawz93rnyjhldngi5i787nhnf88zrwx9ml";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "1ypcsf9gbq1bz29kfn7g4kg8741mxg1lfcbb14a0vfhjq4d6pnx9";
+    sha256 = "0gjvfblyv72m0nqv90m7qvbdnazsh5ind1pxwqz83vm4zjh9a873";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/skytemple-rust";
     description = "Binary Rust extensions for SkyTemple";
     license = licenses.mit;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ xfix marius851000 ];
   };
 }

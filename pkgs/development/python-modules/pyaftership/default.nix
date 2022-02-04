@@ -1,9 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy3k
+, pythonOlder
 , aiohttp
-, async-timeout
 , aresponses
 , pytest-asyncio
 , pytestCheckHook
@@ -11,21 +10,38 @@
 
 buildPythonPackage rec {
   pname = "pyaftership";
-  version = "21.1.0";
+  version = "21.11.0";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "0jyzgwaijkp80whi58a0hgjzmnlczmd9vwn11z2m0j01kbdwznn5";
+    sha256 = "sha256-SN7fvI/+VHYn2eYQe5wp6lEZ73YeZbsiPjDiq/Ibk3Q=";
   };
 
-  propagatedBuildInputs = [ aiohttp async-timeout ];
+  propagatedBuildInputs = [
+    aiohttp
+  ];
 
-  checkInputs = [ pytestCheckHook aresponses pytest-asyncio ];
-  pythonImportsCheck = [ "pyaftership" ];
+  checkInputs = [
+    aresponses
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    # Upstream is releasing with the help of a CI to PyPI, GitHub releases
+    # are not in their focus
+    substituteInPlace setup.py \
+      --replace 'version="main",' 'version="${version}",'
+  '';
+
+  pythonImportsCheck = [
+    "pyaftership"
+  ];
 
   meta = with lib; {
     description = "Python wrapper package for the AfterShip API";

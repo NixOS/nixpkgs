@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation {
   pname = "jboss-mysql-jdbc";
+  inherit (mysql_jdbc) version;
 
-  builder = ./builder.sh;
+  dontUnpack = true;
 
-  inherit mysql_jdbc;
-  version = mysql_jdbc.version;
+  installPhase = ''
+    runHook preInstall
 
-  meta = {
-    platforms = lib.platforms.unix;
+    mkdir -p $out/server/default/lib
+    ln -s $mysql_jdbc/share/java/mysql-connector-java.jar $out/server/default/lib/mysql-connector-java.jar
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
+    inherit (mysql_jdbc.meta) description license platforms homepage;
+    maintainers = with maintainers; [ ];
   };
 }

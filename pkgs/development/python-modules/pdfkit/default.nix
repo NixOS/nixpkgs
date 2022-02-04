@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pdfkit";
-  version = "0.6.1";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lcc1njpjd2zadbljqsnkrvamschl6j099p4giz1jd6mg1ds67gg";
+    sha256 = "992f821e1e18fc8a0e701ecae24b51a2d598296a180caee0a24c0af181da02a9";
   };
 
   # tests are not distributed

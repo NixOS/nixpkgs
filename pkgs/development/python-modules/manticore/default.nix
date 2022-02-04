@@ -1,38 +1,46 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , capstone
 , crytic-compile
+, fetchFromGitHub
+, intervaltree
 , ply
 , prettytable
+, protobuf
 , pyelftools
 , pyevmasm
 , pysha3
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 , rlp
 , stdenv
 , unicorn
 , wasm
 , yices
-, pytestCheckHook
 , z3
 }:
 
 buildPythonPackage rec {
   pname = "manticore";
-  version = "0.3.5";
+  version = "0.3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "manticore";
     rev = version;
-    sha256 = "0z2nhfcraa5dx6srbrw8s11awh2la0x7d88yw9in8g548nv6qa69";
+    sha256 = "sha256-L112YwrBcdcLBeBsPLWt3C57u2WDvGLq50EzW9ojdyg=";
   };
 
   propagatedBuildInputs = [
     crytic-compile
+    intervaltree
     ply
     prettytable
+    protobuf
     pyevmasm
     pysha3
     pyyaml
@@ -49,22 +57,29 @@ buildPythonPackage rec {
     sed -ie s/z3-solver// setup.py
   '';
 
-  checkInputs = [ pytestCheckHook ];
-  preCheck = "export PATH=${yices}/bin:${z3}/bin:$PATH";
-  pytestFlagsArray = [
-    "--ignore=tests/ethereum" # TODO: enable when solc works again
-    "--ignore=tests/ethereum_bench"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "--ignore=tests/native"
-    "--ignore=tests/other/test_locking.py"
-    "--ignore=tests/other/test_state_introspection.py"
+  checkInputs = [
+    pytestCheckHook
   ];
+
+  preCheck = ''
+    export PATH=${yices}/bin:${z3}/bin:$PATH
+  '';
+
+  disabledTestPaths = [
+    "tests/ethereum" # Enable when solc works again
+    "tests/ethereum_bench"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "tests/native"
+    "tests/other/test_locking.py"
+    "tests/other/test_state_introspection.py"
+  ];
+
   disabledTests = [
-    # failing tests
+    # Failing tests
     "test_chmod"
     "test_timeout"
     "test_wasm_main"
-    # slow tests
+    # Slow tests
     "testmprotectFailSymbReading"
     "test_ConstraintsForking"
     "test_resume"
@@ -97,6 +112,13 @@ buildPythonPackage rec {
     "test_implicit_call"
     "test_trace"
     "test_plugin"
+    # Tests are failing with latest unicorn
+    "Aarch64UnicornInstructions"
+    "test_integration_resume"
+  ];
+
+  pythonImportsCheck = [
+    "manticore"
   ];
 
   meta = with lib; {

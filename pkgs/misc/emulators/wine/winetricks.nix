@@ -1,17 +1,18 @@
-{ lib, stdenv, callPackage, wine, perl, which, coreutils, zenity, curl
+{ lib, stdenv, callPackage, perl, which, coreutils, zenity, curl
 , cabextract, unzip, p7zip, gnused, gnugrep, bash } :
 
 stdenv.mkDerivation rec {
-  name = "winetricks-${src.version}";
+  pname = "winetricks";
+  version = src.version;
 
   src = (callPackage ./sources.nix {}).winetricks;
 
   buildInputs = [ perl which ];
 
   # coreutils is for sha1sum
-  pathAdd = lib.concatMapStringsSep ":" (x: x + "/bin")
-    (lib.filter (x: x != null)
-      [ wine perl which coreutils zenity curl cabextract unzip p7zip gnused gnugrep bash ]);
+  pathAdd = lib.makeBinPath [
+    perl which coreutils zenity curl cabextract unzip p7zip gnused gnugrep bash
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

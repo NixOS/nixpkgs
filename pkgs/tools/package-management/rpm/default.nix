@@ -1,7 +1,7 @@
 { stdenv, lib
 , pkg-config, autoreconfHook
 , fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
-, sqlite, zstd
+, sqlite, zstd, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "man" ];
+  separateDebugInfo = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
@@ -34,6 +35,13 @@ stdenv.mkDerivation rec {
     "--enable-zstd"
     "--localstatedir=/var"
     "--sharedstatedir=/com"
+  ];
+
+  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ # Fix build for macOS aarch64
+    (fetchpatch {
+      url = "https://github.com/rpm-software-management/rpm/commit/ad87ced3990c7e14b6b593fa411505e99412e248.patch";
+      hash = "sha256-WYlxPGcPB5lGQmkyJ/IpGoqVfAKtMxKzlr5flTqn638=";
+    })
   ];
 
   postPatch = ''
@@ -61,6 +69,8 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/{rpm,rpmquery}
     ln -sf $out/bin/{rpm,rpmverify}
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://www.rpm.org/";

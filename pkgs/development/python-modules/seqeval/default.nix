@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , numpy
 , scikit-learn
-, perl
 , pytestCheckHook
 }:
 

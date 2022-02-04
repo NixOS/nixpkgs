@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "0.17";
 
   src = fetchurl {
-    url = "ftp://ftp.metalab.unc.edu/pub/linux/system/network/finger/bsd-finger-${version}.tar.gz";
+    url = "mirror://metalab/system/network/finger/bsd-finger-${version}.tar.gz";
     sha256 = "1yhkiv0in588il7f84k2xiy78g9lv12ll0y7047gazhiimk5v244";
   };
 

@@ -1,7 +1,8 @@
 { lib, stdenv, runtimeShell, fetchurl, unzip, mono, avrdude, gtk2, xdg-utils }:
 
 stdenv.mkDerivation {
-  name = "avrdudess-2.2.20140102";
+  pname = "avrdudess";
+  version = "2.2.20140102";
 
   src = fetchurl {
     url = "http://blog.zakkemble.co.uk/download/avrdudess_20140102.zip";

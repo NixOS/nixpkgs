@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
+  pname = "crawl${lib.optionalString tileMode "-tiles"}";
   version = "0.27.1";
 
   src = fetchFromGitHub {

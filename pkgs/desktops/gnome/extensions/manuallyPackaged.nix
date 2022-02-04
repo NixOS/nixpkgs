@@ -1,7 +1,6 @@
 { callPackage }:
 {
   "arcmenu@arcmenu.com" = callPackage ./arcmenu { };
-  "caffeine@patapon.info" = callPackage ./caffeine { };
   "clock-override@gnomeshell.kryogenix.org" = callPackage ./clock-override { };
   "dash-to-panel@jderose9.github.com" = callPackage ./dash-to-panel { };
   "drop-down-terminal@gs-extensions.zzrough.org" = callPackage ./drop-down-terminal { };
@@ -15,6 +14,7 @@
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
   "paperwm@hedning:matrix.org" = callPackage ./paperwm { };
   "pidgin@muffinmad" = callPackage ./pidgin-im-integration { };
+  "pop-shell@system76.com" = callPackage ./pop-shell { };
   "sound-output-device-chooser@kgshank.net" = callPackage ./sound-output-device-chooser { };
   "system-monitor@paradoxxx.zero.gmail.com" = callPackage ./system-monitor { };
   "taskwhisperer-extension@infinicode.de" = callPackage ./taskwhisperer { };

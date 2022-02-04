@@ -5,7 +5,7 @@
 , pkg-config
 , ninja
 , wayland
-, epoxy
+, libepoxy
 , glib
 , libwpe
 , libxkbcommon
@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "https://wpewebkit.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-uJ39NQCk3scREyzXv/clmeZ9VqQZ0ABzDhS7mVR1Ccw=";
+    sha256 = "sha256-YjnJwVUjQQeY1mMV3mtJFxKrMACboYDz4N0HbZsAdKw=";
   };
 
   depsBuildBuild = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wayland
-    epoxy
+    libepoxy
     glib
     libwpe
     libxkbcommon

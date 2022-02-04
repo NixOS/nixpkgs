@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, zlib, openssl, libuuid, pkg-config }:
+{ fetchurl, lib, stdenv, zlib, openssl, libuuid, pkg-config, bzip2 }:
 
 stdenv.mkDerivation rec {
   version = "20201230";
@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib openssl libuuid ];
+  buildInputs = [ zlib openssl libuuid ]
+    ++ lib.optionals stdenv.isDarwin [ bzip2 ];
 
   meta = {
     description = "Library for support of the Expert Witness Compression Format";

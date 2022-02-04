@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, pythonPackages, libreoffice }:
+{ lib, fetchFromGitHub, python2Packages, libreoffice }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
 
   pname = "odpdown";
   version = "0.4.1";
@@ -12,9 +12,9 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "r2qbgD9PAalbypt+vjp2YcYggUGPQMEG2FDxMtohqG4=";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ libreoffice lpod lxml mistune pillow pygments ];
+  propagatedBuildInputs = with python2Packages; [ libreoffice lpod lxml mistune pillow pygments ];
 
-  checkInputs = with pythonPackages; [
+  checkInputs = with python2Packages; [
     nose
   ];
 

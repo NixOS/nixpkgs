@@ -23,6 +23,11 @@ buildPythonPackage rec {
     sha256 = "sha256-ysaIeVefsTX7ZubOXaEzeS1kMyBp4/w3SHNFxsGVhzY=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/test_command.py \
+      --replace '/tmp/' "$TMPDIR/"
+  '';
+
   propagatedBuildInputs = [
     click
     ordered-set

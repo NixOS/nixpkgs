@@ -51,13 +51,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnatcoll-${component}";
-  version = "21.0.0";
+  version = "22.0.0";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-db";
     rev = "v${version}";
-    sha256 = "0fdfng3yfy645nlw8l3c2za0zkn6pdhkvyrw20wnjx4k26glgb6r";
+    sha256 = "1c39yg13faadg5mzpq3s83rn24npmpc4yjj0cvj7kqwpqxci4m55";
   };
 
   patches = lib.optionals (component == "sqlite") [

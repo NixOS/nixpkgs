@@ -21,7 +21,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = https://github.com/vbmithr/ocaml-hidapi;
+    homepage = "https://github.com/vbmithr/ocaml-hidapi";
     description = "Bindings to Signal11's hidapi library";
     license = licenses.isc;
     maintainers = [ maintainers.alexfmpe ];

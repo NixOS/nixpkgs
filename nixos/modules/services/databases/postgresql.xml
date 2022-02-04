@@ -52,37 +52,51 @@ Type "help" for help.
  <section xml:id="module-services-postgres-upgrading">
   <title>Upgrading</title>
 
+  <note>
+   <para>
+    The steps below demonstrate how to upgrade from an older version to <package>pkgs.postgresql_13</package>.
+    These instructions are also applicable to other versions.
+   </para>
+  </note>
   <para>
-   Major PostgreSQL upgrade requires PostgreSQL downtime and a few imperative steps to be called. To simplify this process, use the following NixOS module:
+   Major PostgreSQL upgrades require a downtime and a few imperative steps to be called. This is the case because
+   each major version has some internal changes in the databases' state during major releases. Because of that,
+   NixOS places the state into <filename>/var/lib/postgresql/&lt;version&gt;</filename> where each <literal>version</literal>
+   can be obtained like this:
 <programlisting>
-  containers.temp-pg.config.services.postgresql = {
-    enable = true;
-    package = pkgs.postgresql_12;
-    ## set a custom new dataDir
-    # dataDir = "/some/data/dir";
-  };
-  environment.systemPackages =
-    let newpg = config.containers.temp-pg.config.services.postgresql;
-    in [
-      (pkgs.writeScriptBin "upgrade-pg-cluster" ''
-        set -x
-        export OLDDATA="${config.services.postgresql.dataDir}"
-        export NEWDATA="${newpg.dataDir}"
-        export OLDBIN="${config.services.postgresql.package}/bin"
-        export NEWBIN="${newpg.package}/bin"
+<prompt>$ </prompt>nix-instantiate --eval -A postgresql_13.psqlSchema
+"13"
+</programlisting>
+   For an upgrade, a script like this can be used to simplify the process:
+<programlisting>
+{ config, pkgs, ... }:
+{
+  <xref linkend="opt-environment.systemPackages" /> = [
+    (pkgs.writeScriptBin "upgrade-pg-cluster" ''
+      set -eux
+      # XXX it's perhaps advisable to stop all services that depend on postgresql
+      systemctl stop postgresql
 
-        install -d -m 0700 -o postgres -g postgres "$NEWDATA"
-        cd "$NEWDATA"
-        sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
+      # XXX replace `&lt;new version&gt;` with the psqlSchema here
+      export NEWDATA="/var/lib/postgresql/&lt;new version&gt;"
 
-        systemctl stop postgresql    # old one
+      # XXX specify the postgresql package you'd like to upgrade to
+      export NEWBIN="${pkgs.postgresql_13}/bin"
 
-        sudo -u postgres $NEWBIN/pg_upgrade \
-          --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-          --old-bindir $OLDBIN --new-bindir $NEWBIN \
-          "$@"
-      '')
-    ];
+      export OLDDATA="${config.<xref linkend="opt-services.postgresql.dataDir"/>}"
+      export OLDBIN="${config.<xref linkend="opt-services.postgresql.package"/>}/bin"
+
+      install -d -m 0700 -o postgres -g postgres "$NEWDATA"
+      cd "$NEWDATA"
+      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
+
+      sudo -u postgres $NEWBIN/pg_upgrade \
+        --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
+        --old-bindir $OLDBIN --new-bindir $NEWBIN \
+        "$@"
+    '')
+  ];
+}
 </programlisting>
   </para>
 
@@ -103,17 +117,25 @@ Type "help" for help.
    </listitem>
    <listitem>
     <para>
-     Run <literal>upgrade-pg-cluster</literal>. It will stop old postgresql, initialize new one and migrate old one to new one. You may supply arguments like <literal>--jobs 4</literal> and <literal>--link</literal> to speedup migration process. See <link xlink:href="https://www.postgresql.org/docs/current/pgupgrade.html" /> for details.
+     Run <literal>upgrade-pg-cluster</literal>. It will stop old postgresql, initialize a new one and migrate the old one to the new one. You may supply arguments like <literal>--jobs 4</literal> and <literal>--link</literal> to speedup migration process. See <link xlink:href="https://www.postgresql.org/docs/current/pgupgrade.html" /> for details.
     </para>
    </listitem>
    <listitem>
     <para>
-     Change postgresql package in NixOS configuration to the one you were upgrading to, and change <literal>dataDir</literal> to the one you have migrated to. Rebuild NixOS. This should start new postgres using upgraded data directory.
+     Change postgresql package in NixOS configuration to the one you were upgrading to via <xref linkend="opt-services.postgresql.package" />. Rebuild NixOS. This should start new postgres using upgraded data directory and all services you stopped during the upgrade.
     </para>
    </listitem>
    <listitem>
     <para>
-     After upgrade you may want to <literal>ANALYZE</literal> new db.
+     After the upgrade it's advisable to analyze the new cluster (as <literal>su -l postgres</literal> in the
+     <xref linkend="opt-services.postgresql.dataDir" />, in this example <filename>/var/lib/postgresql/13</filename>):
+<programlisting>
+<prompt>$ </prompt>./analyze_new_cluster.sh
+</programlisting>
+     <warning><para>The next step removes the old state-directory!</para></warning>
+<programlisting>
+<prompt>$ </prompt>./delete_old_cluster.sh
+</programlisting>
     </para>
    </listitem>
   </orderedlist>

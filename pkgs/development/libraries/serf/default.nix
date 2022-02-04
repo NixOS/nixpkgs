@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.3.9";
 
   src = fetchurl {
-    url = "https://www.apache.org/dist/serf/${pname}-${version}.tar.bz2";
+    url = "mirror://apache/serf/${pname}-${version}.tar.bz2";
     sha256 = "1k47gbgpp52049andr28y28nbwh9m36bbb0g8p0aka3pqlhjv72l";
   };
 

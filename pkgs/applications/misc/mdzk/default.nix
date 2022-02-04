@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdzk";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "mdzk-rs";
     repo = "mdzk";
     rev = version;
-    sha256 = "sha256-yz8lLFAP2/16fixknqGziyrUJKs3Qo1+whV82kUPuAE=";
+    sha256 = "sha256-NkoKQKcww5ktEbxbOY6WP8OemCB+rvXbuN9oSPjLE3Y=";
   };
 
-  cargoSha256 = "sha256-TGNzi8fMU7RhX2SJyxpYfJLgGYxpO/XkmDXzMdlX/2o=";
+  cargoSha256 = "sha256-uJ00tGiKtcYghFUh0fcYg4nZc/o8yhvlVs+6/aRNY5s=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

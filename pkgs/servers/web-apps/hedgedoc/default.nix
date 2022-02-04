@@ -7,13 +7,13 @@
 , nodejs
 , mkYarnPackage
 , fetchYarnDeps
-, python2
+, python3
 , nixosTests
 , buildGoModule
 }:
 
 let
-  pinData = (builtins.fromJSON (builtins.readFile ./pin.json));
+  pinData = lib.importJSON ./pin.json;
 
   # we need a different version than the one already available in nixpkgs
   esbuild-hedgedoc = buildGoModule rec {
@@ -43,7 +43,7 @@ mkYarnPackage rec {
   };
 
   nativeBuildInputs = [ which makeWrapper ];
-  extraBuildInputs = [ python2 esbuild-hedgedoc ];
+  extraBuildInputs = [ python3 esbuild-hedgedoc ];
 
   offlineCache = fetchYarnDeps {
     inherit yarnLock;

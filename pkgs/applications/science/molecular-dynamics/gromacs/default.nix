@@ -14,16 +14,16 @@ let
     if stdenv.hostPlatform.system == "i686-linux" then "SSE2" else
     if stdenv.hostPlatform.system == "x86_64-linux" then "SSE4.1" else
     if stdenv.hostPlatform.system == "x86_64-darwin" then "SSE4.1" else
-    if stdenv.hostPlatform.system == "aarch64-linux" then "ARM_NEON" else
+    if stdenv.hostPlatform.system == "aarch64-linux" then "ARM_NEON_ASIMD" else
     "None";
 
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2021.3";
+  version = "2021.5";
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "4QmFbsREdo373kHzBZ4xI6vbj+Vsozsag/Me1FdaHMY=";
+    sha256 = "1dh9l2gcv61h1r6qsg8vr3k1xp8jgd27czzg24kzf4k823k3z9pb";
   };
 
   nativeBuildInputs = [ cmake ];

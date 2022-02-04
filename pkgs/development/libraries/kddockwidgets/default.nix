@@ -8,13 +8,13 @@
 
 mkDerivation rec {
   pname = "KDDockWidgets";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lgNRuRoJhBw0n/Hb58uxpa+4aXoOrK4bRldtIXYIKLI=";
+    sha256 = "sha256-7jC0zl5ESwqZXzvFJYmPvRhwFitse05NuYoTgFWiHac=";
   };
 
   nativeBuildInputs = [ cmake ];

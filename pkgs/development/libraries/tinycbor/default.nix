@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tinycbor";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "tinycbor";
     rev = "v${version}";
-    sha256 = "sha256-H0NTUaSOGMtbM1+EQVOsYoPP+A1FGvUM7XrbPxArR88=";
+    sha256 = "1ph1cmsh4hm6ikd3bs45mnv9zmniyrvp2rrg8qln204kr6fngfcd";
   };
 
   makeFlags = [ "prefix=$(out)" ];

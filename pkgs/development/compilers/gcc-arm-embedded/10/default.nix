@@ -8,20 +8,22 @@
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
   version = "10.3.1";
-  release = "10.3-2021.07";
+  release = "10.3-2021.10";
 
   suffix = {
+    aarch64-darwin = "mac";  # use intel binaries via rosetta
     aarch64-linux = "aarch64-linux";
-    x86_64-darwin = "mac-10.14.6";
+    x86_64-darwin = "mac";
     x86_64-linux  = "x86_64-linux";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${release}/gcc-arm-none-eabi-${release}-${suffix}.tar.bz2";
     sha256 = {
-      aarch64-linux = "0y4nyrff5bq90v44z2h90gqgl18bs861i9lygx4z89ym85jycx9s";
-      x86_64-darwin = "1r3yidmgx1xq1f19y2c5njf2g95vs9cssmmsxsb68qm192r58i8a";
-      x86_64-linux  = "1skcalz1sr0hhpjcl8qjsqd16n2w0zrbnlrbr8sx0g728kiqsnwc";
+      aarch64-darwin = "0fr8pki2g4bfk1rk90dzwql37d0b71ngzs9zyx0g2jainan3sqgv";
+      aarch64-linux = "020j8gkzc0i0b74vz98gvngnwjm5222j1gk5nswfk6587krba1gn";
+      x86_64-darwin = "0fr8pki2g4bfk1rk90dzwql37d0b71ngzs9zyx0g2jainan3sqgv";
+      x86_64-linux  = "18y92vpl22hf74yqdvmpw8adrkl92s4crzzs6avm05md37qb9nwp";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -49,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://developer.arm.com/open-source/gnu-toolchain/gnu-rm";
     license = with licenses; [ bsd2 gpl2 gpl3 lgpl21 lgpl3 mit ];
     maintainers = with maintainers; [ prusnak ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

@@ -43,24 +43,24 @@ let
       # vda is a filesystem without partition table
       forceInstall = true;
     };
-    nix.binaryCaches = lib.mkForce [ ];
-    nix.extraOptions = ''
-      hashed-mirrors =
-      connect-timeout = 1
-    '';
+    nix.settings = {
+      substituters = lib.mkForce [];
+      hashed-mirrors = null;
+      connect-timeout = 1;
+    };
     # save some memory
     documentation.enable = false;
   };
   # /etc/nixos/configuration.nix for the vm
   configFile = pkgs.writeText "configuration.nix"  ''
-    {config, pkgs, ...}: ({
+    {config, pkgs, lib, ...}: ({
     imports =
           [ ./hardware-configuration.nix
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
-    } // (builtins.fromJSON (builtins.readFile ${
+    } // lib.importJSON ${
       pkgs.writeText "simpleConfig.json" (builtins.toJSON simpleConfig)
-    })))
+    })
   '';
 in {
   name = "os-prober";
@@ -114,7 +114,7 @@ in {
         "${configFile}",
         "/etc/nixos/configuration.nix",
     )
-    machine.succeed("nixos-rebuild boot >&2")
+    machine.succeed("nixos-rebuild boot --show-trace >&2")
 
     machine.succeed("egrep 'menuentry.*debian' /boot/grub/grub.cfg")
   '';

@@ -9,6 +9,7 @@
 , bc
 , ddcutil
 , efl
+, libexif
 , pam
 , xkeyboard_config
 , udisks2
@@ -20,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "enlightenment";
-  version = "0.24.2";
+  version = "0.25.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1wfz0rwwsx7c1mkswn4hc9xw1i6bsdirhxiycf7ha2vcipqy465y";
+    sha256 = "0i1424vsc929h36hx04646pbrjiya6nc1nqr6s15xwvfv7imzw1c";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     bc # for the Everything module calculator mode
     ddcutil # specifically libddcutil.so.2 for backlight control
     efl
+    libexif
     pam
     xkeyboard_config
     udisks2 # for removable storage mounting/unmounting

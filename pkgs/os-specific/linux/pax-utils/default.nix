@@ -1,13 +1,17 @@
-{ stdenv, lib, fetchurl }:
+{ stdenv, lib, fetchurl, bash }:
 
 stdenv.mkDerivation rec {
   pname = "pax-utils";
   version = "1.3.3";
 
   src = fetchurl {
-    url = "http://distfiles.gentoo.org/distfiles/${pname}-${version}.tar.xz";
+    url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
     sha256 = "sha256-7sp/vZi8Zr6tSncADCAl2fF+qCAbhCRYgkBs4AubaxQ=";
   };
+
+  strictDeps = true;
+
+  buildInputs = [ bash ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

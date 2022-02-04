@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "swaglyrics";
-  version = "1.2.2";
+  version = "unstable-2021-06-17";
 
   src = fetchFromGitHub {
     owner = "SwagLyrics";
     repo = "SwagLyrics-For-Spotify";
-    rev = "v${version}";
-    sha256 = "1dwj9fpyhqqpm2z3imp8hfribkzxya891shh77yg77rc2xghp7mh";
+    rev = "99fe764a9e45cac6cb9fcdf724c7d2f8cb4524fb";
+    sha256 = "sha256-O48T1WsUIVnNQb8gmzSkFFHTOiFOKVSAEYhF9zUqZz0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -17,10 +17,9 @@ python3.pkgs.buildPythonApplication rec {
 
   preConfigure = ''
     substituteInPlace setup.py \
-      --replace 'requests>=2.24.0' 'requests~=2.23' \
-      --replace 'beautifulsoup4==4.9.1' 'beautifulsoup4~=4.9' \
-      --replace 'colorama==0.4.3' 'colorama~=0.4' \
-      --replace 'unidecode==1.1.1' 'unidecode~=1.2'
+      --replace 'beautifulsoup4==4.9.3' 'beautifulsoup4>=4.9.3' \
+      --replace 'unidecode==1.2.0' 'unidecode>=1.2.0' \
+      --replace 'flask==2.0.1' 'flask>=2.0.1'
   '';
 
   preBuild = "export HOME=$NIX_BUILD_TOP";
@@ -43,6 +42,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SwagLyrics/SwagLyrics-For-Spotify";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

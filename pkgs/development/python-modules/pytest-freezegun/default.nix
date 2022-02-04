@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, isPy27
 , fetchFromGitHub
 , freezegun
 , pytest

@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.2.189.1";
+  version = "1.2.198.0";
 
   # It's not strictly necessary to have matching versions here, however
   # since we're using the SDK version we may as well be consistent with
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       owner = "KhronosGroup";
       repo = "Vulkan-Tools";
       rev = "sdk-${version}";
-      sha256 = "0izmzyj6gb51d71vbdjcgd9qw34aidvbmz0mg4bkc13n48w8s9vj";
+      sha256 = "sha256-oNJm9Gi41aA5krkpkQI0EYdIlMcQpdodv9yqXhnNURA=";
     });
 
   nativeBuildInputs = [ cmake ];

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchzip
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2, cmake
+, gfortran, m4, makeWrapper, patchelf, perl, which, python3, cmake
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
 # standard library dependencies
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
 
-  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which cmake ];
+  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python3 which cmake ];
 
   makeFlags =
     let

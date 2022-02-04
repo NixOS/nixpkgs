@@ -8,11 +8,11 @@
 }:
 
 rec {
-  version = "20211005.2.251ac7d";
+  version = "20211213.2.37be4c3";
 
   src = fetchzip {
     url = "https://dl.jami.net/release/tarballs/jami_${version}.tar.gz";
-    sha256 = "12ppbwhnk5zajb73szd04sz80bp17q577bkb9j8p45apvq201db3";
+    sha256 = "08abswvxwsxh6b0smb4l4cmymsbfiy7473b2sgvghj55w603prsc";
 
     stripRoot = false;
     extraPostFetch = ''

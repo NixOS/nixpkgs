@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , importlib-metadata
+, jsonschema
+, lxml
 , packageurl-python
 , poetry-core
 , pytestCheckHook
@@ -9,12 +11,13 @@
 , requirements-parser
 , setuptools
 , toml
-, tox
+, types-setuptools
+, types-toml
 }:
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "0.10.2";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +26,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11sbnlbxighmmygrlgg4d31y70067pxzjsirwicaslfq95wgdlav";
+    hash = "sha256-/1kWvhTUS0JT0RwodiivJSUiWIDwQyXxdjF/KUlCNds=";
   };
 
   nativeBuildInputs = [
@@ -36,18 +39,15 @@ buildPythonPackage rec {
     requirements-parser
     setuptools
     toml
+    types-setuptools
+    types-toml
   ];
 
   checkInputs = [
+    jsonschema
+    lxml
     pytestCheckHook
-    tox
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'setuptools = "^50.3.2"' 'setuptools = "*"' \
-      --replace 'importlib-metadata = "^4.8.1"' 'importlib-metadata = "*"'
-  '';
 
   pythonImportsCheck = [
     "cyclonedx"

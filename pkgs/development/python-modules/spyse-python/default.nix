@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "spyse-python";
   version = "2.2.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -34,7 +35,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'dataclasses~=0.6'," "" \
-      --replace "responses~=0.13.3" "responses>=0.13.3"
+      --replace "responses~=0.13.3" "responses>=0.13.3" \
+      --replace "limiter~=0.1.2" "limiter>=0.1.2"
   '';
 
   pythonImportsCheck = [

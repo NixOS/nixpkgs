@@ -22,6 +22,14 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/afterstep/raw/master/debian/patches/44-Fix-build-with-gcc-5.patch";
       sha256 = "1vipy2lzzd2gqrsqk85pwgcdhargy815fxlbn57hsm45zglc3lj4";
     })
+
+    # Fix pending upstream inclusion for binutils-2.36 support:
+    #  https://github.com/afterstep/afterstep/pull/7
+    (fetchpatch {
+      name = "binutils-2.36.patch";
+      url = "https://github.com/afterstep/afterstep/commit/5e9e897cf8c455390dd6f5b27fec49707f6b9088.patch";
+      sha256 = "1kk97max05r2p1a71pvpaza79ff0klz32rggik342p7ki3516qv8";
+    })
   ];
 
   postPatch = ''
@@ -39,6 +47,12 @@ stdenv.mkDerivation rec {
   preConfigure = ''
      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
+
+  # Parallel build fails due to missing dependencies between private libaries:
+  #   ld: cannot find ../libAfterConf/libAfterConf.a: No such file or directory
+  # Let's disable parallel builds until it's fixed upstream:
+  #   https://github.com/afterstep/afterstep/issues/8
+  enableParallelBuilding = false;
 
   meta = with lib; {
     description = "A NEXTStep-inspired window manager";

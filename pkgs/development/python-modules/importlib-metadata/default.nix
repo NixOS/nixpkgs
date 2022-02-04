@@ -10,16 +10,20 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "4.6.4";
-  disabled = pythonOlder "3.6";
+  version = "4.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    sha256 = "sha256-ezCnjbKSLXim9H+zBoMVahTzxqpcwj93zIln6astAC8=";
+    hash = "sha256-kqi1jOc0sqRJSHjg7PfXnM16EotfxgFMQB4LYfAG8PY=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     toml
@@ -30,7 +34,10 @@ buildPythonPackage rec {
 
   # Cyclic dependencies due to pyflakefs
   doCheck = false;
-  pythonImportsCheck = [ "importlib_metadata" ];
+
+  pythonImportsCheck = [
+    "importlib_metadata"
+  ];
 
   meta = with lib; {
     description = "Read metadata from Python packages";

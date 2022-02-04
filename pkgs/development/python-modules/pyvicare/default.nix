@@ -10,14 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pyvicare";
-  version = "2.13.1";
+  version = "2.14.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "somm15";
     repo = "PyViCare";
     rev = version;
-    sha256 = "sha256-L43aickagJolw+VTRX4ZwRcfOm9fMBZOimPx8jLPHhE=";
+    sha256 = "sha256-+Rjs5PwsjcE8vsCS9gHmEj2Hy2OSH/YxNjYgjrBXHPk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -38,7 +40,9 @@ buildPythonPackage rec {
       --replace "'setuptools-git-versioning'" " "
   '';
 
-  pythonImportsCheck = [ "PyViCare" ];
+  pythonImportsCheck = [
+    "PyViCare"
+  ];
 
   meta = with lib; {
     description = "Python Library to access Viessmann ViCare API";

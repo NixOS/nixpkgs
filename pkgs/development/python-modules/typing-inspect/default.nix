@@ -3,7 +3,6 @@
 , fetchPypi
 , typing-extensions
 , mypy-extensions
-, isPy39
 }:
 
 buildPythonPackage rec {

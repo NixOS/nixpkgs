@@ -13,7 +13,7 @@
 let
   # Get as close as possible as the `package.json` required version.
   # This is what drives omnisharp.
-  rtDepsSrcsFromJson = builtins.fromJSON (builtins.readFile ./rt-deps-bin-srcs.json);
+  rtDepsSrcsFromJson = lib.importJSON ./rt-deps-bin-srcs.json;
 
   rtDepsBinSrcs = builtins.mapAttrs (k: v:
       let

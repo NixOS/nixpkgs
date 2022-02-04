@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "impacket";
-  version = "0.9.23";
+  version = "0.9.24";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c1be8a50cdbe3cffc566ba64f552b1b28bcc79b7a406b833956b49c56d77184";
+    sha256 = "18d557d387f4914fafa739813b9172bc3f8bd9c036e93bf589a8e0ebb7304bba";
   };
 
   propagatedBuildInputs = [ flask ldapdomaindump pycryptodomex pyasn1 pyopenssl chardet setuptools ];

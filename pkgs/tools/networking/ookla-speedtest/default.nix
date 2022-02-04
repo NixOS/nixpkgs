@@ -2,16 +2,16 @@
 
 let
   pname = "ookla-speedtest";
-  version = "1.0.0";
+  version = "1.1.1";
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://install.speedtest.net/app/cli/${pname}-${version}-x86_64-linux.tgz";
-      sha256 = "sha256-X+ICjw1EJ+T0Ix2fnPcOZpG7iQpwY211Iy/k2XBjMWg=";
+      url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-x86_64.tgz";
+      sha256 = "sha256-lwR3/f7k10HnXwiPr2SPm1HHvgQxP7iP+13gfrGjBAw=";
     };
     aarch64-linux = fetchurl {
-      url = "https://install.speedtest.net/app/cli/${pname}-${version}-aarch64-linux.tgz";
-      sha256 = "sha256-BzaE3DSQUIygGwTFhV4Ez9eX/tM/bqam7cJt+8b2qp4=";
+      url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-aarch64.tgz";
+      sha256 = "sha256-J2pAhz/hw8okohWAwvxkqpLtNY/8bbYHGhPQOo1DH9k=";
     };
   };
 in
@@ -19,7 +19,7 @@ in
 stdenv.mkDerivation rec {
   inherit pname version;
 
-  src = srcs.${stdenv.hostPlatform.system};
+  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   setSourceRoot = ''
     sourceRoot=$PWD

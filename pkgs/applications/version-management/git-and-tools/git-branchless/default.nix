@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-branchless";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
     rev = "v${version}";
-    sha256 = "sha256-knRRjTjnhpedcQTVpJnBsrnaeRbjZ2i3aABeE0LrQ+c=";
+    sha256 = "sha256-eDVC1tvAkCioV0Mi5f/Qkc0MMTNaoFXuvWXpllZ7PgE=";
   };
 
-  cargoSha256 = "sha256-NyzsY5d4iC3zMSzmh9Qmd211oT6lmhUdvIfQdnzrtok=";
+  cargoSha256 = "sha256-wtG/WTmZ13jxIawI9j9QKQm7jPx5TUs7MjqX+lq/Vf0=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -42,6 +42,11 @@ rustPlatform.buildRustPackage rec {
     export PATH_TO_GIT=${git}/bin/git
     export GIT_EXEC_PATH=$(${git}/bin/git --exec-path)
   '';
+  # FIXME: these tests deadlock when run in the Nix sandbox
+  checkFlags = [
+    "--skip=test_checkout_pty"
+    "--skip=test_next_ambiguous_interactive"
+  ];
 
   meta = with lib; {
     description = "A suite of tools to help you visualize, navigate, manipulate, and repair your commit history";

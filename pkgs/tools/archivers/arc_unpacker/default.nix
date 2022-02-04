@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper, boost, libpng, libiconv
-, libjpeg, zlib, openssl, libwebp, catch }:
+, libjpeg, zlib, openssl, libwebp, catch2 }:
 
 stdenv.mkDerivation rec {
   pname = "arc_unpacker";
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "1xxrc9nww0rla3yh10z6glv05ax4rynwwbd0cdvkp7gyqzrv97xp";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper catch ];
+  nativeBuildInputs = [ cmake makeWrapper catch2 ];
   buildInputs = [ boost libpng libjpeg zlib openssl libwebp ]
     ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   postPatch = ''
-    cp ${catch}/include/catch/catch.hpp tests/test_support/catch.h
+    cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
   '';
 
   checkPhase = ''
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # A few tests fail on aarch64
-  doCheck = !stdenv.isAarch64;
+  # A few tests fail on aarch64-linux
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   meta = with lib; {
     description = "A tool to extract files from visual novel archives";

@@ -32,7 +32,7 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "bkyml" ];
 
   propagatedBuildInputs = [
-    ruamel_yaml
+    ruamel-yaml
     setuptools
   ];
 

@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/phisch/giph";
     description = "Simple gif recorder";
     license = licenses.mit;
-    maintainers = [ maintainers.legendofmiracles ];
+    maintainers = [ maintainers.lom ];
     platforms = platforms.linux;
   };
 }

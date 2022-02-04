@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, fetchpatch, fetchFromGitHub, autoreconfHook }:
+{ callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, autoreconfHook }:
 let
   common = opts: callPackage (import ./common.nix opts) { };
 in
@@ -6,41 +6,43 @@ in
 
   openssh = common rec {
     pname = "openssh";
-    version = "8.7p1";
+    version = "8.8p1";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      sha256 = "090yxpi03pxxzb4ppx8g8hdpw7c4nf8p0avr6c7ybsaana5lp8vw";
+      sha256 = "1s8z6f7mi1pwsl79cqai8cr350m5lf2ifcxff57wx6mvm478k425";
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
+    extraMeta.maintainers = with lib.maintainers; [ das_j ];
   };
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "8.4p1";
+    version = "8.8p1";
     extraDesc = " with high performance networking patches";
 
-    src = fetchFromGitHub {
-      owner = "rapier1";
-      repo = "openssh-portable";
-      rev = "hpn-KitchenSink-${builtins.replaceStrings [ "." "p" ] [ "_" "_P" ] version}";
-      hash = "sha256-SYQPDGxZR41m4g603RaZaOYm4vCr9uZnFnZoKhruueY=";
+    src = fetchurl {
+      url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
+      sha256 = "1s8z6f7mi1pwsl79cqai8cr350m5lf2ifcxff57wx6mvm478k425";
     };
 
     extraPatches = [
-      ./ssh-keysign-8.4.patch
+      ./ssh-keysign-8.5.patch
 
-      # See https://github.com/openssh/openssh-portable/pull/206
-      ./ssh-copy-id-fix-eof.patch
+      # HPN Patch from FreeBSD ports
+      (fetchpatch {
+        name = "ssh-hpn.patch";
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/a981593e/security/openssh-portable/files/extra-patch-hpn";
+        stripLen = 1;
+        sha256 = "sha256-+JvpPxktZAjhxLLK1lF4ijG9VlSWkqbRwotaLe6en64=";
+      })
     ];
 
     extraNativeBuildInputs = [ autoreconfHook ];
 
-    extraMeta.knownVulnerabilities = [
-      "CVE-2021-28041"
-      "CVE-2021-41617"
-    ];
+    extraConfigureFlags = [ "--with-hpn" ];
+    extraMeta.maintainers = with lib.maintainers; [ abbe ];
   };
 
   openssh_gssapi = common rec {

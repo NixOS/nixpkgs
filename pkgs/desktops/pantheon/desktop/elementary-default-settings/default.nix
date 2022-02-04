@@ -1,9 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , nixos-artwork
@@ -17,25 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "6.0.1";
-
-  repoName = "default-settings";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "default-settings";
     rev = version;
-    sha256 = "0gqnrm968j4v699yhhiyw5fqjy4zbvvrjci2v1jrlycn09c2yrwf";
+    sha256 = "sha256-qaPj/Qp7RYzHgElFdM8bHV42oiPUbCMTC9Q+MUj4Q6Y=";
   };
-
-  patches = [
-    # Update gtk-theme-name and gtk-font-name for Pantheon 6
-    # https://github.com/elementary/default-settings/pull/252
-    (fetchpatch {
-      url = "https://github.com/elementary/default-settings/commit/be24c151492bb9115c75bd1a7abc88714240294a.patch";
-      sha256 = "sha256-EglFiN4CLbL8osfNGLvjD220Al35uBXuRNC9Ud3QYBI=";
-    })
-  ];
 
   nativeBuildInputs = [
     accountsservice
@@ -68,20 +55,12 @@ stdenv.mkDerivation rec {
     # Our launchers that use paths at /run/current-system/sw/bin
     mkdir -p $out/etc/skel/.config/plank/dock1
     cp -avr ${./launchers} $out/etc/skel/.config/plank/dock1/launchers
-
-    # Whitelist wingpanel indicators to be used in the greeter
-    # https://github.com/elementary/greeter/blob/fc19752f147c62767cd2097c0c0c0fcce41e5873/debian/io.elementary.greeter.whitelist
-    # wingpanel 2.3.2 renamed this to .allowed to .forbidden
-    # https://github.com/elementary/wingpanel/pull/326
-    install -D ${./io.elementary.greeter.allowed} $out/etc/wingpanel.d/io.elementary.greeter.allowed
   '';
 
   postFixup = ''
     # https://github.com/elementary/default-settings/issues/55
-    rm -rf $out/share/plymouth
-    rm -rf $out/share/cups
-
-    rm -rf $out/share/applications
+    rm -r $out/share/cups
+    rm -r $out/share/applications
   '';
 
   passthru = {

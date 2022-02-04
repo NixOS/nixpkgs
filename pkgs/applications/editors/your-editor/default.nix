@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "your-editor";
-  version = "1203";
+  version = "1303";
 
   src = fetchFromGitHub {
-    owner = "kammerdienerb";
+    owner = "your-editor";
     repo = "yed";
-    rev = "608418f2037dc4ef5647e69fcef45302c50f138c";
-    sha256 = "KqK2lcDTn91aCFJIDg+h+QsTrl7745So5aiKCxPkeh4=";
+    rev = version;
+    sha256 = "BWy/icQs8hVtNeM/mCi6LOah1UG0elU/DgCmfaIPD64=";
   };
 
   installPhase = ''
@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Your-editor (yed) is a small and simple terminal editor core that is meant to be extended through a powerful plugin architecture";
     homepage = "https://your-editor.org/";
+    changelog = "https://github.com/your-editor/yed/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ uniquepointer ];
     mainProgram = "yed";
   };

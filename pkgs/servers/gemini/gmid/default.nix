@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, bison, libressl, libevent }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, libressl, libevent }:
 
 stdenv.mkDerivation rec {
   pname = "gmid";
-  version = "1.7.5";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BBd0AL5jRRslxzDnxcTZRR+8J5D23NAQ7mp9K+leXAQ=";
+    sha256 = "sha256-CwJPaZefRDyn2fliOd9FnOLXq70HFu2RsUZhzWQdE3E";
   };
 
   nativeBuildInputs = [ bison ];

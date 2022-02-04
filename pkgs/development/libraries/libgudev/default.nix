@@ -5,9 +5,10 @@
 , ninja
 , udev
 , glib
-, gobject-introspection
 , gnome
 , vala
+, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
@@ -21,12 +22,18 @@ stdenv.mkDerivation rec {
     sha256 = "1al6nr492nzbm8ql02xhzwci2kwb1advnkaky3j9636jf08v41hd";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     pkg-config
-    gobject-introspection
     meson
     ninja
     vala
+    glib # for glib-mkenums needed during the build
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -37,8 +44,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
     "-Dtests=disabled"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
     "-Dvapi=disabled"
   ];
 

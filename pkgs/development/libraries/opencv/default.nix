@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, unzip
 , zlib
-, enablePython ? false, pythonPackages
+, enablePython ? false, python2Packages
 , enableGtk2 ? false, gtk2
 , enableJPEG ? true, libjpeg
 , enablePNG ? true, libpng
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
        [ zlib ]
-    ++ lib.optional enablePython pythonPackages.python
+    ++ lib.optional enablePython python2Packages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]
     ;
 
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
+  propagatedBuildInputs = lib.optional enablePython python2Packages.numpy;
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 

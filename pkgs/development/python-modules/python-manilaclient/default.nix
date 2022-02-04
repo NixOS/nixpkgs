@@ -18,11 +18,11 @@
 
 buildPythonApplication rec {
   pname = "python-manilaclient";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d90af35c5beccc53fa6b0f5a3c4b330a065e86924c33c42b017f18943ab2b05";
+    sha256 = "d53f69238cdc454c0297f513e0b481a039d0bac723990ebd5ab9d3d29633956e";
   };
 
   propagatedBuildInputs = [

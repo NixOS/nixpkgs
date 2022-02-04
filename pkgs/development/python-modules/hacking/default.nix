@@ -4,9 +4,7 @@
 , pbr
 , flake8
 , stestr
-, eventlet
 , ddt
-, testtools
 , testscenarios
 }:
 
@@ -37,7 +35,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    stestr run
+    stestr run -e <(echo "
+      hacking.tests.test_doctest.HackingTestCase.test_flake8
+    ")
   '';
 
   pythonImportsCheck = [ "hacking" ];

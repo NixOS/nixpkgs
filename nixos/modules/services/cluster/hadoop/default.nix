@@ -1,6 +1,7 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, options, pkgs, ...}:
 let
   cfg = config.services.hadoop;
+  opt = options.services.hadoop;
 in
 with lib;
 {
@@ -15,7 +16,10 @@ with lib;
           "fs.defaultFS" = "hdfs://localhost";
         }
       '';
-      description = "Hadoop core-site.xml definition";
+      description = ''
+        Hadoop core-site.xml definition
+        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/core-default.xml"/>
+      '';
     };
 
     hdfsSite = mkOption {
@@ -28,7 +32,10 @@ with lib;
           "dfs.nameservices" = "namenode1";
         }
       '';
-      description = "Hadoop hdfs-site.xml definition";
+      description = ''
+        Hadoop hdfs-site.xml definition
+        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml"/>
+      '';
     };
 
     mapredSite = mkOption {
@@ -38,13 +45,24 @@ with lib;
         "mapreduce.map.env" = "HADOOP_MAPRED_HOME=${cfg.package}/lib/${cfg.package.untarDir}";
         "mapreduce.reduce.env" = "HADOOP_MAPRED_HOME=${cfg.package}/lib/${cfg.package.untarDir}";
       };
+      defaultText = literalExpression ''
+        {
+          "mapreduce.framework.name" = "yarn";
+          "yarn.app.mapreduce.am.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}";
+          "mapreduce.map.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}";
+          "mapreduce.reduce.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}";
+        }
+      '';
       type = types.attrsOf types.anything;
       example = literalExpression ''
         options.services.hadoop.mapredSite.default // {
           "mapreduce.map.java.opts" = "-Xmx900m -XX:+UseParallelGC";
         }
       '';
-      description = "Hadoop mapred-site.xml definition";
+      description = ''
+        Hadoop mapred-site.xml definition
+        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml"/>
+      '';
     };
 
     yarnSite = mkOption {
@@ -67,11 +85,31 @@ with lib;
           "yarn.resourcemanager.hostname" = "''${config.networking.hostName}";
         }
       '';
-      description = "Hadoop yarn-site.xml definition";
+      description = ''
+        Hadoop yarn-site.xml definition
+        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-common/yarn-default.xml"/>
+      '';
+    };
+
+    httpfsSite = mkOption {
+      default = { };
+      type = types.attrsOf types.anything;
+      example = literalExpression ''
+        {
+          "hadoop.http.max.threads" = 500;
+        }
+      '';
+      description = ''
+        Hadoop httpfs-site.xml definition
+        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-hdfs-httpfs/httpfs-default.html"/>
+      '';
     };
 
     log4jProperties = mkOption {
       default = "${cfg.package}/lib/${cfg.package.untarDir}/etc/hadoop/log4j.properties";
+      defaultText = literalExpression ''
+        "''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}/etc/hadoop/log4j.properties"
+      '';
       type = types.path;
       example = literalExpression ''
         "''${pkgs.hadoop}/lib/''${pkgs.hadoop.untarDir}/etc/hadoop/log4j.properties";
@@ -92,7 +130,10 @@ with lib;
           "feature.terminal.enabled" = 0;
         }
       '';
-      description = "Yarn container-executor.cfg definition";
+      description = ''
+        Yarn container-executor.cfg definition
+        <link xlink:href="https://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-site/SecureContainer.html"/>
+      '';
     };
 
     extraConfDirs = mkOption {
@@ -118,7 +159,8 @@ with lib;
 
   config = mkMerge [
     (mkIf (builtins.hasAttr "yarn" config.users.users ||
-           builtins.hasAttr "hdfs" config.users.users) {
+           builtins.hasAttr "hdfs" config.users.users ||
+           builtins.hasAttr "httpfs" config.users.users) {
       users.groups.hadoop = {
         gid = config.ids.gids.hadoop;
       };

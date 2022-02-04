@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python, wafHook }:
+{ lib, stdenv, fetchFromGitHub, python2, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "pflask";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ wafHook ];
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
 
   meta = {
     description = "Lightweight process containers for Linux";

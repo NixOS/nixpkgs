@@ -31,10 +31,11 @@ let
 
     buildAndTestSubdir = "adapter";
 
+    buildFeatures = [ "weak-linkage" ];
+
     cargoBuildFlags = [
       "--lib"
       "--bin=codelldb"
-      "--features=weak-linkage"
     ];
 
     # Tests are linked to liblldb but it is not available here.

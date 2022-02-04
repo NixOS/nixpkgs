@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
-  baseName = "sockets";
+  pname = "pure-sockets";
   version = "0.7";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-sockets-${version}.tar.gz";
     sha256 = "4f2769618ae5818cf6005bb08bcf02fe359a2e31998d12dc0c72f0494e9c0420";
   };
 

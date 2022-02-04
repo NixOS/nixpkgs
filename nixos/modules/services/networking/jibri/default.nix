@@ -132,7 +132,7 @@ in
         pkgs.writeScript "finalize_recording.sh" ''''''
         #!/bin/sh
         RECORDINGS_DIR=$1
-        ${pkgs.rclone}/bin/rclone copy $RECORDINGS_DIR RCLONE_REMOTE:jibri-recordings/ -v --log-file=/var/log/jitsi/jibri/recording-upload.txt
+        ''${pkgs.rclone}/bin/rclone copy $RECORDINGS_DIR RCLONE_REMOTE:jibri-recordings/ -v --log-file=/var/log/jitsi/jibri/recording-upload.txt
         exit 0
         '''''';
       '';

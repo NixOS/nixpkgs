@@ -3,12 +3,12 @@
 
 mkDerivation rec {
   pname = "jamulus";
-  version = "3.8.0";
+  version = "3.8.1";
   src = fetchFromGitHub {
     owner = "jamulussoftware";
     repo = "jamulus";
     rev = "r${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-Ni6N7XW34OFNuEkqBEgMcYGmIqb+UZ0uhLt/shRkWRs=";
+    sha256 = "sha256-QtlvcKVqKgRAO/leHy4CgvjNW49HAyZLI2JtKERP7HQ=";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];

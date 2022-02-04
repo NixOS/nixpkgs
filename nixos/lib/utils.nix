@@ -1,4 +1,4 @@
-pkgs: with pkgs.lib;
+{ lib, config, pkgs }: with lib;
 
 rec {
 
@@ -10,7 +10,7 @@ rec {
   # Check whenever fileSystem is needed for boot.  NOTE: Make sure
   # pathsNeededForBoot is closed under the parent relationship, i.e. if /a/b/c
   # is in the list, put /a and /a/b in as well.
-  pathsNeededForBoot = [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/var/lib/nixos" "/etc" ];
+  pathsNeededForBoot = [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/var/lib/nixos" "/etc" "/usr" ];
   fsNeededForBoot = fs: fs.neededForBoot || elem fs.mountPoint pathsNeededForBoot;
 
   # Check whenever `b` depends on `a` as a fileSystem
@@ -149,10 +149,16 @@ rec {
       if [[ -h '${output}' ]]; then
         rm '${output}'
       fi
+
+      inherit_errexit_restore=$(shopt -p inherit_errexit)
+      shopt -s inherit_errexit
     ''
     + concatStringsSep
         "\n"
-        (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
+        (imap1 (index: name: ''
+                  secret${toString index}=$(<'${secrets.${name}}')
+                  export secret${toString index}
+                '')
                (attrNames secrets))
     + "\n"
     + "${pkgs.jq}/bin/jq >'${output}' '"
@@ -164,5 +170,11 @@ rec {
       ' <<'EOF'
       ${builtins.toJSON set}
       EOF
+      $inherit_errexit_restore
     '';
+
+  systemdUtils = {
+    lib = import ./systemd-lib.nix { inherit lib config pkgs; };
+    unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
+  };
 }

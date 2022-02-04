@@ -15,11 +15,11 @@ in
 with lib;
 stdenv.mkDerivation rec {
   pname = "libass";
-  version = "0.15.1";
+  version = "0.15.2";
 
   src = fetchurl {
     url = "https://github.com/libass/libass/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-HN05ydAHsG5zfnc4AE1/OM+bHpKEPzcweyTn/2OrjlM=";
+    sha256 = "sha256-G+LfnESFpX14uxjAqO0Ve8h6Wo3UjGYZYcYlyxEoMv0=";
   };
 
   configureFlags = [

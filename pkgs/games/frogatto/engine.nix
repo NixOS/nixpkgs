@@ -4,20 +4,15 @@
 
 stdenv.mkDerivation {
   pname = "anura-engine";
-  version = "unstable-2021-05-24";
+  version = "unstable-2021-11-23";
 
   src = fetchFromGitHub {
     owner = "anura-engine";
     repo = "anura";
-    rev = "ed50bbfa68a4aa09438d95d39103ec39156d438f";
-    sha256 = "0bk0qklk9wwx3jr2kbrmansccn1nj962v5n2vlb5hxsrcv96s3dg";
+    rev = "816425df31624066e2815e26a25b1c5d3d355cb4";
+    sha256 = "1k7fnfgz003gcbyygv4aakhkkz3w3z9nyz7dlwz01xa6122zqyir";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace src/sys.cpp \
-      --replace mallinfo2 mallinfo
-  '';
 
   nativeBuildInputs = [
     which pkg-config

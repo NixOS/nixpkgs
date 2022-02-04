@@ -3,17 +3,21 @@
 , fetchFromGitHub
 , mock
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python_http_client";
-  version = "3.3.3";
+  version = "3.3.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sendgrid";
     repo = "python-http-client";
     rev = version;
-    sha256 = "sha256-cZqyu67xP0UIKYbhYYTNL5kLiPjjMjayde75sqkHZhg=";
+    sha256 = "sha256-VSrh6t9p7Xb8HqAwcuDSUD2Pj3NcXeg7ygKLG2MHFxk=";
   };
 
   checkInputs = [
@@ -21,9 +25,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Failure was fixed by https://github.com/sendgrid/python-http-client/commit/6d62911ab0d0645b499e14bb17c302b48f3c10e4
-  disabledTests = [ "test__daterange" ];
-  pythonImportsCheck = [ "python_http_client" ];
+  pythonImportsCheck = [
+    "python_http_client"
+  ];
 
   meta = with lib; {
     description = "Python HTTP library to call APIs";

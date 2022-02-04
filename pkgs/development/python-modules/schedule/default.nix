@@ -15,6 +15,13 @@ buildPythonPackage rec {
 
   buildInputs = [ mock ];
 
+  preCheck = ''
+    # https://github.com/dbader/schedule/issues/488
+    substituteInPlace test_schedule.py --replace \
+      "self.assertRaises(ScheduleValueError, every().day.until, datetime.time(hour=5))" \
+      "# self.assertRaises(ScheduleValueError, every().day.until, datetime.time(hour=5))"
+  '';
+
   meta = with lib; {
     description = "Python job scheduling for humans";
     homepage = "https://github.com/dbader/schedule";

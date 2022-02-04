@@ -12,13 +12,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "stgit";
-  version = "1.3";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    sha256 = "0wa3ba7afnbb1h08n9xr0cqsg93rx0qd9jv8a34mmpp0lpijmjw6";
+    sha256 = "sha256-TsJr2Riygz/DZrn6UZMPvq1tTfvl3dFEZZNq2wVj1Nw=";
   };
 
   nativeBuildInputs = [ installShellFiles asciidoc xmlto docbook_xsl docbook_xml_dtd_45 ];

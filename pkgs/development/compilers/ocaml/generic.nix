@@ -64,9 +64,15 @@ stdenv.mkDerivation (args // {
     "-target ${stdenv.targetPlatform.config}"
   ];
   dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
-  configurePlatforms = lib.optionals (lib.versionAtLeast version "4.08") [ "host" "target" ];
+
+  # on aarch64-darwin using --host and --target causes the build to invoke
+  # `aarch64-apple-darwin-clang` while using assembler. However, such binary
+  # does not exist. So, disable these configure flags on `aarch64-darwin`.
+  # See #144785 for details.
+  configurePlatforms = lib.optionals (lib.versionAtLeast version "4.08" && !(stdenv.isDarwin && stdenv.isAarch64)) [ "host" "target" ];
   # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
-  hardeningDisable = lib.optional (lib.versionAtLeast version "4.09" && stdenv.hostPlatform.isMusl) "pie";
+  hardeningDisable = lib.optional (lib.versionAtLeast version "4.09" && stdenv.hostPlatform.isMusl) "pie"
+    ++ lib.optionals (args ? hardeningDisable) args.hardeningDisable;
 
   buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
   buildInputs = optional (!lib.versionAtLeast version "4.07") ncurses
@@ -76,7 +82,7 @@ stdenv.mkDerivation (args // {
   preConfigure = optionalString (!lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
-  '' + optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  '' + optionalString (stdenv.isDarwin && !lib.versionAtLeast version "4.13") ''
     # Do what upstream does by default now: https://github.com/ocaml/ocaml/pull/10176
     # This is required for aarch64-darwin, everything else works as is.
     AS="${stdenv.cc}/bin/cc -c" ASPP="${stdenv.cc}/bin/cc -c"

@@ -9,21 +9,22 @@
 , shaderc
 , glslang
 , lcms2
-, epoxy
+, libepoxy
 , libGL
 , xorg
+, libunwind
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "4.157.0";
+  version = "4.192.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08kqsd29h8wm0vz7698wh2mdgpwv6anqc5n7d1spnnamwyfwc64h";
+    sha256 = "19i7p9z8mmki5yq26059dp9055cccgxs0vfdlx0w1qak7pmv1vpm";
   };
 
   nativeBuildInputs = [
@@ -39,9 +40,10 @@ stdenv.mkDerivation rec {
     shaderc
     glslang
     lcms2
-    epoxy
+    libepoxy
     libGL
     xorg.libX11
+    libunwind
   ];
 
   mesonFlags = [

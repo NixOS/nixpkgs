@@ -13,6 +13,7 @@ mkXfceDerivation {
   category = "thunar-plugins";
   pname = "thunar-media-tags-plugin";
   version = "0.3.0";
+  odd-unstable = false;
 
   sha256 = "sha256-jtgcHH5U5GOvzDVUwPEreMtTdk5DT6sXvFPDbzbF684=";
 
@@ -31,6 +32,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Thunar plugin providing tagging and renaming features for media files";
-    maintainers = with maintainers; [ ncfavier ];
+    maintainers = with maintainers; [ ncfavier ] ++ teams.xfce.members;
   };
 }

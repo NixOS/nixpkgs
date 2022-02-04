@@ -1,15 +1,12 @@
 { lib, stdenv, fetchFromGitHub, libevent }:
 
-let
-  pkg = "redsocks";
+stdenv.mkDerivation rec {
+  pname = "redsocks";
   version = "0.5";
-in
-stdenv.mkDerivation {
-  name = "${pkg}-${version}";
 
   src = fetchFromGitHub {
     owner = "darkk";
-    repo = pkg;
+    repo = "redsocks";
     rev = "release-${version}";
     sha256 = "170cpvvivb6y2kwsqj9ppx5brgds9gkn8mixrnvj8z9c15xhvplm";
   };

@@ -31,8 +31,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ contextlib2 ];
 
+  preConfigure = ''
+    substituteInPlace setup.py \
+        --replace "'pkg-config'" "'${stdenv.cc.targetPrefix}pkg-config'"
+  '';
+
   preBuild = ''
-    ${python.interpreter} setup.py build_cython
+    ${python.pythonForBuild.interpreter} setup.py build_cython
   '';
 
   # On Darwin, the test requires macFUSE to be installed outside of Nix.

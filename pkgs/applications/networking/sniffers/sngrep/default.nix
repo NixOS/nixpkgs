@@ -3,6 +3,7 @@
 , autoconf
 , automake
 , fetchFromGitHub
+, fetchpatch
 , libpcap
 , ncurses
 , openssl
@@ -19,6 +20,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-92wPRDFSoIOYFv3XKdsuYH8j3D8kXyg++q6VpIIMGDg=";
   };
+
+  patches = [
+    # Pull fix pending upstream inclusion for ncurses-6.3 support:
+    #  https://github.com/irontec/sngrep/pull/382
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://github.com/irontec/sngrep/commit/d09e1c323dbd7fc899e8985899baec568f045601.patch";
+      sha256 = "sha256-nY5i3WQh/oKboEAh4wvxF5Imf2BHYEKdFj+WF1M3SSA=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf

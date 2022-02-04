@@ -1,4 +1,4 @@
-{ lib, stdenv, ffmpeg, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
+{ lib, stdenv, buildPackages, ffmpeg, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -107,7 +107,7 @@
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
 #, opencv ? null # Video filtering
 , openglExtlib ? false, libGL ? null, libGLU ? null # OpenGL rendering
-#, openh264 ? null # H.264/AVC encoder
+, openh264 ? null # H.264/AVC encoder
 , openjpeg ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
 , libpulseaudio ? null # Pulseaudio input support
@@ -132,6 +132,7 @@
 , xavs ? null # AVS encoder
 , xvidcore ? null # Xvid encoder, native encoder exists
 , zeromq4 ? null # Message passing
+, zimg ? null
 , zlib ? null
 , vulkan-loader ? null
 , glslang ? null
@@ -163,7 +164,7 @@
  *
  * Not packaged:
  *   aacplus avisynth cdio-paranoia crystalhd libavc1394 libiec61883
- *   libnut libquvi nvenc opencl openh264 oss shine twolame
+ *   libnut libquvi nvenc opencl oss shine twolame
  *   utvideo vo-aacenc vo-amrwbenc xvmc zvbi blackmagic-design-desktop-video
  *
  * Need fixes to support Darwin:
@@ -259,7 +260,7 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [];
   configureFlags = [
-    "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
+    "--target_os=${if stdenv.hostPlatform.isMinGW then "mingw64" else stdenv.hostPlatform.parsed.kernel.name}" #mingw32 and mingw64 doesn't have a difference here, it is internally rewritten as mingw32
     "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
     /*
      *  Licensing flags
@@ -281,7 +282,7 @@ stdenv.mkDerivation rec {
     (enableFeature hardcodedTablesBuild "hardcoded-tables")
     (enableFeature safeBitstreamReaderBuild "safe-bitstream-reader")
     (if multithreadBuild then (
-       if isCygwin then
+       if stdenv.hostPlatform.isWindows then
          "--disable-pthreads --enable-w32threads"
        else # Use POSIX threads by default
          "--enable-pthreads --disable-w32threads")
@@ -381,7 +382,7 @@ stdenv.mkDerivation rec {
     (enableFeature (opencore-amr != null && version3Licensing) "libopencore-amrnb")
     #(enableFeature (opencv != null) "libopencv")
     (enableFeature openglExtlib "opengl")
-    #(enableFeature (openh264 != null) "openh264")
+    (enableFeature (openh264 != null) "libopenh264")
     (enableFeature (openjpeg != null) "libopenjpeg")
     (enableFeature (opensslExtlib && gplLicensing) "openssl")
     (enableFeature (libpulseaudio != null) "libpulse")
@@ -403,6 +404,7 @@ stdenv.mkDerivation rec {
     (enableFeature (xavs != null && gplLicensing) "libxavs")
     (enableFeature (xvidcore != null && gplLicensing) "libxvid")
     (enableFeature (zeromq4 != null) "libzmq")
+    (enableFeature (zimg != null) "libzimg")
     (enableFeature (zlib != null) "zlib")
     (enableFeature (isLinux && vulkan-loader != null) "vulkan")
     (enableFeature (isLinux && vulkan-loader != null && glslang != null) "libglslang")
@@ -418,6 +420,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     "--enable-cross-compile"
+    "--host-cc=${buildPackages.stdenv.cc}/bin/cc"
   ] ++ optionals stdenv.cc.isClang [
     "--cc=clang"
     "--cxx=clang++"
@@ -431,7 +434,7 @@ stdenv.mkDerivation rec {
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv libXext xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
     samba SDL2 soxr speex srt vid-stab vo-amrwbenc x264 x265 xavs xvidcore
-    zeromq4 zlib
+    zeromq4 zimg zlib openh264
   ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva

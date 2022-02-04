@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "certigo";
-  version = "1.12.1";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0siwbxxzknmbsjy23d0lvh591ngabqhr2g8mip0siwa7c1y7ivv4";
+    sha256 = "sha256-P6xXXY0INB3Eyuxs1LEJlm2NBfMbG/HvlbIKUMAOxZE=";
   };
 
-  vendorSha256 = "1l6ajfl04rfbssvijgd5jrppmqc5svfrswdx01x007lr8rvdfd94";
+  vendorSha256 = "sha256-0wul0f8T7E4cXbsNee1j1orUgjrAToqDLgwCjiyii1Y=";
 
   doCheck = false;
 

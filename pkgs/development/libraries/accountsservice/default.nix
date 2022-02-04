@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
@@ -40,12 +41,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     polkit
+    systemd
   ];
 
   mesonFlags = [
     "-Dadmin_group=wheel"
     "-Dlocalstatedir=/var"
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dsystemd=true"
   ];
 
   postPatch = ''
@@ -89,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

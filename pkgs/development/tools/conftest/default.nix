@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.28.2";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "sha256-lmmk6veBDI51UA/wnFB7Q3DTxZ9J/1qp0OoNgmBrR1Y=";
+    sha256 = "sha256-8/eZz5ejw5bahCYwz825HI+oZ6D1odeTpMIJh0TcGMY=";
   };
-  vendorSha256 = "sha256-NALyUjFL6OqgCke1QiUxbSNLAoaIMB2zeIWWEfcnCjs=";
+  vendorSha256 = "sha256-wvOtBK3lRK7XwgeClywowgrZLohltSTGdoB+j3NRmkE=";
 
   ldflags = [
     "-s"
@@ -52,6 +52,6 @@ buildGoModule rec {
       assertions. You can read more about Rego in 'How do I write policies' in
       the Open Policy Agent documentation.
     '';
-    maintainers = with maintainers; [ jk superherointj yurrriq ];
+    maintainers = with maintainers; [ jk yurrriq ];
   };
 }

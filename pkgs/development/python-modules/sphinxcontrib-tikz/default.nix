@@ -1,5 +1,4 @@
 { lib
-, substituteAll
 , buildPythonPackage
 , fetchPypi
 , sphinx

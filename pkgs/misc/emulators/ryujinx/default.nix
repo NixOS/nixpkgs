@@ -1,19 +1,22 @@
 { lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem, copyDesktopItems
-, libX11, libgdiplus, ffmpeg
+, dotnetCorePackages, libX11, libgdiplus, ffmpeg
 , SDL2_mixer, openal, libsoundio, sndio, pulseaudio
-, gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
+, gtk3, gdk-pixbuf, wrapGAppsHook
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.0.7086"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.7168"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "85d8d1d7cab5615e6911b7b570c8dd0b94a521ab";
-    sha256 = "11j54c7qrb7vcay8bjpv2jykdnwsjhf5cmqds43wvbicigbbds54";
+    rev = "6e0799580f0d1b473a79471c5d365c6524d97a86";
+    sha256 = "145sn9xkjxj79292faypcdmpmbxm1w70q0iprg6pfymf9920gvfv";
   };
+
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   projectFile = "Ryujinx.sln";
   nugetDeps = ./deps.nix;
@@ -27,7 +30,10 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     copyDesktopItems
     wrapGAppsHook
-    gobject-introspection
+  ];
+
+  buildInputs = [
+    gtk3
     gdk-pixbuf
   ];
 
@@ -78,6 +84,7 @@ buildDotnetModule rec {
     changelog = "https://github.com/Ryujinx/Ryujinx/wiki/Changelog";
     maintainers = [ maintainers.ivar ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "Ryujinx";
   };
   passthru.updateScript = ./updater.sh;
 }

@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  pname = "qrcode-git";
-  version = "20160804";
+  pname = "qrcode";
+  version = "unstable-2016-08-04";
 
   src = fetchFromGitHub {
-    owner  = "qsantos";
-    repo   = "qrcode";
-    rev    = "ad0fdb4aafd0d56b903f110f697abaeb27deee73";
+    owner = "qsantos";
+    repo = "qrcode";
+    rev = "ad0fdb4aafd0d56b903f110f697abaeb27deee73";
     sha256 = "0v81745nx5gny2g05946k8j553j18a29ikmlyh6c3syq6c15k8cf";
   };
 

@@ -2,7 +2,7 @@
 , fixup_yarn_lock, yarn, pkg-config, libsecret, xcbuild, Security, AppKit, fetchYarnDeps }:
 
 let
-  pinData = (builtins.fromJSON (builtins.readFile ./pin.json));
+  pinData = lib.importJSON ./pin.json;
 
 in stdenv.mkDerivation rec {
   pname = "keytar";

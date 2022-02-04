@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , attrs
 , functools32
 , importlib-metadata

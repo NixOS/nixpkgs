@@ -27,6 +27,10 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
+  fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
+  fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
+  fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
+
   install-shell-files = callPackage ./install-shell-files {};
 
   kernel-config = callPackage ./kernel.nix {};
@@ -36,6 +40,8 @@ with pkgs;
   macOSSierraShared = callPackage ./macos-sierra-shared {};
 
   cross = callPackage ./cross {};
+
+  php = recurseIntoAttrs (callPackages ./php {});
 
   rustCustomSysroot = callPackage ./rust-sysroot {};
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
@@ -51,8 +57,14 @@ with pkgs;
 
   cuda = callPackage ./cuda { };
 
-  trivial = callPackage ../build-support/trivial-builders/test.nix {};
-  trivial-overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
+  trivial-builders = recurseIntoAttrs {
+    writeStringReferencesToFile = callPackage ../build-support/trivial-builders/test/writeStringReferencesToFile.nix {};
+    references = callPackage ../build-support/trivial-builders/test/references.nix {};
+    overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
+    concat = callPackage ../build-support/trivial-builders/test/concat-test.nix {};
+  };
 
   writers = callPackage ../build-support/writers/test.nix {};
+
+  dhall = callPackage ./dhall { };
 }

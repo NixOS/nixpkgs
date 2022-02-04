@@ -4,13 +4,13 @@
 }: stdenv.mkDerivation rec {
 
   pname = "redo-apenwarr";
-  version = "0.42c";
+  version = "0.42d";
 
   src = fetchFromGitHub rec {
     owner = "apenwarr";
     repo = "redo";
     rev = "${repo}-${version}";
-    sha256 = "0kc2gag1n5583195gs38gjm8mb7in9y70c07fxibsay19pvvb8iw";
+    sha256 = "/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
   };
 
   postPatch = ''

@@ -187,7 +187,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      after = [ "syslog.target" "network.target" ];
+      after = [ "network.target" ];
 
       preStart = ''
         install -m 0755 -d /var/log/glusterfs

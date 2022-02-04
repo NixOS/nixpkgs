@@ -1,0 +1,147 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="module-services-mosquitto">
+  <title>Mosquitto</title>
+  <para>
+    Mosquitto is a MQTT broker often used for IoT or home automation
+    data transport.
+  </para>
+  <section xml:id="module-services-mosquitto-quickstart">
+    <title>Quickstart</title>
+    <para>
+      A minimal configuration for Mosquitto is
+    </para>
+    <programlisting language="bash">
+services.mosquitto = {
+  enable = true;
+  listeners = [ {
+    acl = [ &quot;pattern readwrite #&quot; ];
+    omitPasswordAuth = true;
+    settings.allow_anonymous = true;
+  } ];
+};
+</programlisting>
+    <para>
+      This will start a broker on port 1883, listening on all interfaces
+      of the machine, allowing read/write access to all topics to any
+      user without password requirements.
+    </para>
+    <para>
+      User authentication can be configured with the
+      <literal>users</literal> key of listeners. A config that gives
+      full read access to a user <literal>monitor</literal> and
+      restricted write access to a user <literal>service</literal> could
+      look like
+    </para>
+    <programlisting language="bash">
+services.mosquitto = {
+  enable = true;
+  listeners = [ {
+    users = {
+      monitor = {
+        acl = [ &quot;read #&quot; ];
+        password = &quot;monitor&quot;;
+      };
+      service = {
+        acl = [ &quot;write service/#&quot; ];
+        password = &quot;service&quot;;
+      };
+    };
+  } ];
+};
+</programlisting>
+    <para>
+      TLS authentication is configured by setting TLS-related options of
+      the listener:
+    </para>
+    <programlisting language="bash">
+services.mosquitto = {
+  enable = true;
+  listeners = [ {
+    port = 8883; # port change is not required, but helpful to avoid mistakes
+    # ...
+    settings = {
+      cafile = &quot;/path/to/mqtt.ca.pem&quot;;
+      certfile = &quot;/path/to/mqtt.pem&quot;;
+      keyfile = &quot;/path/to/mqtt.key&quot;;
+    };
+  } ];
+</programlisting>
+  </section>
+  <section xml:id="module-services-mosquitto-config">
+    <title>Configuration</title>
+    <para>
+      The Mosquitto configuration has four distinct types of settings:
+      the global settings of the daemon, listeners, plugins, and
+      bridges. Bridges and listeners are part of the global
+      configuration, plugins are part of listeners. Users of the broker
+      are configured as parts of listeners rather than globally,
+      allowing configurations in which a given user is only allowed to
+      log in to the broker using specific listeners (eg to configure an
+      admin user with full access to all topics, but restricted to
+      localhost).
+    </para>
+    <para>
+      Almost all options of Mosquitto are available for configuration at
+      their appropriate levels, some as NixOS options written in camel
+      case, the remainders under <literal>settings</literal> with their
+      exact names in the Mosquitto config file. The exceptions are
+      <literal>acl_file</literal> (which is always set according to the
+      <literal>acl</literal> attributes of a listener and its users) and
+      <literal>per_listener_settings</literal> (which is always set to
+      <literal>true</literal>).
+    </para>
+    <section xml:id="module-services-mosquitto-config-passwords">
+      <title>Password authentication</title>
+      <para>
+        Mosquitto can be run in two modes, with a password file or
+        without. Each listener has its own password file, and different
+        listeners may use different password files. Password file
+        generation can be disabled by setting
+        <literal>omitPasswordAuth = true</literal> for a listener; in
+        this case it is necessary to either set
+        <literal>settings.allow_anonymous = true</literal> to allow all
+        logins, or to configure other authentication methods like TLS
+        client certificates with
+        <literal>settings.use_identity_as_username = true</literal>.
+      </para>
+      <para>
+        The default is to generate a password file for each listener
+        from the users configured to that listener. Users with no
+        configured password will not be added to the password file and
+        thus will not be able to use the broker.
+      </para>
+    </section>
+    <section xml:id="module-services-mosquitto-config-acl">
+      <title>ACL format</title>
+      <para>
+        Every listener has a Mosquitto <literal>acl_file</literal>
+        attached to it. This ACL is configured via two attributes of the
+        config:
+      </para>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            the <literal>acl</literal> attribute of the listener
+            configures pattern ACL entries and topic ACL entries for
+            anonymous users. Each entry must be prefixed with
+            <literal>pattern</literal> or <literal>topic</literal> to
+            distinguish between these two cases.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            the <literal>acl</literal> attribute of every user
+            configures in the listener configured the ACL for that given
+            user. Only topic ACLs are supported by Mosquitto in this
+            setting, so no prefix is required or allowed.
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para>
+        The default ACL for a listener is empty, disallowing all
+        accesses from all clients. To configure a completely open ACL,
+        set <literal>acl = [ &quot;pattern readwrite #&quot; ]</literal>
+        in the listener.
+      </para>
+    </section>
+  </section>
+</chapter>

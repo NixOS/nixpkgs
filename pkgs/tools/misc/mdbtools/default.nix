@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mdbtools";
-  version = "0.9.4";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "mdbtools";
     repo = "mdbtools";
     rev = "v${version}";
-    sha256 = "sha256-Hnub8h0a3qx5cxVn1tp/IVbz9aORjGGWizD3Z4rPl2s=";
+    sha256 = "sha256-e9rgTWu8cwuccpp/wAfas1ZeQPTpGcgE6YjLz7KRnhw=";
   };
 
   configureFlags = [ "--disable-scrollkeeper" ];

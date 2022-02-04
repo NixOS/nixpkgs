@@ -2,16 +2,16 @@
 
 buildGoModule {
   pname = "gb-backup";
-  version = "unstable-2021-08-16";
+  version = "unstable-2021-10-27";
 
   src = fetchFromGitHub {
     owner = "leijurv";
     repo = "gb";
-    rev = "fa996208d06766bf523686fbe5831628130d80f7";
-    sha256 = "1vggl8d69sf4z2lmixfndwwd6l9gi0fkkrxga7v4w7a7yr96b1vp";
+    rev = "61383d445af7b035fb8e1df0cacc424340dd16df";
+    sha256 = "sha256-YRrD2gW+gzxD2JwadCbF/SBSsHeeGPsa8kKZHHAytVo=";
   };
 
-  vendorSha256 = "0m2aa6p04b4fs7zncar1mlykc94pp527phv71cdsbx58jgsm1jnx";
+  vendorSha256 = "sha256-H3Zf4VNJVX9C3GTeqU4YhNqCIQz1R55MfhrygDgJTxc=";
 
   nativeBuildInputs = [ makeWrapper ];
 

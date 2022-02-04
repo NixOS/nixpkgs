@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -prd * $out/bin
+    cp -prd *.dll *.so gozip func $out/bin
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" "$out/bin/func"

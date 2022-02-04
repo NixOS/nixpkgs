@@ -11,21 +11,21 @@ let
     name = "cbqn-bytecode-files";
     owner = "dzaima";
     repo = "CBQN";
-    rev = "4d23479cdbd5ac6eb512c376ade58077b814b2b7";
-    hash = "sha256-MTvg4lOB26bqvJTqV71p4Y4qDjTYaOE40Jk4Sle/hsY=";
+    rev = "b000b951aa8f3590b196b4c09056604c0b32a168";
+    hash = "sha256-znW0xOXogP4TfifUmk3cs4aN/9mMSpSD2WJppmeI1Fg=";
   };
 in
 assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+date=2021-10-20";
+  version = "0.pre+date=2021-12-13";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "f50b8ab503d05cccb6ff61df52f2625df3292a9e";
-    hash = "sha256-pxToXVIKYS9P2TnGMGmKfJmAP54GVPVls9bm9tmS21s=";
+    rev = "e7662b0f6a44add0749fba2a6d7309a5c1eb2601";
+    hash = "sha256-2nfkTZBIGHX5cok6Ea3KSewakZy8Ey8nSO2Fe4xGgvg=";
   };
 
   dontConfigure = true;
@@ -52,8 +52,9 @@ stdenv.mkDerivation rec {
 
      mkdir -p $out/bin/
      cp BQN -t $out/bin/
-     ln -s $out/bin/BQN $out/bin/bqn
-     ln -s $out/bin/BQN $out/bin/cbqn
+     # note guard condition for case-insensitive filesystems
+     [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
+     [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
 
      runHook postInstall
   '';

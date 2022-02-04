@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-R3H6tv6fzQG41Y2rui0K8fdQ/+Ywnc5hqTPFjktrhF8=";
   };
 
+  makeFlags = [ "CC=$$CXX" ];
+
   buildInputs = [ ncurses ];
 
   installPhase = ''

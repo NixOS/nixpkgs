@@ -46,13 +46,18 @@ in {
   '';
 
   nextcloud21 = generic {
-    version = "21.0.5";
-    sha256 = "1q46h480kn97k7h3xm7r5gsa8l3f0kfiicapi46sh0p39pbjbyhv";
+    version = "21.0.8";
+    sha256 = "00c37wp6fsnpm40bbhk6r6xycacfa5zk7arzc3i4xmhm89cyvm6z";
   };
 
   nextcloud22 = generic {
-    version = "22.2.0";
-    sha256 = "07ryvynws65k42n6ca20nni1vqr90fsrd2dpx2bvh09mwhyblg97";
+    version = "22.2.4";
+    sha256 = "0vnf2j1hz0d7lxby73r2mq2rjm72nq55xajzm8sipj6wlbys15zl";
+  };
+
+  nextcloud23 = generic {
+    version = "23.0.1";
+    sha256 = "047pnkp49rf0a9gl03dwkkdgzmdsf88m79mzq04bwmgkb3a3qxay";
   };
   # tip: get she sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'

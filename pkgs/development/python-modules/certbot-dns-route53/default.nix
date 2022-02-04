@@ -2,7 +2,6 @@
 , acme
 , boto3
 , certbot
-, isPy3k
 , pytestCheckHook
 , pythonOlder
 }:

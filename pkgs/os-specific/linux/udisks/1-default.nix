@@ -1,12 +1,31 @@
-{ lib, stdenv, fetchurl, pkg-config, sg3_utils, udev, glib, dbus, dbus-glib
-, polkit, parted, lvm2, libatasmart, intltool, libuuid, mdadm
-, libxslt, docbook_xsl, util-linux, libgudev }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, sg3_utils
+, udev
+, glib
+, dbus
+, dbus-glib
+, polkit
+, parted
+, lvm2
+, libatasmart
+, intltool
+, libuuid
+, mdadm
+, libxslt
+, docbook_xsl
+, util-linux
+, libgudev
+}:
 
 stdenv.mkDerivation rec {
-  name = "udisks-1.0.5";
+  pname = "udisks";
+  version = "1.0.5";
 
   src = fetchurl {
-    url = "https://hal.freedesktop.org/releases/${name}.tar.gz";
+    url = "https://hal.freedesktop.org/releases/udisks-${version}.tar.gz";
     sha256 = "0wbg3jrv8limdgvcygf4dqin3y6d30y9pcmmk711vq571vmq5v7j";
   };
 
@@ -27,8 +46,21 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs =
-    [ sg3_utils udev glib dbus dbus-glib polkit parted libgudev
-      lvm2 libatasmart intltool libuuid libxslt docbook_xsl
+    [
+      sg3_utils
+      udev
+      glib
+      dbus
+      dbus-glib
+      polkit
+      parted
+      libgudev
+      lvm2
+      libatasmart
+      intltool
+      libuuid
+      libxslt
+      docbook_xsl
     ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -41,6 +73,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2Plus ];
     broken = true;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

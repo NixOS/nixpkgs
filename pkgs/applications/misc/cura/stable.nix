@@ -1,15 +1,14 @@
-{ lib, stdenv, python27Packages, curaengine, makeDesktopItem, fetchurl }:
-let
-  py = python27Packages;
-  version = "15.04";
-in
+{ lib, stdenv, python27Packages, curaengine, makeDesktopItem, fetchFromGitHub }:
+
 stdenv.mkDerivation rec {
   pname = "cura";
-  inherit version;
+  version = "15.06.03";
 
-  src = fetchurl {
-    url = "https://github.com/daid/Cura/archive/${version}.tar.gz";
-    sha256 = "0xbjvzhp8wzq9lnpmcg1fjf7j5h39bj5463sd5c8jzdjl96izizl";
+  src = fetchFromGitHub {
+    owner = "daid";
+    repo = "Cura";
+    rev = version;
+    sha256 = "sha256-o1cAi4Wi19WOijlRB9iYwNEpSNnmywUj5Bth8rRhqFA=";
   };
 
   desktopItem = makeDesktopItem {
@@ -22,13 +21,13 @@ stdenv.mkDerivation rec {
     categories = "GNOME;GTK;Utility;";
   };
 
-  python_deps = with py; [ pyopengl pyserial numpy wxPython30 power setuptools ];
+  python_deps = with python27Packages; [ pyopengl pyserial numpy wxPython30 power setuptools ];
 
   pythonPath = python_deps;
 
   propagatedBuildInputs = python_deps;
 
-  buildInputs = [ curaengine py.wrapPython ];
+  buildInputs = [ curaengine python27Packages.wrapPython ];
 
   configurePhase = "";
   buildPhase = "";

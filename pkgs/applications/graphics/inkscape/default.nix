@@ -9,7 +9,6 @@
 , gettext
 , ghostscript
 , glib
-, glib-networking
 , glibmm
 , gsl
 , gspell
@@ -82,6 +81,28 @@ stdenv.mkDerivation rec {
       stripLen = 1;
       extraPrefix = "share/extensions/";
     })
+
+    # Fix build with Poppler 21.11.0.
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/3622
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/5724c21b9cb7b6176a7b36ca24068b148c817e82.patch";
+      sha256 = "/1p/Vkes1HuZN0v09Ey4kiT+4zrEaoSXyPAmc4O3sDg=";
+    })
+
+    # Remove mandatory break from end of paragraphs, added in Pango 1.49
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/3630
+    # TODO: Remove in Inkscape 1.1.2
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/b3dabef2245d4e4e977ee9d6776be9a134493515.patch";
+      sha256 = "YhqUlRBKL1vJ/iCM/DvdwbmPIsAHQpcgf4TPpjlnBng=";
+    })
+    # Fix build against gcc-12
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/3683
+    (fetchpatch {
+      name = "gcc-12.patch";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/3825abc637ac2d3bc6ff997503b0631ac14e16b5.patch";
+      sha256 = "sha256-VzKrWCkcVA1Co/xBTyh28Zhm2zFE/2jfZ3LveK0raO4=";
+    })
   ];
 
   postPatch = ''
@@ -118,7 +139,6 @@ stdenv.mkDerivation rec {
     boost
     gettext
     glib
-    glib-networking
     glibmm
     gsl
     gtkmm3

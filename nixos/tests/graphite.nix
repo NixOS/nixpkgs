@@ -4,7 +4,6 @@ import ./make-test-python.nix ({ pkgs, ... } :
   nodes = {
     one =
       { ... }: {
-        virtualisation.memorySize = 1024;
         time.timeZone = "UTC";
         services.graphite = {
           web = {

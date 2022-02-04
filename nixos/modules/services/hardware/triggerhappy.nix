@@ -70,7 +70,7 @@ in
         type = types.listOf (types.submodule bindingCfg);
         default = [];
         example = lib.literalExpression ''
-          [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc_cli}/bin/mpc -q toggle"; } ]
+          [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc-cli}/bin/mpc -q toggle"; } ]
         '';
         description = ''
           Key bindings for <command>triggerhappy</command>.

@@ -1,6 +1,6 @@
-{ lib, fetchurl, pythonPackages }:
+{ lib, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "speedometer";
   version = "2.8";
 
@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "060bikv3gwr203jbdmvawsfhc0yq0bg1m42dk8czx1nqvwvgv6fm";
   };
 
-  propagatedBuildInputs = [ pythonPackages.urwid ];
+  propagatedBuildInputs = [ python2Packages.urwid ];
 
   postPatch = ''
     sed -i "/'entry_points': {/d" setup.py

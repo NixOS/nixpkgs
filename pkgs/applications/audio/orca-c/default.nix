@@ -1,8 +1,7 @@
 { lib, stdenv, fetchgit, ncurses, portmidi }:
 stdenv.mkDerivation {
   pname = "orca-c";
-
-  version = "git-2021-02-13";
+  version = "unstable-2021-02-13";
 
   src = fetchgit {
     url = "https://git.sr.ht/~rabbits/orca";

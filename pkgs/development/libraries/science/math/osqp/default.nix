@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osqp";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "oxfordcontrol";
     repo = "osqp";
     rev = "v${version}";
-    sha256 = "1gwk1bqsk0rd85zf7xplbwq822y5pnxjmqc14jj6knqbab9afvrs";
+    sha256 = "sha256-RYk3zuZrJXPcF27eMhdoZAio4DZ+I+nFaUEg1g/aLNk=";
     fetchSubmodules = true;
   };
 

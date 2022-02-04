@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, openssl, libcap, curl, which
-, eventlog, pkg-config, glib, python, systemd, perl
+, eventlog, pkg-config, glib, python2, systemd, perl
 , riemann_c_client, protobufc, pcre, libnet
 , json_c, libuuid, libivykis, mongoc, rabbitmq-c
 , libesmtp
@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "syslog-ng";
-  version = "3.33.2";
+  version = "3.34.1";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-C3hqBgd7kVAZHXFPRaG0s3kpUstYFjo68zbwdNqfsUs=";
+    sha256 = "sha256-zs457BxoyI1JNwXgpSi4PQONo4TonUg4OTzMdfYqLUw=";
   };
 
   nativeBuildInputs = [ pkg-config which ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     eventlog
     glib
     perl
-    python
+    python2
     systemd
     riemann_c_client
     protobufc

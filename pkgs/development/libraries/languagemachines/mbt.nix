@@ -5,7 +5,7 @@
 }:
 
 let
-  release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-mbt.json);
+  release = lib.importJSON ./release-info/LanguageMachines-mbt.json;
 in
 
 stdenv.mkDerivation {

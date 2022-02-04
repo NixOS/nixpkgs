@@ -1,22 +1,22 @@
-{ lib, callPackage, python3Packages, fetchFromGitLab, cacert,
-  rustPlatform, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchzip,
-  jre, makeWrapper, tr-patcher, tes3cmd, fetchpatch }:
+{ lib, callPackage, python3Packages, fetchFromGitLab, cacert
+, rustPlatform, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchzip
+, jre, makeWrapper, tr-patcher, tes3cmd, openmw }:
 
 let
-  version = "2.0.3";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    sha256 = "sha256-vMdyaI1Ps7bFoRvwdVNVG9vPFEiGb7CPvKEWfxiM128=";
+    sha256 = "sha256-b/ENApFovMPNUMbJhwY+TZCnSzpr1e/IKJ/5XAGTQjE=";
   };
 
   portmod-rust = rustPlatform.buildRustPackage rec {
     inherit src version;
     pname = "portmod-rust";
 
-    cargoHash = "sha256-tAghZmlg34jHr8gtNgL3MQ8EI7K6/TfDcTbBjxdWLr0=";
+    cargoHash = "sha256-3EfMMpSWSYsB3nXaoGGDuKQ9duyCKzbrT6oeATnzqLE=";
 
     nativeBuildInputs = [ python3Packages.python ];
 
@@ -30,6 +30,7 @@ let
     tr-patcher
     tes3cmd
     imagemagick
+    openmw
   ];
 
 in
@@ -46,15 +47,6 @@ python3Packages.buildPythonApplication rec {
       --replace "from setuptools_rust import Binding, RustExtension" "" \
       --replace "RustExtension(\"portmodlib.portmod\", binding=Binding.PyO3, strip=True)" ""
   '';
-
-  patches = [
-    (fetchpatch {
-      # fix error when symlinks are present in the path (https://gitlab.com/portmod/portmod/-/merge_requests/393)
-      # happen with ~/.nix-profile
-      url = "https://gitlab.com/portmod/portmod/-/merge_requests/393.patch";
-      sha256 = "sha256-XHifwD/Nh7UiMZdvSNudVF7qpBOpjGTKSr4VVdJqUdA=";
-    })
-  ];
 
   propagatedBuildInputs = with python3Packages; [
     setuptools-scm

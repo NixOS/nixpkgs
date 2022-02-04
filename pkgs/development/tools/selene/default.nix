@@ -10,25 +10,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "selene";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "kampfkarren";
     repo = pname;
     rev = version;
-    sha256 = "0c228aakwf679wyxir0jwry3khv7phlaf77w675gn1wr4fxdg5gr";
+    sha256 = "sha256-S0EeFJS90bzQ7C+hN4CyZ7l9wmizT2d3P6utshI5JWs=";
   };
 
-  cargoSha256 = "sha256-5GODuqjVo3b1SzRgXVBIKec2tSS335EAUAmRlcpbClE=";
+  cargoSha256 = "sha256-3J1Q595LxAI0LBP4/cLHDrMbZBnoA2+OSr8/erQcN+0=";
 
   nativeBuildInputs = lib.optional robloxSupport pkg-config;
 
   buildInputs = lib.optional robloxSupport openssl
     ++ lib.optional (robloxSupport && stdenv.isDarwin) Security;
 
-  cargoBuildFlags = lib.optional (!robloxSupport) "--no-default-features";
-
-  cargoTestFlags = cargoBuildFlags;
+  buildNoDefaultFeatures = !robloxSupport;
 
   meta = with lib; {
     description = "A blazing-fast modern Lua linter written in Rust";

@@ -1,7 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -19,22 +20,23 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot";
-  version = "6.0.1";
-
-  repoName = "screenshot";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "screenshot";
     rev = version;
-    sha256 = "sha256-MDmk+0IUCe6PSV5QOjjDRedv7X3lcBJ04jn9cE9DP3M=";
+    sha256 = "sha256-n+L08C/W5YnHZ5P3F1NGUYE2SH94sc4+kr1x+wXZ+cw=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Fix build with meson 0.61
+    # https://github.com/elementary/screenshot/pull/241
+    (fetchpatch {
+      url = "https://github.com/elementary/screenshot/commit/80a5d942e813dd098e1ef0f6629b81d2ccef05ae.patch";
+      sha256 = "sha256-jOQuzUJvsjqytplLcW9BeIxzi9+/k2GFa4hHVZ3+wts=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -60,10 +62,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Screenshot tool designed for elementary OS";
     homepage = "https://github.com/elementary/screenshot";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.screenshot";

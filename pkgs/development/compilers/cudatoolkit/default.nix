@@ -66,11 +66,18 @@ rec {
   };
 
   cudatoolkit_11_4 = common {
-    version = "11.4.1";
-    url = "https://developer.download.nvidia.com/compute/cuda/11.4.1/local_installers/cuda_11.4.1_470.57.02_linux.run";
-    sha256 = "0180pb1zfajb9l6blr467xkx01yp3snfwm2xix8x52crf6d36v6x";
+    version = "11.4.2";
+    url = "https://developer.download.nvidia.com/compute/cuda/11.4.2/local_installers/cuda_11.4.2_470.57.02_linux.run";
+    sha256 = "sha256-u9h8oOkT+DdFSnljZ0c1E83e9VUILk2G7Zo4ZZzIHwo=";
     gcc = gcc10; # can bump to 11 along with stdenv.cc
   };
 
-  cudatoolkit_11 = cudatoolkit_11_2;
+  cudatoolkit_11_5 = common {
+    version = "11.5.0";
+    url = "https://developer.download.nvidia.com/compute/cuda/11.5.0/local_installers/cuda_11.5.0_495.29.05_linux.run";
+    sha256 = "sha256-rgoWk9lJfPPYHmlIlD43lGNpANtxyY1Y7v2sr38aHkw=";
+    gcc = gcc10; # can bump to 11 along with stdenv.cc
+  };
+
+  cudatoolkit_11 = cudatoolkit_11_4;
 }

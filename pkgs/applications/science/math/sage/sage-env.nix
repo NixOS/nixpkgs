@@ -2,7 +2,7 @@
 , lib
 , writeTextFile
 , sagelib
-, sage_docbuild
+, sage-docbuild
 , env-locations
 , gfortran
 , bash
@@ -15,8 +15,7 @@
 , pkg-config
 , pari
 , gap
-, ecl
-, maxima-ecl
+, maxima
 , singular
 , fflas-ffpack
 , givaro
@@ -46,11 +45,10 @@
 , flint
 , gmp
 , mpfr
-, pynac
 , zlib
 , gsl
 , ntl
-, jdk8
+, jdk
 , less
 }:
 
@@ -61,8 +59,6 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 # dependencies.
 
 let
-  jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-
   runtimepath = (lib.makeBinPath ([
     "@sage-local@"
     "@sage-local@/build"
@@ -77,8 +73,8 @@ let
     pkg-config
     pari
     gap
-    ecl
-    maxima-ecl
+    maxima.lisp-compiler
+    maxima
     singular
     giac
     palp
@@ -164,7 +160,6 @@ writeTextFile rec {
         gmp
         mpfr
         pari
-        pynac
         zlib
         eclib
         gsl
@@ -180,7 +175,6 @@ writeTextFile rec {
         glpk
         flint
         gap
-        pynac
         mpfr.dev
       ])
     }'
@@ -194,5 +188,5 @@ writeTextFile rec {
   '';
 } // { # equivalent of `passthru`, which `writeTextFile` doesn't support
   lib = sagelib;
-  docbuild = sage_docbuild;
+  docbuild = sage-docbuild;
 }

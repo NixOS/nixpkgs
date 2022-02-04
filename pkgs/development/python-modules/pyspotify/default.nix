@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cffi
-, pkgs
+, libspotify
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ cffi ];
-  buildInputs = [ pkgs.libspotify ];
+  buildInputs = [ libspotify ];
 
   # python zip complains about old timestamps
   preConfigure = ''
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     find "$out" -name _spotify.so -exec \
         install_name_tool -change \
         @loader_path/../Frameworks/libspotify.framework/libspotify \
-        ${pkgs.libspotify}/lib/libspotify.dylib \
+        ${libspotify}/lib/libspotify.dylib \
         {} \;
   '';
 
@@ -41,7 +41,5 @@ buildPythonPackage rec {
     description = "A Python interface to Spotify’s online music streaming service";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
   };
-
 }

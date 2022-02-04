@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tuya-iot-py-sdk";
-  version = "0.5.0";
+  version = "0.6.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "tuya";
     repo = "tuya-iot-python-sdk";
     rev = "v${version}";
-    sha256 = "1qfjq4h62phsrmrfb11xwd6gjc28vhs90g3mmx7d8ikgsgnqlvza";
+    sha256 = "sha256-KmSVa71CM/kNhzE4GznaxISGmIaV+UcTSn3v+fmxmrQ=";
   };
 
   propagatedBuildInputs = [

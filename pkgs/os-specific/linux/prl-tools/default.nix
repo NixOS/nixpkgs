@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   inherit libsOnly;
 
   unpackPhase = ''
-    undmg < "${src}"
+    undmg "${src}"
 
     export sourceRoot=prl-tools-build
     7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso" -o$sourceRoot

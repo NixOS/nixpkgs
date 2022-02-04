@@ -1,4 +1,4 @@
-{ fetchFromGitHub, rustPlatform, lib }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mhost";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0gqrya0bpdd67k2sxib7f4npnrx84d9r4hjq2sg2xz4j8pmgs018";
+
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   CARGO_CRATE_NAME = "mhost";
 

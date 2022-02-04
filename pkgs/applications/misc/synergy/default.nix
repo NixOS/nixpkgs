@@ -1,41 +1,90 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, openssl, qttools
-, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
-, xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
-, withGUI ? true, wrapQtAppsHook }:
+{ withGUI ? true
+, stdenv
+, lib
+, fetchpatch
+, fetchFromGitHub
+, wrapQtAppsHook
+
+, cmake
+, openssl
+, pcre
+, util-linux
+, libselinux
+, libsepol
+, pkg-config
+, gdk-pixbuf
+, libnotify
+, qttools
+, xlibsWrapper
+, libX11
+, libXi
+, libXtst
+, libXrandr
+, xinput
+, avahi-compat
+
+# macOS / darwin
+, ApplicationServices
+, Carbon
+, Cocoa
+, CoreServices
+, ScreenSaver
+}:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.13.1.41";
+  version = "1.14.1.32";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
     rev = "${version}-stable";
     fetchSubmodules = true;
-    sha256 = "1phg0szc9g018zxs5wbys4drzq1cdhyzajfg45l6a3fmi6qdi1kw";
+    sha256 = "123p75rm22vb3prw1igh0yii2y4bvv7r18iykfvmnr41hh4w7z2p";
   };
 
-  patches = lib.optional stdenv.isDarwin ./macos_build_fix.patch;
+  patches = [ ./macos_build_fix.patch ];
 
   postPatch = ''
     substituteInPlace src/gui/src/SslCertificate.cpp \
       --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
   '';
 
-  cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
+  cmakeFlags = lib.optionals (!withGUI) [
+    "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.09"
+  ];
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional withGUI wrapQtAppsHook;
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   dontWrapQtApps = true;
 
   buildInputs = [
     openssl
+    pcre
   ] ++ lib.optionals withGUI [
     qttools
   ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices Carbon Cocoa CoreServices ScreenSaver
+    ApplicationServices
+    Carbon
+    Cocoa
+    CoreServices
+    ScreenSaver
   ] ++ lib.optionals stdenv.isLinux [
-    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat
+    util-linux
+    libselinux
+    libsepol
+    xlibsWrapper
+    libX11
+    libXi
+    libXtst
+    libXrandr
+    xinput
+    avahi-compat
+    gdk-pixbuf
+    libnotify
   ];
 
   installPhase = ''
@@ -60,7 +109,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Share one mouse and keyboard between multiple computers";
-    homepage = "https://synergy-project.org/";
+    homepage = "https://symless.com/synergy";
     license = licenses.gpl2;
     maintainers = with maintainers; [ talyz ];
     platforms = platforms.all;

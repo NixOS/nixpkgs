@@ -2,11 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, six
 , decorator
 , pytestCheckHook
-, isort
-, flake8
 }:
 
 buildPythonPackage rec {
@@ -20,17 +17,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    six
     decorator
   ];
 
   checkInputs = [
     pytestCheckHook
-    flake8
-    isort
   ];
-
-  disabledTests = lib.optionals isPy27 [ "url" ];
 
   meta = with lib; {
     description = "Python Data Validation for Humans™";

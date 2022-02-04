@@ -3,8 +3,6 @@
 , buildPythonPackage
 , authlib
 , requests
-, mock
-, isPy27
 , nose
 , pytz
 , responses

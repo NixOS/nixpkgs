@@ -19,6 +19,8 @@ in {
   stdenv,
   # The kernel version
   version,
+  # Position of the Linux build expression
+  pos ? null,
   # Additional kernel make flags
   extraMakeFlags ? [],
   # The version of the kernel module directory
@@ -95,13 +97,14 @@ let
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
         (lib.versionOlder version "4.14");
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
-      passthru = {
+      passthru = rec {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
         inherit isZen isHardened isLibre;
         isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
-        kernelOlder = lib.versionOlder version;
-        kernelAtLeast = lib.versionAtLeast version;
+        baseVersion = lib.head (lib.splitString "-rc" version);
+        kernelOlder = lib.versionOlder baseVersion;
+        kernelAtLeast = lib.versionAtLeast baseVersion;
       };
 
       inherit src;
@@ -126,7 +129,11 @@ let
         # See also https://kernelnewbies.org/BuildId
         sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
-        patchShebangs scripts
+        # Some linux-hardened patches now remove certain files in the scripts directory, so we cannot
+        # patch all scripts until after patches are applied.
+        # However, scripts/ld-version.sh is still ran when generating a configfile for a kernel, so it needs
+        # to be patched prior to patchPhase
+        patchShebangs scripts/ld-version.sh
       '';
 
       postPatch = ''
@@ -140,6 +147,8 @@ let
             --replace NIXOS_RANDSTRUCT_SEED \
             $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
         fi
+
+        patchShebangs scripts
       '';
 
       configurePhase = ''
@@ -333,4 +342,4 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   ] ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
-})
+} // (optionalAttrs (pos != null) { inherit pos; }))

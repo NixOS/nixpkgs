@@ -3,8 +3,8 @@
 buildPecl {
   pname = "pcov";
 
-  version = "1.0.9";
-  sha256 = "0q2ig5lxzpwz3qgr05wcyh5jzhfxlygkv6nj6jagkhiialng2710";
+  version = "1.0.11";
+  sha256 = "sha256-rSLmTNOvBlMwGCrBQsHDq0Dek0SCzUAPi9dgZBMKwkI=";
 
   buildInputs = [ pcre2 ];
 

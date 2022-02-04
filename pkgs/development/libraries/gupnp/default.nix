@@ -20,18 +20,23 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.4.0";
+  version = "1.4.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-WQ/7ArhNoqGuxo/VNLxArxs33T9iI/nRV3/EirSL428=";
+    sha256 = "sha256-FO2nd5NNot90PQckiZM72YETMre1v0Fia4Ay77KLM7o=";
   };
 
   patches = [
     # Bring .pc file in line with our patched pkg-config.
     ./0001-pkg-config-Declare-header-dependencies-as-public.patch
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -58,7 +63,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   doCheck = true;

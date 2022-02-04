@@ -134,9 +134,11 @@ let
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
+      plasma-phone-components = callPackage ./plasma-phone-components {};
       plasma-desktop = callPackage ./plasma-desktop {};
       plasma-disks = callPackage ./plasma-disks.nix {};
       plasma-integration = callPackage ./plasma-integration {};
+      plasma-nano = callPackage ./plasma-nano {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
       plasma-sdk = callPackage ./plasma-sdk.nix {};
@@ -155,10 +157,12 @@ let
       thirdParty = let inherit (libsForQt5) callPackage; in {
         plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
         plasma-applet-virtual-desktop-bar = callPackage ./3rdparty/addons/virtual-desktop-bar.nix { };
+        bismuth = callPackage ./3rdparty/addons/bismuth { };
         kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
         kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
         krunner-symbols = callPackage ./3rdparty/addons/krunner-symbols.nix { };
+        lightly = callPackage ./3rdparty/lightly { };
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
       };
 

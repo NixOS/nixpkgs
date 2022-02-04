@@ -10,7 +10,7 @@ with lib; mkCoqDerivation {
 
   inherit version;
   defaultVersion = with versions; switch [ coq.version mathcomp.version ] [
-    { cases = [ (range "8.10" "8.14") (isGe "1.12.0") ]; out = "1.13"; }
+    { cases = [ (range "8.10" "8.15") (isGe "1.12.0") ]; out = "1.13"; }
     { cases = [ (range "8.10" "8.12") "1.11.0" ]; out = "1.11"; }
   ] null;
 

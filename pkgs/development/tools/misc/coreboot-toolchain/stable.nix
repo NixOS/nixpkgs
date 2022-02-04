@@ -1,9 +1,9 @@
 { fetchurl }: [
   {
-    name = "gmp-6.2.0.tar.xz";
+    name = "gmp-6.2.1.tar.xz";
     archive = fetchurl {
-      sha256 = "09hmg8k63mbfrx1x3yy6y1yzbbq85kw5avbibhcgrg9z3ganr3i5";
-      url = "mirror://gnu/gmp/gmp-6.2.0.tar.xz";
+      sha256 = "1wml97fdmpcynsbw9yl77rj29qibfp652d0w3222zlfx5j8jjj7x";
+      url = "mirror://gnu/gmp/gmp-6.2.1.tar.xz";
     };
   }
   {
@@ -14,31 +14,31 @@
     };
   }
   {
-    name = "mpc-1.2.0.tar.gz";
+    name = "mpc-1.2.1.tar.gz";
     archive = fetchurl {
-      sha256 = "19pxx3gwhwl588v496g3aylhcw91z1dk1d5x3a8ik71sancjs3z9";
-      url = "mirror://gnu/mpc/mpc-1.2.0.tar.gz";
+      sha256 = "0n846hqfqvmsmim7qdlms0qr86f1hck19p12nq3g3z2x74n3sl0p";
+      url = "mirror://gnu/mpc/mpc-1.2.1.tar.gz";
     };
   }
   {
-    name = "gcc-8.3.0.tar.xz";
+    name = "gcc-11.2.0.tar.xz";
     archive = fetchurl {
-      sha256 = "0b3xv411xhlnjmin2979nxcbnidgvzqdf4nbhix99x60dkzavfk4";
-      url = "mirror://gnu/gcc/gcc-8.3.0/gcc-8.3.0.tar.xz";
+      sha256 = "12zs6vd2rapp42x154m479hg3h3lsafn3xhg06hp5hsldd9xr3nh";
+      url = "mirror://gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz";
     };
   }
   {
-    name = "binutils-2.35.1.tar.xz";
+    name = "binutils-2.37.tar.xz";
     archive = fetchurl {
-      sha256 = "01w6xvfy7sjpw8j08k111bnkl27j760bdsi0wjvq44ghkgdr3v9w";
-      url = "mirror://gnu/binutils/binutils-2.35.1.tar.xz";
+      sha256 = "0b53hhgfnafw27y0c3nbmlfidny2cc5km29pnfffd8r0y0j9f3c2";
+      url = "mirror://gnu/binutils/binutils-2.37.tar.xz";
     };
   }
   {
-    name = "acpica-unix2-20200925.tar.gz";
+    name = "acpica-unix2-20210331.tar.gz";
     archive = fetchurl {
-      sha256 = "18n6129fkgj85piid7v4zxxksv3h0amqp4p977vcl9xg3bq0zd2w";
-      url = "https://acpica.org/sites/acpica/files/acpica-unix2-20200925.tar.gz";
+      sha256 = "1h98pvc9iy1c49cid0ppjwk5zsy2m1xbvfqb72pkwkrd4rn35arx";
+      url = "https://acpica.org/sites/acpica/files/acpica-unix2-20210331.tar.gz";
     };
   }
   {

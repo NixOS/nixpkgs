@@ -2,6 +2,7 @@
 , appdirs
 , buildPythonPackage
 , fetchFromGitHub
+, importlib-metadata
 , poetry-core
 , pyee
 , pytest-xdist
@@ -16,8 +17,9 @@
 buildPythonPackage rec {
   pname = "pyppeteer";
   version = "0.2.6";
-  disabled = pythonOlder "3.6";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -32,6 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     appdirs
+    importlib-metadata
     pyee
     tqdm
     urllib3
@@ -43,6 +46,11 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'websockets = "^9.1"' 'websockets = "*"'
+  '';
 
   disabledTestPaths = [
     # Requires network access
@@ -71,12 +79,14 @@ buildPythonPackage rec {
     "TestPDF"
   ];
 
-  pythonImportsCheck = [ "pyppeteer" ];
+  pythonImportsCheck = [
+    "pyppeteer"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
     homepage = "https://github.com/pyppeteer/pyppeteer";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kmein ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ kmein ];
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    sha256 = "sha256-52cVY3SBT048tErydk3l27yBvM/FMVpEMf5miAeInDM=";
+    sha256 = "sha256-7jmKD6HjsTqW/SRmD4xI3uQJnwmyDgjJZRJX9XygZyU=";
   };
 
   appimageContents = appimageTools.extractType2 {

@@ -39,8 +39,8 @@ let
     "riscv32-netbsd" "riscv64-netbsd" "x86_64-netbsd"
 
     # none
-    "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none"
-    "msp430-none" "or1k-none" "m68k-none" "powerpc-none"
+    "aarch64_be-none" "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none"
+    "msp430-none" "or1k-none" "m68k-none" "powerpc-none" "powerpcle-none"
     "riscv32-none" "riscv64-none" "s390-none" "s390x-none" "vc4-none"
     "x86_64-none"
 

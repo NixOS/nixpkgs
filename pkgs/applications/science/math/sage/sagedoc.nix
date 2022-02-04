@@ -1,7 +1,7 @@
 { stdenv
 , sage-with-env
 , python3
-, maxima-ecl
+, maxima
 , tachyon
 , jmol
 , cddlib
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     sage-with-env.env.lib
     python3
-    maxima-ecl
+    maxima
     tachyon
     jmol
     cddlib
   ] ++ (with python3.pkgs; [
-    sage_docbuild
+    sage-docbuild
     psutil
     future
     sphinx
@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
-    ${sage-with-env}/bin/sage -t --optional=dochtml --all
+    ${sage-with-env}/bin/sage -t --optional=sagemath_doc_html --all
   '';
 }

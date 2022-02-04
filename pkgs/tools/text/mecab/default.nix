@@ -4,7 +4,8 @@ let
   mecab-base = import ./base.nix { inherit fetchurl; };
 in
 stdenv.mkDerivation (mecab-base // {
-    name = "mecab-${mecab-base.version}";
+    pname = "mecab";
+    version = mecab-base.version;
 
     postInstall = ''
       sed -i 's|^dicdir = .*$|dicdir = ${mecab-ipadic}|' "$out/etc/mecabrc"

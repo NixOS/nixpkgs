@@ -1,47 +1,44 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , substituteAll
 , meson
 , ninja
 , pkg-config
 , vala
 , libgee
+, gnome-settings-daemon
 , granite
+, gsettings-desktop-schemas
 , gtk3
 , libhandy
 , libxml2
 , libgnomekbd
 , libxklavier
 , ibus
+, onboard
 , switchboard
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "2.5.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1p1l7dx5v1zzz89hhhkm6n3ls7ig4cf2prh1099f1c054qiy9b0y";
+    sha256 = "sha256-Bl0T+8upTdBnLs03UIimcAg0LO40KwuMZRNSM+y/3Hc=";
   };
 
   patches = [
     ./0001-Remove-Install-Unlisted-Engines-function.patch
     (substituteAll {
       src = ./fix-paths.patch;
-      ibus = ibus;
+      inherit ibus onboard;
     })
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     libxml2
@@ -52,7 +49,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gnome-settings-daemon # media-keys
     granite
+    gsettings-desktop-schemas
     gtk3
     ibus
     libgee
@@ -61,6 +60,12 @@ stdenv.mkDerivation rec {
     libxklavier
     switchboard
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Keyboard Plug";

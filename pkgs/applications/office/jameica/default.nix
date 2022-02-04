@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
 
 let
-  _version = "2.10.0";
-  _build = "480";
+  _version = "2.10.1";
+  _build = "482";
   version = "${_version}-${_build}";
   name = "jameica-${version}";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     rev = "V_${builtins.replaceStrings ["."] ["_"] _version}_BUILD_${_build}";
-    sha256 = "0rzhbskzzvr9aan6fwxd2kmzg79ranx7aym5yn1i37z3ra67d1nz";
+    sha256 = "0pzcfqsf7flzipwivpinpkfb2xisand1sfjm00wif4pyj3f4qfh1";
   };
 
   # there is also a build.gradle, but it only seems to be used to vendor 3rd party libraries
@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli r3dl3g ];
   };
 }

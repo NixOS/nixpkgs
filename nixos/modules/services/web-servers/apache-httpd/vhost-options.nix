@@ -128,9 +128,12 @@ in
     };
 
     acmeRoot = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
+      description = ''
+        Directory for the acme challenge which is PUBLIC, don't put certs or keys in here.
+        Set to null to inherit from config.security.acme.
+      '';
     };
 
     sslServerCert = mkOption {

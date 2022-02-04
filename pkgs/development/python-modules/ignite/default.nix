@@ -8,24 +8,23 @@
 , matplotlib
 , mock
 , pytorch
-, pynvml
 , scikit-learn
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dlKGXjUUnyYmPDilo0LQg9OkSkBnMYNgzlFLIfI0T6I=";
+    sha256 = "11gvw0yqb3y5ddifs5f38bgslvfmw1bmd9rga1ynlrmmgmhxym6h";
   };
 
   checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
-  propagatedBuildInputs = [ pytorch scikit-learn tqdm pynvml ];
+  propagatedBuildInputs = [ pytorch scikit-learn tqdm ];
 
   # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";
@@ -51,6 +50,7 @@ buildPythonPackage rec {
     "idist"
     "mlflow"
     "tensorboard"
+    "test_gpu_info" # needs pynvml
     "test_integration"
     "test_output_handler" # needs mlflow
     "test_pbar" # slight output differences

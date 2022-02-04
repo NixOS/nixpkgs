@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xine-ui";
-  version = "0.99.12";
+  version = "0.99.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/xine/${pname}-${version}.tar.xz";
-    sha256 = "10zmmss3hm8gjjyra20qhdc0lb1m6sym2nb2w62bmfk8isfw9gsl";
+    sha256 = "sha256-sjgtB1xysbEAOeDpAxDMhsjZEDWMU1We2C09WEIB9cU=";
   };
 
   nativeBuildInputs = [

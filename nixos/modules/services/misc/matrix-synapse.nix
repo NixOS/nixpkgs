@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.matrix-synapse;
+  opt = options.services.matrix-synapse;
   pg = config.services.postgresql;
   usePostgresql = cfg.database_type == "psycopg2";
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
@@ -118,6 +119,30 @@ ${cfg.extraConfig}
 
   hasLocalPostgresDB = let args = cfg.database_args; in
     usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
+
+  registerNewMatrixUser =
+    let
+      isIpv6 = x: lib.length (lib.splitString ":" x) > 1;
+      listener =
+        lib.findFirst (
+          listener: lib.any (
+            resource: lib.any (
+              name: name == "client"
+            ) resource.names
+          ) listener.resources
+        ) (lib.last cfg.listeners) cfg.listeners;
+    in
+    pkgs.writeShellScriptBin "matrix-synapse-register_new_matrix_user" ''
+      exec ${cfg.package}/bin/register_new_matrix_user \
+        $@ \
+        ${lib.concatMapStringsSep " " (x: "-c ${x}") ([ configFile ] ++ cfg.extraConfigFiles)} \
+        "${listener.type}://${
+          if (isIpv6 listener.bind_address) then
+            "[${listener.bind_address}]"
+          else
+            "${listener.bind_address}"
+        }:${builtins.toString listener.port}/"
+    '';
 in {
   options = {
     services.matrix-synapse = {
@@ -197,7 +222,7 @@ in {
       tls_certificate_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "${cfg.dataDir}/homeserver.tls.crt";
+        example = "/var/lib/matrix-synapse/homeserver.tls.crt";
         description = ''
           PEM encoded X509 certificate for TLS.
           You can replace the self-signed certificate that synapse
@@ -209,7 +234,7 @@ in {
       tls_private_key_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "${cfg.dataDir}/homeserver.tls.key";
+        example = "/var/lib/matrix-synapse/homeserver.tls.key";
         description = ''
           PEM encoded private key for TLS. Specify null if synapse is not
           speaking TLS directly.
@@ -218,7 +243,7 @@ in {
       tls_dh_params_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "${cfg.dataDir}/homeserver.tls.dh";
+        example = "/var/lib/matrix-synapse/homeserver.tls.dh";
         description = ''
           PEM dh parameters for ephemeral keys
         '';
@@ -227,6 +252,7 @@ in {
         type = types.str;
         example = "example.com";
         default = config.networking.hostName;
+        defaultText = literalExpression "config.networking.hostName";
         description = ''
           The domain name of the server, with optional explicit port.
           This is used by remote servers to look up the server address.
@@ -292,7 +318,7 @@ in {
                     description = ''
                       List of resources to host on this listener.
                     '';
-                    example = ["client" "webclient" "federation"];
+                    example = ["client" "federation"];
                   };
                   compress = mkOption {
                     type = types.bool;
@@ -317,7 +343,7 @@ in {
           tls = true;
           x_forwarded = false;
           resources = [
-            { names = ["client" "webclient"]; compress = true; }
+            { names = ["client"]; compress = true; }
             { names = ["federation"]; compress = false; }
           ];
         }];
@@ -379,6 +405,11 @@ in {
         default = if versionAtLeast config.system.stateVersion "18.03"
           then "psycopg2"
           else "sqlite3";
+        defaultText = literalExpression ''
+          if versionAtLeast config.system.stateVersion "18.03"
+            then "psycopg2"
+            else "sqlite3"
+        '';
         description = ''
           The database engine name. Can be sqlite or psycopg2.
         '';
@@ -402,6 +433,29 @@ in {
             database = cfg.database_name;
           };
         }.${cfg.database_type};
+        defaultText = literalDocBook ''
+          <variablelist>
+            <varlistentry>
+              <term>using sqlite3</term>
+              <listitem>
+                <programlisting>
+                  { database = "''${config.${opt.dataDir}}/homeserver.db"; }
+                </programlisting>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>using psycopg2</term>
+              <listitem>
+                <programlisting>
+                  psycopg2 = {
+                    user = config.${opt.database_user};
+                    database = config.${opt.database_name};
+                  }
+                </programlisting>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        '';
         description = ''
           Arguments to pass to the engine.
         '';
@@ -733,7 +787,7 @@ in {
       after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        ${cfg.package}/bin/homeserver \
+        ${cfg.package}/bin/synapse_homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
@@ -753,7 +807,7 @@ in {
           chmod 0600 ${cfg.dataDir}/homeserver.signing.key
         '')) ];
         ExecStart = ''
-          ${cfg.package}/bin/homeserver \
+          ${cfg.package}/bin/synapse_homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
@@ -762,6 +816,8 @@ in {
         UMask = "0077";
       };
     };
+
+    environment.systemPackages = [ registerNewMatrixUser ];
   };
 
   imports = [

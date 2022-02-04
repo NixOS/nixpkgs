@@ -32,5 +32,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ hedning ];
+    # Set a lower priority such that the newly provided completion from Nix 2.4 are preferred.
+    priority = 10;
   };
 }

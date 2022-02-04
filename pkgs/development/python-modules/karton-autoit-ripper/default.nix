@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "karton-autoit-ripper";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bsqpf9w6d9fjysmnafaglg2w41gsafs2xz4dzcgc7n92shpcs8w";
+    sha256 = "1gclrrc0n72bfj4m55kk8d69zrfvnlwm9692ni9w7d2231mvv7bw";
   };
 
   propagatedBuildInputs = [

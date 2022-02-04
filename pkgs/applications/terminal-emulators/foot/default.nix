@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.9.2";
+  version = "1.10.3";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = pname;
     rev = version;
-    sha256 = "15h01ijx87i60bdgjjap1ymwlxggsxc6iziykh3bahj8432s1836";
+    sha256 = "13v6xqaw3xn1x84dn4gnkiimcsllb19mrbvcdj2fnm8klnrys3gs";
   };
 
   depsBuildBuild = [
@@ -170,7 +170,13 @@ stdenv.mkDerivation rec {
     llvm-profdata merge default_*profraw --output=default.profdata
   '';
 
-  outputs = [ "out" "terminfo" ];
+  # Install example themes which can be added to foot.ini via the include
+  # directive to a separate output to save a bit of space
+  postInstall = ''
+    moveToOutput share/foot/themes "$themes"
+  '';
+
+  outputs = [ "out" "terminfo" "themes" ];
 
   passthru.tests = {
     clang-default-compilation = foot.override {

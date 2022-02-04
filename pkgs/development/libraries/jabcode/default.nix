@@ -2,7 +2,9 @@
 , fetchFromGitHub
 , lib
 , subproject ? "library" # one of "library", "reader" or  "writer"
-, zlib, libpng, libtiff
+, zlib
+, libpng
+, libtiff
 , jabcode
 }:
 let
@@ -11,9 +13,10 @@ let
     "reader" = "jabcodeReader";
     "writer" = "jabcodeWriter";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "jabcode-${subproject}";
-  version = "git-2020-05-13";
+  version = "unstable-2020-05-13";
   src = fetchFromGitHub {
     repo = "jabcode";
     owner = "jabcode";
@@ -27,13 +30,14 @@ in stdenv.mkDerivation rec {
 
   preConfigure = "cd src/${subdir}";
 
-  installPhase = if subproject == "library" then ''
-    mkdir -p $out/lib
-    cp build/* $out/lib
-  '' else ''
-    mkdir -p $out/bin
-    cp -RT bin $out/bin
-  '';
+  installPhase =
+    if subproject == "library" then ''
+      mkdir -p $out/lib
+      cp build/* $out/lib
+    '' else ''
+      mkdir -p $out/bin
+      cp -RT bin $out/bin
+    '';
 
   meta = with lib; {
     description = "A high-capacity 2D color bar code (${subproject})";
@@ -42,5 +46,6 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
   };
 }

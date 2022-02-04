@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-authorization";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "9a9fc16866b46387853381ab4fa0f84c1765e0afea5b0124709ea9fae10ee752";
+    sha256 = "0776edc4980be940a8602eefc0372b4d1a1fa26caa46e3c0234e0c7a0feda4ec";
   };
 
   propagatedBuildInputs = [

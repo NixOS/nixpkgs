@@ -1,19 +1,13 @@
 { config, pkgs, lib, ... }:
 
-let
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types maintainers recursiveUpdate;
-  inherit (lib) any attrValues concatMapStrings concatMapStringsSep flatten literalExpression;
-  inherit (lib) filterAttrs mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
+with lib;
 
-  cfg = migrateOldAttrs config.services.dokuwiki;
+let
+  cfg = config.services.dokuwiki;
   eachSite = cfg.sites;
   user = "dokuwiki";
   webserver = config.services.${cfg.webserver};
   stateDir = hostName: "/var/lib/dokuwiki/${hostName}/data";
-
-  # Migrate config.services.dokuwiki.<hostName> to config.services.dokuwiki.sites.<hostName>
-  oldSites = filterAttrs (o: _: o != "sites" && o != "webserver");
-  migrateOldAttrs = cfg: cfg // { sites = cfg.sites // oldSites cfg; };
 
   dokuwikiAclAuthConfig = hostName: cfg: pkgs.writeText "acl.auth-${hostName}.php" ''
     # acl.auth.php
@@ -66,6 +60,8 @@ let
   siteOpts = { config, lib, name, ... }:
     {
       options = {
+        enable = mkEnableOption "DokuWiki web application.";
+
         package = mkOption {
           type = types.package;
           default = pkgs.dokuwiki;
@@ -253,36 +249,29 @@ in
 {
   # interface
   options = {
-    services.dokuwiki = mkOption {
-      type = types.submodule {
-        # Used to support old interface
-        freeformType = types.attrsOf (types.submodule siteOpts);
+    services.dokuwiki = {
 
-        # New interface
-        options.sites = mkOption {
-          type = types.attrsOf (types.submodule siteOpts);
-          default = {};
-          description = "Specification of one or more DokuWiki sites to serve";
-        };
-
-        options.webserver = mkOption {
-          type = types.enum [ "nginx" "caddy" ];
-          default = "nginx";
-          description = ''
-            Whether to use nginx or caddy for virtual host management.
-
-            Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
-
-            Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
-          '';
-        };
+      sites = mkOption {
+        type = types.attrsOf (types.submodule siteOpts);
+        default = {};
+        description = "Specification of one or more DokuWiki sites to serve";
       };
-      default = {};
-      description = "DokuWiki configuration";
-    };
 
+      webserver = mkOption {
+        type = types.enum [ "nginx" "caddy" ];
+        default = "nginx";
+        description = ''
+          Whether to use nginx or caddy for virtual host management.
+
+          Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+          See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+
+          Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
+          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        '';
+      };
+
+    };
   };
 
   # implementation
@@ -299,13 +288,14 @@ in
     }
     ]) eachSite);
 
-    warnings = mapAttrsToList (hostName: _: ''services.dokuwiki."${hostName}" is deprecated use services.dokuwiki.sites."${hostName}"'') (oldSites cfg);
-
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "dokuwiki-${hostName}" {
         inherit user;
         group = webserver.group;
 
+        # Not yet compatible with php 8 https://www.dokuwiki.org/requirements
+        # https://github.com/splitbrain/dokuwiki/issues/3545
+        phpPackage = pkgs.php74;
         phpEnv = {
           DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig hostName cfg}";
           DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig hostName cfg}";
@@ -444,5 +434,6 @@ in
   meta.maintainers = with maintainers; [
     _1000101
     onny
+    dandellion
   ];
 }

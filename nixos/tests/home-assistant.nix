@@ -24,6 +24,11 @@ in {
     services.home-assistant = {
       inherit configDir;
       enable = true;
+      package = (pkgs.home-assistant.override {
+        extraComponents = [ "zha" ];
+      }).overrideAttrs (oldAttrs: {
+        doInstallCheck = false;
+      });
       config = {
         homeassistant = {
           name = "Home";
@@ -43,6 +48,12 @@ in {
           state_topic = "home-assistant/test";
           payload_on = "let_there_be_light";
           payload_off = "off";
+        }];
+        wake_on_lan = {};
+        switch = [{
+          platform = "wake_on_lan";
+          mac = "00:11:22:33:44:55";
+          host = "127.0.0.1";
         }];
         # tests component-based capability assignment (CAP_NET_BIND_SERVICE)
         emulated_hue = {
@@ -87,10 +98,16 @@ in {
     with subtest("Check that capabilities are passed for emulated_hue to bind to port 80"):
         hass.wait_for_open_port(80)
         hass.succeed("curl --fail http://localhost:80/description.xml")
+    with subtest("Check extra components are considered in systemd unit hardening"):
+        hass.succeed("systemctl show -p DeviceAllow home-assistant.service | grep -q char-ttyUSB")
     with subtest("Print log to ease debugging"):
         output_log = hass.succeed("cat ${configDir}/home-assistant.log")
         print("\n### home-assistant.log ###\n")
         print(output_log + "\n")
+
+    # wait for home-assistant to fully boot
+    hass.sleep(30)
+    hass.wait_for_unit("home-assistant.service")
 
     with subtest("Check that no errors were logged"):
         assert "ERROR" not in output_log

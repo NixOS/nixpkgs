@@ -5,20 +5,20 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sof-firmware";
-  version = "1.9";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof-bin";
     rev = "v${version}";
-    sha256 = "sha256-yife3gO8lXOGwRye213II9rCQqDic7B7w1xW1o7ajF8=";
+    sha256 = "sha256-pDxNcDe/l1foFYuHB0w3YZidKIeH6h0IuwRmMzeMteE=";
   };
 
   dontFixup = true; # binaries must not be stripped or patchelfed
 
   installPhase = ''
     runHook preInstall
-    cd "v${version}.x"
+    cd "v${lib.versions.majorMinor version}.x"
     mkdir -p $out/lib/firmware/intel/
     cp -a sof-v${version} $out/lib/firmware/intel/sof
     cp -a sof-tplg-v${version} $out/lib/firmware/intel/sof-tplg

@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mpdevil";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "SoongNoonien";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zx129zl6bjb0j3f81yx2641nsj6ck04q5f0v0g8f08xgdwsyv3b";
+    sha256 = "1a5nhlbgi3ahnkcq16c2vgiaghgswy5lxg64pcrlbqssg1pj5gma";
   };
 
   nativeBuildInputs = [

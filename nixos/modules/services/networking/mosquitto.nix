@@ -136,7 +136,7 @@ let
         + concatStringsSep "\n"
           (plainLines
            ++ optional (plainLines != []) ''
-             ${pkgs.mosquitto}/bin/mosquitto_passwd -U "$file"
+             ${cfg.package}/bin/mosquitto_passwd -U "$file"
            ''
            ++ hashedLines));
 
@@ -257,11 +257,20 @@ let
 
       users = mkOption {
         type = attrsOf userOptions;
-        example = { john = { password = "123456"; acl = [ "topic readwrite john/#" ]; }; };
+        example = { john = { password = "123456"; acl = [ "readwrite john/#" ]; }; };
         description = ''
           A set of users and their passwords and ACLs.
         '';
         default = {};
+      };
+
+      omitPasswordAuth = mkOption {
+        type = bool;
+        description = ''
+          Omits password checking, allowing anyone to log in with any user name unless
+          other mandatory authentication methods (eg TLS client certificates) are configured.
+        '';
+        default = false;
       };
 
       acl = mkOption {
@@ -269,6 +278,7 @@ let
         description = ''
           Additional ACL items to prepend to the generated ACL file.
         '';
+        example = [ "pattern read #" "topic readwrite anon/report/#" ];
         default = [];
       };
 
@@ -294,9 +304,9 @@ let
   formatListener = idx: listener:
     [
       "listener ${toString listener.port} ${toString listener.address}"
-      "password_file ${cfg.dataDir}/passwd-${toString idx}"
       "acl_file ${makeACLFile idx listener.users listener.acl}"
     ]
+    ++ optional (! listener.omitPasswordAuth) "password_file ${cfg.dataDir}/passwd-${toString idx}"
     ++ formatFreeform {} listener.settings
     ++ concatMap formatAuthPlugin listener.authPlugins;
 
@@ -434,6 +444,15 @@ let
   globalOptions = with types; {
     enable = mkEnableOption "the MQTT Mosquitto broker";
 
+    package = mkOption {
+      type = package;
+      default = pkgs.mosquitto;
+      defaultText = literalExpression "pkgs.mosquitto";
+      description = ''
+        Mosquitto package to use.
+      '';
+    };
+
     bridges = mkOption {
       type = attrsOf bridgeOptions;
       default = {};
@@ -546,7 +565,7 @@ in
     systemd.services.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       serviceConfig = {
         Type = "notify";
         NotifyAccess = "main";
@@ -555,7 +574,7 @@ in
         RuntimeDirectory = "mosquitto";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
-        ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c ${configFile}";
+        ExecStart = "${cfg.package}/bin/mosquitto -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
         # Hardening
@@ -645,5 +664,10 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ pennae ];
+  meta = {
+    maintainers = with lib.maintainers; [ pennae ];
+    # Don't edit the docbook xml directly, edit the md and generate it:
+    # `pandoc mosquitto.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > mosquitto.xml`
+    doc = ./mosquitto.xml;
+  };
 }

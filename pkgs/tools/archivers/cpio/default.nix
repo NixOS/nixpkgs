@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  separateDebugInfo = true;
+
   preConfigure = lib.optionalString stdenv.isCygwin ''
     sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
   '';

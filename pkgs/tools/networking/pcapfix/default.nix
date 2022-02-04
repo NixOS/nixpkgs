@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pcapfix";
-  version = "1.1.4";
+  version = "1.1.7";
 
   src = fetchurl {
     url = "https://f00l.de/pcapfix/pcapfix-${version}.tar.gz";
-    sha256 = "0m6308ka33wqs568b7cwa1f5q0bv61j2nwfizdyzrazw673lnh6d";
+    sha256 = "sha256-bL6/b5npdrGrdok5JK65DNh8MWUILRUmTBkz8POz4Ow=";
   };
 
   postPatch = ''sed -i "s|/usr|$out|" Makefile'';

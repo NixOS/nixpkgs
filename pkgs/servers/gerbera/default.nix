@@ -3,8 +3,8 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, nixosTests
   # required
-, fmt
 , libiconv
 , libupnp
 , libuuid
@@ -88,7 +88,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    fmt
     libiconv
     libupnp'
     libuuid
@@ -97,6 +96,8 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
   ] ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
+
+  passthru.tests = { inherit (nixosTests) mediatomb; };
 
   meta = with lib; {
     homepage = "https://docs.gerbera.io/";

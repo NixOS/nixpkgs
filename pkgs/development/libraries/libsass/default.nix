@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsass";
-  version = "3.6.5";
+  version = "3.6.5"; # also check sassc for updates
 
   src = fetchFromGitHub {
     owner = "sass";

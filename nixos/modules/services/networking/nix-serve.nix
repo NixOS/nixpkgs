@@ -26,6 +26,12 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Open ports in the firewall for nix-serve.";
+      };
+
       secretKeyFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -36,8 +42,6 @@ in
           ```
           nix-store --generate-binary-cache-key key-name secret-key-file public-key-file
           ```
-
-          Make sure user `nix-serve` has read access to the private key file.
 
           For more details see <citerefentry><refentrytitle>nix-store</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
         '';
@@ -61,17 +65,27 @@ in
 
       path = [ config.nix.package.out pkgs.bzip2.bin ];
       environment.NIX_REMOTE = "daemon";
-      environment.NIX_SECRET_KEY_FILE = cfg.secretKeyFile;
+
+      script = ''
+        ${lib.optionalString (cfg.secretKeyFile != null) ''
+          export NIX_SECRET_KEY_FILE="$CREDENTIALS_DIRECTORY/NIX_SECRET_KEY_FILE"
+        ''}
+        exec ${pkgs.nix-serve}/bin/nix-serve --listen ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}
+      '';
 
       serviceConfig = {
         Restart = "always";
         RestartSec = "5s";
-        ExecStart = "${pkgs.nix-serve}/bin/nix-serve " +
-          "--listen ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}";
         User = "nix-serve";
         Group = "nix-serve";
         DynamicUser = true;
+        LoadCredential = lib.optionalString (cfg.secretKeyFile != null)
+          "NIX_SECRET_KEY_FILE:${cfg.secretKeyFile}";
       };
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
     };
   };
 }

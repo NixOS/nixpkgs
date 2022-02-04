@@ -24,19 +24,19 @@
 , networkmanager
 }: stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    sha256 = "sha256-Blwj4cqrrYXohnGyJYe+1NYifxqfS4DoVUHmxFf62i4=";
+    sha256 = "sha256-hHel3BVMzTYfE59kxxADnm8tqtUFntqS3RzmJSZlWjM=";
   };
 
   # XXX: See patch files for relevant explanations.
   patches = [
     ./patches/0001-makefile-correctly-sed-paths.patch
-    ./patches/0002-tlp-sleep.service-reintroduce.patch
+    ./patches/0002-reintroduce-tlp-sleep-service.patch
   ];
 
   buildInputs = [ perl ];
@@ -50,12 +50,11 @@
   # [1]: https://github.com/NixOS/nixpkgs/issues/65718
   # [2]: https://github.com/linrunner/TLP/blob/ab788abf4936dfb44fbb408afc34af834230a64d/Makefile#L4-L46
   makeFlags = [
-    "DESTDIR=${placeholder "out"}"
-
     "TLP_NO_INIT=1"
     "TLP_WITH_ELOGIND=0"
     "TLP_WITH_SYSTEMD=1"
 
+    "DESTDIR=${placeholder "out"}"
     "TLP_BATD=/share/tlp/bat.d"
     "TLP_BIN=/bin"
     "TLP_CONFDEF=/share/tlp/defaults.conf"

@@ -1,8 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -12,6 +11,7 @@
 , gtk3
 , granite
 , libgee
+, libhandy
 , clutter-gst
 , clutter-gtk
 , gst_all_1
@@ -21,30 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "2.7.3";
-
-  repoName = "videos";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "videos";
     rev = version;
-    sha256 = "04nl9kn33dysvsg0n5qx1z8qgrifkgfwsm7gh1l308v3n8c69lh7";
-  };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/videos/pull/233
-    (fetchpatch {
-      url = "https://github.com/elementary/videos/commit/19ba2a9148be09ea521d2e9ac29dede6b9c6fa07.patch";
-      sha256 = "0ffp7ana98846xi7vxrzfg6dbs4yy28x2i4ky85mqs1gj6fjqin5";
-    })
-  ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-3V8iDy68ngdFTJxAGimuGi4vPru32pHYevThA0RwNpE=";
   };
 
   nativeBuildInputs = [
@@ -57,25 +40,33 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
+  buildInputs = [
     clutter-gst
     clutter-gtk
     elementary-icon-theme
     granite
+    gtk3
+    libgee
+    libhandy
+  ] ++ (with gst_all_1; [
     gst-libav
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    libgee
-  ];
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Video player and library app designed for elementary OS";

@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.amazonImage;
+  amiBootMode = if config.ec2.efi then "uefi" else "legacy-bios";
 
 in {
 
@@ -106,10 +107,12 @@ in {
          --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
          --arg root_logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
          --arg boot_logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$bootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+         --arg boot_mode "${amiBootMode}" \
          --arg root "$rootDisk" \
          --arg boot "$bootDisk" \
         '{}
           | .label = $system_label
+          | .boot_mode = $boot_mode
           | .system = $system
           | .disks.boot.logical_bytes = $boot_logical_bytes
           | .disks.boot.file = $boot
@@ -145,9 +148,11 @@ in {
          --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
          --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
          --arg logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$diskImage" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+         --arg boot_mode "${amiBootMode}" \
          --arg file "$diskImage" \
           '{}
           | .label = $system_label
+          | .boot_mode = $boot_mode
           | .system = $system
           | .logical_bytes = $logical_bytes
           | .file = $file

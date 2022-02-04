@@ -7,7 +7,6 @@
 , openssl
 , nlohmann_json
 , gtest
-, fmt
 , spdlog
 , c-ares
 , abseil-cpp
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
     openssl
     nlohmann_json
     gtest
-    fmt
     spdlog
     c-ares
     abseil-cpp
@@ -48,9 +46,6 @@ stdenv.mkDerivation rec {
     # Default libexec would be set to /nix/store/*-bear//nix/store/*-bear/libexec/...
     ./no-double-relative.patch
   ];
-
-  # 'path' is unavailable: introduced in macOS 10.15
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
 
   meta = with lib; {
     description = "Tool that generates a compilation database for clang tooling";

@@ -9,23 +9,36 @@
 , python
 , pythonOlder
 , pyyaml
+, setuptools-scm
 , typing-extensions
 , typing-inspect
 }:
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.3.20";
+  version = "0.3.23";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
-  # Some files for tests missing from PyPi
-  # https://github.com/Instagram/LibCST/issues/331
   src = fetchFromGitHub {
     owner = "instagram";
     repo = pname;
     rev = "v${version}";
-    sha256 = "063bl21gyyd25i2v0j6kz29cxxdfhng2nins4i2qblmac90f2nqy";
+    sha256 = "1r4aiqpndqa75119faknsghi7zxyjrx5r6i7cb3d0liwiqrkzrvx";
   };
+
+  postPatch = ''
+    # test try to format files, which isn't necessary when consuming releases
+    sed -i libcst/codegen/generate.py \
+      -e '/ufmt/c\        pass'
+  '';
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     hypothesis
@@ -54,7 +67,9 @@ buildPythonPackage rec {
     "test_codemod_formatter_error_input"
   ];
 
-  pythonImportsCheck = [ "libcst" ];
+  pythonImportsCheck = [
+    "libcst"
+  ];
 
   meta = with lib; {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";

@@ -10,11 +10,12 @@
 
 buildPythonPackage rec {
   pname = "fe25519";
-  version = "1.0.0";
+  version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-947DIkmg56mAegEgLKq8iqETWf2SCvtmeDZi5cxVSJA=";
+    sha256 = "sha256-3WFpbt4bA7zPlK+mp5DJXdgk44MBimCbpIMhRjZ5p0o=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +29,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "fe25519" ];
+  pythonImportsCheck = [
+    "fe25519"
+  ];
 
   meta = with lib; {
     description = "Python field operations for Curve25519's prime";

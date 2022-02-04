@@ -81,30 +81,35 @@ ln -s /proc/mounts /etc/mtab # to shut up mke2fs
 touch /etc/udev/hwdb.bin # to shut up udev
 touch /etc/initrd-release
 
-# Function for waiting a device to appear.
+# Function for waiting for device(s) to appear.
 waitDevice() {
     local device="$1"
+    # Split device string using ':' as a delimiter as bcachefs
+    # uses this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
+    local IFS=':'
 
     # USB storage devices tend to appear with some delay.  It would be
     # great if we had a way to synchronously wait for them, but
     # alas...  So just wait for a few seconds for the device to
     # appear.
-    if test ! -e $device; then
-        echo -n "waiting for device $device to appear..."
-        try=20
-        while [ $try -gt 0 ]; do
-            sleep 1
-            # also re-try lvm activation now that new block devices might have appeared
-            lvm vgchange -ay
-            # and tell udev to create nodes for the new LVs
-            udevadm trigger --action=add
-            if test -e $device; then break; fi
-            echo -n "."
-            try=$((try - 1))
-        done
-        echo
-        [ $try -ne 0 ]
-    fi
+    for dev in $device; do
+        if test ! -e $dev; then
+            echo -n "waiting for device $dev to appear..."
+            try=20
+            while [ $try -gt 0 ]; do
+                sleep 1
+                # also re-try lvm activation now that new block devices might have appeared
+                lvm vgchange -ay
+                # and tell udev to create nodes for the new LVs
+                udevadm trigger --action=add
+                if test -e $dev; then break; fi
+                echo -n "."
+                try=$((try - 1))
+            done
+            echo
+            [ $try -ne 0 ]
+        fi
+    done
 }
 
 # Mount special file systems.
@@ -118,6 +123,18 @@ specialMount() {
   mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
 }
 source @earlyMountScript@
+
+# Copy initrd secrets from /.initrd-secrets to their actual destinations
+if [ -d "/.initrd-secrets" ]; then
+    #
+    # Secrets are named by their full destination pathname and stored
+    # under /.initrd-secrets/
+    #
+    for secret in $(cd "/.initrd-secrets"; find . -type f); do
+        mkdir -p $(dirname "/$secret")
+        cp "/.initrd-secrets/$secret" "$secret"
+    done
+fi
 
 # Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
 mkdir -p /tmp
@@ -251,15 +268,6 @@ if test -n "$debug1devices"; then fail; fi
 @postDeviceCommands@
 
 
-# Return true if the machine is on AC power, or if we can't determine
-# whether it's on AC power.
-onACPower() {
-    ! test -d "/proc/acpi/battery" ||
-    ! ls /proc/acpi/battery/BAT[0-9]* > /dev/null 2>&1 ||
-    ! cat /proc/acpi/battery/BAT*/state | grep "^charging state" | grep -q "discharg"
-}
-
-
 # Check the specified file system, if appropriate.
 checkFS() {
     local device="$1"
@@ -273,6 +281,9 @@ checkFS() {
 
     # Don't check resilient COWs as they validate the fs structures at mount time
     if [ "$fsType" = btrfs -o "$fsType" = zfs -o "$fsType" = bcachefs ]; then return 0; fi
+
+    # Skip fsck for apfs as the fsck utility does not support repairing the filesystem (no -a option)
+    if [ "$fsType" = apfs ]; then return 0; fi
 
     # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
     if [ "$fsType" = nilfs2 ]; then return 0; fi
@@ -301,13 +312,6 @@ checkFS() {
         \( "$fsType" = ext3 -o "$fsType" = ext4 -o "$fsType" = reiserfs \
         -o "$fsType" = xfs -o "$fsType" = jfs -o "$fsType" = f2fs \)
     then
-        return 0
-    fi
-
-    # Don't run `fsck' if the machine is on battery power.  !!! Is
-    # this a good idea?
-    if ! onACPower; then
-        echo "on battery power, so no \`fsck' will be performed on \`$device'"
         return 0
     fi
 

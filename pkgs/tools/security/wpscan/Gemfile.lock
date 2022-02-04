@@ -26,16 +26,16 @@ GEM
     ffi (1.15.4)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
-    i18n (1.8.10)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     minitest (5.14.4)
-    nokogiri (1.12.4-x86_64-linux)
+    nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     opt_parse_validator (1.9.5)
       activesupport (>= 5.2, < 6.2.0)
       addressable (>= 2.5, < 2.9)
     public_suffix (4.0.6)
-    racc (1.5.2)
+    racc (1.6.0)
     ruby-progressbar (1.11.0)
     sys-proctable (1.2.6)
       ffi
@@ -44,12 +44,12 @@ GEM
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     webrick (1.7.0)
-    wpscan (3.8.19)
+    wpscan (3.8.20)
       cms_scanner (~> 0.13.6)
     xmlrpc (0.3.2)
       webrick
     yajl-ruby (1.4.1)
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.1)
 
 PLATFORMS
   x86_64-linux

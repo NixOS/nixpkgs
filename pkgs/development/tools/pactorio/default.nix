@@ -1,28 +1,36 @@
-{ fetchFromGitHub, installShellFiles, lib, stdenv, rustPlatform, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, bzip2
+, stdenv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pactorio";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "figsoda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07h9hywz0pc29411myhxjq6pks4p6q6czbqjv7fxf3xkb1mg9grq";
+    sha256 = "sha256-tRmchXDg8flvByjg6GLwwdwQgp/5NdZIgnjYgPLcLP8=";
   };
 
-  cargoSha256 = "1rac2s36j88vm231aji8d0ndfbaa2gzxwsrxrvsi0zp9cqisc6rh";
+  cargoSha256 = "sha256-FIn+6wflDAjshP2Vz/rXRTrrjPQFW63XtXo8hBHMdkg=";
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  preFixup = ''
+  buildInputs = [ bzip2 ] ++ lib.optional stdenv.isDarwin Security;
+
+  postInstall = ''
     completions=($releaseDir/build/pactorio-*/out/completions)
-    installShellCompletion ''${completions[0]}/pactorio.{bash,fish}
-    installShellCompletion --zsh ''${completions[0]}/_pactorio
+    installShellCompletion $completions/pactorio.{bash,fish} --zsh $completions/_pactorio
   '';
 
-  GEN_COMPLETIONS = "1";
+  GEN_COMPLETIONS = 1;
 
   meta = with lib; {
     description = "Mod packager for factorio";

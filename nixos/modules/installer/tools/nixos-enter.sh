@@ -1,4 +1,5 @@
 #! @runtimeShell@
+# shellcheck shell=bash
 
 set -e
 
@@ -102,5 +103,7 @@ chroot_add_resolv_conf "$mountPoint" || print "ERROR: failed to set up resolv.co
     # Create /tmp
     chroot "$mountPoint" systemd-tmpfiles --create --remove --exclude-prefix=/dev 1>&2 || true
 )
+
+unset TMPDIR
 
 exec chroot "$mountPoint" "${command[@]}"

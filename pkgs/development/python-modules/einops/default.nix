@@ -10,6 +10,7 @@
 , pytorch
 , mxnet
 , tensorflow
+, keras
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     pytorch
     mxnet
     tensorflow
+    keras
   ];
 
   # No CUDA in sandbox
@@ -42,6 +44,11 @@ buildPythonPackage rec {
 
   checkPhase = ''
     export HOME=$TMPDIR
+
+    # Prevent hangs on PyTorch-related tests, see
+    # https://discuss.pytorch.org/t/pytorch-cpu-hangs-on-nn-linear/17748/4
+    export OMP_NUM_THREADS=1
+
     nosetests -v -w tests
   '';
 

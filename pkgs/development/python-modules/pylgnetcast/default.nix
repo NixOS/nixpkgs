@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pylgnetcast";
-  version = "0.3.5";
+  version = "0.3.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "Drafteed";
     repo = "python-lgnetcast";
     rev = "v${version}";
-    sha256 = "11g7ya4ppqxjiv3fkz9mi6h1afw9icy6xyn4jzm63kjvxqhrwnw4";
+    sha256 = "0pmz52k2sfxj5x2wcwdjks2lqh1gb5zfrjgc6xij8jal4l9xd2dz";
   };
 
   propagatedBuildInputs = [

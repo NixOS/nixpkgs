@@ -1,8 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , substituteAll
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -13,7 +14,7 @@
 , granite
 , libgee
 , elementary-icon-theme
-, elementary-gtk-theme
+, elementary-settings-daemon
 , gettext
 , libhandy
 , wrapGAppsHook
@@ -22,22 +23,27 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "6.0.0";
-
-  repoName = "onboarding";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "onboarding";
     rev = version;
-    sha256 = "1mpw0j8ymb41py9v9qlk4nwy1lnwj7k388c7gqdv34ynck0ymfi4";
+    sha256 = "sha256-9voy9eje3VlV4IMM664EyjKWTfSVogX5JoRCqhsUXTE=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      appcenter = appcenter;
+    })
+    # Provides the directory where the locales are actually installed
+    # https://github.com/elementary/onboarding/pull/147
+    (fetchpatch {
+      url = "https://github.com/elementary/onboarding/commit/af19c3dbefd1c0e0ec18eddacc1f21cb991f5513.patch";
+      sha256 = "sha256-fSFfjSd33W7rXXEUHY8b3rv9B9c31XfCjxjRxBBrqjs=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -50,8 +56,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-gtk-theme
     elementary-icon-theme
+    elementary-settings-daemon # settings schema
     glib
     granite
     gtk3
@@ -59,17 +65,16 @@ stdenv.mkDerivation rec {
     libhandy
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      appcenter = appcenter;
-    })
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Onboarding app for new users designed for elementary OS";

@@ -1,19 +1,19 @@
 { pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  iso-flags-png-320x420 = pkgs.iso-flags.overrideAttrs(p: p // {
+  iso-flags-png-320x420 = pkgs.iso-flags.overrideAttrs (p: p // {
     buildPhase = "make png-country-320x240-fancy";
     # installPhase = "mkdir -p $out/share && mv build/png-country-4x2-fancy/res-320x240 $out/share/iso-flags-png-320x420";
     installPhase = "mkdir -p $out/share && mv build/png-country-4x2-fancy/res-320x240 $out/share/iso-flags-png";
   });
 
-  iso-flags-svg = pkgs.iso-flags.overrideAttrs(p: p // {
+  iso-flags-svg = pkgs.iso-flags.overrideAttrs (p: p // {
     buildPhase = "mkdir -p $out/share";
     installPhase = "mv svg $out/share/iso-flags-svg";
   });
 
   # blueberry -> pkgs/tools/bluetooth/blueberry/default.nix
-  bulky = callPackage ./bulky {};
+  bulky = callPackage ./bulky { };
   cinnamon-common = callPackage ./cinnamon-common { };
   cinnamon-control-center = callPackage ./cinnamon-control-center { };
   cinnamon-desktop = callPackage ./cinnamon-desktop { };
@@ -30,7 +30,9 @@ lib.makeScope pkgs.newScope (self: with self; {
   mint-x-icons = callPackage ./mint-x-icons { };
   mint-y-icons = callPackage ./mint-y-icons { };
   muffin = callPackage ./muffin { };
+  pix = callPackage ./pix { };
   xapps = callPackage ./xapps { };
   warpinator = callPackage ./warpinator { };
+  xreader = callPackage ./xreader { };
   xviewer = callPackage ./xviewer { };
 })

@@ -5,19 +5,23 @@
 , fetchFromGitHub
 , fpc
 , lazarus-qt
-, qt5
-, libX11
+, wrapQtAppsHook
+, breeze-qt5
+, libGL
+, libGLU
 , libqt5pas
+, libX11
 , coreutils
 , git
 , gnugrep
 , libnotify
-, mesa-demos
 , polkit
 , procps
 , systemd
+, util-linux
 , vulkan-tools
 , which
+, nix-update-script
 }:
 
 let
@@ -34,13 +38,13 @@ let
   '';
 in stdenv.mkDerivation rec {
   pname = "goverlay";
-  version = "0.6";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "benjamimgois";
     repo = pname;
     rev = version;
-    hash = "sha256-E4SMUL9rpDSSdprX4fPyGCHCowdQavjhGIhV3r4jeiw=";
+    sha256 = "sha256-oXkGrMHjs8uui0pzGYW8jnttet/5IX0r8eat0n5saFk=";
   };
 
   outputs = [ "out" "man" ];
@@ -61,15 +65,18 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     fpc
     lazarus-qt
-    qt5.wrapQtAppsHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    libX11
+    breeze-qt5
+    libGL
+    libGLU
     libqt5pas
+    libX11
   ];
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  NIX_LDFLAGS = "-lGLU -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
     runHook preBuild
@@ -85,10 +92,10 @@ in stdenv.mkDerivation rec {
       git
       gnugrep
       libnotify
-      mesa-demos
       polkit
       procps
       systemd
+      util-linux.bin
       vulkan-tools
       which
     ]}"
@@ -97,6 +104,10 @@ in stdenv.mkDerivation rec {
     # See https://github.com/benjamimgois/goverlay/issues/107
     "--set QT_QPA_PLATFORM xcb"
   ];
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "An opensource project that aims to create a Graphical UI to help manage Linux overlays";

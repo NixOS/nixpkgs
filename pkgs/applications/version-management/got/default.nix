@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "got";
-  version = "0.60";
+  version = "0.66";
 
   src = fetchurl {
     url =
       "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
-    sha256 = "sha256-tT8F3Kx7Rcjd/tWjIXXNWygYlkMddWwrttpjnYLnBdo=";
+    sha256 = "13xrwndj80jix210fxkadivxyd1f5qavdrhxyl32n68xyv5xmkgg";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    test "$($out/bin/got --version)" = '${pname} "${version}"'
+    test "$($out/bin/got --version)" = '${pname} ${version}'
     runHook postInstallCheck
   '';
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gameoftrees.org";
     license = licenses.isc;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ abbe ];
   };
 }

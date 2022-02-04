@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "bacnet-stack";
+  pname = "bacnet-stack";
   version = "1.0.0";
 
   src = fetchFromGitHub {

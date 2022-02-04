@@ -18,7 +18,6 @@ in {
       { config, pkgs, ... }: {
         networking.firewall.allowedTCPPorts = [ 80 2222 ];
 
-        virtualisation.memorySize = 1024;
 
         services.gerrit = {
           enable = true;

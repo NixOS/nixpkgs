@@ -1,15 +1,12 @@
-{
-  stdenv,
-  clangStdenv,
-  fetchgit,
-  fetchpatch,
-  libuuid,
-  python3,
-  bc,
-  clang_9,
-  llvmPackages_9,
-  overrideCC,
-  lib,
+{ stdenv
+, clangStdenv
+, fetchFromGitHub
+, fetchpatch
+, libuuid
+, python3
+, bc
+, llvmPackages_9
+, lib
 }:
 
 let
@@ -25,7 +22,7 @@ else
   throw "Unsupported architecture";
 
 buildStdenv = if stdenv.isDarwin then
-  overrideCC clangStdenv [ clang_9 llvmPackages_9.llvm llvmPackages_9.lld ]
+  llvmPackages_9.stdenv
 else
   stdenv;
 
@@ -39,11 +36,25 @@ edk2 = buildStdenv.mkDerivation {
   version = "202108";
 
   # submodules
-  src = fetchgit {
-    url = "https://github.com/tianocore/edk2";
+  src = fetchFromGitHub {
+    owner = "tianocore";
+    repo = "edk2";
     rev = "edk2-stable${edk2.version}";
+    fetchSubmodules = true;
     sha256 = "1ps244f7y43afxxw6z95xscy24f9mpp8g0mfn90rd4229f193ba2";
   };
+
+  patches = [
+    # Pull upstream fix for gcc-11 build.
+    (fetchpatch {
+      name = "gcc-11-vla.patch";
+      url = "https://github.com/google/brotli/commit/0a3944c8c99b8d10cc4325f721b7c273d2b41f7b.patch";
+      sha256 = "10c6ibnxh4f8lrh9i498nywgva32jxy2c1zzvr9mcqgblf9d19pj";
+      # Apply submodule patch to subdirectory: "a/" -> "BaseTools/Source/C/BrotliCompress/brotli/"
+      stripLen = 1;
+      extraPrefix = "BaseTools/Source/C/BrotliCompress/brotli/";
+    })
+  ];
 
   buildInputs = [ libuuid pythonEnv ];
 

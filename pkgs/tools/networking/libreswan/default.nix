@@ -14,6 +14,7 @@
 , curl
 , nspr
 , bash
+, runtimeShell
 , iproute2
 , iptables
 , procps
@@ -42,11 +43,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "4.5";
+  version = "4.6";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    sha256 = "18whvmaxqfmaqbmq72calyzk21wyvxa0idddcsxd8x36vhdza0q7";
+    sha256 = "1zsnsfx18pf5dy1p4jva2sfl0bdfx5y9ls54f9bp70m64r46yf96";
   };
 
   strictDeps = true;
@@ -70,11 +71,15 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isLinux libselinux;
 
   prePatch = ''
-    # Correct iproute2 path
-    sed -e 's|"/sbin/ip"|"${iproute2}/bin/ip"|' \
-        -e 's|"/sbin/iptables"|"${iptables}/bin/iptables"|' \
+    # Correct iproute2 and iptables path
+    sed -e 's|/sbin/ip|${iproute2}/bin/ip|g' \
+        -e 's|/sbin/\(ip6\?tables\)|${iptables}/bin/\1|' \
+        -e 's|/bin/bash|${runtimeShell}|g' \
         -i initsystems/systemd/ipsec.service.in \
+           programs/barf/barf.in \
            programs/verify/verify.in
+    sed -e 's|\([[:blank:]]\)\(ip6\?tables\(-save\)\? -\)|\1${iptables}/bin/\2|' \
+        -i programs/verify/verify.in
 
     # Prevent the makefile from trying to
     # reload the systemd daemon or create tmpfiles

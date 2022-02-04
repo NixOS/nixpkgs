@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -7,6 +7,8 @@
 , catalogue
 , cymem
 , cython
+, contextvars
+, dataclasses
 , Accelerate
 , CoreFoundation
 , CoreGraphics
@@ -15,7 +17,6 @@
 , mock
 , murmurhash
 , numpy
-, pathlib
 , plac
 , pythonOlder
 , preshed
@@ -28,17 +29,19 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.0.10";
+  version = "8.0.13";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-teTbjSTmvopfHkoXhUdyt5orVgIkUZ9Qoh85UcokAB8=";
+    sha256 = "sha256-R2YqOuM9RFp3tup7dyREgFx7uomR8SLjUNr3Le3IFxo=";
   };
 
-  buildInputs = [ cython ]
-    ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    cython
+  ] ++ lib.optionals stdenv.isDarwin [
     Accelerate
     CoreFoundation
     CoreGraphics
@@ -57,7 +60,12 @@ buildPythonPackage rec {
     tqdm
     pydantic
     wasabi
-  ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
+  ] ++ lib.optional (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ lib.optional (pythonOlder "3.7") [
+    contextvars
+    dataclasses
+  ];
 
   checkInputs = [
     hypothesis
@@ -72,7 +80,9 @@ buildPythonPackage rec {
     "thinc/tests"
   ];
 
-  pythonImportsCheck = [ "thinc" ];
+  pythonImportsCheck = [
+    "thinc"
+  ];
 
   meta = with lib; {
     description = "Practical Machine Learning for NLP in Python";

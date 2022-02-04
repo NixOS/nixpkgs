@@ -1,23 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, which
+{ lib
+, stdenv
+, fetchFromGitHub
 , darwin ? null
-, xorgproto ? null
+, fontconfig ? null
+, freetype ? null
 , libX11
 , libXext ? null
 , libXt ? null
-, fontconfig ? null
-, freetype ? null
 , perl ? null  # For building web manuals
+, which
+, xorgproto ? null
 }:
 
 stdenv.mkDerivation {
   pname = "plan9port";
-  version = "2021-04-22";
+  version = "2021-10-19";
 
   src =  fetchFromGitHub {
     owner = "9fans";
     repo = "plan9port";
-    rev = "70cc6e5ba7798b315c3fb3aae19620a01604a459";
-    hash = "sha256-HCn8R9YSocHrpw/xK5n8gsCLSAbAQgw0NtjO9vYIbKo=";
+    rev = "d0d440860f2000a1560abb3f593cdc325fcead4c";
+    hash = "sha256-2aYXqPGwrReyFPrLDtEjgQd/RJjpOfI3ge/tDocYpRQ=";
   };
 
   postPatch = ''
@@ -44,10 +47,19 @@ stdenv.mkDerivation {
   buildInputs = [
     perl
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    xorgproto libX11 libXext libXt fontconfig
-    freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
+    fontconfig
+    freetype # fontsrv wants ft2build.h provides system fonts for acme and sam
+    libX11
+    libXext
+    libXt
+    xorgproto
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Carbon Cocoa IOKit Metal QuartzCore
+    Carbon
+    Cocoa
+    IOKit
+    Metal
+    QuartzCore
+    darwin.DarwinTools
   ]);
 
   builder = ./builder.sh;
@@ -90,6 +102,8 @@ stdenv.mkDerivation {
       kovirobi
     ];
     platforms = platforms.unix;
+    # TODO: revisit this when the sdk situation on x86_64-darwin changes
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
 # TODO: investigate the mouse chording support patch

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "reproxy";
-  version = "0.8.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zwQZr6BbvJ2Ol5pCLkZ49j0j5KWTK0N8BybvTr8PPeg=";
+    hash = "sha256-3kpGeG60WSpcIqVLw437gkDT8XLsDyhGL8/sEnhTgBw=";
   };
 
   postPatch = ''

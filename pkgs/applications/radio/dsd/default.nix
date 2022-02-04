@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       tap audio and synthesize the decoded speech. Speech synthesis requires
       mbelib, which is a separate package.
     '';
-    homepage = https://github.com/szechyjs/dsd;
+    homepage = "https://github.com/szechyjs/dsd";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ andrew-d ];

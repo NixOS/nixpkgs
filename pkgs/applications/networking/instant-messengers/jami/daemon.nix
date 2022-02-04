@@ -3,6 +3,7 @@
 , jami-meta
 , stdenv
 , lib
+, fetchFromGitHub
 , autoreconfHook
 , pkg-config
 , perl # for pod2man
@@ -49,13 +50,23 @@ let
         ++ lib.optionals stdenv.isLinux (readLinesToList ./config/ffmpeg_args_linux)
         ++ lib.optionals (stdenv.isx86_32 || stdenv.isx86_64) (readLinesToList ./config/ffmpeg_args_x86);
       outputs = [ "out" "doc" ];
+      meta = old.meta // {
+        # undefined reference to `ff_nlmeans_init_aarch64'
+        broken = stdenv.isAarch64;
+      };
     });
 
   pjsip-jami = pjsip.overrideAttrs (old:
     let
+      src-args = import ./pjproject-src.nix;
+      version = lib.concatStrings (lib.lists.take 7 (lib.stringToCharacters src-args.rev));
       patch-src = src + "/daemon/contrib/src/pjproject/";
     in
     {
+      inherit version;
+
+      src = fetchFromGitHub src-args;
+
       patches = old.patches ++ (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
     });
 
@@ -64,7 +75,8 @@ let
     enablePushNotifications = true;
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "jami-daemon";
   inherit src version;
   sourceRoot = "source/daemon";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, pkg-config, libixp_hg, txt2tags, dash, python, which
+{ lib, stdenv, fetchurl, unzip, pkg-config, libixp_hg, txt2tags, dash, python2, which
 , libX11 , libXrender, libXext, libXinerama, libXrandr, libXft }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config unzip ];
-  buildInputs = [ libixp_hg txt2tags dash python which
+  buildInputs = [ libixp_hg txt2tags dash python2 which
                   libX11 libXrender libXext libXinerama libXrandr libXft ];
 
   # For some reason including mercurial in buildInputs did not help

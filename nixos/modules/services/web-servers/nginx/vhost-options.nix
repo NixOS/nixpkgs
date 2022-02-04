@@ -3,7 +3,7 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ lib, ... }:
+{ config, lib, ... }:
 
 with lib;
 {
@@ -85,9 +85,12 @@ with lib;
     };
 
     acmeRoot = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
+      description = ''
+        Directory for the acme challenge which is PUBLIC, don't put certs or keys in here.
+        Set to null to inherit from config.security.acme.
+      '';
     };
 
     acmeFallbackHost = mkOption {
@@ -144,6 +147,17 @@ with lib;
         server blocks to avoid serving the certificate for another vhost. Uses the
         <literal>ssl_reject_handshake</literal> directive available in nginx versions
         1.19.4 and above.
+      '';
+    };
+
+    kTLS = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable kTLS support.
+        Implementing TLS in the kernel (kTLS) improves performance by significantly
+        reducing the need for copying operations between user space and the kernel.
+        Required Nginx version 1.21.4 or later.
       '';
     };
 

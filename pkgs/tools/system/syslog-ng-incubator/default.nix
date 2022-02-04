@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, syslogng
-, eventlog, perl, python, bison, protobufc, libivykis, libcap, czmq
+, eventlog, perl, python2, bison, protobufc, libivykis, libcap, czmq
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook bison ];
 
   buildInputs = [
-    glib syslogng eventlog perl python protobufc libivykis libcap czmq
+    glib syslogng eventlog perl python2 protobufc libivykis libcap czmq
   ];
 
   configureFlags = [

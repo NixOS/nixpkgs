@@ -45,11 +45,11 @@ in makeTest {
         ../modules/profiles/base.nix
       ];
 
-      nix.binaryCaches = mkForce [ ];
-      nix.extraOptions = ''
-        hashed-mirrors =
-        connect-timeout = 1
-      '';
+      nix.settings = {
+        substituters = mkForce [];
+        hashed-mirrors = null;
+        connect-timeout = 1;
+      };
 
       virtualisation.diskSize = 8 * 1024;
       virtualisation.emptyDiskImages = [
@@ -95,7 +95,7 @@ in makeTest {
           "mkswap /dev/vda1 -L swap",
           # Install onto /mnt
           "nix-store --load-db < ${pkgs.closureInfo {rootPaths = [installedSystem];}}/registration",
-          "nixos-install --root /mnt --system ${installedSystem} --no-root-passwd",
+          "nixos-install --root /mnt --system ${installedSystem} --no-root-passwd --no-channel-copy >&2",
       )
       machine.shutdown()
 
@@ -110,7 +110,7 @@ in makeTest {
       )
 
       # Hibernate machine
-      hibernate.succeed("systemctl hibernate &")
+      hibernate.execute("systemctl hibernate >&2 &", check_return=False)
       hibernate.wait_for_shutdown()
 
       # Restore machine from hibernation, validate our ramfs file is there.

@@ -24,6 +24,8 @@ buildPythonPackage rec {
     argon2_cffi python-dateutil future
   ];
 
+  propagatedNativeBuildInputs = [ argon2_cffi ];
+
   checkPhase = ''
     ${python.interpreter} -m unittest tests.tests
   '';

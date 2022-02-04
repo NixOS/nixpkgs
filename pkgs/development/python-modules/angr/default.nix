@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , ailment
 , archinfo
 , buildPythonPackage
@@ -21,6 +22,7 @@
 , pycparser
 , pythonOlder
 , pyvex
+, sympy
 , sqlalchemy
 , rpyc
 , sortedcontainers
@@ -30,27 +32,30 @@
 let
   # Only the pinned release in setup.py works properly
   unicorn' = unicorn.overridePythonAttrs (old: rec {
-      pname = "unicorn";
-      version = "1.0.2-rc4";
-      src =  fetchFromGitHub {
-        owner = "unicorn-engine";
-        repo = pname;
-        rev = version;
-        sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
+    pname = "unicorn";
+    version = "1.0.2-rc4";
+    src =  fetchFromGitHub {
+      owner = "unicorn-engine";
+      repo = pname;
+      rev = version;
+      sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
     };
+    doCheck = false;
   });
 in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.10339";
+  version = "9.1.11752";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+bJuV4Ce3WoNtkZC+ism+QtRqTu42BDVVhqbZqVPAPA=";
+    hash = "sha256-4DUM1c3M/naJFqN/gdrX/NnJrY3ElUEOQ34cwcpSC+s=";
   };
 
   propagatedBuildInputs = [
@@ -71,20 +76,24 @@ buildPythonPackage rec {
     progressbar2
     protobuf
     psutil
-    sqlalchemy
     pycparser
     pyvex
-    sqlalchemy
     rpyc
     sortedcontainers
+    sqlalchemy
+    sympy
     unicorn'
+  ];
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+    "--plat-name"
+    "linux"
   ];
 
   # Tests have additional requirements, e.g., pypcode and angr binaries
   # cle is executing the tests with the angr binaries
   doCheck = false;
 
-  # See http://angr.io/api-doc/
   pythonImportsCheck = [
     "angr"
     "claripy"

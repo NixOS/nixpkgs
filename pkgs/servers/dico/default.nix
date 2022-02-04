@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  nativeBuildInputs = [ groff ];
+
   buildInputs =
-    [ libtool gettext zlib readline gsasl guile python3 pcre libffi groff ];
+    [ libtool gettext zlib readline gsasl guile python3 pcre libffi ];
+
+  strictDeps = true;
 
   doCheck = true;
 

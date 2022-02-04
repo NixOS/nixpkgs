@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchzip
 , fetchpatch
 , makeWrapper
 , nixosTests
@@ -49,11 +49,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.0.2";
+  version = "9.1.1";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    sha256 = "0r05iqmnnjq259nsibncgfrfsr0l4h3hsafizvgfl9zgmrkm6izz";
+    sha256 = "sha256-oicRqKFE6hOpcNG9o3BmrMujtEzi4hrPhBWaljOW+VI=";
   };
 
   patches = [
@@ -62,6 +62,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/apache/trafficserver/commit/19d3af481cf74c91fbf713fc9d2f8b138ed5fbaf.diff";
       sha256 = "0z1ikgpp00rzrrcqh97931586yn9wbksgai9xlkcjd5cg8gq0150";
+    })
+
+    # Fix build against ncurses-6.3:
+    #  https://github.com/apache/trafficserver/pull/8437
+    (fetchpatch {
+      url = "https://github.com/apache/trafficserver/commit/66c86c6b082903a92b9db33c60e3ed947e77d540.patch";
+      sha256 = "1hgpp80xnnjr4k5i6gcllrb7dw4q4xcdrkwxpc1xk2np5cbyxd16";
     })
   ];
 

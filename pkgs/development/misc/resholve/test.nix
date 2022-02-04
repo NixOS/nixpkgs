@@ -21,10 +21,17 @@
 , rSrc
 , runDemo ? false
 , binlore
+, sqlite
+, util-linux
+, gawk
+, rlwrap
+, gnutar
+, bc
 }:
 
 let
-
+  default_packages = [ bash file findutils gettext ];
+  parsed_packages = [ coreutils sqlite util-linux gnused gawk findutils rlwrap gnutar bc ];
 in
 rec {
   re_shunit2 = with shunit2;
@@ -56,9 +63,6 @@ rec {
             "/usr/bin/od" = true;
           };
           keep = {
-            # dynamically defined in shunit2:_shunit_mktempFunc
-            eval = [ "shunit_condition_" "_shunit_test_" "_shunit_prepForSourcing" ];
-
             # variables invoked as commands; long-term goal is to
             # resolve the *variable*, but that is complexish, so
             # this is where we are...
@@ -166,13 +170,14 @@ rec {
     # LOGLEVEL="DEBUG";
 
     # default path
-    RESHOLVE_PATH = "${lib.makeBinPath [ bash file findutils gettext ]}";
+    RESHOLVE_PATH = "${lib.makeBinPath default_packages}";
     # but separate packages for combining as needed
     PKG_FILE = "${lib.makeBinPath [ file ]}";
     PKG_FINDUTILS = "${lib.makeBinPath [ findutils ]}";
     PKG_GETTEXT = "${lib.makeBinPath [ gettext ]}";
     PKG_COREUTILS = "${lib.makeBinPath [ coreutils ]}";
-    RESHOLVE_LORE = "${binlore.collect { drvs = [ bash file findutils gettext coreutils ]; } }";
+    RESHOLVE_LORE = "${binlore.collect { drvs = default_packages ++ [ coreutils ] ++ parsed_packages; } }";
+    PKG_PARSED = "${lib.makeBinPath parsed_packages}";
 
     # explicit interpreter for demo suite; maybe some better way...
     INTERP = "${bash}/bin/bash";

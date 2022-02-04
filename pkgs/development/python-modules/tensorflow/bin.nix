@@ -2,8 +2,7 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, pythonOlder, pythonAtLeast, isPy38
-, astor
+, isPy3k, pythonOlder, pythonAtLeast, astor
 , gast
 , google-pasta
 , wrapt
@@ -18,14 +17,14 @@
 , wheel
 , opt-einsum
 , backports_weakref
-, tensorflow-estimator_2
-, tensorflow-tensorboard_2
+, tensorflow-estimator
+, tensorflow-tensorboard
 , cudaSupport ? false
-, cudatoolkit ? null
-, cudnn ? null
+, cudatoolkit
+, cudnn
+, patchelfUnstable
 , zlib
 , python
-, symlinkJoin
 , keras-applications
 , keras-preprocessing
 , addOpenGLRunpath
@@ -39,25 +38,17 @@
 # - the source build doesn't work on Darwin.
 # - the source build is currently brittle and not easy to maintain
 
-assert cudaSupport -> cudatoolkit != null
-                   && cudnn != null;
-
 # unsupported combination
 assert ! (stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
-
-  variant = if cudaSupport then "-gpu" else "";
-  pname = "tensorflow${variant}";
-  metadataPatch = ./relax-dependencies-metadata.patch;
-  patch = ./relax-dependencies.patch;
 in buildPythonPackage {
-  inherit pname;
+  pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
   format = "wheel";
 
-  disabled = pythonAtLeast "3.9";
+  disabled = pythonAtLeast "3.10";
 
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
@@ -82,15 +73,16 @@ in buildPythonPackage {
     opt-einsum
     google-pasta
     wrapt
-    tensorflow-estimator_2
-    tensorflow-tensorboard_2
+    tensorflow-estimator
+    tensorflow-tensorboard
     keras-applications
     keras-preprocessing
     h5py
   ] ++ lib.optional (!isPy3k) mock
     ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
-  nativeBuildInputs = [ wheel ] ++ lib.optional cudaSupport addOpenGLRunpath;
+  # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
+  nativeBuildInputs = [ wheel ] ++ lib.optional cudaSupport [ addOpenGLRunpath patchelfUnstable ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -101,13 +93,18 @@ in buildPythonPackage {
     pushd dist
 
     wheel unpack --dest unpacked ./*.whl
+    rm ./*.whl
     (
       cd unpacked/tensorflow*
-      # relax too strict versions in setup.py
-      patch -p 1 < ${patch}
-      cd *.dist-info
-      # relax too strict versions in *.dist-info/METADATA
-      patch -p 3 < ${metadataPatch}
+      # Adjust dependency requirements:
+      # - Relax gast version requirement that doesn't match what we have packaged
+      # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
+      # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
+      sed -i *.dist-info/METADATA \
+        -e "s/Requires-Dist: gast.*/Requires-Dist: gast/" \
+        -e "/Requires-Dist: libclang/d" \
+        -e "/Requires-Dist: keras/d" \
+        -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d"
     )
     wheel pack ./unpacked/tensorflow*
 

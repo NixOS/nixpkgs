@@ -13,19 +13,19 @@
 , udev
 , libevdev
 , libinput
-, libX11
 , libGL
+, xwaylandSupport ? true, libX11
 }:
 
 stdenv.mkDerivation rec {
   pname = "river";
-  version = "unstable-2021-09-30";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
-    owner = "ifreund";
+    owner = "riverwm";
     repo = pname;
-    rev = "e6bb373240bc08668c8e6e14996a3f8765941158";
-    sha256 = "sha256-dYruRpsud2XYrVY2f4f2dkRRSh1oU9rn2GRwAkJqW3A=";
+    rev = "v${version}";
+    sha256 = "0mysj6fmgiwzrfzm1rk09k4xa9qiqsdwvwr59b4rs010c1gsllwk";
     fetchSubmodules = true;
   };
 
@@ -34,15 +34,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland-protocols
     wlroots
-    pixman
     libxkbcommon
     pixman
     udev
     libevdev
     libinput
-    libX11
     libGL
-  ];
+  ] ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;
 
@@ -52,14 +50,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    zig build -Drelease-safe -Dcpu=baseline -Dxwayland -Dman-pages --prefix $out install
+    zig build -Drelease-safe -Dcpu=baseline ${lib.optionalString xwaylandSupport "-Dxwayland"} -Dman-pages --prefix $out install
     runHook postInstall
   '';
 
-  /*
-    Builder patch install dir into river to get default config
-    When installFlags is removed, river becomes half broken.
-    See https://github.com/ifreund/river/blob/7ffa2f4b9e7abf7d152134f555373c2b63ccfc1d/river/main.zig#L56
+  /* Builder patch install dir into river to get default config
+     When installFlags is removed, river becomes half broken.
+     See https://github.com/riverwm/river/blob/7ffa2f4b9e7abf7d152134f555373c2b63ccfc1d/river/main.zig#L56
   */
   installFlags = [ "DESTDIR=$(out)" ];
 

@@ -5,23 +5,23 @@
 with lib;
 
 let
-  qemuName = "qemu-2.10.0";
   cpuTarget = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux-user"
     else if stdenv.hostPlatform.system == "i686-linux" then "i386-linux-user"
     else throw "afl: no support for ${stdenv.hostPlatform.system}!";
 in
-stdenv.mkDerivation {
-  name = "afl-${qemuName}";
+stdenv.mkDerivation rec {
+  pname = "afl-qemu";
+  version = "2.10.0";
 
   srcs = [
     (fetchurl {
-      url = "http://wiki.qemu.org/download/${qemuName}.tar.bz2";
+      url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
       sha256 = "0j3dfxzrzdp1w21k21fjvmakzc6lcha1rsclaicwqvbf63hkk7vy";
     })
     afl.src
   ];
 
-  sourceRoot = qemuName;
+  sourceRoot = "qemu-${version}";
 
   postUnpack = ''
     cp ${afl.src.name}/types.h $sourceRoot/afl-types.h

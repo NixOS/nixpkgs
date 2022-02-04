@@ -294,7 +294,7 @@ in
       };
 
       submissionOptions = mkOption {
-        type = types.attrs;
+        type = with types; attrsOf str;
         default = {
           smtpd_tls_security_level = "encrypt";
           smtpd_sasl_auth_enable = "yes";
@@ -312,7 +312,7 @@ in
       };
 
       submissionsOptions = mkOption {
-        type = types.attrs;
+        type = with types; attrsOf str;
         default = {
           smtpd_sasl_auth_enable = "yes";
           smtpd_client_restrictions = "permit_sasl_authenticated,reject";

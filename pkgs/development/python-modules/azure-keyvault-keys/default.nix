@@ -2,7 +2,6 @@
 , aiohttp
 , azure-common
 , azure-core
-, azure-nspkg
 , cryptography
 , msrest
 , pytestCheckHook

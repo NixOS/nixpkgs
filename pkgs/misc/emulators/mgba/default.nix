@@ -3,13 +3,12 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, epoxy
+, libepoxy
 , ffmpeg
 , imagemagick
 , libedit
 , libelf
 , libzip
-, copyDesktopItems
 , makeDesktopItem
 , minizip
 , pkg-config
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mgba";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    hash = "sha256-A48PVUCekdRYel/BddPCeIcEDllOvcU7pk4i4P58dpo=";
+    hash = "sha256-0ZtoyyoD+YjplJlPFpZgIg5119j/6X8ZaSZP+UpX5K0=";
   };
 
   nativeBuildInputs = [
@@ -35,9 +34,10 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapQtAppsHook
   ];
+
   buildInputs = [
     SDL2
-    epoxy
+    libepoxy
     ffmpeg
     imagemagick
     libedit
@@ -79,10 +79,9 @@ stdenv.mkDerivation rec {
       runners, and a modern feature set for emulators that older emulators may
       not support.
     '';
-
     license = licenses.mpl20;
     maintainers = with maintainers; [ MP2E AndersonTorres ];
     platforms = platforms.linux;
   };
 }
-# TODO [ AndersonTorres ]: use desktopItem functions
+# TODO: use desktopItem functions

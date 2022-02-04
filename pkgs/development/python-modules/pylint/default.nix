@@ -6,6 +6,7 @@
 , installShellFiles
 , astroid
 , isort
+, GitPython
 , mccabe
 , platformdirs
 , toml
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.10.2";
+  version = "2.12.2";
 
   disabled = pythonOlder "3.6";
 
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hkrkgUdC5LO1oSPFL6gvIk0zFpMw45gCmnoRbdPZuRs=";
+    sha256 = "sha256-seBYBTB+8PLIovqxVohkoQEfDAZI1fehLgXuHeTx9Wo=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
+    GitPython
     pytest-benchmark
     pytest-xdist
     pytestCheckHook
@@ -56,6 +58,7 @@ buildPythonPackage rec {
   # calls executable in one of the tests
   preCheck = ''
     export PATH=$PATH:$out/bin
+    export HOME=$TEMPDIR
   '';
 
   pytestFlagsArray = [

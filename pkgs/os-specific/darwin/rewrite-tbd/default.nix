@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, libyaml }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libyaml }:
 
 stdenv.mkDerivation {
   pname = "rewrite-tbd";
@@ -13,4 +13,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libyaml ];
+
+  meta = with lib; {
+    homepage = "https://github.com/thefloweringash/rewrite-tbd/";
+    description = "Rewrite filepath in .tbd to Nix applicable format";
+    platforms = platforms.darwin;
+    license = licenses.mit;
+  };
 }

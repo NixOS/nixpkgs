@@ -1,5 +1,7 @@
+{ lib }:
+
 let
-  sources = builtins.fromJSON (builtins.readFile ./sources.json);
+  sources = lib.importJSON ./sources.json;
 in
 {
   jdk-hotspot = import ./jdk-darwin-base.nix { sourcePerArch = sources.openjdk13.mac.jdk.hotspot; knownVulnerabilities = ["Support ended"]; };

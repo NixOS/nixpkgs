@@ -114,11 +114,11 @@
       };
     }
     {
-      name = "bn.js___bn.js_4.11.9.tgz";
+      name = "bn.js___bn.js_4.12.0.tgz";
       path = fetchurl {
-        name = "bn.js___bn.js_4.11.9.tgz";
-        url  = "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.9.tgz";
-        sha1 = "26d556829458f9d1e81fc48952493d0ba3507828";
+        name = "bn.js___bn.js_4.12.0.tgz";
+        url  = "https://registry.yarnpkg.com/bn.js/-/bn.js-4.12.0.tgz";
+        sha1 = "775b3f278efbb9718eec7361f483fb36fbbfea88";
       };
     }
     {
@@ -530,11 +530,11 @@
       };
     }
     {
-      name = "elliptic___elliptic_6.5.3.tgz";
+      name = "elliptic___elliptic_6.5.4.tgz";
       path = fetchurl {
-        name = "elliptic___elliptic_6.5.3.tgz";
-        url  = "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.3.tgz";
-        sha1 = "cb59eb2efdaf73a0bd78ccd7015a62ad6e0f93d6";
+        name = "elliptic___elliptic_6.5.4.tgz";
+        url  = "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.4.tgz";
+        sha1 = "da37cebd31e79a1367e941b592ed1fbebd58abbb";
       };
     }
     {

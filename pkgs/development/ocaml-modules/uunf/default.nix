@@ -22,6 +22,8 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ uchar ];
 
+  prePatch = lib.optionalString stdenv.isAarch64 "ulimit -s 16384";
+
   inherit (topkg) buildPhase installPhase;
 
   meta = with lib; {

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "editdistance";
-  version = "0.5.3";
+  version = "0.6.0";
 
 
   src = fetchFromGitHub {
     owner = "roy-ht";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vk8vz41p2cs7s7zbaw3cnw2jnvy5rhy525xral68dh14digpgsd";
+    sha256 = "17xkndwdyf14nfxk25z1qnhkzm0yxw65fpj78c01haq241zfzjr5";
   };
 
   nativeBuildInputs = [ cython ];

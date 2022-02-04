@@ -92,7 +92,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "dwarf-fortress-${dwarf-fortress.dfVersion}";
+  pname = "dwarf-fortress";
+  version = dwarf-fortress.dfVersion;
 
   dfInit = substituteAll {
     name = "dwarf-fortress-init";

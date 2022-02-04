@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version= "2.48.1";
+  version= "2.50.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-d2rVPnkeQxBrf0D/CDS+5uTrHGrXy20hVUb3o98O3E0=";
+    sha256 = "sha256-onqnfgF7mvzp51HYW9HPiQq7s6WL9Z0PrJF+74LbO1s=";
   };
 
   nativeBuildInputs = [

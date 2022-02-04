@@ -25,11 +25,6 @@
 , zlib
 }:
 
-# We need multiple binaries as a given binary isn't always able to build
-# (even slightly) older or newer versions.
-# - 0.26.1 can build 0.25.x and 0.26.x but not 0.27.x
-# - 0.27.2 can build 0.27.x but not 0.25.x, 0.26.x and 0.29.x
-#
 # We need to keep around at least the latest version released with a stable
 # NixOS
 let
@@ -37,9 +32,11 @@ let
     x86_64-linux = "linux-x86_64";
     i686-linux = "linux-i686";
     x86_64-darwin = "darwin-x86_64";
+    aarch64-darwin = "darwin-universal";
   };
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
+  isAarch64Darwin = stdenv.system == "aarch64-darwin";
 
   checkInputs = [ git gmp openssl readline libxml2 libyaml ];
 
@@ -58,6 +55,8 @@ let
         tar --strip-components=1 -C $out -xf ${src}
         patchShebangs $out/bin/crystal
       '';
+
+      meta.broken = lib.versionOlder version "1.2.0" && isAarch64Darwin;
     };
 
   commonBuildInputs = extraBuildInputs: [
@@ -211,7 +210,8 @@ let
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 fabianhjr manveru peterhoeg ];
-        platforms = builtins.attrNames archs;
+        platforms = let archNames = builtins.attrNames archs; in
+          if (lib.versionOlder version "1.2.0") then remove "aarch64-darwin" archNames else archNames;
         broken = lib.versionOlder version "0.36.1" && stdenv.isDarwin;
       };
     })
@@ -228,6 +228,13 @@ rec {
     };
   };
 
+  binaryCrystal_1_2 = genericBinary {
+    version = "1.2.0";
+    sha256s = {
+      aarch64-darwin = "1hrs8cpjxdkcf8mr9qgzilwbg6bakq87sd4yydfsk2f4pqd6g7nf";
+    };
+  };
+
   crystal_1_0 = generic {
     version = "1.0.0";
     sha256 = "sha256-RI+a3w6Rr+uc5jRf7xw0tOenR+q6qii/ewWfID6dbQ8=";
@@ -241,12 +248,10 @@ rec {
   };
 
   crystal_1_2 = generic {
-    version = "1.2.1";
-    sha256 = "sha256-jyNmY3n+u8WoVqHY8B5H9Vr9Ix3RogCtm8irkXZ3aek=";
-    binary = crystal_1_1;
+    version = "1.2.2";
+    sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
+    binary = if isAarch64Darwin then binaryCrystal_1_2 else crystal_1_1;
   };
 
   crystal = crystal_1_2;
-
-  crystal2nix = callPackage ./crystal2nix.nix { };
 }

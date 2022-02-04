@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with builtins;
 with lib;
 
 let
   cfg = config.services.tor;
+  opt = options.services.tor;
   stateDir = "/var/lib/tor";
   runDir = "/run/tor";
   descriptionGeneric = option: ''
@@ -793,12 +794,22 @@ in
               };
             }));
           };
+          options.ShutdownWaitLength = mkOption {
+            type = types.int;
+            default = 30;
+            description = descriptionGeneric "ShutdownWaitLength";
+          };
           options.SocksPolicy = optionStrings "SocksPolicy" // {
             example = ["accept *:*"];
           };
           options.SOCKSPort = mkOption {
             description = descriptionGeneric "SOCKSPort";
             default = if cfg.settings.HiddenServiceNonAnonymousMode == true then [{port = 0;}] else [];
+            defaultText = literalExpression ''
+              if config.${opt.settings}.HiddenServiceNonAnonymousMode == true
+              then [ { port = 0; } ]
+              else [ ]
+            '';
             example = [{port = 9090;}];
             type = types.listOf (optionSOCKSPort true);
           };
@@ -971,7 +982,7 @@ in
         ExecStart = "${cfg.package}/bin/tor -f ${torrc}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         KillSignal = "SIGINT";
-        TimeoutSec = 30;
+        TimeoutSec = cfg.settings.ShutdownWaitLength + 30; # Wait a bit longer than ShutdownWaitLength before actually timing out
         Restart = "on-failure";
         LimitNOFILE = 32768;
         RuntimeDirectory = [
@@ -1012,6 +1023,7 @@ in
         # Tor cannot currently bind privileged port when PrivateUsers=true,
         # see https://gitlab.torproject.org/legacy/trac/-/issues/20930
         PrivateUsers = !bindsPrivilegedPort;
+        ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
@@ -1019,6 +1031,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        ProtectProc = "invisible";
         ProtectSystem = "strict";
         RemoveIPC = true;
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];

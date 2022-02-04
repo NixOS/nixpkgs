@@ -1,7 +1,7 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.28.1";
+  version = "2.32.0";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,13 +9,12 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-9EkCScEj5kuKtkfnCmFUZg/qDzvmI3rvDS+NtkZC7sk=";
+    sha256 = "sha256-PXY32bfuK0bQGI0N+XHs9lakF6K7+WjrHMvuNgDFSJM=";
   };
 
   # put packages that needs to be overriden in the py package scope
   py = import ./python-packages.nix {
-    inherit stdenv lib src version;
-    python = python3;
+    inherit stdenv lib src version python3;
   };
 in
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
@@ -26,10 +25,11 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "javaproperties==0.5.1" "javaproperties" \
+      --replace "chardet~=3.0.4" "chardet" \
+      --replace "javaproperties~=0.5.1" "javaproperties" \
       --replace "pytz==2019.1" "pytz" \
       --replace "scp~=0.13.2" "scp" \
-      --replace "jsondiff==1.2.0" "jsondiff~=1.2" \
+      --replace "jsondiff~=1.2.0" "jsondiff~=1.2" \
       --replace "antlr4-python3-runtime~=4.7.2" "antlr4-python3-runtime~=4.7" \
       --replace "mock~=4.0" "mock"
 
@@ -55,6 +55,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-identity
     azure-keyvault
     azure-keyvault-administration
+    azure-keyvault-keys
     azure-loganalytics
     azure-mgmt-advisor
     azure-mgmt-apimanagement
@@ -115,6 +116,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-servicebus
     azure-mgmt-servicefabric
     azure-mgmt-servicefabricmanagedclusters
+    azure-mgmt-servicelinker
     azure-mgmt-signalr
     azure-mgmt-sql
     azure-mgmt-sqlvirtualmachine

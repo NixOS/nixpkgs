@@ -19,9 +19,14 @@ import ./versions.nix ({ version, sha256 }:
 
     configureFlags = [
       "--enable-agent"
+      "--enable-ipv6"
       "--with-iconv"
       "--with-libpcre"
       "--with-openssl=${openssl.dev}"
+    ];
+    makeFlags = [
+      "AR:=$(AR)"
+      "RANLIB:=$(RANLIB)"
     ];
 
     postInstall = ''

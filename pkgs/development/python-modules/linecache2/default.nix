@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pbr
-, isPy3k
 }:
 
 buildPythonPackage rec {

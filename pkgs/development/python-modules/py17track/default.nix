@@ -14,15 +14,16 @@
 
 buildPythonPackage rec {
   pname = "py17track";
-  version = "3.3.0";
+  version = "2021.12.2";
   format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "1rnq9ybzj2l3699mjyplc29mxla8fayh52x52cnsz21ixlfd9fky";
+    sha256 = "sha256-T0Jjdu6QC8rTqZwe4cdsBbs0hQXUY6CkrImCgYwWL9o=";
   };
 
   nativeBuildInputs = [
@@ -44,13 +45,18 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace ">=19.3,<21.0" ">=19.3,<22.0"
+      --replace 'attrs = ">=19.3,<21.0"' 'attrs = ">=19.3,<22.0"' \
+      --replace 'async-timeout = "^3.0.1"' 'async-timeout = ">=3.0.1,<5.0.0"'
   '';
 
-  # Ignore the examples directory as the files are prefixed with test_
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    # Ignore the examples directory as the files are prefixed with test_
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "py17track" ];
+  pythonImportsCheck = [
+    "py17track"
+  ];
 
   meta = with lib; {
     description = "Python library to track package info from 17track.com";

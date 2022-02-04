@@ -27,6 +27,8 @@ let
         inherit sha256;
       };
 
+      ldflags = [ "-s" "-w" ];
+
       postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
@@ -60,9 +62,10 @@ let
           babariviere
           kalbasit
           marsam
+          maxeaubrey
           timstott
           zimbatm
-          maxeaubrey
+          zowoq
         ];
       };
     } // attrs');
@@ -72,39 +75,6 @@ let
       withPlugins = plugins:
         let
           actualPlugins = plugins terraform.plugins;
-
-          # Make providers available in Terraform 0.13 and 0.12 search paths.
-          pluginDir = lib.concatMapStrings
-            (pl:
-              let
-                inherit (pl) version GOOS GOARCH;
-
-                pname = pl.pname or (throw "${pl.name} is missing a pname attribute");
-
-                # This is just the name, without the terraform-provider- prefix
-                plugin_name = lib.removePrefix "terraform-provider-" pname;
-
-                slug = pl.passthru.provider-source-address or "registry.terraform.io/nixpkgs/${plugin_name}";
-
-                shim = writeText "shim" ''
-                  #!${runtimeShell}
-                  exec ${pl}/bin/${pname}_v${version} "$@"
-                '';
-              in
-              ''
-                TF_0_13_PROVIDER_PATH=$out/plugins/${slug}/${version}/${GOOS}_${GOARCH}/${pname}_v${version}
-                mkdir -p "$(dirname $TF_0_13_PROVIDER_PATH)"
-
-                cp ${shim} "$TF_0_13_PROVIDER_PATH"
-                chmod +x "$TF_0_13_PROVIDER_PATH"
-
-                TF_0_12_PROVIDER_PATH=$out/plugins/${pname}_v${version}
-
-                cp ${shim} "$TF_0_12_PROVIDER_PATH"
-                chmod +x "$TF_0_12_PROVIDER_PATH"
-              ''
-            )
-            actualPlugins;
 
           # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
           wrapperInputs = lib.unique (lib.flatten
@@ -135,10 +105,27 @@ let
             inherit (terraform) name meta;
             nativeBuildInputs = [ makeWrapper ];
 
-            buildCommand = pluginDir + ''
+            buildCommand = ''
+              # Create wrappers for terraform plugins because Terraform only
+              # walks inside of a tree of files.
+              for providerDir in ${toString actualPlugins}
+              do
+                for file in $(find $providerDir/libexec/terraform-providers -type f)
+                do
+                  relFile=''${file#$providerDir/}
+                  mkdir -p $out/$(dirname $relFile)
+                  cat <<WRAPPER > $out/$relFile
+              #!${runtimeShell}
+              exec "$file" "$@"
+              WRAPPER
+                  chmod +x $out/$relFile
+                done
+              done
+
+              # Create a wrapper for terraform to point it to the plugins dir.
               mkdir -p $out/bin/
               makeWrapper "${terraform}/bin/terraform" "$out/bin/terraform" \
-                --set NIX_TERRAFORM_PLUGIN_DIR $out/plugins \
+                --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
                 --prefix PATH : "${lib.makeBinPath wrapperInputs}"
             '';
 
@@ -157,20 +144,6 @@ rec {
   # Constructor for other terraform versions
   mkTerraform = attrs: pluggable (generic attrs);
 
-  terraform_0_12 = mkTerraform {
-    version = "0.12.31";
-    sha256 = "03p698xdbk5gj0f9v8v1fpd74zng3948dyy4f2hv7zgks9hid7fg";
-    patches = [
-      ./provider-path.patch
-      (fetchpatch {
-        name = "fix-mac-mojave-crashes.patch";
-        url = "https://github.com/hashicorp/terraform/commit/cd65b28da051174a13ac76e54b7bb95d3051255c.patch";
-        sha256 = "1k70kk4hli72x8gza6fy3vpckdm3sf881w61fmssrah3hgmfmbrs";
-      })
-    ];
-    passthru = { inherit plugins; };
-  };
-
   terraform_0_13 = mkTerraform {
     version = "0.13.7";
     sha256 = "1cahnmp66dk21g7ga6454yfhaqrxff7hpwpdgc87cswyq823fgjn";
@@ -181,7 +154,7 @@ rec {
   terraform_0_14 = mkTerraform {
     version = "0.14.11";
     sha256 = "1yi1jj3n61g1kn8klw6l78shd23q79llb7qqwigqrx3ki2mp279j";
-    vendorSha256 = "1d93aqkjdrvabkvix6h1qaxpjzv7w1wa7xa44czdnjs2lapx4smm";
+    vendorSha256 = "sha256-tWrSr6JCS9s+I0T1o3jgZ395u8IBmh73XGrnJidWI7U=";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   };
@@ -189,15 +162,15 @@ rec {
   terraform_0_15 = mkTerraform {
     version = "0.15.5";
     sha256 = "18f4a6l24s3cym7gk40agxikd90i56q84wziskw1spy9rgv2yx6d";
-    vendorSha256 = "12hrpxay6k3kz89ihyhl91c4lw4wp821ppa245w9977fq09fhnx0";
+    vendorSha256 = "sha256-oFvoEsDunJR4IULdGwS6nHBKWEgUehgT+nNM41W/GYo=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };
 
-  terraform_1_0 = mkTerraform {
-    version = "1.0.10";
-    sha256 = "1jcgp9q99785m85754ipza7b3dd3g58adpnyh5w2imqj01cas6mb";
-    vendorSha256 = "00cl42w1mzsi9qd09wydfvp5f2h7lxaay6s2dv0mf47k6h7prf42";
+  terraform_1 = mkTerraform {
+    version = "1.1.5";
+    sha256 = "sha256-zIerP8v6ovIx+xwLsSmMFH41l140W9IwQMvomb/pk8E=";
+    vendorSha256 = "sha256-4ctuErxZIaESfIkS7BXI+eQcdatXE/1p20P9f890twM=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };
@@ -211,7 +184,7 @@ rec {
       mainTf = writeText "main.tf" ''
         resource "random_id" "test" {}
       '';
-      terraform = terraform_1_0.withPlugins (p: [ p.random ]);
+      terraform = terraform_1.withPlugins (p: [ p.random ]);
       test =
         runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
           set -e

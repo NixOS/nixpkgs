@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, setuptools-rust
-, rustPlatform
+, libiconv
 , pytestCheckHook
+, pythonOlder
+, rustPlatform
+, setuptools-rust
 }:
 
 buildPythonPackage rec {
   pname = "rtoml";
   version = "0.7";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -32,15 +34,29 @@ buildPythonPackage rec {
     cargoSetupHook
   ];
 
-  pythonImportsCheck = [ "rtoml" ];
+  buildInputs = [
+    libiconv
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [
+    "rtoml"
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   preCheck = ''
     cd tests
   '';
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   meta = with lib; {
-    description = "Rust based TOML library for python";
+    description = "Rust based TOML library for Python";
     homepage = "https://github.com/samuelcolvin/rtoml";
     license = licenses.mit;
     maintainers = with maintainers; [ evils ];

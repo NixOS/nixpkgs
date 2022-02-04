@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://pg.ucsd.edu/cde/manual/";
+    homepage = "https://github.com/usnistgov/corr-CDE";
     description = "A packaging tool for building portable packages";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.rlupton20 ];

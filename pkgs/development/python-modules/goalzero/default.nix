@@ -1,31 +1,32 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
 , aiohttp
-, ratelimit
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "goalzero";
-  version = "0.2.0";
+  version = "0.2.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6cb67cf772a758225b2e23b394feb697e8cbfb1aff5a2d7a17a0d4ccf61e55cd";
+    sha256 = "sha256-PveHE317p5fGSxgx7LQkpRYF55HwdzpZFY8/F8s3CBQ=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    ratelimit
   ];
 
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "goalzero" ];
+  pythonImportsCheck = [
+    "goalzero"
+  ];
 
   meta = with lib; {
     description = "Goal Zero Yeti REST Api Library";

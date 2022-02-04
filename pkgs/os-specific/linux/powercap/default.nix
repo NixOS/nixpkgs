@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "powercap";
-  version = "0.3.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "powercap";
     repo = "powercap";
     rev = "v${version}";
-    sha256 = "0f1sg1zsskcfralg9khwq7lmz25gvnyknza3bb0hmh1a9lw0jhdn";
+    sha256 = "sha256-VvepbABc7daRE0/sJqsCb+m2my8O3B1ICXywBqsjSO8=";
   };
 
   nativeBuildInputs = [ cmake ];

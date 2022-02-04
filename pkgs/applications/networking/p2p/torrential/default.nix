@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "torrential";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "davidmhewitt";
     repo = "torrential";
     rev = version;
-    sha256 = "sha256-78eNIz7Lgeq4LTog04TMNuL27Gv0UZ0poBaw8ia1R/g=";
+    sha256 = "sha256-W9Is6l8y5XSlPER2BLlf+cyMPPdEQuaP4xM59VhfDE0=";
   };
 
   nativeBuildInputs = [
@@ -77,5 +77,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
+    mainProgram = "com.github.davidmhewitt.torrential";
   };
 }

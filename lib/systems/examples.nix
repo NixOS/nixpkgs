@@ -258,6 +258,12 @@ rec {
     platform = {};
   };
 
+  x86_64-darwin = {
+    config = "x86_64-apple-darwin";
+    xcodePlatform = "MacOSX";
+    platform = {};
+  };
+
   #
   # Windows
   #
@@ -284,6 +290,7 @@ rec {
     libc = "nblibc";
   };
 
+  # this is broken and never worked fully
   x86_64-netbsd-llvm = {
     config = "x86_64-unknown-netbsd";
     libc = "nblibc";

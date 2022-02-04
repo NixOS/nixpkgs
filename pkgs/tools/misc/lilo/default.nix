@@ -8,7 +8,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-4VjxneRWDJNevgUHwht5v/F2GLkjDYB2/oxf/5/b1bE=";
   };
   nativeBuildInputs = [ dev86 sharutils ];
-  DESTDIR = placeholder "out";
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "SBIN_DIR=/bin"
+    "USRSBIN_DIR=/bin"
+    "MAN_DIR=/share/man"
+  ];
 
   meta = with lib; {
     homepage = "https://www.joonet.de/lilo/";

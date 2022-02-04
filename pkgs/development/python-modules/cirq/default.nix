@@ -1,5 +1,4 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , cirq-aqt
 , cirq-core
 , cirq-google

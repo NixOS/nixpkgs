@@ -6,6 +6,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , pytest-aiohttp
 , pytest-asyncio
@@ -16,14 +17,16 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.0.1";
+  version = "1.0.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "coreGreenberet";
     repo = "homematicip-rest-api";
     rev = version;
-    sha256 = "008snxx9ijpi1zr1pi1v4a6g74j821hyw0khs9lmi08v2mcabm36";
+    sha256 = "sha256-j2ansly05auevlcDY5TFz6PZR/pNIGIbtkJuU8L5b0o=";
   };
 
   propagatedBuildInputs = [
@@ -65,9 +68,16 @@ buildPythonPackage rec {
     "test_home_unknown_types"
     # Requires network access
     "test_websocket"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    "test_connection_lost"
+    "test_user_disconnect_and_reconnect"
+    "test_ws_message"
+    "test_ws_no_pong"
   ];
 
-  pythonImportsCheck = [ "homematicip" ];
+  pythonImportsCheck = [
+    "homematicip"
+  ];
 
   meta = with lib; {
     description = "Python module for the homematicIP REST API";

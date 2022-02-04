@@ -1,22 +1,37 @@
-{ lib, buildPythonPackage, fetchFromGitHub, gevent, isPy27, python }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gevent
+, isPy27
+, python
+}:
 
 buildPythonPackage rec {
   pname = "yappi";
-  version = "1.3.0";
+  version = "1.3.2";
+
   disabled = isPy27; # invalid syntax
 
   src = fetchFromGitHub {
     owner = "sumerc";
     repo = pname;
-    rev = "30f94024a0e2e4fa21c220de6a0dc97b4cb2c319";
-    sha256 = "1kvwl3y3c2hivf9y2x1q1s8a2y724iwqd1krq6ryvsbg3inyh8qw";
+    rev = "8bf7a650066f104f59c3cae4a189ec15e7d51c8c";
+    sha256 = "1q8lr9n0lny2g3mssy3mksbl9m4k1kqn1a4yv1hfqsahxdvpw2dp";
   };
 
   patches = [ ./tests.patch ];
-  checkInputs = [ gevent ];
+
+  checkInputs = [
+    gevent
+  ];
+
   checkPhase = ''
     ${python.interpreter} run_tests.py
   '';
+
+  pythonImportsCheck = [
+    "yappi"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/sumerc/yappi";

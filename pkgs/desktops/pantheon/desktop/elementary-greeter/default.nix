@@ -1,10 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -19,7 +20,6 @@
 , elementary-icon-theme
 , wingpanel-with-indicators
 , elementary-gtk-theme
-, elementary-settings-daemon
 , nixos-artwork
 , lightdm
 , gdk-pixbuf
@@ -33,25 +33,39 @@ stdenv.mkDerivation rec {
   pname = "elementary-greeter";
   version = "6.0.1";
 
-  repoName = "greeter";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "greeter";
     rev = version;
     sha256 = "1f606ds56sp1c58q8dblfpaq9pwwkqw9i4gkwksw45m2xkwlbflq";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-
-    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
-      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
-      name = "io.elementary.greeter.desktop";
-    }];
-  };
+  patches = [
+    ./sysconfdir-install.patch
+    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
+    (substituteAll {
+      src = ./hardcode-fallback-background.patch;
+      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
+    })
+    # Revert "UserCard: use accent color for logged_in check (#566)"
+    # https://github.com/elementary/greeter/pull/566
+    # Fixes crash issue reported in:
+    # https://github.com/elementary/greeter/issues/578
+    # https://github.com/NixOS/nixpkgs/issues/151609
+    # Probably also fixes:
+    # https://github.com/elementary/greeter/issues/568
+    # https://github.com/elementary/greeter/issues/583
+    # https://github.com/NixOS/nixpkgs/issues/140513
+    # Revisit this when the greeter is ported to GTK 4:
+    # https://github.com/elementary/greeter/pull/591
+    ./revert-pr566.patch
+    # Fix build with meson 0.61
+    # https://github.com/elementary/greeter/pull/590
+    (fetchpatch {
+      url = "https://github.com/elementary/greeter/commit/a4b25244058fce794a9f13f6b22a8ff7735ebde9.patch";
+      sha256 = "sha256-qPXhdvmYG8YMDU/CjbEkfZ0glgRzxnu0TsOPtvWHxLY=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -67,7 +81,6 @@ stdenv.mkDerivation rec {
     clutter-gtk # else we get could not generate cargs for mutter-clutter-2
     elementary-gtk-theme
     elementary-icon-theme
-    elementary-settings-daemon
     gnome-settings-daemon
     gdk-pixbuf
     granite
@@ -87,21 +100,12 @@ stdenv.mkDerivation rec {
     "-Dgsd-dir=${gnome-settings-daemon}/libexec/" # trailing slash is needed
   ];
 
-  patches = [
-    ./sysconfdir-install.patch
-    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
-    (substituteAll {
-      src = ./hardcode-fallback-background.patch;
-      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
-    })
-  ];
-
   preFixup = ''
     gappsWrapperArgs+=(
       # dbus-launch needed in path
       --prefix PATH : "${dbus}/bin"
 
-      # for `wingpanel -g`
+      # for `io.elementary.wingpanel -g`
       --prefix PATH : "${wingpanel-with-indicators}/bin"
 
       # for the compositor
@@ -121,6 +125,17 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/xgreeters/io.elementary.greeter.desktop \
       --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+
+    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
+      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
+      name = "io.elementary.greeter.desktop";
+    }];
+  };
 
   meta = with lib; {
     description = "LightDM Greeter for Pantheon";

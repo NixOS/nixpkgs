@@ -12,7 +12,7 @@ import ./versions.nix ({ version, sha256 }:
 
     modRoot = "src/go";
 
-    vendorSha256 = "1iyi7lnknr42gbv25illqnnjc7mshv73ih9anc6rxbf87n9s46ac";
+    vendorSha256 = "1417qi061xc4m55z0vz420fr7qpi24kw5yj9wq7iic92smakgkjn";
 
     nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ libiconv openssl pcre zlib ];
@@ -33,6 +33,7 @@ import ./versions.nix ({ version, sha256 }:
       ./configure \
         --prefix=${placeholder "out"} \
         --enable-agent2 \
+        --enable-ipv6 \
         --with-iconv \
         --with-libpcre \
         --with-openssl=${openssl.dev}

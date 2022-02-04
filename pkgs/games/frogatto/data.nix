@@ -7,9 +7,9 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "frogatto";
     repo = "frogatto";
-    # master branch as of 2020-12-17
-    rev = "8b0f2bc8f9f172f6225b8e0d806552cb94f35e2a";
-    sha256 = "09nrna9l1zj2ma2bazdhdvphwy570kfz4br4xgpwq21rsjrvrqiy";
+    # master branch as of 2021-11-29
+    rev = "82d3dafa0cfeaad016a427bdbc729eb9509748f1";
+    sha256 = "0fmwn584xl0vafcsh72b4xnryfqyjxk5zhmymg5i8rzp6h03n8xq";
   };
 
   installPhase = ''

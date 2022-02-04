@@ -1,25 +1,28 @@
-{ lib, stdenv, fetchurl }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "hd-idle";
-  version = "1.05";
+  version = "1.16";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/hd-idle/hd-idle-${version}.tgz";
-    sha256 = "031sm996s0rhy3z91b9xvyimsj2yd2fhsww2al2hxda5s5wzxzjf";
+  src = fetchFromGitHub {
+    owner = "adelolmo";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-LZcMwF/BhHiWWXMcrzbk8GyvwXdA3B2olmbOBxQwV5g=";
   };
 
-  prePatch = ''
-    substituteInPlace Makefile \
-      --replace "-g root -o root" ""
-  '';
+  vendorSha256 = null;
 
-  installFlags = [ "TARGET_DIR=$(out)" ];
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage debian/hd-idle.8
+  '';
 
   meta = with lib; {
     description = "Spins down external disks after a period of idle time";
-    homepage = "http://hd-idle.sourceforge.net/";
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/adelolmo/hd-idle";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rycee ];
   };

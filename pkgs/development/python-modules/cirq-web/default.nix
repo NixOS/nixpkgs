@@ -1,8 +1,5 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , cirq-core
-, pythonOlder
-, fetchFromGitHub
 , pytestCheckHook
 }:
 

@@ -85,5 +85,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.domoticz.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/domoticz.x86_64-darwin
   };
 }

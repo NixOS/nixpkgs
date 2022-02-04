@@ -1,10 +1,10 @@
 { self, callPackage, lib }:
 callPackage ./default.nix {
   inherit self;
-  version = "2.0.5-2021-07-27";
-  rev = "3a654999c6f00de4cb9e61232d23579442e544a0";
+  version = "2.0.5-2021-10-02";
+  rev = "d3294fa63b344173db68dd612c6d3801631e28d4";
   isStable = true;
-  sha256 = "0q187vn6bspn9i33hrvfy59mh83nd8jjmik5qkkkc3vls13jxr6z";
+  sha256 = "0ja6x7bv3iqnf6m8xk6qp1dgan2b7mys0ff86dw671fqqrfw28fn";
   extraMeta = { # this isn't precise but it at least stops the useless Hydra build
     platforms = with lib; filter (p: !hasPrefix "aarch64-" p)
       (platforms.linux ++ platforms.darwin);

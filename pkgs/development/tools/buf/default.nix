@@ -5,19 +5,20 @@
 , git
 , testVersion
 , buf
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "buf";
-  version = "0.54.1";
+  version = "1.0.0-rc12";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-v8n1K2YrN8o4IPA2u6Sg5zsOM08nppg29vlU6ycMj9U=";
+    sha256 = "sha256-UqyWQdlCDTSjW348f87W7g2kwB5nzIOviSE5/1T1soY=";
   };
-  vendorSha256 = "sha256-WLQ8Bw/UgRVTFEKpDbv6VZkMHQm2tgxekH3J7Sd5vC8=";
+  vendorSha256 = "sha256-qBgGZTok3G0Pgku76uiV9bZperhiSNoWSrzxrHe4QXw=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -26,7 +27,7 @@ buildGoModule rec {
     ./skip_test_requiring_dotgit.patch
   ];
 
-  nativeBuildInputs = [ protobuf ];
+  nativeBuildInputs = [ protobuf installShellFiles ];
   # Required for TestGitCloner
   checkInputs = [ git ];
 
@@ -42,16 +43,25 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
 
+    # Binaries
     mkdir -p "$out/bin"
     # Only install required binaries, don't install testing binaries
     for FILE in \
       "buf" \
       "protoc-gen-buf-breaking" \
-      "protoc-gen-buf-lint" \
-      "protoc-gen-buf-check-breaking" \
-      "protoc-gen-buf-check-lint"; do
+      "protoc-gen-buf-lint"; do
       cp "$GOPATH/bin/$FILE" "$out/bin/"
     done
+
+    # Completions
+    installShellCompletion --cmd buf \
+      --bash <($GOPATH/bin/buf bash-completion) \
+      --fish <($GOPATH/bin/buf fish-completion) \
+      --zsh <($GOPATH/bin/buf zsh-completion)
+
+    # Man Pages
+    mkdir man && $GOPATH/bin/buf manpages man
+    installManPage man/*
 
     runHook postInstall
   '';
@@ -63,6 +73,6 @@ buildGoModule rec {
     changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raboof jk ];
+    maintainers = with maintainers; [ raboof jk lrewega ];
   };
 }

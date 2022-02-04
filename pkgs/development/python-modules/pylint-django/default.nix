@@ -1,16 +1,12 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
+, coverage
+, django
+, factory_boy
 , fetchFromGitHub
 , isPy3k
-, lib
-
-# pythonPackages
-, django
 , pylint-plugin-utils
-
-# pythonPackages for checkInputs
-, coverage
-, factory_boy
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -30,17 +26,26 @@ buildPythonPackage rec {
     pylint-plugin-utils
   ];
 
-  checkInputs = [ coverage factory_boy pytest ];
+  checkInputs = [
+    coverage
+    factory_boy
+    pytestCheckHook
+  ];
 
-  # Check command taken from scripts/test.sh
-  # Skip test external_django_tables2_noerror_meta_class:
-  # requires an unpackaged django_tables2
-  checkPhase = ''
-      python pylint_django/tests/test_func.py -v -k "not tables2"
-  '';
+  disabledTests = [
+    # Skip outdated tests and the one with a missing dependency (django_tables2)
+    "external_django_tables2_noerror_meta_class"
+    "external_factory_boy_noerror"
+    "func_noerror_foreign_key_attributes"
+    "func_noerror_foreign_key_key_cls_unbound"
+  ];
+
+  pythonImportsCheck = [
+    "pylint_django"
+  ];
 
   meta = with lib; {
-    description = "A Pylint plugin to analyze Django applications";
+    description = "Pylint plugin to analyze Django applications";
     homepage = "https://github.com/PyCQA/pylint-django";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kamadorueda ];

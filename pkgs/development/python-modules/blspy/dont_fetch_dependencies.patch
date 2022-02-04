@@ -48,3 +48,17 @@ index 5a8c381..d9aa940 100644
  )
  FetchContent_MakeAvailable(pybind11 relic)
  
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 449164a..15a955e 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -37,8 +37,7 @@ install(FILES $<TARGET_FILE:bls> DESTINATION lib)
+ if(BUILD_BLS_TESTS)
+   FetchContent_Declare(
+     Catch2
+-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+-    GIT_TAG        v2.13.7
++    URL @catch2_src@
+   )
+   FetchContent_MakeAvailable(Catch2)
+   add_executable(runtest test.cpp)

@@ -1,4 +1,8 @@
 {
+    "compe-tmux": {
+        "date": "2021-12-21",
+        "new": "cmp-tmux"
+    },
     "gist-vim": {
         "date": "2020-03-27",
         "new": "vim-gist"
@@ -14,6 +18,10 @@
     "nvim-toggleterm-lua": {
         "date": "2021-08-22",
         "new": "toggleterm-nvim"
+    },
+    "orgmode-nvim": {
+        "date": "2021-11-28",
+        "new": "orgmode"
     },
     "sql-nvim": {
         "date": "2021-09-03",
