@@ -16,6 +16,7 @@
 , spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
 , ncursesSupport ? !nixosTestRunner, ncurses
 , usbredirSupport ? spiceSupport, usbredir
+, usbSupport ? true, libusb1
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
@@ -84,7 +85,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
-    ++ lib.optionals uringSupport [ liburing ];
+    ++ lib.optionals uringSupport [ liburing ]
+    ++ lib.optionals usbSupport [ libusb1 ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
@@ -202,6 +204,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional smartcardSupport "--enable-smartcard"
     ++ lib.optional spiceSupport "--enable-spice"
     ++ lib.optional usbredirSupport "--enable-usb-redir"
+    ++ lib.optional usbSupport "--enable-libusb"
     ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
     ++ lib.optional stdenv.isDarwin "--enable-cocoa"
     ++ lib.optional stdenv.isDarwin "--enable-hvf"
