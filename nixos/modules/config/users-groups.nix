@@ -625,7 +625,7 @@ in {
         # The check does not apply when users.disableLoginPossibilityAssertion
         # The check does not apply when users.mutableUsers
         assertion = !cfg.mutableUsers -> !cfg.allowNoPasswordLogin ->
-          any id (mapAttrsToList (name: cfg:
+          any id ((mapAttrsToList (name: cfg:
             (name == "root"
              || cfg.group == "wheel"
              || elem "wheel" cfg.extraGroups)
@@ -637,7 +637,7 @@ in {
              || cfg.openssh.authorizedKeys.keyFiles != [])
           ) cfg.users) ++ [
             config.security.googleOsLogin.enable
-          ];
+          ]);
         message = ''
           Neither the root account nor any wheel user has a password or SSH authorized key.
           You must set one to prevent being locked out of your system.
