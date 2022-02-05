@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "garminconnect-ha";
+  pname = "garminconnect";
   version = "0.1.13";
   format = "setuptools";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "cyberjunky";
     repo = "python-garminconnect-ha";
     rev = version;
-    sha256 = "sha256-1O1EcG5FvpwUvI8rwcdlQLzEEStyFAwvmkaL97u6hZ4=";
+    hash = "sha256-1O1EcG5FvpwUvI8rwcdlQLzEEStyFAwvmkaL97u6hZ4=";
   };
 
   propagatedBuildInputs = [
@@ -29,12 +29,12 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [
-    "garminconnect_ha"
+    "garminconnect"
   ];
 
   meta = with lib; {
-    description = "Garmin Connect Python API wrapper for Home Assistant";
-    homepage = "https://github.com/cyberjunky/python-garminconnect-ha";
+    description = "Garmin Connect Python API wrapper";
+    homepage = "https://github.com/cyberjunky/python-garminconnect";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
