@@ -5,6 +5,7 @@
 , python3Packages
 , ffmpeg
 , flac
+, librsvg
 , gobject-introspection
 , gtk3
 , libnotify
@@ -20,23 +21,22 @@
 
 stdenv.mkDerivation rec {
   pname = "tauon";
-  version = "6.7.1";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${version}";
-    sha256 = "1hm82yfq7q2akrrvff3vmwrd3bz34d2dk8jzhnizhnhar6xc6fzp";
+    sha256 = "sha256-Sw9w6vFXk2Cx7LdfMsou9IDheVckdusc0iGWkVsVtCQ=";
   };
 
   postPatch = ''
     substituteInPlace tauon.py \
       --replace 'install_mode = False' 'install_mode = True' \
-      --replace 'install_directory = os.path.dirname(__file__)' 'install_directory = "${placeholder "out"}/share/tauon"'
+      --replace 'install_directory = os.path.dirname(os.path.abspath(__file__))' 'install_directory = "${placeholder "out"}/share/tauon"'
 
     substituteInPlace t_modules/t_main.py \
       --replace 'install_mode = False' 'install_mode = True' \
-      --replace 'install_directory = sys.path[0]' 'install_directory = "${placeholder "out"}/share/tauon"' \
       --replace 'libopenmpt.so' '${lib.getLib libopenmpt}/lib/libopenmpt.so' \
       --replace 'lib/libphazor.so' '../../lib/libphazor.so'
 
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     gtk3
     libnotify
     libopenmpt
+    librsvg
     libsamplerate
     libvorbis
     mpg123
@@ -70,11 +71,14 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = with python3Packages; [
+    beautifulsoup4
+    gst-python
     dbus-python
     isounidecode
     musicbrainzngs
     mutagen
     pillow
+    plexapi
     pulsectl
     pycairo
     pylast
@@ -83,6 +87,7 @@ stdenv.mkDerivation rec {
     pysdl2
     requests
     send2trash
+    setproctitle
   ] ++ lib.optional withDiscordRPC pypresence;
 
   makeWrapperArgs = [
