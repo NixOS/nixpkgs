@@ -1,16 +1,20 @@
 { config, pkgs, lib, ... }:
 with lib;
+let
+  cfg = config.services.languageToolHttp;
+  format = pkgs.formats.toml { };
+in
 {
   options.services.languageToolHttp = {
     enable = mkEnableOption "the LanguagTool http server";
-    address = mkOption {
-      description = ''
-        The address on which the server listen.
-      '';
-      default = "127.0.0.1";
-      type = types.str;
-    };
     allowBrowserPluginAccess = mkEnableOption "access from the browser plugin";
+    settings = mkOption {
+      description = ''
+        Contents of the configuration file.
+      '';
+      inherit (format) type;
+      default = { };
+    };
     args = mkOption {
       description = ''
         Arguments to be passed when starting the server.
@@ -29,23 +33,15 @@ with lib;
     };
   };
 
-  config =
-    let
-      cfg = config.services.languageToolHttp;
-    in
-    {
-      services.languageToolHttp.args = {
-        allow-origin =
-          mkIf cfg.allowBrowserPluginAccess (mkDefault "*");
-      };
-      #TODO:socket activation
-      # systemd.sockets.languagetool-http = {
-      #   socketConfig.ListenStream = with cfg;["${address}:${toString args.port}"];
-      # };
-      systemd.services.languagetool-http = {
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig.ExecStart =
-          "${pkgs.languagetool}/bin/languagetool-http-server ${cli.toGNUCommandLineShell {} cfg.args}";
-      };
+  config = mkIf cfg.enable {
+    services.languageToolHttp.args = {
+      allow-origin = mkIf cfg.allowBrowserPluginAccess (mkDefault "*");
+      config = builtins.toString (format.generate "LanguageTool.cfg" cfg.settings);
     };
+    systemd.services.languagetool-http = {
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.ExecStart =
+        "${pkgs.languagetool}/bin/languagetool-http-server ${cli.toGNUCommandLineShell {} cfg.args}";
+    };
+  };
 }
