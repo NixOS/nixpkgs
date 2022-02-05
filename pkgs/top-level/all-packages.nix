@@ -31637,9 +31637,7 @@ with pkgs;
 
   typespeed = callPackage ../games/typespeed { };
 
-  uchess = callPackage ../games/uchess {
-    buildGoModule = buildGo116Module;
-  };
+  uchess = callPackage ../games/uchess { };
 
   udig = callPackage ../applications/gis/udig { };
 
