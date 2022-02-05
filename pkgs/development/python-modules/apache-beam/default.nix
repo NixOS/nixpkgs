@@ -29,6 +29,7 @@
 , pytest-xdist
 , pytestCheckHook
 , python
+, pythonAtLeast
 , python-dateutil
 , pytz
 , pyyaml
@@ -43,6 +44,7 @@
 buildPythonPackage rec {
   pname = "apache-beam";
   version = "2.35.0";
+  disabled = pythonAtLeast "3.10";
 
   src = fetchFromGitHub {
     owner = "apache";

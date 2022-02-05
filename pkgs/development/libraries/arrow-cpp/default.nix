@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
     "-DARROW_DATASET=ON"
     "-DARROW_ENGINE=ON"
     "-DARROW_FILESYSTEM=ON"
-    "-DARROW_FLIGHT_SQL=ON"
+    "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_IPC=ON"
     "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
     "-DARROW_JSON=ON"
