@@ -3219,6 +3219,8 @@ with pkgs;
 
   goa = callPackage ../development/tools/goa { };
 
+  goawk = callPackage ../tools/text/goawk { };
+
   gohai = callPackage ../tools/system/gohai { };
 
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
