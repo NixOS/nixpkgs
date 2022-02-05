@@ -160,9 +160,7 @@ let
       description = "A cross-platform application framework for C++";
       license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
       maintainers = with maintainers; [ qknight ttuegel periklis bkchr milahu ];
-      # FIXME(milahu) darwin
-      #platforms = platforms.unix;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     } // (args.meta or { });
   });
 in
