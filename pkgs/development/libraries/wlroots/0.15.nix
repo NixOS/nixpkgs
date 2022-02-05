@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wlroots";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "wlroots";
     repo = "wlroots";
     rev = version;
-    sha256 = "0wdzs0wpv61pxgy3mx3xjsndyfmbj30v47d3w9ymmnd4r479n41n";
+    sha256 = "sha256-MFR38UuB/wW7J9ODDUOfgTzKLse0SSMIRYTpEaEdRwM=";
   };
 
   # $out for the library and $examples for the example programs (in examples):

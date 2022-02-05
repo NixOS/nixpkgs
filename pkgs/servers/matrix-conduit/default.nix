@@ -1,22 +1,40 @@
-{ stdenv, lib, fetchFromGitLab, rustPlatform, }:
+{ stdenv, lib, fetchFromGitLab, rustPlatform, pkgs }:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     rev = "v${version}";
-    sha256 = "0k3313bnv399v738j1xja9hngsmi39r3vzvgwssl5c24yvkvskdr";
+    sha256 = "sha256-jCBvenwXPgYms5Tbu16q/F8UNpvaw0Shao9kLEZLbHM=";
   };
 
-  cargoSha256 = "0379dvc8m8clc9lrxd1x0aciqvcgv3hjq7xfspz3bh8aq2a43pcs";
+  cargoSha256 = "sha256-fpjzc2HiWP6nV8YZOwxsIOhy4ht/tQqcvCkcLMIFUaQ=";
+
+  nativeBuildInputs = with pkgs; [
+    clang
+    llvmPackages.libclang
+  ];
+
+  buildInputs = with pkgs; [
+    pkg-config
+    clangStdenv
+    llvmPackages.libclang.lib
+    rocksdb
+  ];
+
+  preBuild = with pkgs; ''
+    export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
+  '';
+
+  cargoBuildFlags = "--bin conduit";
 
   meta = with lib; {
     description = "A Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pstn piegames ];
+    maintainers = with maintainers; [ pstn piegames pimeys ];
   };
 }
