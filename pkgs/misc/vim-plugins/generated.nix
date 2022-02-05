@@ -3513,6 +3513,18 @@ final: prev:
     meta.homepage = "https://github.com/Valloric/MatchTagAlways/";
   };
 
+  material-nvim = buildVimPluginFrom2Nix {
+    pname = "material.nvim";
+    version = "2022-02-04";
+    src = fetchFromGitHub {
+      owner = "marko-cerovac";
+      repo = "material.nvim";
+      rev = "e57df0a28e3cec66f4c4287aca4324ad4c8bf278";
+      sha256 = "066mk7vqc77d3zv4nx98mrfjr6gc4fwslwj2111gr0576s6xpqjx";
+    };
+    meta.homepage = "https://github.com/marko-cerovac/material.nvim/";
+  };
+
   mattn-calendar-vim = buildVimPluginFrom2Nix {
     pname = "mattn-calendar-vim";
     version = "2021-09-13";

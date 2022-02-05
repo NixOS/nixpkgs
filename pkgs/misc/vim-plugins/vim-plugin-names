@@ -455,6 +455,7 @@ MarcWeber/vim-addon-sql
 MarcWeber/vim-addon-syntax-checker
 MarcWeber/vim-addon-toggle-buffer
 MarcWeber/vim-addon-xdebug
+marko-cerovac/material.nvim
 markonm/traces.vim
 martinda/Jenkinsfile-vim-syntax
 MattesGroeger/vim-bookmarks
