@@ -60,7 +60,8 @@ buildPythonPackage rec {
   # See https://github.com/NixOS/nixpkgs/issues/156957.
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "typing-extensions>=3.7.0,<4" "typing-extensions"
+      --replace "typing-extensions>=3.7.0,<4" "typing-extensions" \
+      --replace "pyarrow>=0.15.1,<7.0.0" "pyarrow"
   '';
 
   sourceRoot = "source/sdks/python";
