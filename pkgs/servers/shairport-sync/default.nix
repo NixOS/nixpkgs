@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-alsa" "--with-pipe" "--with-pa" "--with-stdout"
-    "--with-avahi" "--with-ssl=openssl" "--with-soxr"
+    "--with-avahi" "--with-ssl=openssl" "--with-soxr" "--with-metadata"
     "--without-configfiles"
     "--sysconfdir=/etc"
   ];
