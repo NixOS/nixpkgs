@@ -29034,7 +29034,7 @@ with pkgs;
   taskopen = callPackage ../applications/misc/taskopen { };
 
   tdesktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
-    inherit (xorg) libpthreadstubs libXdmcp;
+    abseil-cpp = abseil-cpp_202111;
   };
 
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
