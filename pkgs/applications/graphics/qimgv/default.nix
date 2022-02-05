@@ -10,7 +10,7 @@
 , qtbase
 , wrapQtAppsHook
 , qtwayland
-, qt5compat
+, qt5compat ? null # qt6 only
 , qtimageformats
 , qtsvg
 }:
@@ -38,9 +38,10 @@ mkDerivation rec {
     opencv4
     qtbase
     qtwayland
-    qt5compat
     qtimageformats
     qtsvg
+  ] ++ lib.optionals (lib.versions.major qtbase.version == "6") [
+    qt5compat
   ];
 
   # FIXME only needed for qt6

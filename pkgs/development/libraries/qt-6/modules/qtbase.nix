@@ -20,7 +20,7 @@
 , xmlstarlet
 , libproxy
 , xlibsWrapper
-, xlibs
+, xlibs ? null
 , zstd
 , double-conversion
 , util-linux
@@ -39,7 +39,7 @@
 , libdrm
 , libdatrie
 , lttng-ust
-, epoxy
+, epoxy ? null
 
   # darwin support
 , libiconv
@@ -174,9 +174,6 @@ stdenv.mkDerivation rec {
     libproxy
     libproxy.dev # pulls kerberos
     xlibsWrapper
-    xlibs.libXdmcp
-    xlibs.libXtst
-    xlibs.xcbutilcursor
     zstd
     double-conversion
     util-linux # mount for gio-2.0
@@ -198,7 +195,6 @@ stdenv.mkDerivation rec {
     libthai # for pango
     libdrm
     libdatrie # for libthai
-    epoxy # for gdk-3.0
     #valgrind # for libdrm. TODO add? or is it bloat?
     #tslib # touchscreen
   ] ++ (with unixODBCDrivers; [
@@ -246,7 +242,15 @@ stdenv.mkDerivation rec {
       xcbutilkeysyms
       xcbutilrenderutil
       xcbutilwm
-    ] ++ lib.optional libGLSupported libGL
+
+      epoxy # for gdk-3.0
+    ]
+    ++ lib.optionals (xlibs != null) [
+      xlibs.libXdmcp
+      xlibs.libXtst
+      xlibs.xcbutilcursor
+    ]
+    ++ lib.optional libGLSupported libGL
   );
 
   buildInputs = [

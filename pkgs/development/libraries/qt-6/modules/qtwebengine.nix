@@ -24,7 +24,7 @@
 , libXtst
 , libxshmfence
 , libXi
-, xlibs
+, xlibs ? null
 , fontconfig
 , freetype
 , harfbuzz
@@ -89,7 +89,7 @@
 , libxslt
 , lcms2
 , re2
-, kerberos
+, kerberos ? null
 }:
 
 # TODO(milahu) add optional dependencies? Qt6QmlCompilerPlus Qt6Designer
@@ -217,10 +217,12 @@ qtModule rec {
       "-DQT_FEATURE_webengine_system_libxml=ON"
       "-DQT_FEATURE_webengine_system_ffmpeg=ON"
       #"-DQT_FEATURE_webengine_native_spellchecker=ON" # android only. https://bugreports.qt.io/browse/QTBUG-100293
-      "-DQT_FEATURE_webengine_kerberos=ON" # auth -> requires include/gssapi.h -> kerberos
       "-DQT_FEATURE_webengine_sanitizer=ON"
     ]
-    ++ lib.optional stdenv.isLinux "-DQT_FEATURE_webengine_webrtc_pipewire=ON" # TODO(milahu) why linux only? (ported from qt5)
+    ++ lib.optionals (!stdenv.isDarwin) [
+      "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
+      "-DQT_FEATURE_webengine_kerberos=ON" # gssapi.h
+    ]
     ++ lib.optional enableProprietaryCodecs "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ;
 
@@ -252,8 +254,6 @@ qtModule rec {
 
     libevent
     ffmpeg
-
-    kerberos
 
   ] ++ lib.optionals (!stdenv.isDarwin) [
     dbus
@@ -288,10 +288,11 @@ qtModule rec {
     xorg.libxkbfile
     libxshmfence
     libXi
-    xlibs.libXext
 
     # Pipewire
     pipewire
+
+    kerberos
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
@@ -317,7 +318,11 @@ qtModule rec {
 
     openbsm
     libunwind
-  ];
+  ]
+  ++ lib.optionals (xlibs != null) [
+    xlibs.libXext
+  ]
+  ;
 
   buildInputs = [
     cups
@@ -341,6 +346,7 @@ qtModule rec {
     '')
   ];
 
+  # TODO(milahu) why isLinux?
   postInstall = lib.optionalString stdenv.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
