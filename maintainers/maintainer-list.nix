@@ -7903,6 +7903,12 @@
       fingerprint = "FEF0 AE2D 5449 3482 5F06  40AA 186A 1EDA C5C6 3F83";
     }];
   };
+  mihnea-s = {
+    email = "mihn.stn@gmail.com";
+    github = "mihnea-s";
+    githubId = 43088426;
+    name = "Mihnea Stoian";
+  };
   mikefaille = {
     email = "michael@faille.io";
     github = "mikefaille";
