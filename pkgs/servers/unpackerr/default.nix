@@ -15,6 +15,8 @@ buildGoModule rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Cocoa WebKit ];
 
+  ldflags = [ "-s" "-w" "-X golift.io/version.Version=${version}" ];
+
   meta = with lib; {
     description = "Extracts downloads for Radarr, Sonarr, Lidarr - Deletes extracted files after import";
     homepage = "https://github.com/davidnewhall/unpackerr";
