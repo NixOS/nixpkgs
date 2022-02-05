@@ -804,90 +804,11 @@ self: super: builtins.intersectAttrs super {
     '' + drv.postInstall or "";
   }) super.hlint;
 
-  hls-brittany-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-brittany-plugin;
-  hls-class-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-class-plugin;
-  hls-ormolu-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-ormolu-plugin;
-  hls-fourmolu-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-fourmolu-plugin;
-  hls-module-name-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-module-name-plugin;
-  hls-rename-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '' + (drv.preCheck or "");
-  }) super.hls-rename-plugin;
-  hls-splice-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-splice-plugin;
-  hls-floskell-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-floskell-plugin;
-  hls-pragmas-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-pragmas-plugin;
-  hls-hlint-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-hlint-plugin;
   hiedb = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/hiedb:$PATH
     '';
   }) super.hiedb;
-  hls-call-hierarchy-plugin = overrideCabal (drv: {
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-call-hierarchy-plugin;
-  # Tests have file permissions expections that don‘t work with the nix store.
-  hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
-  hls-haddock-comments-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-haddock-comments-plugin;
-  hls-eval-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-eval-plugin;
 
   taglib = overrideCabal (drv: {
     librarySystemDepends = [
@@ -1052,4 +973,33 @@ self: super: builtins.intersectAttrs super {
       install -Dm644 test/examples/*.jac -t "$docDir/examples"
     '';
   }) super.jacinda;
+
+# haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
+} // pkgs.lib.mapAttrs
+  (_: overrideCabal (drv: {
+    testToolDepends = (drv.testToolDepends or [ ]) ++ [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '' + (drv.preCheck or "");
+  }))
+{
+  inherit (super)
+    hls-alternate-number-format-plugin
+    hls-brittany-plugin
+    hls-call-hierarchy-plugin
+    hls-class-plugin
+    hls-eval-plugin
+    hls-floskell-plugin
+    hls-fourmolu-plugin
+    hls-haddock-comments-plugin
+    hls-module-name-plugin
+    hls-ormolu-plugin
+    hls-pragmas-plugin
+    hls-qualify-imported-names-plugin
+    hls-rename-plugin
+    hls-selection-range-plugin
+    hls-splice-plugin;
+  # Tests have file permissions expections that don‘t work with the nix store.
+  hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
+  hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
 }
