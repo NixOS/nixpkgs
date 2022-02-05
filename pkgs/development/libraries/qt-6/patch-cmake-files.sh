@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /usr/bin/env bash
 
 # patch files
 
@@ -13,7 +13,7 @@ set -eu
 for arg in "$@"
 do
   [ "$arg" = "--" ] && { shift; break; }
-  echo "$0 eval $arg"
+  #echo "$0 eval $arg" # debug
   eval "$arg"
   shift
 done
@@ -25,6 +25,8 @@ fi
 
 echo "$0: patching $# files"
 
+# debug
+if false; then
 cat <<EOF
 $0: debug:
   REGEX_FILE = $REGEX_FILE
@@ -34,11 +36,13 @@ $0: debug:
   NIX_DEV_PATH = $NIX_DEV_PATH
   NIX_BIN_PATH = $NIX_BIN_PATH
 EOF
+fi
 
-echo "$0: build regex"
+#echo "$0: build regex" # debug
 
+# / -> \/
 escape_b() {
-  echo "$1" | sed 's,/,\\/,g'
+  echo "${1//\//\\\/}";
 }
 
 regex="$( ( echo; cat $REGEX_FILE; echo ) | perl -p -0 -e '
