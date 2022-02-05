@@ -2564,6 +2564,8 @@ in {
 
   emoji = callPackage ../development/python-modules/emoji { };
 
+  empty-files = callPackage ../development/python-modules/empty-files { };
+
   empy = callPackage ../development/python-modules/empy { };
 
   emulated-roku = callPackage ../development/python-modules/emulated-roku { };
