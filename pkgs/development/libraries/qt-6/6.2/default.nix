@@ -137,7 +137,6 @@ let
       qtwayland = callPackage ../modules/qtwayland.nix { };
       qtwebchannel = callPackage ../modules/qtwebchannel.nix { };
       qtwebengine = callPackage ../modules/qtwebengine.nix {
-        inherit (srcs.qtwebengine) version;
         inherit (darwin) cctools libobjc libunwind xnu;
         inherit (darwin.apple_sdk.libs) sandbox;
         inherit (darwin.apple_sdk.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
