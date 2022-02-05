@@ -83,7 +83,6 @@
 , lib
 , stdenv
 , fetchpatch
-, version ? null
 , qtCompatVersion
 , glib
 , libxml2
@@ -99,7 +98,6 @@ qtModule rec {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
-    # requires python2
     bison
     coreutils
     flex
@@ -107,7 +105,7 @@ qtModule rec {
     gperf
     ninja
     pkg-config
-    python2
+    python2 # not python3
     which
     gn
     nodejs
@@ -125,6 +123,7 @@ qtModule rec {
   hardeningDisable = [ "format" ];
 
   # disable ninja line-clearing
+  # TODO move to ninja setupHook
   preBuild = ''
     export TERM=dumb
   '';
