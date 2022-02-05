@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, wayland-scanner
 , libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
-, libpng, ffmpeg, xcbutilrenderutil, seatd, vulkan-loader, glslang
+, libpng, ffmpeg_4, xcbutilrenderutil, seatd, vulkan-loader, glslang
 , nixosTests
 
 , enableXWayland ? true, xwayland ? null
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGL wayland wayland-protocols libinput libxkbcommon pixman
     xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg xcbutilrenderutil seatd vulkan-loader
+    libpng ffmpeg_4 xcbutilrenderutil seatd vulkan-loader
   ]
     ++ lib.optional enableXWayland xwayland
   ;
