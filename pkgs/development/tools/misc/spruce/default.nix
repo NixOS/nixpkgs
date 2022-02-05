@@ -12,7 +12,8 @@ buildGoModule rec {
   };
 
   deleteVendor = true;
-  vendorSha256 = "sha256-67PGSW3wV8i3mAt3rCuWbFmeOe+QhHXn2rTUmeN6YMA=";
+  regenModSum = true;
+  vendorSha256 = "sha256-XdOuKAxQbxpDfeErhJ0JyTZlMgO9EhBe8bXVoPUF2+Q=";
 
   meta = with lib; {
     description = "A BOSH template merge tool";

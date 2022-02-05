@@ -26,6 +26,8 @@
 , vendorSha256
 # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
+# Whether to regenerate the go.mod and go.sum files with vendor
+, regenModSum ? false
 # Whether to fetch (go mod download) and proxy the vendor directory.
 # This is useful if your code depends on c code and go mod tidy does not
 # include the needed sources to build or if any dependency has case-insensitive
@@ -128,6 +130,11 @@ let
       cp -r --reflink=auto vendor $out
     ''}
 
+      ${if regenModSum then ''
+      cp go.mod --reflink=auto $out
+      cp go.sum --reflink=auto $out
+      '' else ""}
+
       runHook postInstall
     '';
 
@@ -144,6 +151,8 @@ let
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
     inherit (go) GOOS GOARCH;
+
+    go-modules = go-modules;
 
     GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
@@ -163,6 +172,13 @@ let
         rm -rf vendor
         cp -r --reflink=auto ${go-modules} vendor
       ''}
+
+      ${if regenModSum then ''
+        rm go.mod
+        rm go.sum
+        cp  --reflink=auto ${go-modules}/go.mod go.mod
+        cp  --reflink=auto ${go-modules}/go.sum go.sum
+      '' else ""}
     '' + ''
 
       runHook postConfigure
