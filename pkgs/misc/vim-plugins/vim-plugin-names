@@ -180,6 +180,7 @@ folke/tokyonight.nvim
 folke/trouble.nvim
 folke/twilight.nvim
 folke/which-key.nvim
+folke/zen-mode.nvim
 FooSoft/vim-argwrap
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
@@ -454,6 +455,7 @@ MarcWeber/vim-addon-sql
 MarcWeber/vim-addon-syntax-checker
 MarcWeber/vim-addon-toggle-buffer
 MarcWeber/vim-addon-xdebug
+marko-cerovac/material.nvim
 markonm/traces.vim
 martinda/Jenkinsfile-vim-syntax
 MattesGroeger/vim-bookmarks
