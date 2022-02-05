@@ -6730,15 +6730,9 @@ with pkgs;
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
-  ipfs = callPackage ../applications/networking/ipfs {
-    buildGoModule = buildGo116Module;
-  };
-  ipfs-migrator = callPackage ../applications/networking/ipfs-migrator {
-    buildGoModule = buildGo116Module;
-  };
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
-    buildGoModule = buildGo116Module;
-  };
+  ipfs = callPackage ../applications/networking/ipfs { };
+  ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipget = callPackage ../applications/networking/ipget { };
 
