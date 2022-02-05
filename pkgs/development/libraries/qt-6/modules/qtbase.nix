@@ -249,7 +249,12 @@ stdenv.mkDerivation rec {
     ] ++ lib.optional libGLSupported libGL
   );
 
-  buildInputs = [ python3 at-spi2-core ]
+  buildInputs = [
+    python3
+    at-spi2-core
+    patch-cmake-files-sh
+    patch-cmake-files-regex-diff
+  ]
     ++ lib.optionals (!stdenv.isDarwin)
     (
       [ libinput ]
