@@ -180,6 +180,7 @@ folke/tokyonight.nvim
 folke/trouble.nvim
 folke/twilight.nvim
 folke/which-key.nvim
+folke/zen-mode.nvim
 FooSoft/vim-argwrap
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim

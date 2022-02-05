@@ -11712,6 +11712,18 @@ final: prev:
     meta.homepage = "https://github.com/KabbAmine/zeavim.vim/";
   };
 
+  zen-mode-nvim = buildVimPluginFrom2Nix {
+    pname = "zen-mode.nvim";
+    version = "2021-11-07";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "zen-mode.nvim";
+      rev = "f1cc53d32b49cf962fb89a2eb0a31b85bb270f7c";
+      sha256 = "1fxkrny1xk69w8rlmz4x5msvqb8i8xvvl9csndpplxhkn8wzirdp";
+    };
+    meta.homepage = "https://github.com/folke/zen-mode.nvim/";
+  };
+
   zenburn = buildVimPluginFrom2Nix {
     pname = "zenburn";
     version = "2021-09-15";
