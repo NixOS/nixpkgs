@@ -92,6 +92,7 @@ stdenv.mkDerivation {
   postInstall = ". ${postInstall}";
   postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
+    changelog = "https://hylafax.sourceforge.io/news/${version}.php";
     description = "enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";
     homepage = "https://hylafax.sourceforge.io";
