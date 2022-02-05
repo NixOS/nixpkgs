@@ -11,6 +11,7 @@
 qtModule {
   pname = "qtwayland";
   qtInputs = [ qtbase qtdeclarative ];
-  buildInputs = [ wayland pkg-config xlibsWrapper libdrm ];
+  buildInputs = [ wayland xlibsWrapper libdrm ];
+  nativeBuildInputs = [ pkg-config ];
   outputs = [ "out" "dev" "bin" ];
 }
