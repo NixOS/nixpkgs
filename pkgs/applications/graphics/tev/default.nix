@@ -21,11 +21,6 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true; # We also need zenity (see below)
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "/usr/" "''${out}/"
-  '';
-
   cmakeFlags = [
     "-DTEV_DEPLOY=1" # Only relevant not to append "dev" to the version
   ];
