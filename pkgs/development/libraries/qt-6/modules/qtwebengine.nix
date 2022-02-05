@@ -113,20 +113,12 @@ qtModule rec {
   doCheck = true;
   outputs = [ "out" "bin" "dev" ];
 
-  enableParallelBuilding = true;
-
   # Don’t use the gn setup hook
   dontUseGnConfigure = true;
 
   # ninja builds some components with -Wno-format,
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
-
-  # disable ninja line-clearing
-  # TODO move to ninja setupHook
-  preBuild = ''
-    export TERM=dumb
-  '';
 
   postPatch = ''
     # Patch Chromium build tools
@@ -203,12 +195,7 @@ qtModule rec {
     "-fno-objc-arc"
   ];
 
-  # FIXME set in hook: QT_ADDITIONAL_PACKAGES_PREFIX_PATH
   preConfigure = ''
-    export QT_ADDITIONAL_PACKAGES_PREFIX_PATH="${qtdeclarative.dev}:${qtwebsockets.dev}:${qtwebchannel.dev}:${qtpositioning.dev}"
-
-    export NINJAFLAGS=-j$NIX_BUILD_CORES
-
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi

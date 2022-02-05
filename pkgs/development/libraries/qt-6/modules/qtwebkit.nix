@@ -30,7 +30,7 @@
 }:
 
 let
-  # TODO update
+  # TODO update hyphen
   hyphen = stdenv.mkDerivation rec {
     pname = "hyphen";
     version = "2.8.8";
@@ -43,21 +43,34 @@ let
     '';
     buildInputs = [ perl ];
   };
-  usingAnnulenWebkitFork = lib.versionAtLeast qtbase.version "5.11.0";
 in
+
 qtModule {
   pname = "qtwebkit";
+
   qtInputs = [
     qtbase
     qtdeclarative
     #qtlocation
     qtsensors
-  ]
-  ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
-  ++ lib.optional usingAnnulenWebkitFork qtwebchannel;
-  buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
-    ++ lib.optionals stdenv.isDarwin [ ICU OpenGL ]
-    ++ lib.optional usingAnnulenWebkitFork hyphen;
+    qtwebchannel
+  ] ++ lib.optional stdenv.isDarwin qtmultimedia; # TODO only darwin?
+
+  buildInputs = [
+    fontconfig
+    libwebp
+    libxml2
+    libxslt
+    sqlite
+    glib
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    hyphen
+  ] ++ lib.optionals stdenv.isDarwin [
+    ICU
+    OpenGL
+  ];
+
   nativeBuildInputs = [
     bison
     flex
@@ -66,6 +79,7 @@ qtModule {
     perl
     pkg-config
     python2
+    # TODO(sandro) can we use python3?
     ruby
   ] ++ lib.optional usingAnnulenWebkitFork cmake;
 

@@ -155,6 +155,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     openssl
+    # TODO sqlite.all?
     sqlite
     sqlite.out
     sqlite.dev

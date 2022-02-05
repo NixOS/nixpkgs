@@ -1,3 +1,5 @@
+# TODO(milahu) cleanup
+
 { mkDerivation
 , lib
 , fetchFromGitHub
@@ -126,7 +128,7 @@ QMAKE_QT_CONFIG = $$[QT_HOST_DATA/get]/mkspecs/qconfig.pri
     "QT_INSTALL_HEADERS=${qtbase.dev}/include"
   ];
 
-  buildInputs = [ qtbase qtbase.dev qt5compat qt5compat.dev ];
+  buildInputs = [ qtbase qt5compat ];
   nativeBuildInputs = [ qmake wrapQtAppsHook pkg-config ];
 
   meta = with lib; {
