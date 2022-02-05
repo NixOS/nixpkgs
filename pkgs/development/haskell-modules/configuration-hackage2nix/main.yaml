@@ -167,6 +167,7 @@ extra-packages:
   - brick == 0.64.*                     # 2021-12-03: matterhorn depends on brick < 0.65
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - ormolu == 0.3.*                     # 2021-12-03: for HLS with GHC 9.0.2
+  - fourmolu == 0.4.*                   # 2022-02-05: for HLS with GHC 9.0.2
 
 package-maintainers:
   abbradar:
