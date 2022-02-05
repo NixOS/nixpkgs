@@ -6000,7 +6000,7 @@ with pkgs;
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
 
-  gnome-passwordsafe = callPackage ../applications/misc/gnome-passwordsafe { };
+  gnome-secrets = callPackage ../applications/misc/gnome-secrets { };
 
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
