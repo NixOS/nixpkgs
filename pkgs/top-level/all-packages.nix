@@ -2297,7 +2297,9 @@ with pkgs;
     cudaSupport = config.cudaSupport or false;
   };
 
-  tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
+  tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite {
+    abseil-cpp = abseil-cpp_20210324;
+  };
 
   tezos-rust-libs = callPackage ../development/libraries/tezos-rust-libs { };
 
@@ -15947,6 +15949,7 @@ with pkgs;
   aalib = callPackage ../development/libraries/aalib { };
 
   abseil-cpp = callPackage ../development/libraries/abseil-cpp { };
+  abseil-cpp_20210324 = callPackage ../development/libraries/abseil-cpp/20210324.nix { };
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
@@ -21950,6 +21953,7 @@ with pkgs;
 
   # Fails to compile with boost <= 1.72
   rippled = callPackage ../servers/rippled {
+    abseil-cpp = abseil-cpp_20210324;
     boost = boost172;
   };
 
@@ -32239,7 +32243,7 @@ with pkgs;
     python = python3;
     # or-tools builds with -std=c++17, so abseil-cpp must
     # also be built that way
-    abseil-cpp = abseil-cpp.override {
+    abseil-cpp = abseil-cpp_20210324.override {
       static = true;
       cxxStandard = "17";
     };
