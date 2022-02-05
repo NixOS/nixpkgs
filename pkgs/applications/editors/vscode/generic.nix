@@ -125,7 +125,7 @@ let
       rm -rf "$packed"
 
       # this fixes bundled ripgrep
-      chmod +x resources/app/node_modules/vscode-ripgrep/bin/rg
+      chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
     '';
 
     inherit meta;
