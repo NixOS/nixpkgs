@@ -28380,6 +28380,8 @@ with pkgs;
 
   renoise = callPackage ../applications/audio/renoise {};
 
+  redux = callPackage ../applications/audio/redux { };
+
   roomeqwizard = callPackage ../applications/audio/roomeqwizard { };
 
   radiotray-ng = callPackage ../applications/audio/radiotray-ng {
