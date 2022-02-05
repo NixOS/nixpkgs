@@ -30233,7 +30233,8 @@ with pkgs;
 
   zanshin = libsForQt5.callPackage ../applications/office/zanshin { };
 
-  zathura = callPackage ../applications/misc/zathura { };
+  zathuraPkgs = callPackage ../applications/misc/zathura { };
+  zathura = zathuraPkgs.zathuraWrapper;
 
   zdns = callPackage ../tools/security/zdns { };
 
