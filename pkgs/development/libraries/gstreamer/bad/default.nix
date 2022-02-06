@@ -92,19 +92,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.18.5";
+  version = "1.20.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-oWSSO5Tw0IV4pvyuqsbgwF2niKRpA6EIaHDpykWtZ44=";
+    sha256 = "sha256-AVuNTZo5Xr9ETUCHaGeiA03TMEs61IvDoN0MHucdwR0=";
   };
-
-  patches = [
-    # Use pkgconfig to inject the includedirs
-    ./fix_pkgconfig_includedir.patch
-  ];
 
   nativeBuildInputs = [
     meson
