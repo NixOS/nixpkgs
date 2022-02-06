@@ -11,17 +11,18 @@
 , qtmultimedia
 , qtsvg
 , qttools
+, quazip
 }:
 
 mkDerivation rec {
   pname = "mediaelch";
-  version = "2.8.12";
+  version = "2.8.14";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "1gx4m9cf81d0b2nk2rlqm4misz67f5bpkjqx7d1l76rw2pwc6azf";
+    sha256 = "sha256-yHThX5Xs+8SijNKgmg+4Mawbwi3zHA/DJQoIBy0Wchs=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +30,11 @@ mkDerivation rec {
 
   buildInputs = [ curl libmediainfo libzen ffmpeg qtbase qtdeclarative qtmultimedia qtsvg ];
 
-  prePatch = ''
+  qmakeFlags = [
+    "USE_EXTERN_QUAZIP=${quazip}/include/quazip5"
+  ];
+
+  postPatch = ''
     substituteInPlace MediaElch.pro --replace "/usr" "$out"
   '';
 
