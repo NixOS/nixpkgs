@@ -20809,8 +20809,6 @@ with pkgs;
 
   httpunit = callPackage ../development/libraries/java/httpunit { };
 
-  gwtdragdrop = callPackage ../development/libraries/java/gwt-dragdrop { };
-
   gwtwidgets = callPackage ../development/libraries/java/gwt-widgets { };
 
   javaCup = callPackage ../development/libraries/java/cup {
