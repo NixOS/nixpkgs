@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "johnwhitington";
     repo = "cpdf-source";
     rev = "v${version}";
-    sha256 = "sha256:0ps6d78i5mp1gcigxfp9rxmjr1k00nkr37vllhr0rdyph97w41s1";
+    sha256 = "sha256:1qmx229nij7g6qmiacmyy4mcgx3k9509p4slahivshqm79d6wiwl";
   };
 
   buildInputs = [ ocaml findlib ncurses ];
