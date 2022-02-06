@@ -376,6 +376,7 @@ mapAliases ({
   google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # added 2021-03-07
   googleAuthenticator = google-authenticator; # added 2016-10-16
   googleearth = throw "the non-pro version of Google Earth was removed because it was discontinued and downloading it isn't possible anymore"; # added 2022-01-22
+  gpgstats = throw "gpgstats has been removed: upstream is gone"; # added 2022-02-06
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   graalvm8 = throw "graalvm8-ce has been removed by upstream."; # added 2021-10-19
   graalvm8-ce = throw "graalvm8-ce has been removed by upstream."; # added 2021-10-19
