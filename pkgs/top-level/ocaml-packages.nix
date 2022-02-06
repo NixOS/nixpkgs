@@ -140,7 +140,9 @@ let
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
-    cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
+    cairo2 = callPackage ../development/ocaml-modules/cairo2 {
+      inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
+    };
 
     callipyge = callPackage ../development/ocaml-modules/callipyge { };
 
