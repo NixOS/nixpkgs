@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
       --replace 'lib/libphazor.so' '../../lib/libphazor.so'
 
     patchShebangs compile-phazor.sh
+
+    substituteInPlace extra/tauonmb.desktop --replace 'Exec=/opt/tauon-music-box/tauonmb.sh' 'Exec=${placeholder "out"}/bin/tauon'
   '';
 
   postBuild = ''
@@ -103,7 +105,12 @@ stdenv.mkDerivation rec {
     cp -r assets input.txt t_modules theme $out/share/tauon
 
     wrapPythonPrograms
-  '';
+
+    mkdir -p $out/share/applications
+    install -Dm755 extra/tauonmb.desktop $out/share/applications/tauonmb.desktop
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    install -Dm644 extra/tauonmb{,-symbolic}.svg $out/share/icons/hicolor/scalable/apps
+'';
 
   meta = with lib; {
     description = "The Linux desktop music player from the future";
