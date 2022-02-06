@@ -17092,8 +17092,6 @@ with pkgs;
 
   pgweb = callPackage ../development/tools/database/pgweb { };
 
-  gpgstats = callPackage ../tools/security/gpgstats { };
-
   gpshell = callPackage ../development/tools/misc/gpshell { };
 
   grantlee = callPackage ../development/libraries/grantlee { };
