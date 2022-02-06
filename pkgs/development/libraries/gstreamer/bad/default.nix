@@ -48,7 +48,7 @@
 , libdvdnav
 , libdvdread
 , libgudev
-, libqrencode
+, qrencode
 , libsndfile
 , libusb1
 , neon
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
     libde265
     libdvdnav
     libdvdread
-    libqrencode
+    qrencode
     libsndfile
     libusb1
     neon
