@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , gtk3
 , pcre
@@ -11,23 +10,15 @@
 
 stdenv.mkDerivation rec {
   pname = "kermit";
-  version = "3.5";
+  version = "3.7";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "orhun";
     repo = pname;
     rev = version;
-    hash = "sha256-bdy2iPUV3flZrf4otuw40Xn1t/82H7ayjr7yzHLPo74=";
+    hash = "sha256-O5jpiQ+aaOTPst4/Z+H5e7ylA8CNBevqNoH50p4uEA4=";
   };
-
-  patches = [
-    # Manpage installation. Remove it when next release arrives
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/orhun/kermit/pull/21.patch";
-      hash = "sha256-mcsKQNEPgJOWFmOxKii2en2CwpUbT6tO2/YAlRSUL2A=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
