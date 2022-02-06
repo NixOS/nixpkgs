@@ -207,6 +207,14 @@
           <link xlink:href="options.html#opt-services.headscale.enable">services.headscale</link>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/wwmm/easyeffects">easyeffects</link>,
+          an audio effects filter for PipeWire applications. Available
+          as
+          <link xlink:href="options.html#opt-services.pipewire.easyeffects.enable">services.pipewire.easyeffects</link>
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">

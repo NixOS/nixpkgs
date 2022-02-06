@@ -362,6 +362,7 @@
   ./services/desktops/gsignond.nix
   ./services/desktops/gvfs.nix
   ./services/desktops/malcontent.nix
+  ./services/desktops/pipewire/easyeffects.nix
   ./services/desktops/pipewire/pipewire.nix
   ./services/desktops/pipewire/pipewire-media-session.nix
   ./services/desktops/pipewire/wireplumber.nix
