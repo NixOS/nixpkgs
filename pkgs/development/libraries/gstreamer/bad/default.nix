@@ -8,11 +8,13 @@
 , python3
 , gst-plugins-base
 , orc
+, gstreamer
 , gobject-introspection
 , enableZbar ? false
 , faacSupport ? false
 , faac
 , faad2
+, ldacbt
 , libass
 , libkate
 , libmms
@@ -27,7 +29,7 @@
 , sratom
 , libbs2b
 , libmodplug
-, mpeg2dec
+, libmpeg2
 , libmicrodns
 , openjpeg
 , libopus
@@ -39,6 +41,7 @@
 , fdk_aac
 , flite
 , gsm
+, json-glib
 , libaom
 , libdc1394
 , libde265
@@ -47,6 +50,7 @@
 , libdvdread
 , libgudev
 , libofa
+, libqrencode
 , libsndfile
 , libusb1
 , neon
@@ -88,6 +92,7 @@
 , CoreVideo
 , Foundation
 , MediaToolbox
+, enableGplPlugins ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -108,6 +113,7 @@ stdenv.mkDerivation rec {
     orc # for orcc
     python3
     gettext
+    gstreamer # for gst-tester-1.0
     gobject-introspection
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
@@ -119,14 +125,14 @@ stdenv.mkDerivation rec {
     # gobject-introspection has to be in both nativeBuildInputs and
     # buildInputs. The build tries to link against libgirepository-1.0.so
     gobject-introspection
-    faad2
+    json-glib
+    ldacbt
     libass
     libkate
     libmms
     webrtc-audio-processing # webrtc
     libbs2b
     libmodplug
-    mpeg2dec
     libmicrodns
     openjpeg
     libopenmpt
@@ -140,9 +146,9 @@ stdenv.mkDerivation rec {
     libde265
     libdvdnav
     libdvdread
+    libqrencode
     libsndfile
     libusb1
-    mjpegtools
     neon
     openal
     opencv4
@@ -161,7 +167,6 @@ stdenv.mkDerivation rec {
     libGLU
     libgme
     openssl
-    x265
     libxml2
     libintl
     srt
@@ -170,6 +175,11 @@ stdenv.mkDerivation rec {
     zbar
   ] ++ lib.optionals faacSupport [
     faac
+  ] ++ lib.optionals enableGplPlugins [
+    libmpeg2
+    mjpegtools
+    faad2
+    x265
   ] ++ lib.optionals stdenv.isLinux [
     bluez
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
@@ -224,7 +234,7 @@ stdenv.mkDerivation rec {
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
-    "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing
+    "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing, also this is AGPL so update license when adding support
     "-Dmagicleap=disabled" # required `ml_audio` library not packaged in nixpkgs as of writing
     "-Dmsdk=disabled" # not packaged in nixpkgs as of writing / no Windows support
     # As of writing, with `libmpcdec` in `buildInputs` we get
@@ -250,6 +260,10 @@ stdenv.mkDerivation rec {
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
     "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
+    "-Dgs=disabled" # depends on `google-cloud-cpp`
+    "-Disac=disabled" # depends on `webrtc-audio-coding-1` not packaged in nixpkgs as of writing
+    "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
+    "-Dopenaptx=disabled" # depends on older version of `libopenaptx` due to licensing conflict https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/2235
   ]
   ++ lib.optionals (!stdenv.isLinux) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
@@ -281,7 +295,17 @@ stdenv.mkDerivation rec {
     "-Dapplemedia=disabled"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dintrospection=disabled"
-  ];
+  ] ++ (if enableGplPlugins then [
+    "-Dgpl=enabled"
+  ] else [
+    "-Ddts=disabled"
+    "-Dfaad=disabled"
+    "-Diqa=disabled"
+    "-Dmpeg2enc=disabled"
+    "-Dmplex=disabled"
+    "-Dresindvd=disabled"
+    "-Dx265=disabled"
+  ]);
 
   # Argument list too long
   strictDeps = true;
@@ -306,7 +330,7 @@ stdenv.mkDerivation rec {
       something - be it a good code review, some documentation, a set of tests,
       a real live maintainer, or some actual wide use.
     '';
-    license = licenses.lgpl2Plus;
+    license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];
   };
