@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, imlib2, xlibsWrapper, autoreconfHook
-, autoconf-archive, libXfixes, libXcomposite
-, pkg-config, gettext, libtool, intltool, gtk-doc, libbsd }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, imlib2
+, xlibsWrapper
+, autoreconfHook
+, autoconf-archive
+, libXfixes
+, libXcomposite
+, pkg-config
+, libbsd
+}:
 
 stdenv.mkDerivation rec {
   pname = "scrot";
@@ -13,8 +22,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oVmEPkEK1xDcIRUQjCp6CKf+aKnnVe3L7aRTdSsCmmY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config ];
-  buildInputs = [ imlib2 xlibsWrapper libXfixes libXcomposite gettext libtool intltool gtk-doc libbsd ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+  ];
+
+  buildInputs = [
+    imlib2
+    xlibsWrapper
+    libXfixes
+    libXcomposite
+    libbsd
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";
