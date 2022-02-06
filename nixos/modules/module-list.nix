@@ -909,6 +909,7 @@
   ./services/networking/ucarp.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
+  ./services/networking/v2raya.nix
   ./services/video/unifi-video.nix
   ./services/video/rtsp-simple-server.nix
   ./services/networking/v2ray.nix
