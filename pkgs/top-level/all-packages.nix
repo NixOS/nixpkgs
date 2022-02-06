@@ -26340,8 +26340,6 @@ with pkgs;
 
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
 
-  heme = callPackage ../applications/editors/heme { };
-
   herbe = callPackage ../applications/misc/herbe { };
 
   herbstluftwm = callPackage ../applications/window-managers/herbstluftwm { };
