@@ -156,6 +156,21 @@ in
     };
   };
 
+  geoip2 = {
+    src = fetchFromGitHub {
+      name = "geoip2";
+      owner = "leev";
+      repo = "ngx_http_geoip2_module";
+      rev = "3.3";
+      sha256 = "EEn/qxPsBFgVBqOgPYTrRhaLPwSBlSPWYYSr3SL8wZA=";
+    };
+    inputs = [ pkgs.libmaxminddb ];
+
+    meta = {
+      maintainers = with lib.maintainers; [ pinpox ];
+    };
+  };
+
   http_proxy_connect_module_v18 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
     supports = with lib.versions; version: major version == "1" && minor version == "18";
   };
