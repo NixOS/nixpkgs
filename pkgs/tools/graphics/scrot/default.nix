@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, giblib, xlibsWrapper, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, imlib2, xlibsWrapper, autoreconfHook
 , autoconf-archive, libXfixes, libXcomposite
 , pkg-config, gettext, libtool, intltool, gtk-doc, libbsd }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config ];
-  buildInputs = [ giblib xlibsWrapper libXfixes libXcomposite gettext libtool intltool gtk-doc libbsd ];
+  buildInputs = [ imlib2 xlibsWrapper libXfixes libXcomposite gettext libtool intltool gtk-doc libbsd ];
 
   meta = with lib; {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";
