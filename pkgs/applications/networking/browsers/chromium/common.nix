@@ -292,7 +292,6 @@ let
       enable_hangout_services_extension = false;
       enable_js_type_check = false;
       enable_mdns = false;
-      enable_nacl_nonsfi = false;
       enable_one_click_signin = false;
       enable_reading_list = false;
       enable_remoting = false;
