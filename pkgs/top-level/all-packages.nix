@@ -6720,8 +6720,6 @@ with pkgs;
 
   ioping = callPackage ../tools/system/ioping { };
 
-  iops = callPackage ../tools/system/iops { };
-
   ior = callPackage ../tools/system/ior { };
 
   iouyap = callPackage ../tools/networking/iouyap { };
