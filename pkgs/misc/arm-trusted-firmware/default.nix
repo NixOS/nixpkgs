@@ -20,6 +20,8 @@ let
       sha256 = "sha256-qT9DdTvMcUrvRzgmVf2qmKB+Rb1WOB4p1rM+fsewGcg=";
     };
 
+    patches = [ ./remove-hdcp-blob.patch ];
+
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
     # For Cortex-M0 firmware in RK3399
