@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
     Davix provides an API and a set of command line tools";
 
     license = licenses.lgpl2Plus;
-    homepage = "http://dmc.web.cern.ch/projects/davix/home";
-    changelog = "https://github.com/cern-fts/davix/blob/devel/RELEASE-NOTES.md";
+    homepage = "https://github.com/cern-fts/davix";
+    changelog = "https://github.com/cern-fts/davix/blob/R_${lib.replaceStrings ["."] ["_"] version}/RELEASE-NOTES.md";
     maintainers = with maintainers; [ adev ];
     platforms = platforms.all;
   };
