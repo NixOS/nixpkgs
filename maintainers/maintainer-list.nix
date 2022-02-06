@@ -11041,6 +11041,12 @@
     }];
     name = "Shane Sveller";
   };
+  shanoaice = {
+    email = "mashiro350@protonmail.com";
+    github = "shanoaice";
+    githubId = 25174488;
+    name = "Shanoa Ice";
+  };
   shawndellysse = {
     email = "sdellysse@gmail.com";
     github = "shawndellysse";
