@@ -7,7 +7,7 @@ then throw "sosa is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-sosa-${version}";
+  pname = "ocaml${ocaml.version}-sosa";
   version = "0.3.0";
 
   src = fetchFromGitHub {
