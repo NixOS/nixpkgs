@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoconf automake libtool git ];
   buildInputs = [ ncurses glib openssl perl libintl libgcrypt libotr ];
 
+  enableParallelBuilding = true;
+
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh
   '';
