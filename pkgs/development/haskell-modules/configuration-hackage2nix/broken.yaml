@@ -831,6 +831,7 @@ broken-packages:
   - context-free-grammar
   - context-stack
   - contiguous-checked
+  - contiguous-fft
   - continue
   - Contract
   - control-iso
@@ -3897,6 +3898,7 @@ broken-packages:
   - PrimitiveArray-Pretty
   - primitive-atomic
   - primitive-checked
+  - primitive-containers
   - primitive-convenience
   - primitive-foreign
   - primitive-indexed
@@ -4202,6 +4204,7 @@ broken-packages:
   - riemann
   - riff
   - ring-buffer
+  - ring-buffers
   - riscv-isa
   - Ritt-Wu
   - rivers
