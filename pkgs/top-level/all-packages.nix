@@ -27256,6 +27256,8 @@ with pkgs;
     inherit (luajitPackages) luafilesystem;
   };
 
+  lookatme = callPackage ../tools/misc/lookatme {};
+
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
   ltc-tools = callPackage ../applications/audio/ltc-tools { };
