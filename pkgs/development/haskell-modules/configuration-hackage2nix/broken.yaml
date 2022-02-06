@@ -1132,6 +1132,7 @@ broken-packages:
   - doctest-discover-configurator
   - doctest-parallel
   - doctest-prop
+  - docusign-base
   - docusign-example
   - docvim
   - doi
@@ -2377,6 +2378,7 @@ broken-packages:
   - hsns
   - hsnsq
   - hsntp
+  - hs-opentelemetry-instrumentation-persistent
   - hsoptions
   - hsoz
   - hsparql
@@ -2726,6 +2728,7 @@ broken-packages:
   - katydid
   - kawaii
   - kawhi
+  - kazura-queue
   - kdesrc-build-extra
   - kd-tree
   - keccak
@@ -2998,6 +3001,7 @@ broken-packages:
   - lye
   - lz4-frame-conduit
   - lzip
+  - lzlib
   - lzma-streams
   - lzo
   - maam
