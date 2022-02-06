@@ -11,11 +11,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "202";
+  version = "203";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-Cek5C55hCcD+zWGEDsL8Fx2nEJv1Ajy4UELMclysM/M=";
+    sha256 = "sha256-xDH4Bd87hRnQ0xOeJijeon2RNAnvD3vfpvJgXoAXWAA=";
   };
 
   outputs = [ "out" "man" ];
