@@ -2,14 +2,12 @@
 , mkDerivation
 , fetchFromGitHub
 , pipewire
-, qtsvg
 , glibmm
-, libspatialaudio
 , qmake
-, git
 , makeDesktopItem
 , pkg-config
 , libarchive
+, fetchpatch
 }:
 
 mkDerivation rec{
@@ -23,15 +21,19 @@ mkDerivation rec{
     hash = "sha256-Hkzurr+s+vvSyOMCYH9kHI+nIm6mL9yORGNzY2FXslc=";
   };
 
-  patches = [ ./0001-Make-project-work-on-nix.patch ];
-  nativeBuildInputs = [ qmake pkg-config ];
-  buildInputs = [ glibmm libarchive pipewire ];
+  patches = [
+    # fixing /usr install assumption, remove on version bump
+    (fetchpatch {
+      url = "https://github.com/Audio4Linux/JDSP4Linux/commit/003c9e9fc426f83e269aed6e05be3ed55273931a.patch";
+      hash = "sha256-crll/a7C9pUq9eL5diq8/YgC5bNC6SrdijZEBxZpJ8E=";
+    })
+  ];
 
-  propagatedBuildInput = [
-    qtsvg
-    pipewire
+  nativeBuildInputs = [ qmake pkg-config ];
+  buildInputs = [
     glibmm
-    libspatialaudio
+    libarchive
+    pipewire
   ];
 
   desktopItems = [
@@ -56,6 +58,7 @@ mkDerivation rec{
     description = "An audio effect processor for PipeWire clients";
     homepage = "https://github.com/Audio4Linux/JDSP4Linux";
     license = licenses.gpl3Only;
-    mantainer = with mantainers;[ pasqui23 ];
+    maintainers = with maintainers;[ pasqui23 ];
+    platforms = platforms.linux;
   };
 }
