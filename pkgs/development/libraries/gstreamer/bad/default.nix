@@ -20,7 +20,7 @@
 , lrdf
 , ladspaH
 , libnice
-, webrtc-audio-processing
+, webrtc-audio-processing_1
 , lilv
 , lv2
 , serd
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     ldacbt
     libass
     libkate
-    webrtc-audio-processing # webrtc
+    webrtc-audio-processing_1 # webrtc
     libbs2b
     libmodplug
     libmicrodns
