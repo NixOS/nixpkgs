@@ -3048,6 +3048,8 @@ with pkgs;
 
   facedetect = callPackage ../tools/graphics/facedetect { };
 
+  findimagedupes = callPackage ../tools/graphics/findimagedupes { };
+
   facter = callPackage ../tools/system/facter { };
 
   fasd = callPackage ../tools/misc/fasd { };
