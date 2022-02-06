@@ -145,7 +145,7 @@
 
     posix = callPackage ./posix.nix {};
 
-    protobuf = callPackage ./protobuf.nix {};
+    protobuf = throw "idrisPackages.protobuf has been removed: abandoned by upstream"; # added 2022-02-06
 
     quantities = callPackage ./quantities.nix {};
 
