@@ -400,6 +400,7 @@ mapAliases ({
   hawkthorne = throw "hawkthorne has been removed because it depended on a broken version of love"; # added 2022-01-15
   hal-flash = throw "hal-flash has been removed as Adobe Flash Player is now deprecated."; # added 2021-02-07
   heimdalFull = heimdal; # added 2018-05-01
+  heme = throw "heme has been removed: upstream is gone"; # added 2022-02-06
   hepmc = hepmc2; # added 2019-08-05
   hexen = throw "hexen (SDL port) has been removed: abandoned by upstream."; # added 2019-12-11
   hicolor_icon_theme = hicolor-icon-theme; # added 2018-02-25
