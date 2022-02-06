@@ -165,6 +165,10 @@ in
       sha256 = "EEn/qxPsBFgVBqOgPYTrRhaLPwSBlSPWYYSr3SL8wZA=";
     };
     inputs = [ pkgs.libmaxminddb ];
+
+    meta = {
+      maintainers = with lib.maintainers; [ pinpox ];
+    };
   };
 
   http_proxy_connect_module_v18 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
