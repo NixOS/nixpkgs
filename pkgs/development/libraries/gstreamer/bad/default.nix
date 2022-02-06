@@ -20,6 +20,7 @@
 , lrdf
 , ladspaH
 , libnice
+, webrtc-audio-processing
 , webrtc-audio-processing_1
 , lilv
 , lv2
@@ -127,7 +128,8 @@ stdenv.mkDerivation rec {
     ldacbt
     libass
     libkate
-    webrtc-audio-processing_1 # webrtc
+    webrtc-audio-processing # required by webrtcdsp
+    webrtc-audio-processing_1 # required by isac
     libbs2b
     libmodplug
     libmicrodns
@@ -257,7 +259,6 @@ stdenv.mkDerivation rec {
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
     "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
     "-Dgs=disabled" # depends on `google-cloud-cpp`
-    "-Disac=disabled" # depends on `webrtc-audio-coding-1` not packaged in nixpkgs as of writing
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=disabled" # depends on older version of `libopenaptx` due to licensing conflict https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/2235
   ]
