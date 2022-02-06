@@ -205,6 +205,7 @@ mapAliases ({
   debugedit-unstable = debugedit; # added 2021-11-22
   deepin = throw "deepin was a work in progress and it has been canceled and removed https://github.com/NixOS/nixpkgs/issues/94870"; # added 2020-08-31
   deepspeech = throw "deepspeech was removed in favor of stt. https://github.com/NixOS/nixpkgs/issues/119496"; # added 2021-05-05
+  deis = throw "deis was removed ; the service does not exist anymore"; # added 2022-02-06
   deltachat-electron = deltachat-desktop; # added 2021-07-18
   deluge-1_x = throw ''
     Deluge 1.x (deluge-1_x) is no longer supported.
