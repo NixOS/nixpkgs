@@ -116,8 +116,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs \
-      common/scangobj-merge.py \
-      scripts/
+      scripts/meson-pkg-config-file-fixup.py \
+      scripts/extract-release-date-from-doap-file.py
   '';
 
   # This package has some `_("string literal")` string formats
