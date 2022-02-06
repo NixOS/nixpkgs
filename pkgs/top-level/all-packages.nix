@@ -243,6 +243,8 @@ with pkgs;
 
   cen64 = callPackage ../misc/emulators/cen64 { };
 
+  btdu = callPackage ../tools/misc/btdu { };
+
   uxn = callPackage ../misc/emulators/uxn { };
 
   cereal = callPackage ../development/libraries/cereal { };
