@@ -253,6 +253,7 @@ mapAliases ({
   emacsWithPackages = emacs.pkgs.withPackages; # added 2020-12-18
   emacsPackages = emacs.pkgs; # added 2020-12-18
   enblendenfuse = enblend-enfuse; # 2015-09-30
+  encryptr = throw "encryptr was removed because it reached end of life"; # added 2022-02-06
   envelope = throw "envelope has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   epoxy = libepoxy; # 2021-11-11
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # added 2021-04-12

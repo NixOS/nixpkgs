@@ -1751,10 +1751,6 @@ with pkgs;
 
   emplace = callPackage ../tools/package-management/emplace { };
 
-  encryptr = callPackage ../tools/security/encryptr {
-    gconf = gnome2.GConf;
-  };
-
   enchive = callPackage ../tools/security/enchive { };
 
   enjarify = callPackage ../tools/misc/enjarify { };
