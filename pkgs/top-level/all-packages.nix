@@ -29905,6 +29905,8 @@ with pkgs;
 
   wofi-emoji = callPackage ../applications/misc/wofi-emoji { };
 
+  cl-wordle = callPackage ../games/cl-wordle { };
+
   wordnet = callPackage ../applications/misc/wordnet {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
