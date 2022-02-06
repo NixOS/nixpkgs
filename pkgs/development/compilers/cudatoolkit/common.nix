@@ -239,8 +239,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A compiler for NVIDIA GPUs, math libraries, and tools";
     homepage = "https://developer.nvidia.com/cuda-toolkit";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ "aarch64-linux" ];
     license = licenses.unfree;
   };
 }
-
