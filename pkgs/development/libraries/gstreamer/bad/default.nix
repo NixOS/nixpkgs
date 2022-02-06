@@ -17,7 +17,6 @@
 , ldacbt
 , libass
 , libkate
-, libmms
 , lrdf
 , ladspaH
 , libnice
@@ -49,7 +48,6 @@
 , libdvdnav
 , libdvdread
 , libgudev
-, libofa
 , libqrencode
 , libsndfile
 , libusb1
@@ -129,7 +127,6 @@ stdenv.mkDerivation rec {
     ldacbt
     libass
     libkate
-    libmms
     webrtc-audio-processing # webrtc
     libbs2b
     libmodplug
@@ -198,7 +195,6 @@ stdenv.mkDerivation rec {
     libdrm
     libgudev
     libnice
-    libofa
     sbc
     spandsp
 
