@@ -984,22 +984,24 @@ self: super: builtins.intersectAttrs super {
   }))
 {
   inherit (super)
-    hls-alternate-number-format-plugin
     hls-brittany-plugin
     hls-call-hierarchy-plugin
     hls-class-plugin
     hls-eval-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
-    hls-haddock-comments-plugin
     hls-module-name-plugin
     hls-ormolu-plugin
     hls-pragmas-plugin
-    hls-qualify-imported-names-plugin
     hls-rename-plugin
     hls-selection-range-plugin
     hls-splice-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
+
+  # Flaky tests
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
+  hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
+  hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
+  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
 }
