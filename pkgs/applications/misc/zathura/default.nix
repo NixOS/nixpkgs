@@ -30,4 +30,4 @@ let
     };
   };
 
-in self.zathuraWrapper
+in self
