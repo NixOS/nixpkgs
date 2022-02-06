@@ -2816,8 +2816,6 @@ with pkgs;
 
   dehydrated = callPackage ../tools/admin/dehydrated { };
 
-  deisctl = callPackage ../development/tools/deisctl {};
-
   deja-dup = callPackage ../applications/backup/deja-dup { };
 
   dejsonlz4 = callPackage ../tools/compression/dejsonlz4 { };
