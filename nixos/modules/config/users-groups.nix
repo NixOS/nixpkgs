@@ -635,9 +635,9 @@ in {
              || cfg.passwordFile != null
              || cfg.openssh.authorizedKeys.keys != []
              || cfg.openssh.authorizedKeys.keyFiles != [])
-          ) cfg.users) ++ [
+          ) cfg.users ++ [
             config.security.googleOsLogin.enable
-          ];
+          ]);
         message = ''
           Neither the root account nor any wheel user has a password or SSH authorized key.
           You must set one to prevent being locked out of your system.

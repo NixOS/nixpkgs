@@ -378,6 +378,7 @@ mapAliases ({
   gmailieer = lieer; # Added 2020-04-19
   gmic_krita_qt = gmic-qt-krita; # Added 2019-09-07
   gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # Added 2021-03-08
+  gnome-passwordsafe = gnome-secrets; # added 2022-01-30
   gnome-mpv = celluloid; # Added 2019-08-22
   gnome-sharp = throw "gnome-sharp has been removed from nixpkgs"; # Added 2022-01-15
   gnome-themes-standard = gnome-themes-extra; # Added 2018-03-14
