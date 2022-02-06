@@ -112,6 +112,7 @@ self: super: {
     libraryHaskellDepends = [
       self.fail
       self.ordered-containers
+      self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
   ghc-lib = self.ghc-lib_9_2_1_20220109;
@@ -137,7 +138,7 @@ self: super: {
   quickcheck-instances = super.quickcheck-instances_0_3_27;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
-  retrie = doDistribute self.retrie_1_2_0_1;
+  retrie = doDistribute (dontCheck self.retrie_1_2_0_1);
   semialign = super.semialign_1_2_0_1;
   singleton-bool = doJailbreak super.singleton-bool;
   scientific = doJailbreak super.scientific;
@@ -187,11 +188,6 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
     sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
   }) (doJailbreak super.language-haskell-extract);
-
-  haskell-src-meta = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/haskell-src-meta-0.8.7.patch";
-    sha256 = "013k8hpxac226j47cdzgdf9a1j91kmm0cvv7n8zwlajbj3y9bzjp";
-  }) (doJailbreak super.haskell-src-meta);
 
   # Tests depend on `parseTime` which is no longer available
   hourglass = dontCheck super.hourglass;
@@ -245,4 +241,37 @@ self: super: {
   # need bytestring >= 0.11 which is only bundled with GHC >= 9.2
   regex-rure = doDistribute (markUnbroken super.regex-rure);
   jacinda = doDistribute super.jacinda;
+  some = doJailbreak super.some;
+  fourmolu = super.fourmolu_0_5_0_1;
+  implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
+  lucid = doJailbreak super.lucid;
+  hashtables = doJailbreak super.hashtables;
+  primitive-extras = super.primitive-extras_0_10_1_4;
+  hiedb = doJailbreak super.hiedb;
+
+  # 2022-02-05: The following plugins don‘t work yet on ghc9.2.
+  # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
+  haskell-language-server = appendConfigureFlags [
+    "-f-alternateNumberFormat"
+    "-f-class"
+    "-f-eval"
+    "-f-haddockComments"
+    "-f-hlint"
+    "-f-retrie"
+    "-f-splice"
+    "-f-tactics"
+    "-f-brittany"
+    "-f-stylish-haskell"
+  ] (super.haskell-language-server.override {
+    hls-alternate-number-format-plugin = null;
+    hls-class-plugin = null;
+    hls-eval-plugin = null;
+    hls-haddock-comments-plugin = null;
+    hls-hlint-plugin = null;
+    hls-retrie-plugin = null;
+    hls-splice-plugin = null;
+    hls-tactics-plugin = null;
+    hls-brittany-plugin = null;
+    hls-stylish-haskell-plugin = null;
+  });
 }
