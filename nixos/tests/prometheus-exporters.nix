@@ -510,14 +510,14 @@ let
         };
         # initialize wallet, creates macaroon needed by exporter
         systemd.services.lnd.postStart = ''
-          ${pkgs.curl}/bin/curl \
+          ${pkgs.curl.exe} \
             --retry 20 \
             --retry-delay 1 \
             --retry-connrefused \
             --cacert /var/lib/lnd/tls.cert \
             -X GET \
             https://localhost:8080/v1/genseed | ${pkgs.jq}/bin/jq -c '.cipher_seed_mnemonic' > /tmp/seed
-          ${pkgs.curl}/bin/curl \
+          ${pkgs.curl.exe} \
             --retry 20 \
             --retry-delay 1 \
             --retry-connrefused \

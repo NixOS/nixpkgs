@@ -96,7 +96,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
           base.wait_for_open_port(8080)
           base.wait_for_unit("searx")
           base.succeed(
-              "${pkgs.curl}/bin/curl --fail http://localhost:8080"
+              "${pkgs.curl.exe} --fail http://localhost:8080"
           )
           base.shutdown()
 
@@ -105,10 +105,10 @@ import ./make-test-python.nix ({ pkgs, ...} :
           fancy.wait_for_open_port(80)
           fancy.wait_for_unit("uwsgi")
           fancy.succeed(
-              "${pkgs.curl}/bin/curl --fail http://localhost/searx >&2"
+              "${pkgs.curl.exe} --fail http://localhost/searx >&2"
           )
           fancy.succeed(
-              "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/themes/oscar/js/bootstrap.min.js >&2"
+              "${pkgs.curl.exe} --fail http://localhost/searx/static/themes/oscar/js/bootstrap.min.js >&2"
           )
     '';
 })
