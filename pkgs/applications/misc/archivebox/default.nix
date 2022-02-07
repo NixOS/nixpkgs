@@ -22,9 +22,7 @@ let
       sha256 = "sha256-Ms55Lum2oMu+w0ASPiKayfdl3/jCpK6SR6FLK6OjZac=";
     };
   });
-  django-extensions' = django-extensions.overrideAttrs (oldAttrs: rec {
-    propagatedBuildInputs = [];
-  });
+  django-extensions' = django-extensions.override { django = django_3'; };
 in
 
 buildPythonApplication rec {
