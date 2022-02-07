@@ -8559,6 +8559,12 @@
     githubId = 3747396;
     name = "Nathan Isom";
   };
+  nelsonjeppesen = {
+    email = "nix@jeppesen.io";
+    github = "NelsonJeppesen";
+    githubId = 50854675;
+    name = "Nelson Jeppesen";
+  };
   neonfuz = {
     email = "neonfuz@gmail.com";
     github = "neonfuz";
