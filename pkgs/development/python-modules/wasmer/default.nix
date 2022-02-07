@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , buildPythonPackage
 , libiconv
-, llvm_11
 , libffi
 , libxml2
 , ncurses
@@ -74,26 +73,26 @@ rec {
   wasmer = common {
     pname = "wasmer";
     buildAndTestSubdir = "packages/api";
-    cargoHash = "sha256-txOOia1C4W+nsXuXp4EytEn82CFfSmiOYwRLC4WPImc=";
+    cargoHash = "sha256-twoog8LjQtoli+TlDipSuB7yLFkXQJha9BqobqgZW3Y=";
   };
 
   wasmer-compiler-cranelift = common {
     pname = "wasmer-compiler-cranelift";
     buildAndTestSubdir = "packages/compiler-cranelift";
-    cargoHash = "sha256-cHgAUwqnbQV3E5nUYGYQ48ntbIFfq4JXfU5IrSFZ3zI=";
+    cargoHash = "sha256-IqeMOY6emhIC7ekH8kIOZCr3JVkjxUg/lQli+ZZpdq4=";
   };
 
   wasmer-compiler-llvm = common {
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
-    cargoHash = "sha256-Jm22CC5S3pN/vdVvsGZdvtoAgPzWVLto8wavSJdxY3A=";
-    extraNativeBuildInputs = [ llvm_11 ];
+    cargoHash = "sha256-xawbf5gXXV+7I2F2fDSaMvjtFvGDBtqX7wL3c28TSbA=";
+    extraNativeBuildInputs = [ rustPlatform.rust.rustc.llvm ];
     extraBuildInputs = [ libffi libxml2.out ncurses zlib ];
   };
 
   wasmer-compiler-singlepass = common {
     pname = "wasmer-compiler-singlepass";
     buildAndTestSubdir = "packages/compiler-singlepass";
-    cargoHash = "sha256-lmqEo3+jYoN+4EEYphcoE4b84jdFcvYVycjrJ956Bh8=";
+    cargoHash = "sha256-4nZHMCNumNhdGPOmHXlJ5POYP7K+VPjwhEUMgzGb/Rk=";
   };
 }
