@@ -1,5 +1,17 @@
-{ lib, stdenv, python, fetchFromGitHub, cmake, swig, opencascade-occt, smesh, freetype, libGL, libGLU, libX11
-, Cocoa }:
+{ lib, stdenv, python, fetchFromGitHub
+, cmake
+, Cocoa
+, freetype
+, libGL
+, libGLU
+, libX11
+, libXext
+, libXi
+, libXmu
+, opencascade-occt
+, smesh
+, swig
+}:
 
 stdenv.mkDerivation rec {
   pname = "pythonocc-core";
@@ -21,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake swig ];
   buildInputs = [
     python opencascade-occt smesh
-    freetype libGL libGLU libX11
+    freetype libGL libGLU libX11 libXext libXmu libXi
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   cmakeFlags = [
