@@ -1,42 +1,40 @@
 { lib
-, aiohttp
-, brotlipy
 , buildPythonPackage
+, cloudscraper
 , fetchFromGitHub
 , pythonOlder
-, yarl
+, requests
 }:
 
 buildPythonPackage rec {
-  pname = "garminconnect-aio";
-  version = "0.1.4";
+  pname = "garminconnect";
+  version = "0.1.44";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
-    repo = "python-garminconnect-aio";
+    repo = "python-garminconnect";
     rev = version;
-    hash = "sha256-GWY2kTG2D+wOJqM/22pNV5rLvWjAd4jxVGlHBou/T2g=";
+    hash = "sha256-CUjMbh3eGPwoHW+oOjaVyr0g/txWmzGuP1usq2WCwZg=";
   };
 
   propagatedBuildInputs = [
-    aiohttp
-    brotlipy
-    yarl
+    cloudscraper
+    requests
   ];
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [
-    "garminconnect_aio"
+    "garminconnect"
   ];
 
   meta = with lib; {
-    description = "Python module to interact with Garmin Connect";
-    homepage = "https://github.com/cyberjunky/python-garminconnect-aio";
+    description = "Garmin Connect Python API wrapper";
+    homepage = "https://github.com/cyberjunky/python-garminconnect";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
