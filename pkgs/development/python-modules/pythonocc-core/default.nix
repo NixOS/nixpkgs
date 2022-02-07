@@ -1,6 +1,7 @@
 { lib, stdenv, python, fetchFromGitHub
 , cmake
 , Cocoa
+, fontconfig
 , freetype
 , libGL
 , libGLU
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python opencascade-occt smesh
     freetype libGL libGLU libX11 libXext libXmu libXi
+    fontconfig
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   cmakeFlags = [
