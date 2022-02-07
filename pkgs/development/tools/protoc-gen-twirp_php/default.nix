@@ -15,6 +15,10 @@ buildGoModule rec {
 
   subPackages = [ "protoc-gen-twirp_php" ];
 
+  ldflags = [
+    "-X main.version=${version}"
+  ];
+
   meta = with lib; {
     description = "PHP port of Twitch's Twirp RPC framework";
     homepage = "https://github.com/twirphp/twirp";
