@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
          scripts, cron jobs, terminals without X-Windows support, etc.
       '';
 
+    mainProgram = "wget";
+
     license = licenses.gpl3Plus;
 
     homepage = "https://www.gnu.org/software/wget/";
