@@ -1,4 +1,4 @@
-{ lib, stdenv, python, fetchFromGitHub, cmake, swig, opencascade, smesh, freetype, libGL, libGLU, libX11
+{ lib, stdenv, python, fetchFromGitHub, cmake, swig, opencascade-occt, smesh, freetype, libGL, libGLU, libX11
 , Cocoa }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake swig ];
   buildInputs = [
-    python opencascade smesh
+    python opencascade-occt smesh
     freetype libGL libGLU libX11
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
