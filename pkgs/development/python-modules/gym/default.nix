@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "12b545xz0r2g4z5r7f8amxl7nm0lqymkzwcwhg1bni9h0sxwpv6c";
   };
 
