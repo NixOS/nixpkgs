@@ -56,28 +56,27 @@ let
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
-    aarch64-darwin = aarch64-darwin-version;
     x86_64-linux = x86_64-linux-version;
+    aarch64-darwin =  aarch64-darwin-version;
   }.${system} or throwSystem;
 
-  src =
-    let
-      base = "https://downloads.slack-edge.com";
-    in
-      {
-        x86_64-darwin = fetchurl {
-          url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-          sha256 = x86_64-darwin-sha256;
-        };
-        aarch64-darwin = fetchurl {
-          url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
-          sha256 = aarch64-darwin-sha256;
-        };
-        x86_64-linux = fetchurl {
-          url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
-          sha256 = x86_64-linux-sha256;
-        };
-      }.${system} or throwSystem;
+
+  src = let
+    base = "https://downloads.slack-edge.com";
+  in {
+    x86_64-darwin = fetchurl {
+      url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
+      sha256 = x86_64-darwin-sha256;
+    };
+    x86_64-linux = fetchurl {
+      url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
+      sha256 = x86_64-linux-sha256;
+    };
+    aarch64-darwin = fetchurl {
+      url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+      sha256 = aarch64-darwin-sha256;
+    };
+  }.${system} or throwSystem;
 
   meta = with lib; {
     description = "Desktop client for Slack";
@@ -195,7 +194,10 @@ let
       runHook preInstall
       mkdir -p $out/Applications/Slack.app
       cp -R . $out/Applications/Slack.app
-      /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
+    '' + lib.optionalString (!stdenv.isAarch64) ''
+      # on aarch64-darwin we get: Could not write domain com.tinyspeck.slackmacgap; exiting
+      /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -Bool YES
+    '' + ''
       runHook postInstall
     '';
   };
