@@ -68,14 +68,14 @@ import ./make-test-python.nix ({ pkgs, ... } : {
                   r ${pkgs.libunistring}/share/**,
                   x ${pkgs.libunistring}/foo/**,
               ''} ${pkgs.runCommand "actual.rules" { preferLocalBuild = true; } ''
-                  ${pkgs.gnused}/bin/sed -e 's:^[^ ]* ${builtins.storeDir}/[^,/-]*-\([^/,]*\):\1 \0:' ${
+                  ${pkgs.gnused.exe} -e 's:^[^ ]* ${builtins.storeDir}/[^,/-]*-\([^/,]*\):\1 \0:' ${
                       pkgs.apparmorRulesFromClosure {
                         name = "ping";
                         additionalRules = ["x $path/foo/**"];
                       } [ pkgs.libcap ]
                   } |
                   ${pkgs.coreutils}/bin/sort -n -k1 |
-                  ${pkgs.gnused}/bin/sed -e 's:^[^ ]* ::' >$out
+                  ${pkgs.gnused.exe} -e 's:^[^ ]* ::' >$out
               ''}"
           )
     '';
