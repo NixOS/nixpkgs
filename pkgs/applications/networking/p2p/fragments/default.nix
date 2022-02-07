@@ -1,78 +1,120 @@
-{ lib
+{ rustPlatform
 , stdenv
+, lib
 , fetchFromGitLab
 , meson
-, vala
-, ninja
-, pkg-config
-, wrapGAppsHook
+, cmake
 , desktop-file-utils
-, appstream-glib
-, python3
-, glib
-, gtk3
-, libhandy
-, libtransmission
-, libb64
-, libutp
-, miniupnpc
-, dht
-, libnatpmp
+, ninja
+, automake
+, autoconf
+, libtool
 , libevent
-, curl
 , openssl
 , zlib
+, pkg-config
+, libgee
+, curl
+, vala
+, glib
+, python3
+, gtk3
+, libhandy
+, sqlite
+, dbus
+, gtk4
+, libadwaita
+, git
+, cargo
+, gettext
+, rustc
+, transmission
+, hicolor-icon-theme
+, libtransmission
+, libb64
+, wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "fragments";
-  version = "1.5";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Fragments";
     rev = version;
-    sha256 = "0x1kafhlgyi65l4w67c24r8mpvasg3q3c4wlgnjc9sxvp6ki7xbn";
+    fetchSubmodules = true;
+    sha256 = "sha256-3/v+MK7Zzn2tnUOe5cW35I5nJ+EsMUaqzTr25EloJ/k=";
   };
 
-  patches = [
-    # Fix dependency resolution
-    ./dependency-resolution.patch
-  ];
+  cargoSha256 = "sha256-Js1UOPIegmQ8rJSPRen1knv0ngoVZXgAHsMbsm0tLcM=";
 
   nativeBuildInputs = [
-    meson
-    vala
-    ninja
-    pkg-config
-    wrapGAppsHook
+    autoconf
+    automake
+    cmake
     desktop-file-utils
-    appstream-glib
+    libtool
+    meson
+    pkg-config
     python3
+    vala
+    wrapGAppsHook
+    gettext
+    glib
+    ninja
   ];
 
   buildInputs = [
-    glib
-    gtk3
-    libhandy
-    libtransmission
-    libb64
-    libutp
-    miniupnpc
-    dht
-    libnatpmp
-    libevent
+    meson
     curl
+    gtk3
+    hicolor-icon-theme
+    libevent
+    libgee
+    libhandy
     openssl
     zlib
+    libtransmission
+    libb64
+    sqlite
+    dbus
+    gtk4
+    libadwaita
+    git
+    rustc
+    cargo
   ];
 
+  # Don't use buildRustPackage phases, only use it for rust deps setup
+  configurePhase = null;
+  buildPhase = null;
+  doCheck = true;
+  checkPhase = null;
+  installPhase = null;
+
+  postPatch = ''
+    chmod +x build-aux/*
+    patchShebangs build-aux
+  '';
+
+  dontUseCmakeConfigure = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/fragments \
+        --set PATH ${lib.makeBinPath [ transmission ]}
+  '';
+
   meta = with lib; {
-    homepage = "https://gitlab.gnome.org/World/Fragments";
-    description = "A GTK3 BitTorrent Client";
-    maintainers = with maintainers; [ angustrau ];
+    homepage = https://gitlab.gnome.org/World/Fragments;
+    description = "A GTK BitTorrent Client";
+    maintainers = with maintainers; [
+      onny
+      angustrau
+    ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }
+
