@@ -1277,7 +1277,7 @@ mapAliases ({
     Its new location is obs-studio-plugins.wlrobs.
   '';
 
-  multimc = throw "multimc was removed from nixpkgs; use polymc instead"; # Added 2022-01-08
+  multimc = throw "multimc was removed from nixpkgs; use polymc instead (see https://github.com/NixOS/nixpkgs/pull/154051 for more information)"; # Added 2022-01-08
 
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
