@@ -21,6 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/gping --version | grep "${version}"
+  '';
+
   meta = with lib; {
     description = "Ping, but with a graph";
     homepage = "https://github.com/orf/gping";
