@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 
 , autoreconfHook
 , pkg-config
@@ -21,8 +22,15 @@ stdenv.mkDerivation rec {
     sha256 = "1j3snghqjbhwmnm5vz3dr1zm68dj15mgbx1wqld7vkl7n2nfaihf";
   };
 
-  # FreeImage needs this patch
-  patches = [ ./headers.patch ];
+  patches = [
+    # FreeImage needs this patch
+    ./headers.patch
+    (fetchpatch {
+      name = "CVE-2022-22844.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/03047a26952a82daaa0792957ce211e0aa51bc64.patch";
+      sha256 = "0cfih55f5qpc84mvlwsffik80bgz6drkflkhrdyqq8m84jw3mbwb";
+    })
+  ];
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
