@@ -16595,7 +16595,9 @@ with pkgs;
   ffmpeg_3 = ffmpeg_3_4;
   # Please make sure this is updated to the latest version on the next major
   # update to ffmpeg
-  ffmpeg = ffmpeg_5;
+  # Packages which use ffmpeg as a library, should pin to the relevant major
+  # version number which the upstream support.
+  ffmpeg = ffmpeg_4;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     svt-av1 = if stdenv.isAarch64 then null else svt-av1;
