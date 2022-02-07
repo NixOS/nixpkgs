@@ -1227,7 +1227,9 @@ with pkgs;
 
   lilo = callPackage ../tools/misc/lilo { };
 
-  logseq = callPackage ../applications/misc/logseq { };
+  logseq = callPackage ../applications/misc/logseq {
+    electron = electron_16;
+  };
 
   natls = callPackage ../tools/misc/natls { };
 
@@ -14290,7 +14292,8 @@ with pkgs;
     electron_13
     electron_14
     electron_15
-    electron_16;
+    electron_16
+    electron_17;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
