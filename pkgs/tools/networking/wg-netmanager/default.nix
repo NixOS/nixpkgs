@@ -19,9 +19,6 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
   checkFlags = "--skip device";
 
-  passthru.tests = {
-  };
-
   meta = with lib; {
     description = "Wireguard network manager";
     longDescription = "Wireguard network manager, written in rust, simplifies the setup of wireguard nodes, identifies short connections between nodes residing in the same subnet, identifies unreachable aka dead nodes and maintains the routes between all nodes automatically. To achieve this, wireguard network manager needs to be running on each node.";
