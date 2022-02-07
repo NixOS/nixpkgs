@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.8.1";
+  version = "0.8.1.0";
 
   src = fetchPypi {
     pname = "POT";
