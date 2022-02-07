@@ -10,6 +10,7 @@
 , libXi
 , libXmu
 , opencascade-occt
+, rapidjson
 , smesh
 , swig
 }:
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python opencascade-occt smesh
     freetype libGL libGLU libX11 libXext libXmu libXi
-    fontconfig
+    fontconfig rapidjson
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   cmakeFlags = [
