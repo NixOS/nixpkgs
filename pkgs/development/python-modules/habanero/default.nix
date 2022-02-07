@@ -1,6 +1,7 @@
 { buildPythonPackage, lib, fetchFromGitHub
 , requests, tqdm
 , nose, vcrpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,8 +18,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests tqdm ];
 
-  checkInputs = [ nose vcrpy ];
-  checkPhase = "make test";
+  # almost the entirety of the test suite makes network calls
+  pytestFlagsArray = [
+    "test/test-filters.py"
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    vcrpy
+  ];
 
   meta = {
     description = "Python interface to Library Genesis";
