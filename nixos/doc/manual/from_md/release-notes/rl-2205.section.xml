@@ -319,6 +319,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>buildGoModule</literal> was updated to use
+          <literal>go_1_17</literal>, third party derivations that
+          specify &gt;= go 1.17 in the main <literal>go.mod</literal>
+          will need to regenerate their <literal>vendorSha256</literal>
+          hash.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>gnome-passwordsafe</literal> package updated to
           <link xlink:href="https://gitlab.gnome.org/World/secrets/-/tags/6.0">version
           6.x</link> and renamed to <literal>gnome-secrets</literal>.
