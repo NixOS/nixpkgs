@@ -37,6 +37,6 @@ buildGoModule rec {
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ matdsoupe ];
+    maintainers = with maintainers; [ zoedsoupe ];
   };
 }

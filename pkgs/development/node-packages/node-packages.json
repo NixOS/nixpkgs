@@ -13,6 +13,7 @@
 , "@nestjs/cli"
 , "@squoosh/cli"
 , "@tailwindcss/language-server"
+, "@uppy/companion"
 , "@vue/cli"
 , "@webassemblyjs/cli"
 , "@webassemblyjs/repl"

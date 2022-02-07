@@ -18,7 +18,9 @@ nixpkgs_linux_version=$(cat "$slack_nix" | sed -n 's/.*x86_64-linux-version = \"
 nixpkgs_mac_version=$(cat "$slack_nix" | sed -n 's/.*x86_64-darwin-version = \"\([0-9\.]\+\)\";.*/\1/p')
 nixpkgs_mac_arm_version=$(cat "$slack_nix" | sed -n 's/.*aarch64-darwin-version = \"\([0-9\.]\+\)\";.*/\1/p')
 
-if [[ "$nixpkgs_linux_version" == "$latest_linux_version" && "$nixpkgs_mac_version" == "$latest_mac_version" ]]; then
+if [[ "$nixpkgs_linux_version" == "$latest_linux_version" && \
+      "$nixpkgs_mac_version" == "$latest_mac_version" && \
+      "$nixpkgs_mac_arm_version" == "$latest_mac_version" ]]; then
   echo "nixpkgs versions are all up to date!"
   exit 0
 fi
@@ -34,7 +36,7 @@ sed -i "s/x86_64-linux-version = \".*\"/x86_64-linux-version = \"${latest_linux_
 sed -i "s/x86_64-darwin-version = \".*\"/x86_64-darwin-version = \"${latest_mac_version}\"/" "$slack_nix"
 sed -i "s/aarch64-darwin-version = \".*\"/aarch64-darwin-version = \"${latest_mac_version}\"/" "$slack_nix"
 sed -i "s/x86_64-linux-sha256 = \".*\"/x86_64-linux-sha256 = \"${linux_sha256}\"/" "$slack_nix"
-sed -i "s/x86_64-darwin-sha256 = \".*\"/x86_64-darwin-sha256 = \"${mac_arm_sha256}\"/" "$slack_nix"
+sed -i "s/x86_64-darwin-sha256 = \".*\"/x86_64-darwin-sha256 = \"${mac_sha256}\"/" "$slack_nix"
 sed -i "s/aarch64-darwin-sha256 = \".*\"/aarch64-darwin-sha256 = \"${mac_arm_sha256}\"/" "$slack_nix"
 
 if ! nix-build -A slack "$nixpkgs"; then
