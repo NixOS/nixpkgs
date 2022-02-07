@@ -9617,6 +9617,8 @@ in {
 
   types-toml = callPackage ../development/python-modules/types-toml { };
 
+  types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
+
   typesentry = callPackage ../development/python-modules/typesentry { };
 
   typesystem = callPackage ../development/python-modules/typesystem { };

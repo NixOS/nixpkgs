@@ -7,6 +7,9 @@
 # For documentation on this file, see https://help.github.com/articles/about-codeowners/
 # Mentioned users will get code review requests.
 
+# Release managers, release branch only
+/ @jonringer
+
 # This file
 /.github/CODEOWNERS @edolstra
 
