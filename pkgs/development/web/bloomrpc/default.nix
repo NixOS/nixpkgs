@@ -31,7 +31,8 @@ in appimageTools.wrapType2 {
   meta = with lib; {
     description = "GUI Client for GRPC Services";
     longDescription = ''
-    Inspired by Postman and GraphQL Playground BloomRPC aims to provide the simplest and most efficient developer experience for exploring and querying your GRPC services.
+      Inspired by Postman and GraphQL Playground BloomRPC aims to provide the simplest
+      and most efficient developer experience for exploring and querying your GRPC services.
     '';
     homepage = "https://github.com/uw-labs/bloomrpc";
     license = licenses.lgpl3Plus;
