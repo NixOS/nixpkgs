@@ -16,7 +16,7 @@
 , makeWrapper
 , numactl
 , perl
-, python2
+, python3
 , rocclr
 , rocm-comgr
 , rocm-device-libs
@@ -56,7 +56,7 @@ let
       substituteInPlace bin/hip_embed_pch.sh \
         --replace '$LLVM_DIR/bin/' ""
 
-      sed 's,#!/usr/bin/python,#!${python2}/bin/python,' -i hip_prof_gen.py
+      sed 's,#!/usr/bin/python,#!${python3.interpreter},' -i hip_prof_gen.py
 
       sed -e 's,$ROCM_AGENT_ENUM = "''${ROCM_PATH}/bin/rocm_agent_enumerator";,$ROCM_AGENT_ENUM = "${rocminfo}/bin/rocm_agent_enumerator";,' \
           -e 's,^\($DEVICE_LIB_PATH=\).*$,\1"${rocm-device-libs}/amdgcn/bitcode";,' \
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     sha256 = "WvOuQu/EN81Kwcoc3ZtGlhb996edQJ3OWFsmPuqeNXE=";
   };
 
-  nativeBuildInputs = [ cmake python2 makeWrapper perl ];
+  nativeBuildInputs = [ cmake python3 makeWrapper perl ];
   buildInputs = [ libxml2 numactl libglvnd libX11 ];
   propagatedBuildInputs = [
     clang

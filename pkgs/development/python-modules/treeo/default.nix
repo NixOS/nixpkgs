@@ -18,6 +18,11 @@ buildPythonPackage rec {
     sha256 = "176r1kgsdlylvdrxmhnzni81p8m9cfnsn4wwn6fnmsgam2qbp76j";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'typing-extensions = "^3.10.0"' 'typing-extensions = "*"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];

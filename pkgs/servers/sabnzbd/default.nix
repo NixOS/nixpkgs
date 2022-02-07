@@ -20,6 +20,7 @@ let
     sabyenc3
     puremagic
     guessit
+    pysocks
   ]);
   path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {

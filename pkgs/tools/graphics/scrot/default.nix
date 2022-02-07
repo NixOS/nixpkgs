@@ -1,14 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, imlib2
+, xlibsWrapper
 , autoreconfHook
 , autoconf-archive
-, pkg-config
-, imlib2
-, libbsd
-, libXcomposite
 , libXfixes
-, xlibsWrapper
+, libXcomposite
+, pkg-config
+, libbsd
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "resurrecting-open-source-projects";
     repo = pname;
     rev = version;
-    hash = "sha256-oVmEPkEK1xDcIRUQjCp6CKf+aKnnVe3L7aRTdSsCmmY=";
+    sha256 = "sha256-oVmEPkEK1xDcIRUQjCp6CKf+aKnnVe3L7aRTdSsCmmY=";
   };
 
   nativeBuildInputs = [
@@ -27,12 +27,13 @@ stdenv.mkDerivation rec {
     autoconf-archive
     pkg-config
   ];
+
   buildInputs = [
     imlib2
-    libbsd
-    libXcomposite
-    libXfixes
     xlibsWrapper
+    libXfixes
+    libXcomposite
+    libbsd
   ];
 
   meta = with lib; {
