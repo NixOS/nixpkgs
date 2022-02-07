@@ -2,18 +2,19 @@
 , stdenv
 , fetchPypi
 , buildPythonPackage
-, Mako
-, pytest
-, numpy
-, cffi
-, pytools
-, decorator
 , appdirs
-, six
-, opencl-headers
-, ocl-icd
-, pybind11
+, cffi
+, decorator
+, Mako
 , mesa_drivers
+, numpy
+, ocl-icd
+, opencl-headers
+, platformdirs
+, pybind11
+, pytest
+, pytools
+, six
 }:
 
 let
@@ -26,7 +27,16 @@ in buildPythonPackage rec {
   checkInputs = [ pytest ];
   buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
 
-  propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
+  propagatedBuildInputs = [
+    appdirs
+    cffi
+    decorator
+    Mako
+    numpy
+    platformdirs
+    pytools
+    six
+  ];
 
   src = fetchPypi {
     inherit pname version;
