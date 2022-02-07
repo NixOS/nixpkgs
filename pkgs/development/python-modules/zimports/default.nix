@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sqlalchemyorg";
     repo = "zimports";
-    rev = version;
+    rev = "v${version}";
     sha256 = "11mg7j7xiypv9hki4qbnp9jsgwgfdrgdzfqyrzk5x0s4hycgi4q0";
   };
 
