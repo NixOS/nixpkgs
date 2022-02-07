@@ -1,0 +1,13 @@
+diff --git a/src/bin/wordle/game.rs b/src/bin/wordle/game.rs
+index 8500732..6f26e2a 100644
+--- a/src/bin/wordle/game.rs
++++ b/src/bin/wordle/game.rs
+@@ -235,7 +235,7 @@ impl Display for GameShare {
+             score = self.score
+         )?;
+         for m in &self.matches {
+-            write!(f, "\n{m}")?;
++            write!(f, "\n{}", m)?;
+         }
+         Ok(())
+     }

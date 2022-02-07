@@ -11,7 +11,7 @@ shopt -s inherit_errexit
 
 show_usage() {
   cat <<DOC
-Usage: ./update-provider [--force] [--vendor] [<owner>/]<provider>
+Usage: ./update-provider [--force] [--no-build] [<owner>/]<provider>
 
 Update a single provider in the providers.json inventory file.
 
@@ -27,14 +27,14 @@ to add the provider to the list:
 Options:
 
   * --force: Force the update even if the version matches.
-  * --vendor: Switch from go package to go modules with vendor.
+  * --no-build: Don't build provider
   * --vendor-sha256 <sha256>: Override the SHA256 or "null".
 DOC
 }
 
 force=
 provider=
-vendor=
+build=1
 vendorSha256=
 
 while [[ $# -gt 0 ]]; do
@@ -47,9 +47,8 @@ while [[ $# -gt 0 ]]; do
     force=1
     shift
     ;;
-  --vendor)
-    force=1
-    vendor=1
+  --no-build)
+    build=0
     shift
     ;;
   --vendor-sha256)
@@ -142,12 +141,10 @@ update_attr rev "${rev}"
 sha256=$(prefetch_github "${org}" "${repo}" "${rev}")
 update_attr sha256 "${sha256}"
 
-repo_root=$(git rev-parse --show-toplevel)
-
 if [[ -z ${vendorSha256} ]]; then
   if [[ ${old_vendor_sha256} == null ]]; then
     vendorSha256=null
-  elif [[ -n ${old_vendor_sha256} || ${vendor} == 1 ]]; then
+  elif [[ -n ${old_vendor_sha256} ]]; then
     echo "=== Calculating vendorSha256 ==="
     vendorSha256=$(nix-prefetch -I nixpkgs=../../../../.. "{ sha256 }: (import ../../../../.. {}).terraform-providers.${provider_name}.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
     # Deal with nix unstable
@@ -162,5 +159,7 @@ if [[ -n ${vendorSha256} ]]; then
 fi
 
 # Check that the provider builds
-echo "=== Building terraform-providers.${provider_name} ==="
-nix-build --no-out-link "${repo_root}" -A "terraform-providers.${provider_name}"
+if [[ ${build} == 1 ]]; then
+  echo "=== Building terraform-providers.${provider_name} ==="
+  nix-build --no-out-link ../../../../.. -A "terraform-providers.${provider_name}"
+fi

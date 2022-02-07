@@ -223,11 +223,14 @@ mapAliases ({
   dbvisualizer = throw "dbvisualizer has been removed from nixpkgs, as it's unmaintained"; # Added 2020-09-20
   deadbeef-mpris2-plugin = deadbeefPlugins.mpris2; # Added 2018-02-23
   deadpixi-sam = deadpixi-sam-unstable;
-  debian_devscripts = debian-devscripts; # Added 2016-03-23
+
+  debian_devscripts = debian-devscripts; # added 2016-03-23
   debugedit-unstable = debugedit; # Added 2021-11-22
-  deepin = throw "deepin was a work in progress and it has been canceled and removed https://github.com/NixOS/nixpkgs/issues/94870"; # Added 2020-08-31
-  deepspeech = throw "deepspeech was removed in favor of stt. https://github.com/NixOS/nixpkgs/issues/119496"; # Added 2021-05-05
-  deltachat-electron = deltachat-desktop; # Added 2021-07-18
+  deepin = throw "deepin was a work in progress and it has been canceled and removed https://github.com/NixOS/nixpkgs/issues/94870"; # added 2020-08-31
+  deepspeech = throw "deepspeech was removed in favor of stt. https://github.com/NixOS/nixpkgs/issues/119496"; # added 2021-05-05
+  deisctl = throw "deisctl was removed ; the service does not exist anymore"; # added 2022-02-06
+  deis = throw "deis was removed ; the service does not exist anymore"; # added 2022-02-06
+  deltachat-electron = deltachat-desktop; # added 2021-07-18
   diffuse = throw "diffuse has been removed from nixpkgs, as it's unmaintained"; # Added 2019-12-10
 
   deluge-1_x = throw ''
@@ -247,8 +250,8 @@ mapAliases ({
   dmtx = dmtx-utils; # Added 2018-04-25
   dnnl = oneDNN; # Added 2020-04-22
   docbook5_xsl = docbook_xsl_ns; # Added 2018-04-25
-  docbook_xml_xslt = docbook_xsl; # Added 2018-04-25
   docbookrx = throw "docbookrx has been removed since it was unmaintained"; # Added 2021-01-12
+  docbook_xml_xslt = docbook_xsl; # Added 2018-04-25
   docker_compose = docker-compose; # Added 2018-11-10
   dolphinEmu = dolphin-emu; # Added 2021-11-10
   dolphinEmuMaster = dolphin-emu-beta; # Added 2021-11-10
@@ -262,8 +265,10 @@ mapAliases ({
 
   ### E ###
 
+
   ec2_ami_tools = ec2-ami-tools; # Added 2021-10-08
   ec2_api_tools = ec2-api-tools; # Added 2021-10-08
+  ec2-utils = amazon-ec2-utils; # Added 2022-02-01
   elasticmq = throw "elasticmq has been removed in favour of elasticmq-server-bin"; # Added 2021-01-17
   elasticsearch7-oss = throw "elasticsearch7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # Added 2021-06-09
 
@@ -286,6 +291,7 @@ mapAliases ({
   emacsWithPackages = emacs.pkgs.withPackages; # Added 2020-12-18
 
   enblendenfuse = enblend-enfuse; # Added 2015-09-30
+  encryptr = throw "encryptr was removed because it reached end of life"; # Added 2022-02-06
   envelope = throw "envelope has been removed from nixpkgs, as it was unmaintained."; # Added 2021-08-05
   epoxy = libepoxy; # Added 2021-11-11
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # Added 2021-04-12
@@ -305,16 +311,15 @@ mapAliases ({
   ffadoFull = ffado; # Added 2018-05-01
   firefox-esr-68 = throw "Firefox 68 ESR was removed because it reached end of life with its final release 68.12esr on 2020-08-25.";
   firefox-esr-wrapper = firefox-esr; # Added 2016-01
-  firefox-wrapper = firefox; # Added 2016-01
   firefoxWrapper = firefox; # Added 2015-09
-
+  firefox-wrapper = firefox; # Added 2016-01
   firestr = throw "firestr has been removed."; # Added 2019-12-08
   firmwareLinuxNonfree = linux-firmware; # Added 2022-01-09
   fish-foreign-env = throw "fish-foreign-env has been replaced with fishPlugins.foreign-env"; # Added 2020-12-29, modified 2021-01-10
   flameGraph = flamegraph; # Added 2018-04-25
-  flashplayer = throw "flashplayer has been removed as Adobe Flash Player is now deprecated."; # Added 2021-02-07
-  flashplayer-standalone = throw "flashplayer-standalone has been removed as Adobe Flash Player is now deprecated."; # Added 2021-02-07
   flashplayer-standalone-debugger = throw "flashplayer-standalone-debugger has been removed as Adobe Flash Player is now deprecated."; # Added 2021-02-07
+  flashplayer-standalone = throw "flashplayer-standalone has been removed as Adobe Flash Player is now deprecated."; # Added 2021-02-07
+  flashplayer = throw "flashplayer has been removed as Adobe Flash Player is now deprecated."; # Added 2021-02-07
   flashtool = throw "flashtool was removed from nixpkgs, because the download is down for copyright reasons and the site looks very fishy"; # Added 2021-06-31
   flink_1_5 = throw "flink_1_5 was removed, use flink instead"; # Added 2021-01-25
   flutter-beta = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions."; # Added 2020-01-15
@@ -395,84 +400,90 @@ mapAliases ({
   }; # Added 2020-10-16
 
   gmock = gtest; # moved from top-level 2021-03-14
+
   gnome3 = gnome; # Added 2021-05-07
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# Added 2020-07-12
+  gnuradio3_7 = throw "gnuradio3_7 has been removed because it required Python 2"; # Added 2022-01-16
   gnuradio-ais = gnuradio3_7.pkgs.ais; # Added 2019-05-27, changed 2020-10-16
   gnuradio-gsm = gnuradio3_7.pkgs.gsm; # Added 2019-05-27, changed 2020-10-16
   gnuradio-limesdr = gnuradio3_7.pkgs.limesdr; # Added 2019-05-27, changed 2020-10-16
   gnuradio-nacl = gnuradio3_7.pkgs.nacl; # Added 2019-05-27, changed 2020-10-16
   gnuradio-osmosdr = gnuradio3_7.pkgs.osmosdr; # Added 2019-05-27, changed 2020-10-16
   gnuradio-rds = gnuradio3_7.pkgs.rds; # Added 2019-05-27, changed 2020-10-16
-  gnuradio3_7 = throw "gnuradio3_7 has been removed because it required Python 2"; # Added 2022-01-16
   gnustep-make = gnustep.make; # Added 2016-7-6
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # Added 2020-01-14
-  go-pup = pup; # Added 2017-12-19
   gobby5 = gobby; # Added 2021-02-01
   gobjectIntrospection = gobject-introspection; # Added 2018-12-02
   goimports = gotools; # Added 2018-09-16
   gometalinter = throw "gometalinter was abandoned by upstream. Consider switching to golangci-lint instead"; # Added 2020-04-23
-  google-gflags = gflags; # Added 2019-07-25
-  google-music-scripts = throw "google-music-scripts has been removed because Google Play Music was discontinued"; # Added 2021-03-07
-  google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # Added 2021-03-07
   googleAuthenticator = google-authenticator; # Added 2016-10-16
   googleearth = throw "the non-pro version of Google Earth was removed because it was discontinued and downloading it isn't possible anymore"; # Added 2022-01-22
+  google-gflags = gflags; # Added 2019-07-25
+  google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # Added 2021-03-07
+  google-music-scripts = throw "google-music-scripts has been removed because Google Play Music was discontinued"; # Added 2021-03-07
+  go-pup = pup; # Added 2017-12-19
+  gpgstats = throw "gpgstats has been removed: upstream is gone"; # added 2022-02-06
+  graalvm11 = graalvm11-ce;
+  graalvm8-ce = throw "graalvm8-ce has been removed by upstream."; # Added 2021-10-19
+  graalvm8 = throw "graalvm8-ce has been removed by upstream."; # Added 2021-10-19
   gr-ais = gnuradio3_7.pkgs.ais; # Added 2019-05-27, changed 2020-10-16
+  grantlee5 = libsForQt5.grantlee; # Added 2015-12-19
   gr-gsm = gnuradio3_7.pkgs.gsm; # Added 2019-05-27, changed 2020-10-16
+  grib-api = throw "grib-api has been replaced by ecCodes => https://confluence.ecmwf.int/display/ECC/GRIB-API+migration"; # Added 2022-01-05
   gr-limesdr = gnuradio3_7.pkgs.limesdr; # Added 2019-05-27, changed 2020-10-16
   gr-nacl = gnuradio3_7.pkgs.nacl; # Added 2019-05-27, changed 2020-10-16
   gr-osmosdr = gnuradio3_7.pkgs.osmosdr; # Added 2019-05-27, changed 2020-10-16
   gr-rds = gnuradio3_7.pkgs.rds; # Added 2019-05-27, changed 2020-10-16
-  graalvm11 = graalvm11-ce;
-  graalvm8 = throw "graalvm8-ce has been removed by upstream."; # Added 2021-10-19
-  graalvm8-ce = throw "graalvm8-ce has been removed by upstream."; # Added 2021-10-19
-  grantlee5 = libsForQt5.grantlee; # Added 2015-12-19
-  grib-api = throw "grib-api has been replaced by ecCodes => https://confluence.ecmwf.int/display/ECC/GRIB-API+migration"; # Added 2022-01-05
   gsettings_desktop_schemas = gsettings-desktop-schemas; # Added 2018-02-25
-  gtk-recordmydesktop = throw "gtk-recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # Added 2019-12-10
   gtk_doc = gtk-doc; # Added 2018-02-25
   gtklick = throw "gtklick has been removed from nixpkgs as the project is stuck on python2"; # Added 2022-01-01
+  gtk-recordmydesktop = throw "gtk-recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # Added 2019-12-10
   guileCairo = guile-cairo; # Added 2017-09-24
-guile-gnome = throw "guile-gnome has been removed"; # Added 2022-01-16
+  guile-gnome = throw "guile-gnome has been removed"; # Added 2022-01-16
   guileGnome = throw "guile-gnome has been removed"; # Added 2022-01-16
-  guileLint = guile-lint; # Added 2017-09-27
   guile_lib = guile-lib; # Added 2017-09-24
+  guileLint = guile-lint; # Added 2017-09-27
   guile_ncurses = guile-ncurses; # Added 2017-09-24
   gupnp_av = gupnp-av; # Added 2018-02-25
   gupnp_dlna = gupnp-dlna; # Added 2018-02-25
   gupnp_igd = gupnp-igd; # Added 2018-02-25
   gupnptools = gupnp-tools; # Added 2015-12-19
   gutenberg = zola; # Added 2018-11-17
+  gwtdragdrop = throw "gwtdragdrop was removed: abandoned by upstream"; # Added 2022-02-06
+  gwtwidgets = throw "gwtwidgets was removed: unmaintained"; # Added 2022-02-06
 
   ### H ###
 
   hal-flash = throw "hal-flash has been removed as Adobe Flash Player is now deprecated."; # Added 2021-02-07
   hawkthorne = throw "hawkthorne has been removed because it depended on a broken version of love"; # Added 2022-01-15
   heimdalFull = heimdal; # Added 2018-05-01
+  heme = throw "heme has been removed: upstream is gone"; # added 2022-02-06
   hepmc = hepmc2; # Added 2019-08-05
   hexen = throw "hexen (SDL port) has been removed: abandoned by upstream."; # Added 2019-12-11
   hicolor_icon_theme = hicolor-icon-theme; # Added 2018-02-25
   holochain-go = throw "holochain-go was abandoned by upstream"; # Added 2022-01-01
-  ht-rust = xh; # Added 2021-02-13
   htmlTidy = html-tidy; # Added 2014-12-06
+  ht-rust = xh; # Added 2021-02-13
   hydra-flakes = throw "hydra-flakes: Flakes support has been merged into Hydra's master. Please use `hydra-unstable` now."; # Added 2020-04-06
 
   ### I ###
 
-  i-score = throw "i-score has been removed: abandoned upstream."; # Added 2020-11-21
   iana_etc = iana-etc; # Added 2017-03-08
   iasl = throw "iasl has been removed, use acpica-tools instead"; # Added 2021-08-08
   icedtea8_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   icedtea_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   idea = jetbrains; # Added 2017-04-03
-  imagemagick7 = imagemagick; # Added 2021-02-22
   imagemagick7Big = imagemagickBig; # Added 2021-02-22
+  imagemagick7 = imagemagick; # Added 2021-02-22
   imagemagick7_light = imagemagick_light; # Added 2021-02-22
   impressive = throw "impressive has been removed due to lack of released python 2 support and maintainership in nixpkgs"; # Added 2022-01-27
+  i-score = throw "i-score has been removed: abandoned upstream."; # Added 2020-11-21
   inboxer = throw "inboxer has been removed as it is no longer maintained and no longer works as Google shut down the inbox service this package wrapped.";
   infiniband-diags = rdma-core; # Added 2019-08-09
   ino = throw "ino has been removed from nixpkgs, the project is stuck on python2 and upstream has archived the project."; # Added 2022-01-12
   inotifyTools = inotify-tools;
   inter-ui = inter; # Added 2021-03-27
+  iops = throw "iops was removed: upstream is gone"; # Added 2022-02-06
   iproute = iproute2; # moved from top-level 2021-03-14
   ipsecTools = throw "ipsecTools has benn removed, because it was no longer maintained upstream"; # Added 2021-12-15
 

@@ -19,7 +19,7 @@
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
 , cups, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg ? null
+, ffmpeg_4 ? null
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
@@ -154,7 +154,7 @@ qtModule {
     harfbuzz icu
 
     libevent
-    ffmpeg
+    ffmpeg_4
   ] ++ lib.optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 

@@ -21,7 +21,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           pushd pkgs/applications/networking/cluster/terraform-providers
-          ./update-all-providers
+          ./update-all-providers --no-build
           git commit -m "${{ steps.setup.outputs.title }}" providers.json
           popd
       - name: create PR

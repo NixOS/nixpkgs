@@ -60,6 +60,7 @@ self: super: {
   lukko = doJailbreak super.lukko;
   parallel = doJailbreak super.parallel;
   primitive = doJailbreak (dontCheck super.primitive);
+  primitive-extras = doDistribute (self.primitive-extras_0_10_1_4);
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
@@ -71,8 +72,8 @@ self: super: {
   vector-th-unbox = doJailbreak super.vector-th-unbox;
   zlib = doJailbreak super.zlib;
   weeder = self.weeder_2_3_0;
-  generic-lens-core = self.generic-lens-core_2_2_0_0;
-  generic-lens = self.generic-lens_2_2_0_0;
+  generic-lens-core = self.generic-lens-core_2_2_1_0;
+  generic-lens = self.generic-lens_2_2_1_0;
   th-desugar = self.th-desugar_1_13;
   # 2021-11-08: Fixed in autoapply-0.4.2
   autoapply = doJailbreak self.autoapply_0_4_1_1;
@@ -83,7 +84,7 @@ self: super: {
   });
 
   # Upstream also disables test for GHC 9: https://github.com/kcsongor/generic-lens/pull/130
-  generic-lens_2_2_0_0 = dontCheck super.generic-lens_2_2_0_0;
+  generic-lens_2_2_1_0 = dontCheck super.generic-lens_2_2_1_0;
 
   # Apply patches from head.hackage.
   alex = appendPatch (pkgs.fetchpatch {
@@ -149,23 +150,14 @@ self: super: {
   # Fixes a bug triggered on GHC 9.0.1
   text-short = self.text-short_0_1_5;
 
-  # 2021-09-18: The following plugins don‘t work yet on ghc9.
-  haskell-language-server = appendConfigureFlags [
-    "-f-tactic"
-    "-f-splice"
-    "-f-refineimports"
-    "-f-class"
+  fourmolu = doJailbreak self.fourmolu_0_4_0_0;
 
-    "-f-fourmolu"
+  # 2022-02-05: The following plugins don‘t work yet on ghc9.
+  # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
+  haskell-language-server = appendConfigureFlags [
     "-f-brittany"
     "-f-stylishhaskell"
   ] (super.haskell-language-server.override {
-    hls-tactics-plugin = null; # No upstream support, generic-lens-core fail
-    hls-splice-plugin = null; # No upstream support in hls 1.4.0, should be fixed in 1.5
-    hls-refine-imports-plugin = null; # same issue es splice-plugin
-    hls-class-plugin = null; # No upstream support
-
-    hls-fourmolu-plugin = null; # No upstream support, needs new fourmolu release
     hls-stylish-haskell-plugin = null; # No upstream support
     hls-brittany-plugin = null; # Dependencies don't build with 9.0.1
   });
