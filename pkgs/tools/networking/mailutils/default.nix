@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailutils";
-  version = "3.12";
+  version = "3.13";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0n51ng1f8yf5zfsnh8s0pj9bnw6icb2r0y78gl2kzijaghhzlhvd";
+    hash = "sha256-2SCXHctJh4oAmRF3T9ZATxPSe9EB4tWbZkooZZpAlMc=";
   };
 
   postPatch = ''
@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
            -e 's/chmod [24]755/chmod 0755/' \
       */Makefile{.in,.am}
     sed -i 's:/usr/lib/mysql:${libmysqlclient}/lib/mysql:' configure.ac
-    sed -i 's/0\.18/0.19/' configure.ac
   '';
 
   nativeBuildInputs = [
