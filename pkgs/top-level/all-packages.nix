@@ -21580,7 +21580,12 @@ with pkgs;
 
   popa3d = callPackage ../servers/mail/popa3d { };
 
-  postfix = callPackage ../servers/mail/postfix { };
+  postfix = callPackage ../servers/mail/postfix {
+    cyrus_sasl = cyrus_sasl.override { openssl = openssl_3_0; };
+    openldap = openldap.override { openssl = openssl_3_0; };
+    openssl = openssl_3_0;
+    pcre = pcre2;
+  };
 
   postfixadmin = callPackage ../servers/postfixadmin { };
 
