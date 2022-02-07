@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Basic Linear Algebra Subprograms";
-    license = lib.licenses.publicDomain;
+    license = licenses.publicDomain;
+    maintainers = [ maintainers.markuskowa ];
     homepage = "http://www.netlib.org/blas/";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }
