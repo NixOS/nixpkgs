@@ -170,6 +170,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://moosefs.com">moosefs</link>, fault
+          tolerant petabyte distributed file system. Available as
+          <link linkend="opt-services.moosefs">moosefs</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/ThomasLeister/prosody-filer">prosody-filer</link>,
           a server for handling XMPP HTTP Upload requests. Available at
           <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
