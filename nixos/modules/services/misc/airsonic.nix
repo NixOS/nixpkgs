@@ -38,9 +38,6 @@ in {
         default = "127.0.0.1";
         description = ''
           The host name or IP address on which to bind Airsonic.
-          Only relevant if you have multiple network interfaces and want
-          to make Airsonic available on only one of them. The default value
-          will bind Airsonic to all available network interfaces.
         '';
       };
 
