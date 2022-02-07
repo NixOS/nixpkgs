@@ -15,6 +15,8 @@ buildPythonPackage rec {
     sha256 = "sha256-xwzaJuiQxExUA5W4kW7t1713S6NOvDNagcD3/dwA+DE=";
   };
 
+  VERSION = version;
+
   propagatedBuildInputs = [ requests ];
 
   # Project has no tests
