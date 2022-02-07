@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, ninja, yasm
-, libjpeg, openssl, libopus, ffmpeg_$, alsa-lib, libpulseaudio, protobuf
+, libjpeg, openssl, libopus, ffmpeg_4, alsa-lib, libpulseaudio, protobuf
 , xorg, libXtst
 }:
 
