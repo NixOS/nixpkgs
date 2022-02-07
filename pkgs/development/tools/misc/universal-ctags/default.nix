@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, coreutils, pkg-config, perl, python3Packages, libiconv, jansson }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, autoreconfHook, coreutils, pkg-config, perl, python3Packages, libiconv, jansson }:
 
 stdenv.mkDerivation rec {
   pname = "universal-ctags";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c031y0dl2b70pd0mqfbylplf8f27x11b0ch7ljka3rqav0zb1zr";
   };
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoreconfHook coreutils pkg-config python3Packages.docutils ];
   buildInputs = [ jansson ] ++ lib.optional stdenv.isDarwin libiconv;
 
