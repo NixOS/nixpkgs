@@ -147,10 +147,13 @@ rec {
 
       commonAttrs = drv
         // (builtins.listToAttrs outputsList)
-        // ({ all = map (x: x.value) outputsList; })
-        // lib.optionalAttrs (passthru?meta.mainProgram) {
-          exe = "${lib.getBin drv}/bin/${passthru.meta.mainProgram}";
-        }
+        // ({
+          all = map (x: x.value) outputsList;
+          exe =
+              if passthru?meta.mainProgram
+              then "${lib.getBin drv}/bin/${passthru.meta.mainProgram}"
+              else throw "Package ${drv.name} at ${passthru.meta.position} does not define meta.mainProgram, which is required for the exe attribute. If the package does not have an unambiguous main program, use \"\${pkg}/bin/command\" syntax instead.";
+          })
         // passthru;
 
       outputToAttrListElement = outputName:
