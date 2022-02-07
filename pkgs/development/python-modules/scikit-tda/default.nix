@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "scikit-tda";
-    rev = version;
+    rev = "v${version}";
     sha256 = "0yhmf5jmxywyj6l9q0rfv9r8wpdk063fvvfnb4azwwccblgz37rj";
   };
 
