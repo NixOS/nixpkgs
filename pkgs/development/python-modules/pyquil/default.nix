@@ -92,6 +92,9 @@ buildPythonPackage rec {
   disabledTests = [
     "test_compile_with_quilt_calibrations"
     "test_sets_timeout_on_requests"
+    # sensitive to lark parser output
+    "test_memory_commands"
+    "test_classical"
   ];
 
   pythonImportsCheck = [ "pyquil" ];
