@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ markuskowa ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };
