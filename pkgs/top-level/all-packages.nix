@@ -28883,6 +28883,8 @@ with pkgs;
 
   firefox = wrapFirefox firefox-unwrapped { };
 
+  firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
+
   firefox-esr = firefox-esr-102;
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
 
