@@ -145,8 +145,13 @@ rec {
     let
       outputs = drv.outputs or [ "out" ];
 
-      commonAttrs = drv // (builtins.listToAttrs outputsList) //
-        ({ all = map (x: x.value) outputsList; }) // passthru;
+      commonAttrs = drv
+        // (builtins.listToAttrs outputsList)
+        // ({ all = map (x: x.value) outputsList; })
+        // lib.optionalAttrs (passthru?meta.mainProgram) {
+          exe = "${lib.getBin drv}/bin/${passthru.meta.mainProgram}";
+        }
+        // passthru;
 
       outputToAttrListElement = outputName:
         { name = outputName;
