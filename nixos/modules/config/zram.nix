@@ -197,7 +197,12 @@ in
             device = "/dev/${dev}";
             priority = cfg.priority;
           };
-      in map useZramSwap devices;
+
+        # Override VMOverrides by using a priority one higher
+        mkVMOverrideOverride = mkOverride 9;
+        swapDevices = map useZramSwap devices;
+        # Detect if we're in a NixOS QEMU VM by seeing if the virtualisation.diskImage option exists
+      in if (config.virtualisation ? diskImage) then mkVMOverrideOverride swapDevices else swapDevices;
 
   };
 
