@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    tbb
     wrapGAppsHook4
   ];
 
@@ -71,6 +70,7 @@ stdenv.mkDerivation rec {
     rnnoise
     rubberband
     speexdsp
+    tbb
     zita-convolver
   ];
 
