@@ -1,40 +1,32 @@
-{ lib, stdenv, callPackage, autoreconfHook, texinfo, fetchFromGitHub
-, swig, libffi
+{ lib, stdenv, fetchFromGitHub, callPackage
+, autoreconfHook, texinfo, libffi
 }:
-let
-  version = "0.7.9_20211111";
-  sha256 = "sha256-KwYPMWdsL9o8SVcNdENMs4C9ioFBEfyVMqe5bgIrfzs=";
-  ## FIXME build https://github.com/GeraldWodni/swig with gforth, then rebuild
-  #### This will get rid of the configuration warning
-  # swigf = swig.overrideDerivation (old: {
-  #   configureFlags = old.configureFlags ++ [
-  #     "--enable-forth"
-  #   ];
-  # });
-  bootForth = callPackage ./boot-forth.nix { };
 
-in stdenv.mkDerivation {
-  pname = "gforth";
-  inherit version;
+let
+  swig = callPackage ./swig.nix { };
+  bootForth = callPackage ./boot-forth.nix { };
+in stdenv.mkDerivation rec {
+
+  name = "gforth-${version}";
+  version = "0.7.9_20220127";
+
   src = fetchFromGitHub {
     owner = "forthy42";
     repo = "gforth";
     rev = version;
-    inherit sha256;
+    sha256 = "sha256-3+ObHhsPvW44UFiN0GWOhwo7aiqhjwxNY8hw2Wv4MK0=";
   };
-  patches = [ ./fix-install-txt.patch ];
 
   nativeBuildInputs = [
-    autoreconfHook texinfo bootForth
+    autoreconfHook texinfo bootForth swig
   ];
   buildInputs = [
-    swig libffi
+    libffi
   ];
 
   passthru = { inherit bootForth; };
 
-  configureFlags =
-    lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
+  configureFlags = lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
@@ -47,5 +39,4 @@ in stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
   };
-
 }
