@@ -63,6 +63,12 @@ self: super: {
   # works fine there.
   fakedata = dontCheck super.fakedata;
 
+  # The latest release on hackage has an upper bound on containers which
+  # breaks the build, though it works with the version of containers present
+  # and the upper bound doesn't exist in code anymore:
+  # > https://github.com/roelvandijk/numerals
+  numerals = doJailbreak (dontCheck super.numerals);
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
@@ -307,7 +313,6 @@ self: super: {
   network-dbus = dontCheck super.network-dbus;
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
-  numerals = dontCheck super.numerals;
   odpic-raw = dontCheck super.odpic-raw; # needs a running oracle database server
   opaleye = dontCheck super.opaleye;
   openpgp = dontCheck super.openpgp;
