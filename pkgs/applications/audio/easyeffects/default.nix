@@ -4,11 +4,13 @@
 , fetchFromGitHub
 , calf
 , fftwFloat
+, fmt
 , glib
 , glibmm
 , gtk4
 , gtkmm4
 , itstool
+, libadwaita
 , libbs2b
 , libebur128
 , libsamplerate
@@ -26,6 +28,7 @@
 , rnnoise
 , rubberband
 , speexdsp
+, tbb
 , wrapGAppsHook4
 , zam-plugins
 , zita-convolver
@@ -33,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "6.1.3";
+  version = "6.2.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-1UfeqPJxY4YT98UdqTZtG+QUBOZlKfK+7WbszhO22A0=";
+    sha256 = "sha256-A1UanrAbmZFGCmDNIr1h+v5RVMsIl4qgM/veBirudQM=";
   };
 
   nativeBuildInputs = [
@@ -49,15 +52,18 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    tbb
     wrapGAppsHook4
   ];
 
   buildInputs = [
     fftwFloat
+    fmt
     glib
     glibmm
     gtk4
     gtkmm4
+    libadwaita
     libbs2b
     libebur128
     libsamplerate
