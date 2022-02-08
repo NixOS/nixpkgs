@@ -5,13 +5,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Django";
+  pname = "django";
   version = "2.2.26";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Django";
+    inherit version;
     sha256 = "sha256-36U3Jn1SxiQ6YrMoVadEyoPDfHBgCqz/v9mLxdbYUY8=";
   };
 
