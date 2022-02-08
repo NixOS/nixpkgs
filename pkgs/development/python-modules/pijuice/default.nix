@@ -28,6 +28,7 @@ buildPythonPackage rec {
   ];
 
   PIJUICE_BUILD_BASE = 1;
+  PIJUICE_VERSION = version;
 
   preBuild = ''
     cd Software/Source
@@ -50,7 +51,10 @@ buildPythonPackage rec {
     rm $out/bin/pijuice_sys.py
     rm $out/bin/pijuiceboot
     mv $out/bin/pijuice_cli.py $out/bin/pijuice_cli
-   '';
+  '';
+
+  # no tests
+  doCheck = false;
 
   meta = with lib; {
     description = "Library and resources for PiJuice HAT for Raspberry Pi";
