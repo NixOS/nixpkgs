@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, python
 , fetchPypi
 , pytestCheckHook
 , blis
@@ -78,12 +79,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Cannot find cython modules.
-  doCheck = false;
+  # Add native extensions.
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
 
-  pytestFlagsArray = [
-    "thinc/tests"
-  ];
+    # avoid local paths, relative imports wont resolve correctly
+    mv thinc/tests tests
+    rm -r thinc
+  '';
 
   pythonImportsCheck = [
     "thinc"
