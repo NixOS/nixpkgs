@@ -8,6 +8,7 @@
 , numpy
 , osqp
 , pandas
+, setuptools-scm
 , scikit-learn
 , scipy
 , pytestCheckHook
@@ -24,6 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
