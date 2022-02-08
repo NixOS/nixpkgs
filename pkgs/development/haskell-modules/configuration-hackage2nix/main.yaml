@@ -603,7 +603,6 @@ dont-distribute-packages:
   - dialog
   - ghcjs-dom-webkit
   - gi-webkit
-  - hs-mesos
   - hsqml
   - hsqml-datamodel
   - hsqml-demo-manic
@@ -626,3 +625,6 @@ dont-distribute-packages:
 
   # glade relies on system libglade which is deprecated
   - glade
+
+  # mesos was removed from nixpkgs
+  - hs-mesos
