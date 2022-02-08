@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cl-wordle";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-mcPC2Lj+Vsytfl3+ghYn74QRfM6U4dQLUybtCqkjKlk=";
+    sha256 = "sha256-M2ljFrfIOyM1Slwsk7ZJ+PhJIVSUvFcFck2Q2e9nOwc=";
   };
 
-  cargoSha256 = "sha256-3Ef8gLFWIAYpKdPixvILvDee5Gezh68hc9TR5+zRX0I=";
+  cargoSha256 = "sha256-bB6MzpJc8QS2+8GSS8RbSF5QcJyRT8FkmChpf1x2i/E=";
 
   patches = [ ./rust-1-57.diff ];
 
