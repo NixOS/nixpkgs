@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dt $out/lib/displaylink *.spkg
     install -Dm755 ${bins}/DisplayLinkManager $out/bin/DisplayLinkManager
-    mkdir -p $out/lib/udev/rules.d
+    mkdir -p $out/lib/udev/rules.d $out/share
     cp ${./99-displaylink.rules} $out/lib/udev/rules.d/99-displaylink.rules
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
       $out/bin/DisplayLinkManager
     wrapProgram $out/bin/DisplayLinkManager \
       --run "cd $out/lib/displaylink"
+
+    # We introduce a dependency on the source file so that it need not be redownloaded everytime
+    echo $src >> "$out/share/workspace_dependencies.pin"
   '';
 
   dontStrip = true;
