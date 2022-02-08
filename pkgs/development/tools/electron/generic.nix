@@ -15,6 +15,7 @@
 , libxkbcommon
 , libappindicator-gtk3
 , libxshmfence
+, libglvnd
 }:
 
 version: hashes:
@@ -64,6 +65,7 @@ let
     ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]
     ++ optionals (! versionOlder version "11.0.0") [ libxkbcommon ]
     ++ optionals (! versionOlder version "12.0.0") [ libxshmfence ]
+    ++ optionals (! versionOlder version "17.0.0") [ libglvnd ]
   );
 
   linux = {
