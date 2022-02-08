@@ -6,9 +6,7 @@
 , fftwFloat
 , fmt
 , glib
-, glibmm
 , gtk4
-, gtkmm4
 , itstool
 , libadwaita
 , libbs2b
@@ -60,9 +58,7 @@ stdenv.mkDerivation rec {
     fftwFloat
     fmt
     glib
-    glibmm
     gtk4
-    gtkmm4
     libadwaita
     libbs2b
     libebur128
