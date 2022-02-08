@@ -1901,6 +1901,8 @@ with pkgs;
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
+  leetcode-cli = callPackage ../applications/misc/leetcode-cli { };
+
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
   lsix = callPackage ../tools/graphics/lsix { };
