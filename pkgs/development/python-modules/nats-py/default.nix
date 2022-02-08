@@ -9,15 +9,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "asyncio-nats-client";
-  version = "0.11.5";
-  disabled = pythonOlder "3.6";
+  pname = "nats-py";
+  version = "2.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats.py";
     rev = "v${version}";
-    sha256 = "0zwiijaswmfdk71diqmdpb6nx54fmgi8hy0vwx2m3ihhsyjxj82h";
+    hash = "sha256-BraT30J7OIcW2NXAwjcg9PYu+kgf8f1iDjKiN9J6l7Y=";
   };
 
   propagatedBuildInputs = [
@@ -38,12 +40,24 @@ buildPythonPackage rec {
   disabledTests = [
     # RuntimeError: Event loop is closed
     "test_subscribe_no_echo"
-    "test_reconnect_to_new_server_with_auth"
-    "test_drain_connection"
-    "test_discover_servers_on_first_connect"
+    "test_publish"
+    "test_publish_verbose"
+    "test_fetch_max_waiting_fetch_one"
+    "test_fetch_n"
+    "test_consumer_management"
+    "test_ephemeral_subscribe"
+    "test_queue_subscribe_deliver_group"
+    "test_subscribe_push_bound"
+    "test_double_acking_subscribe"
+    "test_flow_control"
+    "test_ordered_consumer"
+    "test_ordered_consumer_single_loss"
+    "test_kv_simple"
   ];
 
-  pythonImportsCheck = [ "nats.aio" ];
+  pythonImportsCheck = [
+    "nats"
+  ];
 
   meta = with lib; {
     description = "Python client for NATS.io";

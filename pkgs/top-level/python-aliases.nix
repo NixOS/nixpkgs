@@ -33,6 +33,7 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  asyncio-nats-client = nats-py; # added 2022-02-08
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   bt_proximity = bt-proximity; # added 2021-07-02
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # added 2019-11-27
