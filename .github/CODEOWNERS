@@ -15,7 +15,7 @@
 # See https://github.com/NixOS/nixpkgs/issues/124085 for more details
 
 # Release managers, release branch only
-/ @jonringer
+* @jonringer
 
 # This file
 /.github/CODEOWNERS @edolstra
