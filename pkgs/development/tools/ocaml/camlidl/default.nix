@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml ];
 
+  # build fails otherwise
+  enableParallelBuilding = false;
+
   preBuild = ''
     mv config/Makefile.unix config/Makefile
     substituteInPlace config/Makefile --replace BINDIR=/usr/local/bin BINDIR=$out

@@ -3,6 +3,7 @@
 , fetchPypi
 , findutils
 , pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -14,6 +15,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "10iqjzmya2h4sk765dlm1pbqypwlqyh8rw59a5m9i63d3klnz2mc";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   patches = [ ./permissions.patch ];
 

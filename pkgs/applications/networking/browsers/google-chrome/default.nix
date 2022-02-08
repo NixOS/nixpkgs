@@ -118,6 +118,9 @@ in stdenv.mkDerivation {
     cp -a opt/* $out/share
     cp -a usr/share/* $out/share
 
+
+    substituteInPlace $out/share/google/$appname/google-$appname \
+      --replace 'CHROME_WRAPPER' 'WRAPPER'
     substituteInPlace $out/share/applications/google-$appname.desktop \
       --replace /usr/bin/google-chrome-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
@@ -143,6 +146,7 @@ in stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : "$rpath" \
       --prefix PATH            : "$binpath" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addOpenGLRunpath.driverLink}/share" \
+      --set CHROME_WRAPPER  "google-chrome-$dist" \
       --add-flags ${escapeShellArg commandLineArgs} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 

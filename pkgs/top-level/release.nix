@@ -136,6 +136,7 @@ let
             ++ lib.optionals supportDarwin.x86_64 [
               jobs.stdenv.x86_64-darwin
               jobs.cargo.x86_64-darwin
+              jobs.cachix.x86_64-darwin
               jobs.go.x86_64-darwin
               jobs.python2.x86_64-darwin
               jobs.python3.x86_64-darwin

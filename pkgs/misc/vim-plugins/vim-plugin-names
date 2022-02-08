@@ -3,6 +3,7 @@ aca/completion-tabnine
 AckslD/nvim-neoclip.lua
 AckslD/nvim-whichkey-setup.lua
 ackyshake/Spacegray.vim
+ackyshake/VimCompletesMe
 ahmedkhalf/lsp-rooter.nvim
 ahmedkhalf/project.nvim
 airblade/vim-gitgutter
@@ -180,6 +181,7 @@ folke/tokyonight.nvim
 folke/trouble.nvim
 folke/twilight.nvim
 folke/which-key.nvim
+folke/zen-mode.nvim
 FooSoft/vim-argwrap
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
@@ -221,6 +223,7 @@ guns/vim-clojure-highlight
 guns/vim-clojure-static
 guns/vim-sexp
 guns/xterm-color-table.vim
+gyim/vim-boxdraw
 haringsrob/nvim_context_vt
 hashivim/vim-packer
 hashivim/vim-terraform
@@ -361,6 +364,7 @@ kdheepak/cmp-latex-symbols
 kdheepak/lazygit.nvim
 kdheepak/tabline.nvim
 KeitaNakamura/neodark.vim
+KeitaNakamura/tex-conceal.vim
 keith/investigate.vim
 keith/rspec.vim
 keith/swift.vim
@@ -431,6 +435,7 @@ lumiliet/vim-twig
 luochen1990/rainbow
 luukvbaal/stabilize.nvim
 lyokha/vim-xkbswitch
+m-pilia/vim-ccls
 machakann/vim-highlightedyank
 machakann/vim-sandwich
 machakann/vim-swap
@@ -454,6 +459,7 @@ MarcWeber/vim-addon-sql
 MarcWeber/vim-addon-syntax-checker
 MarcWeber/vim-addon-toggle-buffer
 MarcWeber/vim-addon-xdebug
+marko-cerovac/material.nvim
 markonm/traces.vim
 martinda/Jenkinsfile-vim-syntax
 MattesGroeger/vim-bookmarks
@@ -627,6 +633,7 @@ posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
 prabirshrestha/async.vim
+prabirshrestha/asyncomplete-lsp.vim
 prabirshrestha/asyncomplete.vim
 prabirshrestha/vim-lsp
 preservim/nerdcommenter
@@ -770,6 +777,7 @@ sudormrfbin/cheatsheet.nvim
 sunaku/vim-dasht
 sunjon/Shade.nvim
 svermeulen/vim-subversive
+symphorien/vim-nixhash
 t9md/vim-choosewin
 t9md/vim-smalls
 TaDaa/vimade

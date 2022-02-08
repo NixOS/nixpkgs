@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
+  # Disable parallel build, errors:
+  #  *** No rule to make target 'patscc.dats', needed by 'patscc_dats.c'.  Stop.
+  enableParallelBuilding = false;
+
   setupHook = with lib;
     let
       hookFiles =

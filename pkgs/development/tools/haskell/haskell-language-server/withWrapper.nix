@@ -1,5 +1,10 @@
-{ lib, supportedGhcVersions ? [ "884" "8107" "902" ], stdenv, haskellPackages
-, haskell }:
+{ lib
+, stdenv
+, supportedGhcVersions ? [ "884" "8107" "902" ]
+    ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [ "921" ]
+, haskellPackages
+, haskell
+}:
 #
 # The recommended way to override this package is
 #

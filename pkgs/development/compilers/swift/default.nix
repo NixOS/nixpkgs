@@ -36,26 +36,50 @@
 }:
 
 let
-  version = "5.4.2";
+  # The Swift toolchain script builds projects with separate repos. By convention, some of them share
+  # the same version with the main Swift compiler project per release. We fetch these with
+  # `fetchSwiftRelease`. The rest have their own versions locked to each Swift release, as defined in the
+  # Swift compiler repo:
+  #   utils/update_checkout/update_checkout-config.json.
+  #
+  # ... among projects listed in that file, we provide our own:
+  # - CMake
+  # - ninja
+  # - icu
+  #
+  # ... we'd like to include the following in the future:
+  # - stress-tester
+  # - integration-tests
 
-  # These dependency versions can be found in utils/update_checkout/update-checkout-config.json.
-  swiftArgumentParserVersion = "0.3.0";
-  yamsVersion = "3.0.1";
-  swiftFormatVersion = "0.50400.0";
+  versions = {
+    swift = "5.5.2";
+    yams = "4.0.2";
+    argumentParser = "0.4.3";
+    format = "swift-5.5-branch";
+    crypto = "1.1.5";
+  };
+
+  fetchAppleRepo = { repo, rev, sha256 }:
+    fetchFromGitHub {
+      owner = "apple";
+      inherit repo rev sha256;
+      name = "${repo}-${rev}-src";
+    };
 
   fetchSwiftRelease = { repo, sha256, fetchSubmodules ? false }:
     fetchFromGitHub {
       owner = "apple";
       inherit repo sha256 fetchSubmodules;
-      rev = "swift-${version}-RELEASE";
-      name = "${repo}-${version}-src";
+      rev = "swift-${versions.swift}-RELEASE";
+      name = "${repo}-${versions.swift}-src";
     };
 
-  # Sources based on utils/update_checkout/update_checkout-config.json.
   sources = {
+    # Projects that share `versions.swift` for each release.
+
     swift = fetchSwiftRelease {
       repo = "swift";
-      sha256 = "0qrkqkwpmk312fi12kwwyihin01qb7sphhdz5c6an8j1rjfd9wbv";
+      sha256 = "1a9ja3r6ap4cappbvlk18krlvwi0q75z21j5yx5rhbnw4ihh7lda";
     };
     cmark = fetchSwiftRelease {
       repo = "swift-cmark";
@@ -63,75 +87,73 @@ let
     };
     llbuild = fetchSwiftRelease {
       repo = "swift-llbuild";
-      sha256 = "0d7sj5a9b5c1ry2209cpccic5radf9s48sp1lahqzmd1pdx3n7pi";
-    };
-    argumentParser = fetchFromGitHub {
-      owner = "apple";
-      repo = "swift-argument-parser";
-      rev = swiftArgumentParserVersion;
-      sha256 = "15vv7hnffa84142q97dwjcn196p2bg8nfh89d6nnix0i681n1qfd";
-      name = "swift-argument-parser-${swiftArgumentParserVersion}";
+      sha256 = "1xmiv7yp9r9iscx3fc3zdp25mriz134k9ny2rchxzi4kifz8h0zc";
     };
     driver = fetchSwiftRelease {
       repo = "swift-driver";
-      sha256 = "1j08273haqv7786rkwsmw7g103glfwy1d2807490id9lagq3r66z";
+      sha256 = "1pb7fidgdqxzragqkillkv03vdilrwmcx6x2r4czqvdqj37gy6b6";
     };
     toolsSupportCore = fetchSwiftRelease {
       repo = "swift-tools-support-core";
-      sha256 = "07gm28ki4px7xzrplvk9nd1pp5r9nyi87l21i0rcbb3r6wrikxb4";
+      sha256 = "0a63193nycir4lffvmb3ky8cfly5kdr2libki2gx4fn6fxmb3a2f";
     };
     swiftpm = fetchSwiftRelease {
       repo = "swift-package-manager";
-      sha256 = "05linnzlidxamzl3723zhyrfm24pk2cf1x66a3nk0cxgnajw0vzx";
+      sha256 = "0hdjvb2asfi6h3x9bjssxkc3bgjn3idlmyga3dl3lscfq88hjxr9";
     };
     syntax = fetchSwiftRelease {
       repo = "swift-syntax";
-      sha256 = "1y9agx9bg037xjhkwc28xm28kjyqydgv21s4ijgy5l51yg1g0daj";
+      sha256 = "0kdgh9a8n28yh12hj8lbz2j66ag83l0lcfyfdg7zdr614zs6i3p1";
     };
-    # TODO: possibly re-add stress-tester.
     corelibsXctest = fetchSwiftRelease {
       repo = "swift-corelibs-xctest";
-      sha256 = "00c68580yr12yxshl0hxyhp8psm15fls3c7iqp52hignyl4v745r";
+      sha256 = "12fp3xzsqwcrmyc55h91d3dm64wn3wln47x2fl7sj0s8cn7q12b3";
     };
     corelibsFoundation = fetchSwiftRelease {
       repo = "swift-corelibs-foundation";
-      sha256 = "1jyadm2lm7hhik8n8wacfiffpdwqsgnilwmcw22qris5s2drj499";
+      sha256 = "1f7qcdx8597gwqa9pwl38d31w6w4d84c5hadj4ycj99msrm2f32x";
     };
     corelibsLibdispatch = fetchSwiftRelease {
       repo = "swift-corelibs-libdispatch";
-      sha256 = "1s46c0hrxi42r43ff5f1pq2imb3hs05adfpwfxkilgqyb5svafsp";
+      sha256 = "1bim5x9z9bqfgs6gdm4nlz1zrwl2x7xh4dn6i5md9ygsplr4ibzf";
       fetchSubmodules = true;
     };
-    # TODO: possibly re-add integration-tests.
-    # Linux does not support Xcode playgrounds.
-    # We provide our own ninja.
-    # We provider our own icu.
-    yams = fetchFromGitHub {
-      owner = "jpsim";
-      repo = "Yams";
-      rev = yamsVersion;
-      sha256 = "13md54y7lalrpynrw1s0w5yw6rrjpw46fml9dsk2m3ph1bnlrqrq";
-      name = "Yams-${yamsVersion}";
-    };
-    # We provide our own CMake.
     indexstoreDb = fetchSwiftRelease {
       repo = "indexstore-db";
-      sha256 = "1ap3hiq2jd3cn10d8d674xysq27by878mvq087a80681r8cdivn3";
+      sha256 = "1l1xlzf5kx7x80kf4b7r36glv0jc64d08d1688kmzjq1cfgn6gm2";
     };
     sourcekitLsp = fetchSwiftRelease {
       repo = "sourcekit-lsp";
-      sha256 = "02m9va0lsn2hnwkmgrbgj452sbyaswwmq14lqvxgnb7gssajv4gc";
-    };
-    format = fetchFromGitHub {
-      owner = "apple";
-      repo = "swift-format";
-      rev = swiftFormatVersion;
-      sha256 = "0skmmggsh31f3rnqcrx43178bc7scrjihibnwn68axagasgbqn4k";
-      name = "swift-format-${swiftFormatVersion}-src";
+      sha256 = "00fcmd7x5v62n6ajsc0dmzwz6nzy2p72mcs9w6p90adcx7pffqkn";
     };
     llvmProject = fetchSwiftRelease {
       repo = "llvm-project";
-      sha256 = "166hd9d2i55zj70xjb1qmbblbfyk8hdb2qv974i07j6cvynn30lm";
+      sha256 = "1gvqps5f9jh6lbhcjh1fyzp3bc0h9chbljzaspcrdi2qp878prlx";
+    };
+
+    # Projects that have their own versions during each release
+
+    argumentParser = fetchAppleRepo {
+      repo = "swift-argument-parser";
+      rev = "${versions.argumentParser}";
+      sha256 = "1jkq72fphxzsnynjxk72azp0iz5r2ji7adxrz6w1y2a19pgjdqrp";
+    };
+    format = fetchAppleRepo {
+      repo = "swift-format";
+      rev = "${versions.format}";
+      sha256 = "1hg888ps3fk23q2zf6djkvxyk6zndqvwypmy0s800hmnyf0hzgv4";
+    };
+    crypto = fetchAppleRepo {
+      repo = "swift-crypto";
+      rev = "${versions.crypto}";
+      sha256 = "0918pj3x3wgli3bnrjbvpzck2n6qz5n6f4yc5kljky45wd15f34g";
+    };
+    yams = fetchFromGitHub {
+      owner = "jpsim";
+      repo = "Yams";
+      rev = versions.yams;
+      sha256 = "1nk9b7l6m3wwjkl81npl2l1iwpsxaxb9za53jpwwsbbi1h1h4fbi";
+      name = "Yams-${versions.yams}-src";
     };
   };
 
@@ -160,7 +182,7 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "swift-${version}";
+  name = "swift-${versions.swift}";
 
   nativeBuildInputs = [
     autoconf
@@ -207,15 +229,14 @@ stdenv.mkDerivation {
     cp -r ${sources.toolsSupportCore} swift-tools-support-core
     cp -r ${sources.swiftpm} swiftpm
     cp -r ${sources.syntax} swift-syntax
-    # TODO: possibly re-add stress-tester.
     cp -r ${sources.corelibsXctest} swift-corelibs-xctest
     cp -r ${sources.corelibsFoundation} swift-corelibs-foundation
     cp -r ${sources.corelibsLibdispatch} swift-corelibs-libdispatch
-    # TODO: possibly re-add integration-tests.
     cp -r ${sources.yams} yams
     cp -r ${sources.indexstoreDb} indexstore-db
     cp -r ${sources.sourcekitLsp} sourcekit-lsp
     cp -r ${sources.format} swift-format
+    cp -r ${sources.crypto} swift-crypto
     cp -r ${sources.llvmProject} llvm-project
 
     chmod -R u+w .
@@ -378,7 +399,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "The Swift Programming Language";
     homepage = "https://github.com/apple/swift";
-    maintainers = with maintainers; [ dtzWill trepetti ];
+    maintainers = with maintainers; [ dtzWill trepetti dduan ];
     license = licenses.asl20;
     # Swift doesn't support 32-bit Linux, unknown on other platforms.
     platforms = platforms.linux;

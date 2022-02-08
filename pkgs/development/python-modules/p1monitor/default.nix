@@ -1,8 +1,11 @@
 { lib
 , aiohttp
+, aresponses
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 , yarl
 }:
@@ -21,6 +24,12 @@ buildPythonPackage rec {
     sha256 = "1ciaclgq4aknldjqlqa08jcab28sbqrjxy5nqqwlnb2wlprg5ijz";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"0.0.0"' '"${version}"' \
+      --replace 'addopts = "--cov"' ""
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -30,8 +39,11 @@ buildPythonPackage rec {
     yarl
   ];
 
-  # Project has no tests
-  doCheck = false;
+  checkInputs = [
+    aresponses
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "p1monitor" ];
 

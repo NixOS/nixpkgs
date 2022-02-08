@@ -16,13 +16,13 @@ assert docSupport -> doxygen != null;
 with lib;
 stdenv.mkDerivation rec {
   pname = "waylandpp";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "NilsBrause";
     repo = pname;
     rev = version;
-    sha256 = "1kxiqab48p0n97pwg8c2zx56wqq32m3rcq7qd2pjj33ipcanb3qq";
+    sha256 = "sha256-c7sayJjQaqJWso2enESBx6OUW9vxxsfuHFolYDIYlXw=";
   };
 
   cmakeFlags = [

@@ -194,6 +194,8 @@ in {
 
   adax = callPackage ../development/python-modules/adax { };
 
+  adax-local = callPackage ../development/python-modules/adax-local { };
+
   adb-enhanced = callPackage ../development/python-modules/adb-enhanced { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
@@ -257,6 +259,8 @@ in {
   ailment = callPackage ../development/python-modules/ailment { };
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
+
+  aioaseko = callPackage ../development/python-modules/aioaseko { };
 
   aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
@@ -362,6 +366,8 @@ in {
 
   aionotion = callPackage ../development/python-modules/aionotion { };
 
+  aiooncue = callPackage ../development/python-modules/aiooncue { };
+
   aiopg = callPackage ../development/python-modules/aiopg { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
@@ -415,6 +421,8 @@ in {
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
   aiowatttime = callPackage ../development/python-modules/aiowatttime { };
+
+  aiowebostv = callPackage ../development/python-modules/aiowebostv { };
 
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
@@ -684,8 +692,6 @@ in {
 
   asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
 
-  asyncio-nats-client = callPackage ../development/python-modules/asyncio-nats-client { };
-
   asyncio-rlock = callPackage ../development/python-modules/asyncio-rlock { };
 
   asyncmy = callPackage ../development/python-modules/asyncmy { };
@@ -745,6 +751,8 @@ in {
   };
 
   auroranoaa = callPackage ../development/python-modules/auroranoaa { };
+
+  aurorapy = callPackage ../development/python-modules/aurorapy { };
 
   auth0-python = callPackage ../development/python-modules/auth0-python { };
 
@@ -1580,6 +1588,8 @@ in {
   ci-info = callPackage ../development/python-modules/ci-info { };
 
   ci-py = callPackage ../development/python-modules/ci-py { };
+
+  circuit-webhook = callPackage ../development/python-modules/circuit-webhook { };
 
   circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
 
@@ -2512,8 +2522,6 @@ in {
 
   edward = callPackage ../development/python-modules/edward { };
 
-  eebrightbox = callPackage ../development/python-modules/eebrightbox { };
-
   effect = callPackage ../development/python-modules/effect { };
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
@@ -3123,7 +3131,7 @@ in {
 
   garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
 
-  garminconnect-ha = callPackage ../development/python-modules/garminconnect-ha { };
+  garminconnect = callPackage ../development/python-modules/garminconnect { };
 
   gast = callPackage ../development/python-modules/gast { };
 
@@ -3192,6 +3200,8 @@ in {
   geojson-client = callPackage ../development/python-modules/geojson-client { };
 
   geomet = callPackage ../development/python-modules/geomet { };
+
+  geometric = callPackage ../development/python-modules/geometric { };
 
   geopandas = callPackage ../development/python-modules/geopandas { };
 
@@ -3467,6 +3477,8 @@ in {
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
+
+  grapheme = callPackage ../development/python-modules/grapheme { };
 
   graphite_api = callPackage ../development/python-modules/graphite-api { };
 
@@ -3995,6 +4007,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  intellifire4py = callPackage ../development/python-modules/intellifire4py { };
+
   intensity-normalization = callPackage ../development/python-modules/intensity-normalization { };
 
   internetarchive = callPackage ../development/python-modules/internetarchive { };
@@ -4123,7 +4137,11 @@ in {
 
   jax = callPackage ../development/python-modules/jax { };
 
-  jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix { };
+  jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    cudatoolkit_11 = tensorflow_compat_cudatoolkit;
+    cudnn = tensorflow_compat_cudnn;
+  };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib {
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
@@ -5299,6 +5317,8 @@ in {
 
   nassl = callPackage ../development/python-modules/nassl { };
 
+  nats-py = callPackage ../development/python-modules/nats-py { };
+
   nats-python = callPackage ../development/python-modules/nats-python { };
 
   natsort = callPackage ../development/python-modules/natsort { };
@@ -6084,6 +6104,8 @@ in {
 
   pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
 
+  pyhumps = callPackage ../development/python-modules/pyhumps { };
+
   pyisy = callPackage ../development/python-modules/pyisy { };
 
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
@@ -6531,6 +6553,8 @@ in {
   pyatv = callPackage ../development/python-modules/pyatv { };
 
   pyaudio = callPackage ../development/python-modules/pyaudio { };
+
+  pyaussiebb = callPackage ../development/python-modules/pyaussiebb { };
 
   pyautogui = callPackage ../development/python-modules/pyautogui { };
 
@@ -7337,6 +7361,8 @@ in {
 
   pyquil = callPackage ../development/python-modules/pyquil { };
 
+  pyqvrpro = callPackage ../development/python-modules/pyqvrpro { };
+
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
 
   pyrad = callPackage ../development/python-modules/pyrad { };
@@ -7941,6 +7967,8 @@ in {
   python-hpilo = callPackage ../development/python-modules/python-hpilo { };
 
   python-http-client = callPackage ../development/python-modules/python-http-client { };
+
+  python-i18n = callPackage ../development/python-modules/python-i18n { };
 
   pythonix = callPackage ../development/python-modules/pythonix {
     nix = pkgs.nixVersions.nix_2_3;
@@ -8722,6 +8750,8 @@ in {
   };
 
   rtslib = callPackage ../development/python-modules/rtslib { };
+
+  rtsp-to-webrtc = callPackage ../development/python-modules/rtsp-to-webrtc { };
 
   ruamel-base = callPackage ../development/python-modules/ruamel-base { };
 
@@ -9929,6 +9959,8 @@ in {
 
   trytond = callPackage ../development/python-modules/trytond { };
 
+  ttls = callPackage ../development/python-modules/ttls { };
+
   ttp = callPackage ../development/python-modules/ttp { };
 
   tubes = callPackage ../development/python-modules/tubes { };
@@ -10345,6 +10377,8 @@ in {
   warlock = callPackage ../development/python-modules/warlock { };
 
   warrant = callPackage ../development/python-modules/warrant { };
+
+  warrant-lite = callPackage ../development/python-modules/warrant-lite { };
 
   waqiasync = callPackage ../development/python-modules/waqiasync { };
 

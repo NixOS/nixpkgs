@@ -1,5 +1,5 @@
 { lib
-, buildGo117Module
+, buildGoModule
 , rustPlatform
 , fetchFromGitHub
 , makeWrapper
@@ -16,9 +16,9 @@ let
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "sha256-/Dn2X1VMQI1OYHmvNDlAjrLI64DFxmVmS3PeEKLFVjQ=";
+    sha256 = "sha256-ir2NMNIjSpv7l6dVNHczARg6b+doFofinsJy1smEC7o=";
   };
-  version = "8.1.1";
+  version = "8.1.3";
 
   roleTester = rustPlatform.buildRustPackage {
     name = "teleport-roletester";
@@ -39,11 +39,11 @@ let
   webassets = fetchFromGitHub {
     owner = "gravitational";
     repo = "webassets";
-    rev = "36ba49bb58dd6933d5ed5c9599e86d2b6c828137";
-    sha256 = "sha256-XgH+IjTsaJUdM54Y+L8Rf/bt6y0vB4t8IcRES2EG70s=";
+    rev = "ea3c67c941c56cfb6c228612e88100df09fb6f9c";
+    sha256 = "sha256-oKvDXkxA73IJOi+ciBFVLkYcmeRUsTC+3rcYf64vDoY=";
   };
 in
-buildGo117Module rec {
+buildGoModule rec {
   pname = "teleport";
 
   inherit src version;

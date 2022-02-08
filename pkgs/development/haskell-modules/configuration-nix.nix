@@ -209,16 +209,6 @@ self: super: builtins.intersectAttrs super {
   # Help the test suite find system timezone data.
   tz = overrideCabal (drv: {
     preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo";
-    patches = [
-      # Fix tests failing with libSystem, musl etc. due to a lack of
-      # support for glibc's non-POSIX TZDIR environment variable.
-      # https://github.com/nilcons/haskell-tz/pull/29
-      (pkgs.fetchpatch {
-        name = "support-non-glibc-tzset.patch";
-        url = "https://github.com/sternenseemann/haskell-tz/commit/64928f1a50a1a276a718491ae3eeef63abcdb393.patch";
-        sha256 = "1f53w8k1vpy39hzalyykpvm946ykkarj2714w988jdp4c2c4l4cf";
-      })
-    ] ++ (drv.patches or []);
   }) super.tz;
 
   # Nix-specific workaround
@@ -605,11 +595,6 @@ self: super: builtins.intersectAttrs super {
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
 
-      spagoWithOverrides = super.spago.override {
-        # spago has not yet been updated for the latest dhall.
-        dhall = self.dhall_1_38_1;
-      };
-
       spagoDocs = overrideCabal (drv: {
         postUnpack = (drv.postUnpack or "") + ''
           # Spago includes the following two files directly into the binary
@@ -635,7 +620,7 @@ self: super: builtins.intersectAttrs super {
             "$sourceRoot/templates/docs-search-app-0.0.11.js" \
             "$sourceRoot/templates/purescript-docs-search-0.0.11"
         '';
-      }) spagoWithOverrides;
+      }) super.spago;
 
       # Tests require network access.
       spagoWithoutChecks = dontCheck spagoDocs;
@@ -814,90 +799,11 @@ self: super: builtins.intersectAttrs super {
     '' + drv.postInstall or "";
   }) super.hlint;
 
-  hls-brittany-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-brittany-plugin;
-  hls-class-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-class-plugin;
-  hls-ormolu-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-ormolu-plugin;
-  hls-fourmolu-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-fourmolu-plugin;
-  hls-module-name-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-module-name-plugin;
-  hls-rename-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '' + (drv.preCheck or "");
-  }) super.hls-rename-plugin;
-  hls-splice-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-splice-plugin;
-  hls-floskell-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-floskell-plugin;
-  hls-pragmas-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-pragmas-plugin;
-  hls-hlint-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-hlint-plugin;
   hiedb = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/hiedb:$PATH
     '';
   }) super.hiedb;
-  hls-call-hierarchy-plugin = overrideCabal (drv: {
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-call-hierarchy-plugin;
-  # Tests have file permissions expections that don‘t work with the nix store.
-  hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
-  hls-haddock-comments-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-haddock-comments-plugin;
-  hls-eval-plugin = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '';
-  }) super.hls-eval-plugin;
 
   taglib = overrideCabal (drv: {
     librarySystemDepends = [
@@ -1062,4 +968,35 @@ self: super: builtins.intersectAttrs super {
       install -Dm644 test/examples/*.jac -t "$docDir/examples"
     '';
   }) super.jacinda;
+
+# haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
+} // pkgs.lib.mapAttrs
+  (_: overrideCabal (drv: {
+    testToolDepends = (drv.testToolDepends or [ ]) ++ [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '' + (drv.preCheck or "");
+  }))
+{
+  inherit (super)
+    hls-brittany-plugin
+    hls-call-hierarchy-plugin
+    hls-class-plugin
+    hls-eval-plugin
+    hls-floskell-plugin
+    hls-fourmolu-plugin
+    hls-module-name-plugin
+    hls-ormolu-plugin
+    hls-pragmas-plugin
+    hls-rename-plugin
+    hls-selection-range-plugin
+    hls-splice-plugin;
+  # Tests have file permissions expections that don‘t work with the nix store.
+  hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
+
+  # Flaky tests
+  hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
+  hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
+  hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
+  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
 }

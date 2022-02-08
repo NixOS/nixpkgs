@@ -2,20 +2,31 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, poetry-core
 , aiohttp
 }:
 
 buildPythonPackage rec {
   pname = "garages-amsterdam";
-  version = "2.1.1";
+  version = "3.2.1";
+  format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "garages_amsterdam";
-    rev = version;
-    sha256 = "1m0bc3bzb83apprk412s7k5r2g6p5br2hrak2a976lh9ifk1d8hj";
+    rev = "v${version}";
+    sha256 = "16f2742r9p3mrg2nz8lnkgsxabbjga2qnp9vzq59026q6mmfwkm9";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"0.0.0"' '"${version}"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -28,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client for getting garage occupancy in Amsterdam";
-    homepage = "https://github.com/klaasnicolaas/garages_amsterdam";
+    homepage = "https://github.com/klaasnicolaas/python-garages-amsterdam";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

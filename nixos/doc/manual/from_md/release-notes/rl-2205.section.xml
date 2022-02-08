@@ -170,6 +170,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://moosefs.com">moosefs</link>, fault
+          tolerant petabyte distributed file system. Available as
+          <link linkend="opt-services.moosefs">moosefs</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/ThomasLeister/prosody-filer">prosody-filer</link>,
           a server for handling XMPP HTTP Upload requests. Available at
           <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
@@ -231,6 +238,19 @@
           <literal>buildPackages.ghc</literal> instead to ensure cross
           compilation keeps working (or switch to
           <literal>haskellPackages.callPackage</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.ghc.withPackages</literal> as well as
+          <literal>haskellPackages.ghcWithPackages</literal> etc. now
+          needs be overridden directly, as opposed to overriding the
+          result of calling it. Additionally, the
+          <literal>withLLVM</literal> parameter has been renamed to
+          <literal>useLLVM</literal>. So instead of
+          <literal>(ghc.withPackages (p: [])).override { withLLVM = true; }</literal>,
+          one needs to use
+          <literal>(ghc.withPackages.override { useLLVM = true; }) (p: [])</literal>.
         </para>
       </listitem>
       <listitem>
@@ -308,6 +328,22 @@
           interpreter. Scripts have to be converted to Python 3 for use
           with <literal>writers.writePython3</literal> or
           <literal>writers.writePyPy2</literal> needs to be used.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>buildGoModule</literal> was updated to use
+          <literal>go_1_17</literal>, third party derivations that
+          specify &gt;= go 1.17 in the main <literal>go.mod</literal>
+          will need to regenerate their <literal>vendorSha256</literal>
+          hash.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>gnome-passwordsafe</literal> package updated to
+          <link xlink:href="https://gitlab.gnome.org/World/secrets/-/tags/6.0">version
+          6.x</link> and renamed to <literal>gnome-secrets</literal>.
         </para>
       </listitem>
       <listitem>

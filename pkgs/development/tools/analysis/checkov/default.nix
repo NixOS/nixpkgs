@@ -22,13 +22,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.763";
+  version = "2.0.805";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-KqxFFRKOCDzlGVKYMp3YNWMKGdxXT9f6xwaCc5XIruk=";
+    hash = "sha256-vQ5BJUwjik9Wfh4eFGuefpMuTcEV83hYEJKa5/n+kRc=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -96,6 +96,8 @@ buildPythonApplication rec {
     "TestSarifReport"
     # Will probably be fixed in one of the next releases
     "test_valid_cyclonedx_bom"
+    "test_record_relative_path_with_direct_oberlay"
+    "test_record_relative_path_with_direct_prod2_oberlay"
     # Requires prettytable release which is only available in staging
     "test_skipped_check_exists"
     "test_record_relative_path_with_relative_dir"

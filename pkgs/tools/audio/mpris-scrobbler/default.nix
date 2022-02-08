@@ -52,9 +52,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Minimalistic scrobbler for libre.fm & last.fm";
-    homepage    = "https://github.com/mariusor/mpris-scrobbler";
-    license     = licenses.mit;
+    homepage = "https://github.com/mariusor/mpris-scrobbler";
+    license = licenses.mit;
     maintainers = with maintainers; [ emantor ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/mpris-scrobbler.x86_64-darwin
   };
 }

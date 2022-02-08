@@ -2,31 +2,29 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , libiconv
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     rev = "gping-v${version}";
-    sha256 = "sha256-Sxmwuf+iTBTlpfMFCEUp6JyEaoHgmLIKB/gws2KY/xc=";
+    sha256 = "sha256-7o7Tj0jWFIOLmpHXWT6zcyowm7vnqMDTf0S4zHkWQ2Q=";
   };
 
-  cargoSha256 = "sha256-xEASs6r5zxYJXS+at6aX5n0whGp5qwuNwq6Jh0GM+/4=";
+  cargoSha256 = "sha256-t+68Rea74RE43TXTSyhZCLXCdBfh7K92Z/amO+wBUuI=";
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/orf/gping/commit/b843beb9617e4b7b98d4f6d3942067cad59c9d60.patch";
-      sha256 = "sha256-9DIeeweCuGqymvUj4EBct82XVevkFSbHWaV76ExjGbs=";
-    })
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/gping --version | grep "${version}"
+  '';
 
   meta = with lib; {
     description = "Ping, but with a graph";

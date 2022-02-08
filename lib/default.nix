@@ -111,8 +111,8 @@ let
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource pathIsRegularFile pathIsGitRepo;
-    inherit (self.modules) evalModules unifyModuleSyntax
-      applyIfFunction mergeModules
+    inherit (self.modules) evalModules setDefaultModuleLocation
+      unifyModuleSyntax applyIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride

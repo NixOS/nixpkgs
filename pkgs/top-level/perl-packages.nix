@@ -3683,7 +3683,7 @@ let
      };
   };
 
-  ConfigIniFiles = buildPerlModule {
+  ConfigIniFiles = buildPerlPackage {
     pname = "Config-IniFiles";
     version = "3.000003";
     src = fetchurl {
@@ -8981,8 +8981,6 @@ let
     };
     buildInputs = [ TestPod ];
   };
-
-  findimagedupes = callPackage ../development/perl-modules/findimagedupes { };
 
   FindLib = buildPerlPackage {
     pname = "Find-Lib";

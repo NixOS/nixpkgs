@@ -43,6 +43,7 @@ in {
         ExecStart = "${pkgs.autorandr}/bin/autorandr --batch --change --default ${cfg.defaultTarget}";
         Type = "oneshot";
         RemainAfterExit = false;
+        KillMode = "process";
       };
     };
 

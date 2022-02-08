@@ -18,7 +18,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-WAI/rl6awVLbXqdqYAq8fyABAO2qet+GYucuiwClylI=";
   };
-  vendorSha256 = "sha256-ZZTM1s/kFHkCjnaDYuP7xCrkW2an3I6kvcMXMy63ySE=";
+  vendorSha256 = "sha256-ckAnSSSEF00gbgxnPAi2Pi8TNu3nmAahK7TP6HnfmNo=";
 
   patches = [
     (substituteAll {
