@@ -406,6 +406,8 @@ in {
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
 
+  aiosteamist = callPackage ../development/python-modules/aiosteamist { };
+
   aiostream = callPackage ../development/python-modules/aiostream { };
 
   aioswitcher = callPackage ../development/python-modules/aioswitcher { };
