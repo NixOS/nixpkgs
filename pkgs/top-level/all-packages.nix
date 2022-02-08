@@ -1207,7 +1207,9 @@ with pkgs;
 
   lilo = callPackage ../tools/misc/lilo { };
 
-  logseq = callPackage ../applications/misc/logseq { };
+  logseq = callPackage ../applications/misc/logseq {
+    electron = electron_16;
+  };
 
   natls = callPackage ../tools/misc/natls { };
 
@@ -6730,6 +6732,8 @@ with pkgs;
   jade = callPackage ../tools/text/sgml/jade { };
 
   jadx = callPackage ../tools/security/jadx { };
+
+  jamesdsp = libsForQt5.callPackage ../applications/audio/jamesdsp { };
 
   jazzy = callPackage ../development/tools/jazzy { };
 
@@ -14169,7 +14173,8 @@ with pkgs;
     electron_13
     electron_14
     electron_15
-    electron_16;
+    electron_16
+    electron_17;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -19805,6 +19810,8 @@ with pkgs;
 
   SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
 
+  SDL2_ttf_2_0_15 = callPackage ../development/libraries/SDL2_ttf/2.0.15.nix { };
+
   sdnotify-wrapper = skawarePackages.sdnotify-wrapper;
 
   sdrplay = callPackage ../applications/radio/sdrplay {};
@@ -22439,6 +22446,8 @@ with pkgs;
   lieer = callPackage ../applications/networking/lieer {};
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
+
+  linthesia = callPackage ../games/linthesia/default.nix { };
 
   libreelec-dvb-firmware = callPackage ../os-specific/linux/firmware/libreelec-dvb-firmware { };
 
@@ -28347,7 +28356,7 @@ with pkgs;
 
   quiterss = libsForQt514.callPackage ../applications/networking/newsreaders/quiterss {};
 
-  falkon = libsForQt514.callPackage ../applications/networking/browsers/falkon { };
+  falkon = libsForQt5.callPackage ../applications/networking/browsers/falkon { };
 
   quodlibet = callPackage ../applications/audio/quodlibet {
     keybinder3 = null;

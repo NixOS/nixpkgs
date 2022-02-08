@@ -242,6 +242,19 @@
       </listitem>
       <listitem>
         <para>
+          <literal>pkgs.ghc.withPackages</literal> as well as
+          <literal>haskellPackages.ghcWithPackages</literal> etc. now
+          needs be overridden directly, as opposed to overriding the
+          result of calling it. Additionally, the
+          <literal>withLLVM</literal> parameter has been renamed to
+          <literal>useLLVM</literal>. So instead of
+          <literal>(ghc.withPackages (p: [])).override { withLLVM = true; }</literal>,
+          one needs to use
+          <literal>(ghc.withPackages.override { useLLVM = true; }) (p: [])</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.emacsPackages.orgPackages</literal> is removed
           because org elpa is deprecated. The packages in the top level
           of <literal>pkgs.emacsPackages</literal>, such as org and
@@ -315,6 +328,15 @@
           interpreter. Scripts have to be converted to Python 3 for use
           with <literal>writers.writePython3</literal> or
           <literal>writers.writePyPy2</literal> needs to be used.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>buildGoModule</literal> was updated to use
+          <literal>go_1_17</literal>, third party derivations that
+          specify &gt;= go 1.17 in the main <literal>go.mod</literal>
+          will need to regenerate their <literal>vendorSha256</literal>
+          hash.
         </para>
       </listitem>
       <listitem>
