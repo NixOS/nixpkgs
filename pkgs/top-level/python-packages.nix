@@ -2176,7 +2176,7 @@ in {
 
   distutils_extra = callPackage ../development/python-modules/distutils_extra { };
 
-  django = self.django_2;
+  django = self.django_3;
 
   # Current LTS
   django_2 = callPackage ../development/python-modules/django/2.nix { };
