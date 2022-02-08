@@ -9,6 +9,7 @@
 , libwebp ? null
 , libtiff ? null
 , libXpm ? null
+, libavif ? null
 , fontconfig
 , freetype
 }:
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake pkg-config ];
 
   buildInputs = [ zlib fontconfig freetype ];
-  propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
+  propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm libavif ];
 
   outputs = [ "bin" "dev" "out" ];
 
