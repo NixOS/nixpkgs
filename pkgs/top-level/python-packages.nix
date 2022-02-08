@@ -9161,6 +9161,8 @@ in {
 
   snakebite = callPackage ../development/python-modules/snakebite { };
 
+  snakemake = callPackage ../development/python-modules/snakemake { };
+
   snakeviz = callPackage ../development/python-modules/snakeviz { };
 
   snapcast = callPackage ../development/python-modules/snapcast { };
