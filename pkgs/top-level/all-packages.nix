@@ -6733,6 +6733,8 @@ with pkgs;
 
   jadx = callPackage ../tools/security/jadx { };
 
+  jamesdsp = libsForQt5.callPackage ../applications/audio/jamesdsp { };
+
   jazzy = callPackage ../development/tools/jazzy { };
 
   jc = with python3Packages; toPythonApplication jc;
