@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, applyPatches
 , bundlerEnv
 , defaultGemConfig
 , callPackage
@@ -20,7 +21,18 @@ let
   pname = "zammad";
   version = "5.0.2";
 
-  sourceDir = fetchFromGitHub (builtins.fromJSON (builtins.readFile ./source.json));
+  sourceDir = applyPatches "zammad-patched" {
+
+    src = fetchFromGitHub (builtins.fromJSON (builtins.readFile ./source.json));
+
+    patches = [ ./0001-nulldb.patch ];
+
+    postPatch = ''
+      sed -i -e "s|ruby '2.7.4'|ruby '${ruby_2_7.version}'|" Gemfile
+      sed -i -e "s|ruby 2.7.4p191|ruby ${ruby_2_7.version}|" Gemfile.lock
+      sed -i -e "s|2.7.4|${ruby_2_7.version}|" .ruby-version
+    '';
+  };
 
   databaseConfig = writeText "database.yml" ''
     production:
@@ -86,10 +98,6 @@ in stdenv.mkDerivation {
   inherit pname version;
 
   src = sourceDir;
-
-  patches = [
-    ./0001-nulldb.patch
-  ];
 
   buildInputs = [
     rubyEnv
