@@ -7,7 +7,7 @@ let
   bootForth = callPackage ./boot-forth.nix { };
 in stdenv.mkDerivation rec {
 
-  name = "gforth-${version}";
+  pname = "gforth";
   version = "0.7.9_20220127";
 
   src = fetchFromGitHub {
