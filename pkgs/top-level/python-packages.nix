@@ -10376,6 +10376,8 @@ in {
 
   warrant = callPackage ../development/python-modules/warrant { };
 
+  warrant-lite = callPackage ../development/python-modules/warrant-lite { };
+
   waqiasync = callPackage ../development/python-modules/waqiasync { };
 
   wasabi = callPackage ../development/python-modules/wasabi { };
