@@ -134,9 +134,6 @@ buildStdenv.mkDerivation ({
   lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch ++
   lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch ++
 
-  # Fix wayland 1.20 compatibility (https://bugzilla.mozilla.org/show_bug.cgi?id=1745560:)
-  lib.optional (lib.versionOlder version "96") ./fix-build-with-wayland-1.20.patch ++
-
   patches;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
@@ -178,6 +175,8 @@ buildStdenv.mkDerivation ({
     rm -rf obj-x86_64-pc-linux-gnu
     substituteInPlace toolkit/xre/glxtest.cpp \
       --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
+
+    patchShebangs mach
  '';
 
   nativeBuildInputs =
