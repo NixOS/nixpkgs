@@ -31,6 +31,26 @@ import ./generic.nix (rec {
       excludes = [ "docs/releasenotes/9.0.0.rst" ];
       sha256 = "13va7lmja9bkp1d8bnwpns9nh7p31kal89cvfky4r95lx0ckrnfv";
     })
+    (fetchpatch {
+      name = "CVE-2022-22817.part-2.patch";
+      url = "https://github.com/python-pillow/Pillow/commit/c930be0758ac02cf15a2b8d5409d50d443550581.patch";
+      sha256 = "123ihfpg86zxlyvb22d5khkrqwv7q3chi2q7kkjyk1k6r84nz4ad";
+    })
+    (fetchpatch {
+      name = "CVE-2022-24303.part-1.patch";
+      url = "https://github.com/python-pillow/Pillow/commit/427221ef5f19157001bf8b1ad7cfe0b905ca8c26.patch";
+      sha256 = "0i7sys6argz320fzyny6fzps9kwvni6i0j3wa97j04k0vigdd5rp";
+    })
+    (fetchpatch {
+      name = "CVE-2022-24303.part-2.patch";
+      url = "https://github.com/python-pillow/Pillow/commit/ca0b58521881b95e47ea49d960d13d1c3dac823d.patch";
+      sha256 = "13f61ab6a6nnzhig0jbsnlmkzvbslpaycrc2iiqmw91glxbw57bh";
+    })
+    (fetchpatch {
+      name = "CVE-2022-24303.part-3.patch";
+      url = "https://github.com/python-pillow/Pillow/commit/02affaa491df37117a7562e6ba6ac52c4c871195.patch";
+      sha256 = "04n0l2k6ikhh15ix8f0dwxx2jk59r9y3z0ix6jz3vz1yq0as16c7";
+    })
   ];
 
   meta = with lib; {
