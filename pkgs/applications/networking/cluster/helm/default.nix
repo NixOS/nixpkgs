@@ -1,6 +1,6 @@
-{ lib, buildGo117Module, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "helm";
   version = "3.8.0";
   gitCommit = "d14138609b01886f544b2025f5000351c9eb092e";
