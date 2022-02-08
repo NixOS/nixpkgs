@@ -2190,12 +2190,11 @@ in {
 
   distutils_extra = callPackage ../development/python-modules/distutils_extra { };
 
-  django = self.django_2;
+  django = self.django_3;
 
-  # Current LTS
   django_2 = callPackage ../development/python-modules/django/2.nix { };
 
-  # Current latest
+  # Current LTS
   django_3 = callPackage ../development/python-modules/django/3.nix { };
 
   django-allauth = callPackage ../development/python-modules/django-allauth { };
