@@ -734,12 +734,9 @@ self: super: builtins.intersectAttrs super {
 
   # based on https://github.com/gibiansky/IHaskell/blob/aafeabef786154d81ab7d9d1882bbcd06fc8c6c4/release.nix
   ihaskell = overrideCabal (drv: {
-    configureFlags = (drv.configureFlags or []) ++ [
-      # ihaskell's cabal file forces building a shared executable,
-      # but without passing --enable-executable-dynamic, the RPATH
-      # contains /build/ and leads to a build failure with nix
-      "--enable-executable-dynamic"
-    ];
+    # ihaskell's cabal file forces building a shared executable, which we need
+    # to reflect here or RPATH will contain a reference to /build/.
+    enableSharedExecutables = true;
     preCheck = ''
       export HOME=$TMPDIR/home
       export PATH=$PWD/dist/build/ihaskell:$PATH
