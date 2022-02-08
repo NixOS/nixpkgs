@@ -1179,14 +1179,14 @@
     name = "Artturi N";
   };
   azahi = {
-    email = "azahi@teknik.io";
-    matrix = "@azahi:matrix.org";
+    name = "Azat Bahawi";
+    email = "azat@bahawi.net";
+    matrix = "@azahi:azahi.cc";
     github = "azahi";
     githubId = 22211000;
-    name = "Azat Bahawi";
     keys = [{
-      longkeyid = "rsa2048/0xB40FCB6608BBE3B6";
-      fingerprint = "E9F3 483F 31C7 29B4 4CA2  7C38 B40F CB66 08BB E3B6";
+      longkeyid = "rsa4096/0xC8C6BDDB3847F72B";
+      fingerprint = "2688 0377 C31D 9E81 9BDF  83A8 C8C6 BDDB 3847 F72B";
     }];
   };
   ayazhafiz = {
