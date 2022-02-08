@@ -14187,8 +14187,6 @@ with pkgs;
 
   inherit (callPackages ../development/tools/electron { })
     electron
-    electron_7
-    electron_8
     electron_9
     electron_10
     electron_11
@@ -30368,8 +30366,6 @@ with pkgs;
   particl-core = callPackage ../applications/blockchains/particl-core { miniupnpc = miniupnpc_2; };
 
   quorum = callPackage ../applications/blockchains/quorum { };
-
-  whirlpool-gui = callPackage ../applications/blockchains/whirlpool-gui { };
 
   saga = libsForQt5.callPackage ../applications/gis/saga {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
