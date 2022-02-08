@@ -64,6 +64,13 @@ stdenv.mkDerivation rec {
       url = "https://marc.info/?l=grub-devel&m=146193404929072&q=mbox";
       sha256 = "00wa1q5adiass6i0x7p98vynj9vsz1w0gn1g4dgz89v35mpyw2bi";
     })
+
+    # Pull upstream patch to fix linkage against binutils-2.36.
+    (fetchpatch {
+      name = "binutils-2.36";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=b98275138bf4fc250a1c362dfd2c8b1cf2421701";
+      sha256 = "001m058bsl2pcb0ii84jfm5ias8zgzabrfy6k2cc9w6w1y51ii82";
+    })
   ];
 
   postPatch = if kbdcompSupport then ''
