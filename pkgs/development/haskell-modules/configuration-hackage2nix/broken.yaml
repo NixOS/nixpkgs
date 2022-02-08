@@ -3437,7 +3437,6 @@ broken-packages:
   - numbered-semigroups
   - NumberSieves
   - NumberTheory
-  - numerals
   - numerals-base
   - numeric-qq
   - numeric-ranges
