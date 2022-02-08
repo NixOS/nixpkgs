@@ -77,8 +77,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
-    # https://github.com/wwmm/easyeffects/pull/1205
-    # substituteInPlace meson_post_install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   preFixup =
