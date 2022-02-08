@@ -22,6 +22,8 @@ let
       (haskell.lib.compose.overrideCabal (old: {
         enableSharedExecutables = dynamic;
         postInstall = ''
+          ${old.postInstall or ""}
+
           remove-references-to -t ${hsPkgs.ghc} $out/bin/haskell-language-server
           remove-references-to -t ${hsPkgs.shake.data} $out/bin/haskell-language-server
           remove-references-to -t ${hsPkgs.js-jquery.data} $out/bin/haskell-language-server
