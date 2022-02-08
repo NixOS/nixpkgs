@@ -22,13 +22,7 @@ with lib;
 let
   common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl, nativeLibs ? [ ], libPatches ? "" }:
     let
-      platformUrlSuffix =
-        if stdenv.isx86_64 && (stdenv.isLinux || stdenv.isDarwin)
-        then ""
-        else
-          if stdenv.isAarch64 && (stdenv.isLinux || stdenv.isDarwin)
-          then "-aarch64"
-          else throw "Hadoop does not currently support ${stdenv.system}.";
+      platformUrlSuffix = optionalString stdenv.isAarch64 "-aarch64";
     in
     stdenv.mkDerivation rec {
       inherit pname version jdk libPatches untarDir openssl;
