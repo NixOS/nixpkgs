@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   pname = "feedbackd";
   # Not an actual upstream project release,
   # only a Debian package release that is tagged in the upstream repo
-  version = "0.0.0+git20210426";
+  version = "0.0.0+git20211018";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${version}";
-    sha256 = "12kdchv11c5ynpv6fbagcx755x5p2kd7acpwjxi9khwdwjsqxlmn";
+    hash = "sha256-jqKRHcxISK54xq/tQm6zV+J+U71eKh04OVTNHDDy65E=";
   };
 
   nativeBuildInputs = [
