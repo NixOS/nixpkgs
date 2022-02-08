@@ -326,7 +326,7 @@ in
         type = types.package;
         default = pkgs.iptables;
         defaultText = literalExpression "pkgs.iptables";
-        example = literalExpression "pkgs.iptables-nftables-compat";
+        example = literalExpression "pkgs.iptables-legacy";
         description =
           ''
             The iptables package to use for running the firewall service."
