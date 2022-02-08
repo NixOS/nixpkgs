@@ -152,7 +152,7 @@ rec {
           exe =
               if passthru?meta.mainProgram
               then "${lib.getBin drv}/bin/${passthru.meta.mainProgram}"
-              else throw "Package ${drv.name} at ${passthru.meta.position} does not define meta.mainProgram, which is required for the exe attribute. If the package does not have an unambiguous main program, use \"\${pkg}/bin/command\" syntax instead.";
+              else drv.exe or (throw "Package ${drv.name} at ${passthru.meta.position} does not define meta.mainProgram, which is required for the exe attribute. If the package does not have an unambiguous main program, use \"\${pkg}/bin/command\" syntax instead.");
           })
         // passthru;
 
