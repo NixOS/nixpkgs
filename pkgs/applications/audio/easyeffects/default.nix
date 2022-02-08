@@ -12,7 +12,7 @@
 , libbs2b
 , libebur128
 , libsamplerate
-, libsigcxx
+, libsigcxx30
 , libsndfile
 , lilv
 , lsp-plugins
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     libbs2b
     libebur128
     libsamplerate
-    libsigcxx
+    libsigcxx30
     libsndfile
     lilv
     lv2
