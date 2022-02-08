@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, boost, numpy, pytestCheckHook, pytest-benchmark }:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, boost, numpy, pytestCheckHook, pytest-benchmark, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "boost-histogram";
@@ -11,7 +11,10 @@ buildPythonPackage rec {
     sha256 = "a27842b2f1cfecc509382da2b25b03056354696482b38ec3c0220af0fc9b7579";
   };
 
+  nativeBuildInputs = [ setuptools-scm ];
+
   buildInputs = [ boost ];
+
   propagatedBuildInputs = [ numpy ];
 
   checkInputs = [ pytestCheckHook pytest-benchmark ];
@@ -20,7 +23,6 @@ buildPythonPackage rec {
     description = "Python bindings for the C++14 Boost::Histogram library";
     homepage = "https://github.com/scikit-hep/boost-histogram";
     license = licenses.bsd3;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }
