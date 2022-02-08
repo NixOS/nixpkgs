@@ -120,7 +120,7 @@ in {
       serviceConfig.EnvironmentFile = cfg.secretsFile;
       script = ''
         echo "Setting password for database '${cfg.dbName}' and user '${cfg.dbUsername}'"
-        ${pkgs.utillinux}/bin/runuser -u ${config.services.postgresql.superUser} -- \
+        ${pkgs.util-linux}/bin/runuser -u ${config.services.postgresql.superUser} -- \
           ${config.services.postgresql.package}/bin/psql \
             -c "ALTER ROLE ${cfg.dbUsername} WITH PASSWORD '$PGPASSWORD'"
         mkdir -p ${cfg.dataDir}
