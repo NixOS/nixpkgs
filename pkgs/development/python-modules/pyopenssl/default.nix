@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "21.0.0";
+  version = "22.0.0";
 
   src = fetchPypi {
     pname = "pyOpenSSL";
     inherit version;
-    sha256 = "5e2d8c5e46d0d865ae933bef5230090bdaf5506281e9eec60fa250ee80600cb3";
+    sha256 = "sha256-ZgsbFCWqxKG+odlBaKhdmfCzFEyGndQ5DSdinQCH8b8=";
   };
 
   outputs = [ "out" "dev" ];
