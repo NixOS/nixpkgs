@@ -351,8 +351,7 @@ in rec {
 
       tar xvf ${hello.src}
       cd hello-*
-      # stdenv bootstrap tools ship a broken libiconv.dylib https://github.com/NixOS/nixpkgs/issues/158331
-      am_cv_func_iconv=no ./configure --prefix=$out
+      ./configure --prefix=$out
       make
       make install
 
