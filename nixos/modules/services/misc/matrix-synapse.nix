@@ -32,16 +32,22 @@ let
         ) (lib.last cfg.settings.listeners) cfg.settings.listeners;
         # FIXME: Handle cases with missing client listener properly,
         # don't rely on lib.last, this will not work.
+
+      # add a tail, so that without any bind_addresses we still have a useable address
+      bindAddress = head (listener.bind_addresses ++ [ "127.0.0.1" ]);
+      listenerProtocol = if listener.tls
+        then "https"
+        else "http";
     in
     pkgs.writeShellScriptBin "matrix-synapse-register_new_matrix_user" ''
       exec ${cfg.package}/bin/register_new_matrix_user \
         $@ \
         ${lib.concatMapStringsSep " " (x: "-c ${x}") ([ configFile ] ++ cfg.extraConfigFiles)} \
-        "${listener.type}://${
-          if (isIpv6 (head listener.bind_addresses)) then
-            "[${head listener.bind_addresses}]"
+        "${listenerProtocol}://${
+          if (isIpv6 bindAddress) then
+            "[${bindAddress}]"
           else
-            "${head listener.bind_addresses}"
+            "${bindAddress}"
         }:${builtins.toString listener.port}/"
     '';
 in {
