@@ -19,7 +19,8 @@
     "nodePackages_latest"
     "nodePackages"
     "platformioPackages"
-    "haskellPackages"
+    # haskellPackages doesn't evaluate because of webkitgtk3 and this branch
+    # is EOL so we just don't index it here
     "idrisPackages"
     "sconsPackages"
     "gns3Packages"

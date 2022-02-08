@@ -244,14 +244,14 @@ let
     Biostrings = [ pkgs.zlib ];
     bnpmr = [ pkgs.gsl_1 ];
     cairoDevice = [ pkgs.gtk2.dev ];
-    Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo.dev pkgs.x11 pkgs.fontconfig.lib ];
+    Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo.dev pkgs.xlibsWrapper pkgs.fontconfig.lib ];
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkg-config ];
     cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
     data_table = [pkgs.zlib.dev] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
-    devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
+    devEMF = [ pkgs.xorg.libXft.dev pkgs.xlibsWrapper ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.lapack ];
     fftw = [ pkgs.fftw.dev ];
@@ -268,7 +268,7 @@ let
     haven = [ pkgs.libiconv pkgs.zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
-    imager = [ pkgs.x11 ];
+    imager = [ pkgs.xlibsWrapper ];
     iBMQ = [ pkgs.gsl_1 ];
     igraph = [ pkgs.gmp pkgs.libxml2.dev ];
     JavaGD = [ pkgs.jdk ];

@@ -40,7 +40,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     mapnik # for mapnik_config
-    pkgs.pkgconfig
+    pkgs.pkg-config
   ];
 
   patches = [
