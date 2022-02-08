@@ -26,9 +26,9 @@ buildPythonPackage rec {
     cp -R src/tests $TMPDIR
     pushd $TMPDIR
   '' + lib.optionalString (stdenv.hostPlatform.system != "x86_64-linux") ''
-    rm $TMPDIR/testdata/th/tis-620.txt  # identified as iso-8859-11, which is fine for all practical purposes
-    rm $TMPDIR/testdata/ga/iso-8859-1.txt  # identified as windows-1252, which is fine for all practical purposes
-    rm $TMPDIR/testdata/fi/iso-8859-1.txt  # identified as windows-1252, which is fine for all practical purposes
+    rm $TMPDIR/tests/testdata/th/tis-620.txt  # identified as iso-8859-11, which is fine for all practical purposes
+    rm $TMPDIR/tests/testdata/ga/iso-8859-1.txt  # identified as windows-1252, which is fine for all practical purposes
+    rm $TMPDIR/tests/testdata/fi/iso-8859-1.txt  # identified as windows-1252, which is fine for all practical purposes
   '';
 
   checkPhase = ''
