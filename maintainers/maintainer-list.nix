@@ -4396,6 +4396,12 @@
     githubId = 27668;
     name = "Tobias Pflug";
   };
+  gin66 = {
+    email = "jochen@kiemes.de";
+    github = "gin66";
+    githubId = 5549373;
+    name = "Jochen Kiemes";
+  };
   giogadi = {
     email = "lgtorres42@gmail.com";
     github = "giogadi";
@@ -7523,16 +7529,6 @@
     githubId = 29855073;
     name = "Michael Colicchia";
   };
-  matdsoupe = {
-    github = "matdsoupe";
-    githubId = 44469426;
-    name = "Matheus de Souza Pessanha";
-    email = "matheus_pessanha2001@outlook.com";
-    keys = [{
-      longkeyid = "rsa4096/0x2671964AB1E06A08";
-      fingerprint = "2F32 CFEF E11A D73B A740  FA47 2671 964A B1E0 6A08";
-    }];
-  };
   matejc = {
     email = "cotman.matej@gmail.com";
     github = "matejc";
@@ -8558,6 +8554,12 @@
     github = "neeasade";
     githubId = 3747396;
     name = "Nathan Isom";
+  };
+  nelsonjeppesen = {
+    email = "nix@jeppesen.io";
+    github = "NelsonJeppesen";
+    githubId = 50854675;
+    name = "Nelson Jeppesen";
   };
   neonfuz = {
     email = "neonfuz@gmail.com";
@@ -13760,6 +13762,16 @@
     matrix = "@zeri:matrix.org";
     github = "zeri42";
     githubId = 68825133;
+  };
+  zoedsoupe = {
+    github = "zoedsoupe";
+    githubId = 44469426;
+    name = "Zoey de Souza Pessanha";
+    email = "zoey.spessanha@outlook.com";
+    keys = [{
+      longkeyid = "rsa4096/0x1E1E889CDBD6A315";
+      fingerprint = "EAA1 51DB 472B 0122 109A  CB17 1E1E 889C DBD6 A315";
+    }];
   };
   zombiezen = {
     name = "Ross Light";

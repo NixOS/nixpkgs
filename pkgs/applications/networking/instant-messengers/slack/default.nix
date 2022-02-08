@@ -51,8 +51,8 @@ let
   x86_64-linux-version = "4.23.0";
   x86_64-linux-sha256 = "1wsrxacnj9f3cb6as7ncbdvi02jqcbyc7ijsavps5bls9phkp0is";
 
-  aarch64-darwin-version = "4.22.0";
-  aarch64-darwin-sha256 = "1z2pcgva9ixjx702c1535b4k0xr9fdnfzi5m08xgvabk9x66hqx4";
+  aarch64-darwin-version = "4.23.0";
+  aarch64-darwin-sha256 = "053psiqysyi7l8pviq0vwvk2azlxcpdrwfa0b99f1h6lbfcf48f3";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -69,7 +69,7 @@ let
       sha256 = x86_64-darwin-sha256;
     };
     x86_64-linux = fetchurl {
-      url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
+      url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
       sha256 = x86_64-linux-sha256;
     };
     aarch64-darwin = fetchurl {

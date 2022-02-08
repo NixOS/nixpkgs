@@ -415,6 +415,10 @@ let
       buildInputs = [ pkgs.libusb1 ];
     };
 
+    uppy-companion = super."@uppy/companion".override {
+      name = "uppy-companion";
+    };
+
     vega-cli = super.vega-cli.override {
       nativeBuildInputs = [ pkgs.pkg-config ];
       buildInputs = with pkgs; [
