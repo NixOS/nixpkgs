@@ -2,11 +2,12 @@
 , re, perl, ncurses
 , ppxlib, ppx_deriving
 , ppxlib_0_15, ppx_deriving_0_15
-, version ? "1.13.7"
+, version ? "1.14.1"
 }:
 with lib;
 let fetched = import ../../../build-support/coq/meta-fetch/default.nix
   {inherit lib stdenv fetchzip; } ({
+    release."1.14.1".sha256 = "sha256-BZPVL8ymjrE9kVGyf6bpc+GA2spS5JBpkUtZi04nPis=";
     release."1.13.7".sha256 = "10fnwz30bsvj7ii1vg4l1li5pd7n0qqmwj18snkdr5j9gk0apc1r";
     release."1.13.5".sha256 = "02a6r23mximrdvs6kgv6rp0r2dgk7zynbs99nn7lphw2c4189kka";
     release."1.13.1".sha256 = "12a9nbdvg9gybpw63lx3nw5wnxfznpraprb0wj3l68v1w43xq044";
