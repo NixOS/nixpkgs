@@ -132,12 +132,12 @@ in rec {
 
   cpu = mkTmuxPlugin {
     pluginName = "cpu";
-    version = "unstable-2020-07-25";
+    version = "unstable-2021-12-15";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-cpu";
-      rev = "20120a38ade17057441482b43eb5390e6ea2c1c1";
-      sha256 = "1gdz2awyd9icvyiw2p40gwymh6ngjhb9mkiv63ix53snp9ii794i";
+      rev = "9eb3dba66672c5b43065e144cc3a1031f77ad67e";
+      sha256 = "sha256-v/jZxsa+JwsSKjmA32VK/4gBNHP/SyOzTaYSSz2c0+4=";
     };
   };
 
