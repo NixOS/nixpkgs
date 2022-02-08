@@ -7,7 +7,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "sha256-k6Rbxpe5BpRmlE+WL7iiFUtRCs5KlrLH2c3iSucUhqo";
+    hash = "sha256-k6Rbxpe5BpRmlE+WL7iiFUtRCs5KlrLH2c3iSucUhqo=";
   };
 
   appimageContents = appimageTools.extractType2 {
