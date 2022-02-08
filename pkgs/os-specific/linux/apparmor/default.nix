@@ -307,7 +307,7 @@ let
   # Generate generic AppArmor rules in a file,
   # from the closure of given rootPaths.
   # To be included in an AppArmor profile like so:
-  # include "$(apparmorRulesFromClosure {} [pkgs.hello]}"
+  # include "${apparmorRulesFromClosure {} [pkgs.hello]}"
   apparmorRulesFromClosure =
     { # The store path of the derivation is given in $path
       additionalRules ? []
