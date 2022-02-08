@@ -5,11 +5,11 @@
 , pkg-config
 , zlib
 , libpng
-, libjpeg ? null
-, libwebp ? null
-, libtiff ? null
-, libXpm ? null
-, libavif ? null
+, libjpeg
+, libwebp
+, libtiff
+, libXpm
+, libavif
 , fontconfig
 , freetype
 }:
