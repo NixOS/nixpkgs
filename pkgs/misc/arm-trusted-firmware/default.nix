@@ -60,7 +60,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/ARM-software/arm-trusted-firmware";
       description = "A reference implementation of secure world software for ARMv8-A";
-      license = if unfreeIncludeHDCPBlob then licenses.unfreeRedistributable else licenses.bsd3;
+      license = (if unfreeIncludeHDCPBlob then [ licenses.unfreeRedistributable ] else []) ++ [ licenses.bsd3 ];
       maintainers = with maintainers; [ lopsided98 ];
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);
