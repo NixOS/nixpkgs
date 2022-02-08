@@ -35,6 +35,24 @@ let
       public-keys:
         - "${snakeOilPublicKey}"
       EOF
+
+      cat << EOF > $out/iso/network-config
+      version: 1
+      config:
+          - type: physical
+            name: eth0
+            mac_address: '52:54:00:12:34:56'
+            subnets:
+            - type: static
+              address: '12.34.56.78'
+              netmask: '255.255.255.0'
+              gateway: '12.34.56.9'
+          - type: nameserver
+            address:
+            - '8.8.8.8'
+            search:
+            - 'example.com'
+      EOF
       ${pkgs.cdrkit}/bin/genisoimage -volid cidata -joliet -rock -o $out/metadata.iso $out/iso
       '';
   };
@@ -46,9 +64,13 @@ in makeTest {
   machine = { ... }:
   {
     virtualisation.qemu.options = [ "-cdrom" "${metadataDrive}/metadata.iso" ];
-    services.cloud-init.enable = true;
+    services.cloud-init = {
+      enable = true;
+      network.enable = true;
+    };
     services.openssh.enable = true;
     networking.hostName = "";
+    networking.useDHCP = false;
   };
   testScript = ''
     # To wait until cloud-init terminates its run
@@ -80,5 +102,8 @@ in makeTest {
         ).strip()
         == "test"
     )
+
+    assert "default via 12.34.56.9 dev eth0 proto static" in unnamed.succeed("ip route")
+    assert "12.34.56.0/24 dev eth0 proto kernel scope link src 12.34.56.78" in unnamed.succeed("ip route")
   '';
 }

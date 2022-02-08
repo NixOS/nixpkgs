@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, buildEnv
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
@@ -102,16 +101,35 @@ let
           terraform.overrideAttrs
             (orig: { passthru = orig.passthru // passthru; })
         else
-          lib.appendToName "with-plugins" (buildEnv {
+          lib.appendToName "with-plugins" (stdenv.mkDerivation {
             inherit (terraform) name meta;
-            paths = actualPlugins;
             nativeBuildInputs = [ makeWrapper ];
-            postBuild = ''
-              mkdir -p $out/bin
+
+            buildCommand = ''
+              # Create wrappers for terraform plugins because Terraform only
+              # walks inside of a tree of files.
+              for providerDir in ${toString actualPlugins}
+              do
+                for file in $(find $providerDir/libexec/terraform-providers -type f)
+                do
+                  relFile=''${file#$providerDir/}
+                  mkdir -p $out/$(dirname $relFile)
+                  cat <<WRAPPER > $out/$relFile
+              #!${runtimeShell}
+              exec "$file" "$@"
+              WRAPPER
+                  chmod +x $out/$relFile
+                done
+              done
+
+              # Create a wrapper for terraform to point it to the plugins dir.
+              mkdir -p $out/bin/
               makeWrapper "${terraform}/bin/terraform" "$out/bin/terraform" \
                 --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
                 --prefix PATH : "${lib.makeBinPath wrapperInputs}"
             '';
+
+            inherit passthru;
           });
     in
     withPlugins (_: [ ]);
@@ -150,9 +168,9 @@ rec {
   };
 
   terraform_1 = mkTerraform {
-    version = "1.1.4";
-    sha256 = "sha256-PzBdo4zqWB9ma+uYFGmZtJNCXlRnAHxQmzWxZFPzHH0=";
-    vendorSha256 = "sha256-Rk2hHtJfaS553MJIea6n51irMas3qcBrWAD+adzTi1Y=";
+    version = "1.1.5";
+    sha256 = "sha256-zIerP8v6ovIx+xwLsSmMFH41l140W9IwQMvomb/pk8E=";
+    vendorSha256 = "sha256-4ctuErxZIaESfIkS7BXI+eQcdatXE/1p20P9f890twM=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };

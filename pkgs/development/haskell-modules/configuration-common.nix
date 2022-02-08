@@ -54,9 +54,9 @@ self: super: {
   # There's an open PR updating the lower bound for `network`:
   # > https://github.com/abhinav/pinch/pull/46
   # With that said version tracked for `network` right now is 3.1.1.1 so we're
-  # replacing the network pinch uses with `network_3_1_2_5` for now.
+  # replacing the network pinch uses with `network_3_1_2_7` for now.
   pinch = super.pinch.overrideScope (self : super: {
-    network = self.network_3_1_2_5;
+    network = self.network_3_1_2_7;
   });
 
   # We can remove this once fakedata version gets to 1.0.1 as the test suite
@@ -77,7 +77,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "14zzs4j9dpc6rdnna80m0vi7s1awlz0mrmwfh8l4zvglx75avpw5";
+      sha256 = "11idvicisp4wnw15lk7f9fs0kqpssngs1j8f98050f3jrqsccj0j";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -1524,10 +1524,7 @@ self: super: {
   # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
   servant-swagger = dontCheck super.servant-swagger;
 
-  # substituteInPlace: https://github.com/hercules-ci/hercules-ci-agent/issues/363
-  hercules-ci-agent = overrideCabal { preConfigure = ''
-    substituteInPlace hercules-ci-agent/Hercules/Agent/Cachix/Init.hs --replace "Cachix.Client.Env" "Cachix.Client.Version"
-  ''; } (generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent);
+  hercules-ci-agent = generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent;
 
   hercules-ci-cli = pkgs.lib.pipe super.hercules-ci-cli [
     unmarkBroken
@@ -2041,13 +2038,13 @@ self: super: {
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
-  # 2021-09-13: hls 1.3 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
+  # 2021-09-13: hls 1.6 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
   # (hls is nearly the only consumer, but consists of 18 packages, so we bump lsp globally.)
-  lsp = doDistribute self.lsp_1_2_0_1;
-  lsp-types = doDistribute self.lsp-types_1_3_0_1;
+  lsp = doDistribute self.lsp_1_4_0_0;
+  lsp-types = doDistribute self.lsp-types_1_4_0_1;
   # Not running the "example" test because it requires a binary from lsps test
   # suite which is not part of the output of lsp.
-  lsp-test = doDistribute (overrideCabal (old: { testTarget = "tests func-test"; }) self.lsp-test_0_14_0_1);
+  lsp-test = doDistribute (overrideCabal (old: { testTarget = "tests func-test"; }) self.lsp-test_0_14_0_2);
 
   # 2021-09-14: Tests are flaky.
   hls-splice-plugin = dontCheck super.hls-splice-plugin;
@@ -2065,11 +2062,11 @@ self: super: {
 
   # Needs network >= 3.1.2
   quic = super.quic.overrideScope (self: super: {
-    network = self.network_3_1_2_5;
+    network = self.network_3_1_2_7;
   });
 
   http3 = super.http3.overrideScope (self: super: {
-    network = self.network_3_1_2_5;
+    network = self.network_3_1_2_7;
   });
 
   # Fixes https://github.com/NixOS/nixpkgs/issues/140613
@@ -2104,7 +2101,7 @@ self: super: {
 
   # Needs brick > 0.64
   nix-tree = super.nix-tree.override {
-    brick = self.brick_0_66;
+    brick = self.brick_0_67;
   };
 
   # build newer version for `pkgs.shellcheck`

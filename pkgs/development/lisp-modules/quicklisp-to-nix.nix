@@ -345,6 +345,16 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "quasiquote-2_dot_0" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."quasiquote-2_dot_0" or (x: {}))
+       (import ./quicklisp-to-nix-output/quasiquote-2_dot_0.nix {
+         inherit fetchurl;
+           "fiveam" = quicklisp-to-nix-packages."fiveam";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+       }));
+
+
   "lfarm-common" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."lfarm-common" or (x: {}))
@@ -2836,6 +2846,24 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "lisp-binary" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."lisp-binary" or (x: {}))
+       (import ./quicklisp-to-nix-output/lisp-binary.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "moptilities" = quicklisp-to-nix-packages."moptilities";
+           "quasiquote-2_dot_0" = quicklisp-to-nix-packages."quasiquote-2_dot_0";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
+       }));
+
+
   "lift" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."lift" or (x: {}))
@@ -3251,6 +3279,16 @@ let quicklisp-to-nix-packages = rec {
     ((f: x: (x // (f x)))
        (qlOverrides."form-fiddle" or (x: {}))
        (import ./quicklisp-to-nix-output/form-fiddle.nix {
+         inherit fetchurl;
+           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
+           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
+       }));
+
+
+  "float-features" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."float-features" or (x: {}))
+       (import ./quicklisp-to-nix-output/float-features.nix {
          inherit fetchurl;
            "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
            "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";

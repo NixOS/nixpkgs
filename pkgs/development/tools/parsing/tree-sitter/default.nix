@@ -29,9 +29,9 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) OPTIONAL: Set GITHUB_TOKEN env variable to avoid api rate limit
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.2";
-  sha256 = "sha256-XCTS58q1XCl7XH6SLTZDZv22nUPBK8d4oqk063ZObkg=";
-  cargoSha256 = "sha256-fKS9Q3BFGzyMnbNH6ItYnPj4dybeX7ucQfzYiOxVvhA=";
+  version = "0.20.4";
+  sha256 = "sha256-H/7j4HnaccmaH5m/FMTbi01uA3JtKVHiJLTQ4VZ7jfo=";
+  cargoSha256 = "sha256-Pf/gVBQFssOomzq0IZp5H7MYwvFBRjMYfifLKCB7DCs=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -58,7 +58,7 @@ let
     let
       change = name: grammar:
         callPackage ./grammar.nix { } {
-          language = name;
+          language = if grammar ? language then grammar.language else name;
           inherit version;
           source = fetchGrammar grammar;
           location = if grammar ? location then grammar.location else null;
@@ -67,6 +67,7 @@ let
       grammars = grammars' //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
+        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; };
     in
@@ -91,7 +92,7 @@ let
           in
           {
             name =
-              (lib.strings.replaceStrings ["-"] ["_"]
+              (lib.strings.replaceStrings [ "-" ] [ "_" ]
                 (lib.strings.removePrefix "tree-sitter-"
                   (lib.strings.removeSuffix "-grammar" name)))
               + stdenv.hostPlatform.extensions.sharedLibrary;

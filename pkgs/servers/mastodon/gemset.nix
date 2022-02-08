@@ -2392,15 +2392,15 @@
     version = "1.11.0";
   };
   ruby-saml = {
-    dependencies = ["nokogiri"];
+    dependencies = ["nokogiri" "rexml"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0ps79g3f39iy6dpc9z4z5wwxdkbaciqjfbi0pfl7dbkz1d8q14qi";
+      sha256 = "1706dyk5jdma75bnl9rhmx8vgzjw12ixnj3y32inmpcgzgsvs76k";
       type = "gem";
     };
-    version = "1.11.0";
+    version = "1.13.0";
   };
   ruby2_keywords = {
     groups = ["default"];

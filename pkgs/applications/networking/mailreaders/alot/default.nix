@@ -1,16 +1,29 @@
-{ lib, python3, fetchFromGitHub, file, gnupg, gawk, notmuch, procps, withManpage ? false
+{ lib
+, python3
+, fetchFromGitHub
+, file
+, gnupg
+, gawk
+, notmuch
+, procps
+, withManpage ? false
 }:
 
 with python3.pkgs;
-
 let
   notmuch2 = callPackage ./notmuch.nix {
     inherit notmuch;
   };
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "alot";
   version = "0.10";
-  outputs = [ "out" ] ++ lib.optional withManpage "man";
+
+  outputs = [
+    "out"
+  ] ++ lib.optional withManpage [
+    "man"
+  ];
 
   disabled = !isPy3k;
 
@@ -22,48 +35,63 @@ in buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace alot/settings/manager.py --replace /usr/share "$out/share"
+    substituteInPlace alot/settings/manager.py \
+      --replace /usr/share "$out/share"
   '';
 
   nativeBuildInputs = lib.optional withManpage sphinx;
 
   propagatedBuildInputs = [
-    notmuch2
-    urwid
-    urwidtrees
-    twisted
-    python_magic
     configobj
-    service-identity
     file
     gpgme
+    notmuch2
+    python_magic
+    service-identity
+    twisted
+    urwid
+    urwidtrees
   ];
 
-  postBuild = lib.optionalString withManpage "make -C docs man";
+  checkInputs = [
+    future
+    gawk
+    gnupg
+    mock
+    procps
+    pytestCheckHook
+  ];
 
-  checkInputs = [ gawk future mock gnupg procps pytestCheckHook ];
-  # some twisted tests need internet access
+  postBuild = lib.optionalString withManpage [
+    "make -C docs man"
+  ];
+
   disabledTests = [
+    # Some twisted tests need internet access
     "test_env_set"
     "test_no_spawn_no_stdin_attached"
+    # DatabaseLockedError
+    "test_save_named_query"
   ];
 
-  postInstall = let
-    completionPython = python.withPackages (ps: [ ps.configobj ]);
-  in lib.optionalString withManpage ''
-    mkdir -p $out/man
-    cp -r docs/build/man $out/man
-  ''
-  + ''
-    mkdir -p $out/share/{applications,alot}
-    cp -r extra/themes $out/share/alot
+  postInstall =
+    let
+      completionPython = python.withPackages (ps: [ ps.configobj ]);
+    in
+    lib.optionalString withManpage ''
+      mkdir -p $out/man
+      cp -r docs/build/man $out/man
+    ''
+    + ''
+      mkdir -p $out/share/{applications,alot}
+      cp -r extra/themes $out/share/alot
 
-    substituteInPlace extra/completion/alot-completion.zsh \
-      --replace "python3" "${completionPython.interpreter}"
-    install -D extra/completion/alot-completion.zsh $out/share/zsh/site-functions/_alot
+      substituteInPlace extra/completion/alot-completion.zsh \
+        --replace "python3" "${completionPython.interpreter}"
+      install -D extra/completion/alot-completion.zsh $out/share/zsh/site-functions/_alot
 
-    sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
-  '';
+      sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/pazz/alot";

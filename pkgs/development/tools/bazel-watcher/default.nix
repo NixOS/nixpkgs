@@ -12,7 +12,7 @@ let
   ];
 in
 buildBazelPackage rec {
-  name = "bazel-watcher-${version}";
+  pname = "bazel-watcher";
   version = "0.14.0";
 
   src = fetchFromGitHub {

@@ -2,13 +2,13 @@
 
 let
   pname = "beekeeper-studio";
-  version = "2.1.4";
+  version = "3.1.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${version}/Beekeeper-Studio-${version}.AppImage";
     name="${pname}-${version}.AppImage";
-    sha512 = "1aik88wi9axv66axjmmjmlna1sp0pz92z8i2x6pq3bs0gcs4i1q3qxxbrfc14ynbpa65knimfhwzrrshchnijgdazx3qjzh8jwzfiwl";
+    sha512 = "sha512:1zv4fclac94fzzhgqmjgc5pllxcxajjx6yjf3zblj53cc7m4sp4ydjx3wh4db57j75x8vh7xc3q1xpq6q3sj1dafnap0j0icfi6wznk";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -32,9 +32,9 @@ in appimageTools.wrapType2 {
   meta = with lib; {
     description = "Modern and easy to use SQL client for MySQL, Postgres, SQLite, SQL Server, and more. Linux, MacOS, and Windows";
     homepage = "https://www.beekeeperstudio.io";
-    changelog = "https://github.com/beekeeper-studio/beekeeper-studio/releases/tag/v2.1.4";
+    changelog = "https://github.com/beekeeper-studio/beekeeper-studio/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ milogert ];
+    maintainers = with maintainers; [ milogert alexnortung ];
     platforms = [ "x86_64-linux" ];
   };
 }

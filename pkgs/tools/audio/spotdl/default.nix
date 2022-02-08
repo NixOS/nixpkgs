@@ -6,13 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "3.7.2";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "v${version}";
-    sha256 = "sha256-ftSnlruSv+RtvjTpZPYg9Z2EK4th8NbDhVlG2eIc87s=";
+    sha256 = "sha256-Y4l86OjAEwNt2i9+OFgol3b6nhbpe27NFTKJrLKQgHg=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,11 +22,10 @@ python3.pkgs.buildPythonApplication rec {
     rapidfuzz
     mutagen
     ytmusicapi
-    tqdm
     beautifulsoup4
     requests
     unidecode
-    youtube-dl
+    yt-dlp
   ];
 
   checkInputs = with python3.pkgs; [

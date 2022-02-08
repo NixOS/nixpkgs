@@ -28,7 +28,6 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "A program for retrieving mail";
     homepage = "https://getmail6.org";
-    updateWalker = true;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ abbe dotlambda ];
   };

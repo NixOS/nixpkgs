@@ -119,7 +119,5 @@ stdenv.mkDerivation rec {
     }
   '');
 
-  meta = sbclBootstrap.meta // {
-    updateWalker = true;
-  };
+  meta = sbclBootstrap.meta;
 }

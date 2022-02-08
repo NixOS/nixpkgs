@@ -40,12 +40,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     libxml2
     meson
@@ -66,6 +60,12 @@ stdenv.mkDerivation rec {
     libxklavier
     switchboard
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Keyboard Plug";

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -43,6 +44,13 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit asciidoc;
+    })
+
+    # Filter out hidden (wrapped) subcommands
+    # https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/481
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/8c28c24e447f13da8cf804cd7a00f9b909c5d3f9.patch";
+      sha256 = "EYo1nOtEr4semaPC5wk6A7bliRXu8qsBHaltd0DEI6Y=";
     })
   ];
 
@@ -124,7 +132,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 

@@ -1,5 +1,4 @@
 { lib }:
-
 {
   tree-sitter-agda = lib.importJSON ./tree-sitter-agda.json;
   tree-sitter-bash = lib.importJSON ./tree-sitter-bash.json;
@@ -55,8 +54,8 @@
   tree-sitter-nix = lib.importJSON ./tree-sitter-nix.json;
   tree-sitter-norg = lib.importJSON ./tree-sitter-norg.json;
   tree-sitter-ocaml = lib.importJSON ./tree-sitter-ocaml.json;
+  tree-sitter-org-nvim = lib.importJSON ./tree-sitter-org-nvim.json;
   tree-sitter-perl = lib.importJSON ./tree-sitter-perl.json;
-  tree-sitter-org = lib.importJSON ./tree-sitter-org.json;
   tree-sitter-php = lib.importJSON ./tree-sitter-php.json;
   tree-sitter-pioasm = lib.importJSON ./tree-sitter-pioasm.json;
   tree-sitter-prisma = lib.importJSON ./tree-sitter-prisma.json;

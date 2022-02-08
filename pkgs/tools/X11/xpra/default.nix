@@ -135,7 +135,6 @@ in buildPythonApplication rec {
   meta = {
     homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
-    downloadURLRegexp = "xpra-.*[.]tar[.][gx]z$";
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
     license = licenses.gpl2;

@@ -217,7 +217,6 @@ in {
 
       package = mkOption {
         type = types.package;
-        example = literalExpression "pkgs.mediatomb";
         default = pkgs.gerbera;
         defaultText = literalExpression "pkgs.gerbera";
         description = ''

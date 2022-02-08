@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nixosTests
+{ lib, stdenv, fetchurl, nixosTests, buildPackages
 # Native buildInputs components
 , bison, boost, cmake, fixDarwinDylibNames, flex, makeWrapper, pkg-config
 # Common components
@@ -18,7 +18,7 @@ let # in mariadb # spans the whole file
 
 libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
-mytopEnv = perl.withPackages (p: with p; [ DBDmysql DBI TermReadKey ]);
+mytopEnv = buildPackages.perl.withPackages (p: with p; [ DBDmysql DBI TermReadKey ]);
 
 mariadbPackage = packageSettings: (server packageSettings) // {
   client = client packageSettings; # MariaDB Client
@@ -208,6 +208,10 @@ in stdenv.mkDerivation (common // {
     "-DPLUGIN_AUTH_PAM=OFF"
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_PLUGIN_S3=1"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # revisit this if nixpkgs supports any architecture whose stack grows upwards
+    "-DSTACK_DIRECTION=-1"
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''

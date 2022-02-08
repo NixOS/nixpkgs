@@ -13,7 +13,6 @@
 , curl
 , dconf
 , libepoxy
-, ffmpeg
 , fftw
 , fftwFloat
 , flex
@@ -95,7 +94,6 @@ stdenv.mkDerivation rec {
     curl
     dconf
     libepoxy
-    ffmpeg
     fftw
     fftwFloat
     flex
@@ -133,10 +131,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Denable_ffmpeg=true"
-    "-Denable_rtmidi=true"
-    "-Denable_rtaudio=true"
-    "-Denable_sdl=true"
+    "-Drtmidi=enabled"
+    "-Drtaudio=enabled"
+    "-Dsdl=enabled"
     "-Dcarla=enabled"
     "-Dmanpage=true"
     # "-Duser_manual=true" # needs sphinx-intl

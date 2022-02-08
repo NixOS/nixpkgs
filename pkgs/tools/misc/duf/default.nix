@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "duf";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "duf";
     rev = "v${version}";
-    sha256 = "sha256-Usdu7f3XPTIT39H23vfP0XBlvNPgPA+3BMyOzFOyLHQ=";
+    sha256 = "sha256-FZ4NplvCc1c+wPy1NSs2qwfWVtCPNHs6JquubGnwiEY=";
   };
 
-  vendorSha256 = "sha256-6PV/v+rk63FIR2M0Q7EzqjVvWIwHtK6TQpEYxkXLQ50=";
+  vendorSha256 = "sha256-VLGsfazTD7hSNXPxuGJJwyqvUlqk5wuz8NqFHs/jyZc=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 

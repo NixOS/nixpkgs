@@ -38,7 +38,13 @@ let
     rtDepsBinSrcs."${bSrcName}__${stdenv.targetPlatform.system}";
 
   omnisharp = rtDepBinSrcByName "OmniSharp";
-  vsdbg = rtDepBinSrcByName "Debugger";
+  vsdbgs = [
+    (rtDepBinSrcByName "Debugger")
+  ] ++ lib.optionals (stdenv.isDarwin) [
+  # Include the aarch64-darwin debugger binaries on x86_64-darwin.  Even though OmniSharp will be
+  # running under Rosetta 2, debugging will fail to start if both sets of binaries are not present.
+    (rtDepsBinSrcs."Debugger__aarch64-darwin")
+  ];
   razor = rtDepBinSrcByName "Razor";
 in
 
@@ -46,8 +52,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "1.23.15";
-    sha256 = "0b74jr45zl7lzirjgj8s2lbf3viy9pbwlgjh055rcwmy77wcml1x";
+    version = "1.23.16";
+    sha256 = "sha256-fM4vcSMi2tEjIox9Twh2sRiFhXgAeRwAM9to3vtcSqI=";
   };
 
   nativeBuildInputs = [
@@ -112,20 +118,28 @@ vscode-utils.buildVscodeMarketplaceExtension {
     chmod a+x "$omnisharp_dir/run"
     touch "$omnisharp_dir/install.Lock"
 
+  '' + builtins.concatStringsSep "\n" (map (vsdbg: ''
     declare vsdbg_dir="$PWD/${vsdbg.installPath}"
     unzip_to "${vsdbg.bin-src}" "$vsdbg_dir"
     chmod a+x "$vsdbg_dir/vsdbg-ui"
     chmod a+x "$vsdbg_dir/vsdbg"
     touch "$vsdbg_dir/install.complete"
     touch "$vsdbg_dir/install.Lock"
-    patchelf_common "$vsdbg_dir/vsdbg"
-    patchelf_common "$vsdbg_dir/vsdbg-ui"
 
+  '') vsdbgs) + ''
     declare razor_dir="$PWD/${razor.installPath}"
     unzip_to "${razor.bin-src}" "$razor_dir"
     chmod a+x "$razor_dir/rzls"
     touch "$razor_dir/install.Lock"
+
+  '' + lib.optionalString stdenv.isLinux ''
+    patchelf_common "$vsdbg_dir/vsdbg"
+    patchelf_common "$vsdbg_dir/vsdbg-ui"
     patchelf_common "$razor_dir/rzls"
+
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace $omnisharp_dir/etc/config \
+      --replace "libmono-native-compat.dylib" "libmono-native.dylib"
   '';
 
   meta = with lib; {
@@ -133,6 +147,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://github.com/OmniSharp/omnisharp-vscode";
     license = licenses.mit;
     maintainers = [ maintainers.jraygauthier ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

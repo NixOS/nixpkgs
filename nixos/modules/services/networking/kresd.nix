@@ -9,7 +9,7 @@ let
   # On Nix level we don't attempt to precisely validate the address specifications.
   # The optional IPv6 scope spec comes *after* port, perhaps surprisingly.
   mkListen = kind: addr: let
-    al_v4 = builtins.match "([0-9.]+):([0-9]+)()" addr;
+    al_v4 = builtins.match "([0-9.]+):([0-9]+)($)" addr;
     al_v6 = builtins.match "\\[(.+)]:([0-9]+)(%.*|$)" addr;
     al_portOnly = builtins.match "([0-9]+)" addr;
     al = findFirst (a: a != null)

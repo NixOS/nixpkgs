@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ CRTified ];
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/lottieconverter.x86_64-darwin
   };
 }

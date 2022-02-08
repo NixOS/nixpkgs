@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pony";
-  version = "0.7.15rc1";
+  version = "0.7.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "ponyorm";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EoMpVvPCwxJbNPoeF73djcaQ4lY9jRx5nJYR2A2LXoQ=";
+    hash = "sha256-yATIsX2nKsW5DBwg9/LznQqf+XPY3q46WZut18Sr0v0=";
   };
 
   checkInputs = [

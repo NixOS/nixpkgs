@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-KICxcfZLBwCo12p5R9wt7Tk440wkUIE7G6lGfWIdxR8=";
   };
 
-  vendorSha256 = "sha256-aPL3npryiCv+SiSyEUNhdPCDmM/hJDMspCbSNy+SuoA=";
+  vendorSha256 = "sha256-1FnewgsKlOnBAdm7vyBngrFsDHNCzpZA3IDccxALeJ8=";
 
   ldflags = [
     "-s" "-w" "-X github.com/achannarasappa/ticker/cmd.Version=v${version}"

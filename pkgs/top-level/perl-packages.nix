@@ -729,11 +729,20 @@ let
 
   Appcpanminus = buildPerlPackage {
     pname = "App-cpanminus";
-    version = "1.7044";
+    version = "1.7045";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7044.tar.gz";
-      sha256 = "9b60767fe40752ef7a9d3f13f19060a63389a5c23acc3e9827e19b75500f81f3";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7045.tar.gz";
+      sha256 = "1779w07zxlgfk35s24ksr7k9azd5yl8sbb48y1aaph7y4gf4lkmc";
     };
+    # Use TLS endpoints for downloads and metadata by default
+    preConfigure = ''
+      substituteInPlace bin/cpanm \
+        --replace http://www.cpan.org https://www.cpan.org \
+        --replace http://backpan.perl.org https://backpan.perl.org \
+        --replace http://fastapi.metacpan.org https://fastapi.metacpan.org \
+        --replace http://cpanmetadb.plackperl.org https://cpanmetadb.plackperl.org
+    '';
+    propagatedBuildInputs = [ IOSocketSSL ];
     meta = {
       homepage = "https://github.com/miyagawa/cpanminus";
       description = "Get, unpack, build and install modules from CPAN";
@@ -3674,7 +3683,7 @@ let
      };
   };
 
-  ConfigIniFiles = buildPerlModule {
+  ConfigIniFiles = buildPerlPackage {
     pname = "Config-IniFiles";
     version = "3.000003";
     src = fetchurl {
@@ -4043,12 +4052,12 @@ let
 
   CPAN = buildPerlPackage {
     pname = "CPAN";
-    version = "2.28";
+    version = "2.29";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AN/ANDK/CPAN-2.28.tar.gz";
-      sha256 = "39d357489283d479695027640d7fc25b42ec3c52003071d1ec94496e34af5974";
+      url = "mirror://cpan/authors/id/A/AN/ANDK/CPAN-2.29.tar.gz";
+      sha256 = "1f55672efd505a9baacfa1924d115362120aa6bf8efab7a17c7cb090b17ccc41";
     };
-    propagatedBuildInputs = [ ArchiveZip CPANChecksums CPANPerlReleases Expect FileHomeDir LWP LogLog4perl ModuleBuild TermReadKey YAML YAMLLibYAML YAMLSyck ];
+    propagatedBuildInputs = [ ArchiveZip CPANChecksums CPANPerlReleases CompressBzip2 Expect FileHomeDir FileWhich LWP LogLog4perl ModuleSignature TermReadKey TextGlob YAML YAMLLibYAML YAMLSyck IOSocketSSL ];
     meta = {
       description = "Query, download and build perl modules from CPAN sites";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -4121,10 +4130,10 @@ let
 
   CPANChecksums = buildPerlPackage {
     pname = "CPAN-Checksums";
-    version = "2.12";
+    version = "2.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AN/ANDK/CPAN-Checksums-2.12.tar.gz";
-      sha256 = "0f1dbpp4638jfdfwrywjmz88na5wzw4fdsmm2r7gh1x0s6r0yq4r";
+      url = "mirror://cpan/authors/id/A/AN/ANDK/CPAN-Checksums-2.14.tar.gz";
+      sha256 = "4080716c5da7e03b504e3cc0ea1fd5ef9ed6915f6fb737564e9e13d355a89e39";
     };
     propagatedBuildInputs = [ CompressBzip2 DataCompare ModuleSignature ];
     meta = {
@@ -9676,21 +9685,6 @@ let
     propagatedBuildInputs = [ Pango ];
   };
 
-  Gtk2GladeXML = buildPerlPackage {
-    pname = "Gtk2-GladeXML";
-    version = "1.007";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TS/TSCH/Gtk2-GladeXML-1.007.tar.gz";
-      sha256 = "50240a2bddbda807c8f8070de941823b7bf3d288a13be6d0d6563320b42c445a";
-    };
-    propagatedBuildInputs = [ pkgs.gnome2.libglade pkgs.gtk2 Gtk2 ];
-    meta = {
-      description = "Create user interfaces directly from Glade XML files";
-      license = lib.licenses.lgpl2Plus;
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2GladeXML.x86_64-darwin
-    };
-  };
-
   Gtk2TrayIcon = buildPerlPackage {
     pname = "Gtk2-TrayIcon";
     version = "0.06";
@@ -11417,11 +11411,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.29";
+    version = "12.39";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      sha256 = "09yszwhirprqr94jwrsr9kyav5syv0mjmnjngqn20fn7m135wv95";
+      sha256 = "sha256-QDq1KTpEcl8EWj9a/bxF0TwghUulH30O5yDV0wsxy6I=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -11863,8 +11857,8 @@ let
     pname = "libnet";
     version = "3.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/libnet-3.12.tar.gz";
-      sha256 = "1px35q9qchzd7rxqldj87vbrall8v31blidhmh0d25d5hyq9lw25";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/libnet-3.13.tar.gz";
+      sha256 = "sha256-WjX7Hy1KopFoDrGvOImfq0U8IsKOcffHvTdHtaPbNIw=";
     };
     patches = [
       (fetchpatch {
@@ -17022,6 +17016,20 @@ let
     '';
 
     doCheck = false;
+  };
+
+  OpenOfficeOODoc = buildPerlPackage {
+    pname = "OpenOffice-OODoc";
+    version = "2.125";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMGDOC/OpenOffice-OODoc-2.125.tar.gz";
+      sha256 = "1dnsj63svxq0hi3aci4x7binql8kr754inlkks5jmi4k0sblh561";
+    };
+    propagatedBuildInputs = [ ArchiveZip XMLTwig ];
+    meta = {
+      license = with lib.licenses; [ lgpl21 ];
+      maintainers = [ maintainers.wentasah ];
+    };
   };
 
   NetOpenIDCommon = buildPerlPackage {
@@ -25433,4 +25441,5 @@ let
   SubExporterUtil = self.SubExporter;
   version = self.Version;
 
+  Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
 }; in self

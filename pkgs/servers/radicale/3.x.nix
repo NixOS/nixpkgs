@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.1.0";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = "v${version}";
-    hash = "sha256-LtPv+3FQMGC2YP2+1cSPZVUIzrUhteJTl58+JdvGcQg=";
+    hash = "sha256-vX6lYiDqpQeWVLotyt2ODwcjskWB6EuCky3/V8m1m7Q=";
   };
 
   postPatch = ''
@@ -36,6 +36,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://radicale.org/v3.html";
     description = "CalDAV and CardDAV server";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda erictapen ];
   };
 }

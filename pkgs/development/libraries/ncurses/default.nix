@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   # Note the revision needs to be adjusted.
-  version = "6.2";
+  version = "6.3";
   name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   # We cannot use fetchFromGitHub (which calls fetchzip)
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   in fetchurl {
     url = "https://github.com/mirror/ncurses/archive/${rev}.tar.gz";
-    sha256 = "15r2456g0mlq2q7gh2z52vl6zv6y0z8sdchrs80kg4idqd8sm8fd";
+    sha256 = "1mawdjhzl2na2j0dylwc37f5w95rhgyvlwnfhww5rz2r7fgkvayv";
   };
 
   outputs = [ "out" "dev" "man" ];

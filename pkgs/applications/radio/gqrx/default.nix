@@ -24,13 +24,13 @@ assert !(pulseaudioSupport && portaudioSupport);
 
 gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "gqrx";
-  version = "2.15.4";
+  version = "2.15.7";
 
   src = fetchFromGitHub {
     owner = "gqrx-sdr";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "sha256-iQlrnkc1EMR8sUUAHh+7RfS/05unrcDm/kJ/Q4Vst2Q=";
+    sha256 = "sha256-4tXWwBkVmNZ4s3d6/n6XBdbh9Fv7821L3vkYmjgv1ds=";
   };
 
   nativeBuildInputs = [
@@ -67,11 +67,6 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     in [
       "-DLINUX_AUDIO_BACKEND=${audioBackend}"
     ];
-
-  postInstall = ''
-    install -vD $src/gqrx.desktop -t "$out/share/applications/"
-    install -vD $src/resources/icons/gqrx.svg -t "$out/share/pixmaps/"
-  '';
 
   meta = with lib; {
     description = "Software defined radio (SDR) receiver";

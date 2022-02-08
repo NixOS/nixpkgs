@@ -57,24 +57,29 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.4";
+  version = "9.5";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-jqkr4meG02KbTCMsGvyr1UbosS4ZuUJhPXU/InuS+9A=";
+    sha256 = "sha256-uOsLpsGpcIGs8Xr82X82MElnTB2E908gytyNJ8WVD5w=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
   # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
-    # Make sure py2/py3 tests are only run when their expected context (all "sage"
-    # tests) are also run. That is necessary to test dochtml individually. See
-    # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
-    # TODO: Determine if it is still necessary.
-    ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
+    # Since https://trac.sagemath.org/ticket/32174, some external features are
+    # marked as "safe" and get auto-detected, in which case the corresponding
+    # optional tests are executed. We disable auto-detection of safe features if
+    # we are doctesting with an "--optional" argument which does not include
+    # "sage", because tests from autodetected features expect context provided
+    # by running basic sage tests. This is necessary to test sagemath_doc_html
+    # separately. See https://trac.sagemath.org/ticket/26110 for a related
+    # upstream discussion (from the time when Sage still had optional py2/py3
+    # tags).
+    ./patches/Only-test-external-software-when-all-of-sage-is.patch
 
     # Fixes a potential race condition which can lead to transient doctest failures.
     ./patches/fix-ecl-race.patch
@@ -109,54 +114,6 @@ stdenv.mkDerivation rec {
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
 
-    # fonttools 4.26.2, used by matplotlib, uses deprecated methods internally.
-    # This is fixed in fonttools 4.27.0, but since fonttools is a dependency of
-    # 2000+ packages and DeprecationWarnings are hidden almost everywhere by
-    # default (not on Sage's doctest harness, though), it doesn't make sense to
-    # backport the fix (see https://github.com/NixOS/nixpkgs/pull/151415).
-    # Let's just assume warnings are expected until we update to 4.27.0.
-    ./patches/fonttools-deprecation-warnings.patch
-
-    # https://trac.sagemath.org/ticket/32305
-    (fetchSageDiff {
-      base = "9.4";
-      name = "networkx-2.6-upgrade.patch";
-      rev = "9808325853ba9eb035115e5b056305a1c9d362a0";
-      sha256 = "sha256-gJSqycCtbAVr5qnVEbHFUvIuTOvaxFIeffpzd6nH4DE=";
-    })
-
-    # https://trac.sagemath.org/ticket/32420
-    (fetchSageDiff {
-      base = "9.5.beta2";
-      name = "sympy-1.9-update.patch";
-      rev = "beed4e16aff32e47d0c3b1c58cb1e2f4c38590f8";
-      sha256 = "sha256-3eJPfWfCrCAQ5filIn7FbzjRQeO9QyTIVl/HyRuqFtE=";
-    })
-
-    # https://trac.sagemath.org/ticket/32567
-    (fetchSageDiff {
-      base = "9.5.beta2";
-      name = "arb-2.21.0-update.patch";
-      rev = "eb3304dd521a3d5a9334e747a08e234bbf16b4eb";
-      sha256 = "sha256-XDkaY4VQGyESXI6zuD7nCNzyQOl/fmBFvAESH9+RRvk=";
-    })
-
-    # https://trac.sagemath.org/ticket/32797
-    (fetchSageDiff {
-      base = "9.5.beta7";
-      name = "pari-2.13.3-update.patch";
-      rev = "f5f7a86908daf60b25e66e6a189c51ada7e0a732";
-      sha256 = "sha256-H/caGx3q4KcdsyGe+ojV9bUTQ5y0siqM+QHgDbeEnbw=";
-    })
-
-    # https://trac.sagemath.org/ticket/32909
-    (fetchSageDiff {
-      base = "9.5.beta7";
-      name = "matplotlib-3.5-deprecation-warnings.patch";
-      rev = "a5127dc56fdf5c2e82f6bc781cfe78dbd04e97b7";
-      sha256 = "sha256-p23qUu9mgEUbdbX6cy7ArxZAtpcFjCKbgyxN4jWvj1o=";
-    })
-
     # https://trac.sagemath.org/ticket/32968
     (fetchSageDiff {
       base = "9.5.beta8";
@@ -164,6 +121,11 @@ stdenv.mkDerivation rec {
       rev = "fc84f82f52b6f05f512cb359ec7c100f93cf8841";
       sha256 = "sha256-bBbfdcnw/9LUOlY8rHJRbFJEdMXK4shosqTNaobTS1Q=";
     })
+
+    # Upstream has not upgraded to linbox 1.7 yet because it conflicts with
+    # pre-4.2.1p3 versions of Singular, but we don't have this problem.
+    # https://trac.sagemath.org/ticket/32959
+    ./patches/linbox-1.7-upgrade.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

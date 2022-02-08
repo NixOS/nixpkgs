@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, go, removeReferencesTo, buildEnv }:
+{ lib, fetchFromGitHub, buildGoModule, buildEnv }:
 
 let
   package = buildGoModule rec {
@@ -28,23 +28,21 @@ let
       sha256 = "sha256-SmlcQH+K/axl6Gj+bX0Quk6K/usP0c1hWnIdFjS1dn8=";
     };
 
-    vendorSha256 = "sha256-tO8vi9jBV6rVcGk/OoaXzpnQi4yPdozYZZwAMFCz2+c=";
+    vendorSha256 = "sha256-g3INNvAQ124kBJSe5cnsIq1y8sWpPYKLwJONgbIUaoM=";
 
-    subPackages = [ "." ];
-
-    nativeBuildInputs = [ removeReferencesTo ];
-
-    # buildGoModule overrides normal buildPhase, can't use makeTargets
-    postBuild = ''
+    buildPhase = ''
+      runHook preBuild
       make build plugins
+      runHook postBuild
     '';
 
     # tries to pull tests from network, and fails silently anyway
     doCheck = false;
 
-    postInstall = ''
-      mkdir -p $bin/bin
-      mv $out/bin/nomad-autoscaler $bin/bin/nomad-autoscaler
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $bin/bin $out/bin
+      mv bin/nomad-autoscaler $bin/bin
       ln -s $bin/bin/nomad-autoscaler $out/bin/nomad-autoscaler
 
       for d in $outputs; do
@@ -54,7 +52,6 @@ let
 
       # have out contain all of the plugins
       for plugin in bin/plugins/*; do
-        remove-references-to -t ${go} "$plugin"
         cp "$plugin" $out/share/
       done
 
@@ -73,6 +70,7 @@ let
       mv bin/plugins/prometheus $prometheus/share/
       mv bin/plugins/target-value $target_value/share/
       mv bin/plugins/threshold $threshold/share/
+      runHook postInstall
     '';
 
     # make toggle-able, so that overrided versions can disable this check if

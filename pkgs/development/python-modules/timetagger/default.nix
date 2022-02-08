@@ -3,36 +3,20 @@
 , fetchFromGitHub
 , pytestCheckHook
 , requests
+, pytest
+, pythonOlder
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "timetagger";
-  version = "22.1.2";
+  version = "22.2.1";
 
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0xrajx0iij7r70ch17m4y6ydyh368dn6nbjsv74pn1x8frd686rw";
+    sha256 = "sha256-2Yne9gTMyuwqBNYz7elzW09olmgIKeRyuO0LdrtYt5c=";
   };
-
-  meta = with lib; {
-    homepage = "https://timetagger.app";
-    license = licenses.gpl3;
-    description = "Tag your time, get the insight";
-    maintainers = with maintainers; [ matthiasbeyer ];
-  };
-
-  checkInputs = [
-    pytestCheckHook
-    requests
-  ];
-
-  preCheck = ''
-    # https://github.com/NixOS/nixpkgs/issues/12591
-    mkdir -p check-phase
-    export HOME=$(pwd)/check-phase
-  '';
 
   propagatedBuildInputs = with python3Packages; [
     asgineer
@@ -44,4 +28,23 @@ python3Packages.buildPythonPackage rec {
     uvicorn
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  checkInputs = [
+    pytestCheckHook
+    requests
+    pytest
+  ];
+
+  # fails with `No module named pytest` on python version 3.10
+  doCheck = pythonOlder "3.10";
+
+  meta = with lib; {
+    homepage = "https://timetagger.app";
+    license = licenses.gpl3Only;
+    description = "Tag your time, get the insight";
+    maintainers = with maintainers; [ matthiasbeyer ];
+  };
 }

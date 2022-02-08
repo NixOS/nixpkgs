@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "Builditluc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IkPv6oPdwfuIQrqQGqZAJ0b9OPRiA3GWDQuPXM/+fY4=";
+    sha256 = "sha256-IMNHsmL1L+zfGxfdTxJ4HBGiQOzWmYVE0P3ZInbMVl0=";
   };
 
   buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-/56KsEg6deeROERWLd9lX+7v6n5Dx1VCzdr/GtPFuGo=";
+  cargoSha256 = "sha256-Q8Xl6L41cDeDN370owAAL9xZhdyUuDKrPlZxG3eg87c=";
 
   meta = with lib; {
     description = "A simple and easy to use Wikipedia Text User Interface";

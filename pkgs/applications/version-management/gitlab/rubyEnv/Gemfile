@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.1.4.1'
+gem 'rails', '~> 6.1.4.4'
 
 gem 'bootsnap', '~> 1.9.1', require: false
 
@@ -50,7 +50,7 @@ gem 'omniauth-shibboleth', '~> 1.3.0'
 gem 'omniauth-twitter', '~> 1.4'
 gem 'omniauth_crowd', '~> 2.4.0'
 gem 'omniauth-authentiq', '~> 0.3.3'
-gem 'gitlab-omniauth-openid-connect', '~> 0.8.0', require: 'omniauth_openid_connect'
+gem 'gitlab-omniauth-openid-connect', '~> 0.9.0', require: 'omniauth_openid_connect'
 gem 'omniauth-salesforce', '~> 1.0.5'
 gem 'omniauth-atlassian-oauth2', '~> 0.2.0'
 gem 'rack-oauth2', '~> 1.16.0'
@@ -74,7 +74,7 @@ gem 'u2f', '~> 0.2.1'
 gem 'validates_hostname', '~> 1.0.11'
 gem 'rubyzip', '~> 2.0.0', require: 'zip'
 # GitLab Pages letsencrypt support
-gem 'acme-client', '~> 2.0', '>= 2.0.6'
+gem 'acme-client', '~> 2.0', '>= 2.0.9'
 
 # Browser detection
 gem 'browser', '~> 4.2'
@@ -98,10 +98,7 @@ gem 'rack-cors', '~> 1.0.6', require: 'rack/cors'
 
 # GraphQL API
 gem 'graphql', '~> 1.11.10'
-# NOTE: graphiql-rails v1.5+ doesn't work: https://gitlab.com/gitlab-org/gitlab/issues/31771
-# TODO: remove app/views/graphiql/rails/editors/show.html.erb when https://github.com/rmosolgo/graphiql-rails/pull/71 is released:
-# https://gitlab.com/gitlab-org/gitlab/issues/31747
-gem 'graphiql-rails', '~> 1.4.10'
+gem 'graphiql-rails', '~> 1.8'
 gem 'apollo_upload_server', '~> 2.1.0'
 gem 'graphql-docs', '~> 1.6.0', group: [:development, :test]
 gem 'graphlient', '~> 0.4.0' # Used by BulkImport feature (group::import)
@@ -149,6 +146,7 @@ gem 'aws-sdk-core', '~> 3'
 gem 'aws-sdk-cloudformation', '~> 1'
 gem 'aws-sdk-s3', '~> 1'
 gem 'faraday_middleware-aws-sigv4', '~>0.3.0'
+gem 'typhoeus', '~> 1.4.0' # Used with Elasticsearch to support http keep-alive connections
 
 # Markdown and HTML processing
 gem 'html-pipeline', '~> 2.13.2'
@@ -166,10 +164,10 @@ gem 'asciidoctor', '~> 2.0.10'
 gem 'asciidoctor-include-ext', '~> 0.3.1', require: false
 gem 'asciidoctor-plantuml', '~> 0.0.12'
 gem 'asciidoctor-kroki', '~> 0.5.0', require: false
-gem 'rouge', '~> 3.26.1'
+gem 'rouge', '~> 3.27.0'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
-gem 'nokogiri', '~> 1.11.4'
+gem 'nokogiri', '~> 1.12'
 gem 'escape_utils', '~> 1.1'
 
 # Calendar rendering
@@ -193,12 +191,12 @@ end
 # State machine
 gem 'state_machines-activerecord', '~> 0.8.0'
 
-# Issue tags
-gem 'acts-as-taggable-on', '~> 8.1'
+# CI domain tags
+gem 'acts-as-taggable-on', '~> 9.0'
 
 # Background jobs
 gem 'sidekiq', '~> 6.3'
-gem 'sidekiq-cron', '~> 1.0'
+gem 'sidekiq-cron', '~> 1.2'
 gem 'redis-namespace', '~> 1.8.1'
 gem 'gitlab-sidekiq-fetcher', '0.8.0', require: 'sidekiq-reliable-fetch'
 
@@ -263,7 +261,7 @@ gem 'ruby-fogbugz', '~> 0.2.1'
 gem 'kubeclient', '~> 4.9.2'
 
 # Sanitize user input
-gem 'sanitize', '~> 5.2.1'
+gem 'sanitize', '~> 6.0'
 gem 'babosa', '~> 1.0.4'
 
 # Sanitizes SVG input
@@ -276,7 +274,7 @@ gem 'licensee', '~> 9.14.1'
 gem 'charlock_holmes', '~> 0.7.7'
 
 # Detect mime content type from content
-gem 'ruby-magic', '~> 0.4'
+gem 'ruby-magic', '~> 0.5'
 
 # Faster blank
 gem 'fast_blank'
@@ -312,7 +310,7 @@ gem 'pg_query', '~> 2.1'
 gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.21.1'
+gem 'gitlab-labkit', '~> 0.21.3'
 # Thrift is a dependency of gitlab-labkit, we want a version higher than 0.14.0
 # because of https://gitlab.com/gitlab-org/gitlab/-/issues/321900
 gem 'thrift', '>= 0.14.0'
@@ -394,8 +392,6 @@ group :development, :test do
 
   gem 'parallel', '~> 1.19', require: false
 
-  gem 'rblineprof', '~> 0.3.6', platform: :mri, require: false
-
   gem 'test_file_finder', '~> 0.1.3'
 end
 
@@ -443,7 +439,8 @@ end
 
 gem 'octokit', '~> 4.15'
 
-# https://gitlab.com/gitlab-org/gitlab/issues/207207
+# Updating this gem version here is deprecated. See:
+# https://docs.gitlab.com/ee/development/emails.html#mailroom-gem-updates
 gem 'gitlab-mail_room', '~> 0.0.9', require: 'mail_room'
 
 gem 'email_reply_trimmer', '~> 0.1'
@@ -483,14 +480,14 @@ end
 gem 'spamcheck', '~> 0.1.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 14.4.0.pre.rc43'
+gem 'gitaly', '~> 14.6.0.pre.rc1'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.0.2'
 
-gem 'grpc', '~> 1.30.2'
+gem 'grpc', '~> 1.42.0'
 
-gem 'google-protobuf', '~> 3.17.1'
+gem 'google-protobuf', '~> 3.19.0'
 
 gem 'toml-rb', '~> 2.0'
 

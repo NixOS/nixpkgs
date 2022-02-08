@@ -13,7 +13,7 @@ buildGoModule rec {
 
   modRoot = "./go";
   subPackages = [ "cmd/dolt" "cmd/git-dolt" "cmd/git-dolt-smudge" ];
-  vendorSha256 = "sha256-7nmpsmisrtBxdLgC9mwSDYbjtbCrGl564+deC9CaYps=";
+  vendorSha256 = "sha256-pP/KCj92Y8fEh9AXKEOxuXxMeTMcGJrYSW+OrfXvajk=";
 
   doCheck = false;
 

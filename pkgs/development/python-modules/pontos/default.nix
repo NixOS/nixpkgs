@@ -7,12 +7,13 @@
 , colorful
 , tomlkit
 , git
+, packaging
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "22.1.1";
+  version = "22.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p7E86McHeijsXpaByD5qLHYQLnSImLwHn15INyxWiZc=";
+    hash = "sha256-VMfvlqpmA2Mg/llVNcY3Enuuq3mwV0G1GYrpbvzo8pU=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     colorful
     tomlkit
+    packaging
     requests
   ];
 
@@ -38,6 +40,11 @@ buildPythonPackage rec {
     git
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'packaging = "^20.3"' 'packaging = "*"'
+  '';
 
   disabledTests = [
     # Signing fails
@@ -48,7 +55,9 @@ buildPythonPackage rec {
     "test_missing_cmd"
   ];
 
-  pythonImportsCheck = [ "pontos" ];
+  pythonImportsCheck = [
+    "pontos"
+  ];
 
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";

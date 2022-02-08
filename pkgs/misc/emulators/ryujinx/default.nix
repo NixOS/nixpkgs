@@ -1,19 +1,22 @@
 { lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem, copyDesktopItems
-, libX11, libgdiplus, ffmpeg
+, dotnetCorePackages, libX11, libgdiplus, ffmpeg
 , SDL2_mixer, openal, libsoundio, sndio, pulseaudio
 , gtk3, gdk-pixbuf, wrapGAppsHook
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.0.7105"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.7168"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "b9d83cc97ee1cb8c60d9b01c162bab742567fe6e";
-    sha256 = "0plchh8f9xhhza1wfw3ys78f0pa1bh3898fqhfhcc0kxb39px9is";
+    rev = "6e0799580f0d1b473a79471c5d365c6524d97a86";
+    sha256 = "145sn9xkjxj79292faypcdmpmbxm1w70q0iprg6pfymf9920gvfv";
   };
+
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   projectFile = "Ryujinx.sln";
   nugetDeps = ./deps.nix;

@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pyface";
-  version = "7.3.0";
+  version = "7.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7031ec4cfff034affc822e47ff5e6c1a0272e576d79465cdbbe25f721740322";
+    sha256 = "sha256-r8Awj9dOYPWxh1Ar2JK/nhuY8hAGFO4+6yr9yq7Pb6s=";
   };
 
   propagatedBuildInputs = [ importlib-metadata importlib-resources six traits ];

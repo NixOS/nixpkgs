@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cosign";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WjYW9Fo27wE1pg/BqYsdHd8jwd8jG5bk37HmU1DqnyE=";
+    sha256 = "sha256-hQFkbHOmtk0SqFSPw1+5nCvjq9cKsGzFPtK4jXDrubQ=";
   };
 
   buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
@@ -16,13 +16,20 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "sha256-6T98zu55BQ26e43a1i68rhebaLwY/iFM8CRqRcv2QwI=";
+  vendorSha256 = "sha256-d3aOX4iMlhlxgYbqCHCIFKXunVha0Fw4ZBmy4OA6EhI=";
 
   excludedPackages = "\\(sample\\|webhook\\|help\\)";
 
   tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
 
   ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/pkg/version.GitVersion=v${version}" ];
+
+  postPatch = ''
+    rm pkg/cosign/tuf/client_test.go # Require network access
+    rm internal/pkg/cosign/fulcio/signer_test.go # Require network access
+    rm internal/pkg/cosign/rekor/signer_test.go # Require network access
+    rm pkg/cosign/kubernetes/webhook/validator_test.go # Require network access
+  '';
 
   postInstall = ''
     installShellCompletion --cmd cosign \

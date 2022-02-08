@@ -18,5 +18,5 @@ echo "${providers}"
 
 for provider in ${providers}; do
   echo "Updating ${provider}"
-  ./update-provider "${provider}"
+  ./update-provider "$@" "${provider}"
 done

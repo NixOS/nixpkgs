@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.ice-wm.org/";
+    homepage = "https://ice-wm.org/";
     description = "A simple, lightweight X window manager";
     longDescription = ''
       IceWM is a window manager for the X Window System. The goal of IceWM is

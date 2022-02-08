@@ -68,7 +68,7 @@ in
         SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
       '';
   } (mkIf cfg.x11 {
-    services.xserver.videoDrivers = mkOverride 50 [ "vmware" "virtualbox" "modesetting" ];
+    services.xserver.videoDrivers = [ "vmware" "virtualbox" "modesetting" ];
 
     services.xserver.config =
       ''

@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruffle";
-  version = "nightly-2021-09-17";
+  version = "nightly-2022-02-02";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-N4i13vx/hWzFf2DT3lToAAnbMgIaUL/B2C3WI1el3ps=";
+    sha256 = "sha256-AV3zGfWacYdkyxHED1nGwTqRHhXpybaCVnudmHqWvqw=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/ruffle_desktop --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
   '';
 
-  cargoSha256 = "sha256-6B6bSIU15Ca1/lLYij9YjpFykbJhOGZieydNXis/Cw8=";
+  cargoSha256 = "sha256-LP9aHcey+e3fqtWdOkqF5k8dwjdAOKpP+mKGxFhTte0=";
 
   meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language.";

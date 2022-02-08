@@ -9,7 +9,8 @@
 , libaio
 , enableCmdlib ? false
 , enableDmeventd ? false
-, udev ? null
+, udevSupport ? !stdenv.targetPlatform.isStatic, udev ? null
+, onlyLib ? stdenv.targetPlatform.isStatic
 , nixosTests
 }:
 
@@ -26,7 +27,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev libuuid libaio ];
+  buildInputs = [
+    libaio
+  ] ++ lib.optionals udevSupport [
+    udev
+  ] ++ lib.optionals (!onlyLib) [
+    libuuid
+  ];
 
   configureFlags = [
     "--disable-readline"
@@ -46,10 +53,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
-  ] ++
-  lib.optionals (udev != null) [
+  ] ++ lib.optionals udevSupport [
     "--enable-udev_rules"
     "--enable-udev_sync"
+  ] ++ lib.optionals stdenv.targetPlatform.isStatic [
+    "--enable-static_link"
   ];
 
   preConfigure = ''
@@ -58,9 +66,13 @@ stdenv.mkDerivation rec {
     substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
       --replace /usr/bin/udevadm /run/current-system/systemd/bin/udevadm
     # https://github.com/lvmteam/lvm2/issues/36
+  '' + lib.optionalString (lib.versionOlder version "2.03.14") ''
+    substituteInPlace udev/69-dm-lvm-metad.rules.in \
+      --replace "(BINDIR)/systemd-run" /run/current-system/systemd/bin/systemd-run
+  '' + lib.optionalString (lib.versionAtLeast version "2.03.14") ''
     substituteInPlace udev/69-dm-lvm.rules.in \
       --replace "/usr/bin/systemd-run" /run/current-system/systemd/bin/systemd-run
-
+  '' + ''
     substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
   '' + lib.optionalString (lib.versionAtLeast version "2.03") ''
     substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
@@ -78,30 +90,41 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mallinfo.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
       sha256 = "0g6wlqi215i5s30bnbkn8w7axrs27y3bnygbpbnf64wwx7rxxlj0";
     })
+  ] ++ lib.optionals stdenv.targetPlatform.isStatic [
+    ./no-shared.diff
   ];
 
   doCheck = false; # requires root
 
-  makeFlags = lib.optionals (udev != null) [
+  makeFlags = lib.optionals udevSupport [
     "SYSTEMD_GENERATOR_DIR=$(out)/lib/systemd/system-generators"
+  ] ++ lib.optionals onlyLib [
+    "libdm.device-mapper"
   ];
 
   # To prevent make install from failing.
   installFlags = [ "OWNER=" "GROUP=" "confdir=$(out)/etc" ];
 
   # Install systemd stuff.
-  installTargets = [ "install" ] ++ lib.optionals (udev != null) [
+  installTargets = [ "install" ] ++ lib.optionals udevSupport [
     "install_systemd_generators"
     "install_systemd_units"
     "install_tmpfiles_configuration"
   ];
 
+  installPhase = lib.optionalString onlyLib ''
+    install -D -t $out/lib libdm/ioctl/libdevmapper.${if stdenv.targetPlatform.isStatic then "a" else "so"}
+    make -C libdm install_include
+    make -C libdm install_pkgconfig
+  '';
+
   # only split bin and lib out from out if cmdlib isn't enabled
   outputs = [
     "out"
+  ] ++ lib.optionals (!onlyLib) [
     "dev"
     "man"
-  ] ++ lib.optionals (enableCmdlib != true) [
+  ] ++ lib.optionals (!onlyLib && !enableCmdlib) [
     "bin"
     "lib"
   ];

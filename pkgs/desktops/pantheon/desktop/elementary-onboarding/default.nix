@@ -14,7 +14,6 @@
 , granite
 , libgee
 , elementary-icon-theme
-, elementary-gtk-theme
 , elementary-settings-daemon
 , gettext
 , libhandy
@@ -26,35 +25,12 @@ stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
   version = "6.1.0";
 
-  repoName = "onboarding";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "onboarding";
     rev = version;
     sha256 = "sha256-9voy9eje3VlV4IMM664EyjKWTfSVogX5JoRCqhsUXTE=";
   };
-
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-    wrapGAppsHook
-  ];
-
-  buildInputs = [
-    elementary-gtk-theme
-    elementary-icon-theme
-    elementary-settings-daemon # settings schema
-    glib
-    granite
-    gtk3
-    libgee
-    libhandy
-  ];
 
   patches = [
     (substituteAll {
@@ -67,6 +43,26 @@ stdenv.mkDerivation rec {
       url = "https://github.com/elementary/onboarding/commit/af19c3dbefd1c0e0ec18eddacc1f21cb991f5513.patch";
       sha256 = "sha256-fSFfjSd33W7rXXEUHY8b3rv9B9c31XfCjxjRxBBrqjs=";
     })
+  ];
+
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkg-config
+    python3
+    vala
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    elementary-icon-theme
+    elementary-settings-daemon # settings schema
+    glib
+    granite
+    gtk3
+    libgee
+    libhandy
   ];
 
   postPatch = ''

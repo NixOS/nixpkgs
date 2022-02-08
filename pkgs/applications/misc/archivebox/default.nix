@@ -1,30 +1,22 @@
 { lib
 , buildPythonApplication
+, python3
 , fetchPypi
-, requests
-, mypy-extensions
-, django_3
-, django-extensions
-, dateparser
-, youtube-dl
-, python-crontab
-, croniter
-, w3lib
-, ipython
 }:
 
 let
-  django_3' = django_3.overridePythonAttrs (old: rec {
-    pname = "Django";
-    version = "3.1.7";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "sha256-Ms55Lum2oMu+w0ASPiKayfdl3/jCpK6SR6FLK6OjZac=";
+  py = python3.override {
+    packageOverrides = self: super: {
+      django = super.django_3.overridePythonAttrs (old: rec {
+        pname = "Django";
+        version = "3.1.7";
+        src = fetchPypi {
+          inherit pname version;
+          sha256 = "sha256-Ms55Lum2oMu+w0ASPiKayfdl3/jCpK6SR6FLK6OjZac=";
+        };
+      });
     };
-  });
-  django-extensions' = django-extensions.overrideAttrs (oldAttrs: rec {
-    propagatedBuildInputs = [];
-  });
+  };
 in
 
 buildPythonApplication rec {
@@ -36,11 +28,11 @@ buildPythonApplication rec {
     sha256 = "sha256-zHty7lTra6yab9d0q3EqsPG3F+lrnZL6PjQAbL1A2NY=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with py.pkgs; [
     requests
     mypy-extensions
-    django_3'
-    django-extensions'
+    django
+    django-extensions
     dateparser
     youtube-dl
     python-crontab

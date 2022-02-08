@@ -1,22 +1,27 @@
 { stdenv, lib, pkgArches, callPackage,
   name, version, src, mingwGccs, monos, geckos, platforms,
   bison, flex, fontforge, makeWrapper, pkg-config,
-  autoconf, hexdump, perl,
+  autoconf, hexdump, perl, nixosTests,
   supportFlags,
   patches,
+  vkd3dArches,
   buildScript ? null, configureFlags ? []
 }:
 
 with import ./util.nix { inherit lib; };
 
 let
-  vkd3d = callPackage ./vkd3d.nix {};
   patches' = patches;
+  prevName = name;
+  prevPlatforms = platforms;
+  prevConfigFlags = configureFlags;
 in
 stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   builder = buildScript;
 }) // rec {
-  inherit name src configureFlags;
+  inherit src;
+
+  name = if supportFlags.waylandSupport then "${prevName}-wayland" else prevName;
 
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
   strictDeps = true;
@@ -36,18 +41,13 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals supportFlags.mingwSupport mingwGccs;
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
-  [ pkgs.freetype pkgs.perl pkgs.xorg.libX11 ]
+  [ pkgs.freetype pkgs.perl ]
   ++ lib.optional stdenv.isLinux         pkgs.libcap
-  ++ lib.optional pngSupport             pkgs.libpng
-  ++ lib.optional jpegSupport            pkgs.libjpeg
   ++ lib.optional cupsSupport            pkgs.cups
-  ++ lib.optional colorManagementSupport pkgs.lcms2
   ++ lib.optional gettextSupport         pkgs.gettext
   ++ lib.optional dbusSupport            pkgs.dbus
-  ++ lib.optional mpg123Support          pkgs.mpg123
   ++ lib.optional openalSupport          pkgs.openal
   ++ lib.optional cairoSupport           pkgs.cairo
-  ++ lib.optional tiffSupport            pkgs.libtiff
   ++ lib.optional odbcSupport            pkgs.unixODBC
   ++ lib.optional netapiSupport          pkgs.samba4
   ++ lib.optional cursesSupport          pkgs.ncurses
@@ -55,35 +55,40 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional pcapSupport            pkgs.libpcap
   ++ lib.optional v4lSupport             pkgs.libv4l
   ++ lib.optional saneSupport            pkgs.sane-backends
-  ++ lib.optional gsmSupport             pkgs.gsm
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional ldapSupport            pkgs.openldap
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
   ++ lib.optional alsaSupport            pkgs.alsa-lib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
-  ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
+  ++ lib.optional (xineramaSupport && !waylandSupport) pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
   ++ lib.optional vulkanSupport          pkgs.vulkan-loader
   ++ lib.optional sdlSupport             pkgs.SDL2
-  ++ lib.optional faudioSupport          pkgs.faudio
-  ++ lib.optional vkd3dSupport           vkd3d
+  ++ vkd3dArches
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1;
     [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav
     (gst-plugins-bad.override { enableZbar = false; }) ])
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
-  ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
   ++ lib.optionals (openglSupport && !stdenv.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
   ])
-  ++ lib.optionals stdenv.isLinux  (with pkgs.xorg; [
-     libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
+  ++ lib.optionals (stdenv.isLinux && !waylandSupport) (with pkgs.xorg; [
+     libX11 libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
+  ])
+  ++ lib.optionals waylandSupport (with pkgs; [
+     wayland libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
   ])));
 
   patches = [ ] ++ patches';
+
+  configureFlags = prevConfigFlags
+    ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
+    ++ lib.optionals supportFlags.vulkanSupport [ "--with-vulkan" ]
+    ++ lib.optionals supportFlags.vkd3dSupport [ "--with-vkd3d" ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
@@ -93,6 +98,8 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
       # libpulsecommon.so is linked but not found otherwise
       ++ lib.optionals supportFlags.pulseaudioSupport (map (x: "${lib.getLib x}/lib/pulseaudio")
           (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ])))
+      ++ lib.optionals supportFlags.waylandSupport (map (x: "${lib.getLib x}/share/wayland-protocols")
+          (toBuildInputs pkgArches (pkgs: [ pkgs.wayland-protocols ])))
     ));
 
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
@@ -144,13 +151,17 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
     ++ lib.optional (supportFlags.mingwSupport) "format";
 
-  passthru = { inherit pkgArches; };
+  passthru = {
+    inherit pkgArches;
+    tests = { inherit (nixosTests) wine; };
+  };
   meta = {
-    inherit version platforms;
+    inherit version;
     homepage = "https://www.winehq.org/";
     license = with lib.licenses; [ lgpl21Plus ];
-    description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    maintainers = with lib.maintainers; [ avnik raskin bendlas ];
+    description = if supportFlags.waylandSupport then "An Open Source implementation of the Windows API on top of OpenGL and Unix (with experimental Wayland support)" else "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
+    platforms = if supportFlags.waylandSupport then (lib.remove "x86_64-darwin" prevPlatforms) else prevPlatforms;
+    maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira ];
     mainProgram = "wine";
   };
 })

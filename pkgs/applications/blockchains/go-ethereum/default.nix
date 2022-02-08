@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit, nixosTests }:
 
 let
   # A list of binaries to put into separate outputs
@@ -49,6 +49,8 @@ in buildGoModule rec {
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =
     lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+
+  passthru.tests = { inherit (nixosTests) geth; };
 
   meta = with lib; {
     homepage = "https://geth.ethereum.org/";

@@ -12,11 +12,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-gtk-theme";
   version = "6.1.1";
 
-  repoName = "stylesheet";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "stylesheet";
     rev = version;
     sha256 = "sha256-gciBn5MQ5Cu+dROL5kCt2GCbNA7W4HOWXyjMBd4OP+8=";
   };
@@ -37,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GTK theme designed to be smooth, attractive, fast, and usable";
     homepage = "https://github.com/elementary/stylesheet";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
   };

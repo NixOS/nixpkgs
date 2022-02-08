@@ -311,11 +311,7 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
-      haskell-language-server = [
-        compilerNames.ghc884
-        compilerNames.ghc8107
-        compilerNames.ghc902
-      ];
+      haskell-language-server = released;
       hoogle = released;
       hlint = released;
       hsdns = released;
@@ -398,8 +394,8 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc921
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
-          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc902
-          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc921
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc921
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };

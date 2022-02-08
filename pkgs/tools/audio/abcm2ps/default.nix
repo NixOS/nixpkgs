@@ -1,25 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, which, docutils, freetype, pango }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, docutils
+, pkg-config
+, freetype
+, pango
+}:
 
 stdenv.mkDerivation rec {
   pname = "abcm2ps";
-  version = "8.14.12";
+  version = "8.14.13";
 
   src = fetchFromGitHub {
     owner = "leesavide";
     repo = "abcm2ps";
     rev = "v${version}";
-    sha256 = "sha256-RELWtI+S2cbG7cXCehXymvWRdair28UaDZRVr5xt9Tk=";
+    hash = "sha256-31cEBtVn7GlNIsPkRiW0DyKA/giLeJ86EUZr8zjYy3s=";
   };
 
   configureFlags = [
     "--INSTALL=install"
   ];
 
-  buildFlags = [
-    "CC=${stdenv.cc}/bin/cc"
-  ];
-
-  nativeBuildInputs = [ which pkg-config docutils ];
+  nativeBuildInputs = [ docutils pkg-config ];
 
   buildInputs = [ freetype pango ];
 

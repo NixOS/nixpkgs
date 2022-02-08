@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, meson_0_60, ninja, pkg-config, wayland-scanner
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, wayland-scanner
 , libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
 , libpng, ffmpeg, xcbutilrenderutil, seatd, vulkan-loader, glslang
@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wlroots";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "wlroots";
     repo = "wlroots";
     rev = version;
-    sha256 = "0wdzs0wpv61pxgy3mx3xjsndyfmbj30v47d3w9ymmnd4r479n41n";
+    sha256 = "sha256-MFR38UuB/wW7J9ODDUOfgTzKLse0SSMIRYTpEaEdRwM=";
   };
 
   # $out for the library and $examples for the example programs (in examples):
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ meson_0_60 ninja pkg-config wayland-scanner ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner glslang ];
 
   buildInputs = [
     libGL wayland wayland-protocols libinput libxkbcommon pixman
     xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg xcbutilrenderutil seatd vulkan-loader glslang
+    libpng ffmpeg xcbutilrenderutil seatd vulkan-loader
   ]
     ++ lib.optional enableXWayland xwayland
   ;

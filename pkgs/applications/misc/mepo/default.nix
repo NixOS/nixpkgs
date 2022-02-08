@@ -5,32 +5,28 @@
 , zig
 , curl
 , SDL2
+, SDL2_gfx
 , SDL2_image
 , SDL2_ttf
 }:
 
 stdenv.mkDerivation rec {
   pname = "mepo";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = pname;
     rev = version;
-    hash = "sha256-ECq748GpjOjvchzAWlGA7H7HBvKNxY9d43+PTOWopiM=";
+    hash = "sha256-B7BOAFhiOTILUdzh49hTMrNNHZpCNRDLW2uekXyptqQ=";
   };
 
   nativeBuildInputs = [ pkg-config zig ];
 
-  buildInputs = [ curl SDL2 SDL2_image SDL2_ttf ];
+  buildInputs = [ curl SDL2 SDL2_gfx SDL2_image SDL2_ttf ];
 
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = ''
     export HOME=$TMPDIR
-    zig build -Drelease-safe=true -Dcpu=baseline
-
-    runHook postBuild
   '';
 
   doCheck = true;
@@ -45,8 +41,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 zig-out/bin/mepo -t $out/bin
-    install -Dm755 scripts/mepo_* $out/bin
+    zig build -Drelease-safe=true -Dcpu=baseline --prefix $out install
 
     runHook postInstall
   '';

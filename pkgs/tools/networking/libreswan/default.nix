@@ -14,6 +14,7 @@
 , curl
 , nspr
 , bash
+, runtimeShell
 , iproute2
 , iptables
 , procps
@@ -71,8 +72,9 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # Correct iproute2 and iptables path
-    sed -e 's|/sbin/ip|${iproute2}/bin/ip|' \
+    sed -e 's|/sbin/ip|${iproute2}/bin/ip|g' \
         -e 's|/sbin/\(ip6\?tables\)|${iptables}/bin/\1|' \
+        -e 's|/bin/bash|${runtimeShell}|g' \
         -i initsystems/systemd/ipsec.service.in \
            programs/barf/barf.in \
            programs/verify/verify.in

@@ -415,7 +415,7 @@ stdenv.mkDerivation {
     "-Dnetworkd=${lib.boolToString withNetworkd}"
     "-Doomd=${lib.boolToString withOomd}"
     "-Dpolkit=${lib.boolToString withPolkit}"
-    "-Dcryptsetup=${lib.boolToString withCryptsetup}"
+    "-Dlibcryptsetup=${lib.boolToString withCryptsetup}"
     "-Dportabled=${lib.boolToString withPortabled}"
     "-Dhwdb=${lib.boolToString withHwdb}"
     "-Dremote=${lib.boolToString withRemote}"
@@ -453,7 +453,6 @@ stdenv.mkDerivation {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dkill-path=${coreutils}/bin/kill"
     "-Dkmod-path=${kmod}/bin/kmod"
     "-Dsulogin-path=${util-linux}/bin/sulogin"
     "-Dmount-path=${util-linux}/bin/mount"
@@ -471,7 +470,6 @@ stdenv.mkDerivation {
   ] ++ lib.optionals withEfi [
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
-    "-Defi-ldsdir=${toString gnu-efi}/lib"
   ] ++ lib.optionals (withShellCompletions == false) [
     "-Dbashcompletiondir=no"
     "-Dzshcompletiondir=no"
@@ -596,16 +594,20 @@ stdenv.mkDerivation {
     rm -rf $out/share/doc
   '';
 
-  # The interface version prevents NixOS from switching to an
-  # incompatible systemd at runtime.  (Switching across reboots is
-  # fine, of course.)  It should be increased whenever systemd changes
-  # in a backwards-incompatible way.  If the interface version of two
-  # systemd builds is the same, then we can switch between them at
-  # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 2;
+  passthru = {
+    # The interface version prevents NixOS from switching to an
+    # incompatible systemd at runtime.  (Switching across reboots is
+    # fine, of course.)  It should be increased whenever systemd changes
+    # in a backwards-incompatible way.  If the interface version of two
+    # systemd builds is the same, then we can switch between them at
+    # runtime; otherwise we can't and we need to reboot.
+    interfaceVersion = 2;
 
-  passthru.tests = {
-    inherit (nixosTests) switchTest;
+    inherit withCryptsetup;
+
+    tests = {
+      inherit (nixosTests) switchTest;
+    };
   };
 
   meta = with lib; {

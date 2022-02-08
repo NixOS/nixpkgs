@@ -10,7 +10,7 @@ scriptDir=$(cd "$(dirname "$0")"; pwd)
 
 declare extPublisher="ms-dotnettools"
 declare extName="csharp"
-declare defaultExtVersion="1.23.15"
+declare defaultExtVersion="1.23.16"
 declare extVersion="${1:-$defaultExtVersion}"
 
 formatExtRuntimeDeps \

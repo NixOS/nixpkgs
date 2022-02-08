@@ -13,34 +13,24 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "shared-mime-info";
-  version = "2.1";
+  pname = "shared-mime-info-unstable";
+  version = "2021-12-03";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
-    repo = pname;
-    rev = version;
-    sha256 = "07bxv44p43pqq4ymfnyy50yli7lwdqymhvclna42rkn1cazq3vb5";
+    repo = "shared-mime-info";
+    rev = "5a406b06792e26a83c7346b3c2443c0bd8d4cdb2";
+    sha256 = "1v7dx7mr0m4lcff1aasg9gxn280zn0ffn6fjg9xc44pnllg01n6s";
   };
-
-  patches = [
-    # xmlto is only used for building the docs, which are not installed anyways.
-    (fetchpatch {
-      name = "xmlto-optional.patch";
-      url = "https://gitlab.freedesktop.org/xdg/shared-mime-info/-/merge_requests/110.patch";
-      sha256 = "0p5gxlcmn8ji5bc7pd105s1halqwa1d28lfx9yj43rn6mav7allx";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     gettext
-    itstool
     libxml2
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) shared-mime-info;
 

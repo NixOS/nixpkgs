@@ -32,9 +32,9 @@ Given that most of the OCaml ecosystem is now built with dune, nixpkgs includes 
 
 Here is a simple package example.
 
-- It defines an (optional) attribute `minimalOCamlVersion` that will be used to
-  throw a descriptive evaluation error if building with an older OCaml is
-  attempted.
+- It defines an (optional) attribute `minimalOCamlVersion` (see note below)
+  that will be used to throw a descriptive evaluation error if building with
+  an older OCaml is attempted.
 
 - It uses the `fetchFromGitHub` fetcher to get its source.
 
@@ -117,3 +117,11 @@ buildDunePackage rec {
   };
 }
 ```
+
+Note about `minimalOCamlVersion`.  A deprecated version of this argument was
+spelled `minimumOCamlVersion`; setting the old attribute wrongly modifies the
+derivation hash and is therefore inappropriate. As a technical dept, currently
+packaged libraries may still use the old spelling: maintainers are invited to
+fix this when updating packages. Massive renaming is strongly discouraged as it
+would be challenging to review, difficult to test, and will cause unnecessary
+rebuild.

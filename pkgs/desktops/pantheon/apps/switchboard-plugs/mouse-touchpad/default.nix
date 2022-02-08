@@ -29,11 +29,12 @@ stdenv.mkDerivation rec {
     sha256 = "0nqgbpk1knvbj5xa078i0ka6lzqmaaa873gwj3mhjr5q2gzkw7y5";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      touchegg = touchegg;
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -54,12 +55,11 @@ stdenv.mkDerivation rec {
     touchegg
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      touchegg = touchegg;
-    })
-  ];
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Mouse & Touchpad Plug";
