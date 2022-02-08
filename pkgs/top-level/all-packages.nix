@@ -8180,7 +8180,9 @@ with pkgs;
 
   pulsemixer = callPackage ../tools/audio/pulsemixer { };
 
-  pwsafe = callPackage ../applications/misc/pwsafe { };
+  pwsafe = callPackage ../applications/misc/pwsafe {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices AVFoundation Carbon;
+  };
 
   neil = callPackage ../development/tools/neil { };
 

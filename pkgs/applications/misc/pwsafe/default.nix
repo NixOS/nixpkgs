@@ -1,8 +1,28 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, zip, gettext, perl
-, wxGTK30, libXext, libXi, libXt, libXtst, xercesc
-, qrencode, libuuid, libyubikey, yubikey-personalization
-, curl, openssl, file
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gettext
+, perl
+, pkg-config
+, zip
+, ApplicationServices
+, AVFoundation
+, Carbon
+, curl
+, file
+, libXext
+, libXi
+, libXt
+, libXtst
+, libuuid
+, libyubikey
+, qrencode
+, openssl
+, wxGTK30
+, wxmac
+, xercesc
+, yubikey-personalization
 }:
 
 stdenv.mkDerivation rec {
@@ -18,13 +38,32 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake gettext perl pkg-config zip
+    cmake
+    gettext
+    perl
+    pkg-config
+    zip
   ];
+
   buildInputs = [
-    libXext libXi libXt libXtst wxGTK30
-    curl qrencode libuuid openssl xercesc
-    libyubikey yubikey-personalization
+    curl
     file
+    libXext
+    libXi
+    libXt
+    libXtst
+    libuuid
+    libyubikey
+    qrencode
+    openssl
+    xercesc
+    yubikey-personalization
+  ] ++ lib.optionals (!stdenv.isDarwin) [ wxGTK30 ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      ApplicationServices
+      AVFoundation
+      Carbon
+      wxmac
   ];
 
   cmakeFlags = [
@@ -64,7 +103,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://pwsafe.org/";
     maintainers = with maintainers; [ c0bw3b pjones ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.artistic2;
   };
 }
