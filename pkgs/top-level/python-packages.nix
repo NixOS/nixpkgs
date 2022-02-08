@@ -692,8 +692,6 @@ in {
 
   asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
 
-  asyncio-nats-client = callPackage ../development/python-modules/asyncio-nats-client { };
-
   asyncio-rlock = callPackage ../development/python-modules/asyncio-rlock { };
 
   asyncmy = callPackage ../development/python-modules/asyncmy { };
@@ -5318,6 +5316,8 @@ in {
   napari-svg = callPackage ../development/python-modules/napari-svg { };
 
   nassl = callPackage ../development/python-modules/nassl { };
+
+  nats-py = callPackage ../development/python-modules/nats-py { };
 
   nats-python = callPackage ../development/python-modules/nats-python { };
 
