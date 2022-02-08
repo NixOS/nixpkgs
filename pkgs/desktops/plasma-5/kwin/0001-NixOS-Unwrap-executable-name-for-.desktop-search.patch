@@ -63,11 +63,11 @@ index 0000000..726065d
 +
 +}// namespace
 +
-+#endif // SERVICE_UTILS_H
-diff --git a/src/service_utils.h b/src/service_utils.h
++#endif // NIXOS_UTILS_H
+diff --git a/src/utils/serviceutils.h b/src/utils/serviceutils.h
 index 8a70c1f..475b15d 100644
---- a/src/service_utils.h
-+++ b/src/service_utils.h
+--- a/src/utils/serviceutils.h
++++ b/src/utils/serviceutils.h
 @@ -19,6 +19,7 @@
  #include <QLoggingCategory>
  //KF
