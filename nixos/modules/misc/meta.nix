@@ -54,6 +54,18 @@ in
         '';
       };
 
+      buildDocsInSandbox = mkOption {
+        type = types.bool // {
+          merge = loc: defs: defs;
+        };
+        internal = true;
+        default = false;
+        description = ''
+          This is an effectless placeholder, so modules from master don't fail to evaluate on systems based on nixos-21.11.
+          See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/149532"/>
+        '';
+      };
+
     };
   };
 
