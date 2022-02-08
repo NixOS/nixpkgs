@@ -82,8 +82,8 @@ in
       sha256 = {
         x86_64-linux = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
         x86_64-darwin = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
-        aarch64-linux = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
-        aarch64-darwin = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
+        aarch64-linux = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
+        aarch64-darwin = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
       };
       jdk = jdk11_headless;
       untarDir = "${pname}-${version}";
