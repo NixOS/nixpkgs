@@ -38,6 +38,10 @@ buildPythonPackage rec {
     "test_cli"
     "test_timedated"
     "test_upower"
+    # needs glib
+    "test_accounts_service"
+    # needs dbus-daemon active
+    "test_systemd"
     # Very slow, consider disabling?
     # "test_networkmanager"
   ];

@@ -383,6 +383,7 @@ mapAliases ({
   gmailieer = lieer; # Added 2020-04-19
   gmic_krita_qt = gmic-qt-krita; # Added 2019-09-07
   gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # Added 2021-03-08
+  gnash = throw "gnash has been removed; broken and abandoned upstream."; # added 2022-02-06
   gnome-passwordsafe = gnome-secrets; # added 2022-01-30
   gnome-mpv = celluloid; # Added 2019-08-22
   gnome-sharp = throw "gnome-sharp has been removed from nixpkgs"; # Added 2022-01-15
@@ -731,7 +732,7 @@ mapAliases ({
   mpd_clientlib = libmpdclient; # Added 2021-02-11
   mpich2 = mpich; # Added 2018-08-06
   msf = metasploit; # Added 2018-04-25
-  multimc = throw "multimc was removed from nixpkgs; use polymc instead"; # Added 2022-01-08
+  multimc = throw "multimc was removed from nixpkgs; use polymc instead (see https://github.com/NixOS/nixpkgs/pull/154051 for more information)"; # Added 2022-01-08
   mumble_git = pkgs.mumble; # Added 2019-08-01
   murmur_git = pkgs.murmur; # Added 2019-08-01
   mysql-client = hiPrio mariadb.client;

@@ -1,6 +1,6 @@
-{ lib, buildGo117Module, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "cmctl";
   version = "1.7.1";
 
