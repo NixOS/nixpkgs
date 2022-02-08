@@ -19,6 +19,11 @@ buildPythonPackage rec {
     sha256 = "16f2742r9p3mrg2nz8lnkgsxabbjga2qnp9vzq59026q6mmfwkm9";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"0.0.0"' '"${version}"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -34,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client for getting garage occupancy in Amsterdam";
-    homepage = "https://github.com/klaasnicolaas/garages_amsterdam";
+    homepage = "https://github.com/klaasnicolaas/python-garages-amsterdam";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
