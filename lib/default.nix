@@ -71,7 +71,8 @@ let
       mod compare splitByAndCompare functionArgs setFunctionArgs isFunction
       toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
-      composeManyExtensions makeExtensible makeExtensibleWithCustomName;
+      composeManyExtensions makeExtensible makeExtensibleWithCustomName
+      encapsulate;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
