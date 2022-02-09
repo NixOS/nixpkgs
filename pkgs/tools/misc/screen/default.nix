@@ -23,12 +23,6 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     });
 
-  postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
-    # XXX: Awful hack to allow cross-compilation.
-    '' sed -i ./configure \
-           -e 's/^as_fn_error .. \("cannot run test program while cross compiling\)/$as_echo \1/g'
-    ''; # "
-
   nativeBuildInputs = [
     autoreconfHook
   ];
