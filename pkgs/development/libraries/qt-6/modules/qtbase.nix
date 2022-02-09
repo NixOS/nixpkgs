@@ -460,12 +460,14 @@ stdenv.mkDerivation rec {
     echo "patching output paths in $dev/lib/cmake ..."
     find $dev/lib/cmake -name '*.cmake' -print0 \
       | xargs -0 ${patch-cmake-files-sh} \
-      qtCompatVersion=${qtCompatVersion} \
+      patch \
+      QT_COMPAT_VERSION=${qtCompatVersion} \
       QT_MODULE_NAME=${lib.toUpper pname} \
       NIX_OUT_PATH=$out \
       NIX_DEV_PATH=$dev \
       NIX_BIN_PATH=$bin \
-      REGEX_FILE=${patch-cmake-files-regex-diff} --
+      REGEX_FILE=${patch-cmake-files-regex-diff} \
+      --
     echo "patching output paths in $dev/lib/cmake done"
 
     # TODO generate qt.conf from buildInputs -> qmake -qtconf /path/to/qt.conf

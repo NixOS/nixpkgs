@@ -1,4 +1,4 @@
--^# Compute the installation prefix relative to this file\.\n.*?set\(_IMPORT_PREFIX ""\)\nendif\(\)
+-# Compute the installation prefix relative to this file\.\n.*?set\(_IMPORT_PREFIX ""\)\nendif\(\)
 +set(_((QT_MODULE_NAME))_NIX_OUT "((NIX_OUT_PATH))")\nset(_((QT_MODULE_NAME))_NIX_DEV "((NIX_DEV_PATH))")\nset(_((QT_MODULE_NAME))_NIX_BIN "((NIX_BIN_PATH))")
 /s
 
@@ -15,7 +15,7 @@
 /g
 
 -\${_IMPORT_PREFIX}/(\./)?plugins
-+\${_((QT_MODULE_NAME))_NIX_BIN}/lib/qt-((qtCompatVersion))/plugins
++\${_((QT_MODULE_NAME))_NIX_BIN}/lib/qt-((QT_COMPAT_VERSION))/plugins
 /g
 
 # all qt binaries are devTools
@@ -28,7 +28,7 @@
 /g
 
 -\${_IMPORT_PREFIX}/(\./)?qml
-+\${_((QT_MODULE_NAME))_NIX_OUT}/lib/qt-((qtCompatVersion))/lib/qml
++\${_((QT_MODULE_NAME))_NIX_OUT}/lib/qt-((QT_COMPAT_VERSION))/lib/qml
 /g
 
 -set\(_IMPORT_PREFIX\)

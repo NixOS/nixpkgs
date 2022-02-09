@@ -2,52 +2,68 @@
 
 # patch files
 
-# first group of parameters are key=val pairs
+# first argument is "patch"
+# first group of arguments are key=val pairs
 # group delimiter: --
-# second group of parameters are files to patch
+# second group of arguments are files to patch
 
 # perl must be in $PATH
 
 set -eu
 
+log() {
+  echo "$0: $*" >&2
+}
+
+if [ $# = 0 ] || [ "$1" != patch ]; then
+  log "fatal error: first argument must be 'patch'"
+  log "hint: this script should not be in buildInputs"
+  exit 1
+fi
+shift
+
+log "arguments: $*" # debug
+
 for arg in "$@"
 do
-  [ "$arg" = "--" ] && { shift; break; }
-  #echo "$0 eval $arg" # debug
-  eval "$arg"
-  shift
+  case "$arg" in
+    *=*) log "eval $arg"; eval "$arg"; shift;;
+    --) shift; break;;
+    *) log "fatal error: bad argument '$arg'. expected key=val or --"; exit 1;;
+  esac
 done
 
 if [ $# = 0 ]; then
-    echo "$0: no files in argv -> ignore"
-    exit 0
+  log "no files to patch -> ignore"
+  exit 0
 fi
 
-echo "$0: patching $# files"
+log "patching $# files"
 
-# debug
-if false; then
 cat <<EOF
 $0: debug:
   REGEX_FILE = $REGEX_FILE
-  qtCompatVersion = $qtCompatVersion
+  QT_COMPAT_VERSION = $QT_COMPAT_VERSION
   QT_MODULE_NAME = $QT_MODULE_NAME
   NIX_OUT_PATH = $NIX_OUT_PATH
   NIX_DEV_PATH = $NIX_DEV_PATH
   NIX_BIN_PATH = $NIX_BIN_PATH
 EOF
+
+if ! [ -e "$REGEX_FILE" ]; then
+  log "fatal error: missing REGEX_FILE: $REGEX_FILE"
+  exit 1
 fi
 
-#echo "$0: build regex" # debug
+log "build regex"
 
-# / -> \/
 escape_b() {
-  echo "${1//\//\\\/}";
+  echo "$1" | sed 's,/,\\/,g'
 }
 
-regex="$( ( echo; cat $REGEX_FILE; echo ) | perl -p -0 -e '
+regex="$( ( echo; cat "$REGEX_FILE"; echo ) | perl -p -0 -e '
   s/\n#[^\n]*/\n/g;
-  s/\(\(qtCompatVersion\)\)/'"$qtCompatVersion"'/g;
+  s/\(\(QT_COMPAT_VERSION\)\)/'"$QT_COMPAT_VERSION"'/g;
   s/\(\(QT_MODULE_NAME\)\)/'"$QT_MODULE_NAME"'/g;
   s/\(\(NIX_OUT_PATH\)\)/'"$(escape_b "$NIX_OUT_PATH")"'/g;
   s/\(\(NIX_DEV_PATH\)\)/'"$(escape_b "$NIX_DEV_PATH")"'/g;
@@ -56,8 +72,8 @@ regex="$( ( echo; cat $REGEX_FILE; echo ) | perl -p -0 -e '
   s/\n-([^\n]+)\n\+([^\n]*)(?:\n\/([^\n]+))?\n/s\/\1\/\2\/\3;\n/g
 ')"
 
-echo "$0: regex:"; echo "$regex" # debug
+log "regex:"; echo "$regex" # debug
 
-#echo "$0: $# input files:"; for f in "$@"; do echo "  $f"; done # debug
+#log "$# input files:"; for f in "$@"; do echo "  $f"; done # debug
 
 exec perl -00 -p -i -e "$regex" "$@"
