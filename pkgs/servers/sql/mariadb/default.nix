@@ -10,6 +10,7 @@
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , cracklib, judy, libevent, libxml2
 , linux-pam, numactl, pmdk
+, fmt_8
 , withStorageMroonga ? true, kytea, libsodium, msgpack, zeromq
 , withStorageRocks ? true
 }:
@@ -173,7 +174,8 @@ in stdenv.mkDerivation (common // {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
     ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) pmdk.dev
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
-    ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ];
+    ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
+    ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
 
   patches = common.patches;
 
@@ -247,5 +249,10 @@ in {
     # Supported until 2026-07
     version = "10.6.6";
     sha256 = "1hz1iwkgrlhhrn5ypxszfp5ngfmfakjxl3ihzsm4845xhzn1fr77";
+  };
+  mariadb_107 = mariadbPackage {
+    # Supported until 2023-02
+    version = "10.7.2";
+    sha256 = "1cx5s8vq7s3r4w1drmp549kl2nyijzq6ds2mcjyzc7bk9ylipx6p";
   };
 }
