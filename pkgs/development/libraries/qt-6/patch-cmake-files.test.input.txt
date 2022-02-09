@@ -1,0 +1,55 @@
+# set all paths in file header
+# Compute the installation prefix relative to this file.
+if...
+  ...
+  set(_IMPORT_PREFIX "")
+endif()
+
+# unset all paths in file footer
+set(_IMPORT_PREFIX)
+
+# include
+${_IMPORT_PREFIX}/include
+${_IMPORT_PREFIX}/./include
+
+# libexec
+${_IMPORT_PREFIX}/libexec
+${_IMPORT_PREFIX}/./libexec
+${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}/${INSTALL_LIBEXECDIR}
+
+# qtbase libexec
+${QtBase_SOURCE_DIR}/libexec
+
+# lib
+${_IMPORT_PREFIX}/lib
+${_IMPORT_PREFIX}/./lib
+${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}/${INSTALL_LIBDIR}
+
+# plugins
+${_IMPORT_PREFIX}/plugins
+${_IMPORT_PREFIX}/./plugins
+
+# bin
+# all qt binaries are devTools
+${_IMPORT_PREFIX}/bin
+${_IMPORT_PREFIX}/./bin
+${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}/${INSTALL_BINDIR}
+
+# mkspecs
+${_IMPORT_PREFIX}/mkspecs
+${_IMPORT_PREFIX}/./mkspecs
+${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}/${INSTALL_MKSPECSDIR}
+${CMAKE_CURRENT_LIST_DIR}/../mkspecs
+${CMAKE_CURRENT_BINARY_DIR}/mkspecs
+${CMAKE_CURRENT_LIST_DIR}/../mkspecs
+${CMAKE_CURRENT_BINARY_DIR}/mkspecs
+
+# qml
+${_IMPORT_PREFIX}/qml
+${_IMPORT_PREFIX}/./qml
+
+# doc
+${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}/${INSTALL_DOCDIR}
+
+# add INTERFACE_LINK_DIRECTORIES
+(  INTERFACE_INCLUDE_DIRECTORIES )

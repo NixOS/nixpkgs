@@ -1,0 +1,56 @@
+# set all paths in file header
+set(_QTBASE_NIX_OUT "/nix/store/xxxx-out")
+set(_QTBASE_NIX_DEV "/nix/store/xxxx-dev")
+set(_QTBASE_NIX_BIN "/nix/store/xxxx-bin")
+
+# unset all paths in file footer
+set(_QTBASE_NIX_OUT)
+set(_QTBASE_NIX_DEV)
+set(_QTBASE_NIX_BIN)
+
+# include
+${_QTBASE_NIX_DEV}/include
+${_QTBASE_NIX_DEV}/include
+
+# libexec
+${_QTBASE_NIX_OUT}/libexec
+${_QTBASE_NIX_OUT}/libexec
+/nix/store/xxxx-out/libexec
+
+# qtbase libexec
+${QtBase_BINARY_DIR}/libexec
+
+# lib
+${_QTBASE_NIX_OUT}/lib
+${_QTBASE_NIX_OUT}/lib
+/nix/store/xxxx-out/lib
+
+# plugins
+${_QTBASE_NIX_BIN}/lib/qt-6.2.2/plugins
+${_QTBASE_NIX_BIN}/lib/qt-6.2.2/plugins
+
+# bin
+# all qt binaries are devTools
+${_QTBASE_NIX_DEV}/bin
+${_QTBASE_NIX_DEV}/bin
+/nix/store/xxxx-dev/bin
+
+# mkspecs
+${_QTBASE_NIX_DEV}/mkspecs
+${_QTBASE_NIX_DEV}/mkspecs
+/nix/store/xxxx-dev/mkspecs
+/nix/store/xxxx-dev/mkspecs
+/nix/store/xxxx-dev/mkspecs
+/nix/store/xxxx-dev/mkspecs
+/nix/store/xxxx-dev/mkspecs
+
+# qml
+${_QTBASE_NIX_OUT}/lib/qt-6.2.2/lib/qml
+${_QTBASE_NIX_OUT}/lib/qt-6.2.2/lib/qml
+
+# doc
+/nix/store/xxxx-out/share/doc
+
+# add INTERFACE_LINK_DIRECTORIES
+(  INTERFACE_LINK_DIRECTORIES "${_QTBASE_NIX_OUT}/lib"
+  INTERFACE_INCLUDE_DIRECTORIES )
