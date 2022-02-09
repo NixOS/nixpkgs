@@ -20,6 +20,8 @@ self = stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
     substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+    substituteInPlace cmake/fido2.cmake \
+    --replace ''$\{MY_PKG_CONFIG_EXECUTABLE\} "${pkg-config}/bin/pkg-config"
   '';
 
   buildInputs = [
