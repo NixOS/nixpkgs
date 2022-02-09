@@ -23539,7 +23539,7 @@ with pkgs;
 
   go-font = callPackage ../data/fonts/go-font { };
 
-  graphite-gtk-theme = callPackage ../data/themes/graphite { };
+  graphite-gtk-theme = callPackage ../data/themes/graphite-gtk-theme { };
 
   graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme { };
 
