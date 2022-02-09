@@ -1,19 +1,22 @@
-{ lib, stdenv, fetchzip, makeDesktopItem, makeWrapper
-, jre
+{ lib
+, stdenv
+, fetchzip
+, makeDesktopItem
+, makeWrapper
+, openjdk11
 }:
 
 stdenv.mkDerivation rec {
   pname = "ganttproject-bin";
-  version = "2.8.10";
+  version = "3.1.3100";
 
-  src = let build = "r2364"; in fetchzip {
-    sha256 = "0cclgyqv4f9pjsdlh93cqvgbzrp8ajvrpc2xszs03sknqz2kdh7r";
-    url = "https://dl.ganttproject.biz/ganttproject-${version}/"
-        + "ganttproject-${version}-${build}.zip";
+  src = fetchzip {
+    sha256 = "sha256-hw2paak0P670/kemiuqYHIaN0uUtkVKy+AX2X7OdnJ4=";
+    url = "https://dl.ganttproject.biz/ganttproject-${version}/ganttproject-${version}.zip";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  buildInputs = [ openjdk11 ];
 
   installPhase = let
 
@@ -27,9 +30,7 @@ stdenv.mkDerivation rec {
       categories = "Office;";
     };
 
-    javaOptions = [
-      "-Dawt.useSystemAAFontSettings=on"
-    ];
+    javaOptions = [ "-Dawt.useSystemAAFontSettings=on" ];
 
   in ''
     mkdir -pv "$out/share/ganttproject"
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
     mkdir -pv "$out/bin"
     wrapProgram "$out/share/ganttproject/ganttproject" \
-      --set JAVA_HOME "${jre}" \
+      --set JAVA_HOME "${openjdk11}" \
       --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
 
     mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
