@@ -21503,6 +21503,7 @@ with pkgs;
     mariadb_105
     mariadb_106
     mariadb_107
+    mariadb_108
   ;
   mariadb = mariadb_106;
 
