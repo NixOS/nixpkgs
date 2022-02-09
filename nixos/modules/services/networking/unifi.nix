@@ -33,6 +33,9 @@ let
             description = ''
                 The gateway configuration as per https://help.ui.com/hc/en-us/articles/215458888-UniFi-USG-Advanced-Configuration-Using-config-gateway-json as nix path to a JSON file.
             '';
+            example = ''
+               { config.services.unifi.sites.default.configGatewayFile = ./config.gateway.json; }
+            '';
         };
     };
   };
