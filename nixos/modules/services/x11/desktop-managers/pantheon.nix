@@ -135,6 +135,7 @@ in
       services.bamf.enable = true;
       services.colord.enable = mkDefault true;
       services.fwupd.enable = mkDefault true;
+      services.packagekit.enable = mkDefault true;
       services.touchegg.enable = mkDefault true;
       services.touchegg.package = pkgs.pantheon.touchegg;
       services.tumbler.enable = mkDefault true;
