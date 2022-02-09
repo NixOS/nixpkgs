@@ -22,6 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-Y8IgqrU8zzV020qwyyb57Tp2j7laQ3JsCOCYBuf8vsQ=";
   };
 
+  postPatch = ''
+    # upstream issue for proper solution https://github.com/cmroche/greeclimate/issues/46
+    substituteInPlace setup.py \
+      --replace 'name="greeclimate",' 'name="greeclimate",version="${version}",'
+  '';
+
   propagatedBuildInputs = [
     netifaces
     pycryptodome

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../.. -i bash -p msbuild dotnet-sdk_3 jq xmlstarlet curl
+#!nix-shell -I nixpkgs=../../../../.. -i bash -p dotnet-sdk_6 jq xmlstarlet curl
 set -euo pipefail
 
 cat << EOL
@@ -18,7 +18,7 @@ mapfile -t repos < <(
         done
     )
 
-msbuild -t:restore -p:Configuration=Release -p:RestorePackagesPath="$tmpdir" \
+dotnet msbuild -t:restore -p:Configuration=Release -p:RestorePackagesPath="$tmpdir" \
         -p:RestoreNoCache=true -p:RestoreForce=true \
         src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj >&2
 

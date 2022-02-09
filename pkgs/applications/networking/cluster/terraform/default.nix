@@ -86,7 +86,26 @@ let
               withPlugins (x: newplugins x ++ actualPlugins);
             full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p));
 
-            # Ouch
+            # Expose wrappers around the override* functions of the terraform
+            # derivation.
+            #
+            # Note that this does not behave as anyone would expect if plugins
+            # are specified. The overrides are not on the user-visible wrapper
+            # derivation but instead on the function application that eventually
+            # generates the wrapper. This means:
+            #
+            # 1. When using overrideAttrs, only `passthru` attributes will
+            #    become visible on the wrapper derivation. Other overrides that
+            #    modify the derivation *may* still have an effect, but it can be
+            #    difficult to follow.
+            #
+            # 2. Other overrides may work if they modify the terraform
+            #    derivation, or they may have no effect, depending on what
+            #    exactly is being changed.
+            #
+            # 3. Specifying overrides on the wrapper is unsupported.
+            #
+            # See nixpkgs#158620 for details.
             overrideDerivation = f:
               (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
             overrideAttrs = f:
@@ -104,6 +123,12 @@ let
           lib.appendToName "with-plugins" (stdenv.mkDerivation {
             inherit (terraform) name meta;
             nativeBuildInputs = [ makeWrapper ];
+
+            # Expose the passthru set with the override functions
+            # defined above, as well as any passthru values already
+            # set on `terraform` at this point (relevant in case a
+            # user overrides attributes).
+            passthru = terraform.passthru // passthru;
 
             buildCommand = ''
               # Create wrappers for terraform plugins because Terraform only
@@ -128,8 +153,6 @@ let
                 --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
                 --prefix PATH : "${lib.makeBinPath wrapperInputs}"
             '';
-
-            inherit passthru;
           });
     in
     withPlugins (_: [ ]);

@@ -5144,7 +5144,7 @@ with pkgs;
   escrotum = callPackage ../tools/graphics/escrotum { };
 
   etcher = callPackage ../tools/misc/etcher {
-    electron = electron_14;
+    electron = electron_12;
   };
 
   ethercalc = callPackage ../servers/web-apps/ethercalc { };
@@ -9641,10 +9641,6 @@ with pkgs;
   shotwell = callPackage ../applications/graphics/shotwell { };
 
   shout = nodePackages.shout;
-
-  shellinabox = callPackage ../servers/shellinabox {
-    openssl = openssl_1_0_2;
-  };
 
   shrikhand = callPackage ../data/fonts/shrikhand { };
 
@@ -17890,9 +17886,7 @@ with pkgs;
 
   libinklevel = callPackage ../development/libraries/libinklevel { };
 
-  libnats-c = callPackage ../development/libraries/libnats-c {
-    openssl = openssl_1_0_2;
-  };
+  libnats-c = callPackage ../development/libraries/libnats-c { };
 
   liburing = callPackage ../development/libraries/liburing { };
 
@@ -21470,9 +21464,7 @@ with pkgs;
 
   libpulseaudio = libpulseaudio-vanilla;
 
-  easyeffects = callPackage ../applications/audio/easyeffects {
-    glibmm = glibmm_2_68;
-  };
+  easyeffects = callPackage ../applications/audio/easyeffects { };
 
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy {
     boost = boost172;
@@ -30149,6 +30141,8 @@ with pkgs;
 
   clightning = callPackage ../applications/blockchains/clightning { };
 
+  besu = callPackage ../applications/blockchains/besu { };
+
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
     boost = boost165;
     withGui = true;
@@ -31559,6 +31553,8 @@ with pkgs;
   zeroad = zeroadPackages.zeroad;
 
   _0verkill = callPackage ../games/0verkill { };
+
+  _7kaa = callPackage ../games/7kaa { };
 
   hhexen = callPackage ../games/hhexen { };
 
@@ -34445,7 +34441,7 @@ with pkgs;
     jami-daemon jami-libclient jami-client-gnome jami-client-qt;
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron {
-    electron = electron_13;
+    electron = electron_16;
   };
 
   zenstates = callPackage ../os-specific/linux/zenstates {};

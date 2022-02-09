@@ -132,12 +132,12 @@ in rec {
 
   cpu = mkTmuxPlugin {
     pluginName = "cpu";
-    version = "unstable-2020-07-25";
+    version = "unstable-2021-12-15";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-cpu";
-      rev = "20120a38ade17057441482b43eb5390e6ea2c1c1";
-      sha256 = "1gdz2awyd9icvyiw2p40gwymh6ngjhb9mkiv63ix53snp9ii794i";
+      rev = "9eb3dba66672c5b43065e144cc3a1031f77ad67e";
+      sha256 = "sha256-v/jZxsa+JwsSKjmA32VK/4gBNHP/SyOzTaYSSz2c0+4=";
     };
   };
 
@@ -523,12 +523,12 @@ in rec {
   tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
     rtpFilePath = "main.tmux";
-    version = "unstable-2020-12-07";
+    version = "unstable-2021-10-20";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "5efeb91086040a3becf5372fb38258acd0579954";
-      sha256 = "1z0zmsf8asxs9wbwvkiyd81h93wb2ikl8nxxc26sdpi6l333q5s9";
+      rev = "1801dd525b39154745ea668fb6916035023949e3";
+      sha256 = "e929Jqletmobp3WAR1tPU3pJuYTYVynxc5CvB80gig8=";
     };
     postInstall = ''
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
