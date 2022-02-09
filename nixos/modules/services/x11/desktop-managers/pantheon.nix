@@ -273,7 +273,7 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      environment.systemPackages = (with pkgs.pantheon; pkgs.gnome.removePackagesByName [
+      environment.systemPackages = with pkgs.pantheon; pkgs.gnome.removePackagesByName ([
         elementary-calculator
         elementary-calendar
         elementary-camera
@@ -287,7 +287,11 @@ in
         elementary-terminal
         elementary-videos
         epiphany
-      ] config.environment.pantheon.excludePackages);
+      ] ++ lib.optionals config.services.flatpak.enable [
+        # Only install appcenter if flatpak is enabled before
+        # https://github.com/NixOS/nixpkgs/issues/15932 is resolved.
+        appcenter
+      ]) config.environment.pantheon.excludePackages;
 
       # needed by screenshot
       fonts.fonts = [
