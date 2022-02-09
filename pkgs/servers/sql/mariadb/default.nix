@@ -235,8 +235,8 @@ in stdenv.mkDerivation (common // {
 in {
   mariadb_104 = mariadbPackage {
     # Supported until 2024-06-18
-    version = "10.4.22";
-    sha256 = "000ca1hdnj2jg051cjgdd2ralgwgh2p8nwb1x6b85202xdpc7ga4";
+    version = "10.4.23";
+    sha256 = "1wlhjd1xvk6p2lb93v8kfjk1scyjz882fx0i0sjyyk047mh2i852";
   };
   mariadb_105 = mariadbPackage {
     # Supported until 2025-06-24
