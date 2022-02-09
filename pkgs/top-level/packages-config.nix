@@ -13,7 +13,6 @@
       fdbPackages
       fusePackages
       gns3Packages
-      haskellPackages
       idrisPackages
       nodePackages
       nodePackages_latest
@@ -30,6 +29,13 @@
       zabbix50
       zeroadPackages
     ;
+
+    haskellPackages = super.haskellPackages // {
+      # mesos, which this depends on, has been removed from nixpkgs. We are keeping
+      # the error message for now, so users will get an error message they can make
+      # sense of, but need to work around it here.
+      hs-mesos = null;
+    };
 
     # This is an alias which we disallow by default; explicitly allow it
     emacs27Packages = emacs27.pkgs;

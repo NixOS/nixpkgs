@@ -1117,6 +1117,8 @@ with pkgs;
   mcaimi-st = callPackage ../applications/terminal-emulators/st/mcaimi-st.nix { };
   siduck76-st = callPackage ../applications/terminal-emulators/st/siduck76-st.nix { };
 
+  snowflake = callPackage ../tools/networking/snowflake { };
+
   stupidterm = callPackage ../applications/terminal-emulators/stupidterm {
     gtk = gtk3;
   };
@@ -1429,8 +1431,6 @@ with pkgs;
   ec2-ami-tools = callPackage ../tools/virtualization/ec2-ami-tools { };
 
   ec2-metadata-mock = callPackage ../development/tools/ec2-metadata-mock { };
-
-  ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
 
   exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
 
@@ -20677,6 +20677,8 @@ with pkgs;
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
 
+  clickhouse-backup = callPackage ../development/tools/database/clickhouse-backup { };
+
   couchdb3 = callPackage ../servers/http/couchdb/3.nix {
     erlang = erlangR22;
   };
@@ -33763,7 +33765,7 @@ with pkgs;
     jami-daemon jami-libclient jami-client-gnome jami-client-qt;
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron {
-    electron = electron_13;
+    electron = electron_16;
   };
 
   zenstates = callPackage ../os-specific/linux/zenstates {};

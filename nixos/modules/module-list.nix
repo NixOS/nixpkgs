@@ -51,6 +51,7 @@
   ./hardware/gkraken.nix
   ./hardware/flirc.nix
   ./hardware/i2c.nix
+  ./hardware/hackrf.nix
   ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
   ./hardware/keyboard/teck.nix
