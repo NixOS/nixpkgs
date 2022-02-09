@@ -49,10 +49,7 @@ let
     inherit pname version src;
     patches = args.patches or patches.${pname} or [ ];
 
-    buildInputs = (args.buildInputs or [ ]) ++ [
-      patch-cmake-files-sh
-      patch-cmake-files-regex-diff
-    ];
+    buildInputs = args.buildInputs or [ ];
 
     nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
       perl
