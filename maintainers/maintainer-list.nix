@@ -13842,4 +13842,10 @@
     github = "AmeerTaweel";
     githubId = 20538273;
   };
+  nigelgbanks = {
+    name = "Nigel Banks";
+    email = "nigel.g.banks@gmail.com";
+    github = "nigelgbanks";
+    githubId = 487373;
+  };
 }

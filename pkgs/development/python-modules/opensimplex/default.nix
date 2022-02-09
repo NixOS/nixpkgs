@@ -1,24 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
+, numpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "opensimplex";
-  version = "0.4";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "lmas";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0djc50v3hcay04a3i2g9qpviniyx98rkxsc6gmmrz2fyxsa5z5ya";
+    sha256 = "zljS0yu3cHF2Vz3rFkwLXiHnKjo970MDIrC/56FoHa4=";
   };
 
-  checkInputs = [ nose ];
-  checkPhase = ''
-    nosetests tests/
-  '';
+  propagatedBuildInputs = [ numpy ];
+
+  checkInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "tests/test_opensimplex.py" ];
   pythonImportsCheck = [ "opensimplex" ];
 
   meta = with lib; {

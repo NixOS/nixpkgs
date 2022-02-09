@@ -1,6 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, bash, makeWrapper, coreutils, gnugrep, ncurses, doCheck ? true }:
+{ resholvePackage
+, lib
+, fetchFromGitHub
+, bash
+, coreutils
+, gnugrep
+, ncurses
+, doInstallCheck ? true
+}:
 
-stdenv.mkDerivation rec {
+resholvePackage rec {
   pname = "bats";
   version = "1.5.0";
 
@@ -11,20 +19,34 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MEkMi2w8G9FZhE3JvzzbqObcErQ9WFXy5mtKwQOoxbk=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
   patchPhase = ''
     patchShebangs .
   '';
 
   installPhase = ''
     ./install.sh $out
-    wrapProgram $out/bin/bats --suffix PATH : "${lib.makeBinPath [ bash coreutils gnugrep ]}"
   '';
 
-  inherit doCheck;
-  checkInputs = [ ncurses ];
-  checkPhase = ''
+  solutions = {
+    bats = {
+      scripts = [ "bin/bats" ];
+      interpreter = "${bash}/bin/bash";
+      inputs = [ bash coreutils gnugrep ];
+      fake = {
+        external = [ "greadlink" ];
+      };
+      fix = {
+        "$BATS_ROOT" = [ "${placeholder "out"}" ];
+      };
+      keep = {
+        "${placeholder "out"}/libexec/bats-core/bats" = true;
+      };
+    };
+  };
+
+  inherit doInstallCheck;
+  installCheckInputs = [ ncurses ];
+  installCheckPhase = ''
     # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
     sed -i '/test works even if PATH is reset/a skip' test/bats.bats
 

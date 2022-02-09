@@ -88,6 +88,8 @@ with lib;
       The racoon module has been removed, because the software project was abandoned upstream.
     '')
 
+    (mkRemovedOptionModule [ "services" "shellinabox" ] "The corresponding package was removed from nixpkgs.")
+
     # Do NOT add any option renames here, see top of the file
   ];
 }

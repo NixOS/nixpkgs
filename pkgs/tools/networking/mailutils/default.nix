@@ -1,14 +1,36 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkg-config
-, gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
-, python3, gss, libmysqlclient, system-sendmail }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, dejagnu
+, gettext
+, gnum4
+, pkg-config
+, texinfo
+, fribidi
+, gdbm
+, gnutls
+, gss
+, guile
+, libmysqlclient
+, mailcap
+, nettools
+, pam
+, readline
+, ncurses
+, python3
+, sasl
+, system-sendmail
+}:
 
 stdenv.mkDerivation rec {
   pname = "mailutils";
-  version = "3.13";
+  version = "3.14";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-2SCXHctJh4oAmRF3T9ZATxPSe9EB4tWbZkooZZpAlMc=";
+    hash = "sha256-wMWzj+qLRaSvzUNkh/Knb9VSUJLQN4gTputVQsIScTk=";
   };
 
   postPatch = ''
@@ -19,12 +41,26 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook gettext pkg-config
+    autoreconfHook
+    gettext
+    gnum4
+    pkg-config
+    texinfo
   ];
 
   buildInputs = [
-    gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi
-    gss libmysqlclient python3
+    fribidi
+    gdbm
+    gnutls
+    gss
+    guile
+    libmysqlclient
+    mailcap
+    ncurses
+    pam
+    python3
+    readline
+    sasl
   ] ++ lib.optionals stdenv.isLinux [ nettools ];
 
   patches = [
@@ -47,6 +83,7 @@ stdenv.mkDerivation rec {
     "--with-mysql"
     "--with-path-sendmail=${system-sendmail}/bin/sendmail"
     "--with-mail-rc=/etc/mail.rc"
+    "DEFAULT_CUPS_CONFDIR=${mailcap}/etc" # provides mime.types to mimeview
   ];
 
   readmsg-tests = let

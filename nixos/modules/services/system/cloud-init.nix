@@ -143,7 +143,7 @@ in
                   "sshd.service" "sshd-keygen.service" ];
         after = [ "network-online.target" "cloud-init-local.service" ];
         before = [ "sshd.service" "sshd-keygen.service" ];
-        requires = [ "network.target "];
+        requires = [ "network.target"];
         path = path;
         serviceConfig =
           { Type = "oneshot";
