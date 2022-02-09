@@ -30969,10 +30969,11 @@ with pkgs;
     inherit (darwin) libiconv;
     inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa;
   })
-    minetestclient_4 minetestserver_4
     minetestclient_5 minetestserver_5;
 
-  minetest = minetestclient_5;
+  minetest = minetestclient;
+  minetestclient = minetestclient_5;
+  minetestserver = minetestserver_5;
 
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
