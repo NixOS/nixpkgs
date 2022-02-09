@@ -166,8 +166,8 @@
   },
   "qtwayland": {
     "url": "https://invent.kde.org/qt/qt/qtwayland.git",
-    "rev": "ce2caf493a1343fbd9f8e4c85baf6a61c057f242",
-    "sha256": "18hcgwxrxxn9q7vgfdc534if55ma673r8vb9c55v2inp7yngwvms"
+    "rev": "214f7ab9d3384a4123f14d9f6cd0205cf0aaa794",
+    "sha256": "1qd64w5c16gmpgi936dfjc0pn1a1rbs752k8lfqv2xwysx7qkqwi"
   },
   "qtwebchannel": {
     "url": "https://invent.kde.org/qt/qt/qtwebchannel.git",
