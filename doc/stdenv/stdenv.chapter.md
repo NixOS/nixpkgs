@@ -319,7 +319,7 @@ For information about how to run the updates, execute `nix-shell maintainers/scr
 
 ### Recursive attributes in `mkDerivation`
 
-If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, considering use of `overrideAttrs`. For example:
+If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
 
 ```nix
 mkDerivation (finalAttrs: {
