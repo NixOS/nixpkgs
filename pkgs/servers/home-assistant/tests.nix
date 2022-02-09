@@ -13,6 +13,7 @@ let
     google_translate = [ mutagen ];
     nest = [ ha-av ];
     onboarding = [ pymetno rpi-bad-power ];
+    version = [ aioaseko ];
     voicerss = [ mutagen ];
     yandextts = [ mutagen ];
     zha = [ pydeconz ];
