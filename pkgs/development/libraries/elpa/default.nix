@@ -13,12 +13,14 @@
 , cudatoolkit
 } :
 
-# The standard Scalapack has no iLP64 interface
-assert (!blas.isILP64) && (!lapack.isILP64);
+assert blas.isILP64 == lapack.isILP64;
+assert blas.isILP64 == scalapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "elpa";
   version = "2021.11.001";
+
+  passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
@@ -60,7 +62,8 @@ stdenv.mkDerivation rec {
     "--with-mpi"
     "--enable-openmp"
     "--without-threading-support-check-during-build"
-  ] ++ lib.optional (!avxSupport) "--disable-avx"
+  ] ++ lib.optional blas.isILP64 "--enable-64bit-integer-math-support"
+    ++ lib.optional (!avxSupport) "--disable-avx"
     ++ lib.optional (!avx2Support) "--disable-avx2"
     ++ lib.optional (!avx512Support) "--disable-avx512"
     ++ lib.optional (!stdenv.hostPlatform.isx86_64) "--disable-sse"
