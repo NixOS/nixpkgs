@@ -68,10 +68,9 @@ assert nugetDeps == null -> throw "Defining the `nugetDeps` attribute is require
 
 let
   _nugetDeps = linkFarmFromDrvs "${name}-nuget-deps" (import nugetDeps {
-    fetchNuGet = { pname, version, sha256 }: fetchurl {
+    fetchNuGet = { pname, version, url ? "https://www.nuget.org/api/v2/package/${pname}/${version}", sha256 }: fetchurl {
       name = "${pname}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
-      inherit sha256;
+      inherit url sha256;
     };
   });
   _localDeps = linkFarmFromDrvs "${name}-local-nuget-deps" projectReferences;
