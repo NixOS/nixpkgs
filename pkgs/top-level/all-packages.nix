@@ -24580,6 +24580,8 @@ with pkgs;
       inherit (gnome2) libglade;
   };
 
+  calcure = callPackage ../applications/misc/calcure { };
+
   calcurse = callPackage ../applications/misc/calcurse { };
 
   calculix = callPackage ../applications/science/math/calculix {};
