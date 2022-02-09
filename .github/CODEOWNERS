@@ -8,7 +8,7 @@
 # Mentioned users will get code review requests.
 
 # Release managers, release branch only
-/ @jonringer
+* @jonringer
 
 # This file
 /.github/CODEOWNERS @edolstra
