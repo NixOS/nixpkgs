@@ -2,11 +2,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "trinsic-cli";
-  version = "1.1.2";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://github.com/trinsic-id/sdk/releases/download/v${version}/trinsic-cli-vendor-${version}.tar.gz";
-    sha256 = "7e5377e8460ebb1253b9974e02d0077ffc58f2b4712cf7896f1bef7e9f580cd4";
+    sha256 = "4ec8a02cf7cd31822668e97befe96f0a7a32b1103abfe27c1bff643d3bf16588";
   };
 
   cargoVendorDir = "vendor";

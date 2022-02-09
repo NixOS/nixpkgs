@@ -1,6 +1,6 @@
 { buildPythonPackage, lib, fetchPypi
 , pytestCheckHook, filelock, mock, pep8
-, cython
+, cython, setuptools-scm
 , six, pyshp, shapely, geos, numpy
 , gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
 , proj, flufl_lock
@@ -22,6 +22,13 @@ buildPythonPackage rec {
       --replace "test_osgb(" "dont_test_osgb(" \
       --replace "test_epsg(" "dont_test_epsg("
   '';
+
+  nativeBuildInputs = [
+    cython
+    geos # for geos-config
+    proj
+    setuptools-scm
+  ];
 
   buildInputs = [
     geos proj
@@ -46,12 +53,6 @@ buildPythonPackage rec {
     "test_nightshade_image"
     "background_img"
     "test_gridliner_labels_bbox_style"
-  ];
-
-  nativeBuildInputs = [
-    cython
-    geos # for geos-config
-    proj
   ];
 
   meta = with lib; {

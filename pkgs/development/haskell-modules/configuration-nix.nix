@@ -595,11 +595,6 @@ self: super: builtins.intersectAttrs super {
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
 
-      spagoWithOverrides = super.spago.override {
-        # spago has not yet been updated for the latest dhall.
-        dhall = self.dhall_1_38_1;
-      };
-
       spagoDocs = overrideCabal (drv: {
         postUnpack = (drv.postUnpack or "") + ''
           # Spago includes the following two files directly into the binary
@@ -625,7 +620,7 @@ self: super: builtins.intersectAttrs super {
             "$sourceRoot/templates/docs-search-app-0.0.11.js" \
             "$sourceRoot/templates/purescript-docs-search-0.0.11"
         '';
-      }) spagoWithOverrides;
+      }) super.spago;
 
       # Tests require network access.
       spagoWithoutChecks = dontCheck spagoDocs;

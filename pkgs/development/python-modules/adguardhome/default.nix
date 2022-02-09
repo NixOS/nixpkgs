@@ -23,6 +23,15 @@ buildPythonPackage rec {
     sha256 = "sha256-HAgt52Bo2NOUkpr5xvWTcRyrLKpfcBDlVAZxgDNI7hY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--cov" "" \
+      --replace '"0.0.0"' '"${version}"'
+
+    substituteInPlace tests/test_adguardhome.py \
+      --replace 0.0.0 ${version}
+  '';
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
@@ -35,10 +44,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace "--cov" ""
-  '';
 
   pythonImportsCheck = [ "adguardhome" ];
 
