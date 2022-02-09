@@ -4,6 +4,7 @@
 , autoreconfHook
 , libtool
 , pkg-config
+, psmisc
 , argp-standalone ? null
 , openssl
 , jitterentropy ? null, withJitterEntropy ? true
@@ -24,13 +25,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";
-  version = "6.14";
+  version = "6.15";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NTXp2l5gVxKhO4Gqcy4VzomYU5B3HydkefMvdzypK8M=";
+    hash = "sha256-km+MEng3VWZF07sdvGLbAG/vf8/A1DxhA/Xa2Y+LAEQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = "patchShebangs tests/*.sh";
+  checkInputs = [ psmisc ]; # rngtestjitter.sh needs killall
 
   doInstallCheck = true;
   installCheckPhase = ''
