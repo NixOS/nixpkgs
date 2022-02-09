@@ -3,7 +3,8 @@
 , ... }:
 
 tcl.mkTclDerivation {
-  name = "tk-${tcl.version}";
+  pname = "tk";
+  version = tcl.version;
 
   inherit src patches;
 
