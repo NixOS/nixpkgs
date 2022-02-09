@@ -2382,6 +2382,13 @@
     githubId = 11145016;
     name = "J.C.";
   };
+  congee = {
+    email = "changshengwu@pm.me";
+    matrix = "@congeec:matrix.org";
+    github = "congee";
+    name = "Changsheng Wu";
+    githubId = 2083950;
+  };
   contrun = {
     email = "uuuuuu@protonmail.com";
     github = "contrun";
