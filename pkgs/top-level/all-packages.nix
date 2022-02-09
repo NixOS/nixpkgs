@@ -659,6 +659,9 @@ with pkgs;
   buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
   buildDotnetModule = callPackage ../build-support/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/nuget-to-nix { };
+  nuget2nix = callPackage ../build-support/nuget2nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
