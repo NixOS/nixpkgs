@@ -690,7 +690,9 @@ in
     };
 
     assertions =
-      let badMachine = m: m.system == null && m.systems == [ ];
+      let
+        badMachine = m: m.system == null && m.systems == [ ];
+        machineWithKey = m: m.publicHostKey != null;
       in
       [
         {
@@ -703,6 +705,12 @@ in
           (concatStringsSep "\n      "
             (map (m: m.hostName)
               (filter (badMachine) cfg.buildMachines)));
+        }
+        {
+          assertion = any machineWithKey cfg.buildMachines -> isNixAtLeast "2.4pre";
+          message = ''
+            The nix.buildMachines.*.publicHostKey option only works with Nix >= 2.4.
+          '';
         }
       ];
 
