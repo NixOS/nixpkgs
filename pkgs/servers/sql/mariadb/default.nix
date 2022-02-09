@@ -240,8 +240,8 @@ in {
   };
   mariadb_105 = mariadbPackage {
     # Supported until 2025-06-24
-    version = "10.5.13";
-    sha256 = "0n0w1pyypv6wsknaqyykj3lc9zv6smji4q5jcf90w4rid330iw0n";
+    version = "10.5.14";
+    sha256 = "02y292mfvr6ils4m61lh9vy74z3w2xkz6xinpgg9wl5h7q29gzaf";
   };
   mariadb_106 = mariadbPackage {
     # Supported until 2026-07
