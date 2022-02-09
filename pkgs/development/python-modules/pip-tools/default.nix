@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "6.5.0";
+  version = "6.5.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0U6k/CwRjbKmr2WkNFqLmzVeeSrtrWv2TdPrl8X8X+4=";
+    sha256 = "sha256-gPViqmmfx2pCRTlpfgvvQeSQoFDlemohRoUxmBqdQZ4=";
   };
 
   checkInputs = [
