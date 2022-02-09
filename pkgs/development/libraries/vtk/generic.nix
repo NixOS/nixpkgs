@@ -94,6 +94,10 @@ in stdenv.mkDerivation rec {
     for lib in $out/lib/libvtk*.so; do
       ln -s $lib $out/lib/"$(basename "$lib" | sed -e 's/-[[:digit:]]*.[[:digit:]]*//g')"
     done
+
+    mv $out/include/vtk-${majorVersion}/* $out/include
+    rmdir $out/include/vtk-${majorVersion}
+    ln -s $out/include $out/include/vtk-${majorVersion}
   '';
 
   meta = with lib; {
