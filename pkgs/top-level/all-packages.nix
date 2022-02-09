@@ -9701,6 +9701,8 @@ with pkgs;
 
   sixpair = callPackage ../tools/misc/sixpair {};
 
+  skeema = callPackage ../tools/misc/skeema { };
+
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
   sks = callPackage ../servers/sks { };
