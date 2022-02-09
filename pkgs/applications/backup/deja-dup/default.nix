@@ -8,12 +8,12 @@
 , gettext
 , itstool
 , glib
-, gtk3
+, gtk4
 , coreutils
-, libsoup
+, libsoup_3
 , libsecret
-, libhandy
-, wrapGAppsHook
+, libadwaita
+, wrapGAppsHook4
 , libgpg-error
 , json-glib
 , duplicity
@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "deja-dup";
-  version = "42.8";
+  version = "43.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = version;
-    sha256 = "sha256-DkRqZAj47wzt4lDvhAbO0PYcRA7oHEo2k69IMLOD3Ps=";
+    sha256 = "sha256-iFrPx/m/nTdm7xVVd1SZh5QNpSqI+TCbMfx0/jLgc1c=";
   };
 
   patches = [
@@ -45,15 +45,15 @@ stdenv.mkDerivation rec {
     vala
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    libsoup
+    libsoup_3
     glib
-    gtk3
+    gtk4
     libsecret
-    libhandy
+    libadwaita
     libgpg-error
     json-glib
   ];
