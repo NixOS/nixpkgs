@@ -2,34 +2,48 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, pytestCheckHook
+, cmake
+, cython
+, scikit-build
+, python
+, numpy
 , hypothesis
 , pandas
-, numpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "1.9.1";
+  version = "2.0.2";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-aZqsQHrxmPqZARkqR1hWaj7XndOlCJjmWk1Cosx4skA=";
+    sha256 = "sha256-4gUh1GM5u1LuHAkMLz2iEpZDQvviAXenDbiOBE6cgjU=";
   };
+
+  nativeBuildInputs = [
+    cmake
+    cython
+    scikit-build
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_MODULE_PATH=${scikit-build}/${python.sitePackages}/skbuild/resources/cmake"
+  ];
 
   propagatedBuildInputs = [
     numpy
   ];
 
   checkInputs = [
-    pytestCheckHook
     hypothesis
     pandas
+    pytestCheckHook
   ];
 
   disabledTests = [
