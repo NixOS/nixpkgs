@@ -17,6 +17,10 @@ with pkgs;
   # just the plain stdenv.
   stdenv_32bit = lowPrio (if stdenv.hostPlatform.is32bit then stdenv else multiStdenv);
 
+  inherit (nodePackages) prettierd;
+  inherit (nodePackages) nest;
+  inherit (nodePackages) tailwindcss-language-server;
+
   stdenvNoCC = stdenv.override (
     { cc = null; hasCC = false; }
 
@@ -12222,10 +12226,9 @@ with pkgs;
     # If we are cross-compiling GNAT, we may as well go the same
     # route (especially as gnatboot can't cross-compile).
     gnatboot =
-      if stdenv.hostPlatform == stdenv.targetPlatform
-         && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnatboot
-      else buildPackages.gnat6;
+    if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform
+    then buildPackages.gnatboot
+    else buildPackages.gnat6;
   });
 
   gnat9 = wrapCC (gcc9.cc.override {
@@ -12238,10 +12241,10 @@ with pkgs;
     # should be done with a (native) compiler of the same version.
     # If we are cross-compiling GNAT, we may as well do the same.
     gnatboot =
-      if stdenv.hostPlatform == stdenv.targetPlatform
-         && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat6
-      else buildPackages.gnat9;
+    if stdenv.hostPlatform == stdenv.targetPlatform
+    && stdenv.buildPlatform == stdenv.hostPlatform
+    then buildPackages.gnat6
+    else buildPackages.gnat9;
   });
 
   gnat10 = wrapCC (gcc10.cc.override {
@@ -12255,7 +12258,7 @@ with pkgs;
     # If we are cross-compiling GNAT, we may as well do the same.
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
-         && stdenv.buildPlatform == stdenv.hostPlatform
+      && stdenv.buildPlatform == stdenv.hostPlatform
       then buildPackages.gnat6
       else buildPackages.gnat10;
   });
@@ -12271,7 +12274,7 @@ with pkgs;
     # If we are cross-compiling GNAT, we may as well do the same.
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
-         && stdenv.buildPlatform == stdenv.hostPlatform
+      && stdenv.buildPlatform == stdenv.hostPlatform
       then buildPackages.gnat6
       else buildPackages.gnat11;
   });
@@ -19729,8 +19732,8 @@ with pkgs;
       owner = "facebook";
       repo = pname;
       rev = "v${version}";
-     sha256 = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
-   };
+      sha256 = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
+    };
   });
 
   rotate-backups = callPackage ../tools/backup/rotate-backups { };
@@ -32508,7 +32511,7 @@ with pkgs;
   geogebra = callPackage ../applications/science/math/geogebra { };
   geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix {
     electron = electron_14;
-   };
+  };
 
   maxima = callPackage ../applications/science/math/maxima {
     lisp-compiler = sbcl;
