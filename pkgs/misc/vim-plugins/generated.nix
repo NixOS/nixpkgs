@@ -2745,6 +2745,18 @@ final: prev:
     meta.homepage = "https://github.com/lukas-reineke/indent-blankline.nvim/";
   };
 
+  indent-detector-vim = buildVimPluginFrom2Nix {
+    pname = "indent-detector.vim";
+    version = "2015-07-06";
+    src = fetchFromGitHub {
+      owner = "luochen1990";
+      repo = "indent-detector.vim";
+      rev = "a0a66b836cef8f89b8f36b33881fa22d7b9a5816";
+      sha256 = "1l455myr9p621liqd1iyv850ksbrzc7vagn9nq5n0v9i87albmhp";
+    };
+    meta.homepage = "https://github.com/luochen1990/indent-detector.vim/";
+  };
+
   indentLine = buildVimPluginFrom2Nix {
     pname = "indentLine";
     version = "2021-01-28";
