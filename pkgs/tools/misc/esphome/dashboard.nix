@@ -1,8 +1,9 @@
 { lib
-, python3
+, buildPythonPackage
+, fetchPypi
 }:
 
-with python3.pkgs; buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "esphome-dashboard";
   version = "20220116.0";
 
