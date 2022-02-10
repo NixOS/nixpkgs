@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
+  makeFlags = kernel.makeFlags ++ [
     "KERNEL_SOURCE_DIR=${kernel.dev}/${kerneldir}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];
