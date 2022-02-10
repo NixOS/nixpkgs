@@ -28,7 +28,6 @@ assert enableGold -> execFormatIsELF stdenv.targetPlatform;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
-  reuseLibs = enableShared && withAllTargets;
 
   version = "2.37";
 
@@ -155,7 +154,7 @@ stdenv.mkDerivation {
 
   doCheck = false; # fails
 
-  postFixup = lib.optionalString reuseLibs ''
+  postFixup = lib.optionalString (enableShared && withAllTargets) ''
     rm "$out"/lib/lib{bfd,opcodes}-${version}.so
     ln -s '${lib.getLib libbfd}/lib/libbfd-${version}.so' "$out/lib/"
     ln -s '${lib.getLib libopcodes}/lib/libopcodes-${version}.so' "$out/lib/"
