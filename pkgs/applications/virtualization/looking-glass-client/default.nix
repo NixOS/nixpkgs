@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
+  cmakeFlags = [ "-DOPTIMIZE_FOR_NATIVE=OFF" ];
 
   postUnpack = ''
     echo ${src.rev} > source/VERSION
