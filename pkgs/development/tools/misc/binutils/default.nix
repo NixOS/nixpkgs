@@ -34,30 +34,31 @@ let
   reuseLibs = enableShared && withAllTargets;
 
   version = "2.37";
-  basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                  "${stdenv.targetPlatform.config}-";
-  vc4-binutils-src = fetchFromGitHub {
-    owner = "itszor";
-    repo = "binutils-vc4";
-    rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
-    sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
-  };
+  "${stdenv.targetPlatform.config}-";
 
-  # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
-  normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
-    url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
-    sha256 = "sha256-Z/waQDDQjuh3pIZ9PcqzWCgUj4fh/QXabbWF7VoWa9Q=";
-  });
+  srcs = {
+    # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
+    normal = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
+      url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
+      sha256 = "sha256-Z/waQDDQjuh3pIZ9PcqzWCgUj4fh/QXabbWF7VoWa9Q=";
+    });
+    vc4-none = fetchFromGitHub {
+      owner = "itszor";
+      repo = "binutils-vc4";
+      rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
+      sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
+    };
+  };
 in
 
 stdenv.mkDerivation {
-  pname = targetPrefix + basename;
+  pname = targetPrefix + "binutils";
   inherit version;
 
-  src = if stdenv.targetPlatform.isVc4 then vc4-binutils-src else normal-src;
+  src = srcs.${stdenv.targetPlatform.system} or srcs.normal;
 
   patches = [
     # Make binutils output deterministic by default.
