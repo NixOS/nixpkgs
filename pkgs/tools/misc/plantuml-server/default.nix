@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, maven, jdk8_headless }:
+{ lib, stdenv, fetchFromGitHub, maven, jdk17_headless }:
 
 let
-  version = "1.2021.12";
+  version = "1.2022.0";
 
   src = fetchFromGitHub {
     owner = "plantuml";
     repo = "plantuml-server";
     rev = "v${version}";
-    sha256 = "sha256:016mrs4djbaid1ma5922dvq372pphbzzmjzsjalj2dqp60538xll";
+    sha256 = "sha256:1dfiph2ryj6c0yaxdk3bd5gin6l6vf46d2v698hm9hkzsr9j1wma";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central
   deps = stdenv.mkDerivation {
     name = "plantuml-server-${version}-deps";
     inherit src;
-    nativeBuildInputs = [ jdk8_headless maven ];
+    nativeBuildInputs = [ jdk17_headless maven ];
     buildPhase = ''
       runHook preBuild
 
@@ -28,7 +28,11 @@ let
     installPhase = ''find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete'';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256:12w1iw9c5j7y9hhaip07j3aszjiiakkww1v3zszlj15fj8jgqyf2";
+    outputHash = (
+      if stdenv.isDarwin
+      then "sha256:016ki4i7r865l38zv0ys3zbs6gb9r8jdyb32ncqzryhr4kanpz5s"
+      else "sha256:1pf77msvi99irhx2hhcs8cac8xn3vgcxcrjx6cpzv9kvmbfsdkaw"
+    );
   };
 in
 
@@ -37,7 +41,7 @@ stdenv.mkDerivation rec {
   inherit version;
   inherit src;
 
-  nativeBuildInputs = [ jdk8_headless maven ];
+  nativeBuildInputs = [ jdk17_headless maven ];
 
   buildPhase = ''
     runHook preBuild
