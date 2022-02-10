@@ -21,14 +21,10 @@ let
     lib.pipe hsPkgs.haskell-language-server ([
       (haskell.lib.compose.overrideCabal (old: {
         enableSharedExecutables = dynamic;
-        postInstall = ''
+        ${if !dynamic then "postInstall" else null} = ''
           ${old.postInstall or ""}
 
           remove-references-to -t ${hsPkgs.ghc} $out/bin/haskell-language-server
-          remove-references-to -t ${hsPkgs.shake.data} $out/bin/haskell-language-server
-          remove-references-to -t ${hsPkgs.js-jquery.data} $out/bin/haskell-language-server
-          remove-references-to -t ${hsPkgs.js-dgtable.data} $out/bin/haskell-language-server
-          remove-references-to -t ${hsPkgs.js-flot.data} $out/bin/haskell-language-server
         '';
       }))
       ((if dynamic then enableCabalFlag else disableCabalFlag) "dynamic")
