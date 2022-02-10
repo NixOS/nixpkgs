@@ -30,13 +30,13 @@ assert enableGold -> execFormatIsELF stdenv.targetPlatform;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.37";
+  version = "2.38";
 
   srcs = {
     # HACK: to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
     normal = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
       url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
-      sha256 = "sha256-Z/waQDDQjuh3pIZ9PcqzWCgUj4fh/QXabbWF7VoWa9Q=";
+      sha256 = "sha256-Bw7HHPB3pqWOC5WfBaCaNQFTeMLYpR6Q866r/jBZDvg=";
     });
     vc4-none = fetchFromGitHub {
       owner = "itszor";
@@ -71,10 +71,6 @@ stdenv.mkDerivation {
     # override this behavior, forcing ld to search DT_RPATH even when
     # cross-compiling.
     ./always-search-rpath.patch
-
-    # WARN: Remove on the next release
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=28138
-    ./fix-ld-descriptors.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   # This patch was suggested by Nick Clifton to fix
