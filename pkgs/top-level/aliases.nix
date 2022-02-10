@@ -425,8 +425,8 @@ mapAliases ({
   google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # Added 2021-03-07
   google-music-scripts = throw "google-music-scripts has been removed because Google Play Music was discontinued"; # Added 2021-03-07
   go-pup = pup; # Added 2017-12-19
+  gpgstats = throw "gpgstats has been removed: upstream is gone"; # Added 2022-02-06
 
-  gpgstats = throw "gpgstats has been removed: upstream is gone"; # added 2022-02-06
   graalvm11 = graalvm11-ce;
   graalvm8-ce = throw "graalvm8-ce has been removed by upstream."; # Added 2021-10-19
   graalvm8 = throw "graalvm8-ce has been removed by upstream."; # Added 2021-10-19

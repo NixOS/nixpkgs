@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ovoenergy";
-  version = "1.1.12";
+  version = "1.2.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1430k699gblxwspsbgxnha8afk6npqharhz2jyjw5gir9pi6g9cz";
+    sha256 = "sha256-OSK74uvpHuEtWgbLVFrz1NO7lvtHbt690smGQ+GlsOI=";
   };
 
   propagatedBuildInputs = [
