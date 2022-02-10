@@ -72,7 +72,7 @@ let
     redis = {
       bin = "${pkgs.redis}/bin/redis-cli";
       host = "127.0.0.1";
-      port = 6379;
+      port = config.services.redis.servers.gitlab.port;
       database = 0;
       namespace = "resque:gitlab";
     };
@@ -450,7 +450,8 @@ in {
 
       redisUrl = mkOption {
         type = types.str;
-        default = "redis://localhost:6379/";
+        default = "redis://localhost:${toString config.services.redis.servers.gitlab.port}/";
+        defaultText = literalExpression ''redis://localhost:''${toString config.services.redis.servers.gitlab.port}/'';
         description = "Redis URL for all GitLab services except gitlab-shell";
       };
 
@@ -961,7 +962,11 @@ in {
     };
 
     # Redis is required for the sidekiq queue runner.
-    services.redis.enable = mkDefault true;
+    services.redis.servers.gitlab = {
+      enable = mkDefault true;
+      port = mkDefault 31636;
+      bind = mkDefault "127.0.0.1";
+    };
 
     # We use postgres as the main data store.
     services.postgresql = optionalAttrs databaseActuallyCreateLocally {
@@ -1249,13 +1254,13 @@ in {
     systemd.services.gitlab-sidekiq = {
       after = [
         "network.target"
-        "redis.service"
+        "redis-gitlab.service"
         "postgresql.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
       ];
       bindsTo = [
-        "redis.service"
+        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
       ] ++ optional (cfg.databaseHost == "") "postgresql.service";
@@ -1370,7 +1375,7 @@ in {
 
     systemd.services.gitlab-mailroom = mkIf (gitlabConfig.production.incoming_email.enabled or false) {
       description = "GitLab incoming mail daemon";
-      after = [ "network.target" "redis.service" "gitlab-config.service" ];
+      after = [ "network.target" "redis-gitlab.service" "gitlab-config.service" ];
       bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
@@ -1391,12 +1396,12 @@ in {
       after = [
         "gitlab-workhorse.service"
         "network.target"
-        "redis.service"
+        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
       ];
       bindsTo = [
-        "redis.service"
+        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
       ] ++ optional (cfg.databaseHost == "") "postgresql.service";
