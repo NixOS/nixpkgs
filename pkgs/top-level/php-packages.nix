@@ -545,10 +545,14 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "sockets";
           doCheck = false;
-          patches = lib.optional (php.version == "8.1.2")
+          patches = lib.optional (php.version == "8.1.2" || php.version == "8.0.15")
+            # This patch fix compilation issues, see https://github.com/php/php-src/issues/7978
+            # The patch has been committed upstream and should not be required for upper versions of PHP.
             (fetchpatch {
+              name = "fix-bug-gh7978-socket-ext-compilation-errors.patch";
               url = "https://github.com/php/php-src/commit/07aaa34cd418c44f7bc653fafbf49f07fc71b2bf.patch";
-              sha256 = "sha256-EwVb09/zV2vJ8PuyLpKFCovxe6yKct0UBvishZaordM=";
+              excludes = [ "NEWS" ];
+              sha256 = "sha256-WCdHQIKBg24AWLAftHuCLZ+QqRVZXWdHFqZhmRSJ7+Y=";
             });
         }
         { name = "sodium"; buildInputs = [ libsodium ]; }
