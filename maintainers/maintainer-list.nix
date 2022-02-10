@@ -5462,6 +5462,12 @@
     githubId = 221929;
     name = "Jean-Baptiste Giraudeau";
   };
+  jc = {
+    name = "Josh Cooper";
+    email = "josh@cooper.is";
+    github = "joshua-cooper";
+    githubId = 35612334;
+  };
   jceb = {
     name = "jceb";
     email = "jceb@e-jc.de";
