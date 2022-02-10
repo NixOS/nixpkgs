@@ -9,13 +9,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "timetagger";
-  version = "22.2.1";
+  version = "22.2.2";
 
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2Yne9gTMyuwqBNYz7elzW09olmgIKeRyuO0LdrtYt5c=";
+    sha256 = "sha256-U2OvvS61t4RnWAA/mv84TWRj+/8SRRXrBR+fX3bakqw=";
   };
 
   propagatedBuildInputs = with python3Packages; [
