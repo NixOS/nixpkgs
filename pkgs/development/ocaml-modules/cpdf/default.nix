@@ -4,7 +4,6 @@ if !lib.versionAtLeast ocaml.version "4.10"
 then throw "cpdf is not available for OCaml ${ocaml.version}"
 else
 
-
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-cpdf";
   version = "2.5";

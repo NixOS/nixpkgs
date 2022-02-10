@@ -6,7 +6,6 @@ if !lib.versionAtLeast ocaml.version "4.02"
 then throw "batteries is not available for OCaml ${ocaml.version}"
 else
 
-
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-batteries";
   version = "3.4.0";
