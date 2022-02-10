@@ -17,12 +17,12 @@ in
 , zlib
 , enableGold ? execFormatIsELF stdenv.targetPlatform
 , enableShared ? !stdenv.hostPlatform.isStatic
-# Enabling all targets increases output size to a multiple.
+# WARN: Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
 }:
 
-# configure silently disables ld.gold if it's unsupported,
-# so we need to make sure that intent matches result ourselves.
+# WARN: configure silently disables ld.gold if it's unsupported, so we need to
+# make sure that intent matches result ourselves.
 assert enableGold -> execFormatIsELF stdenv.targetPlatform;
 
 
@@ -33,7 +33,7 @@ let
   version = "2.37";
 
   srcs = {
-    # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
+    # HACK: to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
     normal = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
       url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
       sha256 = "sha256-Z/waQDDQjuh3pIZ9PcqzWCgUj4fh/QXabbWF7VoWa9Q=";
@@ -46,8 +46,8 @@ let
     };
   };
 
-  # The targetPrefix prepended to binary names to allow multiple binuntils on
-  # the PATH to both be usable.
+  #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
+  #on the PATH to both be usable.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 in
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
-    # Remove on the next release
+    # WARN: Remove on the next release
     # https://sourceware.org/bugzilla/show_bug.cgi?id=28138
     ./fix-ld-descriptors.patch
   ] ++ lib.optional targetPlatform.isiOS ./support-ios.patch
@@ -140,13 +140,13 @@ stdenv.mkDerivation {
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     "--enable-new-dtags"
 
-    # force target prefix. Some versions of binutils will make it empty
-    # if `--host` and `--target` are too close, even if Nixpkgs thinks
-    # the platforms are different (e.g. because not all the info makes
-    # the `config`). Other versions of binutils will always prefix if
-    # `--target` is passed, even if `--host` and `--target` are the same.
-    # The easiest thing for us to do is not leave it to chance, and force
-    # the program prefix to be what we want it to be.
+    # force target prefix. Some versions of binutils will make it empty if
+    # `--host` and `--target` are too close, even if Nixpkgs thinks the
+    # platforms are different (e.g. because not all the info makes the
+    # `config`). Other versions of binutils will always prefix if `--target` is
+    # passed, even if `--host` and `--target` are the same. The easiest thing
+    # for us to do is not leave it to chance, and force the program prefix to be
+    # what we want it to be.
     "--program-prefix=${targetPrefix}"
   ] ++ lib.optionals enableGold [
     "--enable-gold"
@@ -161,7 +161,8 @@ stdenv.mkDerivation {
     ln -s '${lib.getLib libopcodes}/lib/libopcodes-${version}.so' "$out/lib/"
   '';
 
-  # else fails with "./sanity.sh: line 36: $out/bin/size: not found"
+  # INFO: Otherwise it fails with "./sanity.sh: line 36: $out/bin/size: not
+  # found"
   doInstallCheck = buildPlatform == hostPlatform && hostPlatform == targetPlatform;
 
   enableParallelBuilding = true;
@@ -185,8 +186,8 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;
 
-    /* Give binutils a lower priority than gcc-wrapper to prevent a
-       collision due to the ld/as wrappers/symlinks in the latter. */
+    # INFO: Give binutils a lower priority than gcc-wrapper to prevent a
+    # collision due to the ld/as wrappers/symlinks in the latter.
     priority = 10;
   };
 }
