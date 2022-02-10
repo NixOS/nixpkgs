@@ -22,13 +22,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.820";
+  version = "2.0.823";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-qvYg4tXq9RTYj+pbxg0fZRkTGP8/pk22K9wqMNxVHTo=";
+    hash = "sha256-yJc4NiRDGZBkFI9zm95Ug5W6SiBjHJqrRuId9EfryvY=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -82,6 +82,7 @@ buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "cyclonedx-python-lib>=0.11.0,<1.0.0" "cyclonedx-python-lib>=0.11.0" \
+      --replace "jsonschema~=3.0" "jsonschema>=3.0" \
       --replace "prettytable>=3.0.0" "prettytable"
   '';
 
