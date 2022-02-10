@@ -5771,6 +5771,18 @@ final: prev:
     meta.homepage = "https://github.com/RobertAudi/securemodelines/";
   };
 
+  select-and-search = buildVimPluginFrom2Nix {
+    pname = "select-and-search";
+    version = "2014-08-04";
+    src = fetchFromGitHub {
+      owner = "luochen1990";
+      repo = "select-and-search";
+      rev = "6d599c6d64201c0a15a57b650bfa1ec90c1e4052";
+      sha256 = "1wd3q8qi8dmjv99x6xlj819gbqj3yh7yn5fa5iid72nylwfh4il0";
+    };
+    meta.homepage = "https://github.com/luochen1990/select-and-search/";
+  };
+
   self = buildVimPluginFrom2Nix {
     pname = "self";
     version = "2014-05-28";
