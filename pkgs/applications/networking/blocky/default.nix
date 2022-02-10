@@ -1,6 +1,7 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -27,4 +28,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ ratsclub ];
   };
+
+  passthru.tests = { inherit (nixosTests) blocky; };
 }
