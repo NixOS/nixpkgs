@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wg-netmanager";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "gin66";
     repo = "wg_netmanager";
     rev = "wg_netmanager-v${version}";
-    sha256 = "sha256-4u+1puQiqk7UKVMaSUVFEPPMCUO4fUr/z4jUuYVRa5E=";
+    sha256 = "sha256-2LO1OCGlkjdszwgNBZ+Qwp126VfDq3pxf0Gz+6kzuPI=";
   };
 
-  cargoSha256 = "sha256-DXCStTH7tU29bnpGJgmHmvHadU3+T/C/JrlWQZSD/BQ=";
+  cargoSha256 = "sha256-EM0TPMyWMVpLFhan0boAQoAvMHBVgXp6mnYJLHOHiV8=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
