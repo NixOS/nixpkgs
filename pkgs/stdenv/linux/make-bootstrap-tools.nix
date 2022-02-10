@@ -37,7 +37,7 @@ in with pkgs; rec {
   bootBinutils = binutils.bintools.override {
     withAllTargets = false;
     # Don't need two linkers, disable whatever's not primary/default.
-    gold = false;
+    enableGold = false;
     # bootstrap is easier w/static
     enableShared = false;
   };
