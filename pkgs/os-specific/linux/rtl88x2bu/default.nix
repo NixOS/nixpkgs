@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
- prePatch = ''
+  prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
       --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
