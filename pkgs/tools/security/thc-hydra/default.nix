@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
+    badPlatforms = platforms.darwin; # fails to build since v9.3
   };
 }
