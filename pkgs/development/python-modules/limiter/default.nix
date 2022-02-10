@@ -2,12 +2,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, strenum
 , token-bucket
 }:
 
 buildPythonPackage rec {
   pname = "limiter";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.10";
@@ -16,19 +17,15 @@ buildPythonPackage rec {
     owner = "alexdelorenzo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-h3XiCR/8rcCBwdhO6ExrrUE9piba5mssad3+t41scSk=";
+    hash = "sha256-9EkA7S549JLi6MxAXBC+2euPDrcJjW8IsQzMtij8+hA=";
   };
 
   propagatedBuildInputs = [
+    strenum
     token-bucket
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "token-bucket==0.2.0" "token-bucket>=0.2.0"
-  '';
-
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [
