@@ -1,10 +1,8 @@
 { stdenv, lib, fetchFromGitHub, ocaml, findlib }:
-let
-  pname = "xml-light";
+
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-xml-light";
   version = "2.4";
-in
-stdenv.mkDerivation {
-  name = "ocaml-${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ncannasse";
@@ -17,15 +15,12 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  buildPhase = ''
-    make all
-    make opt
-  '';
-
   installPhase = ''
+    runHook preInstall
     make install_ocamlfind
     mkdir -p $out/share
     cp -vai doc $out/share/
+    runHook postInstall
   '';
 
   meta = {
@@ -40,6 +35,6 @@ stdenv.mkDerivation {
     homepage = "http://tech.motion-twin.com/xmllight.html";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.romildo ];
-    platforms = ocaml.meta.platforms or [ ];
+    inherit (ocaml.meta) platforms;
   };
 }
