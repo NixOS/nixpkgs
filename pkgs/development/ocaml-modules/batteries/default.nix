@@ -6,10 +6,9 @@ if !lib.versionAtLeast ocaml.version "4.02"
 then throw "batteries is not available for OCaml ${ocaml.version}"
 else
 
-let version = "3.4.0"; in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-batteries-${version}";
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-batteries";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "ocaml-batteries-team";
