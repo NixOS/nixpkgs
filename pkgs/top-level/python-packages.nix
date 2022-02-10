@@ -398,6 +398,8 @@ in {
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
 
+  aiosteamist = callPackage ../development/python-modules/aiosteamist { };
+
   aiostream = callPackage ../development/python-modules/aiostream { };
 
   aioswitcher = callPackage ../development/python-modules/aioswitcher { };
@@ -2162,6 +2164,8 @@ in {
 
   discordpy = callPackage ../development/python-modules/discordpy { };
 
+  discovery30303 = callPackage ../development/python-modules/discovery30303 { };
+
   diskcache = callPackage ../development/python-modules/diskcache { };
 
   dissononce = callPackage ../development/python-modules/dissononce { };
@@ -2848,6 +2852,8 @@ in {
   fjaraskupan = callPackage ../development/python-modules/fjaraskupan { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
+
+  flake8-bugbear = callPackage ../development/python-modules/flake8-bugbear { };
 
   flake8 = callPackage ../development/python-modules/flake8 { };
 
