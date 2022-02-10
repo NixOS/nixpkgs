@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname   = "nats-server";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "1gvvjwx1g8mhcqi3ssb3k5ylkz0afpmnf6h2zfny9rc4dk2cp2dy";
 
   doCheck = false;
+
+  passthru.tests.nats = nixosTests.nats;
 
   meta = with lib; {
     description = "High-Performance server for NATS";
