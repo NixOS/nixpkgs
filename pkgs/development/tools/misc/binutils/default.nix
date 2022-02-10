@@ -15,9 +15,10 @@ in
 , perl
 , texinfo
 , zlib
+
 , enableGold ? execFormatIsELF stdenv.targetPlatform
 , enableShared ? !stdenv.hostPlatform.isStatic
-# WARN: Enabling all targets increases output size to a multiple.
+  # WARN: Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
 }:
 
@@ -46,7 +47,7 @@ let
   };
 
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
-  #on the PATH to both be usable.
+  # on the PATH to both be usable.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 in
 
@@ -74,16 +75,17 @@ stdenv.mkDerivation {
     # WARN: Remove on the next release
     # https://sourceware.org/bugzilla/show_bug.cgi?id=28138
     ./fix-ld-descriptors.patch
-  ] ++ lib.optional targetPlatform.isiOS ./support-ios.patch
-    # This patch was suggested by Nick Clifton to fix
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    # It can be removed when that 7-year-old bug is closed.
-    # This binutils bug causes GHC to emit broken binaries on armv7, and indeed
-    # GHC will refuse to compile with a binutils suffering from it. See this
-    # comment for more information:
-    # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
-    ++ lib.optional (targetPlatform.isAarch32 && hostPlatform.system != targetPlatform.system) ./R_ARM_COPY.patch
-    ++ lib.optional targetPlatform.isWindows ./windres-locate-gcc.patch;
+  ]
+  ++ lib.optional targetPlatform.isiOS ./support-ios.patch
+  # This patch was suggested by Nick Clifton to fix
+  # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
+  # It can be removed when that 7-year-old bug is closed.
+  # This binutils bug causes GHC to emit broken binaries on armv7, and indeed
+  # GHC will refuse to compile with a binutils suffering from it. See this
+  # comment for more information:
+  # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
+  ++ lib.optional (targetPlatform.isAarch32 && hostPlatform.system != targetPlatform.system) ./R_ARM_COPY.patch
+  ++ lib.optional targetPlatform.isWindows ./windres-locate-gcc.patch;
 
   outputs = [ "out" "info" "man" ];
 
@@ -92,9 +94,11 @@ stdenv.mkDerivation {
     bison
     perl
     texinfo
-  ] ++ (lib.optionals targetPlatform.isiOS [
-    autoreconfHook
-  ]) ++ lib.optionals targetPlatform.isVc4 [ flex ];
+  ]
+  ++ lib.optionals targetPlatform.isiOS [ autoreconfHook ]
+  ++ lib.optionals targetPlatform.isVc4 [ flex ]
+  ;
+
   buildInputs = [ zlib gettext ];
 
   inherit noSysDirs;
@@ -114,7 +118,8 @@ stdenv.mkDerivation {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = if hostPlatform.isDarwin
+  NIX_CFLAGS_COMPILE =
+    if hostPlatform.isDarwin
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
@@ -143,12 +148,13 @@ stdenv.mkDerivation {
     # for us to do is not leave it to chance, and force the program prefix to be
     # what we want it to be.
     "--program-prefix=${targetPrefix}"
-  ] ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
-    ++ lib.optionals enableGold [ "--enable-gold" "--enable-plugins" ]
-    ++ (if enableShared
-        then [ "--enable-shared" "--disable-static" ]
-        else [ "--disable-shared" "--enable-static" ]
-       );
+  ]
+  ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
+  ++ lib.optionals enableGold [ "--enable-gold" "--enable-plugins" ]
+  ++ (if enableShared
+      then [ "--enable-shared" "--disable-static" ]
+      else [ "--disable-shared" "--enable-static" ])
+  ;
 
   # Fails
   doCheck = false;
@@ -159,9 +165,9 @@ stdenv.mkDerivation {
     ln -s '${lib.getLib libopcodes}/lib/libopcodes-${version}.so' "$out/lib/"
   '';
 
-  # INFO: Otherwise it fails with "./sanity.sh: line 36: $out/bin/size: not
-  # found"
-  doInstallCheck = buildPlatform == hostPlatform && hostPlatform == targetPlatform;
+  # INFO: Otherwise it fails with:
+  # `./sanity.sh: line 36: $out/bin/size: not found`
+  doInstallCheck = (buildPlatform == hostPlatform) && (hostPlatform == targetPlatform);
 
   enableParallelBuilding = true;
 
