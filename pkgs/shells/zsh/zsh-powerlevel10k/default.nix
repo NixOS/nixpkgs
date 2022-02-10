@@ -7,13 +7,13 @@ let
   # match gitstatus version with given `gitstatus_version`:
   # https://github.com/romkatv/powerlevel10k/blob/master/gitstatus/build.info
   gitstatus = pkgs.gitstatus.overrideAttrs (oldAtttrs: rec {
-    version = "1.5.1";
+    version = "1.5.3";
 
     src = fetchFromGitHub {
       owner = "romkatv";
       repo = "gitstatus";
       rev = "v${version}";
-      sha256 = "1ffgh5826985phc8amvzl9iydvsnij5brh4gczfh201vfmw9d4hh";
+      sha256 = "17giwdjrsmr71xskxxf506n8kaab8zx77fv267fx37ifi57nffk5";
     };
   });
 in
