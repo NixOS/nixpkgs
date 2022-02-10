@@ -37,7 +37,12 @@ in
       { assertion = cfg.efi -> cfg.hvm;
         message = "EC2 instances using EFI must be HVM instances.";
       }
+      { assertion = versionOlder config.boot.kernelPackages.kernel.version "5.15";
+        message = "ENA driver fails to build with kernel >= 5.15";
+      }
     ];
+
+    boot.kernelPackages = pkgs.linuxKernel.packages.linux_5_10;
 
     boot.growPartition = cfg.hvm;
 
