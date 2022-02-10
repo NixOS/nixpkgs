@@ -1,5 +1,6 @@
-{stdenvNoCC, darcs, cacert}:
+{stdenvNoCC, darcs, cacert, lib}:
 
+lib.makeOverridable (
 { url
 , rev ? null
 , context ? null
@@ -21,3 +22,4 @@ stdenvNoCC.mkDerivation {
 
   inherit url rev context name;
 }
+)
