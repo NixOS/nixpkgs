@@ -16,6 +16,13 @@ with pkgs;
   # it uses GCC compiled with multilib support; on i686-linux, it's
   # just the plain stdenv.
   stdenv_32bit = lowPrio (if stdenv.hostPlatform.is32bit then stdenv else multiStdenv);
+  
+  
+   inherit(nodePackages) prettierd ;
+   inherit(nodePackages) nest;
+   inherit(nodePackages) tailwindcss-language-server;
+
+
 
   inherit (nodePackages) prettierd;
   inherit (nodePackages) nest;
