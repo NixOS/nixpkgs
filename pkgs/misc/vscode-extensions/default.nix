@@ -694,6 +694,18 @@ let
         };
       };
 
+      eg2.vscode-npm-script = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-npm-script";
+          publisher = "eg2";
+          version = "0.3.24";
+          sha256 = "sha256-XgdMLecyZQXsgQAUh8V4eFLKaUF4WVlgy9iIGNDnR/I=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       elmtooling.elm-ls-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elm-ls-vscode";
