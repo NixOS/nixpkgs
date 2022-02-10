@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "beep";
-  version = "1.4.11";
+  version = "1.4.12";
 
   src = fetchFromGitHub {
     owner = "spkr-beep";
     repo = "beep";
     rev = "v${version}";
-    sha256 = "sha256-8g9Nni9lalQvrffhwIv2LFRtLrioUL+lMeDTHH6l6Sk=";
+    sha256 = "sha256-gDgGI9F+wW2cN89IwP93PkMv6vixJA2JckF78nxZ+TU=";
   };
 
   makeFlags = [ "DESTDIR=\${out}" "prefix="];
