@@ -1,4 +1,4 @@
-{ lib, buildPackages, fetchurl, perl, buildLinux, nixosTests, modDirVersionArg ? null, ... } @ args:
+{ lib, stdenv, buildPackages, fetchurl, perl, buildLinux, nixosTests, modDirVersionArg ? null, ... } @ args:
 
 with lib;
 
@@ -10,6 +10,8 @@ buildLinux (args // rec {
 
   # branchVersion needs to be x.y
   extraMeta.branch = versions.majorMinor version;
+
+  extraMeta.broken = stdenv.isi686;
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
