@@ -5,10 +5,13 @@
 , deepClone ? false, private ? false, forceFetchGit ? false
 , sparseCheckout ? ""
 , githubBase ? "github.com", varPrefix ? null
+, meta ? { }
 , ... # For hash agility
 }@args:
+
 let
   baseUrl = "https://${githubBase}/${owner}/${repo}";
+  newMeta = meta // { homepage = meta.homepage or baseUrl; };
   passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
   useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || (sparseCheckout != "");
@@ -37,4 +40,4 @@ let
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; }
+fetcher fetcherArgs // { meta = newMeta; inherit rev; }
