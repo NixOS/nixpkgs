@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.8.5";
-  name = "ocaml${ocaml.version}-ptime-${version}";
+  pname = "ocaml${ocaml.version}-ptime";
 
   src = fetchurl {
     url = "https://erratique.ch/software/ptime/releases/ptime-${version}.tbz";

@@ -413,8 +413,10 @@ mapAliases ({
   gnuradio-rds = gnuradio3_7.pkgs.rds; # Added 2019-05-27, changed 2020-10-16
   gnustep-make = gnustep.make; # Added 2016-7-6
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # Added 2020-01-14
+  go_1_12 = throw "go_1_12 has been removed"; # Added 2020-04-26
   gobby5 = gobby; # Added 2021-02-01
   gobjectIntrospection = gobject-introspection; # Added 2018-12-02
+  gogoclient = throw "gogoclient has been removed, because it was unmaintained"; # Added 2021-12-15
   goimports = gotools; # Added 2018-09-16
   gometalinter = throw "gometalinter was abandoned by upstream. Consider switching to golangci-lint instead"; # Added 2020-04-23
   googleAuthenticator = google-authenticator; # Added 2016-10-16
@@ -423,6 +425,7 @@ mapAliases ({
   google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # Added 2021-03-07
   google-music-scripts = throw "google-music-scripts has been removed because Google Play Music was discontinued"; # Added 2021-03-07
   go-pup = pup; # Added 2017-12-19
+
   gpgstats = throw "gpgstats has been removed: upstream is gone"; # added 2022-02-06
   graalvm11 = graalvm11-ce;
   graalvm8-ce = throw "graalvm8-ce has been removed by upstream."; # Added 2021-10-19

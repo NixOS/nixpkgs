@@ -7,7 +7,7 @@ then throw "farfadet is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-farfadet-${version}";
+  pname = "ocaml${ocaml.version}-farfadet";
   version = "0.3";
 
   src = fetchurl {

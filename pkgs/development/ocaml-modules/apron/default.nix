@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-apron-${version}";
+  pname = "ocaml${ocaml.version}-apron";
   version = "0.9.13";
   src = fetchFromGitHub {
     owner = "antoinemine";

@@ -4,10 +4,9 @@ if !lib.versionAtLeast ocaml.version "4.10"
 then throw "cpdf is not available for OCaml ${ocaml.version}"
 else
 
-let version = "2.5"; in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-cpdf-${version}";
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-cpdf";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "johnwhitington";

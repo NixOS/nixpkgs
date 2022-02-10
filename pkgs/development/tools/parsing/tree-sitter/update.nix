@@ -376,7 +376,7 @@ let
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
       echo "rate limited" >&2
     fi
-    release=$(printf "%s" "$res" | ${jq}/bin/jq '.tag_name')
+    release="$(printf "%s" "$res" | ${jq}/bin/jq -r '.tag_name')"
     # github sometimes returns an empty list even tough there are releases
     if [ "$release" = "null" ]; then
       echo "uh-oh, latest for ${orga + "/" + repo} is not there, using HEAD" >&2

@@ -5,16 +5,17 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "pass-audit";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-audit";
     rev = "v${version}";
-    sha256 = "1vapymgpab91kh798mirgs1nb7j9qln0gm2d3321cmsghhb7xs45";
+    sha256 = "sha256-xigP8LxRXITLF3X21zhWx6ooFNSTKGv46yFSt1dd4vs=";
   };
 
   patches = [
+    ./0001-Set-base-to-an-empty-value.patch
     ./0002-Fix-audit.bash-setup.patch
   ];
 
@@ -40,7 +41,8 @@ in stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
   postInstall = ''
     wrapProgram $out/lib/password-store/extensions/audit.bash \
-      --prefix PYTHONPATH : "$out/lib/${pythonEnv.libPrefix}/site-packages"
+      --prefix PYTHONPATH : "$out/lib/${pythonEnv.libPrefix}/site-packages" \
+      --run "export COMMAND"
   '';
 
   meta = with lib; {

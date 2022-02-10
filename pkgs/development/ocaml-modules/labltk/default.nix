@@ -49,7 +49,7 @@ in
 
 stdenv.mkDerivation rec {
   inherit (param) version src;
-  name = "ocaml${ocaml.version}-labltk-${version}";
+  pname = "ocaml${ocaml.version}-labltk";
 
   buildInputs = [ ocaml findlib tcl tk makeWrapper ];
 

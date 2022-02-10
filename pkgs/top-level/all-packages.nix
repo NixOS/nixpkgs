@@ -1024,6 +1024,8 @@ with pkgs;
 
   gfshare = callPackage ../tools/security/gfshare { };
 
+  glooctl = callPackage ../applications/networking/cluster/glooctl { };
+
   gobgp = callPackage ../tools/networking/gobgp { };
 
   gofu = callPackage ../applications/misc/gofu { };
@@ -1911,6 +1913,8 @@ with pkgs;
   ipgrep = callPackage ../tools/networking/ipgrep { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
+
+  leetcode-cli = callPackage ../applications/misc/leetcode-cli { };
 
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
@@ -3547,6 +3551,8 @@ with pkgs;
   onboard = callPackage ../applications/misc/onboard { };
 
   oneshot = callPackage ../tools/networking/oneshot { };
+
+  orjail = callPackage ../tools/security/orjail { };
 
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
@@ -6770,6 +6776,8 @@ with pkgs;
 
   jl = haskellPackages.callPackage ../development/tools/jl { };
 
+  jless = callPackage ../development/tools/jless { };
+
   jmespath = callPackage ../development/tools/jmespath { };
 
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
@@ -8797,6 +8805,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     xcbuildHook = if stdenv.targetPlatform.isAarch64 then xcbuildHook else xcbuild6Hook;
   };
+
+  pinentry-bemenu = callPackage ../tools/security/pinentry-bemenu { };
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
@@ -15803,7 +15813,9 @@ with pkgs;
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  abseil-cpp = callPackage ../development/libraries/abseil-cpp { };
+  abseil-cpp_202111 = callPackage ../development/libraries/abseil-cpp/202111.nix { };
+  abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix { };
+  abseil-cpp = abseil-cpp_202103;
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
@@ -20393,7 +20405,10 @@ with pkgs;
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
-  webrtc-audio-processing = callPackage ../development/libraries/webrtc-audio-processing { };
+  webrtc-audio-processing_1 = callPackage ../development/libraries/webrtc-audio-processing { };
+  webrtc-audio-processing_0_3 = callPackage ../development/libraries/webrtc-audio-processing/0.3.nix { };
+  # bump when majoring of packages have updated
+  webrtc-audio-processing = webrtc-audio-processing_0_3;
 
   wildmidi = callPackage ../development/libraries/wildmidi { };
 
@@ -22767,10 +22782,6 @@ with pkgs;
 
   quicktemplate = callPackage ../development/tools/quicktemplate { };
 
-  gogoclient = callPackage ../os-specific/linux/gogoclient {
-    openssl = openssl_1_0_2;
-  };
-
   linux-pam = callPackage ../os-specific/linux/pam { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
@@ -23509,7 +23520,7 @@ with pkgs;
 
   go-font = callPackage ../data/fonts/go-font { };
 
-  graphite-gtk-theme = callPackage ../data/themes/graphite { };
+  graphite-gtk-theme = callPackage ../data/themes/graphite-gtk-theme { };
 
   graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme { };
 
@@ -30933,10 +30944,11 @@ with pkgs;
     inherit (darwin) libiconv;
     inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa;
   })
-    minetestclient_4 minetestserver_4
     minetestclient_5 minetestserver_5;
 
-  minetest = minetestclient_5;
+  minetest = minetestclient;
+  minetestclient = minetestclient_5;
+  minetestserver = minetestserver_5;
 
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;

@@ -3,8 +3,9 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-bos-${version}";
+  pname = "ocaml${ocaml.version}-bos";
   version = "0.2.0";
+
   src = fetchurl {
     url = "https://erratique.ch/software/bos/releases/bos-${version}.tbz";
     sha256 = "1s10iqx8rgnxr5n93lf4blwirjf8nlm272yg5sipr7lsr35v49wc";
