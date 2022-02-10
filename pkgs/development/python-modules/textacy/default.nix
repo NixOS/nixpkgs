@@ -23,6 +23,7 @@ buildPythonPackage rec {
   pname = "textacy";
   version = "0.12.0";
   disabled = pythonOlder "3.7";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
