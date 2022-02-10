@@ -157,3 +157,7 @@ The output can be pasted into `pkgs/top-level/perl-packages.nix` or wherever els
 ### Cross-compiling modules {#ssec-perl-cross-compilation}
 
 Nixpkgs has experimental support for cross-compiling Perl modules. In many cases, it will just work out of the box, even for modules with native extensions. Sometimes, however, the Makefile.PL for a module may (indirectly) import a native module. In that case, you will need to make a stub for that module that will satisfy the Makefile.PL and install it into `lib/perl5/site_perl/cross_perl/${perl.version}`. See the `postInstall` for `DBI` for an example.
+
+### Static linking {#ssec-perl-static-linking}
+
+When using `pkgsStatic` to build a perl module, the `configurePhase` will run `perl Makefile.PL` with `LINKTYPE=static` cf [ExtUtils::MakeMaker's doc](https://metacpan.org/pod/ExtUtils::MakeMaker#Static-Linking-of-a-new-Perl-Binary).

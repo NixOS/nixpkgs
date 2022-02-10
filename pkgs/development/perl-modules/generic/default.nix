@@ -17,6 +17,8 @@ toPerlModule(stdenv.mkDerivation (
 
     checkTarget = "test";
 
+    LINKTYPE = if stdenv.targetPlatform.isStatic then "static" else "dynamic";
+
     # Prevent CPAN downloads.
     PERL_AUTOINSTALL = "--skipdeps";
 

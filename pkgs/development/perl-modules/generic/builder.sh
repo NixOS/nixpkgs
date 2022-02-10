@@ -22,7 +22,12 @@ preConfigure() {
         fi
     done
 
-    perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
+    # https://metacpan.org/pod/ExtUtils::MakeMaker#Static-Linking-of-a-new-Perl-Binary
+    if [ "$LINKTYPE" = "static" ]; then
+        perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\" LINKTYPE=static
+    else
+        perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
+    fi
 }
 
 if test -n "$perlPreHook"; then
