@@ -22,6 +22,9 @@ buildPythonPackage rec {
     sha256 = "sha256-JgAQCulv/QgjNLN441VVD++LSlKab6TDT0cTCQXHQm0=";
   };
 
+  # no longer compatible with sybil
+  # https://github.com/simplistix/testfixtures/issues/169
+  doCheck = false;
   checkInputs = [
     mock
     pytestCheckHook
