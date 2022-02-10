@@ -187,7 +187,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://www.gnu.org/software/binutils/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericson2314 ];
+    maintainers = with maintainers; [ ericson2314 lovesegfault ];
     platforms = platforms.unix;
 
     # INFO: Give binutils a lower priority than gcc-wrapper to prevent a
