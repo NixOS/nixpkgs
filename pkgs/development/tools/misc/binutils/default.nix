@@ -2,17 +2,23 @@ let
   execFormatIsELF = platform: platform.parsed.kernel.execFormat.name == "elf";
 in
 
-{ stdenv, lib, buildPackages
-, fetchFromGitHub, fetchurl, zlib, autoreconfHook, gettext
+{ stdenv
+, autoreconfHook
+, bison
+, buildPackages
+, fetchFromGitHub
+, fetchurl
+, flex
+, gettext
+, lib
+, noSysDirs
+, perl
+, texinfo
+, zlib
+, gold ? execFormatIsELF stdenv.targetPlatform
+, enableShared ? !stdenv.hostPlatform.isStatic
 # Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
-, enableShared ? !stdenv.hostPlatform.isStatic
-, noSysDirs
-, gold ? execFormatIsELF stdenv.targetPlatform
-, bison ? null
-, flex
-, texinfo
-, perl
 }:
 
 # configure silently disables ld.gold if it's unsupported,
