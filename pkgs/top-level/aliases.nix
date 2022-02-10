@@ -367,9 +367,11 @@ mapAliases ({
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
   gmock = gtest; # moved from top-level 2021-03-14
+  go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobby5 = gobby; # added 2021-02-01
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
+  gogoclient = throw "gogoclient has been removed, because it was unmaintained"; # added 2021-12-15
   goimports = gotools; # added 2018-09-16
   gometalinter = throw "gometalinter was abandoned by upstream. Consider switching to golangci-lint instead"; # added 2020-04-23
   google-gflags = gflags; # added 2019-07-25

@@ -16,7 +16,8 @@ let param =
 in
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-mtime-${param.version}";
+  pname = "ocaml${ocaml.version}-mtime";
+  inherit (param) version;
 
   src = fetchurl {
     url = "https://erratique.ch/software/mtime/releases/mtime-${param.version}.tbz";

@@ -1,9 +1,8 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf }:
 
-let version = "1.0.1"; in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-jsonm-${version}";
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-jsonm";
+  version = "1.0.1";
 
   src = fetchurl {
     url = "https://erratique.ch/software/jsonm/releases/jsonm-${version}.tbz";

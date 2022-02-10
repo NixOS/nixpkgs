@@ -3537,6 +3537,8 @@ with pkgs;
 
   oneshot = callPackage ../tools/networking/oneshot { };
 
+  orjail = callPackage ../tools/security/orjail { };
+
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
   xkbd = callPackage ../applications/misc/xkbd { };
@@ -22799,10 +22801,6 @@ with pkgs;
 
   quicktemplate = callPackage ../development/tools/quicktemplate { };
 
-  gogoclient = callPackage ../os-specific/linux/gogoclient {
-    openssl = openssl_1_0_2;
-  };
-
   linux-pam = callPackage ../os-specific/linux/pam { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
@@ -23543,7 +23541,7 @@ with pkgs;
 
   go-font = callPackage ../data/fonts/go-font { };
 
-  graphite-gtk-theme = callPackage ../data/themes/graphite { };
+  graphite-gtk-theme = callPackage ../data/themes/graphite-gtk-theme { };
 
   graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme { };
 
@@ -30969,10 +30967,11 @@ with pkgs;
     inherit (darwin) libiconv;
     inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa;
   })
-    minetestclient_4 minetestserver_4
     minetestclient_5 minetestserver_5;
 
-  minetest = minetestclient_5;
+  minetest = minetestclient;
+  minetestclient = minetestclient_5;
+  minetestserver = minetestserver_5;
 
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
