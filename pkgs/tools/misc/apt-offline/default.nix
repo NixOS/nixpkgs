@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "apt-offline";
-  version = "unstable-2021-07-25";
+  version = "unstable-2022-02-06";
 
   src = fetchFromGitHub {
     owner = "rickysarraf";
     repo = pname;
-    rev = "7cfa5fc2736be2c832d0ddfa9255175a1f33158d";
-    sha256 = "xX2wcvqoPdgqBAWvQmSd//YWMC4pPmrq0vQjhDUKwEA=";
+    rev = "2b9929773ff2b6e53d30c50c31fb3a1605631f5f";
+    sha256 = "mf2NM39ql6KR/YTWPYNyVe+bvWmUFYfxt5BGmU5WFpQ=";
   };
 
   postPatch = ''
