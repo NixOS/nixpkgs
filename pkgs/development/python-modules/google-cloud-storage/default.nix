@@ -40,6 +40,7 @@ buildPythonPackage rec {
     "download"
     "get"
     "post"
+    "upload"
     "test_build_api_url"
     "test_ctor_mtls"
     "test_hmac_key_crud"
