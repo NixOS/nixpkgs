@@ -122,11 +122,7 @@ stdenv.mkDerivation {
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  configureFlags =
-    (if enableShared then [ "--enable-shared" "--disable-static" ]
-                     else [ "--disable-shared" "--enable-static" ])
-  ++ lib.optional withAllTargets "--enable-targets=all"
-  ++ [
+  configureFlags = [
     "--enable-64-bit-bfd"
     "--with-system-zlib"
 
@@ -147,12 +143,15 @@ stdenv.mkDerivation {
     # for us to do is not leave it to chance, and force the program prefix to be
     # what we want it to be.
     "--program-prefix=${targetPrefix}"
-  ] ++ lib.optionals enableGold [
-    "--enable-gold"
-    "--enable-plugins"
-  ];
+  ] ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
+    ++ lib.optionals enableGold [ "--enable-gold" "--enable-plugins" ]
+    ++ (if enableShared
+        then [ "--enable-shared" "--disable-static" ]
+        else [ "--disable-shared" "--enable-static" ]
+       );
 
-  doCheck = false; # fails
+  # Fails
+  doCheck = false;
 
   postFixup = lib.optionalString (enableShared && withAllTargets) ''
     rm "$out"/lib/lib{bfd,opcodes}-${version}.so
