@@ -17,6 +17,8 @@
 buildPythonPackage rec {
   pname = "sslyze";
   version = "5.0.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -26,15 +28,23 @@ buildPythonPackage rec {
     hash = "sha256-7kUriEMHcGCXKs42KVWxXvM+JEEWf/8tnuoGujHbqHY=";
   };
 
-  patchPhase = ''
-    substituteInPlace setup.py \
-      --replace "cryptography>=2.6,<36.0.0" "cryptography>=2.6"
-  '';
+  propagatedBuildInputs = [
+    cryptography
+    nassl
+    pydantic
+    tls-parser
+  ];
 
   checkInputs = [
     pytestCheckHook
     faker
   ];
+
+  patchPhase = ''
+    substituteInPlace setup.py \
+      --replace "cryptography>=2.6,<36.0.0" "cryptography>=2.6" \
+      --replace "pydantic>=1.7,<1.9" "pydantic>=1.7"
+  '';
 
   # Most of the tests are online; hence, applicable tests are listed
   # explicitly here
@@ -94,13 +104,8 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [ "sslyze" ];
-
-  propagatedBuildInputs = [
-    cryptography
-    nassl
-    pydantic
-    tls-parser
+  pythonImportsCheck = [
+    "sslyze"
   ];
 
   meta = with lib; {
