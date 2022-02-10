@@ -680,7 +680,7 @@ in
               (if machine.sshKey != null then machine.sshKey else "-")
               (toString machine.maxJobs)
               (toString machine.speedFactor)
-              (concatStringsSep "," machine.supportedFeatures)
+              (concatStringsSep "," (machine.supportedFeatures ++ machine.mandatoryFeatures))
               (concatStringsSep "," machine.mandatoryFeatures)
             ]
             ++ optional (isNixAtLeast "2.4pre") (if machine.publicHostKey != null then machine.publicHostKey else "-")))
