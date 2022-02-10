@@ -1390,6 +1390,18 @@ let
         };
       };
 
+      ms-vscode.anycode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "anycode";
+          publisher = "ms-vscode";
+          version = "0.0.57";
+          sha256 = "sha256-XwL7I+vwZJ6zx5IDZdfOUbq6M9IH/gi7MBe92cG1kDs=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       mvllow.rose-pine = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "mvllow";
