@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     homepage = "http://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "A more Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    # attempts to inline 256bit AVX instructions on x86
+    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/5
+    platforms = lib.lists.subtractLists platforms.i686 platforms.unix;
   };
 }
