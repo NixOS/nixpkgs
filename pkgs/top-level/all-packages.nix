@@ -1013,6 +1013,8 @@ with pkgs;
 
   gfshare = callPackage ../tools/security/gfshare { };
 
+  glooctl = callPackage ../applications/networking/cluster/glooctl { };
+
   gobgp = callPackage ../tools/networking/gobgp { };
 
   gofu = callPackage ../applications/misc/gofu { };
