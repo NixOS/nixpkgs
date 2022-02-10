@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "talosctl";
@@ -32,6 +32,15 @@ buildGoModule rec {
     ];
 
   subPackages = [ "cmd/talosctl" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd talosctl \
+      --bash <($out/bin/talosctl completion bash) \
+      --fish <($out/bin/talosctl completion fish) \
+      --zsh <($out/bin/talosctl completion zsh)
+  '';
 
   doCheck = false;
 
