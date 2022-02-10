@@ -9,9 +9,12 @@
 , pandas
 , tqdm
 , slicer
+, cloudpickle
 , numba
 , matplotlib
 , nose
+, pytest-mpl
+, pytest-cov
 , ipython
 }:
 
@@ -35,6 +38,7 @@ buildPythonPackage rec {
     tqdm
     slicer
     numba
+    cloudpickle
   ];
 
   preCheck = ''
@@ -42,22 +46,41 @@ buildPythonPackage rec {
     # when importing the local copy the extension is not found
     rm -r shap
   '';
-  checkInputs = [ pytestCheckHook matplotlib nose ipython ];
+  checkInputs = [
+    pytestCheckHook
+    matplotlib
+    nose
+    ipython
+    pytest-mpl
+    pytest-cov
+  ];
   # Those tests access the network
-  disabledTests = [
-    "test_kernel_shap_with_a1a_sparse_zero_background"
-    "test_kernel_shap_with_a1a_sparse_nonzero_background"
-    "test_kernel_shap_with_high_dim_sparse"
-    "test_sklearn_random_forest_newsgroups"
-    "test_sum_match_random_forest"
-    "test_sum_match_extra_trees"
-    "test_single_row_random_forest"
-    "test_sum_match_gradient_boosting_classifier"
-    "test_single_row_gradient_boosting_classifier"
-    "test_HistGradientBoostingClassifier_proba"
-    "test_HistGradientBoostingClassifier_multidim"
-    "test_sum_match_gradient_boosting_regressor"
-    "test_single_row_gradient_boosting_regressor"
+  pytestFlagsArray = [
+    "--deselect" "tests/explainers/test_kernel.py::test_kernel_shap_with_a1a_sparse_zero_background"
+    "--deselect" "tests/explainers/test_kernel.py::test_kernel_shap_with_a1a_sparse_nonzero_background"
+    "--deselect" "tests/explainers/test_kernel.py::test_kernel_shap_with_high_dim_sparse"
+    "--deselect" "tests/explainers/test_tree.py::test_sum_match_random_forest"
+    "--deselect" "tests/explainers/test_tree.py::test_sum_match_extra_trees"
+    "--deselect" "tests/explainers/test_tree.py::test_single_row_random_forest"
+    "--deselect" "tests/explainers/test_tree.py::test_sum_match_gradient_boosting_classifier"
+    "--deselect" "tests/explainers/test_tree.py::test_single_row_gradient_boosting_classifier"
+    "--deselect" "tests/explainers/test_tree.py::test_HistGradientBoostingClassifier_proba"
+    "--deselect" "tests/explainers/test_tree.py::test_HistGradientBoostingClassifier_multidim"
+    "--deselect" "tests/explainers/test_tree.py::test_sum_match_gradient_boosting_regressor"
+    "--deselect" "tests/explainers/test_tree.py::test_single_row_gradient_boosting_regressor"
+    "--deselect" "tests/explainers/test_tree.py::test_sklearn_random_forest_newsgroups"
+    "--deselect" "tests/plots/test_dependence_string_features.py::test_dependence_one_string_feature"
+    "--deselect" "tests/plots/test_dependence_string_features.py::test_dependence_two_string_features"
+    "--deselect" "tests/plots/test_dependence_string_features.py::test_dependence_one_string_feature_no_interaction"
+    "--deselect" "tests/plots/test_dependence_string_features.py::test_dependence_one_string_feature_auto_interaction"
+    "--deselect" "tests/plots/test_summary.py::test_random_summary"
+    "--deselect" "tests/plots/test_summary.py::test_random_summary_with_data"
+    "--deselect" "tests/plots/test_summary.py::test_random_multi_class_summary"
+    "--deselect" "tests/plots/test_summary.py::test_random_summary_bar_with_data"
+    "--deselect" "tests/plots/test_summary.py::test_random_summary_dot_with_data"
+    "--deselect" "tests/plots/test_summary.py::test_random_summary_violin_with_data"
+    "--deselect" "tests/plots/test_summary.py::test_random_summary_layered_violin_with_data"
+    "--deselect" "tests/plots/test_summary.py::test_random_summary_with_log_scale"
   ];
 
   meta = with lib; {
@@ -66,7 +89,5 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ evax ];
     platforms = platforms.unix;
-    # ModuleNotFoundError: No module named 'sklearn.ensemble.iforest'
-    broken = true;
   };
 }
