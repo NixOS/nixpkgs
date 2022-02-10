@@ -9,16 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "0hzksx2fw008jdsgfzpws9g7imy6ryw09ai5y0knvrmvr68nvj57";
   };
 
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
-  preConfigure = ''
-    export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    export INSTALL_MOD_PATH="$out"
-  '';
+  makeFlags = kernel.makeFlags ++ [
+    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
 
   installTargets = [ "modules_install" ];
 
