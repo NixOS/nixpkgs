@@ -10,6 +10,8 @@
 , sizeVariants ? [] # default: standard
 , tweaks ? []
 , wallpapers ? false
+, withGrub ? false
+, grubScreens ? [] # default: 1080p
 }:
 
 let
@@ -20,16 +22,17 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red"
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
 lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "midblack" "rimless" "normal" ] tweaks
+lib.checkListOfEnum "${pname}: grub screens" [ "1080p" "2k" "4k" ] grubScreens
 
 stdenvNoCC.mkDerivation {
   inherit pname;
-  version = "unstable-2022-01-07";
+  version = "unstable-2022-02-04";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "78e5421fee63b4c2a2a3d2e321538367b01a24ec";
-    sha256 = "1vfvv1gfbr9yr9mz0kb7c7ij6pxcryni1fjs87gn4hpyzns431wk";
+    rev = "7ab6a1b7eda81e914405a9931408b1d5c73e6891";
+    sha256 = "09xixd6cz2iyyyg6vskyk0wj2mahfsg21dlfcvi862h8w01hg9lr";
   };
 
   nativeBuildInputs = [
@@ -63,6 +66,18 @@ stdenvNoCC.mkDerivation {
       ${lib.optionalString (builtins.elem "nord" tweaks) ''
         cp -a wallpaper/Graphite-nord/*.png $out/share/backgrounds/
       ''}
+    ''}
+
+    ${lib.optionalString withGrub ''
+      (
+      cd other/grub2
+
+      patchShebangs install.sh
+
+      ./install.sh --justcopy --dest $out/share/grub/themes \
+        ${lib.optionalString (builtins.elem "nord" tweaks) "--theme nord"} \
+        ${lib.optionalString (grubScreens != []) "--screen " + builtins.toString grubScreens}
+      )
     ''}
 
     jdupes -L -r $out/share

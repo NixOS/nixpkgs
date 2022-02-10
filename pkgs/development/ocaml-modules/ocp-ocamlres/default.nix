@@ -5,7 +5,7 @@ then throw "ocp-ocamlres is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-ocp-ocamlres-${version}";
+  pname = "ocaml${ocaml.version}-ocp-ocamlres";
   version = "0.4";
   src = fetchFromGitHub {
     owner = "OCamlPro";

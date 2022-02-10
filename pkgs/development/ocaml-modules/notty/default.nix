@@ -12,7 +12,7 @@ let withLwt = lwt != null; in
 
 stdenv.mkDerivation rec {
   version = "0.2.2";
-  name = "ocaml${ocaml.version}-notty-${version}";
+  pname = "ocaml${ocaml.version}-notty";
 
   src = fetchurl {
     url = "https://github.com/pqwy/notty/releases/download/v${version}/notty-${version}.tbz";
