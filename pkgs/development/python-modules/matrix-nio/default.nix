@@ -40,7 +40,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"'
+      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"' \
+      --replace 'jsonschema = "^3.2.0"' 'jsonschema = "*"' \
     # Remove after https://github.com/poljar/matrix-nio/pull/288
     substituteInPlace pyproject.toml \
       --replace 'aiohttp-socks = "^0.6.0"' 'aiohttp-socks = "^0.7.0"'

@@ -25,6 +25,11 @@ buildPythonPackage rec {
     sha256 = "d83570a664c10b97a1dc6f8df87e5fdfff012f48f62be131e449c20dfc32630e";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cachetools>=2.0.0,<5.0" "cachetools"
+  '';
+
   propagatedBuildInputs = [
     cachetools
     pyasn1-modules

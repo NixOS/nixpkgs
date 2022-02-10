@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "loo-py";
-  version = "2017.2";
+  version = "2020.2";
 
   src = fetchPypi {
     pname = "loo.py";
     inherit version;
-    sha256 = "c656992de48b328cdaccd7d1f14eb522b9dd5a1d0d15f54623f4ab18fd219abc";
+    sha256 = "c0aba31f8b61f6487e84120a154fab862d19c3b374ad4285b987c4f2d746d51f";
   };
 
   checkInputs = [ pytest ];

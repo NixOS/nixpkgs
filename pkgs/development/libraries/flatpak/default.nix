@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     # Hardcode paths used by Flatpak itself.
     (substituteAll {
       src = ./fix-paths.patch;
-      p11kit = "${p11-kit.dev}/bin/p11-kit";
+      p11kit = "${p11-kit.bin}/bin/p11-kit";
     })
 
     # Adapt paths exposed to sandbox for NixOS.

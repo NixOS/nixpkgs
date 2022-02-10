@@ -10,7 +10,7 @@
 , avahi
 , dbus
 , faad2
-, ffmpeg
+, ffmpeg_4
 , flac
 , fluidsynth
 , freefont_ttf
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     avahi
     dbus
     faad2
-    ffmpeg
+    ffmpeg_4
     flac
     fluidsynth
     fribidi

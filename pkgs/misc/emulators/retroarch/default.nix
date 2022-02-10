@@ -6,7 +6,7 @@
 , alsa-lib
 , AppKit
 , fetchFromGitHub
-, ffmpeg
+, ffmpeg_4
 , Foundation
 , freetype
 , gamemode
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     lib.optional stdenv.isLinux wayland ++
     lib.optional (runtimeLibs != [ ]) makeWrapper;
 
-  buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ] ++
+  buildInputs = [ ffmpeg_4 freetype libxml2 libGLU libGL python3 SDL2 which ] ++
     lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
     lib.optional withVulkan vulkan-loader ++
     lib.optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++

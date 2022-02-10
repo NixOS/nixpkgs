@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "html-sanitizer";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZPyGF7N+EZHfgqZfRQx4x1r83BMur+Zg2kdtVISn3I8=";
+    sha256 = "sha256-1JSdi1PFM+N+UuEPfgWkOZw8S2PZ4ntadU0wnVJNnjw=";
   };
 
   propagatedBuildInputs = [

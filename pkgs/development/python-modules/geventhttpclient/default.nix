@@ -1,23 +1,25 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, backports_ssl_match_hostname
 , brotli
+, buildPythonPackage
 , certifi
-, gevent
-, six
 , dpkt
+, fetchPypi
+, gevent
 , pytestCheckHook
+, pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
   version = "1.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d80ec9ff42b7219f33558185499d0b4365597fc55ff886207b45f5632e099780";
+    hash = "sha256-2A7J/0K3IZ8zVYGFSZ0LQ2VZf8Vf+IYge0X1Yy4Jl4A=";
   };
 
   propagatedBuildInputs = [
@@ -25,8 +27,6 @@ buildPythonPackage rec {
     certifi
     gevent
     six
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    backports_ssl_match_hostname
   ];
 
   checkInputs = [
@@ -45,11 +45,14 @@ buildPythonPackage rec {
     "test_multi_queries_greenlet_safe"
   ];
 
+  pythonImportsCheck = [
+    "geventhttpclient"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/gwik/geventhttpclient";
     description = "HTTP client library for gevent";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
   };
-
 }

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , coreutils
 , which
 , gnused
@@ -145,6 +146,8 @@ let
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
       sha256 = "sha256-tbTuGlJpdiy76ZOkvWUH5nXkEAzpu+hCFKXusrGfrok=";
     };
+
+    patches = [ ./tests-pcre2-update.patch ]; # should be included in >= 3.4
 
     # Fix FHS paths in tests
     postPatch = ''

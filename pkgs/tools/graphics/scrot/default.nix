@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "A command-line screen capture utility";
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin ];
-    license = licenses.mit;
+    license = licenses.mitAdvertising;
   };
 }

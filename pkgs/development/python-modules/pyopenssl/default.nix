@@ -47,6 +47,8 @@ let
     "test_fallback_default_verify_paths"
     # https://github.com/pyca/pyopenssl/issues/768
     "test_wantWriteError"
+    # https://github.com/pyca/pyopenssl/issues/1043
+    "test_alpn_call_failure"
   ] ++ (
     lib.optionals (lib.hasPrefix "libressl" openssl.meta.name) failingLibresslTests
   ) ++ (
@@ -64,12 +66,12 @@ in
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "20.0.1";
+  version = "21.0.0";
 
   src = fetchPypi {
     pname = "pyOpenSSL";
     inherit version;
-    sha256 = "4c231c759543ba02560fcd2480c48dcec4dae34c9da7d3747c508227e0624b51";
+    sha256 = "5e2d8c5e46d0d865ae933bef5230090bdaf5506281e9eec60fa250ee80600cb3";
   };
 
   outputs = [ "out" "dev" ];

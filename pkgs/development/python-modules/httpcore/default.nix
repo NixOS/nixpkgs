@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.14.3";
+  version = "0.14.4";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jPsbMhY1lWKBXlh6hsX6DGKXi/g7VQSU00tF6H7qkOo=";
+    sha256 = "19zsg8ijw0s1722ka67mjxx5z07lx9jq36z97l1fa6z1129wq240";
   };
 
   propagatedBuildInputs = [

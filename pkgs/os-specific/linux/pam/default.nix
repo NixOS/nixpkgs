@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-pam";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchurl {
     url    = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
-    sha256 = "sha256-IB1AcwsRNbGzzeoJ8sKKxjTXMYHM0Bcs7d7jZJxXkvw=";
+    sha256 = "sha256-5OxxMakdpEUSV0Jo9JPG2MoQXIcJFpG46bVspoXU+U0=";
   };
 
   patches = [ ./suid-wrapper-path.patch ];

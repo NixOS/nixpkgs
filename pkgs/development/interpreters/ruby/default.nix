@@ -166,6 +166,8 @@ let
         # Bundler tries to create this directory
         postInstall = ''
           rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
+          # Remove references to the build environment from the closure
+          sed -i '/^  CONFIG\["\(BASERUBY\|SHELL\|GREP\|EGREP\|MKDIR_P\|MAKEDIRS\|INSTALL\)"\]/d' $rbConfig
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $rbConfig
           ${
@@ -203,7 +205,6 @@ let
           # Add rbconfig shim so ri can find docs
           mkdir -p $devdoc/lib/ruby/site_ruby
           cp ${./rbconfig.rb} $devdoc/lib/ruby/site_ruby/rbconfig.rb
-          sed -i '/^  CONFIG\["\(BASERUBY\|SHELL\|GREP\|EGREP\|MKDIR_P\|MAKEDIRS\|INSTALL\)"\]/d' $rbConfig
         '' + opString useBaseRuby ''
           # Prevent the baseruby from being included in the closure.
           ${removeReferencesTo}/bin/remove-references-to \

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "cwcwidth";
-  version = "0.1.4";
+  version = "0.1.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1azrphpkcyggg38xvkfb9dpc4xmmm90p02kf8dkqd4d6j5w96aj8";
+    sha256 = "1b31da599c9f0cf41f39ed10c1ceaa01d6024e31c6cd9aea2885b1f2a6d15fba";
   };
 
   nativeBuildInputs = [ cython ];

@@ -7,7 +7,7 @@
 , bubblewrap
 , exiftool
 , ffmpeg
-, mime-types
+, mailcap
 , wrapGAppsHook
 , gdk-pixbuf
 , gobject-introspection

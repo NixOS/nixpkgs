@@ -40,7 +40,6 @@ buildPythonPackage rec {
     backoff
     docutils
     pytz
-    types-pytz
     voluptuous
     websockets
   ];
@@ -51,6 +50,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
+    types-pytz
   ];
 
   postPatch = ''

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "2.4.2";
+  version = "2.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    sha256 = "1wgh231r16jyvaj1ch1pajvl9szflb4srs505pfdwdlqvz7rzww8";
+    sha256 = "sha256-ncMwiMwYivaFu5jrAsm1oCuXP/PZ2ALT+M+CmV6dtFo=";
   };
 
   nativeBuildInputs = [

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.46.4";
+  version = "1.46.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0ra2d1wasksy1zy3rgviwdni40dnamchisjrrqqi940y545m493m";
+    sha256 = "1fgvwbj9ihz5svzrd2l0s18k16r4qg3wimrniv71fn3vdcg0shxp";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://e2fsprogs.sourceforge.net/";
+    changelog = "http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#${version}";
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
     license = with licenses; [
       gpl2Plus

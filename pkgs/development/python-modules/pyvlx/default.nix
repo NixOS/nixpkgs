@@ -2,25 +2,35 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 , pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "pyvlx";
-  version = "0.2.19";
+  version = "0.2.20";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = pname;
     rev = version;
-    sha256 = "031gp3sjagvmgdhfpdqlawva425ja1n3bmxk6jyn4zx54szj9zwf";
+    sha256 = "1irjix9kr6qih84gii7k1a9c67n8133gpnmwfd09550jsqdmg006";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  propagatedBuildInputs = [
+    pyyaml
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "pyvlx" ];
+  pythonImportsCheck = [
+    "pyvlx"
+  ];
 
   meta = with lib; {
     description = "Python client to work with Velux units";

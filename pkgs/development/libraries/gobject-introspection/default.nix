@@ -46,6 +46,15 @@ stdenv.mkDerivation rec {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
     })
+    # Fix build with meson 0.61.0
+    (fetchurl {
+      url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/827494d6415b696a98fa195cbd883b50cc893bfc.patch";
+      sha256 = "sha256-imVWzU760FRsX+eXREQDQ6mDcmzZ5ASLT9rBf4oyBGQ=";
+    })
+    (fetchurl {
+      url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/effb1e09dee263cdac4ec593e8caf316e6f01fe2.patch";
+      sha256 = "sha256-o7a0qDT5IYcYcz8toeZu+nPj3SwS52sNgmxgzsmlp4Q=";
+    })
   ] ++ lib.optionals x11Support [
     # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
     # https://github.com/NixOS/nixpkgs/issues/34080

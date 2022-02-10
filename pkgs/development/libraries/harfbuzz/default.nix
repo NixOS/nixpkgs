@@ -24,7 +24,7 @@
 }:
 
 let
-  version = "3.1.2";
+  version = "3.2.0";
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     owner = "harfbuzz";
     repo = "harfbuzz";
     rev = version;
-    sha256 = "sha256-1xndbJhx+1AzJNnpvvdEcBHPZMPaMI03h6sG2h1d3qs=";
+    sha256 = "sha256-iNYp/hyJTaaF6e09YpUL7ktBhq2wRN9zKiEH59WLbYU=";
   };
 
   postPatch = ''

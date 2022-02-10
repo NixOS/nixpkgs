@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ffmpegthumbnailer";
-  version = "2.2.2";
+  version = "unstable-2021-09-02";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
-    rev = version;
-    sha256 = "1bakbr714j7yxdal1f5iq0gcl4cxggbbgj227ihdh5kvygqlwich";
+    rev = "d92e191dd793b12cee0a0f685f5a8d8252988399";
+    sha256 = "1ysfq3g74b8ivivrdpfi4vm23d3cyc3rfla5i6y8q9aycis9xv6q";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

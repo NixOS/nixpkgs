@@ -384,6 +384,17 @@ in {
           so you don't need to to that yourself.
         '';
       };
+
+      enableFccUnlock = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable FCC unlock procedures. Since release 1.18.4, the ModemManager daemon no longer
+          automatically performs the FCC unlock procedure by default. See
+          <link xlink:href="https://modemmanager.org/docs/modemmanager/fcc-unlock/">the docs</link>
+          for more details.
+        '';
+      };
     };
   };
 
@@ -438,7 +449,13 @@ in {
 
       "NetworkManager/VPN/nm-sstp-service.name".source =
         "${networkmanager-sstp}/lib/NetworkManager/VPN/nm-sstp-service.name";
+
       }
+      // optionalAttrs cfg.enableFccUnlock
+         {
+           "ModemManager/fcc-unlock.d".source =
+             "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/*";
+         }
       // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
          {
            "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;

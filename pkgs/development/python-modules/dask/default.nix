@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.10.0";
+  version = "2022.01.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,18 +32,9 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "07ysrs46x5w8rc2df0j06rsw58ahcysd6lwjk5riqpjlpwdfmg7p";
+    sha256 = "sha256-HlVvnhEDzefzv9xchlXl9d4KCumoAqoYUWmIiCXLJyM=
+";
   };
-
-  patches = [
-    # remove with next bump
-    (fetchpatch {
-      name = "fix-tests-against-distributed-2021.10.0.patch";
-      url = "https://github.com/dask/dask/commit/cd65507841448ad49001cf27564102e2fb964d0a.patch";
-      includes = [ "dask/tests/test_distributed.py" ];
-      sha256 = "1i4i4k1lzxcydq9l80jyifq21ny0j3i47rviq07ai488pvx1r2al";
-    })
-  ];
 
   propagatedBuildInputs = [
     cloudpickle
@@ -82,7 +73,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # parallelize
-    "--numprocesses auto"
+    "--numprocesses $NIX_BUILD_CORES"
     # rerun failed tests up to three times
     "--reruns 3"
     # don't run tests that require network access

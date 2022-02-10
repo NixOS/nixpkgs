@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "4.10.0";
+  version = "4.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    hash = "sha256-kqi1jOc0sqRJSHjg7PfXnM16EotfxgFMQB4LYfAG8PY=";
+    hash = "sha256-lR8NiltyYOnbXkHUKShbX0UekoR58Z2AgYh4Un026V4=";
   };
 
   nativeBuildInputs = [

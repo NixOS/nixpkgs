@@ -10,13 +10,13 @@
 buildPythonPackage rec {
   pname = "pyerfa";
   format = "pyproject";
-  version = "2.0.0";
+  version = "2.0.0.1";
 
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+QQjHhpXD5REDgYUB5lZCJUQf5QoR7UqdTzoHJYJFi0=";
+    sha256 = "2fd4637ffe2c1e6ede7482c13f583ba7c73119d78bef90175448ce506a0ede30";
   };
 
   nativeBuildInputs = [

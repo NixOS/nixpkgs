@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.13.5";
+  version = "1.13.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "mwouts";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rapp2baqml1z3n8k7ijf5461b3p8wgr45y3njz54q75v0jk7v45";
+    sha256 = "0xvc4i3wwycaqx16qylglywa14ky7mikdv1jm3p7yz19cq5hr0fx";
   };
 
   buildInputs = [

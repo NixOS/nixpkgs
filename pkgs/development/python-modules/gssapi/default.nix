@@ -67,7 +67,7 @@ buildPythonPackage rec {
     echo $'\ndel TestBaseUtilities.test_add_cred_impersonate_name' >> gssapi/tests/test_raw.py
 
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-    ${python.interpreter} setup.py nosetests -e 'ext_test_\d.*'
+    nosetests -e 'ext_test_\d.*'
   '';
   pythonImportsCheck = [ "gssapi" ];
 

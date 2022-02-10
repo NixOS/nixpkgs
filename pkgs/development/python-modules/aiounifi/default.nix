@@ -33,6 +33,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
+  ];
+
   pythonImportsCheck = [ "aiounifi" ];
 
   meta = with lib; {

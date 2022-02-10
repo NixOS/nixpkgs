@@ -62,5 +62,7 @@ stdenv.mkDerivation rec {
     description = "Audio/Video Communications Framework formely known as farsight";
     platforms = platforms.linux;
     license = licenses.lgpl21;
+    # no longer compatible with gstreamer 1.20
+    broken = true;
   };
 }

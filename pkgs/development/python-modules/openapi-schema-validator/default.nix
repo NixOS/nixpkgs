@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, poetry-core
 , pytestCheckHook
 , isodate
 , jsonschema
@@ -13,12 +14,19 @@
 
 buildPythonPackage rec {
   pname = "openapi-schema-validator";
-  version = "0.1.5";
+  version = "0.2.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a4b2712020284cee880b4c55faa513fbc2f8f07f365deda6098f8ab943c9f0df";
+  src = fetchFromGitHub {
+    owner = "p1c2u";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-HoXtDlXOoYqzsM4FxVfLQdIlpJXaNUcQo8//B4JqJoA=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [ isodate jsonschema six strict-rfc3339 rfc3339-validator ];
 

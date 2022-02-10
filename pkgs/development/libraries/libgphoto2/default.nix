@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgphoto2";
-  version = "2.5.27";
+  version = "2.5.28";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "libgphoto2";
     rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
-    sha256 = "sha256-c7fBl6GBLAU+RL5WFC4PL+n/nEHZUfqIJ9qq1+qNNCg=";
+    sha256 = "sha256-e3zMinUUBKzZlQQzkS0oPWAzIVlmQoLj73Spj0XiTIE=";
   };
 
   depsBuildBuild = [ pkg-config ];

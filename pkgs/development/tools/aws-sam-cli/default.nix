@@ -44,11 +44,12 @@ python3.pkgs.buildPythonApplication rec {
       --replace "dateparser~=1.0" "dateparser>=0.7" \
       --replace "docker~=4.2.0" "docker>=4.2.0" \
       --replace "Flask~=1.1.2" "Flask~=2.0" \
-      --replace "PyYAML~=5.3" "PyYAML" \
+      --replace "PyYAML~=5.3" "PyYAML #" \
       --replace "regex==" "regex #" \
       --replace "requests==" "requests #" \
       --replace "typing_extensions==" "typing-extensions #" \
-      --replace "tzlocal==3.0" "tzlocal" \
+      --replace "tzlocal==3.0" "tzlocal #" \
+      --replace "tomlkit==0.7.2" "tomlkit #" \
       --replace "watchdog==" "watchdog #"
   '';
 

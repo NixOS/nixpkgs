@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
     python3 # for data-generators
     systemd # used for checks to install systemd user service
     dbus # used for checks and pkg-config to install dbus service/s
-  ];
+  ] ++ checkInputs; # gi is in the main meson.build and checked regardless of
+                    # whether tests are enabled
 
   buildInputs = [
     glib
@@ -85,7 +86,6 @@ stdenv.mkDerivation rec {
 
   checkInputs = with python3.pkgs; [
     pygobject3
-    tappy
   ];
 
   mesonFlags = [
