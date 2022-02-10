@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "spruce";
-  version = "unstable-20220210";
+  version = "unstable-2022-02-10";
 
   src = fetchFromGitHub {
     owner = "geofffranks";
