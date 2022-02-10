@@ -75,34 +75,34 @@ in
 {
   # Different version of hadoop support different java runtime versions
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
-  hadoop_3_3 = common
-    rec {
-      pname = "hadoop";
-      version = "3.3.1";
-      sha256 = {
-        x86_64-linux = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
-        x86_64-darwin = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
-        aarch64-linux = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
-        aarch64-darwin = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
-      };
-      jdk = jdk11_headless;
-      untarDir = "${pname}-${version}";
+  hadoop_3_3 =
+    common
+      rec {
+        pname = "hadoop";
+        version = "3.3.1";
+        untarDir = "${pname}-${version}";
+        sha256 = {
+          x86_64-linux = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
+          x86_64-darwin = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
+          aarch64-linux = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
+          aarch64-darwin = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
+        };
+        inherit openssl;
+        nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
+        libPatches = ''
+          ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${untarDir}/lib/native/libsasl2.so.2
+          ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${untarDir}/lib/native/
+          ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${untarDir}/lib/native/
+          ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${untarDir}/lib/native/
+          ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${untarDir}/lib/native/
+          patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
+        '';
+        jdk = jdk11_headless;
+      } // optionalAttrs stdenv.isAarch64 {
       openssl = null;
-    } // optionalAttrs stdenv.isLinux {
-    # Only include native libraries if we're using Linux.
-    # TODO: Figure out how to get the libraries to link properly for darwin.
-    inherit openssl;
-    # TODO: Package and add Intel Storage Acceleration Library
-    nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
-    libPatches = ''
-      ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${untarDir}/lib/native/libsasl2.so.2
-      ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${untarDir}/lib/native/
-      ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${untarDir}/lib/native/
-      ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${untarDir}/lib/native/
-      ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${untarDir}/lib/native/
-      patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
-    '';
-  };
+      nativeLibs = [ ];
+      libPatches = "";
+    };
   hadoop_3_2 = common rec {
     pname = "hadoop";
     version = "3.2.2";
