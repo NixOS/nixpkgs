@@ -21,7 +21,7 @@ let
   pname = "zammad";
   version = "5.0.2";
 
-  sourceDir = applyPatches "zammad-patched" {
+  sourceDir = applyPatches {
 
     src = fetchFromGitHub (builtins.fromJSON (builtins.readFile ./source.json));
 
