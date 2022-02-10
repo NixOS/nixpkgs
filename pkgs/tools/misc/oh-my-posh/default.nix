@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "7.3.0";
+  version = "7.16.2";
 
   src = fetchFromGitHub {
     owner = "JanDeDobbeleer";
     repo = "oh-my-posh";
     rev = "v${version}";
-    sha256 = "b8+G7LOHHz65rfhBL+IxwJhvA2JJc49gfEJboK0cFpc=";
+    sha256 = "vRStKh2IjoQaUea1jUbpnPfD1Xc9yME4eG4cPHccjAo=";
   };
   modRoot = "./src";
 
-  vendorSha256 = "u5rpXEEKCq+FLyM9/LnjfGH5cYDdhYkkGeesNmk5c1U=";
+  vendorSha256 = "LCxez5XJgANiCDmm/E57/F6X7gdMM9HXLNOFEAGpJSc=";
 
   ldflags = [
     "-s" "-w"
