@@ -1,0 +1,7 @@
+Adapted formating to 3.3.1 from
+https://github.com/fish-shell/fish-shell/commit/ec8844d834cc9fe626e9fc326c6f5410341d532a
+--- a/src/fish_tests.cpp
++++ b/src/fish_tests.cpp
+@@ -5726,2 +5725,0 @@
+-        {{L"string", L"match", L"-r", L"(?=ab\\K)", L"ab", 0}, STATUS_CMD_OK, L"\n"},
+-        {{L"string", L"match", L"-r", L"(?=ab\\K)..(?=cd\\K)", L"abcd", 0}, STATUS_CMD_OK, L"\n"},
