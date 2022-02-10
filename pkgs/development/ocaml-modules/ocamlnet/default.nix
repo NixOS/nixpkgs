@@ -7,7 +7,7 @@ then throw "ocamlnet is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-ocamlnet-${version}";
+  pname = "ocaml${ocaml.version}-ocamlnet";
   version = "4.1.9";
 
   src = fetchurl {

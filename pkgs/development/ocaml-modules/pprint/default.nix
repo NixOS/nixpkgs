@@ -13,8 +13,8 @@ let param =
 }; in
 
 stdenv.mkDerivation {
-
-  name = "ocaml${ocaml.version}-pprint-${param.version}";
+  inherit (param) version;
+  pname = "ocaml${ocaml.version}-pprint";
 
   src = fetchurl {
     url = "http://gallium.inria.fr/~fpottier/pprint/pprint-${param.version}.tar.gz";
