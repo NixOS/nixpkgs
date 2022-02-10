@@ -13666,6 +13666,8 @@ with pkgs;
 
   mujs = callPackage ../development/interpreters/mujs { };
 
+  nextflow = callPackage ../development/interpreters/nextflow { };
+
   ngn-k = callPackage ../development/interpreters/ngn-k { };
 
   obb = callPackage ../development/interpreters/clojure/obb.nix { };
