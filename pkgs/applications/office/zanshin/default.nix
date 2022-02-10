@@ -10,11 +10,11 @@
 
 mkDerivation rec {
   pname = "zanshin";
-  version = "21.12.1";
+  version = "21.12.2";
 
   src = fetchurl {
     url = "mirror://kde/stable/release-service/${version}/src/zanshin-${version}.tar.xz";
-    sha256 = "sha256-hYbJwmnD9i/SL5ET2t9YgPxJHJUpAbMZ4a62WljhpHw=";
+    sha256 = "sha256-zMCV4KIrqeKHEsMbqEbnm/DgQiGxZbZXDVMuSSrXj8Y=";
   };
 
   nativeBuildInputs = [
