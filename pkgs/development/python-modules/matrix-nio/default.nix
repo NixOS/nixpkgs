@@ -44,7 +44,8 @@ buildPythonPackage rec {
       --replace 'jsonschema = "^3.2.0"' 'jsonschema = "*"' \
     # Remove after https://github.com/poljar/matrix-nio/pull/288
     substituteInPlace pyproject.toml \
-      --replace 'aiohttp-socks = "^0.6.0"' 'aiohttp-socks = "^0.7.0"'
+      --replace 'aiohttp-socks = "^0.6.0"' 'aiohttp-socks = "^0.7.0"' \
+      --replace 'cachetools = { version = "^4.2.1", optional = true }' 'cachetools = { version = "^5.0.0", optional = true }'
   '';
 
   nativeBuildInputs = [
