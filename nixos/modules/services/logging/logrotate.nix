@@ -84,10 +84,6 @@ let
     };
 
     config.name = name;
-    config.extraConfig = ''
-      missingok
-      notifempty
-    '';
   };
 
   mkConf = pathOpts: ''
@@ -101,7 +97,11 @@ let
   '';
 
   paths = sortProperties (attrValues (filterAttrs (_: pathOpts: pathOpts.enable) cfg.paths));
-  configFile = pkgs.writeText "logrotate.conf" (concatStringsSep "\n" ((map mkConf paths) ++ [ cfg.extraConfig ]));
+  configFile = pkgs.writeText "logrotate.conf" (
+    concatStringsSep "\n" (
+      [ "missingok" "notifempty" cfg.extraConfig ] ++ (map mkConf paths)
+    )
+  );
 
 in
 {
