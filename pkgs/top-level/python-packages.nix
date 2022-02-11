@@ -5390,6 +5390,8 @@ in {
 
   netifaces = callPackage ../development/python-modules/netifaces { };
 
+  netio = callPackage ../development/python-modules/netio { };
+
   nettigo-air-monitor = callPackage ../development/python-modules/nettigo-air-monitor { };
 
   networkx = callPackage ../development/python-modules/networkx { };
