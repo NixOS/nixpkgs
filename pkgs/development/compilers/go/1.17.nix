@@ -50,7 +50,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.17.5";
+  version = "1.17.7";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
