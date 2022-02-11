@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "tap.py";
   version = "3.1";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
