@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pulsectl";
-  version = "22.1.2";
+  version = "22.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-icAIrRgLX/WNqSit/6/423/pVLzA55wlFRcUHlgvEVk=";
+    sha256 = "sha256-8o/kuIHdLMFE0tlPg+xg2MWaUmQqCtNjXMTQ+EBvSFg=";
   };
 
   patches = [
