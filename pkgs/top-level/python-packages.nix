@@ -5444,6 +5444,8 @@ in {
     inherit (pkgs) nix;
   };
 
+  nixdeps = callPackage ../development/python-modules/nixdeps { };
+
   nixpkgs = callPackage ../development/python-modules/nixpkgs { };
 
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
@@ -8758,6 +8760,8 @@ in {
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
 
   rstcheck = callPackage ../development/python-modules/rstcheck { };
+
+  rsyscall = callPackage ../development/python-modules/rsyscall { };
 
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
 
