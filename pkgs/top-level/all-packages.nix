@@ -441,8 +441,6 @@ with pkgs;
     dotnetfx = dotnetfx40;
   };
 
-  dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers { };
-
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
   dotnet-sdk_2 = dotnetCorePackages.sdk_2_1;
@@ -655,8 +653,10 @@ with pkgs;
 
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz {};
 
-  fetchNuGet = callPackage ../build-support/dotnet/fetchnuget { };
   buildDotnetPackage = callPackage ../build-support/dotnet/build-dotnet-package { };
+  fetchNuGet = callPackage ../build-support/dotnet/fetchnuget { };
+  dotnetbuildhelpers = callPackage ../build-support/dotnet/dotnetbuildhelpers { };
+
   buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
 
