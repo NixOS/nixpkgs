@@ -32984,6 +32984,8 @@ with pkgs;
 
   gummi = callPackage ../applications/misc/gummi { };
 
+  gurk = callPackage ../applications/networking/instant-messengers/gurk { };
+
   gxemul = callPackage ../misc/emulators/gxemul { };
 
   hatari = callPackage ../misc/emulators/hatari { };
