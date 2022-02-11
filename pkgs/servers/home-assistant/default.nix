@@ -57,8 +57,18 @@ let
     # Pinned due to API changes in 0.1.0
     (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
 
-    # Requirements for recorder not found: ['sqlalchemy==1.4.27'].
-    #(mkOverride "sqlalchemy" "1.4.27" "031jbd0svrvwr3n52iibp9mkwsj9wicnck45yd26da5kmsfkas6p")
+    # Pinned due to API changes >0.3.5.3
+    (self: super: {
+      pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.5.3";
+        src = fetchFromGitHub {
+          owner = "MatsNl";
+          repo = "pyatag";
+          rev = version;
+          sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
+        };
+      });
+    })
 
     # Pinned due to API changes in 0.4.0
     (self: super: {
@@ -92,9 +102,9 @@ let
     })
   ];
 
-  mkOverride = attrname: version: sha256:
+  mkOverride = attrName: version: sha256:
     self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+      ${attrName} = super.${attrName}.overridePythonAttrs (oldAttrs: {
         inherit version;
         src = oldAttrs.src.override {
           inherit version sha256;
