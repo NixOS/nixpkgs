@@ -63,23 +63,26 @@ stdenv.mkDerivation rec {
     make -C tools/migration
   '';
 
+  luaEnvPath = lua.pkgs.lib.genLuaPathAbsStr luaEnv;
+  luaEnvCPath = lua.pkgs.lib.genLuaCPathAbsStr luaEnv;
+
   # the wrapping should go away once lua hook is fixed
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
       wrapProgram $out/bin/prosody \
-        --prefix LUA_PATH ';' "$LUA_PATH" \
-        --prefix LUA_CPATH ';' "$LUA_CPATH"
+        --prefix LUA_PATH ';' "$luaEnvPath" \
+        --prefix LUA_CPATH ';' "$luaEnvCPath"
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --prefix LUA_PATH ';' "$LUA_PATH" \
-        --prefix LUA_CPATH ';' "$LUA_CPATH"
+        --prefix LUA_PATH ';' "$luaEnvPath" \
+        --prefix LUA_CPATH ';' "$luaEnvCPath"
 
       make -C tools/migration install
       wrapProgram $out/bin/prosody-migrator \
-        --prefix LUA_PATH ';' "$LUA_PATH" \
-        --prefix LUA_CPATH ';' "$LUA_CPATH"
+        --prefix LUA_PATH ';' "$luaEnvPath" \
+        --prefix LUA_CPATH ';' "$luaEnvCPath"
     '';
 
   passthru = {
