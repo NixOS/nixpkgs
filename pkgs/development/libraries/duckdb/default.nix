@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , cmake
+, ninja
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-F5YOqDeY3rgcnuu5SNqOfUxhsaXgqvdJZTnD1unI0tc=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
 
   meta = with lib; {
     homepage = "https://github.com/duckdb/duckdb";
