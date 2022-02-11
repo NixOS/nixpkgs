@@ -15,7 +15,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-F5YOqDeY3rgcnuu5SNqOfUxhsaXgqvdJZTnD1unI0tc=";
   };
 
+  cmakeFlags = [
+    "-DBUILD_FTS_EXTENSION=1"
+    "-DBUILD_HTTPFS_EXTENSION=1"
+    "-DBUILD_ICU_EXTENSION=1"
+    "-DBUILD_REST_EXTENSION=1"
+    "-DBUILD_TPCDS_EXTENSION=1"
+    "-DBUILD_TPCH_EXTENSION=1"
+    "-DBUILD_VISUALIZER_EXTENSION=1"
+  ];
   nativeBuildInputs = [ cmake ninja ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     homepage = "https://github.com/duckdb/duckdb";
