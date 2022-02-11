@@ -1912,6 +1912,10 @@ with pkgs;
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
 
+  itch = callPackage ../games/itch {};
+
+  itch-setup = callPackage ../games/itch-setup {};
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   leetcode-cli = callPackage ../applications/misc/leetcode-cli { };
