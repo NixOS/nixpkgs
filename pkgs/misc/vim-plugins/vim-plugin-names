@@ -974,6 +974,7 @@ Xuyuanp/scrollbar.nvim
 yamatsum/nvim-cursorline
 yamatsum/nvim-nonicons
 ycm-core/YouCompleteMe
+yegappan/mru
 Yggdroot/hiPairs
 Yggdroot/indentLine
 Yggdroot/LeaderF
