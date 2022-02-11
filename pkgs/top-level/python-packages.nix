@@ -7206,6 +7206,8 @@ in {
 
   pynetdicom = callPackage ../development/python-modules/pynetdicom { };
 
+  pynetgear = callPackage ../development/python-modules/pynetgear { };
+
   pynina = callPackage ../development/python-modules/pynina { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
