@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "spidermonkey";
-  version = "91.4.0";
+  version = "91.6.0";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "09xkzk27krzyj1qx8cjjn2zpnws1cncka75828kk7ychnjfq48p7";
+    sha512 = "3dd1929f93cdd087a93fc3597f32d9005c986b59832954e01a8c2472b179c92ad611eaa73d3fc000a08b838a0b70da73ff5ba82d6009160655ba6894cf04520e";
   };
 
   outputs = [ "out" "dev" ];
