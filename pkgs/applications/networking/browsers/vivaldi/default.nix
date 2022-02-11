@@ -4,7 +4,7 @@
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , libxml2
-, glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
+, glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core
 , libdrm, mesa
 , nss, nspr
 , patchelf, makeWrapper
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
     atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd libva
     freetype fontconfig libXrender libuuid expat glib nss nspr
-    libxml2 pango cairo gnome2.GConf
+    libxml2 pango cairo
     libdrm mesa
   ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
