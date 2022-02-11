@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
     homepage    = "https://www.trace-cmd.org/";
-    license     = licenses.gpl2;
+    license     = with licenses; [ lgpl21Only gpl2Only ];
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice basvandijk ];
   };
