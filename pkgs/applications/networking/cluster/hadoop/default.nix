@@ -77,7 +77,7 @@ in
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
   hadoop_3_3 =
     common
-      rec {
+      (rec {
         pname = "hadoop";
         version = "3.3.1";
         untarDir = "${pname}-${version}";
@@ -97,14 +97,14 @@ in
         '';
         jdk = jdk11_headless;
       } // optionalAttrs stdenv.isDarwin {
-      sha256 = {
-        x86_64-darwin = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
-        aarch64-darwin = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
-      };
-      openssl = null;
-      nativeLibs = [ ];
-      libPatches = "";
-    };
+        sha256 = {
+          x86_64-darwin = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
+          aarch64-darwin = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
+        };
+        openssl = null;
+        nativeLibs = [ ];
+        libPatches = "";
+      });
   hadoop_3_2 = common rec {
     pname = "hadoop";
     version = "3.2.2";
