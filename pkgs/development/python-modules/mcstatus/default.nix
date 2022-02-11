@@ -46,6 +46,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'asyncio-dgram = "1.2.0"' 'asyncio-dgram = ">=1.2.0"' \
+      --replace 'dnspython = "2.1.0"' 'dnspython = "^2.1.0"' \
       --replace 'six = "1.14.0"' 'six = ">=1.14.0"' \
       --replace 'click = "7.1.2"' 'click = ">=7.1.2"'
   '';
