@@ -657,7 +657,7 @@ with pkgs;
 
   fetchNuGet = callPackage ../build-support/fetchnuget { };
   buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
-  buildDotnetModule = callPackage ../build-support/build-dotnet-module { };
+  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/nuget-to-nix { };
 
   fetchgx = callPackage ../build-support/fetchgx { };
