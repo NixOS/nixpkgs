@@ -5657,6 +5657,8 @@ in {
 
   openerz-api = callPackage ../development/python-modules/openerz-api { };
 
+  openevsewifi = callPackage ../development/python-modules/openevsewifi { };
+
   openhomedevice = callPackage ../development/python-modules/openhomedevice { };
 
   openidc-client = callPackage ../development/python-modules/openidc-client { };
