@@ -4680,6 +4680,8 @@ in {
 
   lightparam = callPackage ../development/python-modules/lightparam { };
 
+  lightwave = callPackage ../development/python-modules/lightwave { };
+
   lightwave2 = callPackage ../development/python-modules/lightwave2 { };
 
   lima = callPackage ../development/python-modules/lima { };
@@ -6546,6 +6548,8 @@ in {
   pyarrow = callPackage ../development/python-modules/pyarrow {
     inherit (pkgs) arrow-cpp cmake;
   };
+
+  pyasn = callPackage ../development/python-modules/pyasn { };
 
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
 
@@ -9653,6 +9657,8 @@ in {
   teletype = callPackage ../development/python-modules/teletype { };
 
   telfhash = callPackage ../development/python-modules/telfhash { };
+
+  temescal = callPackage ../development/python-modules/temescal { };
 
   tempest = callPackage ../development/python-modules/tempest { };
 
