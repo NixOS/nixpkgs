@@ -64,6 +64,11 @@ buildPythonPackage rec {
     langcodes
   ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic~=1.2"
+  '';
+
   checkInputs = [
     pytest
   ];
