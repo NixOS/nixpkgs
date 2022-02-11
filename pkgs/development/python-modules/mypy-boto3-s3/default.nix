@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-s3";
-  version = "1.20.35.post1";
+  version = "1.20.49";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e576fa0f3d1ea9ce53ad620ee565962687cdae5d8f1f8414db0669aed788836c";
+    sha256 = "sha256-dLDHG81vVUO4V8VyD4KJTXO6LoN2+fVQEbWUzT5YSn8=";
   };
 
   propagatedBuildInputs = [
