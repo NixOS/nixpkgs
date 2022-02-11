@@ -104,10 +104,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0wr4jkylfkd89970hw3akfy7vyj54qz11gq3aar48j8p9px0gl17";
+      sha256 = "0c5dyi1hy9xawlicdfzakj279r514vmb93kpwfa92lbb9bz1plg5";
       type = "gem";
     };
-    version = "1.552.0";
+    version = "1.554.0";
   };
   aws-sdk-core = {
     groups = ["default"];
@@ -684,12 +684,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "b8975cbd6552cc52044250143ffc440775a8a29e";
-      sha256 = "0j1n2lmg0radikdy7j7d1ah82yxzhsly7w7wld92b34yfc374pyy";
+      rev = "61b21e59fe8f4f65fba27f88d49782dece0aad00";
+      sha256 = "1bw0rxg3wbl6ws4scshnmw5121vz3l5a896nanddz1z2lh7psi2b";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.1.28";
+    version = "6.1.29";
   };
   metasploit-model = {
     groups = ["default"];
@@ -706,10 +706,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "12fr3v5mjwlilnlccnbimamz6sq6kckf16vgzpfpgi8gjma3lgb9";
+      sha256 = "0ybw1daczslifq684hjxmr5668w7db1fi0z6g53812yva7lf4sv6";
       type = "gem";
     };
-    version = "2.0.71";
+    version = "2.0.72";
   };
   metasploit_data_models = {
     groups = ["default"];
@@ -967,10 +967,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1fh2pq3gk5fh18g71wir98k4bz4rvihhx8qmn8zi9fz6yfqx39qj";
+      sha256 = "0pn5l3ayjfn4mv2079q80q0x3q39q25nxcc5l9cjqz4lf5anhlfi";
       type = "gem";
     };
-    version = "2.9.0";
+    version = "2.9.1";
   };
   pg = {
     groups = ["default"];
@@ -1357,10 +1357,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mf3mzxq83y7i8nr6bcl5yacvfz6y5p3hdmvr1m6xq0l0i9a9axy";
+      sha256 = "13sp6bqgj06h7jkw5qvafwawfh2akyrsj38vq8qkjfjdg79pkbxf";
       type = "gem";
     };
-    version = "3.0.1";
+    version = "3.0.2";
   };
   rubyntlm = {
     groups = ["default"];

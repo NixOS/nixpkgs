@@ -223,7 +223,7 @@ with lib.maintainers; {
 
   openstack = {
     members = [
-      angustrau
+      emilytrau
       SuperSandro2000
     ];
     scope = "Maintain the ecosystem around OpenStack";

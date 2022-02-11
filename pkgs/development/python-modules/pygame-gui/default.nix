@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "A GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 }
