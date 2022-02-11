@@ -437,6 +437,8 @@ with pkgs;
 
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
+  # Dotnet
+
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
   dotnet-sdk_2 = dotnetCorePackages.sdk_2_1;
@@ -447,6 +449,17 @@ with pkgs;
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
   dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
+
+  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
+  nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
+
+  dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
+    dotnetfx = dotnetfx40;
+  };
+
+  buildDotnetPackage = callPackage ../build-support/dotnet/build-dotnet-package { };
+  fetchNuGet = callPackage ../build-support/dotnet/fetchnuget { };
+  dotnetbuildhelpers = callPackage ../build-support/dotnet/dotnetbuildhelpers { };
 
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
@@ -648,17 +661,6 @@ with pkgs;
   fetchFromGitiles = callPackage ../build-support/fetchgitiles {};
 
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz {};
-
-  buildDotnetPackage = callPackage ../build-support/dotnet/build-dotnet-package { };
-  fetchNuGet = callPackage ../build-support/dotnet/fetchnuget { };
-  dotnetbuildhelpers = callPackage ../build-support/dotnet/dotnetbuildhelpers { };
-
-  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
-  nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
-
-  dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
-    dotnetfx = dotnetfx40;
-  };
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
