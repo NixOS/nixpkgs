@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "spdx-license-list-data";
-  version = "3.15";
+  version = "3.16";
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "license-list-data";
     rev = "v${version}";
-    sha256 = "0r88j00shmhayfq8avswaxsaj1my1vq540rg0srma29862vrjpfk";
+    sha256 = "1h6dj9lyfhk43b7f7ryxfzdf6v1bjq1zq6fmsqdkvdqpih87vwql";
   };
 
   installPhase = ''
