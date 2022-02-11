@@ -268,6 +268,7 @@ in
   litestream = handleTest ./litestream.nix {};
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
+  logrotate = handleTest ./logrotate.nix {};
   loki = handleTest ./loki.nix {};
   lxd = handleTest ./lxd.nix {};
   lxd-image = handleTest ./lxd-image.nix {};
