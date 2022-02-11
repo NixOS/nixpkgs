@@ -21047,6 +21047,7 @@ with pkgs;
     # _compat can probably be removed on next minor version after 0.10.0
     lua = lua5_2_compat;
     withExtraLibs = [];
+    withExtraLuaPackages = _: [];
   };
 
   prosody-filer = callPackage ../servers/xmpp/prosody-filer { };

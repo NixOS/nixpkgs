@@ -5,6 +5,7 @@
 , withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
+, withExtraLuaPackages ? _: [ ]
 , withOnlyInstalledCommunityModules ? [ ]
 , withCommunityModules ? [ ] }:
 
@@ -17,6 +18,7 @@ let
     ]
     ++ lib.optional withLibevent p.luaevent
     ++ lib.optional withDBI p.luadbi
+    ++ withExtraLuaPackages p
   );
 in
 stdenv.mkDerivation rec {
