@@ -14494,7 +14494,7 @@ with pkgs;
 
   checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
-  chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome2.GConf; };
+  chromedriver = callPackage ../development/tools/selenium/chromedriver { };
 
   chromium-xorg-conf = callPackage ../os-specific/linux/chromium-xorg-conf { };
 
