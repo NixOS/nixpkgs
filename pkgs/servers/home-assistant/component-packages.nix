@@ -619,7 +619,7 @@
     "openalpr_local" = ps: with ps; [ ];
     "opencv" = ps: with ps; [ numpy ]; # missing inputs: opencv-python-headless
     "openerz" = ps: with ps; [ openerz-api ];
-    "openevse" = ps: with ps; [ ]; # missing inputs: openevsewifi
+    "openevse" = ps: with ps; [ openevsewifi ];
     "openexchangerates" = ps: with ps; [ ];
     "opengarage" = ps: with ps; [ open-garage ];
     "openhardwaremonitor" = ps: with ps; [ ];
