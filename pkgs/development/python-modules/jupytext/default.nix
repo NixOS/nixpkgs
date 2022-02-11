@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , GitPython
+, isort
 , jupyter-client
 , jupyter-packaging
 , jupyterlab
@@ -44,6 +45,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     GitPython
+    isort
     jupyter-client
     notebook
     pytestCheckHook
@@ -63,6 +65,10 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # Pre-commit tests expect the source directory to be a Git repository
     "--ignore-glob='tests/test_pre_commit_*.py'"
+  ];
+
+  disabledTests = [
+    "test_apply_black_through_jupytext" # we can't do anything about ill-formatted notebooks
   ];
 
   pythonImportsCheck = [
