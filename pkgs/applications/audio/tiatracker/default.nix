@@ -1,8 +1,10 @@
-{ lib
+{ stdenv
+, lib
 , mkDerivation
 , fetchFromBitbucket
 , makeDesktopItem
 , copyDesktopItems
+, libicns
 , qmake
 , qtbase
 , SDL2
@@ -32,15 +34,22 @@ in mkDerivation rec {
     sha256 = "sha256-koQJTCqJD12KRdtE9C17f9qTyyRyHebnrpSwyZyO8wo=";
   };
 
-  # Fix darwin
   postPatch = ''
+    # Fix SDL2 linking on Darwin, doesn't break Linux
     substituteInPlace TIATracker.pro \
       --replace 'linux:' 'unix:'
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    png2icns graphics/tt_icon.{icns,png}
+    substituteInPlace TIATracker.pro \
+      --replace 'RC_ICONS = graphics/tt_icon.ico' 'ICON = graphics/tt_icon.icns'
   '';
 
   nativeBuildInputs = [
     qmake
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
   ];
 
   buildInputs = [
@@ -48,12 +57,18 @@ in mkDerivation rec {
     SDL2
   ];
 
-  desktopItems = [ desktopItem ];
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [ desktopItem ];
 
   installPhase = ''
     runHook preInstall
+  '' + (if stdenv.hostPlatform.isDarwin then ''
+    mkdir -p $out/{Applications,bin}
+    mv TIATracker.app $out/Applications/
+    ln -s $out/{Applications/TIATracker.app/Contents/MacOS,bin}/TIATracker
+  '' else ''
     install -Dm755 TIATracker $out/bin/TIATracker
     install -Dm644 manual/tt_icon.png $out/share/icons/hicolor/256x256/tiatracker.png
+  '') + ''
     install -Dm644 data/keymap.cfg $out/share/tiatracker/keymap.cfg.sample
     cp -r songs $out/share/tiatracker/songs
     install -Dm644 data/TIATracker_manual.pdf $out/share/doc/tiatracker/TIATracker_manual.pdf
