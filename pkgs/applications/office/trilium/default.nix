@@ -65,6 +65,8 @@ in {
     '';
 
     dontStrip = true;
+
+    passthru.updateScript = ./update.sh;
   };
 
 
