@@ -437,10 +437,6 @@ with pkgs;
 
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
-  dotnetenv = callPackage ../build-support/dotnetenv {
-    dotnetfx = dotnetfx40;
-  };
-
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
   dotnet-sdk_2 = dotnetCorePackages.sdk_2_1;
@@ -659,6 +655,10 @@ with pkgs;
 
   buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
+
+  dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
+    dotnetfx = dotnetfx40;
+  };
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
