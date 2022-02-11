@@ -54,4 +54,29 @@ rec {
       versionSuffix = "esr";
     };
   };
+
+  librewolf =
+  let
+    librewolf-src = callPackage ./librewolf { };
+  in
+  (common rec {
+    pname = "librewolf";
+    binaryName = "librewolf";
+    version = librewolf-src.packageVersion;
+    src = librewolf-src.firefox;
+    inherit (librewolf-src) extraConfigureFlags extraPostPatch extraPassthru;
+
+    meta = {
+      description = "A fork of Firefox, focused on privacy, security and freedom";
+      homepage = "https://librewolf.net/";
+      maintainers = with lib.maintainers; [ squalus ];
+      inherit (firefox.meta) platforms badPlatforms broken maxSilent license;
+    };
+    updateScript = callPackage ./librewolf/update.nix {
+      attrPath = "librewolf-unwrapped";
+    };
+  }).override {
+    crashreporterSupport = false;
+    enableOfficialBranding = false;
+  };
 }
