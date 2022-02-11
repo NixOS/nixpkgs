@@ -569,7 +569,7 @@
     "nest" = ps: with ps; [ aiohttp-cors google-nest-sdm ha-ffmpeg python-nest ];
     "netatmo" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa pyatmo ];
     "netdata" = ps: with ps; [ netdata ];
-    "netgear" = ps: with ps; [ ]; # missing inputs: pynetgear
+    "netgear" = ps: with ps; [ pynetgear ];
     "netgear_lte" = ps: with ps; [ eternalegypt ];
     "netio" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pynetio
     "network" = ps: with ps; [ aiohttp-cors ifaddr ];
@@ -1368,6 +1368,7 @@
     "ness_alarm"
     "nest"
     "netatmo"
+    "netgear"
     "network"
     "nexia"
     "nightscout"
