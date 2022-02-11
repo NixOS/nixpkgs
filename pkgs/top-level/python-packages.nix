@@ -9656,6 +9656,8 @@ in {
 
   telfhash = callPackage ../development/python-modules/telfhash { };
 
+  temescal = callPackage ../development/python-modules/temescal { };
+
   tempest = callPackage ../development/python-modules/tempest { };
 
   tempita = callPackage ../development/python-modules/tempita { };
