@@ -18,6 +18,7 @@
 , stdenv
 , substituteAll
 , wrapGAppsHook
+, enableGeoLocation ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -53,16 +54,19 @@ stdenv.mkDerivation rec {
     dbus
     flatpak
     fuse
-    geoclue2
     glib
     gsettings-desktop-schemas
     json-glib
     libportal
     pipewire
+  ] ++ lib.optionals enableGeoLocation [
+    geoclue2
   ];
 
   configureFlags = [
     "--enable-installed-tests"
+  ] ++ lib.optionals (!enableGeoLocation) [
+    "--disable-geoclue"
   ];
 
   makeFlags = [
