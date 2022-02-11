@@ -216,6 +216,10 @@ let
       meta.mainProgram = "markdownlint";
     };
 
+    nest = super."@nestjs/cli".override {
+      name = "nest";
+    };
+
     node-gyp = super.node-gyp.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
@@ -285,6 +289,10 @@ let
         --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
       '';
     });
+
+    prettierd = super."@fsouza/prettierd".override {
+      name = "prettierd";
+    };
 
     pnpm = super.pnpm.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -384,6 +392,10 @@ let
       passthru.tests = {
         simple-execution = pkgs.callPackage ./package-tests/tailwindcss.nix { inherit (self) tailwindcss; };
       };
+    };
+
+    tailwindcss-language-server = super."@tailwindcss/language-server".override {
+      name = "tailwindcss-language-server";
     };
 
     tedicross = super."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {

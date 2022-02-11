@@ -8014,6 +8014,8 @@ with pkgs;
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
+  inherit (nodePackages) nest;
+
   nestopia = callPackage ../misc/emulators/nestopia { };
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
@@ -8956,6 +8958,8 @@ with pkgs;
   pptpd = callPackage ../tools/networking/pptpd {};
 
   pre-commit = callPackage ../tools/misc/pre-commit { };
+
+  inherit (nodePackages) prettierd;
 
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
@@ -10124,6 +10128,8 @@ with pkgs;
   };
 
   tagtime = callPackage ../applications/misc/tagtime { };
+
+  inherit(nodePackages) tailwindcss-language-server;
 
   inherit (callPackages ../applications/networking/taler { })
     taler-exchange taler-merchant;
