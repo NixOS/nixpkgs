@@ -18,7 +18,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Light weight cross-platform test automation";
     homepage = "https://gauge.org";
-    license = licenses.gpl3;
+    license = licenses.asl20;
     maintainers = [ maintainers.vdemeester ];
     platforms = platforms.unix;
   };
