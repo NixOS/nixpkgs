@@ -1,0 +1,13 @@
+diff --git a/app/models/site_setting.rb b/app/models/site_setting.rb
+index 89a5e923fc..b60754f50a 100644
+--- a/app/models/site_setting.rb
++++ b/app/models/site_setting.rb
+@@ -26,6 +26,8 @@ class SiteSetting < ActiveRecord::Base
+     end
+   end
+ 
++  load_settings(File.join(Rails.root, 'config', 'nixos_site_settings.json'))
++
+   setup_deprecated_methods
+   client_settings << :available_locales
+ 

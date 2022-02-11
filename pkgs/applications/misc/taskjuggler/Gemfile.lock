@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    mail (2.7.1)
+      mini_mime (>= 0.1.1)
+    mini_mime (1.0.1)
+    taskjuggler (3.6.0)
+      mail (>= 2.4.3)
+      term-ansicolor (>= 1.0.7)
+    term-ansicolor (1.7.1)
+      tins (~> 1.0)
+    tins (1.20.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  taskjuggler
+
+BUNDLED WITH
+   2.1.4

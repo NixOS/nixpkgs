@@ -1,0 +1,29 @@
+commit 26e7bf8bcb2823819c87115e07932c0d2ba88170 (HEAD -> configurable-dbfile-path)
+Author: Eirik Nygaard <eirik@ngrd.no>
+Date:   Sun Jan 23 12:05:01 2022 +0100
+
+    Make entire path for plocate database configurable
+
+diff --git a/meson.build b/meson.build
+index 435cd0a..8dc2393 100644
+--- a/meson.build
++++ b/meson.build
+@@ -2,8 +2,7 @@ project('plocate', 'cpp', default_options: ['buildtype=debugoptimized','cpp_std=
+
+ add_project_arguments('-DGROUPNAME="' + get_option('locategroup') + '"', language: 'cpp')
+ add_project_arguments('-DUPDATEDB_CONF="/etc/updatedb.conf"', language: 'cpp')
+-dbdir = join_paths(get_option('sharedstatedir'), 'plocate')
+-dbfile = join_paths(dbdir, 'plocate.db')
++dbfile = join_paths(get_option('sharedstatedir'), get_option('dbpath'))
+ add_project_arguments('-DDBFILE="' + dbfile + '"', language: 'cpp')
+ add_project_arguments('-DPACKAGE_NAME="plocate"', language: 'cpp')
+ add_project_arguments('-DPACKAGE_VERSION="' + meson.project_version() + '"', language: 'cpp')
+diff --git a/meson_options.txt b/meson_options.txt
+index 8ac13c5..a9f3358 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -3,3 +3,4 @@ option('install_systemd', type: 'boolean', value: true, description: 'Install sy
+ option('systemunitdir', type: 'string', description: 'Where to install systemd units to (default: autodetect)')
+ option('locategroup', type: 'string', value: 'plocate', description: 'Group that the install script will use for the .db file')
+ option('updatedb_progname', type: 'string', value: 'updatedb', description: 'Binary name of updatedb')
++option('dbpath', type: 'string', value: 'plocate/plocate.db', description: 'Path to plocate database relative to "sharedstatedir"')

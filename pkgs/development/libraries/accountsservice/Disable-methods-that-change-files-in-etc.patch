@@ -1,0 +1,130 @@
+From 6f172007452b39bfda5062fc29ea5382671ac16e Mon Sep 17 00:00:00 2001
+From: Alexander Ried <ried@mytum.de>
+Date: Thu, 26 May 2016 19:54:21 +0200
+Subject: [PATCH] Disable methods that change files in /etc
+
+Only if environment variable NIXOS_USERS_PURE is set.
+---
+ src/daemon.c | 10 ++++++++++
+ src/user.c   | 35 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 45 insertions(+)
+
+diff --git a/src/daemon.c b/src/daemon.c
+index e62e124..87459b2 100644
+--- a/src/daemon.c
++++ b/src/daemon.c
+@@ -931,6 +931,11 @@ daemon_create_user (AccountsAccounts      *accounts,
+                     const gchar           *real_name,
+                     gint                   account_type)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return;
++        }
++
+         Daemon *daemon = (Daemon*)accounts;
+         CreateUserData *data;
+ 
+@@ -1138,6 +1143,11 @@ daemon_delete_user (AccountsAccounts      *accounts,
+                     gint64                 uid,
+                     gboolean               remove_files)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return;
++        }
++
+         Daemon *daemon = (Daemon*)accounts;
+         DeleteUserData *data;
+ 
+diff --git a/src/user.c b/src/user.c
+index 0fb1a17..dbdebaf 100644
+--- a/src/user.c
++++ b/src/user.c
+@@ -904,6 +904,11 @@ user_set_real_name (AccountsUser          *auser,
+                     GDBusMethodInvocation *context,
+                     const gchar           *real_name)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return;
++        }
++
+         User *user = (User*)auser;
+         int uid;
+         const gchar *action_id;
+@@ -981,6 +986,11 @@ user_set_user_name (AccountsUser          *auser,
+                     GDBusMethodInvocation *context,
+                     const gchar           *user_name)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return;
++        }
++
+         User *user = (User*)auser;
+         daemon_local_check_auth (user->daemon,
+                                  user,
+@@ -1263,6 +1273,11 @@ user_set_home_directory (AccountsUser          *auser,
+                          GDBusMethodInvocation *context,
+                          const gchar           *home_dir)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return;
++        }
++
+         User *user = (User*)auser;
+         daemon_local_check_auth (user->daemon,
+                                  user,
+@@ -1322,6 +1337,11 @@ user_set_shell (AccountsUser          *auser,
+                 GDBusMethodInvocation *context,
+                 const gchar           *shell)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return;
++        }
++
+         User *user = (User*)auser;
+         daemon_local_check_auth (user->daemon,
+                                  user,
+@@ -1602,6 +1622,11 @@ user_set_locked (AccountsUser          *auser,
+                  GDBusMethodInvocation *context,
+                  gboolean               locked)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return;
++        }
++
+         User *user = (User*)auser;
+         daemon_local_check_auth (user->daemon,
+                                  user,
+@@ -1814,6 +1839,11 @@ user_set_password_mode (AccountsUser          *auser,
+                         GDBusMethodInvocation *context,
+                         gint                   mode)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return;
++        }
++
+         User *user = (User*)auser;
+         const gchar *action_id;
+ 
+@@ -1905,6 +1935,11 @@ user_set_password (AccountsUser          *auser,
+                    const gchar           *password,
+                    const gchar           *hint)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return;
++        }
++
+         User *user = (User*)auser;
+         gchar **data;
+ 
+-- 
+2.9.3
+

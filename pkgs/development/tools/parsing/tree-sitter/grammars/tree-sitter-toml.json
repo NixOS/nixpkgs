@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/ikatyang/tree-sitter-toml",
+  "rev": "8bd2056818b21860e3d756b5a58c4f6e05fb744e",
+  "date": "2021-05-11T12:47:32+08:00",
+  "path": "/nix/store/isgpadcxmgkb14w9yg67pb8lx7wlfhnn-tree-sitter-toml",
+  "sha256": "0yasw5fp4mq6vzrdwlc3dxlss8a94bsffv4mzrfp0b3iw0s1dlyg",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

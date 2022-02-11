@@ -1,0 +1,13 @@
+diff --git a/meilisearch-http/Cargo.toml b/meilisearch-http/Cargo.toml
+index de418cd4..ecc78d6f 100644
+--- a/meilisearch-http/Cargo.toml
++++ b/meilisearch-http/Cargo.toml
+@@ -92,7 +92,7 @@ mini-dashboard = [
+     "zip",
+ ]
+ analytics = ["whoami", "reqwest"]
+-default = ["analytics", "mini-dashboard"]
++default = []
+ 
+ [target.'cfg(target_os = "linux")'.dependencies]
+ tikv-jemallocator = "0.4.1"

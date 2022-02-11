@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/stsewd/tree-sitter-comment",
+  "rev": "6975eb268f42df2afc313f96c0693e284685dba7",
+  "date": "2022-01-22T20:58:19-05:00",
+  "path": "/nix/store/nl4whdipy7a4g3ds2yv3c0qr7z4pifwn-tree-sitter-comment",
+  "sha256": "009krarzs9qykd8fas67gychjzcbgj8j0jm9h0963dlxs4hyay73",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

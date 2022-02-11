@@ -1,0 +1,13 @@
+diff --git a/src/state.rs b/src/state.rs
+index 5fac0a3..41cbde4 100644
+--- a/src/state.rs
++++ b/src/state.rs
+@@ -74,7 +74,7 @@ impl State {
+             'X'
+         };
+ 
+-        write!(w, "{score}/6",)?;
++        write!(w, "{:?}/6", score)?;
+         for Guess(_, m) in self.guesses() {
+             write!(w, "\n{}", m)?;
+         }

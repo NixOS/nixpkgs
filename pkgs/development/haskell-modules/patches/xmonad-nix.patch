@@ -1,0 +1,73 @@
+diff --git a/src/XMonad/Core.hs b/src/XMonad/Core.hs
+index 7810522..3262934 100644
+--- a/src/XMonad/Core.hs
++++ b/src/XMonad/Core.hs
+@@ -53,6 +53,7 @@ import System.Posix.Types (ProcessID)
+ import System.Process
+ import System.Directory
+ import System.Exit
++import System.Environment (lookupEnv)
+ import Graphics.X11.Xlib
+ import Graphics.X11.Xlib.Extras (getWindowAttributes, WindowAttributes, Event)
+ import Data.Typeable
+@@ -601,6 +602,7 @@ recompile force = io $ do
+         lib  = cfgdir </> "lib"
+         buildscript = cfgdir </> "build"
+ 
++    ghc <- fromMaybe "ghc" <$> liftIO (lookupEnv "NIX_GHC")
+     libTs <- mapM getModTime . Prelude.filter isSource =<< allFiles lib
+     srcT <- getModTime src
+     binT <- getModTime bin
+@@ -643,7 +645,7 @@ recompile force = io $ do
+         status <- bracket (openFile err WriteMode) hClose $ \errHandle ->
+             waitForProcess =<< if useBuildscript
+                                then compileScript bin cfgdir buildscript errHandle
+-                               else compileGHC bin cfgdir errHandle
++                               else compileGHC ghc bin cfgdir errHandle
+ 
+         -- re-enable SIGCHLD:
+         installSignalHandlers
+@@ -653,6 +655,7 @@ recompile force = io $ do
+             then trace "XMonad recompilation process exited with success!"
+             else do
+                 ghcErr <- readFile err
++                xmessage <- fromMaybe "xmessage" <$> liftIO (lookupEnv "XMONAD_XMESSAGE")
+                 let msg = unlines $
+                         ["Error detected while loading xmonad configuration file: " ++ src]
+                         ++ lines (if null ghcErr then show status else ghcErr)
+@@ -660,7 +663,7 @@ recompile force = io $ do
+                 -- nb, the ordering of printing, then forking, is crucial due to
+                 -- lazy evaluation
+                 hPutStrLn stderr msg
+-                forkProcess $ executeFile "xmessage" True ["-default", "okay", replaceUnicode msg] Nothing
++                forkProcess $ executeFile xmessage True ["-default", "okay", replaceUnicode msg] Nothing
+                 return ()
+         return (status == ExitSuccess)
+       else return True
+@@ -678,16 +681,16 @@ recompile force = io $ do
+            '\8216' -> '`'  -- ‘
+            '\8217' -> '`'  -- ’
+            _ -> c
+-       compileGHC bin dir errHandle =
+-         runProcess "ghc" ["--make"
+-                          , "xmonad.hs"
+-                          , "-i"
+-                          , "-ilib"
+-                          , "-fforce-recomp"
+-                          , "-main-is", "main"
+-                          , "-v0"
+-                          , "-o", bin
+-                          ] (Just dir) Nothing Nothing Nothing (Just errHandle)
++       compileGHC ghc bin dir errHandle =
++         runProcess ghc ["--make"
++                        , "xmonad.hs"
++                        , "-i"
++                        , "-ilib"
++                        , "-fforce-recomp"
++                        , "-main-is", "main"
++                        , "-v0"
++                        , "-o", bin
++                        ] (Just dir) Nothing Nothing Nothing (Just errHandle)
+        compileScript bin dir script errHandle =
+          runProcess script [bin] (Just dir) Nothing Nothing Nothing (Just errHandle)
+ 

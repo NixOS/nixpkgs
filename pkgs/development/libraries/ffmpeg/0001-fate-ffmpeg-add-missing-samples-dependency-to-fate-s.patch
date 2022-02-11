@@ -1,0 +1,27 @@
+From a66b58d61caaae452785a2d69f5de9259ab27138 Mon Sep 17 00:00:00 2001
+From: James Almer <jamrial@gmail.com>
+Date: Sun, 16 Jan 2022 00:32:52 -0300
+Subject: [PATCH] fate/ffmpeg: add missing samples dependency to fate-shortest
+
+Signed-off-by: James Almer <jamrial@gmail.com>
+(cherry picked from commit b1ef5882e35d1a95e9c4838d0933084773055345)
+---
+ tests/fate/ffmpeg.mak | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/fate/ffmpeg.mak b/tests/fate/ffmpeg.mak
+index 0b00bb5b23..b80467d02e 100644
+--- a/tests/fate/ffmpeg.mak
++++ b/tests/fate/ffmpeg.mak
+@@ -86,7 +86,7 @@ fate-unknown_layout-ac3: CMD = md5 -auto_conversion_filters \
+   -guess_layout_max 0 -f s32le -ac 1 -ar 44100 -i $(TARGET_PATH)/$(AREF) \
+   -f ac3 -flags +bitexact -c ac3_fixed
+ 
+-FATE_FFMPEG-$(call ALLYES, FILE_PROTOCOL LAVFI_INDEV RAWVIDEO_DEMUXER      \
++FATE_SAMPLES_FFMPEG-$(call ALLYES, FILE_PROTOCOL LAVFI_INDEV RAWVIDEO_DEMUXER \
+                            SINE_FILTER PCM_S16LE_DECODER RAWVIDEO_DECODER  \
+                            ARESAMPLE_FILTER AMIX_FILTER MPEG4_ENCODER      \
+                            AC3_FIXED_ENCODER FRAMECRC_MUXER PIPE_PROTOCOL) \
+-- 
+2.33.1
+

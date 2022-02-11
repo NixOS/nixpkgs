@@ -1,0 +1,21 @@
+--- nrn-7.4/src/mac/Makefile.am	2015-11-12 21:42:45.000000000 +0100
++++ nrn-7.4.new/src/mac/Makefile.am	2016-08-24 17:43:39.000000000 +0200
+@@ -15,18 +15,8 @@
+ host_cpu = @host_cpu@
+ 
+ if MAC_DARWIN
+-carbon = @enable_carbon@
+ bin_SCRIPTS = $(launch_scripts)
+ install: install-am
+-if UniversalMacBinary
+-	$(CC) -arch ppc -o aoutppc -Dcpu="\"$(host_cpu)\"" -I. $(srcdir)/launch.c $(srcdir)/mac2uxarg.c -framework Carbon
+-	$(CC) -arch i386 -o aouti386 -Dcpu="\"$(host_cpu)\"" -I. $(srcdir)/launch.c $(srcdir)/mac2uxarg.c -framework Carbon
+-	lipo aouti386 aoutppc -create -output a.out
+-else
+-	gcc -g -arch i386 -Dncpu="\"$(host_cpu)\"" -I. $(srcdir)/launch.c $(srcdir)/mac2uxarg.c -framework Carbon
+-
+-endif
+-	carbon=$(carbon) sh $(srcdir)/launch_inst.sh "$(host_cpu)" "$(DESTDIR)$(prefix)" "$(srcdir)"
+ 	for i in $(S) ; do \
+ 		sed "s/^CPU.*/CPU=\"$(host_cpu)\"/" < $(DESTDIR)$(bindir)/$$i > temp; \
+ 		mv temp $(DESTDIR)$(bindir)/$$i; \
