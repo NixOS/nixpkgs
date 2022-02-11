@@ -33883,6 +33883,8 @@ with pkgs;
 
   unityhub = callPackage ../development/tools/unityhub { };
 
+  updatecli = callPackage ../development/tools/updatecli { };
+
   urbit = callPackage ../misc/urbit { };
 
   usb-reset = callPackage ../applications/misc/usb-reset { };
