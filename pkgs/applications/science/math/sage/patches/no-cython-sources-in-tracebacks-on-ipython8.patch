@@ -1,0 +1,52 @@
+diff --git a/src/sage/repl/interface_magic.py b/src/sage/repl/interface_magic.py
+index 8a455b69b0..a93e1c9e04 100644
+--- a/src/sage/repl/interface_magic.py
++++ b/src/sage/repl/interface_magic.py
+@@ -260,7 +260,7 @@ class InterfaceMagic(object):
+             2
+             120
+             sage: shell.run_cell('%%gap foo\n1+1;\n')
+-            ...File "<string>", line unknown
++            ...File...<string>...
+             SyntaxError: Interface magics have no options, got "foo"
+             <BLANKLINE>
+             sage: shell.run_cell('%%gap?')
+diff --git a/src/sage/repl/interpreter.py b/src/sage/repl/interpreter.py
+index 71dbe429fd..36b1d986d6 100644
+--- a/src/sage/repl/interpreter.py
++++ b/src/sage/repl/interpreter.py
+@@ -70,25 +70,6 @@ that shell.  The bulk of this functionality is provided through
+ 
+ TESTS:
+ 
+-Check that Cython source code appears in tracebacks::
+-
+-    sage: from sage.repl.interpreter import get_test_shell
+-    sage: shell = get_test_shell()
+-    sage: print("dummy line"); shell.run_cell('1/0') # see #25320 for the reason of the `...` and the dummy line in this test
+-    dummy line
+-    ...
+-    ZeroDivisionError...Traceback (most recent call last)
+-    <ipython-input-...> in <module>...
+-    ----> 1 Integer(1)/Integer(0)
+-    .../sage/rings/integer.pyx in sage.rings.integer.Integer...div...
+-    ...
+-    -> ...                  raise ZeroDivisionError("rational division by zero")
+-       ....:            x = <Rational> Rational.__new__(Rational)
+-       ....:            mpq_div_zz(x.value, ....value, (<Integer>right).value)
+-    <BLANKLINE>
+-    ZeroDivisionError: rational division by zero
+-    sage: shell.quit()
+-
+ Test prompt transformer::
+ 
+     sage: from sage.repl.interpreter import SagePromptTransformer
+@@ -423,7 +404,7 @@ def SagePreparseTransformer(lines):
+         sage: from sage.repl.interpreter import get_test_shell
+         sage: shell = get_test_shell()
+         sage: shell.run_cell(bad_syntax)
+-          File "<string>", line unknown
++          File...<string>...
+         SyntaxError: Mismatched ']'
+         <BLANKLINE>
+         sage: shell.quit()
