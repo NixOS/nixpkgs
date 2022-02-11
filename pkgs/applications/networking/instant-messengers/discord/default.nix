@@ -61,24 +61,26 @@ let
       ++ lib.optionals (branch == "ptb") [ "aarch64-darwin" ];
   };
   package = if stdenv.isLinux then ./linux.nix else ./darwin.nix;
-  packages = {
-    stable = callPackage package rec {
-      inherit src version meta;
-      pname = "discord";
-      binaryName = "Discord";
-      desktopName = "Discord";
-    };
-    ptb = callPackage package rec {
-      inherit src version meta;
-      pname = "discord-ptb";
-      binaryName = "DiscordPTB";
-      desktopName = "Discord PTB";
-    };
-    canary = callPackage package rec {
-      inherit src version meta;
-      pname = "discord-canary";
-      binaryName = "DiscordCanary";
-      desktopName = "Discord Canary";
-    };
-  };
+  packages = (builtins.mapAttrs
+    (_: value: callPackage package (value // { inherit src version; meta = meta // { mainProgram = value.binaryName; }; }))
+    {
+      stable = rec {
+        pname = "discord";
+        binaryName = "Discord";
+        desktopName = "Discord";
+      };
+      ptb = rec {
+        pname = "discord-ptb";
+        binaryName = "DiscordPTB";
+        desktopName = "Discord PTB";
+      };
+      canary = rec {
+        pname = "discord-canary";
+        binaryName = "DiscordCanary";
+        desktopName = "Discord Canary";
+      };
+    }
+  );
+
+
 in packages.${branch}
