@@ -759,13 +759,6 @@
     githubId = 11699655;
     name = "Stanislas Lange";
   };
-  angustrau = {
-    name = "Angus Trau";
-    email = "nix@angus.ws";
-    matrix = "@angustrau:matrix.org";
-    github = "angustrau";
-    githubId = 13267947;
-  };
   anhdle14 = {
     name = "Le Anh Duc";
     email = "anhdle14@icloud.com";
@@ -3387,6 +3380,12 @@
     github = "emilazy";
     githubId = 18535642;
     name = "Emily";
+  };
+  emilytrau = {
+    name = "Emily Trau";
+    email = "nix@angus.ws";
+    github = "emilytrau";
+    githubId = 13267947;
   };
   enderger = {
     email = "endergeryt@gmail.com";

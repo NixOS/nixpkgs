@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyhumps";
-  version = "3.5.0";
+  version = "3.5.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "nficano";
     repo = "humps";
     rev = "v${version}";
-    hash = "sha256-dnNtx0VTD2e89yXMz0+acDhOaLBSkAA7n2io6qypN5E=";
+    hash = "sha256-6F61y0niPPuZBci15j68MFXzzBBimvbZ24+i9AZ7XJs=";
   };
 
   nativeBuildInputs = [

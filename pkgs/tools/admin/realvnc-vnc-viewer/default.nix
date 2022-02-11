@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       url = "https://static.realvnc.com/media/documents/LICENSE-4.0a_en.pdf";
       free = false;
     };
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

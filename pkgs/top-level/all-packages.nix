@@ -1050,7 +1050,7 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd {};
 
-  qflipper = callPackage ../tools/misc/qflipper { };
+  qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
 
   quich = callPackage ../tools/misc/quich { } ;
 
@@ -1911,6 +1911,10 @@ with pkgs;
   imgcrypt = callPackage ../applications/virtualization/imgcrypt { };
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
+
+  itch = callPackage ../games/itch {};
+
+  itch-setup = callPackage ../games/itch-setup {};
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
@@ -3191,6 +3195,8 @@ with pkgs;
   };
 
   goa = callPackage ../development/tools/goa { };
+
+  goawk = callPackage ../tools/text/goawk { };
 
   gohai = callPackage ../tools/system/gohai { };
 
@@ -21506,6 +21512,8 @@ with pkgs;
     mariadb_104
     mariadb_105
     mariadb_106
+    mariadb_107
+    mariadb_108
   ;
   mariadb = mariadb_106;
 
@@ -27515,6 +27523,8 @@ with pkgs;
 
   nootka = qt5.callPackage ../applications/audio/nootka { };
   nootka-unstable = qt5.callPackage ../applications/audio/nootka/unstable.nix { };
+
+  novnc = callPackage ../applications/networking/novnc { };
 
   nwg-drawer = callPackage ../applications/misc/nwg-drawer { };
 

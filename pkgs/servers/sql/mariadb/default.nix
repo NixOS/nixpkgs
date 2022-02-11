@@ -10,6 +10,7 @@
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , cracklib, judy, libevent, libxml2
 , linux-pam, numactl, pmdk
+, fmt_8
 , withStorageMroonga ? true, kytea, libsodium, msgpack, zeromq
 , withStorageRocks ? true
 }:
@@ -173,7 +174,8 @@ in stdenv.mkDerivation (common // {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
     ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) pmdk.dev
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
-    ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ];
+    ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
+    ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
 
   patches = common.patches;
 
@@ -235,17 +237,27 @@ in stdenv.mkDerivation (common // {
 in {
   mariadb_104 = mariadbPackage {
     # Supported until 2024-06-18
-    version = "10.4.22";
-    sha256 = "000ca1hdnj2jg051cjgdd2ralgwgh2p8nwb1x6b85202xdpc7ga4";
+    version = "10.4.23";
+    sha256 = "1wlhjd1xvk6p2lb93v8kfjk1scyjz882fx0i0sjyyk047mh2i852";
   };
   mariadb_105 = mariadbPackage {
     # Supported until 2025-06-24
-    version = "10.5.13";
-    sha256 = "0n0w1pyypv6wsknaqyykj3lc9zv6smji4q5jcf90w4rid330iw0n";
+    version = "10.5.14";
+    sha256 = "02y292mfvr6ils4m61lh9vy74z3w2xkz6xinpgg9wl5h7q29gzaf";
   };
   mariadb_106 = mariadbPackage {
     # Supported until 2026-07
-    version = "10.6.5";
-    sha256 = "13qaqb2h6kysfdi3h1l9zbb2qlpjgxb1n8mxnj5jm96r50209gp0";
+    version = "10.6.6";
+    sha256 = "1hz1iwkgrlhhrn5ypxszfp5ngfmfakjxl3ihzsm4845xhzn1fr77";
+  };
+  mariadb_107 = mariadbPackage {
+    # Supported until 2023-02
+    version = "10.7.2";
+    sha256 = "1cx5s8vq7s3r4w1drmp549kl2nyijzq6ds2mcjyzc7bk9ylipx6p";
+  };
+  mariadb_108 = mariadbPackage {
+    # Supported until 2023-05
+    version = "10.8.1";
+    sha256 = "0ns0z8w3374jrfdrmq7ncag089xwmf7wkr5aq3p9shk1b5mln9z2";
   };
 }

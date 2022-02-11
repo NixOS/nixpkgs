@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "New user interface for spim, a MIPS simulator";
     homepage = "http://spimsimulator.sourceforge.net/";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.linux;
   };
 }

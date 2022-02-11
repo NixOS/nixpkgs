@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, cython
 , h5py
 , matplotlib
 , numpy
@@ -28,6 +29,10 @@ buildPythonPackage rec {
     sha256 = "1vwqyv215yf51j1278cn7l8mpqmy1grm9j7z3hxjlz4w65cff324";
   };
 
+  nativeBuildInputs = [
+    cython
+  ];
+
   propagatedBuildInputs = [
     spglib
     numpy
@@ -42,6 +47,11 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # slight disagreement between caastepxbin versions
+    "test_castep_phonon_read_bands"
   ];
 
   postPatch = ''
