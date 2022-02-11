@@ -106,7 +106,7 @@ let
 
   certtool = "${pkgs.gnutls.bin}/bin/certtool";
 
-  nixos-taskserver = with pkgs.python2.pkgs; buildPythonApplication {
+  nixos-taskserver = with pkgs.python3.pkgs; buildPythonApplication {
     name = "nixos-taskserver";
 
     src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
