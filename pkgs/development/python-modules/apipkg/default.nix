@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "apipkg";
-  version = "1.5";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "37228cda29411948b422fae072f57e31d3396d2ee1c9783775980ee9c9990af6";
+    sha256 = "a4be31cf8081e660d2cdea6edfb8a0f39f385866abdcfcfa45e5a0887345cb70";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

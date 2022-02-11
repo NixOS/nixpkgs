@@ -1,16 +1,18 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
-, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "pypck";
   version = "0.7.13";
+  format = "setuptools";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
@@ -32,7 +34,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "pypck" ];
+  pythonImportsCheck = [
+    "pypck"
+  ];
 
   meta = with lib; {
     description = "LCN-PCK library written in Python";

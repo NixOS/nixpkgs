@@ -694,6 +694,18 @@ let
         };
       };
 
+      eg2.vscode-npm-script = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-npm-script";
+          publisher = "eg2";
+          version = "0.3.24";
+          sha256 = "sha256-XgdMLecyZQXsgQAUh8V4eFLKaUF4WVlgy9iIGNDnR/I=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       elmtooling.elm-ls-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elm-ls-vscode";
@@ -1360,6 +1372,22 @@ let
 
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
 
+      ms-vscode.theme-tomorrowkit = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "Theme-TomorrowKit";
+          publisher = "ms-vscode";
+          version = "0.1.4";
+          sha256 = "sha256-qakwJWak+IrIeeVcMDWV/fLPx5M8LQGCyhVt4TS/Lmc=";
+        };
+        meta = with lib; {
+          description = "Additional Tomorrow and Tomorrow Night themes for VS Code. Based on the TextMate themes.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.Theme-TomorrowKit";
+          homepage = "https://github.com/microsoft/vscode-themes";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
+        };
+      };
+
       ms-python.python = callPackage ./python {
         extractNuGet = callPackage ./python/extract-nuget.nix { };
       };
@@ -1384,6 +1412,18 @@ let
           publisher = "ms-toolsai";
           version = "1.0.4";
           sha256 = "sha256-aKWu0Gp0f28DCv2akF/G8UDaGfTN410CcH8CAmW7mgU=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      ms-vscode.anycode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "anycode";
+          publisher = "ms-vscode";
+          version = "0.0.57";
+          sha256 = "sha256-XwL7I+vwZJ6zx5IDZdfOUbq6M9IH/gi7MBe92cG1kDs=";
         };
         meta = {
           license = lib.licenses.mit;

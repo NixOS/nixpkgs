@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.3+20200317";
-  name = "ocaml${ocaml.version}-erm_xmpp-${version}";
+  pname = "ocaml${ocaml.version}-erm_xmpp";
 
   src = fetchFromGitHub {
     owner  = "hannesm";

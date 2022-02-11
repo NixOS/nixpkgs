@@ -441,6 +441,7 @@ in
   resolv = handleTest ./resolv.nix {};
   restartByActivationScript = handleTest ./restart-by-activation-script.nix {};
   restic = handleTest ./restic.nix {};
+  retroarch = handleTest ./retroarch.nix {};
   riak = handleTest ./riak.nix {};
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
   roundcube = handleTest ./roundcube.nix {};

@@ -15,7 +15,7 @@ then throw "BAP is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-bap-${version}";
+  pname = "ocaml${ocaml.version}-bap";
   version = "2.2.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   setupHook = writeText "setupHook.sh" ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}-llvm-plugins/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${version}/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${version}-llvm-plugins/"
   '';
 
   nativeBuildInputs = [ which makeWrapper ];

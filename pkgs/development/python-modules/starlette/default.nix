@@ -12,7 +12,6 @@
 , requests
 , aiosqlite
 , databases
-, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , trio
@@ -58,7 +57,6 @@ buildPythonPackage rec {
   checkInputs = [
     aiosqlite
     databases
-    pytest-asyncio
     pytestCheckHook
     trio
     typing-extensions

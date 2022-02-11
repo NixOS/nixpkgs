@@ -761,7 +761,7 @@
     "sendgrid" = ps: with ps; [ sendgrid ];
     "sense" = ps: with ps; [ sense-energy ];
     "sensehat" = ps: with ps; [ ]; # missing inputs: sense-hat
-    "senseme" = ps: with ps; [ ]; # missing inputs: aiosenseme
+    "senseme" = ps: with ps; [ aiosenseme ];
     "sensibo" = ps: with ps; [ ]; # missing inputs: pysensibo
     "sensor" = ps: with ps; [ sqlalchemy ];
     "sentry" = ps: with ps; [ sentry-sdk ];
@@ -835,7 +835,7 @@
     "statistics" = ps: with ps; [ sqlalchemy ];
     "statsd" = ps: with ps; [ statsd ];
     "steam_online" = ps: with ps; [ ]; # missing inputs: steamodd
-    "steamist" = ps: with ps; [ aiohttp-cors ifaddr ]; # missing inputs: aiosteamist discovery30303
+    "steamist" = ps: with ps; [ aiohttp-cors aiosteamist discovery30303 ifaddr ];
     "stiebel_eltron" = ps: with ps; [ pymodbus ]; # missing inputs: pystiebeleltron
     "stookalert" = ps: with ps; [ ]; # missing inputs: stookalert
     "stream" = ps: with ps; [ pyturbojpeg aiohttp-cors av ];
@@ -1460,6 +1460,7 @@
     "season"
     "select"
     "sense"
+    "senseme"
     "sensor"
     "sentry"
     "seventeentrack"
@@ -1507,6 +1508,7 @@
     "startca"
     "statistics"
     "statsd"
+    "steamist"
     "stream"
     "stt"
     "subaru"

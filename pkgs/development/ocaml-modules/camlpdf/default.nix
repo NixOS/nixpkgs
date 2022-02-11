@@ -6,7 +6,8 @@ else
 
 stdenv.mkDerivation rec {
   version = "2.5";
-  name = "ocaml${ocaml.version}-camlpdf-${version}";
+  pname = "ocaml${ocaml.version}-camlpdf";
+
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "camlpdf";

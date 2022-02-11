@@ -12,13 +12,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.54.1";
+  version = "0.55.0";
   pname = "numba";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f9dfc803c864edcc2381219b800abf366793400aea55e26d4d5b7d953e14f43f";
+    sha256 = "sha256-siHr2ZdmKh3Ld+TwkUDgIvv+dXetB4H8LgIUE126bL0=";
   };
 
   postPatch = ''

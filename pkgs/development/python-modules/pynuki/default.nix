@@ -3,12 +3,15 @@
 , fetchFromGitHub
 , poetry-core
 , requests
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pynuki";
   version = "1.5.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
@@ -24,11 +27,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pynuki" ];
+
+  pythonImportsCheck = [
+    "pynuki"
+  ];
 
   meta = with lib; {
     description = "Python bindings for nuki.io bridges";

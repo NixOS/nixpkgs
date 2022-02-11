@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "2.0.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-sdk-python";
     rev = version;
-    sha256 = "1kqnr50iwcq9nx40lblbqzf327cdcbkrir6vh70067hk33rq0gm9";
+    sha256 = "12zza78qydkgzqg3j9428g92v7bb55nrwvl5m2il96z39darh7v8";
   };
 
   propagatedBuildInputs = [

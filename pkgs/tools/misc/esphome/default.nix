@@ -1,5 +1,4 @@
 { lib
-, pkgs
 , python3
 , fetchFromGitHub
 , fetchpatch
@@ -11,20 +10,20 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      esphome-dashboard = pkgs.callPackage ./dashboard.nix {};
+      esphome-dashboard = self.callPackage ./dashboard.nix {};
     };
   };
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.1.3";
+  version = "2022.1.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-4ME6XiS0tNgxtbHbOXw0z/kOqjzv3pog48qTRGJSsww=";
+    sha256 = "sha256-Pv4Rh92d+Jb3ZKPgKVyrgVHr6PGTcIYybdFavbnjuPA=";
   };
 
   patches = [

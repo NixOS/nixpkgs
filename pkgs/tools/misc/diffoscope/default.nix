@@ -77,6 +77,9 @@ python3Packages.buildPythonApplication rec {
     # Failing because of file-v5.40 has a slightly different output.
     # Upstream issue: https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/271
     "test_text_proper_indentation"
+
+    # fails because it fails to determine llvm version
+    "test_item3_deflate_llvm_bitcode"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"

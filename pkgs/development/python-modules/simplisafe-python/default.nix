@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2022.02.0";
+  version = "2022.02.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-f3kRBqBQQwo74fDFVLE5pZArsmc8iFgU/onifKy2vNQ=";
+    sha256 = "sha256-r+TcSzFkEGRsuTtEHBT/GMNa9r6GsIyvbLaF32cFfeQ=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,6 @@ buildPythonPackage rec {
     backoff
     docutils
     pytz
-    types-pytz
     voluptuous
     websockets
   ];
@@ -51,6 +50,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
+    types-pytz
   ];
 
   postPatch = ''

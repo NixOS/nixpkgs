@@ -6,6 +6,7 @@
 , cfn-lint
 , docker
 , flask
+, flask-cors
 , freezegun
 , jinja2
 , jsondiff
@@ -24,15 +25,16 @@
 , idna
 , nose
 , pytestCheckHook
+, pytest-xdist
 }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.3.16";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zy0prsyip264i6h03lxsn1qg1n3dc8c4iyfawckjqvm24gnns3c";
+    sha256 = "sha256-vZ1oofOYUkFETDFKwSmifvvn+bCi/6NQAxu950NYk5k=";
   };
 
   postPatch = ''
@@ -41,22 +43,6 @@ buildPythonPackage rec {
       --replace "idna<3,>=2.5" "idna" \
       --replace "MarkupSafe<2.0" "MarkupSafe" \
   '';
-
-  patches = [
-    # Remove dependence on boto. The boto library  (long ago superseded by boto3)
-    # has not had an official release in over two years or even a commit in the
-    # last 18 months. These patches should be included in the next moto release
-    # after 1.3.16
-    (fetchpatch {
-      url = "https://github.com/spulec/moto/pull/3503/commits/ae85c539fd57034c4d5cfd0f95af41ff19862dd1.patch";
-      sha256 = "16hr2py6q701d8ih6zcvs3lbanshpbk15ixckgdqngjf160k5m9p";
-      excludes = ["tests/test_ec2/test_ec2_cloudformation.py"];
-    })
-    (fetchpatch {
-      url = "https://github.com/spulec/moto/pull/3468/commits/6ee39bd7fda4d3623569e10dcd9561bf2cd1d0bd.patch";
-      sha256 = "10m3xdqxgys7spav9mkbhcn4z0124rlprwxnw6ysb10610xlna0i";
-    })
-  ];
 
   propagatedBuildInputs = [
     aws-xray-sdk
@@ -80,8 +66,15 @@ buildPythonPackage rec {
     idna
   ] ++ lib.optionals isPy27 [ backports_tempfile ];
 
-  # Next release after 1.3.16 will not require `nose`
-  checkInputs = [ boto3 nose freezegun pytestCheckHook sure parameterized ];
+  checkInputs = [
+    boto3
+    flask-cors
+    freezegun
+    parameterized
+    pytestCheckHook
+    pytest-xdist
+    sure
+  ];
 
   # Multiple test files still import boto, rather than boto3 like
   # boto is long-deprecated and broken on python3.9
@@ -89,6 +82,7 @@ buildPythonPackage rec {
   # NOTE: This should change to use disabledTestFiles / disabledTestPaths once that
   # feature stabalizes: see #113153 (mostly the discussion therein), #113167, #110700
   pytestFlagsArray = [
+    "-n $NIX_BUILD_CORES"
     "--ignore=tests/test_awslambda/test_policy.py"
     "--ignore=tests/test_autoscaling/test_autoscaling.py"
     "--ignore=tests/test_autoscaling/test_cloudformation.py"
@@ -226,6 +220,12 @@ buildPythonPackage rec {
     "--ignore=tests/test_swf/responses/test_timeouts.py"
     "--ignore=tests/test_swf/responses/test_workflow_executions.py"
     "--ignore=tests/test_swf/responses/test_workflow_types.py"
+    # attempts web connections
+    "--ignore=tests/test_appsync/test_appsync_schema.py"
+    "--ignore=tests/test_awslambda/test_lambda_eventsourcemapping.py"
+    "--ignore=tests/test_awslambda/test_lambda_invoke.py"
+    "--ignore=tests/test_batch/test_batch_jobs.py"
+    "--ignore=tests/**/*_integration.py"
   ];
 
   disabledTests = [
@@ -256,6 +256,14 @@ buildPythonPackage rec {
     "test_get_records_seq"
     "test_stream_with_range_key"
     "test_create_notebook_instance_bad_volume_size"
+    "http_destination"
+    "test_invoke_function_from_sqs_exception"
+    "test_state_machine_list_executions_with_pagination"
+    "test_put_subscription_filter_with_lambda"
+    "test_create_custom_lambda_resource__verify_cfnresponse_failed"
+    "test_state_machine_creation_fails_with_invalid_names"
+    # needs graphql
+    "test_get_schema_creation_status"
   ];
 
   meta = with lib; {

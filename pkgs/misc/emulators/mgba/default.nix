@@ -4,7 +4,7 @@
 , SDL2
 , cmake
 , libepoxy
-, ffmpeg
+, ffmpeg_4
 , imagemagick
 , libedit
 , libelf
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
     libepoxy
-    ffmpeg
+    ffmpeg_4
     imagemagick
     libedit
     libelf

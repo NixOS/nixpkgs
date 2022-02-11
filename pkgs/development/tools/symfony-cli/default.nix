@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "symfony-cli";
-  version = "5.3.0";
+  version = "5.3.3";
   vendorSha256 = "sha256-i4p9kEe0eT2L4U/DjkWlLVqgGT5ZJaoGyFAoYyxmoyI=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
     rev = "v${version}";
-    sha256 = "sha256-bZPoHVYso2BEEZO4FXubxOtGCIJyX77Ll0qut5sJjUA=";
+    sha256 = "sha256-qLgcv6vjPiNJZuZzW0mSKxySz0GdNALtyZ6E3fL3B6Y=";
   };
 
   # Tests requires network access

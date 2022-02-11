@@ -77,6 +77,11 @@ python3.pkgs.buildPythonApplication {
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
       --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
+
+    # according to upstream, this is fine
+    # https://github.com/spesmilo/electrum/issues/7361
+    substituteInPlace contrib/requirements/requirements.txt \
+      --replace "qdarkstyle<2.9" "qdarkstyle>=2.7"
   '';
 
   patches = [

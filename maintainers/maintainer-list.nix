@@ -1179,14 +1179,14 @@
     name = "Artturi N";
   };
   azahi = {
-    email = "azahi@teknik.io";
-    matrix = "@azahi:matrix.org";
+    name = "Azat Bahawi";
+    email = "azat@bahawi.net";
+    matrix = "@azahi:azahi.cc";
     github = "azahi";
     githubId = 22211000;
-    name = "Azat Bahawi";
     keys = [{
-      longkeyid = "rsa2048/0xB40FCB6608BBE3B6";
-      fingerprint = "E9F3 483F 31C7 29B4 4CA2  7C38 B40F CB66 08BB E3B6";
+      longkeyid = "rsa4096/0xC8C6BDDB3847F72B";
+      fingerprint = "2688 0377 C31D 9E81 9BDF  83A8 C8C6 BDDB 3847 F72B";
     }];
   };
   ayazhafiz = {
@@ -2381,6 +2381,13 @@
     github = "con-f-use";
     githubId = 11145016;
     name = "J.C.";
+  };
+  congee = {
+    email = "changshengwu@pm.me";
+    matrix = "@congeec:matrix.org";
+    github = "congee";
+    name = "Changsheng Wu";
+    githubId = 2083950;
   };
   contrun = {
     email = "uuuuuu@protonmail.com";
@@ -3735,6 +3742,12 @@
     github = "ethercrow";
     githubId = 222467;
     name = "Dmitry Ivanov";
+  };
+  Etjean = {
+    email = "et.jean@outlook.fr";
+    github = "Etjean";
+    githubId = 32169529;
+    name = "Etienne Jean";
   };
   etu = {
     email = "elis@hirwing.se";
@@ -5462,6 +5475,12 @@
     githubId = 221929;
     name = "Jean-Baptiste Giraudeau";
   };
+  jc = {
+    name = "Josh Cooper";
+    email = "josh@cooper.is";
+    github = "joshua-cooper";
+    githubId = 35612334;
+  };
   jceb = {
     name = "jceb";
     email = "jceb@e-jc.de";
@@ -5589,6 +5608,16 @@
     github = "tftio";
     githubId = 143075;
     name = "James Felix Black";
+  };
+  jfchevrette = {
+    email = "jfchevrette@gmail.com";
+    github = "jfchevrette";
+    githubId = 3001;
+    name = "Jean-Francois Chevrette";
+    keys = [{
+      longkeyid = "rsa4096/0x67A0585801290DC6";
+      fingerprint = "B612 96A9 498E EECD D5E9  C0F0 67A0 5858 0129 0DC6";
+    }];
   };
   jflanglois = {
     email = "yourstruly@julienlanglois.me";
@@ -7928,6 +7957,12 @@
       longkeyid = "rsa4096/0x186A1EDAC5C63F83";
       fingerprint = "FEF0 AE2D 5449 3482 5F06  40AA 186A 1EDA C5C6 3F83";
     }];
+  };
+  mihnea-s = {
+    email = "mihn.stn@gmail.com";
+    github = "mihnea-s";
+    githubId = 43088426;
+    name = "Mihnea Stoian";
   };
   mikefaille = {
     email = "michael@faille.io";

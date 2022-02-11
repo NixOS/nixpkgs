@@ -804,6 +804,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>nixos-generate-config</literal> now puts the dhcp
+          configuration in <literal>hardware-configuration.nix</literal>
+          instead of <literal>configuration.nix</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>fetchFromSourcehut</literal> now allows fetching
           repositories recursively using <literal>fetchgit</literal> or
           <literal>fetchhg</literal> if the argument
@@ -892,6 +899,17 @@
           Reason is that the old name has been deprecated upstream.
           Using the old option name will still work, but produce a
           warning.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-services.networking.networkmanager.enableFccUnlock">services.networking.networkmanager.enableFccUnlock</link>
+          was added to support FCC unlock procedures. Since release
+          1.18.4, the ModemManager daemon no longer automatically
+          performs the FCC unlock procedure by default. See
+          <link xlink:href="https://modemmanager.org/docs/modemmanager/fcc-unlock/">the
+          docs</link> for more details.
         </para>
       </listitem>
       <listitem>

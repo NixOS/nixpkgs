@@ -278,6 +278,13 @@ with lib.maintainers; {
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
   };
 
+  sphinx = {
+    members = [
+      SuperSandro2000
+    ];
+    scope = "Maintain Sphinx related packages.";
+  };
+
   serokell = {
     # Verify additions by approval of an already existing member of the team.
     members = [

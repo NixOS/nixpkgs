@@ -135,6 +135,7 @@ in
       services.bamf.enable = true;
       services.colord.enable = mkDefault true;
       services.fwupd.enable = mkDefault true;
+      services.packagekit.enable = mkDefault true;
       services.touchegg.enable = mkDefault true;
       services.touchegg.package = pkgs.pantheon.touchegg;
       services.tumbler.enable = mkDefault true;
@@ -272,7 +273,7 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      environment.systemPackages = (with pkgs.pantheon; pkgs.gnome.removePackagesByName [
+      environment.systemPackages = with pkgs.pantheon; pkgs.gnome.removePackagesByName ([
         elementary-calculator
         elementary-calendar
         elementary-camera
@@ -286,7 +287,11 @@ in
         elementary-terminal
         elementary-videos
         epiphany
-      ] config.environment.pantheon.excludePackages);
+      ] ++ lib.optionals config.services.flatpak.enable [
+        # Only install appcenter if flatpak is enabled before
+        # https://github.com/NixOS/nixpkgs/issues/15932 is resolved.
+        appcenter
+      ]) config.environment.pantheon.excludePackages;
 
       # needed by screenshot
       fonts.fonts = [

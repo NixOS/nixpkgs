@@ -3,18 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
-  version = "9.2";
+  version = "9.3";
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = "thc-hydra";
     rev = "v${version}";
-    sha256 = "sha256-V9rr5fbJWm0pa+Kp8g95XvLPo/uWcDwyU2goImnIq58=";
+    sha256 = "sha256-SzbaU52IXw5+ztN/GKD6Ki6/cx2icoZEzLHBu/J8sk0=";
   };
-
-  patches = lib.optionals stdenv.isDarwin [
-    ./darwin-remove-ldflag.patch
-  ];
 
   postPatch = let
     makeDirs = output: subDir: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) buildInputs);
@@ -44,9 +40,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A very fast network logon cracker which support many different services";
-    homepage = "https://www.thc.org/thc-hydra/";
-    license = licenses.agpl3;
+    homepage = "https://github.com/vanhauser-thc/thc-hydra"; # https://www.thc.org/
+    changelog = "https://github.com/vanhauser-thc/thc-hydra/raw/v${version}/CHANGES";
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
+    badPlatforms = platforms.darwin; # fails to build since v9.3
   };
 }
