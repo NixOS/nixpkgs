@@ -31853,6 +31853,8 @@ with pkgs;
 
   fastp = callPackage ../applications/science/biology/fastp { };
 
+  febio-studio = libsForQt5.callPackage ../applications/science/biology/febio-studio { };
+
   hisat2 = callPackage ../applications/science/biology/hisat2 { };
 
   htslib = callPackage ../development/libraries/science/biology/htslib { };
