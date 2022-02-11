@@ -15,34 +15,15 @@ rustPlatform.buildRustPackage rec {
     repo = "polkadot";
     rev = "v${version}";
     sha256 = "sha256-NXuYUmo80rrBZCcuISKon48SKyyJrkzCEhggxaJNfBM=";
-
-    # see the comment below on fakeGit for how this is used
-    leaveDotGit = true;
-    postFetch = ''
-      ( cd $out; git rev-parse --short HEAD > .git_commit )
-      rm -rf $out/.git
-    '';
   };
 
   cargoSha256 = "sha256-PIORMTzQbMdlrKwuF4MiGrLlg2nQpgLRsaHHeiCbqrg=";
 
   nativeBuildInputs =
     let
-      # the build process of polkadot requires a .git folder in order to determine
-      # the git commit hash that is being built and add it to the version string.
-      # since having a .git folder introduces reproducibility issues to the nix
-      # build, we check the git commit hash after fetching the source and save it
-      # into a .git_commit file, and then delete the .git folder. then we create a
-      # fake git command that will just return the contents of this file, which will
-      # be used when the polkadot build calls `git rev-parse` to fetch the commit
-      # hash.
+      # this mocks git to return the truncated SHA hash we get from Nix
       fakeGit = writeShellScriptBin "git" ''
-        if [[ $@ = "rev-parse --short HEAD" ]]; then
-          cat /build/source/.git_commit
-        else
-          >&2 echo "Unknown command: $@"
-          exit 1
-        fi
+        echo ${builtins.substring 0 6 version}
       '';
     in
     [ clang fakeGit ];
