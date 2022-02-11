@@ -25,6 +25,8 @@
 , steam-run-native
 # needed for avoiding crash on file selector
 , gsettings-desktop-schemas
+, glib
+, wrapGAppsHook
 }:
 
 let
@@ -76,13 +78,14 @@ in stdenv.mkDerivation {
     ./0001-fix-locale.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
 
   preBuild = ''
     makeFlagsArray+=(PYTHON="python -m py_compile")
   '';
 
   buildInputs = [
+    glib
     xorg.libX11
     libGL
     python
