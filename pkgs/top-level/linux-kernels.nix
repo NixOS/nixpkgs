@@ -92,14 +92,7 @@ in {
       rpiVersion = 4;
     };
 
-    linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
-      kernelPatches =
-        [ kernelPatches.bridge_stp_helper
-          kernelPatches.request_key_helper_updated
-          kernelPatches.cpu-cgroup-v2."4.4"
-          kernelPatches.modinst_arg_list_too_long
-        ];
-    };
+    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream";
 
     linux_4_9 = callPackage ../os-specific/linux/kernel/linux-4.9.nix {
       kernelPatches =
@@ -465,7 +458,7 @@ in {
 
   vanillaPackages = {
     # recurse to build modules for the kernels
-    linux_4_4 = recurseIntoAttrs (packagesFor kernels.linux_4_4);
+    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream"; # Added 2022-02-11
     linux_4_9 = recurseIntoAttrs (packagesFor kernels.linux_4_9);
     linux_4_14 = recurseIntoAttrs (packagesFor kernels.linux_4_14);
     linux_4_19 = recurseIntoAttrs (packagesFor kernels.linux_4_19);
