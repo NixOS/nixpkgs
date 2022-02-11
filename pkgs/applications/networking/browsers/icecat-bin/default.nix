@@ -3,7 +3,6 @@
 , fetchzip
 , autoPatchelfHook
 , wrapGAppsHook
-, gnome2
 , gtk2
 , nss
 , xdg-utils
@@ -14,6 +13,7 @@
 , cups
 , curl
 , dbus
+, dbus-glib
 , expat
 , fontconfig
 , freetype
@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
     cups
     curl
     dbus
+    dbus-glib
     expat
     fontconfig.lib
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     gtk2
     gtk3
     libX11
