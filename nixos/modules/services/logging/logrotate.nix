@@ -111,7 +111,10 @@ in
 
   options = {
     services.logrotate = {
-      enable = mkEnableOption "the logrotate systemd service";
+      enable = mkEnableOption "the logrotate systemd service" // {
+        default = foldr (n: a: a || n.enable) false (attrValues cfg.paths);
+        defaultText = literalExpression "cfg.paths != {}";
+      };
 
       paths = mkOption {
         type = with types; attrsOf (submodule pathOpts);
