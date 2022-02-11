@@ -145,13 +145,13 @@
     "version": "1.12.2"
   },
   "bitbucket": {
-    "owner": "terraform-providers",
-    "provider-source-address": "registry.terraform.io/nixpkgs/bitbucket",
+    "owner": "DrFaust92",
+    "provider-source-address": "registry.terraform.io/DrFaust92/bitbucket",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v1.2.0",
-    "sha256": "11n4wpvmaab164g6k077n9dbdbhd5lwl7pxpha5492ks468nd95b",
+    "rev": "v2.4.1",
+    "sha256": "07y0biab2g6plkyp8scqf7b12alijnxq2zqqr05lbm6wgrc22kvk",
     "vendorSha256": null,
-    "version": "1.2.0"
+    "version": "2.4.1"
   },
   "brightbox": {
     "owner": "brightbox",
