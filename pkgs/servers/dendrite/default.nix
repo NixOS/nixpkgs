@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.5.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "1HCVWSxXOR2syN+dLDSvrNzYHTj/vXZRHkXhU0f3m1k=";
+    sha256 = "sha256-Suoqua/RC4AJgW2uVqQzVkaLPPYrzfj8qqWQ5s7/PEA=";
   };
 
-  vendorSha256 = "sha256-RqEt0RAsKWKy6NvMzulqY56nZ7fIxgJkgN/WpEZ3F2I=";
+  vendorSha256 = "sha256-ZXPdYzsiODwUQeiY6NV78Ut80qViwj+asJQ0eP223i8=";
 
   passthru.tests = {
     inherit (nixosTests) dendrite;
