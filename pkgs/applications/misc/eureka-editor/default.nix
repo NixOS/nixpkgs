@@ -3,10 +3,9 @@
 stdenv.mkDerivation rec {
   pname = "eureka-editor";
   version = "1.27b";
-  majorVersion = "1.27";
 
   src = fetchzip {
-    url = "mirror://sourceforge/eureka-editor/Eureka/${majorVersion}/eureka-${version}-source.tar.gz";
+    url = "mirror://sourceforge/eureka-editor/Eureka/${lib.versions.majorMinor version}/eureka-${version}-source.tar.gz";
     sha256 = "075w7xxsgbgh6dhndc1pfxb2h1s5fhsw28yl1c025gmx9bb4v3bf";
   };
 
@@ -14,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace src/main.cc --replace /usr/local $out
     substituteInPlace Makefile    --replace /usr/local $out
   '';
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "A map editor for the classic DOOM games, and a few related games such as Heretic and Hexen";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    badPlatforms = platforms.darwin;
     maintainers = with maintainers; [ neonfuz ];
   };
 }
