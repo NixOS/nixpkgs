@@ -28021,6 +28021,8 @@ with pkgs;
 
   phrasendrescher = callPackage ../tools/security/phrasendrescher { };
 
+  phrase-cli = callPackage ../tools/misc/phrase-cli { };
+
   phraseapp-client = callPackage ../tools/misc/phraseapp-client { };
 
   phwmon = callPackage ../applications/misc/phwmon { };
