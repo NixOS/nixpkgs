@@ -464,7 +464,7 @@
     "lifx" = ps: with ps; [ aiolifx aiolifx-effects ];
     "lifx_cloud" = ps: with ps; [ ];
     "light" = ps: with ps; [ ];
-    "lightwave" = ps: with ps; [ ]; # missing inputs: lightwave
+    "lightwave" = ps: with ps; [ lightwave ];
     "limitlessled" = ps: with ps; [ limitlessled ];
     "linksys_smart" = ps: with ps; [ ];
     "linode" = ps: with ps; [ linode-api ];
