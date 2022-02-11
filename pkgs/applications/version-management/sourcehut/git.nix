@@ -48,6 +48,11 @@ buildPythonPackage rec {
   inherit src version;
   pname = "gitsrht";
 
+  patches = [
+    # Revert change breaking Unix socket support for Redis
+    patches/redis-socket/git/0001-Revert-Add-webhook-queue-monitoring.patch
+  ];
+
   nativeBuildInputs = srht.nativeBuildInputs;
 
   propagatedBuildInputs = [

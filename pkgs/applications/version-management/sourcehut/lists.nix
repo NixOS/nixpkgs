@@ -21,6 +21,11 @@ buildPythonPackage rec {
     sha256 = "sha256-iywZ6G5E4AJevg/Q1LoB7JMJxBcsAnbhiND++mFy/bw=";
   };
 
+  patches = [
+    # Revert change breaking Unix socket support for Redis
+    patches/redis-socket/lists/0001-Revert-Add-webhook-queue-monitoring.patch
+  ];
+
   nativeBuildInputs = srht.nativeBuildInputs;
 
   propagatedBuildInputs = [
