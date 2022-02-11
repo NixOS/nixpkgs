@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gmid";
-  version = "1.8";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CwJPaZefRDyn2fliOd9FnOLXq70HFu2RsUZhzWQdE3E";
+    sha256 = "sha256-LqFcwm6r4wF7kSnj8nOgaYTDOJVmB4jl1i5UmTI+skQ=";
   };
 
   nativeBuildInputs = [ bison ];
