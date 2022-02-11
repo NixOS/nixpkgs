@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "python_http_client";
-  version = "3.3.5";
+  version = "3.3.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "sendgrid";
     repo = "python-http-client";
     rev = version;
-    sha256 = "sha256-VSrh6t9p7Xb8HqAwcuDSUD2Pj3NcXeg7ygKLG2MHFxk=";
+    sha256 = "sha256-Xchf/jVkQ7SYOzI9f81iS/G72k//6wkl2bMvHprOP9Y=";
   };
 
   checkInputs = [
