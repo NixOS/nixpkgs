@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fceux";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "TASEmulators";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-LlGM6sOjcpyHApUvSr5etKIqwDoheuiW53DSHs19W6Q=";
+    sha256 = "sha256-yQX58m/sMW/8Jr5cm2SrVXTiF7qyZOgOZg1v0qEyiLw=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
