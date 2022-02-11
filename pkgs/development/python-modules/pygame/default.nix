@@ -72,7 +72,7 @@ buildPythonPackage rec {
     description = "Python library for games";
     homepage = "https://www.pygame.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.unix;
   };
 }
