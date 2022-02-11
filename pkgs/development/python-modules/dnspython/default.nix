@@ -24,6 +24,14 @@ buildPythonPackage rec {
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
+    # attempts to do dns resolution
+    "testFromFile"
+    "testInclude"
+    "testToFileBinary"
+    "testToFileFilename"
+    "testToFileTextual"
+    "testToText"
+    "testTorture1"
   ];
 
   nativeBuildInputs = [
