@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "Embeddable SQL OLAP Database Management System";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ costrouc cpcloud ];
   };
 }
