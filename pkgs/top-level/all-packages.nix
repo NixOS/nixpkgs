@@ -442,11 +442,7 @@ with pkgs;
 
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
-  dotnetenv = callPackage ../build-support/dotnetenv {
-    dotnetfx = dotnetfx40;
-  };
-
-  dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers { };
+  # Dotnet
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
@@ -458,6 +454,17 @@ with pkgs;
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
   dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
+
+  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
+  nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
+
+  dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
+    dotnetfx = dotnetfx40;
+  };
+
+  buildDotnetPackage = callPackage ../build-support/dotnet/build-dotnet-package { };
+  fetchNuGet = callPackage ../build-support/dotnet/fetchnuget { };
+  dotnetbuildhelpers = callPackage ../build-support/dotnet/dotnetbuildhelpers { };
 
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
@@ -659,11 +666,6 @@ with pkgs;
   fetchFromGitiles = callPackage ../build-support/fetchgitiles {};
 
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz {};
-
-  fetchNuGet = callPackage ../build-support/fetchnuget { };
-  buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
-  buildDotnetModule = callPackage ../build-support/build-dotnet-module { };
-  nuget-to-nix = callPackage ../build-support/nuget-to-nix { };
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
@@ -21504,8 +21506,6 @@ with pkgs;
     mariadb_104
     mariadb_105
     mariadb_106
-    mariadb_107
-    mariadb_108
   ;
   mariadb = mariadb_106;
 

@@ -5380,6 +5380,8 @@ in {
 
   netifaces = callPackage ../development/python-modules/netifaces { };
 
+  netio = callPackage ../development/python-modules/netio { };
+
   nettigo-air-monitor = callPackage ../development/python-modules/nettigo-air-monitor { };
 
   networkx = callPackage ../development/python-modules/networkx { };
@@ -5648,6 +5650,8 @@ in {
   });
 
   openerz-api = callPackage ../development/python-modules/openerz-api { };
+
+  openevsewifi = callPackage ../development/python-modules/openevsewifi { };
 
   openhomedevice = callPackage ../development/python-modules/openhomedevice { };
 
@@ -7195,6 +7199,8 @@ in {
   pynetbox = callPackage ../development/python-modules/pynetbox { };
 
   pynetdicom = callPackage ../development/python-modules/pynetdicom { };
+
+  pynetgear = callPackage ../development/python-modules/pynetgear { };
 
   pynina = callPackage ../development/python-modules/pynina { };
 
