@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powerlevel10k";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
     rev = "v${version}";
-    sha256 = "sha256-gSPCNLK733+9NWdalqUJ8nzkhoQxurXAYX9t4859j2s=";
+    sha256 = "0fkfh8j7rd8mkpgz6nsx4v7665d375266shl1aasdad8blgqmf0c";
   };
 
   patches = [

@@ -699,6 +699,8 @@ with pkgs;
 
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
+  makeDarwinBundle = callPackage ../build-support/make-darwin-bundle { };
+
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
 
   makeInitrd = callPackage ../build-support/kernel/make-initrd.nix; # Args intentionally left out
@@ -806,6 +808,11 @@ with pkgs;
   fixDarwinDylibNames = makeSetupHook {
     substitutions = { inherit (binutils) targetPrefix; };
   } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
+
+  writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
+
+  desktopToDarwinBundle = makeSetupHook { deps = [ writeDarwinBundle imagemagick ]; }
+    ../build-support/setup-hooks/desktop-to-darwin-bundle.sh;
 
   keepBuildTree = makeSetupHook { } ../build-support/setup-hooks/keep-build-tree.sh;
 
@@ -1435,9 +1442,7 @@ with pkgs;
 
   awslogs = callPackage ../tools/admin/awslogs { };
 
-  aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator {
-    buildGoModule = buildGo116Module;
-  };
+  aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator { };
 
   aws-env = callPackage ../tools/admin/aws-env { };
 
@@ -4215,6 +4220,8 @@ with pkgs;
   unify = with python3Packages; toPythonApplication unify;
 
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
+
+  unparam = callPackage ../tools/misc/unparam { };
 
   inherit (nodePackages) uppy-companion;
 
@@ -13666,6 +13673,8 @@ with pkgs;
 
   mujs = callPackage ../development/interpreters/mujs { };
 
+  nextflow = callPackage ../development/interpreters/nextflow { };
+
   ngn-k = callPackage ../development/interpreters/ngn-k { };
 
   obb = callPackage ../development/interpreters/clojure/obb.nix { };
@@ -15536,9 +15545,7 @@ with pkgs;
 
   spooles = callPackage ../development/libraries/science/math/spooles {};
 
-  spruce = callPackage ../development/tools/misc/spruce {
-    buildGoModule = buildGo116Module;
-  };
+  spruce = callPackage ../development/tools/misc/spruce {};
 
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
@@ -28379,6 +28386,8 @@ with pkgs;
   };
 
   renoise = callPackage ../applications/audio/renoise {};
+
+  redux = callPackage ../applications/audio/redux { };
 
   roomeqwizard = callPackage ../applications/audio/roomeqwizard { };
 

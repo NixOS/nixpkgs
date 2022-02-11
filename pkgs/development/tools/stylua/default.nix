@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LmmOaxB7UNQQUFBYN5wNZYt9xH5wDrBbtB9QOCb3suQ=";
+    sha256 = "sha256-Nry6P4nwcCmvJ4kdzeGEkaP1fm2LgnAwrINTBFK23tY=";
   };
 
-  cargoSha256 = "sha256-Schaiu9XnkEfjY6D8ZT7dtCf8UN58zQ6256xeOWBi5M=";
+  cargoSha256 = "sha256-i5wOGPOe1lDZknrVzZGxC8dUgTGiZJSzLqkxSRt0mQ8=";
 
   buildFeatures = lib.optional lua52Support "lua52"
     ++ lib.optional luauSupport "luau";

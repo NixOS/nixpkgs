@@ -4,17 +4,17 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "wlgreet";
-  version = "0.3";
+  pname = "wlgreet-unstable";
+  version = "2022-01-25";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
-    repo = pname;
-    rev = version;
-    sha256 = "0n0lzg3y1z5s9s6kfkdj5q8w67bqpw08hqfccc5kz0ninzy9j0cc";
+    repo = "wlgreet";
+    rev = "8517e578cb64a8fb3bd8f8a438cdbe46f208b87c";
+    sha256 = "0la4xlikw61cxvbkil1d22dgvazi7rs17n5i2z02090fvnfxxzxh";
   };
 
-  cargoSha256 = "1lwy8xmkl9n3fj3wlf80wp728nn9p5rjnbgmm2cbpqxklcgbmxhm";
+  cargoSha256 = "651d2bf01612534f1c4b0472c812095a86eb064d16879380c87f684c04fe0d8d";
 
   meta = with lib; {
     description = "Raw wayland greeter for greetd, to be run under sway or similar";
