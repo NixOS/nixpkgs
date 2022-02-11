@@ -29228,8 +29228,6 @@ with pkgs;
     python = python3;
   };
 
-  sslyze = with python3Packages; toPythonApplication sslyze;
-
   ssr = callPackage ../applications/audio/soundscape-renderer {
     autoreconfHook = buildPackages.autoreconfHook269;
   };

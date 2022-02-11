@@ -37,7 +37,6 @@ python3.pkgs.buildPythonApplication rec {
     markupsafe
     pysocks
     six
-    sslyze
     sqlalchemy
     tld
     yaswfp
