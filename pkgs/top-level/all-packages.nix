@@ -6767,6 +6767,8 @@ with pkgs;
 
   jet = callPackage ../development/tools/jet { };
 
+  jfmt = callPackage ../development/tools/jfmt { };
+
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
   jhead = callPackage ../tools/graphics/jhead { };
