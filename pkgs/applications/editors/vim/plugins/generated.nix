@@ -6326,6 +6326,18 @@ final: prev:
     meta.homepage = "https://github.com/darfink/starsearch.vim/";
   };
 
+  stylish-nvim = buildVimPluginFrom2Nix {
+    pname = "stylish.nvim";
+    version = "2022-02-11";
+    src = fetchFromGitHub {
+      owner = "teto";
+      repo = "stylish.nvim";
+      rev = "ea745ebf446410ef3d75f9890b2e7fd59be42e19";
+      sha256 = "1kl2g32ls4s7kpr6395rdmsa7gdzkpfiypphmnxg8n75n0b0mwb3";
+    };
+    meta.homepage = "https://github.com/teto/stylish.nvim/";
+  };
+
   suda-vim = buildVimPluginFrom2Nix {
     pname = "suda.vim";
     version = "2022-02-10";
