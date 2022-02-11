@@ -6,14 +6,14 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.2.11";
+  version = "1.3.0b0";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
-    rev = version;
+    rev = "231ef6faf20fba7463831a5015edee649a1d5d49";
     fetchSubmodules = true;
-    sha256 = "sha256-hRpZce8ydEsyq7htNfzlRSKPwMAOUurC3uiQpX6WiB8=";
+    sha256 = "sha256-2MIhSYosZmOercuOs36oTDx44OpBGVQRGzTFv+Hq6ps=";
   };
 
   postPatch = ''
@@ -31,6 +31,7 @@ let chia = python3Packages.buildPythonApplication rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
   propagatedBuildInputs = with python3Packages; [
+    aiofiles
     aiohttp
     aiosqlite
     bitstring
@@ -46,6 +47,7 @@ let chia = python3Packages.buildPythonApplication rec {
     colorlog
     concurrent-log-handler
     cryptography
+    dnslib
     dnspythonchia
     fasteners
     keyrings-cryptfile
@@ -55,6 +57,7 @@ let chia = python3Packages.buildPythonApplication rec {
     sortedcontainers
     watchdog
     websockets
+    zstd
   ];
 
   checkInputs = with python3Packages; [
