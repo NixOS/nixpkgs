@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.logrotate;
-  inherit (config.users) groups;
 
   pathOpts = { name, ... }:  {
     options = {
@@ -162,25 +161,6 @@ in
         '';
       }
     ) cfg.paths;
-
-    services.logrotate = {
-      paths = {
-        "/var/log/btmp" = {
-          frequency = mkDefault "monthly";
-          keep = mkDefault 1;
-          extraConfig = ''
-            create 0660 root ${groups.utmp.name}
-          '';
-        };
-        "/var/log/wtmp" = {
-          frequency = mkDefault "monthly";
-          keep = mkDefault 1;
-          extraConfig = ''
-            create 0664 root ${groups.utmp.name}
-          '';
-        };
-      };
-    };
 
     systemd.services.logrotate = {
       description = "Logrotate Service";
