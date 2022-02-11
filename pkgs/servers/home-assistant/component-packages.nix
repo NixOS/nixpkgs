@@ -459,12 +459,12 @@
     "launch_library" = ps: with ps; [ pylaunches ];
     "lcn" = ps: with ps; [ pypck ];
     "lg_netcast" = ps: with ps; [ pylgnetcast ];
-    "lg_soundbar" = ps: with ps; [ ]; # missing inputs: temescal
+    "lg_soundbar" = ps: with ps; [ temescal ];
     "life360" = ps: with ps; [ life360 ];
     "lifx" = ps: with ps; [ aiolifx aiolifx-effects ];
     "lifx_cloud" = ps: with ps; [ ];
     "light" = ps: with ps; [ ];
-    "lightwave" = ps: with ps; [ ]; # missing inputs: lightwave
+    "lightwave" = ps: with ps; [ lightwave ];
     "limitlessled" = ps: with ps; [ limitlessled ];
     "linksys_smart" = ps: with ps; [ ];
     "linode" = ps: with ps; [ linode-api ];

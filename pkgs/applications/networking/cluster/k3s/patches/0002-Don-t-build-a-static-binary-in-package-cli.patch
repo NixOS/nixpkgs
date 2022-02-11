@@ -1,0 +1,37 @@
+From 49c000c7c5dd7a502a2be4c638d2c32b65673c00 Mon Sep 17 00:00:00 2001
+From: Euan Kemp <euank@euank.com>
+Date: Sun, 6 Feb 2022 23:13:00 -0800
+Subject: [PATCH] Don't build a static binary in package-cli
+
+since nixpkgs prefers dynamically linked binaries.
+
+Also remove "trimpath" for the 'go generate' step because the codegen
+they use doesn't work with trimpath set.
+---
+ scripts/package-cli | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/scripts/package-cli b/scripts/package-cli
+index 28927327b7..95dbb469f1 100755
+--- a/scripts/package-cli
++++ b/scripts/package-cli
+@@ -48,14 +48,13 @@ fi
+ 
+ CMD_NAME=dist/artifacts/k3s${BIN_SUFFIX}
+ 
+-"${GO}" generate
++GOFLAGS="" "${GO}" generate
+ LDFLAGS="
+     -X github.com/rancher/k3s/pkg/version.Version=$VERSION
+     -X github.com/rancher/k3s/pkg/version.GitCommit=${COMMIT:0:8}
+     -w -s
+ "
+-STATIC="-extldflags '-static'"
+-CGO_ENABLED=0 "${GO}" build -ldflags "$LDFLAGS $STATIC" -o ${CMD_NAME} ./cmd/k3s/main.go
++CGO_ENABLED=0 "${GO}" build -ldflags "$LDFLAGS" -o ${CMD_NAME} ./cmd/k3s/main.go
+ 
+ stat ${CMD_NAME}
+ 
+-- 
+2.34.1
+
