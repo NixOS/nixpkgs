@@ -982,6 +982,7 @@ mapAliases ({
   QmidiNet = qmidinet; # Added 2016-05-22
   qca-qt5 = libsForQt5.qca-qt5; # Added 2015-12-19
   qcsxcad = libsForQt5.qcsxcad; # Added 2020-11-05
+  qflipper = qFlipper; # Added 2022-02-11
   qmk_firmware = throw "qmk_firmware has been removed because it was broken"; # Added 2021-04-02
   qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # Added 2020-12-02
   qt-3 = throw "qt-3 has been removed from nixpkgs, as it's unmaintained and insecure"; # Added 2021-02-15
