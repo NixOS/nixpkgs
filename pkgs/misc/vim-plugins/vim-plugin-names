@@ -563,6 +563,7 @@ norcalli/nvim-colorizer.lua
 norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
 NTBBloodbath/galaxyline.nvim
+NTBBloodbath/rest.nvim
 ntpeters/vim-better-whitespace
 numirias/semshi
 numtostr/comment.nvim
