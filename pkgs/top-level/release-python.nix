@@ -26,4 +26,22 @@ let
         []);
     in if res.success then res.value else []
     );
-in (mapTestOn (packagePython pkgs))
+
+  jobs = {
+    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+    pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
+
+    tested = pkgs.releaseTools.aggregate {
+      name = "python-tested";
+      meta.description = "Release-critical packages from the python package sets";
+      constituents = [
+        jobs.remarshal.x86_64-linux                 # Used in pkgs.formats helper
+        jobs.python39Packages.colorama.x86_64-linux  # Used in nixos test-driver
+        jobs.python39Packages.ptpython.x86_64-linux  # Used in nixos test-driver
+        jobs.python39Packages.requests.x86_64-linux  # Almost ubiquous package
+        jobs.python39Packages.sphinx.x86_64-linux    # Document creation for many packages
+      ];
+    };
+
+  } // (mapTestOn (packagePython pkgs));
+in jobs
