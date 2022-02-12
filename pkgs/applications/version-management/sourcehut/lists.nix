@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.51.0";
+  version = "0.51.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "lists.sr.ht";
     rev = version;
-    sha256 = "sha256-iywZ6G5E4AJevg/Q1LoB7JMJxBcsAnbhiND++mFy/bw=";
+    sha256 = "sha256-oNY5A98oVoL2JKO0fU/8YVl8u7ywmHb/RHD8A6z9yIM=";
   };
 
   patches = [
