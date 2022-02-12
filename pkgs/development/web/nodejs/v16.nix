@@ -8,8 +8,8 @@ let
 in
   buildNodejs {
     inherit enableNpm;
-    version = "16.13.2";
-    sha256 = "185lm13q0kwz0qimc38c7mxn8ml6m713pjdjsa9jna9az4gxxccq";
+    version = "16.14.0";
+    sha256 = "sha256-BetkGT45H6iiwVnA9gwXGCRxUWX4DGf8q528lE4wxiM=";
     patches = [
       ./disable-darwin-v8-system-instrumentation.patch
       # Fixes node incorrectly building vendored OpenSSL when we want system OpenSSL.
