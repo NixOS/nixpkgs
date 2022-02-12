@@ -31,6 +31,6 @@ buildGoModule rec {
     description = "The SPIFFE Runtime Environment";
     homepage = "github.com/spiffe/spire";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ jonringer fkautz ];
   };
 }

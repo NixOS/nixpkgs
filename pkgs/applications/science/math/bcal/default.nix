@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bcal";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "bcal";
     rev = "v${version}";
-    sha256 = "sha256-1k8Q+I1Mc196QL+x4yXzRi7WLBf30U4sJyl0rXisW7k=";
+    sha256 = "sha256-PleWU2yyJzkUAZEvEYoCGdpEXqOgRvZK9zXTYrxRtQU=";
   };
 
   buildInputs = [ readline ];

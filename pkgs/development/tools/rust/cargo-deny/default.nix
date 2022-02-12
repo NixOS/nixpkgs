@@ -11,19 +11,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deny";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LsRky7hc7mgx1iRpJZICmP/ofdfD9r3D5LURTqfI9Fo=";
+    sha256 = "sha256-4VwDpm61OhMvlbiuA7WFup0JwvLvoS615Pr7f7z0kh4=";
   };
 
   # enable pkg-config feature of zstd
   cargoPatches = [ ./zstd-pkg-config.patch ];
 
-  cargoSha256 = "sha256-7WGNaad00MqEM/OdUaLJ3McXlUQyQwPezbMbL+4se5A=";
+  cargoSha256 = "sha256-yiKfVUj3skXF3wk+IzsNucXcopfGm7mYHZsupi/KzZw=";
 
   nativeBuildInputs = [ pkg-config ];
 
