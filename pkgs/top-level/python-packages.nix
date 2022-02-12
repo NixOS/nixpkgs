@@ -8402,8 +8402,6 @@ in {
 
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
 
-  qiskit-aqua = callPackage ../development/python-modules/qiskit-aqua { };
-
   qiskit-finance = callPackage ../development/python-modules/qiskit-finance { };
 
   qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
@@ -9501,6 +9499,8 @@ in {
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
 
   streamz = callPackage ../development/python-modules/streamz { };
+
+  strenum =  callPackage ../development/python-modules/strenum { };
 
   strict-rfc3339 = callPackage ../development/python-modules/strict-rfc3339 { };
 

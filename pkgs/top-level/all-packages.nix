@@ -10750,6 +10750,8 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
+  witness = callPackage ../tools/security/witness { };
+
   openconnect = openconnect_gnutls;
 
   openconnect_openssl = callPackage ../tools/networking/openconnect {

@@ -18,6 +18,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
               Type = "oneshot";
               RemainAfterExit = true;
               ExecStart = "${pkgs.coreutils}/bin/true";
+              ExecReload = "${pkgs.coreutils}/bin/true";
             };
           };
         };
@@ -70,6 +71,80 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           };
         };
 
+        simpleServiceWithExtraSection.configuration = {
+          imports = [ simpleServiceNostop.configuration ];
+          systemd.packages = [ (pkgs.writeTextFile {
+            name = "systemd-extra-section";
+            destination = "/etc/systemd/system/test.service";
+            text = ''
+              [X-Test]
+              X-Test-Value=a
+            '';
+          }) ];
+        };
+
+        simpleServiceWithExtraSectionOtherName.configuration = {
+          imports = [ simpleServiceNostop.configuration ];
+          systemd.packages = [ (pkgs.writeTextFile {
+            name = "systemd-extra-section";
+            destination = "/etc/systemd/system/test.service";
+            text = ''
+              [X-Test2]
+              X-Test-Value=a
+            '';
+          }) ];
+        };
+
+        simpleServiceWithInstallSection.configuration = {
+          imports = [ simpleServiceNostop.configuration ];
+          systemd.packages = [ (pkgs.writeTextFile {
+            name = "systemd-extra-section";
+            destination = "/etc/systemd/system/test.service";
+            text = ''
+              [Install]
+              WantedBy=multi-user.target
+            '';
+          }) ];
+        };
+
+        simpleServiceWithExtraKey.configuration = {
+          imports = [ simpleServiceNostop.configuration ];
+          systemd.services.test.serviceConfig."X-Test" = "test";
+        };
+
+        simpleServiceWithExtraKeyOtherValue.configuration = {
+          imports = [ simpleServiceNostop.configuration ];
+          systemd.services.test.serviceConfig."X-Test" = "test2";
+        };
+
+        simpleServiceWithExtraKeyOtherName.configuration = {
+          imports = [ simpleServiceNostop.configuration ];
+          systemd.services.test.serviceConfig."X-Test2" = "test";
+        };
+
+        simpleServiceReloadTrigger.configuration = {
+          imports = [ simpleServiceNostop.configuration ];
+          systemd.services.test.reloadTriggers = [ "/dev/null" ];
+        };
+
+        simpleServiceReloadTriggerModified.configuration = {
+          imports = [ simpleServiceNostop.configuration ];
+          systemd.services.test.reloadTriggers = [ "/dev/zero" ];
+        };
+
+        simpleServiceReloadTriggerModifiedAndSomethingElse.configuration = {
+          imports = [ simpleServiceNostop.configuration ];
+          systemd.services.test = {
+            reloadTriggers = [ "/dev/zero" ];
+            serviceConfig."X-Test" = "test";
+          };
+        };
+
+        simpleServiceReloadTriggerModifiedSomethingElse.configuration = {
+          imports = [ simpleServiceNostop.configuration ];
+          systemd.services.test.serviceConfig."X-Test" = "test";
+        };
+
         restart-and-reload-by-activation-script.configuration = {
           systemd.services = rec {
             simple-service = {
@@ -93,6 +168,17 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             no-restart-service = simple-service // {
               restartIfChanged = false;
             };
+
+            reload-triggers = simple-service // {
+              wantedBy = [ "multi-user.target" ];
+            };
+
+            reload-triggers-and-restart-by-as = simple-service;
+
+            reload-triggers-and-restart = simple-service // {
+              stopIfChanged = false; # easier to check for this
+              wantedBy = [ "multi-user.target" ];
+            };
           };
 
           system.activationScripts.restart-and-reload-test = {
@@ -101,17 +187,31 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             text = ''
               if [ "$NIXOS_ACTION" = dry-activate ]; then
                 f=/run/nixos/dry-activation-restart-list
+                g=/run/nixos/dry-activation-reload-list
               else
                 f=/run/nixos/activation-restart-list
+                g=/run/nixos/activation-reload-list
               fi
               cat <<EOF >> "$f"
               simple-service.service
               simple-restart-service.service
               simple-reload-service.service
               no-restart-service.service
+              reload-triggers-and-restart-by-as.service
+              EOF
+
+              cat <<EOF >> "$g"
+              reload-triggers.service
+              reload-triggers-and-restart-by-as.service
+              reload-triggers-and-restart.service
               EOF
             '';
           };
+        };
+
+        restart-and-reload-by-activation-script-modified.configuration = {
+          imports = [ restart-and-reload-by-activation-script.configuration ];
+          systemd.services.reload-triggers-and-restart.serviceConfig.X-Modified = "test";
         };
 
         mount.configuration = {
@@ -240,6 +340,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             print("---")
             raise Exception(f"Unexpected string '{needle}' was found")
 
+
+    machine.wait_for_unit("multi-user.target")
 
     machine.succeed(
         "${stderrRunner} ${originalSystem}/bin/switch-to-configuration test"
@@ -379,6 +481,130 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "Main PID:")  # output of systemctl
         assert_lacks(out, "as well:")
 
+    with subtest("unit file parser"):
+        # Switch to a well-known state
+        switch_to_specialisation("${machine}", "simpleServiceNostop")
+
+        # Add a section
+        out = switch_to_specialisation("${machine}", "simpleServiceWithExtraSection")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # Rename it
+        out = switch_to_specialisation("${machine}", "simpleServiceWithExtraSectionOtherName")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # Remove it
+        out = switch_to_specialisation("${machine}", "simpleServiceNostop")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # [Install] section is ignored
+        out = switch_to_specialisation("${machine}", "simpleServiceWithInstallSection")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # Add a key
+        out = switch_to_specialisation("${machine}", "simpleServiceWithExtraKey")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # Change its value
+        out = switch_to_specialisation("${machine}", "simpleServiceWithExtraKeyOtherValue")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # Rename it
+        out = switch_to_specialisation("${machine}", "simpleServiceWithExtraKeyOtherName")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # Remove it
+        out = switch_to_specialisation("${machine}", "simpleServiceNostop")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # Add a reload trigger
+        out = switch_to_specialisation("${machine}", "simpleServiceReloadTrigger")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: test.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # Modify the reload trigger
+        out = switch_to_specialisation("${machine}", "simpleServiceReloadTriggerModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: test.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # Modify the reload trigger and something else
+        out = switch_to_specialisation("${machine}", "simpleServiceReloadTriggerModifiedAndSomethingElse")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
+        # Remove the reload trigger
+        out = switch_to_specialisation("${machine}", "simpleServiceReloadTriggerModifiedSomethingElse")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+
     with subtest("restart and reload by activation script"):
         switch_to_specialisation("${machine}", "simpleServiceNorestart")
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script")
@@ -386,23 +612,32 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "restarting the following units:")
-        assert_contains(out, "\nstarting the following units: no-restart-service.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
+        assert_contains(out, "\nstarting the following units: no-restart-service.service, reload-triggers-and-restart-by-as.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
         assert_lacks(out, "as well:")
         # Switch to the same system where the example services get restarted
-        # by the activation script
+        # and reloaded by the activation script
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: simple-reload-service.service\n")
-        assert_contains(out, "restarting the following units: simple-restart-service.service, simple-service.service\n")
+        assert_contains(out, "reloading the following units: reload-triggers-and-restart.service, reload-triggers.service, simple-reload-service.service\n")
+        assert_contains(out, "restarting the following units: reload-triggers-and-restart-by-as.service, simple-restart-service.service, simple-service.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "as well:")
+        # Switch to the same system and see if the service gets restarted when it's modified
+        # while the fact that it's supposed to be reloaded by the activation script is ignored.
+        out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script-modified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: reload-triggers.service, simple-reload-service.service\n")
+        assert_contains(out, "restarting the following units: reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, simple-restart-service.service, simple-service.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "as well:")
         # The same, but in dry mode
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script", action="dry-activate")
         assert_lacks(out, "would stop the following units:")
         assert_lacks(out, "would NOT stop the following changed units:")
-        assert_contains(out, "would reload the following units: simple-reload-service.service\n")
-        assert_contains(out, "would restart the following units: simple-restart-service.service, simple-service.service\n")
+        assert_contains(out, "would reload the following units: reload-triggers.service, simple-reload-service.service\n")
+        assert_contains(out, "would restart the following units: reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, simple-restart-service.service, simple-service.service\n")
         assert_lacks(out, "\nwould start the following units:")
         assert_lacks(out, "as well:")
 

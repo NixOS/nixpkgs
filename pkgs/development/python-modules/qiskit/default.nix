@@ -4,7 +4,6 @@
 , fetchFromGitHub
   # Python Inputs
 , qiskit-aer
-, qiskit-aqua
 , qiskit-ibmq-provider
 , qiskit-ignis
 , qiskit-terra
@@ -42,7 +41,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     qiskit-aer
-    qiskit-aqua
     qiskit-ibmq-provider
     qiskit-ignis
     qiskit-terra
@@ -52,7 +50,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "qiskit"
-    "qiskit.aqua"
     "qiskit.circuit"
     "qiskit.ignis"
     "qiskit.providers.aer"
