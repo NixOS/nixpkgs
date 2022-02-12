@@ -375,17 +375,23 @@ in {
         "mysql.service"
         "postgresql.service"
       ];
-      preStart = optionalString (cfg.config != null) (if cfg.configWritable then ''
-        cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
-      '' else ''
-        rm -f "${cfg.configDir}/configuration.yaml"
-        ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
-      '') + optionalString (cfg.lovelaceConfig != null) (if cfg.lovelaceConfigWritable then ''
-        cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
-      '' else ''
-        rm -f "${cfg.configDir}/ui-lovelace.yaml"
-        ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
-      '');
+      preStart = let
+        copyConfig = if cfg.configWritable then ''
+          cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
+        '' else ''
+          rm -f "${cfg.configDir}/configuration.yaml"
+          ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
+        '';
+        copyLovelaceConfig = if cfg.lovelaceConfigWritable then ''
+          cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+        '' else ''
+          rm -f "${cfg.configDir}/ui-lovelace.yaml"
+          ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+        '';
+      in
+        (optionalString (cfg.config != null) copyConfig) +
+        (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig)
+      ;
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
         capabilities = [
