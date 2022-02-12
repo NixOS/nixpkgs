@@ -10,7 +10,7 @@
 , hunspell, libevent, libstartup_notification
 , libvpx
 , icu70, libpng, glib, pciutils
-, autoconf213, which, gnused, rustPackages_1_57
+, autoconf213, which, gnused, rustPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , gtk3, wrapGAppsHook
@@ -95,7 +95,7 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
-  inherit (rustPackages_1_57) rustc cargo;
+  inherit (rustPackages) rustc cargo;
 
   # Darwin's stdenv provides the default llvmPackages version, match that since
   # clang LTO on Darwin is broken so the stdenv is not being changed.
@@ -174,8 +174,6 @@ buildStdenv.mkDerivation ({
     rm -rf obj-x86_64-pc-linux-gnu
     substituteInPlace toolkit/xre/glxtest.cpp \
       --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
-
-    patchShebangs mach
  '';
 
   nativeBuildInputs =
