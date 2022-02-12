@@ -8,14 +8,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.12.0";
+  version = "4.15.0";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    sha256 = "023plm5mwm15xikmdh1mq3gx1n7y4a0r0kw9fvk3rvm9brm78hzp";
+    sha256 = "sha256-JaPE11MmBzmhadPE4Kp2TK5RJJVe/nkXD/Jhy/M0tOY=";
   };
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook git qttools which ];
