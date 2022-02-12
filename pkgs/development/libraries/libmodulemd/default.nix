@@ -11,14 +11,13 @@
 , file
 , gtk-doc
 , docbook-xsl-nons
-, help2man
 , docbook_xml_dtd_412
 , glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmodulemd";
-  version = "2.13.0";
+  version = "2.14.0";
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "py" ];
 
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "fedora-modularity";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-hg/it3pHUnEYsmKcLzQKcZNthHZZwdXBjzTlOS1Losk=";
+    sha256 = "sha256-ccLk8O0UJwy7WZYr5Bq2XqaSFNe4i7HQehmVoB5C2Yg=";
   };
 
   patches = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
     ninja
     gtk-doc
     docbook-xsl-nons
-    help2man
     docbook_xml_dtd_412
     gobject-introspection
   ];
