@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake gfortran ];
 
+  doCheck = true;
+
   meta = {
     description = "A three-dimensional finite element mesh generator";
     homepage = "https://gmsh.info/";
