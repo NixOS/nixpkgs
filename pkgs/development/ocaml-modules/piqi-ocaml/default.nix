@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  installPhase = "DESTDIR=$out make install";
+  installPhase = ''
+    runHook preInstall
+    DESTDIR=$out make install
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://piqi.org";

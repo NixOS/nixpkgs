@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "1.7.0";
+  version = "1.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
     rev = version;
-    sha256 = "sha256-SDxYPncC/VVTbI4Ka/mgcVfU1KUNRXVvQl78LCoD/RQ=";
+    sha256 = "sha256-c/Btc2CiYGb9ZGzNYDd1xJoGID6amTyv/Emdh1M6e/U=";
   };
 
   propagatedBuildInputs = [

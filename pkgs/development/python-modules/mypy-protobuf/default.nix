@@ -2,14 +2,14 @@
 
 buildPythonApplication rec {
   pname = "mypy-protobuf";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "558dcc390290e43c7def0d4238cc41a79abde06ff509b3014c3dff0553c7b0c1";
+    sha256 = "sha256-cwqhUzfDjwRG++CPbGwjcO4B05USU2nUtw4IseLuMO4=";
   };
 
   propagatedBuildInputs = [ protobuf types-protobuf grpcio-tools ];

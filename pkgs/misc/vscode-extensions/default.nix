@@ -795,7 +795,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=faustinoaq.lex-flex-yacc-bison";
           homepage = "https://github.com/faustinoaq/vscode-lex-flex-yacc-bison";
           license = licenses.mit;
-          maintainers = with maintainers; [ angustrau ];
+          maintainers = with maintainers; [ emilytrau ];
         };
       };
 

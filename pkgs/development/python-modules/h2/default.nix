@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "HTTP/2 State-Machine based protocol implementation";
-    homepage = "http://hyper.rtfd.org/";
+    homepage = "https://github.com/python-hyper/h2";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

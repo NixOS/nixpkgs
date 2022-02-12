@@ -247,6 +247,8 @@ nixFlakeBuild() {
                 local k="$1"; shift 1
                 evalArgs+=("$i" "$j" "$k")
                 ;;
+              --impure) # We don't want this in buildArgs, it's only needed at evaluation time, and unsupported during realisation
+                ;;
               *)
                 buildArgs+=("$i")
                 ;;

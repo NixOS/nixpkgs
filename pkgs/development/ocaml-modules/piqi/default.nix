@@ -19,15 +19,9 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildPhase = ''
-    make
-    make -C piqilib piqilib.cma
-  '';
+  postBuild = "make -C piqilib piqilib.cma";
 
-  installPhase = ''
-    make install;
-    make ocaml-install;
-  '';
+  installTargets = [ "install" "ocaml-install" ];
 
   meta = with lib; {
     homepage = "https://piqi.org";

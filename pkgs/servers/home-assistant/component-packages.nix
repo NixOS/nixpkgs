@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.2.3";
+  version = "2022.2.6";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -459,12 +459,12 @@
     "launch_library" = ps: with ps; [ pylaunches ];
     "lcn" = ps: with ps; [ pypck ];
     "lg_netcast" = ps: with ps; [ pylgnetcast ];
-    "lg_soundbar" = ps: with ps; [ ]; # missing inputs: temescal
+    "lg_soundbar" = ps: with ps; [ temescal ];
     "life360" = ps: with ps; [ life360 ];
     "lifx" = ps: with ps; [ aiolifx aiolifx-effects ];
     "lifx_cloud" = ps: with ps; [ ];
     "light" = ps: with ps; [ ];
-    "lightwave" = ps: with ps; [ ]; # missing inputs: lightwave
+    "lightwave" = ps: with ps; [ lightwave ];
     "limitlessled" = ps: with ps; [ limitlessled ];
     "linksys_smart" = ps: with ps; [ ];
     "linode" = ps: with ps; [ linode-api ];
@@ -569,7 +569,7 @@
     "nest" = ps: with ps; [ aiohttp-cors google-nest-sdm ha-ffmpeg python-nest ];
     "netatmo" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa pyatmo ];
     "netdata" = ps: with ps; [ netdata ];
-    "netgear" = ps: with ps; [ ]; # missing inputs: pynetgear
+    "netgear" = ps: with ps; [ pynetgear ];
     "netgear_lte" = ps: with ps; [ eternalegypt ];
     "netio" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pynetio
     "network" = ps: with ps; [ aiohttp-cors ifaddr ];
@@ -619,7 +619,7 @@
     "openalpr_local" = ps: with ps; [ ];
     "opencv" = ps: with ps; [ numpy ]; # missing inputs: opencv-python-headless
     "openerz" = ps: with ps; [ openerz-api ];
-    "openevse" = ps: with ps; [ ]; # missing inputs: openevsewifi
+    "openevse" = ps: with ps; [ openevsewifi ];
     "openexchangerates" = ps: with ps; [ ];
     "opengarage" = ps: with ps; [ open-garage ];
     "openhardwaremonitor" = ps: with ps; [ ];
@@ -1368,6 +1368,7 @@
     "ness_alarm"
     "nest"
     "netatmo"
+    "netgear"
     "network"
     "nexia"
     "nightscout"

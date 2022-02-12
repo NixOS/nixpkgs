@@ -1096,12 +1096,6 @@ let
       ];
     });
 
-    nloptr = old.nloptr.overrideDerivation (attrs: {
-      # Drop bundled nlopt source code. Probably unnecessary, but I want to be
-      # sure we're using the system library, not this one.
-      preConfigure = "rm -r src/nlopt_src";
-    });
-
     V8 = old.V8.overrideDerivation (attrs: {
       postPatch = ''
         substituteInPlace configure \

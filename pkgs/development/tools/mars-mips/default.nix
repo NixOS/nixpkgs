@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation rec {
     description = "An IDE for programming in MIPS assembly language intended for educational-level use";
     homepage = "https://courses.missouristate.edu/KenVollmar/MARS/";
     license = licenses.mit;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.all;
   };
 }
