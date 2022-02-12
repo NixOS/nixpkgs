@@ -220,6 +220,9 @@ stdenv.mkDerivation rec {
       binPath = [ iptables iproute2 pmutils numad numactl bridge-utils dmidecode dnsmasq ] ++ optionals enableIscsi [ openiscsi ];
     in
     ''
+      substituteInPlace $out/bin/virt-xml-validate \
+        --replace xmllint ${libxml2}/bin/xmllint
+
       substituteInPlace $out/libexec/libvirt-guests.sh \
         --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
         --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
