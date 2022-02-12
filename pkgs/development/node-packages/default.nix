@@ -226,6 +226,15 @@ let
       '';
     };
 
+    near-cli = super.near-cli.override {
+      nativeBuildInputs = with pkgs; [
+        libusb
+        nodePackages.prebuild-install
+        nodePackages.node-gyp-build
+        pkg-config
+      ];
+    };
+
     node-inspector = super.node-inspector.override {
       buildInputs = [ self.node-pre-gyp ];
       meta.broken = since "10";
