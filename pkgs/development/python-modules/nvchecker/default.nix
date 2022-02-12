@@ -5,7 +5,7 @@
 , pytestCheckHook
 , setuptools
 , packaging
-, toml
+, tomli
 , structlog
 , appdirs
 , pytest-asyncio
@@ -20,18 +20,18 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.5";
+  version = "2.6.1";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jzmpra87dlj88d20ihnva9fj81wqbbd9qbzsjwwvzdx062136mg";
+    sha256 = "sha256-Lfo/VzsklEbv/kiKV5GbzvycwekqykRLrZBhehC1MjY=";
   };
 
   nativeBuildInputs = [ installShellFiles docutils ];
-  propagatedBuildInputs = [ setuptools packaging toml structlog appdirs tornado pycurl aiohttp ];
+  propagatedBuildInputs = [ setuptools packaging tomli structlog appdirs tornado pycurl aiohttp ];
   checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
 
   disabled = pythonOlder "3.7";
