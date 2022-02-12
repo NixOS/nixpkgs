@@ -11,10 +11,14 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "1h6dj9lyfhk43b7f7ryxfzdf6v1bjq1zq6fmsqdkvdqpih87vwql";
   };
 
+  # List of file formats to package.
+  _types = "html json jsonld rdfa rdfnt rdfturtle rdfxml template text";
+
   installPhase = ''
     runHook preInstall
 
-    install -vDt $out/json json/licenses.json
+    mkdir -p $out
+    cp -ar $_types $out
 
     runHook postInstall
   '';
