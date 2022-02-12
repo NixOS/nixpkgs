@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pioneer";
-  version = "20210723";
+  version = "20220203";
 
   src = fetchFromGitHub{
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    sha256 = "sha256-w+ECVv96MoS69815+X0PqguDiGDhHoTnAnnYtLpMScI=";
+    sha256 = "sha256-HNVg8Lq6k6gQDmgOdpnBwJ57WSEnn5XwtqzmkDU1WGI=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
