@@ -2,6 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,12 +18,13 @@ buildPythonPackage rec {
     sha256 = "sha256-q/VIc1U+Xgem/U1fZTt4H1rkEpekk2ZrWdzyFABqErI=";
   };
 
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [
     "semantic_version"
   ];
-
-  # ModuleNotFoundError: No module named 'tests'
-  doCheck = false;
 
   meta = with lib; {
     description = "A library implementing the 'SemVer' scheme";
