@@ -18,6 +18,12 @@ buildPythonApplication rec {
     sha256 = "sha256-qhwFRveFCwflQmVCwzThC8sP+YCqckgCaXAc3IRms0g=";
   };
 
+  # frozendict version constraint is to avoid a debian issue we don't have
+  postPatch = ''
+    substituteInPlace synapse/python_dependencies.py \
+      --replace '"frozendict' '"frozendict", #'
+  '';
+
   buildInputs = [ openssl ];
 
   propagatedBuildInputs = [

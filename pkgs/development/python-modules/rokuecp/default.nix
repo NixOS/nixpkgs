@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.13.1";
+  version = "0.13.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "ctalkington";
     repo = "python-rokuecp";
     rev = version;
-    hash = "sha256-6bHEg7bpqldLDr3UX42GUg7kIDHVxtnVnrFr8CvTJU4=";
+    hash = "sha256-TWjONAGUwcCaWiaCxgR1xV1R+Ouy7FvMUewZa3z1mBc=";
   };
 
   nativeBuildInputs = [
