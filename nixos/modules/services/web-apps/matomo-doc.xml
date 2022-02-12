@@ -6,46 +6,13 @@
  <title>Matomo</title>
  <para>
   Matomo is a real-time web analytics application. This module configures
-  php-fpm as backend for Matomo, optionally configuring an nginx vhost as well.
+  php-fpm as backend for Matomo, optionally configuring MariaDB database and an
+  nginx vhost as well.
  </para>
  <para>
   An automatic setup is not suported by Matomo, so you need to configure Matomo
   itself in the browser-based Matomo setup.
  </para>
- <section xml:id="module-services-matomo-database-setup">
-  <title>Database Setup</title>
-
-  <para>
-   You also need to configure a MariaDB or MySQL database and -user for Matomo
-   yourself, and enter those credentials in your browser. You can use
-   passwordless database authentication via the UNIX_SOCKET authentication
-   plugin with the following SQL commands:
-<programlisting>
-# For MariaDB
-INSTALL PLUGIN unix_socket SONAME 'auth_socket';
-CREATE DATABASE matomo;
-CREATE USER 'matomo'@'localhost' IDENTIFIED WITH unix_socket;
-GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
-
-# For MySQL
-INSTALL PLUGIN auth_socket SONAME 'auth_socket.so';
-CREATE DATABASE matomo;
-CREATE USER 'matomo'@'localhost' IDENTIFIED WITH auth_socket;
-GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
-</programlisting>
-   Then fill in <literal>matomo</literal> as database user and database name,
-   and leave the password field blank. This authentication works by allowing
-   only the <literal>matomo</literal> unix user to authenticate as the
-   <literal>matomo</literal> database user (without needing a password), but no
-   other users. For more information on passwordless login, see
-   <link xlink:href="https://mariadb.com/kb/en/mariadb/unix_socket-authentication-plugin/" />.
-  </para>
-
-  <para>
-   Of course, you can use password based authentication as well, e.g. when the
-   database is not on the same host.
-  </para>
- </section>
  <section xml:id="module-services-matomo-archive-processing">
   <title>Archive Processing</title>
 
