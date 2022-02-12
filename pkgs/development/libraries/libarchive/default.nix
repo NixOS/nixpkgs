@@ -12,13 +12,13 @@ assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   pname = "libarchive";
-  version = "3.5.2";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${version}";
-    sha256 = "sha256-H00UJ+ON1kBc19BgWBBKmO8f23oAg2mk7o9hhDhn50Q=";
+    sha256 = "sha256-u6Zeu9yTjhx5U7KZVUkuuUsQPjWN71mE5egG4T+FGfY=";
   };
 
   outputs = [ "out" "lib" "dev" ];
