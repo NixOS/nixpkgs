@@ -15,10 +15,7 @@ let
           forceSSL = false;
           enableACME = false;
         };
-      };
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
+        mariaDB = true;
       };
       services.nginx.enable = true;
     };
