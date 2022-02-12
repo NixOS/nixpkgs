@@ -8,11 +8,8 @@ stdenv.mkDerivation rec {
     owner = "snar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rOpggVlXKaf3KBhfZ2lVooDaQA0iRjSbsLXF02GEyBw=";
+    hash = "sha256-rOpggVlXKaf3KBhfZ2lVooDaQA0iRjSbsLXF02GEyBw=";
   };
-
-  # Fix binary install location. Remove with next upstream release.
-  preInstall = "mkdir -p $out/bin";
 
   meta = with lib; {
     description = "bgp filtering automation tool";
