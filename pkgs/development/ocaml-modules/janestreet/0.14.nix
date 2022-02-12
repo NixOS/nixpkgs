@@ -773,9 +773,9 @@ with self;
 
   spawn = janePackage {
     pname = "spawn";
-    version = "0.13.0";
+    version = "0.15";
     minimumOCamlVersion = "4.02.3";
-    hash = "1w003k1kw1lmyiqlk58gkxx8rac7dchiqlz6ah7aj7bh49b36ppf";
+    hash = "sha256-F0St42s7veLEEO+RTL+fF1gIWQOw7w7DrL9opW9IWbo=";
     meta.description = "Spawning sub-processes";
     buildInputs = [ ppx_expect ];
     doCheck = false; # tests are broken on NixOS (absolute paths)
