@@ -16,6 +16,7 @@ dotnetConfigureHook() {
             dotnet restore "$project" \
                 -p:ContinuousIntegrationBuild=true \
                 -p:Deterministic=true \
+                -p:RestoreUseStaticGraphEvaluation=true \
                 --source "@nugetSource@/lib" \
                 ${parallelFlag-} \
                 "${dotnetRestoreFlags[@]}" \
