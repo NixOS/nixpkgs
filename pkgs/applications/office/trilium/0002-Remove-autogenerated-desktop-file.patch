@@ -1,0 +1,9 @@
+--- a/resources/app.asar.unpacked/electron.js
++++ b/resources/app.asar.unpacked/electron.js
+@@ -9,7 +9,6 @@ const tray = require('./src/services/tray');
+ // Adds debug features like hotkeys for triggering dev tools and reload
+ require('electron-debug')();
+ 
+-appIconService.installLocalAppIcon();
+ 
+ require('electron-dl')({ saveAs: true });
