@@ -1,14 +1,14 @@
 { lib, fetchFromGitHub, crystal, openssl }:
 
 crystal.buildCrystalPackage rec {
-  version = "0.15.1";
+  version = "0.15.2";
   pname = "mint";
 
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
     rev = version;
-    sha256 = "sha256-naiZ51B5TBc88wH4Y7WcrkdFnZosEVCS5MlLAGVe8/E=";
+    sha256 = "sha256-7TpzpotuS5rpUW+lsCABEdKsDQyqlAP0aTaQ64I2jjQ=";
   };
 
   postPatch = ''
