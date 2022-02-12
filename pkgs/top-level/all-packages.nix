@@ -33493,17 +33493,17 @@ with pkgs;
 
   discord = import ../applications/networking/instant-messengers/discord {
     branch = "stable";
-    inherit pkgs;
+    inherit pkgs lib stdenv;
   };
 
   discord-ptb = import ../applications/networking/instant-messengers/discord {
     branch = "ptb";
-    inherit pkgs;
+    inherit pkgs lib stdenv;
   };
 
   discord-canary = import ../applications/networking/instant-messengers/discord {
     branch = "canary";
-    inherit pkgs;
+    inherit pkgs lib stdenv;
   };
 
   golden-cheetah = libsForQt514.callPackage ../applications/misc/golden-cheetah {};
