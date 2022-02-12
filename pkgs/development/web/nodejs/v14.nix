@@ -7,7 +7,7 @@ let
 in
   buildNodejs {
     inherit enableNpm;
-    version = "14.18.3";
-    sha256 = "026nd6vihjdqz4jn0slg89m8m5vvkvjzgg1aip3dcg9lrm1w8fkq";
+    version = "14.19.0";
+    sha256 = "sha256-6S6EYwDmEXVH036o1b0yJEwZsvzvyznhQgpHY39FAww=";
     patches = lib.optional stdenv.isDarwin ./bypass-xcodebuild.diff;
   }
