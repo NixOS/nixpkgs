@@ -2,16 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , requests
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "wazeroutecalculator";
-  version = "0.14";
+  version = "0.15";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "WazeRouteCalculator";
     inherit version;
-    sha256 = "01a6e8d7d896279fd342fd7fcb86c2b9bf97503d95e8b1a926867d504c4836ab";
+    sha256 = "sha256-DB5oWthWNwamFG3kNxA/kmUBOVogoSg5LI2KrI39s4M=";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +25,9 @@ buildPythonPackage rec {
   # there are no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "WazeRouteCalculator" ];
+  pythonImportsCheck = [
+    "WazeRouteCalculator"
+  ];
 
   meta = with lib; {
     description = "Calculate actual route time and distance with Waze API";
