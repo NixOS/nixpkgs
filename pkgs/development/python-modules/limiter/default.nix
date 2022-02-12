@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "limiter";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.10";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "alexdelorenzo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9EkA7S549JLi6MxAXBC+2euPDrcJjW8IsQzMtij8+hA=";
+    hash = "sha256-2Et4ozVf9t+tp2XtLbDk/LgLIU+jQAEAlU8hA5lpxdk=";
   };
 
   propagatedBuildInputs = [
