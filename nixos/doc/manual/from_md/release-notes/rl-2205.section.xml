@@ -42,6 +42,14 @@
           upgrade notes</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          systemd services can now set
+          <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.reloadTriggers</link>
+          instead of <literal>reloadIfChanged</literal> for a more
+          granular distinction between reloads and restarts.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
@@ -550,6 +558,15 @@
               honors <literal>restartIfChanged</literal> and
               <literal>reloadIfChanged</literal> of the units.
             </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  Preferring to reload instead of restarting can still
+                  be achieved using
+                  <literal>/run/nixos/activation-reload-list</literal>.
+                </para>
+              </listitem>
+            </itemizedlist>
           </listitem>
           <listitem>
             <para>
