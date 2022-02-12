@@ -694,6 +694,19 @@
           <link xlink:href="https://github.com/olimorris/onedarkpro.nvim">olimorris/onedarkpro.nvim</link>).
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.pipewire.enable</literal> will default to
+          enabling the WirePlumber session manager instead of
+          pipewire-media-session. pipewire-media-session is deprecated
+          by upstream and not recommended, but can still be manually
+          enabled by setting
+          <literal>services.pipewire.media-session.enable</literal> to
+          <literal>true</literal> and
+          <literal>services.pipewire.wireplumber.enable</literal> to
+          <literal>false</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
