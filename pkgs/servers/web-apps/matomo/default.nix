@@ -61,22 +61,22 @@ let
         '';
 
         # TODO: future versions might rename the PIWIK_… variables to MATOMO_…
-        # TODO: Move more unnecessary files from share/, especially using PIWIK_INCLUDE_PATH.
+        # TODO: Move more unnecessary files from share/matomo, especially using PIWIK_INCLUDE_PATH.
         #       See https://forum.matomo.org/t/bootstrap-php/5926/10 and
         #       https://github.com/matomo-org/matomo/issues/11654#issuecomment-297730843
         installPhase = ''
           runHook preInstall
 
-          # copy everything to share/, used as webroot folder, and then remove what's known to be not needed
-          mkdir -p $out/share
-          cp -ra * $out/share/
+          # copy everything to share/matomo, used as webroot folder, and then remove what's known to be not needed
+          mkdir -p $out/share/matomo
+          cp -ra * $out/share/matomo
           # tmp/ is created by matomo in PIWIK_USER_PATH
-          rmdir $out/share/tmp
+          rmdir $out/share/matomo/tmp
           # config/ needs to be accessed by PIWIK_USER_PATH anyway
-          ln -s $out/share/config $out/
+          ln -s $out/share/matomo/config $out/
 
           makeWrapper ${php}/bin/php $out/bin/matomo-console \
-            --add-flags "$out/share/console"
+            --add-flags "$out/share/matomo/console"
 
           runHook postInstall
         '';
@@ -96,7 +96,7 @@ let
         # The filesToFix list may contain files that are exclusive to only one of the versions we build
         # make sure to test for existence to avoid erroring on an incompatible version and failing
         postFixup = ''
-          pushd $out/share > /dev/null
+          pushd $out/share/matomo > /dev/null
           for f in $filesToFix; do
             if [ -f "$f" ]; then
               length="$(wc -c "$f" | cut -d' ' -f1)"
