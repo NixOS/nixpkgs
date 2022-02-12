@@ -8,7 +8,7 @@ let
   } else {
     stable = "0.0.264";
     ptb = "0.0.59";
-    canary = "0.0.280";
+    canary = "0.0.283";
   };
   version = versions.${branch};
   srcs = let
@@ -43,7 +43,7 @@ let
       canary = fetchurl {
         url =
           "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
-        sha256 = "0ccchsywry68vv81pqzzxmh1r19lnvxr429iwvgfr9y82lyjvz06";
+        sha256 = "0mqpk1szp46mih95x42ld32rrspc6jx1j7qdaxf01whzb3d4pi9l";
       };
     };
     # Only PTB bundles a MachO Universal binary with ARM support.
