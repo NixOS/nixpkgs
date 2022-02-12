@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       -d $out/share/icons
 
     # replace duplicate files with symlinks
-    jdupes -l -r $out/share/icons
+    jdupes -L -r $out/share/icons
 
     runHook postInstall
   '';
