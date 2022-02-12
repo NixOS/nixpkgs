@@ -165,7 +165,7 @@ in {
       requiredBy = [ "${phpExecutionUnit}.service" ];
       before = [ "${phpExecutionUnit}.service" ];
       # the update part of the script can only work if the database is already up and running
-      requires = [ databaseService ];
+      wants = [ databaseService ];
       after = [ databaseService ];
       path = [ cfg.package ];
       environment.PIWIK_USER_PATH = dataDir;
