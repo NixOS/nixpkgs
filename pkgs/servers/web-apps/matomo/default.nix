@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, php }:
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, php }:
 
 let
-  versions = {
+  versions = rec {
     matomo = {
-      version = "4.5.0";
-      sha256 = "sha256-OyjdzY+ENYxOTVjDLjj2unJbpaGODIH2I5Acmt45HDA=";
+      version = "4.7.1";
+      sha256 = "sha256-MuuCKWKIzf4V7JmV4y2EH8oONSetJyciKmLNpHdC1g8=";
     };
 
-    matomo-beta = {
+    matomo-beta = matomo; /* {
       version = "4.6.0";
       # `beta` examples: "b1", "rc1", null
       # when updating: use null if stable version is >= latest beta or release candidate
       beta = "b2";
       sha256 = "sha256-7p/ZPtr5a/tBjrM27ILF3rNfxDIWuzWKCXNom3HlyL8=";
-    };
+    }; */
   };
   common = pname: { version, sha256, beta ? null }:
     let
@@ -44,6 +44,13 @@ let
           # This changes the default config for path.geoip2 so that it doesn't point
           # to the nix store.
           ./change-path-geoip2.patch
+
+          # https://github.com/matomo-org/matomo/issues/18785 prevents us from
+          # updating GeoIP.
+          (fetchpatch {
+            url = "https://github.com/matomo-org/matomo/pull/18799/commits/15a4c28230f203f5c5b814cea3e2bd5f87754796.patch";
+            sha256 = "sha256-I+7qxDYNDitfZySWSoRQjCeQFrIrVr6DfNksTIx4f9U=";
+          })
         ];
 
         # this bootstrap.php adds support for getting PIWIK_USER_PATH
@@ -75,15 +82,13 @@ let
         '';
 
         filesToFix = [
-          "misc/composer/build-xhprof.sh"
-          "misc/composer/clean-xhprof.sh"
-          "misc/cron/archive.sh"
           "plugins/GeoIp2/config/config.php"
           "plugins/Installation/FormDatabaseSetup.php"
+
+          # Scripts modified by `patchShebangs`.
+          "misc/cron/archive.sh"
           "vendor/pear/archive_tar/sync-php4"
-          "vendor/szymach/c-pchart/coverage.sh"
           "vendor/matomo/matomo-php-tracker/run_tests.sh"
-          "vendor/twig/twig/drupal_test.sh"
         ];
 
         # This fixes the consistency check in the admin interface
