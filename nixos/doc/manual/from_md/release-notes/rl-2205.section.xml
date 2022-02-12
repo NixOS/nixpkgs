@@ -320,6 +320,15 @@
       </listitem>
       <listitem>
         <para>
+          Ntopng (<literal>services.ntopng</literal>) is updated to
+          5.2.1 and uses a separate Redis instance if
+          <literal>system.stateVersion</literal> is at least
+          <literal>22.05</literal>. Existing setups shouldn’t be
+          affected.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The backward compatibility in
           <literal>services.wordpress</literal> to configure sites with
           the old interface has been removed. Please use
