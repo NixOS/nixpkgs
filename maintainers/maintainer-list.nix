@@ -3930,6 +3930,12 @@
     githubId = 1276854;
     name = "Florian Peter";
   };
+  fbeffa = {
+    email = "beffa@fbengineering.ch";
+    github = "fedeinthemix";
+    githubId = 7670450;
+    name = "Federico Beffa";
+  };
   fbrs = {
     email = "yuuki@protonmail.com";
     github = "cideM";
