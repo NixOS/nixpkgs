@@ -57,10 +57,7 @@ index 0e04b4c05c4..848a02662e7 100644
  
  disassemble.lo: disassemble.c
  if am__fastdepCC
-@@ -324,12 +324,21 @@ libopcodes_la_SOURCES =  dis-buf.c disassemble.c dis-init.c
- # old version of libbfd, or to pick up libbfd for the wrong architecture
- # if host != build. So for building with shared libraries we use a
- # hardcoded path to libbfd.so instead of relying on the entries in libbfd.la.
+@@ -327,9 +327,18 @@ libopcodes_la_SOURCES =  dis-buf.c disassemble.c dis-init.c
 -libopcodes_la_DEPENDENCIES = $(OFILES) @SHARED_DEPENDENCIES@
 +libopcodes_la_DEPENDENCIES = $(OFILES) @SHARED_DEPENDENCIES@ libtool-soversion
  libopcodes_la_LIBADD = $(OFILES) @SHARED_LIBADD@
@@ -85,7 +82,7 @@ diff --git a/opcodes/configure.ac b/opcodes/configure.ac
 index e564f067334..5da62a3d58b 100644
 --- a/opcodes/configure.ac
 +++ b/opcodes/configure.ac
-@@ -96,6 +96,8 @@ BFD_CC_FOR_BUILD
+@@ -98,6 +98,8 @@ BFD_64_BIT
  AC_SUBST(HDEFINES)
  AC_PROG_INSTALL
  
@@ -94,7 +91,7 @@ index e564f067334..5da62a3d58b 100644
  AC_CHECK_DECLS([basename, stpcpy])
  
  # Check if sigsetjmp is available.  Using AC_CHECK_FUNCS won't do
-@@ -146,67 +148,31 @@ AC_CACHE_CHECK(linker --as-needed support, bfd_cv_ld_as_needed,
+@@ -148,44 +150,21 @@ AC_CACHE_CHECK(linker --as-needed support, bfd_cv_ld_as_needed,
  
  LT_LIB_M
  
@@ -139,29 +136,18 @@ index e564f067334..5da62a3d58b 100644
 -    SHARED_LIBADD="-L`pwd`/../libiberty/pic -liberty"
 -  fi
 -fi
--
+ 
  SHARED_LIBADD="$SHARED_LIBADD $LIBINTL"
  
- if test "$enable_shared" = "yes"; then
+@@ -193,11 +172,10 @@ if test "$enable_shared" = "yes"; then
    case "${host}" in
      *-*-cygwin*)
        SHARED_LDFLAGS="-no-undefined"
 -      SHARED_LIBADD="-L`pwd`/../bfd -lbfd -L`pwd`/../libiberty -liberty $SHARED_LIBADD"
 +      SHARED_LIBADD="-lbfd -liberty $SHARED_LIBADD"
        ;;
--   *-*-darwin*)
--     SHARED_LIBADD="-Wl,`pwd`/../bfd/.libs/libbfd.dylib ${SHARED_LIBADD}"
--     SHARED_DEPENDENCIES="../bfd/libbfd.la"
--     ;;
      *)
--      case "$host_vendor" in
--        hp)
--          SHARED_LIBADD="-Wl,`pwd`/../bfd/.libs/libbfd.sl ${SHARED_LIBADD}"
--	  ;;
--	*)
--          SHARED_LIBADD="-Wl,`pwd`/../bfd/.libs/libbfd.so ${SHARED_LIBADD}"
--	  ;;
--      esac
+-      SHARED_LIBADD="../bfd/libbfd.la ${SHARED_LIBADD}"
 -      SHARED_DEPENDENCIES="../bfd/libbfd.la"
 +      SHARED_LIBADD="-lbfd ${SHARED_LIBADD}"
        ;;
