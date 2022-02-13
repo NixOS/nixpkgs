@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "volk";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "XvX6emv30bSB29EFm6aC+j8NGOxWqHCNv0Hxtdrq/jc=";
+    sha256 = "sha256-kbZE0zGFAunWDo35Ar9eGKnOtitAoOcr0p5EpPsxM3Y=";
     fetchSubmodules = true;
   };
 
