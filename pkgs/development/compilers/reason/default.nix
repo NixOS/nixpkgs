@@ -2,6 +2,9 @@
 , fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
 }:
 
+lib.throwIfNot (lib.versionOlder ocaml.version "4.13")
+  "reason is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-reason";
   version = "3.7.0";
