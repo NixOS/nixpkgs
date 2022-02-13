@@ -52,13 +52,5 @@ buildGoModule rec {
     description = "Open Source Kubernetes Marketplace";
     license = licenses.mit;
     maintainers = with maintainers; [ welteki ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-linux"
-      "aarch64-darwin"
-      "armv7l-linux"
-      "armv6l-linux"
-    ];
   };
 }
