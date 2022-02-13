@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   pname = "lv2";
   version = "1.18.2";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "https://lv2plug.in/spec/${pname}-${version}.tar.bz2";
     sha256 = "sha256-TokfvHRMBYVb6136gugisUkX3Wbpj4K4Iw29HHqy4F4=";
@@ -27,7 +29,10 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  wafConfigureFlags = lib.optionals stdenv.isDarwin [
+  wafConfigureFlags = [
+    "--includedir=${placeholder "dev"}/include"
+    "--bindir=${placeholder "dev"}/bin"
+  ] ++ lib.optionals stdenv.isDarwin [
     "--lv2dir=${placeholder "out"}/lib/lv2"
   ];
 
