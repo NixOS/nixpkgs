@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, python3Packages, unstableGitUpdater, gnupg }:
+{ lib, fetchFromGitHub, python3Packages, nix-update-script, gnupg }:
 
 python3Packages.buildPythonApplication rec {
   pname = "apt-offline";
-  version = "unstable-2022-02-06";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "rickysarraf";
     repo = pname;
-    rev = "2b9929773ff2b6e53d30c50c31fb3a1605631f5f";
-    sha256 = "mf2NM39ql6KR/YTWPYNyVe+bvWmUFYfxt5BGmU5WFpQ=";
+    rev = "v${version}";
+    sha256 = "RBf/QG0ewLS6gnQTBXi0I18z8QrxoBAqEXZ7dro9z5A=";
   };
 
   postPatch = ''
@@ -28,8 +28,8 @@ python3Packages.buildPythonApplication rec {
 
   pythonimportsCheck = [ "apt-offline" ];
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/rickysarraf/apt-offline.git";
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
   };
 
   meta = with lib; {
