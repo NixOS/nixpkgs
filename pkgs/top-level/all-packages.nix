@@ -5926,6 +5926,8 @@ with pkgs;
 
   gitea = callPackage ../applications/version-management/gitea { };
 
+  gitmux = callPackage ../applications/version-management/gitmux { };
+
   gokart = callPackage ../development/tools/gokart { };
 
   gl2ps = callPackage ../development/libraries/gl2ps { };
