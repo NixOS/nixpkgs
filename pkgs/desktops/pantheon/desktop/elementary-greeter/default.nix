@@ -94,6 +94,9 @@ stdenv.mkDerivation rec {
       src = ./hardcode-fallback-background.patch;
       default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
     })
+    # https://github.com/NixOS/nixpkgs/issues/151609
+    # https://github.com/elementary/greeter/issues/578#issuecomment-1030746697
+    ./fix-crash.patch
   ];
 
   preFixup = ''
