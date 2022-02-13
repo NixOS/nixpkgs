@@ -4472,6 +4472,12 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
+  gmfawcett = {
+    email = "graham.fawcett@gmail.com";
+    github = "gmfawcett";
+    githubId = 49970;
+    name = "Graham Fawcett";
+  };
   gnxlxnxx = {
     email = "gnxlxnxx@web.de";
     github = "gnxlxnxx";
