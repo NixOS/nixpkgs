@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, gtk2
 , libsndfile
 , pkg-config
 , python3
@@ -23,7 +22,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk2
     libsndfile
     python3
   ];
