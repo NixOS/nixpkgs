@@ -185,7 +185,7 @@ targetHostCmd() {
     if [ -z "$targetHost" ]; then
         runCmd "${maybeSudo[@]}" "$@"
     else
-        runCmd ssh "${SSHOPTS[@]}" "$targetHost" "${maybeSudo[@]}" "$@"
+        runCmd ssh "${SSHOPTS[@]}" "$targetHost" "${maybeSudo[*]@Q} ${*@Q}"
     fi
 }
 
