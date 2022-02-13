@@ -72,13 +72,13 @@ in {
           kernelModules = [ "kvdo" ];
 
           extraUtilsCommands = ''
-            for BIN in ${pkgs.vdo}/bin/*; do
-              copy_bin_and_libs $BIN
+            ls ${pkgs.vdo}/bin/ | grep -v adaptLVMVDO | while read BIN; do
+              copy_bin_and_libs ${pkgs.vdo}/bin/$BIN
             done
           '';
 
           extraUtilsCommandsTest = ''
-            ls ${pkgs.vdo}/bin/ | while read BIN; do
+            ls ${pkgs.vdo}/bin/ | grep -v adaptLVMVDO | while read BIN; do
               $out/bin/$(basename $BIN) --help > /dev/null
             done
           '';
