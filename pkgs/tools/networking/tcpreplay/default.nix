@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tcpreplay";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchurl {
     url = "https://github.com/appneta/tcpreplay/releases/download/v${version}/tcpreplay-${version}.tar.gz";
-    sha256 = "sha256-o7ElwDGb0JbWj4IcSggFGy09kni6xv4Yz+PJIBcDpWc=";
+    sha256 = "sha256-y2e2SRphiGf8T5hI9YYBnxuy69FJ85OvrFVE7lXkVE8=";
   };
 
   buildInputs = [ libpcap ]
