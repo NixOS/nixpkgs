@@ -18,19 +18,19 @@
 , python
 }:
 let
-  version = "0.57.2";
+  version = "0.57.5";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    sha256 = "sha256-+ksfAOuch/fLkFLYU52Ug0Hf0EoERy+oCwa9g+GKuAA=";
+    sha256 = "sha256-qsCwZaCiqvY445U053OCWD98jlIUi9NB2jWVP2oW3Vk=";
   };
 
   buildApi = src: buildGoModule {
     inherit src version;
     pname = "metasrht-api";
-    vendorSha256 = "sha256-vo+YbMyo/Eal7hbFxP9hwIW2cePJcGFszoDRCCzFYdM=";
+    vendorSha256 = "sha256-8Ubrr9qRlgW2wsLHrPHwulSWLz+gp4VPcTvOZpg8TYM=";
   };
 
 in

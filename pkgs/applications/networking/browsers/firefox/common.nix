@@ -1,7 +1,8 @@
 { pname, version, meta, updateScript ? null
 , binaryName ? "firefox", application ? "browser"
 , src, unpackPhase ? null, patches ? []
-, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? [] }:
+, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? []
+, extraPostPatch ? "", extraPassthru ? {} }:
 
 { lib, stdenv, pkg-config, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
@@ -177,7 +178,7 @@ buildStdenv.mkDerivation ({
       --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
 
     patchShebangs mach
- '';
+  '' + extraPostPatch;
 
   nativeBuildInputs =
     [
@@ -374,7 +375,7 @@ buildStdenv.mkDerivation ({
     inherit applicationName;
     inherit tests;
     inherit gtk3;
-  };
+  } // extraPassthru;
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
 

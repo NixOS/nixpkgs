@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "2.5.1";
+  version = "2.5.2";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl libkrb5 ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     repo   = "timescaledb";
     # some branches are named like tags which confuses git
     rev    = "refs/tags/${version}";
-    sha256 = "sha256-3G/foe4TlKEKP0Vi60oD7ZoxYdkNipyoOhGoF+GojZw=";
+    sha256 = "sha256-eq2dljS8+0fRcA7hQr5yOV1FXtMyaajjYFqpw+DYt1A=";
   };
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
