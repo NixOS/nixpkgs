@@ -6024,6 +6024,8 @@ in {
 
   phx-class-registry = callPackage ../development/python-modules/phx-class-registry { };
 
+  pi1wire = callPackage ../development/python-modules/pi1wire { };
+
   piccata = callPackage ../development/python-modules/piccata { };
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
