@@ -2016,6 +2016,8 @@ in {
 
   databricks-connect = callPackage ../development/python-modules/databricks-connect { };
 
+  dataclass-csv = callPackage ../development/python-modules/dataclass-csv { };
+
   dataclasses = callPackage ../development/python-modules/dataclasses { };
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
