@@ -14,6 +14,7 @@
 , moreutils
 , racket-minimal
 , clojure-lsp
+, alejandra
 }:
 
 let
@@ -1228,6 +1229,34 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      kamadorueda.alejandra = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "alejandra";
+          publisher = "kamadorueda";
+          version = "1.0.0";
+          sha256 = "sha256-COlEjKhm8tK5XfOjrpVUDQ7x3JaOLiYoZ4MdwTL8ktk=";
+        };
+        nativeBuildInputs = [ jq moreutils ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+
+          jq -e '
+            .contributes.configuration.properties."alejandra.program".default =
+              "${alejandra}/bin/alejandra" |
+            .contributes.configurationDefaults."alejandra.program" =
+              "${alejandra}/bin/alejandra"
+          ' \
+          < package.json \
+          | sponge package.json
+        '';
+        meta = with lib; {
+          description = "The Uncompromising Nix Code Formatter";
+          homepage = "https://github.com/kamadorueda/alejandra";
+          license = licenses.unlicense;
+          maintainers = with maintainers; [ kamadorueda ];
         };
       };
 
