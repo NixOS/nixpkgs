@@ -17,17 +17,17 @@
 
 stdenv.mkDerivation rec {
   pname = "notejot";
-  version = "3.3.3"; # make sure to recheck src.rev
+  version = "3.4.9"; # make sure to recheck src.rev
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     # Note from Fedora spec file:
     # https://src.fedoraproject.org/rpms/notejot/blob/bbe621cef4d5a2c27eed029063b8e8cfd7c8d400/f/notejot.spec
-    # Upstream confusingly made several bugfix post-releases of version 3.3.3,
-    # tagged as 3.4.x, but with prominent notices like "This is still 3.3.3". We
+    # Upstream confusingly made several bugfix post-releases of version 3.4.9,
+    # tagged as 3.4.x, but with prominent notices like "This is still 3.4.9". We
     # respect upstream’s wishes (and the version numbers inside the source tarball)
-    # by packaging these releases as 3.3.3 with appropriate snapshot info.
+    # by packaging these releases as 3.4.9 with appropriate snapshot info.
     # https://github.com/lainsce/notejot/releases/tag/3.4.9
     #
     # Note that sometimes upstream don't update their version in meson.build

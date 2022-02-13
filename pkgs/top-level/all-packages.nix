@@ -5029,6 +5029,8 @@ with pkgs;
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
+  worker-build = callPackage ../development/tools/worker-build { };
+
   wrangler = callPackage ../development/tools/wrangler {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
   };
@@ -7199,6 +7201,10 @@ with pkgs;
 
   mdbook-katex = callPackage ../tools/text/mdbook-katex {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  mdbook-linkcheck = callPackage ../tools/text/mdbook-linkcheck {
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   mdbook-mermaid = callPackage ../tools/text/mdbook-mermaid {
@@ -9569,6 +9575,8 @@ with pkgs;
   screencloud = libsForQt5.callPackage ../applications/graphics/screencloud { };
 
   screenkey = callPackage ../applications/video/screenkey { };
+
+  scrub = callPackage ../tools/misc/scrub { };
 
   scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
 
@@ -14191,8 +14199,6 @@ with pkgs;
 
   inherit (callPackages ../development/tools/electron { })
     electron
-    electron_7
-    electron_8
     electron_9
     electron_10
     electron_11
@@ -25719,6 +25725,17 @@ with pkgs;
     desktopName = "Firefox DevEdition";
   };
 
+  librewolf-unwrapped = firefoxPackages.librewolf;
+
+  librewolf = wrapFirefox librewolf-unwrapped {
+    inherit (librewolf-unwrapped) extraPrefsFiles extraPoliciesFiles;
+    libName = "librewolf";
+  };
+
+  librewolf-wayland = librewolf.override {
+    forceWayland = true;
+  };
+
   firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };
 
   flac = callPackage ../applications/audio/flac { };
@@ -30371,8 +30388,6 @@ with pkgs;
 
   quorum = callPackage ../applications/blockchains/quorum { };
 
-  whirlpool-gui = callPackage ../applications/blockchains/whirlpool-gui { };
-
   saga = libsForQt5.callPackage ../applications/gis/saga {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -32105,6 +32120,10 @@ with pkgs;
 
   sympow = callPackage ../development/libraries/science/math/sympow { };
 
+  trilinos = callPackage ../development/libraries/science/math/trilinos {};
+
+  trilinos-mpi = callPackage ../development/libraries/science/math/trilinos { withMPI = true; };
+
   ipopt = callPackage ../development/libraries/science/math/ipopt { };
 
   gmsh = callPackage ../applications/science/math/gmsh { };
@@ -32475,6 +32494,12 @@ with pkgs;
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
 
+  xyce = callPackage ../applications/science/electronics/xyce { };
+
+  xyce-parallel = callPackage ../applications/science/electronics/xyce {
+    withMPI = true;
+    trilinos = trilinos-mpi;
+  };
 
   ### SCIENCE / MATH
 
