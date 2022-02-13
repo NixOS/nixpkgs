@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.12.9";
+  version = "0.12.11";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "0d3ymw747frl40w5d6r33lf1s72v7fiv742yjr1m6la2phb9h834";
+    sha256 = "sha256-hxnd9zuDq3CfdvriU1P5C9oM2x/sLqLQZPDNolpz5IQ=";
   };
 
   sourceRoot = "source/src";
