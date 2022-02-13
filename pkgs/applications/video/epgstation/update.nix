@@ -58,5 +58,8 @@ in writers.writeBash "update-epgstation" ''
   ${yq}/bin/yq -j '{ urlscheme , stream }' \
     "$SRC/config/config.yml.template" \
     > streaming.json
+
+  # Fix generated output for EditorConfig compliance
+  printf '\n' >> streaming.json  # rule: insert_final_newline
   popd
 ''
