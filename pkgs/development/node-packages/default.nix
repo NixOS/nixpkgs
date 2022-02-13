@@ -332,11 +332,11 @@ let
     prisma = super.prisma.override rec {
       nativeBuildInputs = [ pkgs.makeWrapper ];
 
-      inherit (pkgs.prisma-engines) version;
+      version = "3.9.2";
 
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-xLmVyO/L6C4ZdHzHqiJVq3ZfDWSym29x75JcwJx746ps61UcNEg4ozSwN9ud7UjXLntdXe1xDLNOUO1lc7LN5g==";
+        sha512 = "sha512-i9eK6cexV74OgeWaH3+e6S07kvC9jEZTl6BqtBH398nlCU0tck7mE9dicY6YQd+euvMjjCtY89q4NgmaPnUsSg==";
       };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
