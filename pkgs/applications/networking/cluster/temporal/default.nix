@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.12.0";
+  version = "1.14.5";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    sha256 = "1gdks7pzaqrsdihh2m3v597x0dw2qww95jlznj0h112jgicanimj";
+    sha256 = "sha256-unRJkJzi1l7GGkLMb3clIaumcb1Jsi1mUox9kevqIjg=";
   };
 
-  vendorSha256 = "sha256-dGmd6tCUKoK4uwhB5kXGOpXemtLn0VssabDE4iQWEAw=";
+  vendorSha256 = "sha256-k9F1cY1FCNLPGoCd/i4dg7CfPsuiq6Y9nni8v69Lra8=";
 
   # Errors:
   #  > === RUN   TestNamespaceHandlerGlobalNamespaceDisabledSuite
