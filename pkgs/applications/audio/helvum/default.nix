@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -48,8 +49,6 @@ stdenv.mkDerivation rec {
     gtk4
     pipewire
   ];
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   meta = with lib; {
     description = "A GTK patchbay for pipewire";
