@@ -5241,6 +5241,8 @@ in {
 
   mohawk = callPackage ../development/python-modules/mohawk { };
 
+  monero = callPackage ../development/python-modules/monero { };
+
   mongomock = callPackage ../development/python-modules/mongomock { };
 
   mongodict = callPackage ../development/python-modules/mongodict { };
