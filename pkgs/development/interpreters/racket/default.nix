@@ -37,6 +37,7 @@ let
     libjpeg
     libpng
     mpfr
+    ncurses
     openssl
     pango
     poppler
@@ -69,8 +70,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cacert wrapGAppsHook ];
 
-  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ncurses ];
+  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ncurses ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
 
   patches = [
     # Hardcode variant detection because we wrap the Racket binary making it
