@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   pname = "lilv";
   version = "0.24.12";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
     sha256 = "sha256-JqN3kIkMnB+DggO0f1sjIDNP6SwCpNJuu+Jmnb12kGE=";
