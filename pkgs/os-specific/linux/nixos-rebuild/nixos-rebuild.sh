@@ -177,7 +177,7 @@ buildHostCmd() {
     elif [ -n "$remoteNix" ]; then
         runCmd ssh "${SSHOPTS[@]}" "$buildHost" "${maybeSudo[*]@Q} env PATH=${remoteNix@Q}:\"\$PATH\" ${*@Q}"
     else
-        runCmd ssh "${SSHOPTS[@]}" "$buildHost" "${maybeSudo[@]}" "$@"
+        runCmd ssh "${SSHOPTS[@]}" "$buildHost" "${maybeSudo[*]@Q} ${*@Q}"
     fi
 }
 
