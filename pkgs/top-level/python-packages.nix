@@ -6137,6 +6137,8 @@ in {
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
+  pyownet = callPackage ../development/python-modules/pyownet { };
+
   pypoint = callPackage ../development/python-modules/pypoint { };
 
   pypoolstation = callPackage ../development/python-modules/pypoolstation { };
