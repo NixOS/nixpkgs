@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook }:
+{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook
+
+# test derivations
+, pipewire
+}:
 
 stdenv.mkDerivation rec {
   pname = "lilv";
@@ -16,6 +20,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config python3 wafHook ];
   buildInputs = [ serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
+
+  passthru.tests = {
+    inherit pipewire;
+  };
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/lilv";
