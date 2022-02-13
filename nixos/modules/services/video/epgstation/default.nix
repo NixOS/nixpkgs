@@ -171,20 +171,20 @@ in
         options.socketioPort = lib.mkOption {
           type = lib.types.port;
           default = cfg.settings.port + 1;
-          defaultText = lib.literalExpression "config.${opt.settings.port} + 1";
+          defaultText = lib.literalExpression "config.${opt.settings}.port + 1";
           description = ''
             Socket.io port for EPGStation to listen on. It is valid to share
-            ports with <option>${opt.settings.port}</option>.
+            ports with <option>${opt.settings}.port</option>.
           '';
         };
 
         options.clientSocketioPort = lib.mkOption {
           type = lib.types.port;
           default = cfg.settings.socketioPort;
-          defaultText = lib.literalExpression "config.${opt.settings.socketioPort}";
+          defaultText = lib.literalExpression "config.${opt.settings}.socketioPort";
           description = ''
             Socket.io port that the web client is going to connect to. This may
-            be different from <option>${opt.settings.socketioPort}</option> if
+            be different from <option>${opt.settings}.socketioPort</option> if
             EPGStation is hidden behind a reverse proxy.
           '';
         };
