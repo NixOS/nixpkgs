@@ -611,7 +611,7 @@
     "onboarding" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow sqlalchemy ];
     "oncue" = ps: with ps; [ aiooncue ];
     "ondilo_ico" = ps: with ps; [ aiohttp-cors ondilo ];
-    "onewire" = ps: with ps; [ ]; # missing inputs: pi1wire pyownet
+    "onewire" = ps: with ps; [ pi1wire pyownet ];
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
     "onvif" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: WSDiscovery onvif-zeep-async
     "open_meteo" = ps: with ps; [ open-meteo ];
@@ -1387,6 +1387,7 @@
     "onboarding"
     "oncue"
     "ondilo_ico"
+    "onewire"
     "open_meteo"
     "openalpr_cloud"
     "openalpr_local"
