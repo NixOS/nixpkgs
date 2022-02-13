@@ -10996,6 +10996,8 @@ in {
     phantomjsSupport = false;
   };
 
+  yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
+
   yt-dlp = callPackage ../tools/misc/yt-dlp { };
 
   yt-dlp-light = callPackage ../tools/misc/yt-dlp {
