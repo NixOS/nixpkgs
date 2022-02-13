@@ -195,6 +195,7 @@ in
           {
             device = "/dev/${dev}";
             priority = cfg.priority;
+            discardPolicy = "both"; # Wouldn't free backing pages after unswap otherwise
           };
       in map useZramSwap devices;
 
