@@ -37,9 +37,11 @@ let
     # For more information about anti tracking (german website)
     # visit https://wiki.kairaven.de/open/app/firefox
     , extraPrefs ? ""
+    , extraPrefsFiles ? []
     # For more information about policies visit
     # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
     , extraPolicies ? {}
+    , extraPoliciesFiles ? []
     , libName ? "firefox" # Important for tor package or the like
     , nixExtensions ? null
     }:
@@ -189,7 +191,7 @@ let
         ];
       };
 
-      nativeBuildInputs = [ makeWrapper lndir replace ];
+      nativeBuildInputs = [ makeWrapper lndir replace jq ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -325,6 +327,12 @@ let
         rm -f "$POL_PATH"
         cat ${policiesJson} >> "$POL_PATH"
 
+        extraPoliciesFiles=(${builtins.toString extraPoliciesFiles})
+        for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
+          jq -s '.[0] + .[1]' "$POL_PATH" $extraPoliciesFile > .tmp.json
+          mv .tmp.json "$POL_PATH"
+        done
+
         # preparing for autoconfig
         mkdir -p "$out/lib/${libName}/defaults/pref"
 
@@ -332,6 +340,11 @@ let
         echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${libName}/defaults/pref/autoconfig.js"
 
         cat > "$out/lib/${libName}/mozilla.cfg" < ${mozillaCfg}
+
+        extraPrefsFiles=(${builtins.toString extraPrefsFiles})
+        for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
+          cat "$extraPrefsFile" >> "$out/lib/${libName}/mozilla.cfg"
+        done
 
         mkdir -p $out/lib/${libName}/distribution/extensions
 
