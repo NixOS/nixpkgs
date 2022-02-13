@@ -13984,7 +13984,7 @@ with pkgs;
 
   regina = callPackage ../development/interpreters/regina { };
 
-  inherit (ocamlPackages) reason;
+  inherit (ocaml-ng.ocamlPackages_4_12) reason;
 
   pixie = callPackage ../development/interpreters/pixie { };
   dust = callPackage ../development/interpreters/pixie/dust.nix { };
