@@ -5,6 +5,7 @@
 , pkg-config
 , python3
 , wafHook
+, pipewire
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
   wafConfigureFlags = lib.optionals stdenv.isDarwin [
     "--lv2dir=${placeholder "out"}/lib/lv2"
   ];
+
+  passthru.tests = {
+    inherit pipewire;
+  };
 
   meta = with lib; {
     homepage = "https://lv2plug.in";
