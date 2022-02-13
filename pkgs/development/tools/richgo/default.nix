@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "richgo";
-  version = "0.3.9";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "kyoh86";
     repo = "richgo";
     rev = "v${version}";
-    sha256 = "sha256-yVt0iFH9tYCeIWJC16ve988xBXgt96357YiHfsxai7g=";
+    sha256 = "sha256-USHg1KXl0MOWifiVu+KdjvrbDlAh6T/ReKFKeIpVK0A=";
   };
 
-  vendorSha256 = "sha256-IJjJ4X3mv2PUmwzt5/hgv1N6R0w+EXGSrCS4q+INJrA=";
+  vendorSha256 = "sha256-O63QEo0/+m9cYktMg4+RloLuUfAlCG0eGkxpHPFg/Cw=";
 
   doCheck = false;
 
