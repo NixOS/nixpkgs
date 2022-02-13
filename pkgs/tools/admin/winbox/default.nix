@@ -14,15 +14,15 @@ let
   inherit (lib) last splitString;
 
   pname = "winbox";
-  version = "3.32";
+  version = "3.34";
   name = "${pname}-${version}";
 
   executable = fetchurl (if use64 then {
     url = "https://download.mikrotik.com/winbox/${version}/${pname}64.exe";
-    sha256 = "1gf0zdn4ahfp08fn5w0nzigwldl3bjqcj2f08rcvyn0mbwar4znn";
+    sha256 = "1zr5qvdnr98xhwlhjikdnx3l5zyx6qnvxqy9p2hrayi0w4w5wmba";
   } else {
     url = "https://download.mikrotik.com/winbox/${version}/${pname}.exe";
-    sha256 = "18rmbnv7iwba19sfh4q4wfwh385snrmpvs6dyad2s9rv7vh2nch7";
+    sha256 = "1d5zif0f4xfiipjs281xwa3f3blfxbgzqppv3gg3rh5ivxwvaf6g";
   });
   # This is from the winbox AUR package:
   # https://aur.archlinux.org/cgit/aur.git/tree/winbox64?h=winbox64&id=8edd93792af84e87592e8645ca09e9795931e60e
