@@ -2,13 +2,13 @@
 
 buildPythonApplication rec{
   pname = "xxh";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-TzC8GTDmnYN56Rp5DyZxh+yGrkgWr6Xt86a/jyB3j5k=";
+    hash = "sha256-Uo7xFwE9e5MFWDlNWq15kg+4xf/hF4WGUNTpTK+rgVg=";
   };
 
   propagatedBuildInputs = [ pexpect pyyaml openssh ];
