@@ -33079,6 +33079,8 @@ with pkgs;
 
   dump = callPackage ../tools/backup/dump { };
 
+  dxvk = callPackage ../misc/dxvk { };
+
   ecdsatool = callPackage ../tools/security/ecdsatool { };
 
   emulationstation = callPackage ../applications/emulators/emulationstation { };
