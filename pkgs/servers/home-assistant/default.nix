@@ -15,6 +15,9 @@
 # Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
 
+# Write out info about included extraComponents and extraPackages
+, writeText
+
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
@@ -129,6 +132,10 @@ let
 
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages python.pkgs;
+
+  # Create info about included packages and components
+  extraComponentsFile = writeText "home-assistant-components" (lib.concatStringsSep "\n" extraComponents);
+  extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
   hassVersion = "2022.2.6";
@@ -281,6 +288,11 @@ in python.pkgs.buildPythonApplication rec {
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
     export PATH=${inetutils}/bin:$PATH
+  '';
+
+  postInstall = ''
+    cp -v ${extraComponentsFile} $out/extra_components
+    cp -v ${extraPackagesFile} $out/extra_packages
   '';
 
   passthru = {
