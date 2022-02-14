@@ -378,6 +378,8 @@ in {
 
   aiopvpc = callPackage ../development/python-modules/aiopvpc { };
 
+  aiopyarr = callPackage ../development/python-modules/aiopyarr { };
+
   aiopylgtv = callPackage ../development/python-modules/aiopylgtv { };
 
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
