@@ -40,6 +40,9 @@ in {
 
       # tests loading components by overriding the package
       package = (pkgs.home-assistant.override {
+        extraPackages = ps: with ps; [
+          colorama
+        ];
         extraComponents = [ "zha" ];
       }).overrideAttrs (oldAttrs: {
         doInstallCheck = false;
@@ -131,7 +134,17 @@ in {
   };
 
   testScript = ''
+    import re
+
     start_all()
+
+    # Parse the package path out of the systemd unit, as we cannot
+    # access the final package, that is overriden inside the module,
+    # by any other means.
+    pattern = re.compile(r"path=(?P<path>[\/a-z0-9-.]+)\/bin\/hass")
+    response = hass.execute("systemctl show -p ExecStart home-assistant.service")[1]
+    match = pattern.search(response)
+    package = match.group('path')
 
     hass.wait_for_unit("home-assistant.service")
 
@@ -140,6 +153,14 @@ in {
 
     with subtest("Check the lovelace config is copied because lovelaceConfigWritable = true"):
         hass.succeed("test -f ${configDir}/ui-lovelace.yaml")
+
+    with subtest("Check extraComponents and extraPackages are considered from the package"):
+        hass.succeed(f"grep -q 'colorama' {package}/extra_packages")
+        hass.succeed(f"grep -q 'zha' {package}/extra_components")
+
+    with subtest("Check extraComponents and extraPackages are considered from the module"):
+        hass.succeed(f"grep -q 'psycopg2' {package}/extra_packages")
+        hass.succeed(f"grep -q 'wake_on_lan' {package}/extra_components")
 
     with subtest("Check that Home Assistant's web interface and API can be reached"):
         hass.wait_until_succeeds("journalctl -u home-assistant.service | grep -q 'Home Assistant initialized in'")
