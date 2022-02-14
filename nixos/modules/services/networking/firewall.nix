@@ -179,10 +179,6 @@ let
       ) cfg.allowedUDPPortRanges
     ) allInterfaces)}
 
-    # Accept IPv4 multicast.  Not a big security risk since
-    # probably nobody is listening anyway.
-    #iptables -A nixos-fw -d 224.0.0.0/4 -j nixos-fw-accept
-
     # Optionally respond to ICMPv4 pings.
     ${optionalString cfg.allowPing ''
       iptables -w -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
