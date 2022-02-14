@@ -5060,6 +5060,8 @@ in {
 
   minidump = callPackage ../development/python-modules/minidump { };
 
+  minikanren = callPackage ../development/python-modules/minikanren { };
+
   minikerberos = callPackage ../development/python-modules/minikerberos { };
 
   minimock = callPackage ../development/python-modules/minimock { };
