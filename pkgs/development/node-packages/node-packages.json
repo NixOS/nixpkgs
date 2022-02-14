@@ -264,6 +264,7 @@
 , "smartdc"
 , "snyk"
 , "socket.io"
+, "spectral-cli"
 , "speed-test"
 , "sql-formatter"
 , "ssb-server"

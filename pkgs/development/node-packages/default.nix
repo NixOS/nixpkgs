@@ -475,6 +475,10 @@ let
       ];
     };
 
+    spectral-cli = super.spectral-cli.override {
+      buildInputs = [ self.node-gyp-build ];
+    };
+
     thelounge = super.thelounge.override {
       buildInputs = [ self.node-pre-gyp ];
       postInstall = ''
