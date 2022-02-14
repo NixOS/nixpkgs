@@ -2655,6 +2655,8 @@ in {
 
   eth-utils = callPackage ../development/python-modules/eth-utils { };
 
+  etuples = callPackage ../development/python-modules/etuples { };
+
   et_xmlfile = callPackage ../development/python-modules/et_xmlfile { };
 
   ev3dev2 = callPackage ../development/python-modules/ev3dev2 { };
