@@ -49,6 +49,8 @@ in
 buildPythonPackage rec {
   pname = "ibis-framework";
   version = "2.1.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -75,7 +77,9 @@ buildPythonPackage rec {
     sqlalchemy
     tables
     toolz
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   checkInputs = [
     pytestCheckHook
@@ -85,8 +89,13 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  # these tests are broken upstream: https://github.com/ibis-project/ibis/issues/3291
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "atpublic>=2.3,<3" "atpublic>=2.3"
+  '';
+
   disabledTests = [
+    # These tests are broken upstream: https://github.com/ibis-project/ibis/issues/3291
     "test_summary_numeric"
     "test_summary_non_numeric"
     "test_batting_most_hits"
@@ -130,7 +139,9 @@ buildPythonPackage rec {
     export PYTEST_BACKENDS="${backendsString}"
   '';
 
-  pythonImportsCheck = [ "ibis" ] ++ (map (backend: "ibis.backends.${backend}") backends);
+  pythonImportsCheck = [
+    "ibis"
+  ] ++ (map (backend: "ibis.backends.${backend}") backends);
 
   meta = with lib; {
     description = "Productivity-centric Python Big Data Framework";
