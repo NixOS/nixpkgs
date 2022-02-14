@@ -25,7 +25,7 @@ let
       configEnv = listToAttrs (concatLists (mapAttrsToList (name: value:
         if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else []
       ) cfg.config));
-    in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+    in { DATA_FOLDER = cfg.dataFolder; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
 
@@ -83,6 +83,14 @@ in {
 
         The available configuration options can be found in
         <link xlink:href="https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template">the environment template file</link>.
+      '';
+    };
+
+    dataFolder = mkOption {
+      type = str;
+      default = "/var/lib/bitwarden_rs";
+      description = ''
+        The directory under which vaultwarden save it's data.
       '';
     };
 
@@ -154,7 +162,7 @@ in {
       aliases = [ "backup-bitwarden_rs" ];
       description = "Backup vaultwarden";
       environment = {
-        DATA_FOLDER = "/var/lib/bitwarden_rs";
+        DATA_FOLDER = cfg.dataFolder;
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];
