@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/OpenSC/pkcs11-helper";
-    license = with licenses; [ bsd3 gpl2 ];
+    license = with licenses; [ bsd3 gpl2Only ];
     description = "Library that simplifies the interaction with PKCS#11 providers";
     platforms = platforms.unix;
   };
