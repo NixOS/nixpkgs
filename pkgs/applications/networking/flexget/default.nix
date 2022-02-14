@@ -1,8 +1,34 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-python3Packages.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.0";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
+        };
+
+        SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+        doCheck = false;
+      });
+    };
+  };
+in
+with py.pkgs;
+
+buildPythonApplication rec {
   pname = "flexget";
   version = "3.2.18";
+  format = "setuptools";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
@@ -28,7 +54,7 @@ python3Packages.buildPythonApplication rec {
   # ~400 failures
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with py.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.in
     APScheduler
     beautifulsoup4
