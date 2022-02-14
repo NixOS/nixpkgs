@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, zlib, e2fsprogs }:
+{ lib, stdenv, fetchurl, openssl, zlib, e2fsprogs, getconf }:
 
 let
   zshCompletion = fetchurl {
@@ -8,15 +8,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tarsnap";
-  version = "1.0.39";
+  version = "1.0.40";
 
   src = fetchurl {
     url = "https://www.tarsnap.com/download/tarsnap-autoconf-${version}.tgz";
-    sha256 = "10i0whbmb345l2ggnf4vs66qjcyf6hmlr8f4nqqcfq0h5a5j24sn";
+    sha256 = "vMrlOAwcHWviXcz7fC6qg2S6NAGq+u5h48VXQgPCf9U=";
   };
 
   preConfigure = ''
-    configureFlags="--with-bash-completion-dir=$out/share/bash-completion/completions"
+    configureFlags="--with-bash-completion-dir=$out/share/bash-completion/completions POSIX_SH=${stdenv.shell}"
   '';
 
   patchPhase = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     install -m 444 -D ${zshCompletion} $out/share/zsh/site-functions/_tarsnap
   '';
 
-  buildInputs = [ openssl zlib ] ++ lib.optional stdenv.isLinux e2fsprogs ;
+  buildInputs = [ openssl zlib getconf ] ++ lib.optional stdenv.isLinux e2fsprogs ;
 
   meta = {
     description = "Online backups for the truly paranoid";
