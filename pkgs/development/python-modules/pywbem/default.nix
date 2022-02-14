@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52f668f7ee1f03bdd80485692b648588b3e1909e2dc0754dceca497f5e9cf059";
+    sha256 = "sha256-rYu75Kt+eVciwPJ/JlbJL8Zzp+BqFM0VGlDwMGRU0X4=";
   };
 
   propagatedBuildInputs = [
