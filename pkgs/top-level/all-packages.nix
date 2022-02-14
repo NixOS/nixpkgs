@@ -7052,6 +7052,8 @@ with pkgs;
 
   libcsptr = callPackage ../development/libraries/libcsptr { };
 
+  libgovirt = callPackage ../applications/virtualization/libgovirt { };
+
   libscrypt = callPackage ../development/libraries/libscrypt { };
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
