@@ -1807,6 +1807,8 @@ in {
 
   connexion = callPackage ../development/python-modules/connexion { };
 
+  cons = callPackage ../development/python-modules/cons { };
+
   consonance = callPackage ../development/python-modules/consonance { };
 
   constantly = callPackage ../development/python-modules/constantly { };
