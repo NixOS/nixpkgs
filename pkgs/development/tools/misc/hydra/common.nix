@@ -5,6 +5,8 @@
 , makeWrapper
 , autoconf
 , automake
+, cacert
+, glibcLocales
 , libtool
 , unzip
 , pkg-config
@@ -60,19 +62,19 @@ else
     perlDeps = buildEnv {
       name = "hydra-perl-deps";
       paths = with perlPackages; lib.closePropagation [
+        AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
+        CatalystAuthenticationStoreLDAP
         CatalystDevel
-        CatalystDispatchTypeRegex
         CatalystPluginAccessLog
         CatalystPluginAuthorizationRoles
         CatalystPluginCaptcha
         CatalystPluginPrometheusTiny
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
-        CatalystPluginSmartURI
         CatalystPluginStackTrace
-        CatalystRuntime
+        CatalystPluginUnicodeEncoding
         CatalystTraitForRequestProxyBase
         CatalystViewDownload
         CatalystViewJSON
@@ -90,8 +92,11 @@ else
         EmailMIME
         EmailSender
         FileSlurper
+        FileWhich
+        git
         IOCompress
         IPCRun
+        IPCRun3
         JSON
         JSONMaybeXS
         JSONXS
@@ -113,15 +118,15 @@ else
         StringCompareConstantTime
         SysHostnameLong
         TermSizeAny
+        TermReadKey
         Test2Harness
+        TestMore
         TestPostgreSQL
         TextDiff
         TextTable
-        XMLSimple
+        UUID4Tiny
         YAML
-        boehmgc
-        git
-        nix
+        XMLSimple
         nix.perl-bindings
       ];
     };
@@ -182,7 +187,9 @@ else
     configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
     checkInputs = [
+      cacert
       foreman
+      glibcLocales
       python3
       libressl.nc
     ];
