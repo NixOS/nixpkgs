@@ -70,7 +70,7 @@ in
 
     localuser = mkOption {
       type = nullOr str;
-      default = "nobody";
+      default = if isMorPLocate then null else "nobody";
       description = ''
         The user to search non-network directories as, using
         <command>su</command>.
@@ -246,7 +246,7 @@ in
     };
 
     warnings = optional (isMorPLocate && cfg.localuser != null)
-      "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
+      "mlocate does not support the services.locate.localuser option; updatedb will run as root."
     ++ optional (isFindutils && cfg.pruneNames != [ ])
       "findutils locate does not support pruning by directory component"
     ++ optional (isFindutils && cfg.pruneBindMounts)
