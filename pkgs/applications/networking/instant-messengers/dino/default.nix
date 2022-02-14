@@ -13,7 +13,8 @@
 , pcre
 , qrencode
 , icu
-, gspell, srtp, libnice, gnutls, gst_all_1
+, gspell
+, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good
  }:
 
 stdenv.mkDerivation rec {
@@ -61,9 +62,9 @@ stdenv.mkDerivation rec {
     srtp
     libnice
     gnutls
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xorg.libxcb
     xorg.libpthreadstubs
