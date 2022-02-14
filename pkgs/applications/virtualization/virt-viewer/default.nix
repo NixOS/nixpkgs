@@ -1,11 +1,31 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, shared-mime-info, wrapGAppsHook
-, glib, gsettings-desktop-schemas, gtk-vnc, gtk3, libvirt, libvirt-glib, libxml2, vte
+{ lib
+, stdenv
+, fetchurl
+, gdbm ? null
+, glib
+, gsettings-desktop-schemas
+, gtk-vnc
+, gtk3
+, intltool
+, libcap ? null
+, libvirt
+, libvirt-glib
+, libxml2
+, pkg-config
+, shared-mime-info
+, spice-gtk ? null
+, spice-protocol ? null
 , spiceSupport ? true
-, spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
+, vte
+, wrapGAppsHook
 }:
 
-assert spiceSupport ->
-  spice-gtk != null && spice-protocol != null && libcap != null && gdbm != null;
+assert spiceSupport -> (
+  gdbm != null
+  && libcap != null
+  && spice-gtk != null
+  && spice-protocol != null
+);
 
 with lib;
 
@@ -19,11 +39,28 @@ stdenv.mkDerivation rec {
     sha256 = "09a83mzyn3b4nd7wpa659g1zf1fjbzb79rk968bz6k5xl21k7d4i";
   };
 
-  nativeBuildInputs = [ pkg-config intltool shared-mime-info wrapGAppsHook glib ];
+  nativeBuildInputs = [
+    glib
+    intltool
+    pkg-config
+    shared-mime-info
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    glib gsettings-desktop-schemas gtk-vnc gtk3 libvirt libvirt-glib libxml2 vte
+    glib
+    gsettings-desktop-schemas
+    gtk-vnc
+    gtk3
+    libvirt
+    libvirt-glib
+    libxml2
+    vte
   ] ++ optionals spiceSupport [
-    spice-gtk spice-protocol libcap gdbm
+    gdbm
+    libcap
+    spice-gtk
+    spice-protocol
   ];
 
   # Required for USB redirection PolicyKit rules file
