@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vengi-tools";
-  version = "0.0.17";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
     repo = "vengi";
     rev = "v${version}";
-    sha256 = "sha256-h+R9L0BBD3NSFWUh43g4V2LBcNyqVInBeJiOLY03nRk=";
+    sha256 = "sha256-Ur1X5FhOa87jbjWBXievBfCHW+qP/8bqLiyKAC8+KU4=";
   };
 
   # Patch from the project's author for fixing an issue with AnimationShaders.h
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    # There used to be a roundtrip test here, but it started failing on 0.0.17
+    # There used to be a roundtrip test here, but it started failing on 0.0.18
     # Relevant upstream ticket:
     # https://github.com/mgerhardy/vengi/issues/113
     voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix {};
