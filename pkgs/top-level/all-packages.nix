@@ -8167,6 +8167,8 @@ with pkgs;
 
   nomad-driver-podman = callPackage ../applications/networking/cluster/nomad-driver-podman { };
 
+  nomad-pack = callPackage ../applications/networking/cluster/nomad-pack { };
+
   nomino = callPackage ../tools/misc/nomino { };
 
   notable = callPackage ../applications/misc/notable { };
