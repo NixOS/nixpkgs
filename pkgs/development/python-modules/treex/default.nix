@@ -39,8 +39,6 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  buildInputs = [ jaxlib ];
-
   propagatedBuildInputs = [
     einops
     flax
