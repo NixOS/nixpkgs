@@ -28,11 +28,11 @@ mariadb = server // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.6.5";
+   version = "10.6.7";
 
   src = fetchurl {
     url = "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "sha256-4L4EBCjZpCqLtL0iG1Z/8lIs1vqJBjhic9pPA8XCCo8=";
+    sha256 = "1idjnkjfkjvyr6r899xbiwq9wwbs84cm85mbc725yxjshqghzvkm";
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
