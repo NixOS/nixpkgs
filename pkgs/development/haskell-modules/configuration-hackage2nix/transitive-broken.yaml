@@ -589,7 +589,6 @@ dont-distribute-packages:
  - bla
  - blakesum-demo
  - blastxml
- - blatex
  - blaze-builder-enumerator
  - blaze-colonnade
  - blink1
@@ -700,7 +699,6 @@ dont-distribute-packages:
  - chainweb-mining-client
  - chalkboard-viewer
  - charade
- - chart-cli
  - chart-svg
  - chart-svg-various
  - chart-unit
@@ -897,10 +895,8 @@ dont-distribute-packages:
  - data-structure-inferrer
  - datadog-tracing
  - dataflow
- - date-conversions
  - dbjava
  - dbus-client
- - ddate
  - ddc-build
  - ddc-core
  - ddc-core-babel
@@ -3037,7 +3033,6 @@ dont-distribute-packages:
  - tn
  - to-string-instances
  - toboggan
- - todos
  - toktok
  - too-many-cells
  - top
@@ -3303,7 +3298,6 @@ dont-distribute-packages:
  - ycextra
  - yeamer
  - yeshql
- - yesod-articles
  - yesod-auth-ldap
  - yesod-colonnade
  - yesod-continuations
