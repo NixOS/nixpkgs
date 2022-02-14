@@ -4382,6 +4382,8 @@ with pkgs;
 
   checkmate = callPackage ../development/tools/checkmate { };
 
+  circup = callPackage ../development/tools/circup { };
+
   civetweb = callPackage ../development/libraries/civetweb { };
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
