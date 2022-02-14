@@ -89,9 +89,9 @@ stdenvNoCC.mkDerivation rec {
     homeExt="''${VSCODE_EXTENSIONS:-$HOME/${extensionHomePath}}"
     mkdir -p "$homeExt"
     # assume $out is unique enough it can replace a tmpdir suffix
-    export VSCODE_EXTENSIONS="''${XDG_RUNTIME_DIR:-''${TEMPDIR:-/tmp}/$PID}@out@"
+    export VSCODE_EXTENSIONS="''${XDG_RUNTIME_DIR:-''${TEMPDIR:-/tmp}/$UID}@out@"
     # avoid remounting after closing and reopening vscode
-    if ! (mount | grep "$VSCODE_EXTENSIONS" > /dev/null)
+    if ! mountpoint -q "$VSCODE_EXTENSIONS"
     then
       mkdir -p "$VSCODE_EXTENSIONS"
       ${mergerfs}/bin/mergerfs \
