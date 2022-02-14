@@ -11875,9 +11875,7 @@ with pkgs;
 
   elm2nix = haskell.lib.compose.justStaticExecutables haskellPackages.elm2nix;
 
-  elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  });
+  elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
 
   apache-flex-sdk = callPackage ../development/compilers/apache-flex-sdk { };
 
