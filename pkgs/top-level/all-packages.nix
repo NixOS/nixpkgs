@@ -4985,6 +4985,8 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
+  mozillavpn = libsForQt5.callPackage ../tools/networking/mozillavpn { };
+
   mozwire = callPackage ../tools/networking/mozwire {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
