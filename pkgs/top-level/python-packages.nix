@@ -222,6 +222,8 @@ in {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
+  aesara = callPackage ../development/python-modules/aesara { };
+
   afdko = callPackage ../development/python-modules/afdko { };
 
   affine = callPackage ../development/python-modules/affine { };
