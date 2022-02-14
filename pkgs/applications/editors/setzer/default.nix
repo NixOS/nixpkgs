@@ -18,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    sha256 = "sha256-uh6mXXJP/EpfvHTXL7PH+Yd1F5Q+6B01ns4vRr/2Xqo=";
+    hash = "sha256-rfk/csJJATXI1JvAHn2K/+fVLsqmkKxIbNWlcu1EhYY=";
   };
 
   format = "other";
