@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "taoup";
-  version = "1.1.15";
+  version = "1.1.16";
 
   src = fetchFromGitHub {
     owner = "globalcitizen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FX/mEhkTdBmtISmrnreT/GDq4WUggGKP5oix9MB7Y8M=";
+    hash = "sha256-LNS4m7Er4dQKYDuHMF/5mAi4yGcYzppxfqVKFOT6I/s=";
   };
 
   buildInputs = [ rubyEnv bash ncurses ];
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib/taoup}
 
     cp taoup $out/lib/taoup
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
 
     cp taoup-fortune $out/bin
     chmod +x $out/bin/taoup-fortune
+
+    runHook postInstall
   '';
 
   meta = {
