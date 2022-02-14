@@ -8,6 +8,7 @@
 , libiconv
 , nixosTests
 , Security
+, Foundation
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security Foundation ];
 
   postInstall = ''
     for shell in bash fish zsh; do
