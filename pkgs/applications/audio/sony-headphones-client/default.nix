@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   desktopItems = [ (makeDesktopItem {
     name = "SonyHeadphonesClient";
     exec = "SonyHeadphonesClient";
