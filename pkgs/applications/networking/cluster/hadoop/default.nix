@@ -19,6 +19,8 @@
 
 with lib;
 
+assert elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+
 let
   common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl, nativeLibs ? [ ], libPatches ? "" }:
     let
@@ -81,9 +83,11 @@ in
         pname = "hadoop";
         version = "3.3.1";
         untarDir = "${pname}-${version}";
-        sha256 = {
+        sha256 = rec {
           x86_64-linux = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
+          x86_64-darwin = x86_64-linux;
           aarch64-linux = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
+          aarch64-darwin = aarch64-linux;
         };
         inherit openssl;
         nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
@@ -97,10 +101,6 @@ in
         '';
         jdk = jdk11_headless;
       } // optionalAttrs stdenv.isDarwin {
-        sha256 = {
-          x86_64-darwin = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
-          aarch64-darwin = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
-        };
         openssl = null;
         nativeLibs = [ ];
         libPatches = "";
