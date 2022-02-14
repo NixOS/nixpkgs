@@ -7,6 +7,8 @@
 , fetchPypi
 , jinja2
 , packaging
+, pytest-aiohttp
+, pytestCheckHook
 , pythonOlder
 , webargs
 }:
@@ -33,6 +35,11 @@ buildPythonPackage rec {
     webargs
   ];
 
+  checkInputs = [
+    pytest-aiohttp
+    pytestCheckHook
+  ];
+
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "jinja2<3.0" "jinja2"
@@ -41,9 +48,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "aiohttp_apispec"
   ];
-
-  # Requires pytest-sanic, currently broken in nixpkgs
-  doCheck = false;
 
   meta = with lib; {
     description = "Build and document REST APIs with aiohttp and apispec";
