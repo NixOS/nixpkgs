@@ -247,8 +247,8 @@ in {
   };
   mariadb_106 = mariadbPackage {
     # Supported until 2026-07
-    version = "10.6.6";
-    sha256 = "1hz1iwkgrlhhrn5ypxszfp5ngfmfakjxl3ihzsm4845xhzn1fr77";
+    version = "10.6.7";
+    sha256 = "1idjnkjfkjvyr6r899xbiwq9wwbs84cm85mbc725yxjshqghzvkm";
   };
   mariadb_107 = mariadbPackage {
     # Supported until 2023-02
