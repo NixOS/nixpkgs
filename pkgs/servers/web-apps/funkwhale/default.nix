@@ -37,6 +37,16 @@ let
         };
       });
 
+      uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
+        version = "0.14.0";
+        src = fetchFromGitHub {
+          owner = "encode";
+          repo = "uvicorn";
+          rev = version;
+          sha256 = "164x92k3rs47ihkmwq5av396576dxp4rzv6557pwgc1ign2ikqy1";
+        };
+      });
+
       django = super.django_3;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: rec {
