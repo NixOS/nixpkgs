@@ -39,6 +39,9 @@ in mkDerivation rec {
       --replace '/usr/include/poppler' '${poppler.dev}/include/poppler'
   '';
 
+  # Fix build with poppler >= 22.01
+  qmakeFlags = [ "CONFIG+=c++17" "QMAKE_CXXFLAGS+=-std=c++17" ];
+
   nativeBuildInputs = [ qmake copyDesktopItems ];
 
   buildInputs = [
