@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "greeclimate";
-  version = "1.0.2";
+  version = "1.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,14 +19,8 @@ buildPythonPackage rec {
     owner = "cmroche";
     repo = "greeclimate";
     rev = "v${version}";
-    hash = "sha256-Y8IgqrU8zzV020qwyyb57Tp2j7laQ3JsCOCYBuf8vsQ=";
+    hash = "sha256-z8X/AZx5Vam7nqYTjhhyXz7E23Crf5vLlNhWXLGSMcs=";
   };
-
-  postPatch = ''
-    # upstream issue for proper solution https://github.com/cmroche/greeclimate/issues/46
-    substituteInPlace setup.py \
-      --replace 'name="greeclimate",' 'name="greeclimate",version="${version}",'
-  '';
 
   propagatedBuildInputs = [
     netifaces
