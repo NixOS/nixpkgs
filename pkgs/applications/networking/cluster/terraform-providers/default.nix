@@ -70,7 +70,6 @@ let
     in
     lib.optionalAttrs (config.allowAliases or false) {
       arukas = archived "2022/01";
-      bitbucket = archived "2022/01";
       chef = archived "2022/01";
       cherryservers = archived "2022/01";
       clc = archived "2022/01";

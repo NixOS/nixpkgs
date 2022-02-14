@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "statsd_exporter";
-  version = "0.20.2";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "statsd_exporter";
-    sha256 = "1k98dmjn2mfwg36khpbxg7yk6rn4sk4v264i4rmqs4v8gss2h3kn";
+    sha256 = "sha256-pLzUbeSCMV0yr4gSR7m6NYrpm8ZhCPbwwZ5nQzy6lEM=";
   };
 
-  vendorSha256 = "1fihbchl5g5z9xrca68kaq26l674chcby634k8iz5h31dai8hpyh";
+  vendorSha256 = "sha256-gBeeOxnVT0+x33VuwZhfjk3Fb8JHZdAzaDuFZlUfdgM=";
 
   meta = with lib; {
     description = "Receives StatsD-style metrics and exports them to Prometheus";

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.36.3";
+  version = "0.36.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
     rev = "v${version}";
-    sha256 = "sha256-L69wWtXxsZ+H5ZkR8wj1TSAl8JmV1JcOERQ3nWYDP/Q=";
+    sha256 = "sha256-B4RZftGngV85Trm0iPj50WAv1M0H+sjQ9ABiGh070/M=";
   };
 
   propagatedBuildInputs = [
