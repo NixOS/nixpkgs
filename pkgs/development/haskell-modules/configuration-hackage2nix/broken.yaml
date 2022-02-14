@@ -1088,6 +1088,7 @@ broken-packages:
   - DigitalOcean
   - digitalocean-kzs
   - digits
+  - dijkstra-simple
   - DimensionalHash
   - dimensional-tf
   - diophantine
