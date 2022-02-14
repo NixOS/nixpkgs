@@ -1,16 +1,19 @@
 { lib
 , aiohttp
+, apispec
 , buildPythonPackage
 , callPackage
 , fetchFromGitHub
 , fetchPypi
+, jinja2
+, packaging
 , pythonOlder
 , webargs
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-apispec";
-  version = "2.2.2";
+  version = "3.0.0b1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,15 +22,21 @@ buildPythonPackage rec {
     owner = "maximdanilchenko";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-51QyD56k+1fq2tOqBNUtPRFza9uku79GcvTh8wov04g=";
+    hash = "sha256-LGdi5ZhJ1G0GxUJVBZnwW3Q+x3Yo9FRV9b6REPlq7As=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    apispec3
+    apispec
     jinja2
+    packaging
     webargs
   ];
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "jinja2<3.0" "jinja2"
+  '';
 
   pythonImportsCheck = [
     "aiohttp_apispec"
