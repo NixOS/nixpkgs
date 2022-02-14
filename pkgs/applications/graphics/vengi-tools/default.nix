@@ -41,32 +41,14 @@ let cmake3_22 = cmake.overrideAttrs (old: {
 
 in stdenv.mkDerivation rec {
   pname = "vengi-tools";
-  version = "0.0.17";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
     repo = "vengi";
     rev = "v${version}";
-    sha256 = "sha256-h+R9L0BBD3NSFWUh43g4V2LBcNyqVInBeJiOLY03nRk=";
+    sha256 = "sha256-Ur1X5FhOa87jbjWBXievBfCHW+qP/8bqLiyKAC8+KU4=";
   };
-
-  # Patch from the project's author for fixing an issue with AnimationShaders.h
-  # not being included when turning off some components
-  patches = [(writeText "vengi-tools-fix-build.patch" ''
-    diff --git a/src/modules/voxelworldrender/CMakeLists.txt b/src/modules/voxelworldrender/CMakeLists.txt
-    index aebe5f97b..903e62b37 100644
-    --- a/src/modules/voxelworldrender/CMakeLists.txt
-    +++ b/src/modules/voxelworldrender/CMakeLists.txt
-    @@ -27,7 +27,7 @@ set(FILES
-            voxel/models/plants/3.qb
-            voxel/models/plants/4.qb
-     )
-    -engine_add_module(TARGET ''${LIB} SRCS ''${SRCS} ''${SRCS_SHADERS} FILES ''${FILES} DEPENDENCIES frontend voxelrender)
-    +engine_add_module(TARGET ''${LIB} SRCS ''${SRCS} ''${SRCS_SHADERS} FILES ''${FILES} DEPENDENCIES animation frontend voxelrender)
-     generate_shaders(''${LIB} world water postprocess)
-
-     set(TEST_SRCS
-  '')];
 
   nativeBuildInputs = [
     cmake3_22
