@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -39,6 +40,20 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix_pkgconfig_includedir.patch
+    # Fix device discovery failing without pulseaudio
+    # (Remove once version > 1.19.3)
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/679
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/41677a526b83bb2493087af1d93b50c297cf97cd.patch";
+      sha256 = "e5SCjRREIQ2Y1/SK8ywW/Q+ejxuWkJ7eMR4M0/wQCFs=";
+    })
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1189
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/1912bcbcc42e8ee2c4948511619219f5722631d2.patch";
+      stripLen = 3;
+      extraPrefix = "";
+      sha256 = "a1EcW0phtXjjoC4PaHGrNB9+SVHSTq8bdQbpyspp/zM=";
+    })
   ];
 
   nativeBuildInputs = [
