@@ -7015,13 +7015,13 @@ let
         sha1 = "021e4d9c7705f21bbf37d03ceb58767402774c64";
       };
     };
-    "url-parse-1.5.5" = {
+    "url-parse-1.5.6" = {
       name = "url-parse";
       packageName = "url-parse";
-      version = "1.5.5";
+      version = "1.5.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/url-parse/-/url-parse-1.5.5.tgz";
-        sha512 = "LYNZ15yZDI+HPHUji/yJpj+MnWvQuPZIOJ+gDtHM6gJq33bbmXLfgODIic6SE8tLLes5KWPjZnI3dWlPG6JiTg==";
+        url = "https://registry.npmjs.org/url-parse/-/url-parse-1.5.6.tgz";
+        sha512 = "xj3QdUJ1DttD1LeSfvJlU1eiF1RvBSBfUu8GplFGdUzSO28y5yUtEl7wb//PI4Af6qh0o/K8545vUmucRrfWsw==";
       };
     };
     "utf7-1.0.2" = {
@@ -7462,10 +7462,10 @@ in
   n8n = nodeEnv.buildNodePackage {
     name = "n8n";
     packageName = "n8n";
-    version = "0.163.0";
+    version = "0.163.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/n8n/-/n8n-0.163.0.tgz";
-      sha512 = "7znPwaONZgCGJKfkjkHP/zTsPiSf7+Wun6TjQ9j/NmyMiPku99EiwDtH3lW5GFCcy+Doo4GUVMqXpEM8GOcNVw==";
+      url = "https://registry.npmjs.org/n8n/-/n8n-0.163.1.tgz";
+      sha512 = "lhup+qIy3cG0oWvBuOWi57Tn3F2k5NBD00KJ3ilKgnk4VsY+LmAca2xvyZNKvlRPa9i++3ukG6XioPTDuXylgw==";
     };
     dependencies = [
       (sources."@azure/abort-controller-1.0.5" // {
@@ -8627,7 +8627,7 @@ in
           sources."punycode-1.3.2"
         ];
       })
-      sources."url-parse-1.5.5"
+      sources."url-parse-1.5.6"
       (sources."utf7-1.0.2" // {
         dependencies = [
           sources."semver-5.3.0"
