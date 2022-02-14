@@ -38,6 +38,8 @@ mkDerivation rec {
     substituteInPlace MediaElch.pro --replace "/usr" "$out"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";
     description = "Media Manager for Kodi";
