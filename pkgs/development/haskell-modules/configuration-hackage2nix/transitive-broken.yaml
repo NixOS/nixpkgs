@@ -525,6 +525,9 @@ dont-distribute-packages:
  - base64-bytes
  - baserock-schema
  - batchd
+ - batchd-core
+ - batchd-docker
+ - batchd-libvirt
  - batching
  - battlenet-yesod
  - battleships
@@ -725,9 +728,7 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
- - clash-ghc_1_4_7
  - clash-lib
- - clash-lib_1_4_7
  - clash-multisignal
  - clash-prelude-quickcheck
  - clash-shake
@@ -786,6 +787,7 @@ dont-distribute-packages:
  - comic
  - commsec-keyexchange
  - comonad-random
+ - compaREST
  - compact-mutable
  - complexity
  - computational-algebra
@@ -1485,6 +1487,12 @@ dont-distribute-packages:
  - hasql-cursor-query
  - hasql-postgres
  - hasql-postgres-options
+ - hasql-streams-conduit
+ - hasql-streams-core
+ - hasql-streams-example
+ - hasql-streams-pipes
+ - hasql-streams-streaming
+ - hasql-streams-streamly
  - hasql-th
  - hastache-aeson
  - haste-app
@@ -2546,7 +2554,6 @@ dont-distribute-packages:
  - reactor
  - readpyc
  - reanimate
- - reanimate_1_1_5_0
  - record-aeson
  - record-gl
  - record-preprocessor
