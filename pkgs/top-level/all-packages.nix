@@ -22296,6 +22296,8 @@ with pkgs;
 
   lightum = callPackage ../os-specific/linux/lightum { };
 
+  mathjax = callPackage ../misc/mathjax { };
+
   ebtables = callPackage ../os-specific/linux/ebtables { };
 
   error-inject = callPackages ../os-specific/linux/error-inject { };
