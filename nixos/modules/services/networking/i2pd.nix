@@ -98,6 +98,7 @@ let
   i2pdConf = let
     opts = [
       notice
+      (strOpt "log" cfg.log)
       (strOpt "loglevel" cfg.logLevel)
       (boolOpt "logclftime" cfg.logCLFTime)
       (boolOpt "ipv4" cfg.enableIPv4)
@@ -105,10 +106,10 @@ let
       (boolOpt "notransit" cfg.notransit)
       (boolOpt "floodfill" cfg.floodfill)
       (intOpt "netid" cfg.netid)
-    ] ++ (optionalNullInt "bandwidth" cfg.bandwidth)
+    ] ++ (optionalNullString "logfile" cfg.logFile)
+      ++ (optionalNullInt "bandwidth" cfg.bandwidth)
       ++ (optionalNullInt "port" cfg.port)
       ++ (optionalNullString "family" cfg.family)
-      ++ (optionalNullString "datadir" cfg.dataDir)
       ++ (optionalNullInt "share" cfg.share)
       ++ (optionalNullBool "ssu" cfg.ssu)
       ++ (optionalNullBool "ntcp" cfg.ntcp)
@@ -223,7 +224,8 @@ let
     in pkgs.writeText "i2pd-tunnels.conf" opts;
 
   i2pdFlags = concatStringsSep " " (
-    optional (cfg.address != null) ("--host=" + cfg.address) ++ [
+    optional (cfg.address != null) ("--host=" + cfg.address) ++
+    optional (cfg.dataDir != null) ("--datadir=" + cfg.dataDir) ++ [
     "--service"
     ("--conf=" + i2pdConf)
     ("--tunconf=" + tunnelConf)
@@ -257,6 +259,23 @@ in
         defaultText = literalExpression "pkgs.i2pd";
         description = ''
           i2pd package to use.
+        '';
+      };
+
+      log = mkOption {
+        type = types.enum ["stdout" "file" "syslog"];
+        default = "stdout";
+        description = ''
+          Logs destination: stdout, file, syslog (stdout if not set or invalid)
+          (if daemon, stdout/unspecified are replaced by file in some cases)
+        '';
+      };
+
+      logFile = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = ''
+          Path to logfile (default - autodetect)
         '';
       };
 
