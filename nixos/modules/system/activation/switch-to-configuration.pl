@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-use Array::Compare;
 use Config::IniFiles;
 use File::Path qw(make_path);
 use File::Basename;
@@ -221,8 +220,12 @@ sub unrecord_unit {
 # - 2 if the units are different and a reload action is required
 sub compare_units {
     my ($old_unit, $new_unit) = @_;
-    my $comp = Array::Compare->new;
     my $ret = 0;
+
+    my $comp_array = sub {
+      my ($a, $b) = @_;
+      return join("\0", @{$a}) eq join("\0", @{$b});
+    };
 
     # Comparison hash for the sections
     my %section_cmp = map { $_ => 1 } keys %{$new_unit};
@@ -255,7 +258,7 @@ sub compare_units {
             }
             my @new_value = @{$new_unit->{$section_name}{$ini_key}};
             # If the contents are different, the units are different
-            if (not $comp->compare(\@old_value, \@new_value)) {
+            if (not $comp_array->(\@old_value, \@new_value)) {
                 # Check if only the reload triggers changed
                 if ($section_name eq 'Unit' and $ini_key eq 'X-Reload-Triggers') {
                     $ret = 2;
