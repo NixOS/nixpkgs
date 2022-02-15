@@ -2737,6 +2737,8 @@ in {
 
   factory_boy = callPackage ../development/python-modules/factory_boy { };
 
+  fairseq = callPackage ../development/python-modules/fairseq { };
+
   fake_factory = callPackage ../development/python-modules/fake_factory { };
 
   fake-useragent = callPackage ../development/python-modules/fake-useragent { };
