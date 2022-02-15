@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dmenu";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchurl {
     url = "https://dl.suckless.org/tools/dmenu-${version}.tar.gz";
-    sha256 = "1lvfxzg3chsgcqbc2vr0zic7vimijgmbvnspayx73kyvqi1f267y";
+    sha256 = "sha256-H01wnrujfrcybroOZl4PE75Pok7jXJWw15ww8Uo0j9U=";
   };
 
   buildInputs = [ libX11 libXinerama zlib libXft ];
