@@ -153,7 +153,7 @@ in {
         ProtectHome = "true";
         ProtectSystem = "strict";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        StateDirectory = "bitwarden_rs";
+        StateDirectory = mkIf (cfg.dataFolder == "/var/lib/vaultwarden") [ "vaultwarden" ];
       };
       wantedBy = [ "multi-user.target" ];
     };
