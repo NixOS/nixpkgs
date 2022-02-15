@@ -90,7 +90,13 @@ in {
       type = str;
       default = "/var/lib/bitwarden_rs";
       description = ''
-        The directory under which vaultwarden save it's data.
+        The directory under which vaultwarden save its data.
+
+        <note><para>
+          If left as the default value this directory will automatically be created before
+          the vaultwarden server starts, otherwise the sysadmin is responsible
+          for ensuring the directory exists with appropriate ownership and permissions.
+        </para></note>
       '';
     };
 
