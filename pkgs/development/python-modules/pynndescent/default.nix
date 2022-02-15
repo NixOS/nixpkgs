@@ -7,6 +7,7 @@
 , scikit-learn
 , scipy
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,11 @@ buildPythonPackage rec {
   version = "0.5.6";
   format = "setuptools";
 
+  disabled = pythonOlder "3.6";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YfsxiFuqxGnWeTPix8k1tu3rsG7kmOLw+d/JfFnTclw=";
+    hash = "sha256-YfsxiFuqxGnWeTPix8k1tu3rsG7kmOLw+d/JfFnTclw=";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +32,10 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pynndescent"
   ];
 
   meta = with lib; {
