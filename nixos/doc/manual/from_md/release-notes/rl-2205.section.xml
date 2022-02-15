@@ -271,6 +271,23 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>home-assistant</literal> module now requires
+          users that don’t want their configuration to be managed
+          declaratively to set
+          <literal>services.home-assistant.config = null;</literal>.
+          This is required due to the way default settings are handled
+          with the new settings style.
+        </para>
+        <para>
+          Additionally the default list of
+          <literal>extraComponents</literal> now includes the minimal
+          dependencies to successfully complete the
+          <link xlink:href="https://www.home-assistant.io/getting-started/onboarding/">onboarding</link>
+          procedure.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.emacsPackages.orgPackages</literal> is removed
           because org elpa is deprecated. The packages in the top level
           of <literal>pkgs.emacsPackages</literal>, such as org and
