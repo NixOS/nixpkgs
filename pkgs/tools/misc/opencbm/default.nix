@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
       disk copier included. Successor of cbm4linux. Also supports the XU1541
       and the XUM1541 devices (a.k.a. "ZoomFloppy").
     '';
-    license = licenses.gpl2;
+    homepage = "https://spiro.trikaliotis.net/opencbm";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.sander ];
   };
