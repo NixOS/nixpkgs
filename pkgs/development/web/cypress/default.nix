@@ -2,7 +2,6 @@
 , autoPatchelfHook
 , callPackage
 , fetchzip
-, gnome2
 , gtk2
 , gtk3
 , lib
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     nss
     gtk2
     alsa-lib
-    gnome2.GConf
     gtk3
     mesa # for libgbm
   ];
