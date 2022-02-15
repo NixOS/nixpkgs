@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "0.6.11";
+  version = "0.7.14";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = pname;
     rev = version;
-    sha256 = "1rrdzzb2gcl3lc8l5vb99hy2lmdj5723fds2q78n4sf83y93czw7";
+    hash = "sha256-0j0qXIY0E8BobqjYIWGmPlDivkD/FAMJMQHC9GKy5NA=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,18 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "tests/test_ip_pairing.py"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_remove_pairing"
+    "test_find_ip_by_device_id"
+    "test_pair"
+    "test_identify"
+    "test_get_accessories"
+    "test_get_characteristic"
+    "test_put_characteristic"
+    "test_list_pairings"
   ];
 
   pythonImportsCheck = [
