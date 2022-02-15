@@ -32,7 +32,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0qx1axqr0h5zbn2z9bnb1d0rbs0vajw4p8szw34nicngnn213g7k";
+    outputHash = "sha256-IlHuvFfkqM3O+3PPVBqUJzQXJELKGKHrmI1tdxsBpSk=";
   };
 
   # Point to our local deps repo
