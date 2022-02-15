@@ -60,6 +60,8 @@ buildPythonPackage rec {
     "tests/test_numpy_dtypes.py"
     # no need to test internal packaging
     "tests/extra_python_package/test_files.py"
+    # tests that try to parse setuptools stdout
+    "tests/extra_setuptools/test_setuphelper.py"
   ];
 
   meta = with lib; {
