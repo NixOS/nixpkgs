@@ -17971,6 +17971,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL IOKit;
   };
 
+  irrlichtmt = callPackage ../development/libraries/irrlichtmt {
+    inherit  (darwin.apple_sdk.frameworks) Cocoa Kernel;
+  };
+
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   iso-flags = callPackage ../data/icons/iso-flags { };
@@ -31893,7 +31897,7 @@ with pkgs;
 
   inherit (callPackages ../games/minetest {
     inherit (darwin) libiconv;
-    inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa Kernel;
+    inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa;
   })
     minetestclient_5 minetestserver_5;
 
