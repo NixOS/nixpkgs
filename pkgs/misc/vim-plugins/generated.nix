@@ -5627,6 +5627,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/ReplaceWithRegister/";
   };
 
+  rest-nvim = buildVimPluginFrom2Nix {
+    pname = "rest.nvim";
+    version = "2022-01-26";
+    src = fetchFromGitHub {
+      owner = "NTBBloodbath";
+      repo = "rest.nvim";
+      rev = "2826f6960fbd9adb1da9ff0d008aa2819d2d06b3";
+      sha256 = "0lb3rcc41rb9yhylmkpsj141yfk1kki1xkd4q2i9y0ld0mlwjjv8";
+    };
+    meta.homepage = "https://github.com/NTBBloodbath/rest.nvim/";
+  };
+
   riv-vim = buildVimPluginFrom2Nix {
     pname = "riv.vim";
     version = "2021-08-09";

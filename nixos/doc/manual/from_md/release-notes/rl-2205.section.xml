@@ -280,6 +280,17 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.kubernetes.scheduler.{port,address}</literal>
+          now set <literal>--secure-port</literal> and
+          <literal>--bind-address</literal> instead of
+          <literal>--port</literal> and <literal>--address</literal>,
+          since the former have been deprecated and are no longer
+          functional in kubernetes&gt;=1.23. Ensure that you are not
+          relying on the insecure behaviour before upgrading.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The DHCP server (<literal>services.dhcpd4</literal>,
           <literal>services.dhcpd6</literal>) has been hardened. The
           service is now using the systemd’s

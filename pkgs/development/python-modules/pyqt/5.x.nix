@@ -88,7 +88,7 @@ in buildPythonPackage rec {
   ];
 
   passthru = {
-    inherit sip;
+    inherit sip pyqt5_sip;
     multimediaEnabled = withMultimedia;
     webKitEnabled = withWebKit;
     WebSocketsEnabled = withWebSockets;
