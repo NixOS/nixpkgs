@@ -55,6 +55,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ which ocaml ocamlbuild ];
 
+  # build fails otherwise
+  enableParallelBuilding = false;
+
   dontAddPrefix = true;
 
   preConfigure = ''

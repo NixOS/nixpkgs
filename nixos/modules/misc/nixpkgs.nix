@@ -59,8 +59,6 @@ let
     inherit (cfg) config overlays localSystem crossSystem;
   };
 
-  # NOTE: flake.nix assumes that nixpkgs.config is only used with ../../..
-  #       as nixpkgs.config.path should be equivalent to ../../..
   finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
 
 in

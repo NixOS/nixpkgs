@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-PXQljC9rwlxXQ96fII3EjD4NXu61EMkYvMWqkcJZ4vU=";
   };
 
-  vendorSha256 = "sha256-yVfRjUlw90oUsbF2P6pW6FhMXok9ZwcKmAWyTFLI/cY=";
+  vendorSha256 = "sha256-zNUdglsfy6lEV54afCAoigxa3rR0qf/e3+B4PvVRIa4=";
 
   meta = with lib; {
     description = "Crawler for URLs and endpoints";

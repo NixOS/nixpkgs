@@ -25,9 +25,11 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
+    ] ++ (optionals cfg.package.withCryptsetup [
       "cryptsetup.target"
       "cryptsetup-pre.target"
       "remote-cryptsetup.target"
+    ]) ++ [
       "sigpwr.target"
       "timers.target"
       "paths.target"
@@ -241,6 +243,8 @@ let
           { Requisite = toString config.requisite; }
         // optionalAttrs (config.restartTriggers != [])
           { X-Restart-Triggers = toString config.restartTriggers; }
+        // optionalAttrs (config.reloadTriggers != [])
+          { X-Reload-Triggers = toString config.reloadTriggers; }
         // optionalAttrs (config.description != "") {
           Description = config.description; }
         // optionalAttrs (config.documentation != []) {
@@ -914,6 +918,9 @@ in
               )
               (optional hasDeprecated
                 "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786."
+              )
+              (optional (service.reloadIfChanged && service.reloadTriggers != [])
+                "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
               )
             ]
         )

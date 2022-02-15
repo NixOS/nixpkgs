@@ -1,4 +1,4 @@
-{ pkgs, idris-no-deps, overrides ? (self: super: {}) }: let
+{ pkgs, config, idris-no-deps, overrides ? (self: super: {}) }: let
   inherit (pkgs.lib) callPackageWith fix' extends;
 
   /* Taken from haskell-modules/default.nix, should probably abstract this away */
@@ -145,8 +145,6 @@
 
     posix = callPackage ./posix.nix {};
 
-    protobuf = callPackage ./protobuf.nix {};
-
     quantities = callPackage ./quantities.nix {};
 
     rationals = callPackage ./rationals.nix {};
@@ -207,5 +205,8 @@
 
     yampa = callPackage ./yampa.nix {};
 
-  } // builtins_;
+  } // builtins_ // pkgs.lib.optionalAttrs (config.allowAliases or true) {
+    # removed packages
+    protobuf = throw "idrisPackages.protobuf has been removed: abandoned by upstream"; # Added 2022-02-06
+  };
 in fix' (extends overrides idrisPackages)

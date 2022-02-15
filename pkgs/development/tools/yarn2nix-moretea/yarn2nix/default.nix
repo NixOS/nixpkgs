@@ -76,9 +76,14 @@ in rec {
     workspaceDependencies ? [], # List of yarn packages
   }:
     let
-      extraBuildInputs = (lib.flatten (builtins.map (key:
-        pkgConfig.${key}.buildInputs or []
-      ) (builtins.attrNames pkgConfig)));
+      extraNativeBuildInputs =
+        lib.concatMap
+          (key: pkgConfig.${key}.nativeBuildInputs or [])
+          (builtins.attrNames pkgConfig);
+      extraBuildInputs =
+        lib.concatMap
+          (key: pkgConfig.${key}.buildInputs or [])
+          (builtins.attrNames pkgConfig);
 
       postInstall = (builtins.map (key:
         if (pkgConfig.${key} ? postInstall) then
@@ -106,7 +111,8 @@ in rec {
       inherit preBuild postBuild name;
       dontUnpack = true;
       dontInstall = true;
-      buildInputs = [ yarn nodejs git ] ++ extraBuildInputs;
+      nativeBuildInputs = [ yarn nodejs git ] ++ extraNativeBuildInputs;
+      buildInputs = extraBuildInputs;
 
       configurePhase = lib.optionalString (offlineCache ? outputHash) ''
         if ! cmp -s ${yarnLock} ${offlineCache}/yarn.lock; then

@@ -1,12 +1,15 @@
-{ stdenv, lib, fetchurl, python3, makeWrapper
-, libtorrent-rasterbar-1_2_x, qt5
+{ lib
+, stdenv
+, fetchurl
+, python3
+, makeWrapper
+, libtorrent-rasterbar-1_2_x
+, qt5
 }:
 
 let
   libtorrent = (python3.pkgs.toPythonModule (
     libtorrent-rasterbar-1_2_x.override { python = python3; })).python;
-
-  aiohttp-apispec = python3.pkgs.callPackage ./aiohttp-apispec.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "tribler";
@@ -14,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
-    sha256 = "1x45z23d1cqf0lai7wg5ki7gi2vba5hqk0swhggzplcjwma4wmh9";
+    hash = "sha256-CVZOVOWS0fvfg1yDiWFRa4v4Tpzl8RMVBQ6z0Ib4hfQ=";
   };
 
   nativeBuildInputs = [
@@ -29,40 +32,36 @@ stdenv.mkDerivation rec {
   pythonPath = [
     libtorrent
   ] ++ (with python3.pkgs; [
-    twisted
-    netifaces
-    pycrypto
-    pyasn1
-    requests
-    m2crypto
-    pyqt5
-    chardet
-    cherrypy
-    cryptography
-    libnacl
-    configobj
-    decorator
-    feedparser
-    service-identity
-    psutil
-    pillow
-    networkx
-    pony
-    lz4
-    pyqtgraph
-    pyyaml
     aiohttp
     aiohttp-apispec
+    asynctest
+    chardet
+    cherrypy
+    configobj
+    cryptography
+    decorator
     faker
-    sentry-sdk
+    feedparser
+    libnacl
+    lz4
+    m2crypto
+    netifaces
+    networkx
+    pillow
+    pony
+    psutil
+    pyasn1
+    pycrypto
+    pyqt5
+    pyqtgraph
     pytest-asyncio
     pytest-timeout
-    asynctest
+    pyyaml
+    requests
+    sentry-sdk
+    service-identity
+    twisted
     yappi
-
-    # there is a BTC feature, but it requires some unclear version of
-    # bitcoinlib, so this doesn't work right now.
-    # bitcoinlib
   ]);
 
   installPhase = ''
@@ -84,10 +83,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ xvapx viric ];
+    description = "Decentralised P2P filesharing client based on the Bittorrent protocol";
     homepage = "https://www.tribler.org/";
-    description = "A completely decentralised P2P filesharing client based on the Bittorrent protocol";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ xvapx viric ];
     platforms = platforms.linux;
   };
 }

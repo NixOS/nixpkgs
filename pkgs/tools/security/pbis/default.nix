@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # curl must be placed after openssl_1_0_2, because it pulls openssl 1.1 dependency.
   buildInputs = [
     pam popt libiconv libuuid openssl_1_0_2 cyrus_sasl
-    curl sqlite popt tdb libxml2 /*libglade2 for gtk*/
+    curl sqlite popt tdb libxml2
   ];
 
   postPatch = ''

@@ -86,6 +86,15 @@ in
                 and is set to be read only.
               '';
             };
+            global.database_backend = mkOption {
+              type = types.enum [ "sqlite" "rocksdb" ];
+              default = "sqlite";
+              example = "rocksdb";
+              description = ''
+                The database backend for the service. Switching it on an existing
+                instance will require manual migration of data.
+              '';
+            };
           };
         };
         default = {};

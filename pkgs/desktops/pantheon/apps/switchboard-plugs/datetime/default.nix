@@ -27,12 +27,6 @@ stdenv.mkDerivation rec {
     sha256 = "10rqhxsqbl1xnz5n84d7m39c3vb71k153989xvyc55djia1wjx96";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
@@ -60,6 +54,12 @@ stdenv.mkDerivation rec {
     libgee
     switchboard
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Date & Time Plug";

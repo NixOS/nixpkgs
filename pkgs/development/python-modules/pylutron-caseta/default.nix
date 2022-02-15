@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.13.0";
+  version = "0.13.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "gurumitts";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pVBFlGguVN6b3YY2lFF8KG83tBuotLmWLq/dKjRKAUQ=";
+    sha256 = "sha256-NLVxEor+Z+AVF+0/ugPM4bpeKba6yd43uTLYhtTNhqM=";
   };
 
   propagatedBuildInputs = [

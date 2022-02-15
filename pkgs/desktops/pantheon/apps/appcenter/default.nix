@@ -5,7 +5,6 @@
 , appstream-glib
 , dbus
 , desktop-file-utils
-, elementary-gtk-theme
 , elementary-icon-theme
 , fetchFromGitHub
 , flatpak
@@ -39,13 +38,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xktIHQHmz5gh72NEz9UQ9fMvBlj1BihWxHgxsHmTIB0=";
   };
 
-  patches = [
-    # Introduces a packagekit_backend meson flag.
-    # Makes appcenter actually work by using only the flatpak backend.
-    # https://github.com/elementary/appcenter/pull/1739
-    ./add-packagekit-backend-option.patch
-  ];
-
   nativeBuildInputs = [
     appstream-glib
     dbus # for pkg-config
@@ -61,7 +53,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-gtk-theme
     elementary-icon-theme
     flatpak
     glib
@@ -79,8 +70,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dpayments=false"
     "-Dcurated=false"
-    # This option is introduced in add-packagekit-backend-option.patch
-    "-Dpackagekit_backend=false"
   ];
 
   postPatch = ''

@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, lv2 }:
 
 stdenv.mkDerivation rec {
-  baseName = "lv2";
+  pname = "pure-lv2";
   version = "0.2";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-lv2-${version}.tar.gz";
     sha256 = "721cacd831781d8309e7ecabb0ee7c01da17e75c5642a5627cf158bfb36093e1";
   };
 

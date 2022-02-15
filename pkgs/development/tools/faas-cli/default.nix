@@ -10,14 +10,14 @@ in
 buildGoModule rec {
   pname = "faas-cli";
   # When updating version change rev.
-  version = "0.14.1";
-  rev = "d94600d2d2be52a66e0a15c219634f3bcac27318";
+  version = "0.14.2";
+  rev = "b1c09c0243f69990b6c81a17d7337f0fd23e7542";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
     rev = version;
-    sha256 = "132m9kv7a4vv65n8y3sq1drks6n1pci9fhvq0s637imf2vxccxqr";
+    sha256 = "sha256-OdFd4q5IHu4FjNArcqVt4dNyLWegR4GdAyyCzgNIU+Q=";
   };
 
   CGO_ENABLED = 0;
@@ -38,13 +38,5 @@ buildGoModule rec {
     description = "Official CLI for OpenFaaS ";
     license = licenses.mit;
     maintainers = with maintainers; [ welteki ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-linux"
-      "aarch64-darwin"
-      "armv7l-linux"
-      "armv6l-linux"
-    ];
   };
 }

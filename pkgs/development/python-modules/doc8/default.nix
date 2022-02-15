@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , restructuredtext_lint
+, setuptools-scm
 , stevedore
 }:
 
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "376e50f4e70a1ae935416ddfcf93db35dd5d4cc0e557f2ec72f0667d0ace4548";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   buildInputs = [
     pbr

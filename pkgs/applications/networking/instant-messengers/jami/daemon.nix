@@ -7,7 +7,7 @@
 , autoreconfHook
 , pkg-config
 , perl # for pod2man
-, ffmpeg
+, ffmpeg_4
 , pjsip
 , alsa-lib
 , asio
@@ -39,7 +39,7 @@
 let
   readLinesToList = with builtins; file: filter (s: isString s && stringLength s > 0) (split "\n" (readFile file));
 
-  ffmpeg-jami = ffmpeg.overrideAttrs (old:
+  ffmpeg-jami = ffmpeg_4.overrideAttrs (old:
     let
       patch-src = src + "/daemon/contrib/src/ffmpeg/";
     in

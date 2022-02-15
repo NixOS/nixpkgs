@@ -12,8 +12,7 @@
 , Security
 , AppKit
 , CoreServices
-
-, useWayland ? false
+, desktopToDarwinBundle
 }:
 
 let
@@ -38,7 +37,7 @@ mkYarnPackage rec {
     sha256 = pinData.desktopYarnHash;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   seshat = callPackage ./seshat { inherit CoreServices; };
   keytar = callPackage ./keytar { inherit Security AppKit; };
@@ -82,7 +81,8 @@ mkYarnPackage rec {
     # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
     makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
-      --add-flags "$out/share/element/electron${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}"
+      --add-flags "$out/share/element/electron" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
   '';
 
   # Do not attempt generating a tarball for element-web again.

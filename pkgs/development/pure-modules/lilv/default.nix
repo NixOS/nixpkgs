@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, lilv, lv2, serd, sord, sratom }:
 
 stdenv.mkDerivation rec {
-  baseName = "lilv";
+  pname = "pure-lilv";
   version = "0.4";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-lilv-${version}.tar.gz";
     sha256 = "af20982fe43e8dce62d50bf7a78e461ab36c308325b123cddbababf0d3beaf9f";
   };
 

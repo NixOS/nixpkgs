@@ -51,6 +51,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     homepage = "https://www.flintlib.org/";
     downloadPage = "https://www.flintlib.org/downloads.html";
-    updateWalker = true;
   };
 }

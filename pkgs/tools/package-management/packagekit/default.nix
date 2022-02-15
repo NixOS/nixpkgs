@@ -1,59 +1,94 @@
-{ stdenv, fetchFromGitHub, lib
-, intltool, glib, pkg-config, polkit, python3, sqlite
-, gobject-introspection, vala, gtk-doc, autoreconfHook, autoconf-archive
-, nix, enableNixBackend ? false, boost
+{ stdenv
+, fetchFromGitHub
+, lib
+, gettext
+, glib
+, pkg-config
+, polkit
+, python3
+, sqlite
+, gobject-introspection
+, vala
+, gtk-doc
+, nix
+, boost
+, meson
+, ninja
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, libxml2
+, gst_all_1
+, gtk3
 , enableCommandNotFound ? false
-, enableBashCompletion ? false, bash-completion ? null
-, enableSystemd ? stdenv.isLinux, systemd }:
+, enableBashCompletion ? false
+, bash-completion ? null
+, enableSystemd ? stdenv.isLinux
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
-  version = "1.1.13";
+  version = "1.2.5pre";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitHub {
-    owner = "hughsie";
+    owner = "PackageKit";
     repo = "PackageKit";
-    rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "0xmgac27p5z8wr56yw3cqhywnlvaf8kvyv1g0nzxnq167xj5vxam";
+    rev = "9c2ef9cddf39ebde587907561f8e7ac99ed6be1a";
+    sha256 = "05z1ds240kcmigygkbgjasr4spn7vd7cbpsbfrghhgnmszx9bjgl";
   };
 
-  buildInputs = [ glib polkit python3 gobject-introspection ]
-                  ++ lib.optional enableSystemd systemd
-                  ++ lib.optional enableBashCompletion bash-completion;
-  propagatedBuildInputs =
-    [ sqlite boost ]
-    ++ lib.optional enableNixBackend nix;
-  nativeBuildInputs = [ vala intltool pkg-config autoreconfHook autoconf-archive gtk-doc ];
-
-  preAutoreconf = ''
-    gtkdocize
-    intltoolize
-  '';
-
-  configureFlags = [
-    (if enableSystemd then "--enable-systemd" else "--disable-systemd")
-    "--disable-dummy"
-    "--disable-cron"
-    "--enable-introspection"
-    "--disable-offline-update"
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
-  ]
-  ++ lib.optional enableNixBackend "--enable-nix"
-  ++ lib.optional (!enableBashCompletion) "--disable-bash-completion"
-  ++ lib.optional (!enableCommandNotFound) "--disable-command-not-found";
-
-  enableParallelBuilding = true;
-
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-    "localstatedir=\${TMPDIR}"
+  buildInputs = [
+    glib
+    polkit
+    python3
+    gobject-introspection
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gtk3
+    sqlite
+    nix
+    boost
+  ] ++ lib.optional enableSystemd systemd
+  ++ lib.optional enableBashCompletion bash-completion;
+  nativeBuildInputs = [
+    vala
+    gettext
+    pkg-config
+    gtk-doc
+    meson
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_42
+    libxml2
+    ninja
   ];
+
+  mesonFlags = [
+    (if enableSystemd then "-Dsystemd=true" else "-Dsystem=false")
+    "-Dpackaging_backend=nix"
+    "-Ddbus_sys=${placeholder "out"}/share/dbus-1/system.d"
+    "-Ddbus_services=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "-Dcron=false"
+    "-Dgtk_doc=true"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ]
+  ++ lib.optional (!enableBashCompletion) "-Dbash_completion=false"
+  ++ lib.optional (!enableCommandNotFound) "-Dbash_command_not_found=false";
+
+  postPatch = ''
+    # HACK: we want packagekit to look in /etc for configs but install
+    # those files in $out/etc ; we just override the runtime paths here
+    # same for /var & $out/var
+    substituteInPlace etc/meson.build \
+      --replace "install_dir: join_paths(get_option('sysconfdir'), 'PackageKit')" "install_dir: join_paths('$out', 'etc', 'PackageKit')"
+    substituteInPlace data/meson.build \
+      --replace "install_dir: join_paths(get_option('localstatedir'), 'lib', 'PackageKit')," "install_dir: join_paths('$out', 'var', 'lib', 'PackageKit'),"
+  '';
 
   meta = with lib; {
     description = "System to facilitate installing and updating packages";

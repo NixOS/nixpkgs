@@ -105,7 +105,7 @@ let
       repo = "tree-sitter-latex";
     };
     "tree-sitter-lua" = {
-      orga = "nvim-treesitter";
+      orga = "MunifTanjim";
       repo = "tree-sitter-lua";
     };
     "tree-sitter-fennel" = {
@@ -304,7 +304,7 @@ let
       orga = "victorhqc";
       repo = "tree-sitter-prisma";
     };
-    "tree-sitter-org" = {
+    "tree-sitter-org-nvim" = {
       orga = "milisims";
       repo = "tree-sitter-org";
     };
@@ -376,7 +376,7 @@ let
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
       echo "rate limited" >&2
     fi
-    release=$(printf "%s" "$res" | ${jq}/bin/jq '.tag_name')
+    release="$(printf "%s" "$res" | ${jq}/bin/jq -r '.tag_name')"
     # github sometimes returns an empty list even tough there are releases
     if [ "$release" = "null" ]; then
       echo "uh-oh, latest for ${orga + "/" + repo} is not there, using HEAD" >&2

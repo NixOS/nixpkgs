@@ -19,11 +19,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-notifications";
   version = "6.0.0";
 
-  repoName = "notifications";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "notifications";
     rev = version;
     sha256 = "0jfppafbc8jwhhnillylicz4zfds789d8b31ifsx0qijlxa7kji9";
   };

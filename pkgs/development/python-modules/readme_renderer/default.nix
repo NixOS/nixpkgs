@@ -40,6 +40,11 @@ buildPythonPackage rec {
       --replace "cmarkgfm>=0.5.0,<0.7.0" "cmarkgfm>=0.5.0,<1"
   '';
 
+  disabledTests = [
+    # https://github.com/pypa/readme_renderer/issues/221
+    "test_GFM_"
+  ];
+
   pythonImportsCheck = [
     "readme_renderer"
   ];

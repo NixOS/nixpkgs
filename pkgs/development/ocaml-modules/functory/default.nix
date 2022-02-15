@@ -13,8 +13,8 @@ let param =
 in
 
 stdenv.mkDerivation {
-
-  name = "ocaml${ocaml.version}-functory-${param.version}";
+  pname = "ocaml${ocaml.version}-functory";
+  inherit (param) version;
 
   src = fetchurl {
     url = "https://www.lri.fr/~filliatr/functory/download/functory-${param.version}.tar.gz";

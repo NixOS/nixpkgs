@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "headscale";
-  version = "0.12.2";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     rev = "v${version}";
-    sha256 = "sha256-PgSjxDmPahGd2o3QBfvytMva+LHWeLPm500DsNdB77Q=";
+    sha256 = "sha256-BSKJkNKQP7xDNN10c/lvv83ivAGXhPg1k3A8F58kp/0=";
   };
 
-  vendorSha256 = "sha256-gD4jGaR4KQiYL6+yA8g2u6cTEbfySTMErNqerw76Ook=";
+  vendorSha256 = "sha256-hqiG1m/rMGcCmtNagGZ4y34eu1MyVwqkul70aYiTZsk=";
 
   ldflags = [ "-s" "-w" "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}" ];
 
@@ -44,6 +44,6 @@ buildGoModule rec {
       Headscale implements this coordination server.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nkje jk ];
+    maintainers = with maintainers; [ nkje jk kradalby ];
   };
 }

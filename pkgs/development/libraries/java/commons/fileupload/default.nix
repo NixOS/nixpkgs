@@ -1,17 +1,17 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "1.3.1";
+  version = "1.4";
   pname = "commons-fileupload";
 
   src = fetchurl {
     url    = "mirror://apache/commons/fileupload/binaries/${pname}-${version}-bin.tar.gz";
-    sha256 = "1jy7w2j2ay56mpq4ij3331cf9zgpkm832ydr63svb35j0ymnky72";
+    sha256 = "1avfv4gljp7flra767yzas54vfb6az9s1nhxfjv48jj2x0llxxkx";
   };
   installPhase = ''
     tar xf ${src}
     mkdir -p $out/share/java
-    cp lib/*.jar $out/share/java/
+    cp commons-fileupload-*-bin/*.jar $out/share/java/
   '';
 
   meta = {

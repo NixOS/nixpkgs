@@ -12,16 +12,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "electrs";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-37KTcLFVzuXlLpz9INXbasUdzuY+T34ef8EtfczQ+D8=";
+    hash = "sha256-6TR9OeIAVVbwDrshb9zHTS39x6taNWYK0UyRLbkW+g0=";
   };
 
-  cargoHash = "sha256-aOSCpvejMUfSZCDwShqMPEc3vXw9ri2QvTaCuHODTwA=";
+  cargoHash = "sha256-taOrbtx74DICvPLrwym70X3pv7EBA/H22VZmlxefANM=";
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ llvmPackages.clang ];

@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rivercarro";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromSourcehut {
     owner = "~novakane";
     repo = pname;
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "0h1wvl6rlrpr67zl51x71hy7nwkfd5kfv5p2mql6w5fybxxyqnpm";
+    sha256 = "07md837ki0yln464w8vgwyl3yjrvkz1p8alxlmwqfn4w45nqhw77";
   };
 
   nativeBuildInputs = [

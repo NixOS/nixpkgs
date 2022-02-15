@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libelf setupHook pcre
+  ] ++ optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
     libselinux
@@ -143,6 +144,9 @@ stdenv.mkDerivation rec {
     patchShebangs glib/gen-unicode-tables.pl
     patchShebangs tests/gen-casefold-txt.py
     patchShebangs tests/gen-casemap-txt.py
+  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
+    substituteInPlace gio/win32/meson.build \
+      --replace "libintl, " ""
   '';
 
   DETERMINISTIC_BUILD = 1;
@@ -198,7 +202,10 @@ stdenv.mkDerivation rec {
     getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
 
     inherit flattenInclude;
-    updateScript = gnome.updateScript { packageName = "glib"; };
+    updateScript = gnome.updateScript {
+      packageName = "glib";
+      versionPolicy = "odd-unstable";
+    };
   };
 
   meta = with lib; {

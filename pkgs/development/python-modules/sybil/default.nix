@@ -7,14 +7,14 @@
 
 buildPythonApplication rec {
   pname = "sybil";
-  version = "2.0.1";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "597d71e246690b9223c132f0ed7dcac470dcbe9ad022004a801e108a00dc3524";
+    sha256 = "sha256-dpLtZueT5eea5qcM8s+GGRftSOr/DYrfgl5k2Fgg8lE=";
   };
 
   checkInputs = [
@@ -22,9 +22,9 @@ buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # Will be fixed with 3.0.0, https://github.com/simplistix/sybil/pull/27
-    "test_future_imports"
-    "test_pytest"
+    # sensitive to output of other commands
+    "test_namespace"
+    "test_unittest"
   ];
 
   pythonImportsCheck = [

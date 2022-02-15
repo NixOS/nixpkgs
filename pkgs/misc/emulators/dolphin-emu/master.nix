@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-15445";
+  version = "5.0-15993";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "db02b50d2ecdfbbc21e19aadc57253c353069f77";
-    sha256 = "l2vbTZOcjfyZjKOI3n5ig2f7cDYR22GcqKS479LMtP8=";
+    rev = "5e595616379a694789fe749e40a27ef069f0090e";
+    sha256 = "1kid8qjn8r7dxh2yc1y6yal6qkfxij0ymi3zryxsnym3rjh1jds9";
     fetchSubmodules = true;
   };
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     homepage = "https://dolphin-emu.org";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MP2E ashkitten ];
+    maintainers = with maintainers; [ MP2E ashkitten xfix ];
     branch = "master";
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.

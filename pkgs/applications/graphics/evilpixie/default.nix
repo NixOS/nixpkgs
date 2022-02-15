@@ -49,9 +49,9 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "Pixel-oriented paint program, modelled on Deluxe Paint";
-    homepage = "http://evilpixie.scumways.com/";
+    homepage = "https://github.com/bcampbell/evilpixie"; # http://evilpixie.scumways.com/ is gone
     downloadPage = "https://github.com/bcampbell/evilpixie/releases";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };

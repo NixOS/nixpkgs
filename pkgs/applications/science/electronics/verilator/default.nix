@@ -1,24 +1,30 @@
-{ lib, stdenv, fetchurl
-, perl, flex, bison, python3
+{ lib, stdenv, fetchFromGitHub
+, perl, flex, bison, python3, autoconf
 }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "4.210";
+  version = "4.218";
 
-  src = fetchurl {
-    url = "https://www.veripool.org/ftp/${pname}-${version}.tgz";
-    sha256 = "sha256-KoIfJeV2aITnwiB2eQgQo4ZyXfMe6erFiGKXezR+IBg=";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-FukC60z7Y3bb3I/dgzqCh6kFP6DDBOGi0M8IIZ50P3g=";
   };
 
   enableParallelBuilding = true;
   buildInputs = [ perl ];
-  nativeBuildInputs = [ flex bison python3 ];
+  nativeBuildInputs = [ flex bison python3 autoconf ];
 
   # these tests need some interpreter paths patched early on...
   # see https://github.com/NixOS/nix/issues/1205
   doCheck = false;
   checkTarget = "test";
+
+  preConfigure = ''
+    autoconf
+  '';
 
   postPatch = ''
     patchShebangs \

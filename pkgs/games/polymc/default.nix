@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, makeDesktopItem
 , fetchFromGitHub
 , cmake
 , jdk8
@@ -17,20 +16,18 @@
 
 mkDerivation rec {
   pname = "polymc";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "PolyMC";
     repo = "PolyMC";
     rev = version;
-    sha256 = "sha256-8aya0KfV9F+i2qBpweWcR9hwyTSQkqn2wHdtkCEeNvk=";
+    sha256 = "sha256-KgLWbZxtxTpuFdMOJNyADYw9rMWoLgczrbSrH4qv6NI=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake file makeWrapper ];
   buildInputs = [ qtbase jdk8 zlib ];
-
-  patches = [ ./0001-pick-latest-java-first.patch ];
 
   postPatch = ''
     # hardcode jdk paths
@@ -41,19 +38,6 @@ mkDerivation rec {
 
   cmakeFlags = [ "-DLauncher_LAYOUT=lin-system" ] ++
                lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "polymc";
-      desktopName = "PolyMC";
-      genericName = "Minecraft Launcher";
-      comment = "Free, open source launcher and instance manager for Minecraft.";
-      icon = "launcher";
-      exec = "polymc";
-      categories = "Game";
-      terminal = "false";
-    })
-  ];
 
   dontWrapQtApps = true;
 
@@ -68,8 +52,6 @@ mkDerivation rec {
       libGL
     ];
   in ''
-    install -Dm644 ../launcher/resources/multimc/scalable/launcher.svg $out/share/pixmaps/polymc.svg
-
     # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
     wrapProgram $out/bin/polymc \
       "''${qtWrapperArgs[@]}" \

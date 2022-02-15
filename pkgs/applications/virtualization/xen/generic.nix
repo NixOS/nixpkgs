@@ -254,5 +254,9 @@ stdenv.mkDerivation (rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ eelco tstrobel oxij ];
     license = lib.licenses.gpl2;
+    # https://xenbits.xen.org/docs/unstable/support-matrix.html
+    knownVulnerabilities = lib.optionals (lib.versionOlder version "4.13") [
+      "This version of Xen has reached its end of life. See https://xenbits.xen.org/docs/unstable/support-matrix.html"
+    ];
   } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])

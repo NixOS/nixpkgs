@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-VNOoYYnHsSgiSbVxlBwYUq0JsLa4BwZQSvMVSiyB6rg=";
   };
 
-  vendorSha256 = "sha256-7q5nwkj4TP7VgHmV9YBbCB11yTPL7tK4gD+uN4Vw3Cs";
+  vendorSha256 = "sha256-7q5nwkj4TP7VgHmV9YBbCB11yTPL7tK4gD+uN4Vw3Cs=";
 
   postInstall = ''
     mkdir -p $out/share/doc/$name

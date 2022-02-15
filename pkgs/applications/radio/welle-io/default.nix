@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "welle-io";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "AlbrechtL";
     repo = "welle.io";
     rev = "v${version}";
-    sha256 = "1xl1lanw0xgmgks67dbfb2h52jxnrd1i2zik56v0q8dwsr7f0daw";
+    sha256 = "sha256-xXiCL/A2SwCSr5SA4AQQEdieRzBksXx9Z78bHtlFiW4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -5,7 +5,7 @@ when developing or debugging a test:
 
 ```ShellSession
 $ nix-build . -A nixosTests.login.driverInteractive
-$ ./result/bin/nixos-test-driver --interactive
+$ ./result/bin/nixos-test-driver
 [...]
 >>>
 ```
@@ -28,7 +28,7 @@ You can re-use the VM states coming from a previous run by setting the
 `--keep-vm-state` flag.
 
 ```ShellSession
-$ ./result/bin/nixos-test-driver --interactive --keep-vm-state
+$ ./result/bin/nixos-test-driver --keep-vm-state
 ```
 
 The machine state is stored in the `$TMPDIR/vm-state-machinename`

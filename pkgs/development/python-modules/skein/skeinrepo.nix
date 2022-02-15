@@ -1,9 +1,9 @@
 { autoPatchelfHook, lib, maven, stdenv, src, version }:
 
 stdenv.mkDerivation rec {
-  name = "skein-${version}-maven-repo";
+  pname = "skein-maven-repo";
 
-  inherit src;
+  inherit version src;
 
   nativeBuildInputs = [ maven ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 

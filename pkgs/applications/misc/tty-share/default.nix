@@ -3,13 +3,13 @@
 # Upstream has a `./vendor` directory with all deps which we rely upon.
 buildGoPackage rec {
   pname = "tty-share";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "elisescu";
     repo = "tty-share";
     rev = "v${version}";
-    sha256 = "sha256-+bdQ7KyGEdJJAopzGnDOcLvFNyiKqpagPR1EoU1VR5E=";
+    sha256 = "sha256-aAqKfi0ZX0UB07yGY6x0HcMspvq4rcJXKHSONxAwMlc=";
   };
 
   goPackagePath = "github.com/elisescu/tty-share";

@@ -1,22 +1,22 @@
 { lib
-, buildGo117Module
+, buildGoModule
 , fetchFromGitHub
 , fq
 , testVersion
 }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "fq";
-  version = "0.0.3";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "fq";
     rev = "v${version}";
-    sha256 = "sha256-yC2Hd7sUPA7SCJNWYlD1u3u9kfTEtkFwdUrNeYoi5xU=";
+    sha256 = "sha256-mnb/9zcFSeBasGPYSGWoBhnldljGW3VK070zTO8M/uk=";
   };
 
-  vendorSha256 = "sha256-89rSpxhP35wreo+0AqM+rDICCPchF+yFVvrTtZ2Xwr4=";
+  vendorSha256 = "sha256-KPIO/ZuiwxlnjGLaEuClkDsJnx/fwW0jPDBc7aTT68A=";
 
   ldflags = [
     "-s"

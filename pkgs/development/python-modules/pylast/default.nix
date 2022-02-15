@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "4.4.0";
+  version = "4.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2m6+pQYBmvVxlBw1yLSAKr3kZ5WS1S0TZ1ZQ3ER+bCk=";
+    sha256 = "sha256-YoALculx2trEDD1vU4xhiCGdb1OFPdxI1p2fwlZZAY8=";
   };
 
   nativeBuildInputs = [

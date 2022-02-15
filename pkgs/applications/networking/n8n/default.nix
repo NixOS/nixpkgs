@@ -12,6 +12,8 @@ nodePackages.n8n.override {
     node-pre-gyp
   ];
 
+  passthru.updateScript = ./generate-dependencies.sh;
+
   meta = with lib; {
     description = "Free and open fair-code licensed node based Workflow Automation Tool";
     maintainers = with maintainers; [ freezeboy k900 ];

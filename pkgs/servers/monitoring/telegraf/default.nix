@@ -1,6 +1,6 @@
-{ lib, buildGo117Module, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "telegraf";
   version = "1.20.4";
 

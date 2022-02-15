@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ocaml findlib ];
+  # build fails otherwise
+  enableParallelBuilding = false;
 
   configureFlags = "--libdir=$(OCAMLFIND_DESTDIR)";
 

@@ -8,9 +8,6 @@ rec {
   };
 
   base = minimal.override {
-    pngSupport = true;
-    jpegSupport = true;
-    tiffSupport = true;
     gettextSupport = true;
     fontconfigSupport = true;
     alsaSupport = true;
@@ -25,7 +22,6 @@ rec {
     pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
     udevSupport = true;
     xineramaSupport = true;
-    xmlSupport = true;
     sdlSupport = true;
     mingwSupport = true;
   };
@@ -33,8 +29,6 @@ rec {
   full = base.override {
     gtkSupport = true;
     gstreamerSupport = true;
-    colorManagementSupport = true;
-    mpg123Support = true;
     openalSupport = true;
     openclSupport = true;
     odbcSupport = true;
@@ -42,10 +36,8 @@ rec {
     vaSupport = true;
     pcapSupport = true;
     v4lSupport = true;
-    gsmSupport = true;
     gphoto2Support = true;
     ldapSupport = true;
-    faudioSupport = true;
     vkd3dSupport = true;
     embedInstallers = true;
   };

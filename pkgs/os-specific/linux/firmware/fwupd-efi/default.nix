@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fwupd-efi";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/${pname}-${version}.tar.xz";
-    sha256 = "1w879qxlnsaz5xyp168a08f2p8yrgfpkfycls28jw8qxmz6g20aw";
+    sha256 = "sha256-aRx38RwhAQSNjauvY8bQ/iLPrQ5dQyIEHJurzrr86z8=";
   };
 
   nativeBuildInputs = [

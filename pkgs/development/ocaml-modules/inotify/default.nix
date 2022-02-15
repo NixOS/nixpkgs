@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.3";
-  name = "ocaml${ocaml.version}-inotify-${version}";
+  pname = "ocaml${ocaml.version}-inotify";
 
   src = fetchFromGitHub {
     owner = "whitequark";

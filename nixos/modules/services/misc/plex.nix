@@ -6,6 +6,10 @@ let
   cfg = config.services.plex;
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "plex" "managePlugins" ] "Please omit or define the option: `services.plex.extraPlugins' instead.")
+  ];
+
   options = {
     services.plex = {
       enable = mkEnableOption "Plex Media Server";
@@ -42,16 +46,6 @@ in
         '';
       };
 
-      managePlugins = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          If set to true, this option will cause all of the symlinks in Plex's
-          plugin directory to be removed and symlinks for paths specified in
-          <option>extraPlugins</option> to be added.
-        '';
-      };
-
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -59,9 +53,7 @@ in
           A list of paths to extra plugin bundles to install in Plex's plugin
           directory. Every time the systemd unit for Plex starts up, all of the
           symlinks in Plex's plugin directory will be cleared and this module
-          will symlink all of the paths specified here to that directory. If
-          this behavior is undesired, set <option>managePlugins</option> to
-          false.
+          will symlink all of the paths specified here to that directory.
         '';
       };
 

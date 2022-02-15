@@ -297,6 +297,7 @@ class Machine:
     the machine lifecycle with the help of a start script / command."""
 
     name: str
+    out_dir: Path
     tmp_dir: Path
     shared_dir: Path
     state_dir: Path
@@ -325,6 +326,7 @@ class Machine:
 
     def __init__(
         self,
+        out_dir: Path,
         tmp_dir: Path,
         start_command: StartCommand,
         name: str = "machine",
@@ -332,6 +334,7 @@ class Machine:
         allow_reboot: bool = False,
         callbacks: Optional[List[Callable]] = None,
     ) -> None:
+        self.out_dir = out_dir
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
         self.allow_reboot = allow_reboot
@@ -540,11 +543,11 @@ class Machine:
 
         Should only be used during test development, not in the production test."""
         self.connect()
-        self.log("Terminal is ready (there is no prompt):")
+        self.log("Terminal is ready (there is no initial prompt):")
 
         assert self.shell
         subprocess.run(
-            ["socat", "READLINE", f"FD:{self.shell.fileno()}"],
+            ["socat", "READLINE,prompt=$ ", f"FD:{self.shell.fileno()}"],
             pass_fds=[self.shell.fileno()],
         )
 
@@ -702,10 +705,9 @@ class Machine:
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
-        out_dir = os.environ.get("out", os.getcwd())
         word_pattern = re.compile(r"^\w+$")
         if word_pattern.match(filename):
-            filename = os.path.join(out_dir, "{}.png".format(filename))
+            filename = os.path.join(self.out_dir, "{}.png".format(filename))
         tmp = "{}.ppm".format(filename)
 
         with self.nested(
@@ -756,7 +758,6 @@ class Machine:
         all the VMs (using a temporary directory).
         """
         # Compute the source, target, and intermediate shared file names
-        out_dir = Path(os.environ.get("out", os.getcwd()))
         vm_src = Path(source)
         with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
             shared_temp = Path(shared_td)
@@ -766,7 +767,7 @@ class Machine:
             # Copy the file to the shared directory inside VM
             self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
             self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
-            abs_target = out_dir / target_dir / vm_src.name
+            abs_target = self.out_dir / target_dir / vm_src.name
             abs_target.parent.mkdir(exist_ok=True, parents=True)
             # Copy the file from the shared directory outside VM
             if intermediate.is_dir():

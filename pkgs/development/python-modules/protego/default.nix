@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "Protego";
-  version = "0.1.16";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a682771bc7b51b2ff41466460896c1a5a653f9a1e71639ef365a72e66d8734b4";
+    sha256 = "sha256-G5lgVhekLOB7BJ4LnW3D7l77mSTyb9EV6q+8j5o3Rw4=";
   };
   propagatedBuildInputs = [ six ];
 

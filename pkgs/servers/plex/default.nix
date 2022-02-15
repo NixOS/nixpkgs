@@ -65,6 +65,7 @@ buildFHSUserEnv {
       # First, remove all of the symlinks in the plugins directory.
       while IFS= read -r -d $'\0' f; do
         echo "Removing plugin symlink: $f"
+        rm "$f"
       done < <(find "$pluginDir" -type l -print0)
 
       echo "Symlinking plugins"
@@ -94,6 +95,7 @@ buildFHSUserEnv {
         echo "Removing old symlinks"
         while IFS= read -r -d $'\0' f; do
           echo "Removing scanner symlink: $f"
+          rm "$f"
         done < <(find "$scannerDir" -type l -print0)
 
         echo "Symlinking scanners"

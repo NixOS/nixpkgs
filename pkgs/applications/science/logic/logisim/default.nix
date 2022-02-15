@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.cburch.com/logisim/";
     description = "Educational tool for designing and simulating digital logic circuits";
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

@@ -67,10 +67,6 @@ indent_style = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
-[pkgs/build-support/upstream-updater/**]
-indent_style = unset
-trim_trailing_whitespace = unset
-
 [pkgs/development/compilers/elm/registry.dat]
 end_of_line = unset
 insert_final_newline = unset
@@ -83,11 +79,4 @@ trim_trailing_whitespace = unset
 trim_trailing_whitespace = unset
 
 [pkgs/tools/misc/timidity/timidity.cfg]
-trim_trailing_whitespace = unset
-
-[pkgs/tools/security/enpass/data.json]
-insert_final_newline = unset
-trim_trailing_whitespace = unset
-
-[pkgs/top-level/emscripten-packages.nix]
 trim_trailing_whitespace = unset

@@ -20,6 +20,7 @@
 , pythonOlder
 , rope
 , setuptools
+, stdenv
 , ujson
 , yapf
 , withAutopep8 ? true
@@ -73,14 +74,17 @@ buildPythonPackage rec {
     matplotlib
     numpy
     pandas
-    pyqt5
     pytestCheckHook
-  ];
+  ]
+  # pyqt5 is broken on aarch64-darwin
+  ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [ pyqt5 ];
 
   disabledTests = [
     # pytlint output changed
     "test_lint_free_pylint"
-  ] ++ lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config";
+  ] ++ lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config"
+  # pyqt5 is broken on aarch64-darwin
+  ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "test_pyqt_completion";
 
   disabledTestPaths = lib.optional (!withAutopep8) "test/plugins/test_autopep8_format.py"
     ++ lib.optional (!withRope) "test/plugins/test_completion.py"

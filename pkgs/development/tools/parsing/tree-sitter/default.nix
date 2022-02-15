@@ -58,7 +58,7 @@ let
     let
       change = name: grammar:
         callPackage ./grammar.nix { } {
-          language = name;
+          language = if grammar ? language then grammar.language else name;
           inherit version;
           source = fetchGrammar grammar;
           location = if grammar ? location then grammar.location else null;
@@ -67,6 +67,7 @@ let
       grammars = grammars' //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
+        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; };
     in

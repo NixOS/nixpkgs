@@ -118,7 +118,7 @@ let
       };
 
       azure-batch = overrideAzureMgmtPackage super.azure-batch "11.0.0" "zip"
-        "83d7a2b0be42ca456ac2b56fa3dc6ce704c130e888d37d924072c1d3718f32da";
+        "sha256-zl/bDsli7d/oXNgiBekXfLC720RSZXRuOLO7vx8W3HM=";
 
       azure-mgmt-apimanagement = overrideAzureMgmtPackage super.azure-mgmt-apimanagement "0.2.0" "zip"
         "0whx3s8ri9939r3pdvjf8iqcslas1xy6cnccidmp10r5ng0023vr";
@@ -466,7 +466,8 @@ let
           inherit version;
           sha256 = "sha256-109FuBMXRU2W6YL9HFDm+1yZrCIjcorqh2RDOjn1ZvE=";
         };
-        # sdist lacks tests
+
+        # sdist doesn't provide tests
         doCheck = false;
       });
 
@@ -499,6 +500,16 @@ let
           inherit (oldAttrs) pname;
           inherit version;
           sha256 = "7fcab17585c0236885eaef311c01a1e626d84c982aabcac81703afda3f89c81f";
+        };
+      });
+
+      argcomplete = super.argcomplete.overridePythonAttrs(oldAttrs: rec {
+        version = "1.8.0";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-SreailmO/AgRBGv3dnj4VkMnbokAzWT5xPEPEQ4QEb0=";
         };
       });
 

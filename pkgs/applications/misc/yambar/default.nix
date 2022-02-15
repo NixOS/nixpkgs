@@ -31,14 +31,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "yambar";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "yambar";
     rev = version;
-    sha256 = "sha256-NzJrlPOkzstMbw37yBTah/uFYezlPB/1hrxCiXduSmc=";
+    sha256 = "0d8n9hvmxj7759pfqssqcl9wvb986qsph8bnjsjm9bf97mflhy6d";
   };
 
   nativeBuildInputs = [

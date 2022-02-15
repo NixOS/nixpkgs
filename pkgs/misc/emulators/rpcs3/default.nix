@@ -8,26 +8,38 @@
 }:
 
 let
-  majorVersion = "0.0.19";
-  gitVersion = "12975-37383f421";
+  # Keep these separate so the update script can regex them
+  rpcs3GitVersion = "13222-8c2fd5095";
+  rpcs3Version = "0.0.20-13222-8c2fd5095";
+  rpcs3Revision = "8c2fd50957be3af05c04a9bb782dce8505fb6400";
+  rpcs3Sha256 = "1cf62vpqdc9i4masgv9zz24h7zdc7gcymx6n1hbh7wp5gg1dw4qi";
+
+  ittapi = fetchFromGitHub {
+    owner = "intel";
+    repo = "ittapi";
+    rev = "v3.18.12";
+    sha256 = "0c3g30rj1y8fbd2q4kwlpg1jdy02z4w5ryhj3yr9051pdnf4kndz";
+  };
 in
 gcc11Stdenv.mkDerivation {
   pname = "rpcs3";
-  version = "${majorVersion}-${gitVersion}";
+  version = rpcs3Version;
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    rev = "37383f4217e1c510a543e100d0ca495800b3361a";
+    rev = rpcs3Revision;
     fetchSubmodules = true;
-    sha256 = "1pm1r4j4cdcmr8xmslyv2n6iwcjldnr396by4r6lgf4mdlnwahhm";
+    sha256 = rpcs3Sha256;
   };
+
+  patches = [ ./0001-llvm-ExecutionEngine-IntelJITEvents-only-use-ITTAPI_.patch ];
 
   passthru.updateScript = ./update.sh;
 
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF
-    #define RPCS3_GIT_VERSION "${gitVersion}"
+    #define RPCS3_GIT_VERSION "${rpcs3GitVersion}"
     #define RPCS3_GIT_FULL_BRANCH "RPCS3/rpcs3/master"
     #define RPCS3_GIT_BRANCH "HEAD"
     #define RPCS3_GIT_VERSION_NO_UPDATE 1
@@ -45,6 +57,7 @@ gcc11Stdenv.mkDerivation {
     "-DUSE_SYSTEM_PUGIXML=ON"
     "-DUSE_SYSTEM_FLATBUFFERS=ON"
     "-DUSE_NATIVE_INSTRUCTIONS=OFF"
+    "-DITTAPI_SOURCE_DIR=${ittapi}"
   ];
 
   nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook ];

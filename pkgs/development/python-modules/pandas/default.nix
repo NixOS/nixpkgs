@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.3.4";
+  version = "1.3.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a2aa18d3f0b7d538e21932f637fbfe8518d085238b429e4790a35e1e44a96ffc";
+    sha256 = "1e4285f5de1012de20ca46b188ccf33521bff61ba5c5ebd78b4fb28e5416a9f1";
   };
 
   nativeBuildInputs = [ cython ];

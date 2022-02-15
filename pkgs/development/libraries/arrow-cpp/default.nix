@@ -22,6 +22,7 @@
 , libnsl
 , lz4
 , minio
+, ninja
 , nlohmann_json
 , openssl
 , perl
@@ -30,6 +31,7 @@
 , rapidjson
 , re2
 , snappy
+, sqlite
 , thrift
 , tzdata
 , utf8proc
@@ -54,26 +56,26 @@ let
   arrow-testing = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-testing";
-    rev = "1d8525e109a12a8c67c489eba48715a199609153";
-    hash = "sha256-tesDW/1yRyhZtpLbPvCVEsocs6KtstYofxB5GiSMEFM=";
+    rev = "634739c664433cec366b4b9a81d1e1044a8c5eda";
+    hash = "sha256-r1WVgJJsI7v485L6Qb+5i7kFO4Tvxyk1T0JBb4og6pg=";
   };
 
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "d4d485956a643c693b5549e1a62d52ca61c170f1";
-    hash = "sha256-GmOAS8gGhzDI0WzORMkWHRRUl/XBwmNen2d3VefZxxc=";
+    rev = "acd375eb86a81cd856476fca0f52ba6036a067ff";
+    hash = "sha256-z/kmi+4dBO/dsVkJA4NgUoxl0pXi8RWIGvI8MGu/gcc=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "6.0.1";
+  version = "7.0.0";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-N4az0t+VTQeLPmj5jS5a7Lqj+irM8HXXo6E8GHucUpQ=";
+    hash = "sha256-6PSbFJoV7O9OQPz6sbh8ETxrHuGGAFwWnlzfldMamd4=";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
@@ -85,8 +87,8 @@ stdenv.mkDerivation rec {
     # ./cpp/thirdparty/versions.txt
     owner = "microsoft";
     repo = "mimalloc";
-    rev = "v1.7.2";
-    hash = "sha256-yHupYFgC8mJuLUSpuEAfwF7l6Ue4EiuO1Q4qN4T6wWc=";
+    rev = "v1.7.3";
+    hash = "sha256-Ca877VitpWyKmZNHavqgewk/P+tyd2xHDNVqveKh87M=";
   };
 
   ARROW_XSIMD_URL = fetchFromGitHub {
@@ -103,6 +105,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
     autoconf # for vendored jemalloc
     flatbuffers
   ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
@@ -156,6 +159,10 @@ stdenv.mkDerivation rec {
     "-DARROW_COMPUTE=ON"
     "-DARROW_CSV=ON"
     "-DARROW_DATASET=ON"
+    "-DARROW_ENGINE=ON"
+    "-DARROW_FILESYSTEM=ON"
+    "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_IPC=ON"
     "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
     "-DARROW_JSON=ON"
     "-DARROW_PLASMA=ON"
@@ -201,13 +208,10 @@ stdenv.mkDerivation rec {
         "TestMinioServer.Connect"
         "TestS3FS.*"
         "TestS3FSGeneric.*"
-      ] ++ lib.optionals enableGcs [
-        "GcsFileSystem.FileSystemCompare"
-        "GcsIntegrationTest.*"
       ];
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
-  installCheckInputs = [ perl which ] ++ lib.optional enableS3 minio;
+  installCheckInputs = [ perl which sqlite ] ++ lib.optional enableS3 minio;
   installCheckPhase =
     let
       excludedTests = lib.optionals stdenv.isDarwin [
@@ -215,7 +219,7 @@ stdenv.mkDerivation rec {
         # path on Darwin. See https://github.com/NixOS/nix/pull/1085
         "plasma-external-store-tests"
         "plasma-client-tests"
-      ];
+      ] ++ [ "arrow-gcsfs-test" ];
     in
     ''
       runHook preInstallCheck

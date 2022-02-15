@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "imlib2";
-  version = "1.7.3";
+  version = "1.7.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-FY0LjCC8ESIa+ed6ZKEW/KcFGwPN6ixPMdMfRpOC+Zc=";
+    url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.xz";
+    hash = "sha256-RY2DAKp6bUzjU1GDi7pdn9+wiES9WxU8WTjs/kP/Ngo=";
   };
 
   buildInputs = [
@@ -28,21 +28,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    substituteInPlace imlib2-config.in \
-      --replace "@my_libs@" ""
-  '';
-
   # Do not build amd64 assembly code on Darwin, because it fails to compile
   # with unknow directive errors
   configureFlags = optional stdenv.isDarwin "--enable-amd64=no"
     ++ optional (!x11Support) "--without-x";
 
   outputs = [ "bin" "out" "dev" ];
-
-  postInstall = ''
-    moveToOutput bin/imlib2-config "$dev"
-  '';
 
   meta = with lib; {
     description = "Image manipulation library";
@@ -56,7 +47,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://docs.enlightenment.org/api/imlib2/html";
-    license = licenses.mit;
+    changelog = "https://git.enlightenment.org/legacy/imlib2.git/plain/ChangeLog?h=v${version}";
+    license = licenses.imlib2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ spwhitt ];
   };

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.1";
-  name = "ocaml${ocaml.version}-num-${version}";
+  pname = "ocaml${ocaml.version}-num";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "num";

@@ -37,6 +37,7 @@ let
     libjpeg
     libpng
     mpfr
+    ncurses
     openssl
     pango
     poppler
@@ -48,7 +49,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.3"; # always change at once with ./minimal.nix
+  version = "8.4"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "sha256-M90MIIRsfF/fhK8twlD3ZRBO0ztQkb4VKp9o8eJUFFc=";
+    sha256 = "sha256-uJ+vL+FtBNILkFbwi7qZ6yBA1Rcr7o886zmZ/tFuatM=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -69,8 +70,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cacert wrapGAppsHook ];
 
-  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ncurses ];
+  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ncurses ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
 
   patches = [
     # Hardcode variant detection because we wrap the Racket binary making it

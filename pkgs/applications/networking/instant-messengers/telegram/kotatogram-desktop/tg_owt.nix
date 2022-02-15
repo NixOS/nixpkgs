@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, ninja, yasm
-, libjpeg, openssl, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
+, libjpeg, openssl, libopus, ffmpeg_4, alsa-lib, libpulseaudio, protobuf
 , xorg, libXtst
 }:
 
@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
   buildInputs = [
-    libjpeg openssl libopus ffmpeg alsa-lib libpulseaudio protobuf
+    libjpeg openssl libopus ffmpeg_4 alsa-lib libpulseaudio protobuf
     xorg.libX11 libXtst
   ];
 

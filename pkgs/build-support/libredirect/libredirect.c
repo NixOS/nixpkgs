@@ -84,6 +84,13 @@ static const char * rewrite(const char * path, char * buf)
     return path;
 }
 
+static char * rewrite_non_const(char * path, char * buf)
+{
+    // as long as the argument `path` is non-const, we can consider discarding
+    // the const qualifier of the return value to be safe.
+    return (char *)rewrite(path, buf);
+}
+
 static int open_needs_mode(int flags)
 {
 #ifdef O_TMPFILE
@@ -354,3 +361,117 @@ WRAPPER(int, mkdirat)(int dirfd, const char *path, mode_t mode)
     return mkdirat_real(dirfd, rewrite(path, buf), mode);
 }
 WRAPPER_DEF(mkdirat)
+
+WRAPPER(int, unlink)(const char *path)
+{
+    int (*unlink_real) (const char *path) = LOOKUP_REAL(unlink);
+    char buf[PATH_MAX];
+    return unlink_real(rewrite(path, buf));
+}
+WRAPPER_DEF(unlink)
+
+WRAPPER(int, unlinkat)(int dirfd, const char *path, int flags)
+{
+    int (*unlinkat_real) (int dirfd, const char *path, int flags) = LOOKUP_REAL(unlinkat);
+    char buf[PATH_MAX];
+    return unlinkat_real(dirfd, rewrite(path, buf), flags);
+}
+WRAPPER_DEF(unlinkat)
+
+WRAPPER(int, rmdir)(const char *path)
+{
+    int (*rmdir_real) (const char *path) = LOOKUP_REAL(rmdir);
+    char buf[PATH_MAX];
+    return rmdir_real(rewrite(path, buf));
+}
+WRAPPER_DEF(rmdir)
+
+static void copy_temp_wildcard(char * dest, char * src, int suffixlen) {
+    int dest_len = strnlen(dest, PATH_MAX);
+    int src_len = strnlen(src, PATH_MAX);
+    memcpy(dest + dest_len - (6 + suffixlen), src + src_len - (6 + suffixlen), 6);
+}
+
+WRAPPER(int, mkstemp)(char *template)
+{
+    int (*mkstemp_real) (char *template) = LOOKUP_REAL(mkstemp);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    int retval = mkstemp_real(rewritten);
+    if (retval >= 0 && rewritten != template) {
+        copy_temp_wildcard(template, rewritten, 0);
+    }
+    return retval;
+}
+WRAPPER_DEF(mkstemp)
+
+WRAPPER(int, mkostemp)(char *template, int flags)
+{
+    int (*mkostemp_real) (char *template, int flags) = LOOKUP_REAL(mkostemp);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    int retval = mkostemp_real(rewritten, flags);
+    if (retval >= 0 && rewritten != template) {
+        copy_temp_wildcard(template, rewritten, 0);
+    }
+    return retval;
+}
+WRAPPER_DEF(mkostemp)
+
+WRAPPER(int, mkstemps)(char *template, int suffixlen)
+{
+    int (*mkstemps_real) (char *template, int suffixlen) = LOOKUP_REAL(mkstemps);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    int retval = mkstemps_real(rewritten, suffixlen);
+    if (retval >= 0 && rewritten != template) {
+        copy_temp_wildcard(template, rewritten, suffixlen);
+    }
+    return retval;
+}
+WRAPPER_DEF(mkstemps)
+
+WRAPPER(int, mkostemps)(char *template, int suffixlen, int flags)
+{
+    int (*mkostemps_real) (char *template, int suffixlen, int flags) = LOOKUP_REAL(mkostemps);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    int retval = mkostemps_real(rewritten, suffixlen, flags);
+    if (retval >= 0 && rewritten != template) {
+        copy_temp_wildcard(template, rewritten, suffixlen);
+    }
+    return retval;
+}
+WRAPPER_DEF(mkostemps)
+
+WRAPPER(char *, mkdtemp)(char *template)
+{
+    char * (*mkdtemp_real) (char *template) = LOOKUP_REAL(mkdtemp);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    char * retval = mkdtemp_real(rewritten);
+    if (retval == NULL) {
+        return retval;
+    };
+    if (rewritten != template) {
+        copy_temp_wildcard(template, rewritten, 0);
+    }
+    return template;
+}
+WRAPPER_DEF(mkdtemp)
+
+WRAPPER(char *, mktemp)(char *template)
+{
+    char * (*mktemp_real) (char *template) = LOOKUP_REAL(mktemp);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    char * retval = mktemp_real(rewritten);
+    if (retval == NULL) {
+        return retval;
+    };
+    if (rewritten != template) {
+        copy_temp_wildcard(template, rewritten, 0);
+    }
+    return template;
+}
+WRAPPER_DEF(mktemp)

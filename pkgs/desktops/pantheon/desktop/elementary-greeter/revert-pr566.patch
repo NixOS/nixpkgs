@@ -1,0 +1,103 @@
+From 572a73cbc84dd9a0f5a7667a60c75ed5580d84a1 Mon Sep 17 00:00:00 2001
+From: Bobby Rong <rjl931189261@126.com>
+Date: Tue, 25 Jan 2022 10:03:31 +0800
+Subject: [PATCH] Revert "UserCard: use accent color for logged_in check
+ (#566)"
+
+This reverts commit 6f18c79c780582e43039032f6926816efa82e206.
+---
+ data/Check.css             | 11 -----------
+ data/greeter.gresource.xml |  1 -
+ src/Cards/UserCard.vala    | 29 +++--------------------------
+ 3 files changed, 3 insertions(+), 38 deletions(-)
+ delete mode 100644 data/Check.css
+
+diff --git a/data/Check.css b/data/Check.css
+deleted file mode 100644
+index 947db6b..0000000
+--- a/data/Check.css
++++ /dev/null
+@@ -1,11 +0,0 @@
+-check {
+-    background-color: @accent_color;
+-    border-radius: 99px;
+-    color: white;
+-    margin: 2px;
+-    min-height: 20px;
+-    min-width: 20px;
+-    -gtk-icon-shadow: 0 1px 1px shade(@accent_color, 0.7);
+-    -gtk-icon-source: -gtk-icontheme("check-active-symbolic");
+-    -gtk-icon-transform: scale(0.6);
+-}
+diff --git a/data/greeter.gresource.xml b/data/greeter.gresource.xml
+index 604c89a..ce9be29 100644
+--- a/data/greeter.gresource.xml
++++ b/data/greeter.gresource.xml
+@@ -2,7 +2,6 @@
+ <gresources>
+   <gresource prefix="/io/elementary/greeter">
+     <file alias="Card.css" compressed="true">Card.css</file>
+-    <file alias="Check.css" compressed="true">Check.css</file>
+     <file alias="DateTime.css" compressed="true">DateTime.css</file>
+     <file alias="MainWindow.css" compressed="true">MainWindow.css</file>
+   </gresource>
+diff --git a/src/Cards/UserCard.vala b/src/Cards/UserCard.vala
+index 83df22c..02d2b0a 100644
+--- a/src/Cards/UserCard.vala
++++ b/src/Cards/UserCard.vala
+@@ -42,7 +42,6 @@ public class Greeter.UserCard : Greeter.BaseCard {
+     private Gtk.Stack login_stack;
+     private Greeter.PasswordEntry password_entry;
+ 
+-    private unowned Gtk.StyleContext logged_in_context;
+     private weak Gtk.StyleContext main_grid_style_context;
+     private weak Gtk.StyleContext password_entry_context;
+ 
+@@ -214,14 +213,10 @@ public class Greeter.UserCard : Greeter.BaseCard {
+         };
+         avatar_overlay.add (avatar);
+ 
+-        var logged_in = new SelectionCheck () {
+-            halign = Gtk.Align.END,
+-            valign = Gtk.Align.END
+-        };
+-
+-        logged_in_context = logged_in.get_style_context ();
+-
+         if (lightdm_user.logged_in) {
++            var logged_in = new Gtk.Image.from_icon_name ("selection-checked", Gtk.IconSize.LARGE_TOOLBAR);
++            logged_in.halign = logged_in.valign = Gtk.Align.END;
++
+             avatar_overlay.add_overlay (logged_in);
+ 
+             session_button.sensitive = false;
+@@ -304,7 +299,6 @@ public class Greeter.UserCard : Greeter.BaseCard {
+         gtksettings.gtk_theme_name = "io.elementary.stylesheet." + accent_to_string (prefers_accent_color);
+ 
+         var style_provider = Gtk.CssProvider.get_named (gtksettings.gtk_theme_name, null);
+-        logged_in_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+         password_entry_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+     }
+ 
+@@ -451,21 +445,4 @@ public class Greeter.UserCard : Greeter.BaseCard {
+             return GLib.Source.REMOVE;
+         });
+     }
+-
+-    private class SelectionCheck : Gtk.Spinner {
+-        private static Gtk.CssProvider check_provider;
+-
+-        class construct {
+-            set_css_name (Gtk.STYLE_CLASS_CHECK);
+-        }
+-
+-        static construct {
+-            check_provider = new Gtk.CssProvider ();
+-            check_provider.load_from_resource ("/io/elementary/greeter/Check.css");
+-        }
+-
+-        construct {
+-            get_style_context ().add_provider (check_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+-        }
+-    }
+ }

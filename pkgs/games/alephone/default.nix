@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libGLU, libmad, libogg
+{ lib, stdenv, fetchurl, boost, curl, ffmpeg_4, icoutils, libGLU, libmad, libogg
 , libpng, libsndfile, libvorbis, lua, pkg-config, SDL2, SDL2_image, SDL2_net
 , SDL2_ttf, smpeg, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip
 , alephone }:
@@ -20,7 +20,7 @@ let
     buildInputs = [
       boost
       curl
-      ffmpeg
+      ffmpeg_4
       libGLU
       libmad
       libsndfile

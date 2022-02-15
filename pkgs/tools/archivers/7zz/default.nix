@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchurl, p7zip }:
+{ stdenv, lib, fetchurl, p7zip, uasm, useUasm ? stdenv.isx86_64 }:
 
+let
+  inherit (stdenv.hostPlatform) system;
+  platformSuffix =
+    if useUasm then
+      {
+        x86_64-linux = "_x64";
+      }.${system} or (throw "`useUasm` is not supported for system ${system}")
+    else "";
+in
 stdenv.mkDerivation rec {
   pname = "7zz";
   version = "21.07";
@@ -11,19 +20,18 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "CPP/7zip/Bundles/Alone2";
 
-  # we need https://github.com/nidud/asmc/tree/master/source/asmc/linux in order
-  # to build with the optimized assembler but that doesn't support building with
-  # GCC: https://github.com/nidud/asmc/issues/8
-  makefile = "../../cmpl_gcc.mak"; # "../../cmpl_gcc_x64.mak";
+  makeFlags = lib.optionals useUasm [ "MY_ASM=uasm" ];
 
-  nativeBuildInputs = [ p7zip ];
+  makefile = "../../cmpl_gcc${platformSuffix}.mak";
+
+  nativeBuildInputs = [ p7zip ] ++ lib.optionals useUasm [ uasm ];
 
   enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin b/g/7zz
+    install -Dm555 -t $out/bin b/g${platformSuffix}/7zz
     install -Dm444 -t $out/share/doc/${pname} ../../../../DOC/*.txt
 
     runHook postInstall
@@ -37,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command line archiver utility";
-    homepage = "https://7zip.org";
+    homepage = "https://7-zip.org";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ anna328p peterhoeg ];
     platforms = platforms.linux;

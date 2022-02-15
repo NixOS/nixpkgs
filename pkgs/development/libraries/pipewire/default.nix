@@ -27,7 +27,6 @@
 , ncurses
 , readline81 # meson can't find <7 as those versions don't have a .pc file
 , lilv
-, openssl
 , makeFontsConf
 , callPackage
 , nixosTests
@@ -55,8 +54,13 @@
 , libpulseaudio
 , zeroconfSupport ? true
 , avahi
+, raopSupport ? true
+, openssl
 , rocSupport ? true
 , roc-toolkit
+, x11Support ? true
+, libcanberra
+, xorg
 }:
 
 let
@@ -65,7 +69,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.43";
+    version = "0.3.45";
 
     outputs = [
       "out"
@@ -83,7 +87,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-vjMA9dQvZe7dPbF9BNtCYf1V240RUBdtxeyqFjWA4j4=";
+      sha256 = "sha256-OnQd98qfOekAsVXLbciZLNPrM84KBX6fOx/f8y2BYI0=";
     };
 
     patches = [
@@ -120,7 +124,6 @@ let
       libsndfile
       lilv
       ncurses
-      openssl
       readline81
       udev
       vulkan-headers
@@ -134,7 +137,9 @@ let
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi
-    ++ lib.optional rocSupport roc-toolkit;
+    ++ lib.optional raopSupport openssl
+    ++ lib.optional rocSupport roc-toolkit
+    ++ lib.optionals x11Support [ libcanberra xorg.libxcb ];
 
     # Valgrind binary is required for running one optional test.
     checkInputs = lib.optional withValgrind valgrind;
@@ -160,8 +165,10 @@ let
       "-Dbluez5-backend-hsphfpd=${mesonEnableFeature hsphfpdSupport}"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
+      "-Draop=${mesonEnableFeature raopSupport}"
       "-Dsession-managers="
       "-Dvulkan=enabled"
+      "-Dx11=${mesonEnableFeature x11Support}"
     ];
 
     # Fontconfig error: Cannot load default config file
@@ -191,6 +198,8 @@ let
       moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "bin/pipewire-pulse" "$pulse"
+
+      moveToOutput "bin/pw-jack" "$jack"
     '';
 
     passthru = {

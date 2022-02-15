@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "4.192.0";
+  version = "4.192.1";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "19i7p9z8mmki5yq26059dp9055cccgxs0vfdlx0w1qak7pmv1vpm";
+    sha256 = "13z2f0vwf9fgfzqgkqzvqwa8c8nkymrg5hv7xslfx53dacjfidhy";
   };
 
   nativeBuildInputs = [

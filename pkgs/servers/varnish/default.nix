@@ -48,12 +48,12 @@ let
 in
 {
   varnish60 = common {
-    version = "6.0.9";
-    sha256 = "1g0pwyckc0xh6ag6wj082x9wn4q6p6krjgc16fkw1arl71c18wsh";
+    version = "6.0.10";
+    sha256 = "1sr60wg5mzjb14y75cga836f19sbmmpgh13mwc4alyg3irsbz1bb";
   };
   varnish70 = (common {
-    version = "7.0.1";
-    sha256 = "0q265fzarz5530g8lasvfpgks8z1kq1yh7rn88bn2qfly3pmpry4";
+    version = "7.0.2";
+    sha256 = "0q9z1iilqwbh5flfy9pl18kxv0yjs5z91c4j81z5pgyjd9d4jjjj";
   }).overrideAttrs (oA: {
     patches = [
       (fetchpatch {

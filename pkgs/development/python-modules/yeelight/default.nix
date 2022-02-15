@@ -9,14 +9,16 @@
 
 buildPythonPackage rec {
   pname = "yeelight";
-  version = "0.7.8";
-  disabled = pythonOlder "3.4";
+  version = "0.7.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "stavros";
     repo = "python-yeelight";
     rev = "v${version}";
-    sha256 = "sha256-fKtG0D256bK1hIcQiLdzCM+IdD/mmcFpcoE3DEFt7r0=";
+    sha256 = "sha256-8N+HOhUX3BXecS/kaAfLoge+NYzKLKPyoTthu+useJA=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +30,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "yeelight/tests.py" ];
+  pytestFlagsArray = [
+    "yeelight/tests.py"
+  ];
 
-  pythonImportsCheck = [ "yeelight" ];
+  pythonImportsCheck = [
+    "yeelight"
+  ];
 
   meta = with lib; {
     description = "Python library for controlling YeeLight RGB bulbs";

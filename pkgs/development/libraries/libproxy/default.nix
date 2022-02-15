@@ -5,8 +5,8 @@
 , zlib
 , dbus
 , networkmanager
-, enableJavaScript ? stdenv.isDarwin || lib.meta.availableOn stdenv.hostPlatform spidermonkey_68
-, spidermonkey_68
+, enableJavaScript ? stdenv.isDarwin || lib.meta.availableOn stdenv.hostPlatform spidermonkey_78
+, spidermonkey_78
 , pcre
 , gsettings-desktop-schemas
 , glib
@@ -17,9 +17,7 @@
 , JavaScriptCore
 }:
 
-let
-  jsRuntime = if stdenv.hostPlatform.isDarwin then JavaScriptCore else spidermonkey_68;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libproxy";
   version = "0.4.17";
 
@@ -43,7 +41,7 @@ in stdenv.mkDerivation rec {
     python3
     zlib
   ] ++ lib.optionals enableJavaScript [
-    jsRuntime
+    (if stdenv.hostPlatform.isDarwin then JavaScriptCore else spidermonkey_78)
   ] ++ (if stdenv.hostPlatform.isDarwin then [
     SystemConfiguration
     CoreFoundation

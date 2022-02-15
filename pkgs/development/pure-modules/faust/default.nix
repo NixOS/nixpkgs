@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, faust, libtool }:
 
 stdenv.mkDerivation rec {
-  baseName = "faust";
+  pname = "pure-faust";
   version = "0.11";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-faust-${version}.tar.gz";
     sha256 = "51278a3b0807c4770163dc2ce423507dcf0ffec9cd1c1fbc08426d07294f6ae0";
   };
 

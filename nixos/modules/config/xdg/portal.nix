@@ -1,4 +1,4 @@
-{ config, pkgs ,lib ,... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -13,13 +13,13 @@ with lib;
 
   options.xdg.portal = {
     enable =
-      mkEnableOption "<link xlink:href='https://github.com/flatpak/xdg-desktop-portal'>xdg desktop integration</link>"//{
+      mkEnableOption "<link xlink:href='https://github.com/flatpak/xdg-desktop-portal'>xdg desktop integration</link>" // {
         default = false;
       };
 
     extraPortals = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = ''
         List of additional portals to add to path. Portals allow interaction
         with system, like choosing files or taking screenshots. At minimum,
@@ -46,25 +46,36 @@ with lib;
     let
       cfg = config.xdg.portal;
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
-      joinedPortals = pkgs.symlinkJoin {
+      joinedPortals = pkgs.buildEnv {
         name = "xdg-portals";
-        paths = cfg.extraPortals;
+        paths = packages;
+        pathsToLink = [ "/share/xdg-desktop-portal/portals" "/share/applications" ];
       };
 
-    in mkIf cfg.enable {
+    in
+    mkIf cfg.enable {
 
       assertions = [
-        { assertion = (cfg.gtkUsePortal -> cfg.extraPortals != []);
-          message = "Setting xdg.portal.gtkUsePortal to true requires a portal implementation in xdg.portal.extraPortals such as xdg-desktop-portal-gtk or xdg-desktop-portal-kde.";
+        {
+          assertion = cfg.extraPortals != [ ];
+          message = "Setting xdg.portal.enable to true requires a portal implementation in xdg.portal.extraPortals such as xdg-desktop-portal-gtk or xdg-desktop-portal-kde.";
         }
       ];
 
-      services.dbus.packages  = packages;
+      services.dbus.packages = packages;
       systemd.packages = packages;
 
-      environment.sessionVariables = {
-        GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
-        XDG_DESKTOP_PORTAL_DIR = "${joinedPortals}/share/xdg-desktop-portal/portals";
+      environment = {
+        # fixes screen sharing on plasmawayland on non-chromium apps by linking
+        # share/applications/*.desktop files
+        # see https://github.com/NixOS/nixpkgs/issues/145174
+        systemPackages = [ joinedPortals ];
+        pathsToLink = [ "/share/applications" ];
+
+        sessionVariables = {
+          GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
+          XDG_DESKTOP_PORTAL_DIR = "${joinedPortals}/share/xdg-desktop-portal/portals";
+        };
       };
     };
 }

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "textfsm";
-  version = "1.1.2";
+  version = "1.1.3";
   format = "setuptools";
 
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cbczg3h2841v1xk2s2xg540c69vsrkwxljm758fyr65kshrzlhm";
+    sha256 = "sha256-IHgKG8v0X+LSK6purWBdwDnI/BCs5XA12ZJixuqqXWg=";
   };
 
   propagatedBuildInputs = [
