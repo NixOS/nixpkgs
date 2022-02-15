@@ -162,6 +162,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
+          a very simple server for the Gemini hypertext protocol.
+          Available as
+          <link xlink:href="options.html#opt-services.agate.enable">services.agate</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm">ArchiSteamFarm</link>,
           a C# application with primary purpose of idling Steam cards
           from multiple accounts simultaneously. Available as
