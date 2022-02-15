@@ -180,6 +180,8 @@ rec {
       fribidi
       p11-kit
 
+      gmp
+
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
