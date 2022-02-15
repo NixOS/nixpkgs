@@ -48,6 +48,11 @@ self: super: {
   });
 
   # Jailbreaks & Version Updates
+
+  # This `doJailbreak` can be removed once the following PR is released to Hackage:
+  # https://github.com/thsutton/aeson-diff/pull/58
+  aeson-diff = doJailbreak super.aeson-diff;
+
   async = doJailbreak super.async;
   data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
