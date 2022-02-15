@@ -7110,6 +7110,12 @@
     githubId = 30698906;
     name = "Luna D Dragon";
   };
+  LunNova = {
+    email = "nixpkgs-maintainer@lunnova.dev";
+    github = "LunNova";
+    githubId = 782440;
+    name = "Luna Nova";
+  };
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
