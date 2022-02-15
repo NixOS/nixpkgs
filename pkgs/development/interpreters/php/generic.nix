@@ -320,6 +320,11 @@ let
             inherit ztsSupport;
           };
 
+          # Temporary build step to debug an issue
+          postBuild = ''
+            make test TESTS='--show-diff tests/blacklist.phpt'
+          '';
+
           meta = with lib; {
             description = "An HTML-embedded scripting language";
             homepage = "https://www.php.net/";
