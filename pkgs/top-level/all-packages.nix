@@ -5542,8 +5542,6 @@ with pkgs;
 
   fpm = callPackage ../tools/package-management/fpm { };
 
-  fprot = callPackage ../tools/security/fprot { };
-
   fprintd = callPackage ../tools/security/fprintd { };
 
   fprintd-tod = callPackage ../tools/security/fprintd/tod.nix { };
