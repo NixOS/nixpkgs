@@ -1,8 +1,12 @@
 { stdenv
+, lib
 , nix
 , perlPackages
 , buildEnv
+, fetchFromGitHub
+, fetchpatch
 , makeWrapper
+, nixosTests
 , autoconf
 , automake
 , cacert
@@ -38,25 +42,13 @@
 , dpkg
 , cdrkit
 , pixz
-, lib
 , boost
 , autoreconfHook
-, src ? null
-, version ? null
-, migration ? false
-, patches ? [ ]
-, tests ? { }
 , mdbook
 , foreman
 , python3
 , libressl
 }:
-
-with stdenv;
-
-if lib.versions.major nix.version == "1"
-then throw "This Hydra version doesn't support Nix 1.x"
-else
 
   let
     perlDeps = buildEnv {
@@ -134,7 +126,14 @@ else
   stdenv.mkDerivation rec {
     pname = "hydra";
 
-    inherit stdenv src version patches;
+    version = "2022-02-07";
+
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "hydra";
+      rev = "517dce285a851efd732affc084c7083aed2e98cd";
+      sha256 = "sha256-abWhd/VLNse3Gz7gcVbFANJLAhHV4nbOKjhVDmq/Zmg=";
+    };
 
     buildInputs = [
       makeWrapper
@@ -228,7 +227,17 @@ else
 
     doCheck = true;
 
-    passthru = { inherit perlDeps migration tests; };
+    passthru = {
+      inherit perlDeps;
+      tests.basic = nixosTests.hydra.hydra-unstable;
+    };
+
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/NixOS/hydra/commit/5ae26aa7604f714dcc73edcb74fe71ddc8957f6c.patch";
+        sha256 = "sha256-wkbWo8SFbT3qwVxwkKQWpQT5Jgb1Bb51yiLTlFdDN/I=";
+      })
+    ];
 
     meta = with lib; {
       description = "Nix-based continuous build system";
