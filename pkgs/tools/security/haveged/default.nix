@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
       the barriers to using haveged for other tasks.
     '';
     homepage = "https://github.com/jirka-h/haveged";
-    license = licenses.gpl3;
+    changelog = "https://raw.githubusercontent.com/jirka-h/haveged/v${version}/ChangeLog";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };
