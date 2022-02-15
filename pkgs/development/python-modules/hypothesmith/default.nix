@@ -18,6 +18,10 @@ buildPythonPackage rec {
 
   checkInputs = [ black parso pytestCheckHook pytest-cov pytest-xdist ];
 
+  pytestFlagsArray = [
+    "--numprocesses $NIX_BUILD_CORES"
+  ];
+
   pythonImportsCheck = [ "hypothesmith" ];
 
   meta = with lib; {
