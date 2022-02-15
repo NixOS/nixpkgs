@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "12.10.1";
 
   src = fetchurl {
-    url = "${meta.homepage}/${lib.versions.majorMinor version}/${version}/+download/libindicator-${version}.tar.gz";
+    url = "https://launchpad.net/libindicator/${lib.versions.majorMinor version}/${version}/+download/libindicator-${version}.tar.gz";
     sha256 = "b2d2e44c10313d5c9cd60db455d520f80b36dc39562df079a3f29495e8f9447f";
   };
 
