@@ -4,7 +4,7 @@
 , ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk, nettools
 , imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
 , libpsl, redis, postgresql, which, brotli, procps, rsync, icu
-, nodePackages, nodejs-16_x
+, nodePackages, nodejs-16_x, oxipng
 
 , plugins ? []
 }@args:
@@ -166,7 +166,12 @@ let
       redis
       nodePackages.uglify-js
       nodePackages.terser
+      oxipng
     ];
+
+    # Without this set we get this error message:
+    # > Error running ember build
+    EMBER_CLI_PROD_ASSETS = 0;
 
     patches = [
       # Use the Ruby API version in the plugin gem path, to match the
@@ -309,7 +314,7 @@ let
     };
 
     passthru = {
-      inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin;
+      inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin assets;
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
