@@ -1,4 +1,10 @@
-{ lib, fetchurl, appimageTools, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
+{ lib
+, fetchurl
+, appimageTools
+, wrapGAppsHook
+, gsettings-desktop-schemas
+, gtk3
+}:
 
 let
   pname = "lens";
