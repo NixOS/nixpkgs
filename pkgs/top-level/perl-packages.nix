@@ -6564,6 +6564,21 @@ let
     buildInputs = [ DBDSQLite TestFatal TestRoo ];
   };
 
+  DevelCamelcadedb = buildPerlPackage {
+    pname = "Devel-Camelcadedb";
+    version = "2021.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HU/HURRICUP/Devel-Camelcadedb-v2021.2.tar.gz";
+      sha256 = "88a1d9e95d398ffe4d4114861e21c36f7c22315b3d03e7f764ccbce018ab3e47";
+    };
+    propagatedBuildInputs = [ HashStoredIterator JSONXS PadWalker ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "Perl side of the Perl debugger for IntelliJ IDEA and other JetBrains IDEs";
+      license = lib.licenses.mit;
+    };
+  };
+
   DevelCycle = buildPerlPackage {
     pname = "Devel-Cycle";
     version = "1.12";
