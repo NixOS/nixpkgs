@@ -65,7 +65,7 @@ let
       X86_INTEL_PSTATE                 = yes;
       INTEL_IDLE                       = yes;
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
-      CPU_FREQ_GOV_SCHEDUTIL           = whenAtLeast "4.9" yes;
+      CPU_FREQ_GOV_SCHEDUTIL           = yes;
       PM_WAKELOCKS                     = yes;
       # Power-capping framework and support for INTEL RAPL
       POWERCAP                         = yes;
@@ -148,12 +148,12 @@ let
       IPV6_MROUTE                 = yes;
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2               = yes;
-      IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
+      IPV6_FOU_TUNNEL             = module;
       IPV6_SEG6_LWTUNNEL          = whenAtLeast "4.10" yes;
       IPV6_SEG6_HMAC              = whenAtLeast "4.10" yes;
       IPV6_SEG6_BPF               = whenAtLeast "4.18" yes;
-      NET_CLS_BPF                 = whenAtLeast "4.4" module;
-      NET_ACT_BPF                 = whenAtLeast "4.4" module;
+      NET_CLS_BPF                 = module;
+      NET_ACT_BPF                 = module;
       NET_SCHED                   = yes;
       L2TP_V3                     = yes;
       L2TP_IP                     = module;
@@ -168,7 +168,7 @@ let
       PPP_FILTER    = yes;
 
       # needed for iwd WPS support (wpa_supplicant replacement)
-      KEY_DH_OPERATIONS = whenAtLeast "4.7" yes;
+      KEY_DH_OPERATIONS = yes;
 
       # needed for nftables
       # Networking Options
@@ -208,7 +208,7 @@ let
       INET_TCP_DIAG     = mkDefault module;
       INET_UDP_DIAG     = mkDefault module;
       INET_RAW_DIAG     = whenAtLeast "4.14" (mkDefault module);
-      INET_DIAG_DESTROY = whenAtLeast "4.9" (mkDefault yes);
+      INET_DIAG_DESTROY = mkDefault yes;
 
       # enable multipath-tcp
       MPTCP           = whenAtLeast "5.6" yes;
@@ -264,14 +264,12 @@ let
       DRM_GMA600             = whenOlder "5.13" yes;
       DRM_GMA3600            = whenOlder "5.12" yes;
       DRM_VMWGFX_FBCON       = yes;
-      # necessary for amdgpu polaris support
-      DRM_AMD_POWERPLAY = whenBetween "4.5" "4.9" yes;
       # (experimental) amdgpu support for verde and newer chipsets
-      DRM_AMDGPU_SI = whenAtLeast "4.9" yes;
+      DRM_AMDGPU_SI = yes;
       # (stable) amdgpu support for bonaire and newer chipsets
-      DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
+      DRM_AMDGPU_CIK = yes;
       # Allow device firmware updates
-      DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
+      DRM_DP_AUX_CHARDEV = yes;
       # amdgpu display core (DC) support
       DRM_AMD_DC_DCN1_0 = whenBetween "4.15" "5.6" yes;
       DRM_AMD_DC_PRE_VEGA = whenBetween "4.15" "4.18" yes;
@@ -378,7 +376,7 @@ let
 
       EXT4_FS_POSIX_ACL = yes;
       EXT4_FS_SECURITY  = yes;
-      EXT4_ENCRYPTION   = { optional = true; tristate = if (versionOlder version "4.8") then "m" else "y"; };
+      EXT4_ENCRYPTION   = { optional = true; tristate = "y"; };
 
       REISERFS_FS_XATTR     = option yes;
       REISERFS_FS_POSIX_ACL = option yes;
@@ -403,7 +401,6 @@ let
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_PNFS              = whenBetween "4.0" "4.6" yes;
       NFSD_V2_ACL            = yes;
       NFSD_V3                = yes;
       NFSD_V3_ACL            = yes;
@@ -460,7 +457,7 @@ let
       DEBUG_SET_MODULE_RONX            = { optional = true; tristate = whenOlder "4.11" "y"; };
       RANDOMIZE_BASE                   = option yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
-      IO_STRICT_DEVMEM                 = whenAtLeast "4.5" (mkDefault yes);
+      IO_STRICT_DEVMEM                 = mkDefault yes;
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
@@ -515,7 +512,6 @@ let
       MEMCG                    = yes;
       MEMCG_SWAP               = yes;
 
-      DEVPTS_MULTIPLE_INSTANCES = whenOlder "4.7" yes;
       BLK_DEV_THROTTLING        = yes;
       CFQ_GROUP_IOSCHED         = whenOlder "5.0" yes; # Removed in 5.0-RC1
       CGROUP_PIDS               = whenAtLeast "4.3" yes;
@@ -543,9 +539,9 @@ let
       STACK_TRACER          = yes;
       UPROBE_EVENT          = { optional = true; tristate = whenOlder "4.11" "y";};
       UPROBE_EVENTS         = { optional = true; tristate = whenAtLeast "4.11" "y";};
-      BPF_SYSCALL           = whenAtLeast "4.4" yes;
+      BPF_SYSCALL           = yes;
       BPF_UNPRIV_DEFAULT_OFF = whenBetween "5.10" "5.15" yes;
-      BPF_EVENTS            = whenAtLeast "4.4" yes;
+      BPF_EVENTS            = yes;
       FUNCTION_PROFILER     = yes;
       RING_BUFFER_BENCHMARK = no;
     };
@@ -556,7 +552,6 @@ let
       HYPERVISOR_GUEST = yes;
       PARAVIRT_SPINLOCKS  = option yes;
 
-      KVM_APIC_ARCHITECTURE             = whenOlder "4.8" yes;
       KVM_ASYNC_PF                      = yes;
       KVM_COMPAT = { optional = true; tristate = whenBetween "4.0" "4.12" "y"; };
       KVM_DEVICE_ASSIGNMENT  = { optional = true; tristate = whenBetween "3.10" "4.12" "y"; };
@@ -762,7 +757,6 @@ let
       AIC79XX_DEBUG_ENABLE = no;
       AIC7XXX_DEBUG_ENABLE = no;
       AIC94XX_DEBUG = no;
-      B43_PCMCIA = { optional=true; tristate = whenOlder "4.4" "y";};
 
       BLK_DEV_INTEGRITY       = yes;
 
@@ -820,14 +814,12 @@ let
       MEDIA_ATTACH          = yes;
       MEGARAID_NEWGEN       = yes;
 
-      MLX4_EN_VXLAN = whenOlder "4.8" yes;
       MLX5_CORE_EN       = option yes;
 
       NVME_MULTIPATH = whenAtLeast "4.15" yes;
 
       PSI = whenAtLeast "4.20" yes;
 
-      MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_ELAN_I2C_SMBUS = yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
       MOUSE_PS2_VMMOUSE  = yes;
