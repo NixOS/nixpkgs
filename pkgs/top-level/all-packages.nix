@@ -1332,7 +1332,7 @@ with pkgs;
 
   ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
 
-  archivebox = python3Packages.callPackage ../applications/misc/archivebox { };
+  archivebox = callPackage ../applications/misc/archivebox { };
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
