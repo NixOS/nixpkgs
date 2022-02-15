@@ -49,12 +49,12 @@
 , versionAttr ? {
   major = "3.10";
   minor = "1";
-  patch = "0";
+  patch = "1";
 }
 }:
 
 let
-  sourceSha256 = "sha256-bU6z7H08G8QIToogAMI2P5tHBtVZezlBDqSbnEsqAjE=";
+  sourceSha256 = "sha256-vsAK+GQzcpA9Vsa6q4RFEzVpbF7/+yZkMsemKn6VhIg=";
   featuresInfo = {
     # Needed always
     basic = {
