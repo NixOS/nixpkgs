@@ -760,6 +760,8 @@ in {
 
   aurorapy = callPackage ../development/python-modules/aurorapy { };
 
+  autarco = callPackage ../development/python-modules/autarco { };
+
   auth0-python = callPackage ../development/python-modules/auth0-python { };
 
   authcaptureproxy = callPackage ../development/python-modules/authcaptureproxy { };
