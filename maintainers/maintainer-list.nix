@@ -8910,9 +8910,9 @@
     githubId = 2946283;
     name = "Brian Cohen";
   };
-  novoxudonoser = {
+  novoxd = {
     email = "radnovox@gmail.com";
-    github = "novoxudonoser";
+    github = "novoxd";
     githubId = 6052922;
     name = "Kirill Struokov";
   };
