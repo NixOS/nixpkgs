@@ -10077,6 +10077,8 @@ in {
 
   typer = callPackage ../development/python-modules/typer { };
 
+  types-dateutil = callPackage ../development/python-modules/types-dateutil { };
+
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
   types-freezegun = callPackage ../development/python-modules/types-freezegun { };

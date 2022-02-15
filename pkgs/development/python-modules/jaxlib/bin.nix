@@ -13,11 +13,20 @@
 #   * https://github.com/google/jax/issues/971#issuecomment-508216439
 #   * https://github.com/google/jax/issues/5723#issuecomment-913038780
 
-{ addOpenGLRunpath, autoPatchelfHook, buildPythonPackage, config
-, fetchurl, isPy39, lib, stdenv
-# propagatedBuildInputs
-, absl-py, flatbuffers, scipy, cudatoolkit_11, cudnn
-# Options:
+{ absl-py
+, addOpenGLRunpath
+, autoPatchelfHook
+, buildPythonPackage
+, config
+, cudatoolkit_11
+, cudnn
+, fetchurl
+, flatbuffers
+, isPy39
+, lib
+, scipy
+, stdenv
+  # Options:
 , cudaSupport ? config.cudaSupport or false
 }:
 
@@ -32,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jaxlib";
-  version = "0.1.75";
+  version = "0.3.0";
   format = "wheel";
 
   # At the time of writing (8/19/21), there are releases for 3.7-3.9. Supporting
@@ -44,7 +53,7 @@ buildPythonPackage rec {
   src = {
     cpu = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/nocuda/jaxlib-${version}-cp39-none-manylinux2010_x86_64.whl";
-      sha256 = "1davmx9dvai8dq3h5ac82634gjhv6l46kq6baajrxjqczbp0w7m6";
+      sha256 = "151p4vqli8x0iqgrzrr8piqk7d76a2xq2krf23jlb142iam5bw01";
     };
     gpu = fetchurl {
       # Note that there's also a release targeting cuDNN 8.2, but unfortunately
@@ -52,7 +61,7 @@ buildPythonPackage rec {
       # Check pkgs/development/libraries/science/math/cudnn/default.nix for more
       # details.
       url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn805-cp39-none-manylinux2010_x86_64.whl";
-      sha256 = "1mk618lq1q5x0dc3xbid8bim59l9j6l47xq232gdbn401ykrid7r";
+      sha256 = "0z15rdw3a8sq51rpjmfc41ix1q095aasl79rvlib85ir6f3wh2h8";
 
       # This is what the cuDNN 8.2 download looks like for future reference:
       # url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn82-cp39-none-manylinux2010_x86_64.whl";
@@ -95,8 +104,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "XLA library for JAX";
-    homepage    = "https://github.com/google/jax";
-    license     = licenses.asl20;
+    homepage = "https://github.com/google/jax";
+    license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
     platforms = [ "x86_64-linux" ];
   };

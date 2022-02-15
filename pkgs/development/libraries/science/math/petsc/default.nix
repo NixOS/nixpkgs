@@ -18,11 +18,11 @@ assert petsc-withp4est -> p4est.mpiSupport;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.16.2";
+  version = "3.16.4";
 
   src = fetchurl {
     url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
-    sha256 = "sha256-erJXrhUNSDesjThyodIGmXliV4eF7CQnY5zqxG0TG7w=";
+    sha256 = "sha256-IpzOIr3P7bH+gn0wbtGvypc3eGzcPwVit0oZZsEkPK8=";
   };
 
   mpiSupport = !withp4est || p4est.mpiSupport;
