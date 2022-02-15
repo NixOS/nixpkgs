@@ -1,29 +1,37 @@
-{ stdenv, kubernetes, installShellFiles }:
+{ lib, stdenv, kubernetes }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "kubectl";
-  version = kubernetes.version;
 
-  # kubectl is currently part of the main distribution but will eventially be
-  # split out (see homepage)
-  dontUnpack = true;
-
-  nativeBuildInputs = [ installShellFiles ];
+  inherit (kubernetes)
+    disallowedReferences
+    GOFLAGS
+    nativeBuildInputs
+    postBuild
+    postPatch
+    src
+    version
+    ;
 
   outputs = [ "out" "man" ];
 
-  installPhase = ''
-    install -D ${kubernetes}/bin/kubectl -t $out/bin
+  WHAT = "cmd/kubectl";
 
-    installManPage "${kubernetes.man}/share/man/man1"/kubectl*
+  installPhase = ''
+    runHook preInstall
+    install -D _output/local/go/bin/kubectl -t $out/bin
+
+    installManPage docs/man/man1/kubectl*
 
     installShellCompletion --cmd kubectl \
       --bash <($out/bin/kubectl completion bash) \
       --zsh <($out/bin/kubectl completion zsh)
+    runHook postInstall
   '';
 
   meta = kubernetes.meta // {
     description = "Kubernetes CLI";
     homepage = "https://github.com/kubernetes/kubectl";
+    platforms = lib.platforms.unix;
   };
 }
