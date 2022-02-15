@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tela-icon-theme";
-  version = "2021-12-25";
+  version = "2022-01-25";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qlt9jv3lCPVFBeN4aQd4r9NE0YAxWQavMoo13cvhv6E=";
+    sha256 = "sha256-XKNSCWwanm2dP002TY/mE4SDX13TllHrbrb55V4wLSQ=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
