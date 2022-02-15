@@ -4350,6 +4350,8 @@ with pkgs;
     inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
   };
 
+  artim-dark = callPackage ../data/themes/artim-dark {};
+
   bore = callPackage ../tools/networking/bore {
     inherit (darwin) Libsystem;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
