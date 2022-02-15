@@ -2839,6 +2839,8 @@ in {
 
   finalfusion = callPackage ../development/python-modules/finalfusion { };
 
+  findimports = callPackage ../development/python-modules/findimports { };
+
   fingerprints = callPackage ../development/python-modules/fingerprints { };
 
   finitude = callPackage ../development/python-modules/finitude { };
