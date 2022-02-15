@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alejandra";
-  version = "unstable-2022-02-12";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "kamadorueda";
     repo = "alejandra";
-    rev = "bfda2490bcb6f7dab2d15f033f65441af283d48d";
-    hash = "sha256-D7dCtwwQcrSnC7MjoqB0ogCsCmrthqy+TqbqbJUT6zE=";
+    rev = version;
+    hash = "sha256-jj66PRqXASDNzdidkdfF2ezWM45Pw9Z+G4YNe8HRPhU=";
   };
 
-  cargoSha256 = "sha256-Gos0ku4wR0jP1FQLYBVMqZN4qW0Tx45qpIL99s6a+t8=";
+  cargoSha256 = "sha256-701lWa/2u10vCSRplL1ebYz29DxjpHY0SqjSWme1X1U=";
 
   meta = with lib; {
     description = "The Uncompromising Nix Code Formatter";

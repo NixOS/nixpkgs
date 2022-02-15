@@ -7,6 +7,7 @@
 , "@bitwarden/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
+, "@google/clasp"
 , "@hyperspace/cli"
 , "@medable/mdctl-cli"
 , "@nerdwallet/shepherd"

@@ -534,6 +534,11 @@ self: super: {
     dependencies = with self; [ nvim-treesitter plenary-nvim ];
   });
 
+  # needs  "http" and "json" treesitter grammars too
+  rest-nvim = super.rest-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   skim = buildVimPluginFrom2Nix {
     pname = "skim";
     version = skim.version;
