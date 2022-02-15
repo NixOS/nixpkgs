@@ -281,7 +281,10 @@ let
               fi
             '' + lib.optionalString stdenv.isDarwin ''
               substituteInPlace configure --replace "-lstdc++" "-lc++"
+            '' + ''
+              make test TESTS='--show-diff tests/blacklist.phpt'
             '';
+            # Temporary build step to debug an issue
 
           postInstall = ''
             test -d $out/etc || mkdir $out/etc
@@ -319,11 +322,6 @@ let
               php;
             inherit ztsSupport;
           };
-
-          # Temporary build step to debug an issue
-          checkPhase = ''
-            make test TESTS='--show-diff tests/blacklist.phpt'
-          '';
 
           meta = with lib; {
             description = "An HTML-embedded scripting language";
