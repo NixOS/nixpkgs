@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/richfelker/bakelite";
     description = "Incremental backup with strong cryptographic confidentality";
     license = licenses.gpl2;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ mvs ];
+    platforms = platforms.unix;
   };
 }
