@@ -18,7 +18,6 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome2
 , gtk3
 , libGL
 , libappindicator-gtk3
@@ -105,7 +104,6 @@ let
       freetype
       gdk-pixbuf
       glib
-      gnome2.GConf
       gtk3
       libGL
       libappindicator-gtk3
