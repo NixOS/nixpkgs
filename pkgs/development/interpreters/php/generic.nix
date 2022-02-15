@@ -258,6 +258,7 @@ let
             # Don't record the configure flags since this causes unnecessary
             # runtime dependencies
             ''
+              set -x
               for i in main/build-defs.h.in scripts/php-config.in; do
                 substituteInPlace $i \
                   --replace '@CONFIGURE_COMMAND@' '(omitted)' \
