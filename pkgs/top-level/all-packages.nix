@@ -8931,6 +8931,8 @@ with pkgs;
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
 
+  podman-tui = callPackage ../applications/virtualization/podman-tui { };
+
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
   poedit = callPackage ../tools/text/poedit {
