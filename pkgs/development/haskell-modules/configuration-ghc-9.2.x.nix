@@ -81,6 +81,11 @@ self: super: {
   extra = dontCheck super.extra;
 
   # Jailbreaks & Version Updates
+
+  # This `doJailbreak` can be removed once the following PR is released to Hackage:
+  # https://github.com/thsutton/aeson-diff/pull/58
+  aeson-diff = doJailbreak super.aeson-diff;
+
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
   attoparsec = super.attoparsec_0_14_4;
