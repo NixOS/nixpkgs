@@ -7359,6 +7359,8 @@ in {
 
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
 
+  pyqt5_sip = callPackage ../development/python-modules/pyqt/sip.nix { };
+
   pyqt5_with_qtmultimedia = self.pyqt5.override {
     withMultimedia = true;
   };
