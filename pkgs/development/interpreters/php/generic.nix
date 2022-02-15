@@ -321,7 +321,7 @@ let
           };
 
           # Temporary build step to debug an issue
-          postBuild = ''
+          checkPhase = ''
             make test TESTS='--show-diff tests/blacklist.phpt'
           '';
 
