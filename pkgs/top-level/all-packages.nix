@@ -260,6 +260,8 @@ with pkgs;
 
   cen64 = callPackage ../misc/emulators/cen64 { };
 
+  btdu = callPackage ../tools/misc/btdu { };
+
   uxn = callPackage ../misc/emulators/uxn { };
 
   cereal = callPackage ../development/libraries/cereal { };
@@ -7885,6 +7887,8 @@ with pkgs;
   modem-manager-gui = callPackage ../applications/networking/modem-manager-gui {};
 
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
+
+  modsecurity-crs = callPackage ../tools/security/modsecurity-crs { };
 
   molly-guard = callPackage ../os-specific/linux/molly-guard { };
 
@@ -24017,7 +24021,7 @@ with pkgs;
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
   starship = callPackage ../tools/misc/starship {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
   stig = callPackage ../applications/networking/p2p/stig { };
