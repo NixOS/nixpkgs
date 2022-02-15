@@ -18,8 +18,8 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "uniffi-rs";
-    rev = "01a9266cef151e57b2d1f98f0dbfd524fc2c72ea"; # no tag for this release yet
-    sha256 = "sha256-7/3J77xMdx8xhrlUSpBQyU5uOKH6q/AnYA8kqEMJxRQ=";
+    rev = "v${version}";
+    hash = "sha256-EGyJrW0U/dnKT7OWgd8LehCyvj6mxud3QWbBVyhoK4Y=";
   };
 
   cargoPatches = [ ./cargo-lock.patch ];
