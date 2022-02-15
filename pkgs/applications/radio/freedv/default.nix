@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     description = "Digital voice for HF radio";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ mvs ];
+    platforms = platforms.unix;
   };
 }
