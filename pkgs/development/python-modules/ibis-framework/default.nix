@@ -14,6 +14,7 @@
 , numpy
 , pandas
 , parsy
+, poetry-core
 , pyarrow
 , pytest
 , pytest-mock
@@ -49,7 +50,7 @@ in
 buildPythonPackage rec {
   pname = "ibis-framework";
   version = "2.1.1";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -59,6 +60,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "sha256-n3fR6wvcSfIo7760seB+5SxtoYSqQmqkzZ9VlNQF200=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     atpublic
@@ -78,6 +81,7 @@ buildPythonPackage rec {
     tables
     toolz
   ] ++ lib.optionals (pythonOlder "3.8") [
+    # TODO: remove when ibis 3.0.0 is released
     importlib-metadata
   ];
 
@@ -90,8 +94,13 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "atpublic>=2.3,<3" "atpublic>=2.3"
+    substituteInPlace pyproject.toml \
+      --replace 'atpublic = ">=2.3,<3"' 'atpublic = ">=2.3"'
+  '';
+
+  preBuild = ''
+    # setup.py exists only for developer convenience and is automatically generated
+    rm setup.py
   '';
 
   disabledTests = [
@@ -136,6 +145,7 @@ buildPythonPackage rec {
 
     wait
 
+    # TODO: remove when 3.0.0 is released
     export PYTEST_BACKENDS="${backendsString}"
   '';
 
