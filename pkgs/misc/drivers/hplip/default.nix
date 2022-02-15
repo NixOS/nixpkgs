@@ -83,6 +83,7 @@ python3Packages.buildPythonApplication {
     dbus-python
   ] ++ lib.optionals withQt5 [
     pyqt5
+    pyqt5_sip
     enum-compat
   ];
 
