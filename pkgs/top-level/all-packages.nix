@@ -10417,6 +10417,8 @@ with pkgs;
 
   srsran = callPackage ../applications/radio/srsran {  };
 
+  soundux = callPackage ../applications/audio/soundux { };
+
   sourcehut = callPackage ../applications/version-management/sourcehut { };
 
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
