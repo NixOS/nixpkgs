@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
+    badPlatforms = platforms.darwin; # fails to build since v1.9.15
   };
 }
