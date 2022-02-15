@@ -16734,16 +16734,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  libgit2_1_1 = libgit2.overrideAttrs (_: rec {
-    version = "1.1.1";
-    src = fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "v${version}";
-      sha256 = "sha256-SxceIxT0aeiiiZCeSIe6EOa+MyVpQVaiv/ZZn6fkwIc=";
-    };
-  });
-
   libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
 
   libhsts = callPackage ../development/libraries/libhsts { };
