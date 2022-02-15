@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, pulseaudio }:
+{ lib, buildGoModule, fetchFromGitHub, pkg-config, libpulseaudio }:
 
 buildGoModule rec {
   pname = "kappanhang";
@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pulseaudio ];
+  buildInputs = [ libpulseaudio ];
 
   vendorSha256 = "1srjngcis42wfskwfqxxj101y9xyzrans1smy53bh1c9zm856xha";
 
