@@ -5554,6 +5554,8 @@ in {
 
   numba = callPackage ../development/python-modules/numba { };
 
+  numba-scipy = callPackage ../development/python-modules/numba-scipy { };
+
   numcodecs = callPackage ../development/python-modules/numcodecs { };
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
