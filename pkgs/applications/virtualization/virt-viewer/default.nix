@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, bash-completion
 , fetchurl
 , gdbm ? null
 , glib
@@ -8,10 +9,14 @@
 , gtk3
 , intltool
 , libcap ? null
+, libgovirt
 , libvirt
 , libvirt-glib
 , libxml2
+, meson
+, ninja
 , pkg-config
+, python3
 , shared-mime-info
 , spice-gtk ? null
 , spice-protocol ? null
@@ -31,27 +36,32 @@ with lib;
 
 stdenv.mkDerivation rec {
   baseName = "virt-viewer";
-  version = "9.0";
+  version = "11.0";
   name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
-    sha256 = "09a83mzyn3b4nd7wpa659g1zf1fjbzb79rk968bz6k5xl21k7d4i";
+    url = "http://virt-manager.org/download/sources/${baseName}/${name}.tar.xz";
+    sha256 = "sha256-pD+iMlxMHHelyMmAZaww7wURohrJjlkPIjQIabrZq9A=";
   };
 
   nativeBuildInputs = [
     glib
     intltool
+    meson
+    ninja
     pkg-config
+    python3
     shared-mime-info
     wrapGAppsHook
   ];
 
   buildInputs = [
+    bash-completion
     glib
     gsettings-desktop-schemas
     gtk-vnc
     gtk3
+    libgovirt
     libvirt
     libvirt-glib
     libxml2
@@ -67,7 +77,10 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
 
   strictDeps = true;
-  enableParallelBuilding = true;
+
+  postPatch = ''
+    patchShebangs build-aux/post_install.py
+  '';
 
   meta = {
     description = "A viewer for remote virtual machines";
