@@ -5,7 +5,7 @@
 }:
 
 let
-  withSystemd = stdenv.isLinux && !(systemd == null);
+  withSystemd = stdenv.isLinux;
   withPpp     = stdenv.isLinux;
 
 in
