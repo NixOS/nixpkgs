@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.02r5";
-  pname = "llibhomfly";
+  pname = "libhomfly";
 
   src = fetchFromGitHub {
     owner = "miguelmarco";
