@@ -11,6 +11,8 @@
 buildPythonPackage rec {
   pname = "pyowm";
   version = "3.3.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -26,12 +28,18 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # Run only tests which don't require network access
-  pytestFlagsArray = [ "tests/unit" ];
+  pytestFlagsArray = [
+    "tests/unit"
+  ];
 
-  pythonImportsCheck = [ "pyowm" ];
+  pythonImportsCheck = [
+    "pyowm"
+  ];
 
   meta = with lib; {
     description = "Python wrapper around the OpenWeatherMap web API";
