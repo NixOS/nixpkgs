@@ -11,11 +11,10 @@ diff --git a/processui/scripting.cpp b/processui/scripting.cpp
 index efed8ff..841761a 100644
 --- a/processui/scripting.cpp
 +++ b/processui/scripting.cpp
-@@ -167,7 +167,7 @@ void Scripting::loadContextMenu() {
-     QStringList scripts;
+@@ -293,7 +293,7 @@ void Scripting::loadContextMenu()
      const QStringList dirs =
          QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("ksysguard/scripts/"), QStandardPaths::LocateDirectory);
-     Q_FOREACH (const QString &dir, dirs) {
+     for (const QString &dir : dirs) {
 -        QDirIterator it(dir, QStringList() << QStringLiteral("*.desktop"), QDir::NoFilter, QDirIterator::Subdirectories);
 +        QDirIterator it(dir, QStringList() << QStringLiteral("*.desktop"), QDir::NoFilter, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
          while (it.hasNext()) {
