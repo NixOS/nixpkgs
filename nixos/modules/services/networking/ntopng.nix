@@ -21,7 +21,7 @@ let
     else
     pkgs.writeText "ntopng.conf" ''
       ${concatStringsSep " " (map (e: "--interface=" + e) cfg.interfaces)}
-      --http-port=${toString cfg.http-port}
+      --http-port=${toString cfg.httpPort}
       --redis=${cfg.redis.address}
       --data-dir=/var/lib/ntopng
       --user=ntopng
@@ -31,6 +31,10 @@ let
 in
 
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "ntopng" "http-port" ] [ "services" "ntopng" "httpPort" ])
+  ];
 
   options = {
 
@@ -64,7 +68,7 @@ in
         '';
       };
 
-      http-port = mkOption {
+      httpPort = mkOption {
         default = 3000;
         type = types.int;
         description = ''
