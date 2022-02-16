@@ -22945,6 +22945,8 @@ with pkgs;
 
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
 
+  quick-lint-js = callPackage ../development/tools/quick-lint-js { };
+
   linux-firmware = callPackage ../os-specific/linux/firmware/linux-firmware { };
 
   qmk-udev-rules = callPackage ../os-specific/linux/qmk-udev-rules { };
@@ -23932,6 +23934,8 @@ with pkgs;
   pari-seadata-small = callPackage ../data/misc/pari-seadata-small {};
 
   penna = callPackage ../data/fonts/penna { };
+
+  pitch-black = callPackage ../data/themes/pitch-black {};
 
   plano-theme = callPackage ../data/themes/plano { };
 
