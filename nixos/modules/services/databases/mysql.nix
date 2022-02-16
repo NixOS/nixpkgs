@@ -305,6 +305,7 @@ in
       {
         datadir = cfg.dataDir;
         port = mkDefault 3306;
+        bind-address = mkDefault "localhost";
       }
       (mkIf (cfg.replication.role == "master" || cfg.replication.role == "slave") {
         log-bin = "mysql-bin-${toString cfg.replication.serverId}";
