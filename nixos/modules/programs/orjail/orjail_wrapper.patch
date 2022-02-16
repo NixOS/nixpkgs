@@ -1,0 +1,32 @@
+diff --git a/usr/sbin/orjail b/usr/sbin/orjail
+index ee0e58a..7167105 100755
+--- a/usr/sbin/orjail
++++ b/usr/sbin/orjail
+@@ -404,13 +404,10 @@ while [[ $# -gt 0 ]]; do
+   shift
+ done
+ 
+-if [[ $EUID -ne 0 ]]; then
+-   die "$DEFAULTNAME must be run as root."
+-fi
+-
+ TORBIN=$(command -v tor)
++tor
+ if ! [ -x "$TORBIN" ]; then
+-  die "Can't locate tor executable.";
++  die "Can't locate $TORBIN tor executable.";
+ fi
+ 
+ # No arguments, no party
+@@ -436,9 +433,9 @@ for cmd in ip iptables bc mkdir chown grep $FIREJAILBIN ${SUDOBIN:-su}; do
+ done
+ ! [ 0 = $err ] && exit $err
+ 
+-FIREJAILBIN=
++FIREJAILBIN=/run/wrappers/bin/firejail
+ if [ $USEFIREJAIL = y ]; then
+-  firejail_version=$(firejail --version | grep -io "9.[0-9]\\{2\\}")
++  firejail_version=$($FIREJAILBIN --version | grep -io "9.[0-9]\\{2\\}")
+   if [[ $(echo "$firejail_version>9.44" | bc) -eq 0 ]]; then
+ 	  die "orjail requires at least firejail 0.9.44.10 to run."
+   fi

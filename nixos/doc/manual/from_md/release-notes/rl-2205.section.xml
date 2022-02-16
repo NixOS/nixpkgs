@@ -389,6 +389,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://orjail.github.io/">orjail</link>,
+          wrapper for tunneling applications through the Tor online
+          anonymity network. Available as
+          <link xlink:href="options.html#opt-programs.orjail.enable">programs.orjail</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://nbd.sourceforge.io/">nbd</link>, a
           Network Block Device server. Available as
           <link xlink:href="options.html#opt-services.nbd.server.enable">services.nbd</link>.

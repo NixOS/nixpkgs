@@ -2,14 +2,21 @@
 , stdenv
 , fetchFromGitHub
 , tor
-, firejail
 , iptables
 , makeWrapper
+, ncurses
+, coreutils-full
+, iproute2
+, bc
+, gnugrep
+, sudo
+, procps
+, findutils
 }:
 
 stdenv.mkDerivation rec {
   pname = "orjail";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -32,17 +39,18 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    # Specify binary paths: tor, firejail, iptables
     # mktemp fails with /tmp path prefix, will work without it anyway
+    # This issue is already fixed upstream and will be solved in versions
+    # later than 1.1.
     # https://github.com/orjail/orjail/issues/78
-    # firejail will fail reading /etc/hosts, therefore remove --hostname arg
-    # https://github.com/netblue30/firejail/issues/2758
     substituteInPlace $out/bin/orjail \
-      --replace ''$'TORBIN=\n' ''$'TORBIN=${tor}/bin/tor\n' \
-      --replace ''$'FIREJAILBIN=\n' ''$'FIREJAILBIN=${firejail}/bin/firejail\n' \
-      --replace 'iptables -' '${iptables}/bin/iptables -' \
       --replace 'mktemp /tmp/' 'mktemp ' \
-      --replace '--hostname=host ' ""
+
+    wrapProgram $out/bin/orjail \
+      --prefix PATH : ${lib.makeBinPath [
+        ncurses coreutils-full tor iptables iproute2 gnugrep bc
+        sudo procps findutils
+      ]}
   '';
 
   meta = with lib; {
