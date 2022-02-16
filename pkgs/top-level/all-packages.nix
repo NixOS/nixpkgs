@@ -4355,6 +4355,8 @@ with pkgs;
     inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
   };
 
+  artim-dark = callPackage ../data/themes/artim-dark {};
+
   bore = callPackage ../tools/networking/bore {
     inherit (darwin) Libsystem;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
@@ -4390,6 +4392,8 @@ with pkgs;
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
   checkmate = callPackage ../development/tools/checkmate { };
+
+  circup = callPackage ../development/tools/circup { };
 
   civetweb = callPackage ../development/libraries/civetweb { };
 
@@ -10962,10 +10966,6 @@ with pkgs;
   truecrack-cuda = truecrack.override { cudaSupport = true; };
 
   ts = callPackage ../tools/system/ts { };
-
-  transfig = callPackage ../tools/graphics/transfig {
-    libpng = libpng12;
-  };
 
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
@@ -26437,8 +26437,6 @@ with pkgs;
 
   icewm = callPackage ../applications/window-managers/icewm {};
 
-  icecat-bin = callPackage ../applications/networking/browsers/icecat-bin { };
-
   icon-library = callPackage ../applications/graphics/icon-library { };
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
@@ -28051,6 +28049,8 @@ with pkgs;
   phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
 
   phrasendrescher = callPackage ../tools/security/phrasendrescher { };
+
+  phrase-cli = callPackage ../tools/misc/phrase-cli { };
 
   phraseapp-client = callPackage ../tools/misc/phraseapp-client { };
 
