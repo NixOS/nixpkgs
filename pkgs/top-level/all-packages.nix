@@ -23935,6 +23935,8 @@ with pkgs;
 
   penna = callPackage ../data/fonts/penna { };
 
+  pitch-black = callPackage ../data/themes/pitch-black {};
+
   plano-theme = callPackage ../data/themes/plano { };
 
   plata-theme = callPackage ../data/themes/plata {
