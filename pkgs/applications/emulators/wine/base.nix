@@ -41,7 +41,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals supportFlags.mingwSupport mingwGccs;
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
-  [ pkgs.freetype pkgs.perl ]
+  [ pkgs.freetype pkgs.perl pkgs.libunwind ]
   ++ lib.optional stdenv.isLinux         pkgs.libcap
   ++ lib.optional cupsSupport            pkgs.cups
   ++ lib.optional gettextSupport         pkgs.gettext
