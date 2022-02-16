@@ -6726,9 +6726,7 @@ with pkgs;
   ipfs = callPackage ../applications/networking/ipfs {
     buildGoModule = buildGo116Module;
   };
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
-    buildGoModule = buildGo116Module;
-  };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix {
     buildGoModule = buildGo116Module;
