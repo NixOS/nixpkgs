@@ -30,10 +30,11 @@ import ../make-test-python.nix ({pkgs, ...}:
         '';
       };
 
-      services.redis = {
+      services.redis.servers.peertube = {
         enable = true;
         bind = "0.0.0.0";
         requirePass = "turrQfaQwnanGbcsdhxy";
+        port = 6379;
       };
     };
 
@@ -109,7 +110,7 @@ import ../make-test-python.nix ({pkgs, ...}:
     start_all()
 
     database.wait_for_unit("postgresql.service")
-    database.wait_for_unit("redis.service")
+    database.wait_for_unit("redis-peertube.service")
 
     database.wait_for_open_port(5432)
     database.wait_for_open_port(6379)
