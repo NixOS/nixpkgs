@@ -172,12 +172,15 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p "$out/lib" "$bin/bin"
+    mkdir -p "$out/lib" "$out/share/vulkan/icd.d" "$bin/bin"
     cp outputs/bin/MoltenVKShaderConverter "$bin/bin/"
     cp outputs/lib/libMoltenVK.dylib "$out/lib/"
     ${cctools}/bin/install_name_tool -id "$out/lib/libMoltenVK.dylib" "$out/lib/libMoltenVK.dylib"
     # FIXME: https://github.com/NixOS/nixpkgs/issues/148189
     /usr/bin/codesign -s - -f "$out/lib/libMoltenVK.dylib"
+    install -m644 MoltenVK/icd/MoltenVK_icd.json "$out/share/vulkan/icd.d/MoltenVK_icd.json"
+    substituteInPlace $out/share/vulkan/icd.d/MoltenVK_icd.json \
+      --replace ./libMoltenVK.dylib "$out/share/vulkan/icd.d/MoltenVK_icd.json"
   '';
 
   sandboxProfile = ''
