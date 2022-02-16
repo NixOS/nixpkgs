@@ -2,8 +2,8 @@
 , openssl
 , ppp
 , systemd
-, withSystemd = stdenv.isLinux;
-, withPpp = stdenv.isLinux;
+, withSystemd ? stdenv.isLinux
+, withPpp ? stdenv.isLinux
 }:
 
 stdenv.mkDerivation rec {
