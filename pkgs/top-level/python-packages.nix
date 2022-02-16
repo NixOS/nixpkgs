@@ -380,6 +380,8 @@ in {
 
   aiopvpc = callPackage ../development/python-modules/aiopvpc { };
 
+  aiopyarr = callPackage ../development/python-modules/aiopyarr { };
+
   aiopylgtv = callPackage ../development/python-modules/aiopylgtv { };
 
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
@@ -759,6 +761,8 @@ in {
   auroranoaa = callPackage ../development/python-modules/auroranoaa { };
 
   aurorapy = callPackage ../development/python-modules/aurorapy { };
+
+  autarco = callPackage ../development/python-modules/autarco { };
 
   auth0-python = callPackage ../development/python-modules/auth0-python { };
 
@@ -2533,6 +2537,8 @@ in {
 
   einops = callPackage ../development/python-modules/einops { };
 
+  eiswarnung = callPackage ../development/python-modules/eiswarnung { };
+
   elgato = callPackage ../development/python-modules/elgato { };
 
   elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
@@ -2838,6 +2844,8 @@ in {
   filterpy = callPackage ../development/python-modules/filterpy { };
 
   finalfusion = callPackage ../development/python-modules/finalfusion { };
+
+  findimports = callPackage ../development/python-modules/findimports { };
 
   fingerprints = callPackage ../development/python-modules/fingerprints { };
 
@@ -5381,6 +5389,8 @@ in {
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
   nestedtext = callPackage ../development/python-modules/nestedtext { };
+
+  net2grid = callPackage ../development/python-modules/net2grid { };
 
   netaddr = callPackage ../development/python-modules/netaddr { };
 

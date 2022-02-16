@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , importlib-metadata
 , ipython
 , lark
@@ -23,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "3.0.1";
+  version = "3.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,16 +31,8 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OU7/LjcpCxvqlcfdlm5ll4f0DYXf0yxNprM8Muu2wyg=";
+    sha256 = "sha256-ejfzxCf2NucK/hfzswHu3h4DPPZQY8vkMAQ51XDRWKU=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "pyquil-pr-1404-unpin-qcs-api-client-version-pyproject.patch";
-      url = "https://github.com/rigetti/pyquil/commit/2e35a4fdf65262fdf39c5091aeddfa3f3564925a.patch";
-      sha256 = "sha256-KGDNU2wpzsuifQSbbkoMwaFXspHW6zyIJ5GRZbw+lUY=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -97,7 +88,9 @@ buildPythonPackage rec {
     "test_classical"
   ];
 
-  pythonImportsCheck = [ "pyquil" ];
+  pythonImportsCheck = [
+    "pyquil"
+  ];
 
   meta = with lib; {
     description = "Python library for creating Quantum Instruction Language (Quil) programs";

@@ -475,6 +475,7 @@ mapAliases ({
 
   iana_etc = iana-etc; # Added 2017-03-08
   iasl = throw "iasl has been removed, use acpica-tools instead"; # Added 2021-08-08
+  icecat-bin = throw "icecat-bin has been removed, the binary builds are not maintained upstream."; # Added 2022-02-15
   icedtea8_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   icedtea_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   idea = jetbrains; # Added 2017-04-03
@@ -1188,6 +1189,7 @@ mapAliases ({
   torch-repl = throw "torch-repl has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   torchPackages = throw "torchPackages has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   trang = jing-trang; # Added 2018-04-25
+  transfig = fig2dev; # Added 2022-02-15
   transmission-remote-cli = "transmission-remote-cli has been removed, as the upstream project has been abandoned. Please use tremc instead"; # Added 2020-10-14
   transmission_gtk = transmission-gtk; # Added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # Added 2018-01-06

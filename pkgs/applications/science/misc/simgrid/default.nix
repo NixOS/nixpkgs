@@ -3,7 +3,7 @@
 # Lua 5.3 needed and not available now
 #, luaSupport ? false, lua5
 , fortranSupport ? false, gfortran
-, buildDocumentation ? false, transfig, ghostscript, doxygen
+, buildDocumentation ? false, fig2dev, ghostscript, doxygen
 , buildJavaBindings ? false, openjdk
 , modelCheckingSupport ? false, libunwind, libevent, elfutils # Inside elfutils: libelf and libdw
 , debug ? false
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake perl python3 valgrind ]
       ++ optionals fortranSupport [ gfortran ]
       ++ optionals buildJavaBindings [ openjdk ]
-      ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
+      ++ optionals buildDocumentation [ fig2dev ghostscript doxygen ]
       ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
 
   #buildInputs = optional luaSupport lua5;
