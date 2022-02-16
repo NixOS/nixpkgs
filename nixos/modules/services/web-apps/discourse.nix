@@ -655,7 +655,7 @@ in
       long_polling_interval = null;
     };
 
-    services.redis.enable = lib.mkDefault (cfg.redis.host == "localhost");
+    services.redis.servers.discourse.enable = lib.mkDefault (cfg.redis.host == "localhost");
 
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
