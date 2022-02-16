@@ -6332,6 +6332,12 @@
     githubId = 209729;
     name = "Kevin Griffin";
   };
+  kevink = {
+    email = "kevin@kevink.dev";
+    github = "Unkn0wnCat";
+    githubId = 8211181;
+    name = "Kevin Kandlbinder";
+  };
   kfollesdal = {
     email = "kfollesdal@gmail.com";
     github = "kfollesdal";
