@@ -34,7 +34,7 @@ _separateDebugInfo() {
         # firmware blobs in QEMU.)
         (
             $OBJCOPY --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
-            $STRIP --strip-debug "$i"
+            $STRIP --strip-unneeded "$i"
 
             # Also a create a symlink <original-name>.debug.
             ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
