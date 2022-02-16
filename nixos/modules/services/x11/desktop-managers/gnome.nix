@@ -513,7 +513,7 @@ in
             cheese
             eog
             epiphany
-            gedit
+            pkgs.gnome-text-editor
             gnome-calculator
             gnome-calendar
             gnome-characters
