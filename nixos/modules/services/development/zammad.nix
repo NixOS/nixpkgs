@@ -248,15 +248,15 @@ in
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         # Blindly copy the whole project here.
-        chmod -R u+w .
+        chmod -R +w .
         rm -rf ./public/assets/*
         rm -rf ./tmp/*
         rm -rf ./log/*
         cp -r --no-preserve=owner ${cfg.package}/* .
-        chmod -R u+w .
+        chmod -R +w .
         # config file
         cp ${databaseConfig} ./config/database.yml
-        chmod -R u+w .
+        chmod -R +w .
         ${optionalString (cfg.database.passwordFile != null) ''
         {
           echo -n "  password: "

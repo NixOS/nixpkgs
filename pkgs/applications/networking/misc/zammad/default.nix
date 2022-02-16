@@ -21,7 +21,7 @@ let
   pname = "zammad";
   version = "5.0.2";
 
-  sourceDir = applyPatches {
+  src = applyPatches {
 
     src = fetchFromGitHub (builtins.fromJSON (builtins.readFile ./source.json));
 
@@ -52,7 +52,7 @@ let
     #   https://docs.zammad.org/en/latest/prerequisites/software.html#ruby-programming-language
     inherit ruby_2_7;
 
-    gemdir = sourceDir;
+    gemdir = src;
     gemset = ./gemset.nix;
     groups = [
       "assets"
@@ -86,19 +86,15 @@ let
 
   yarnEnv = yarn2nix-moretea.mkYarnPackage {
     pname = "${pname}-node-modules";
-    inherit version;
-    src = sourceDir;
+    inherit version src;
     yarnLock = ./yarn.lock;
     yarnNix = ./yarn.nix;
-    packageJSON = sourceDir + "/package.json";
+    packageJSON = src + "/package.json";
   };
 
 in
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
-  inherit pname version;
-
-  src = sourceDir;
+  inherit pname version src;
 
   buildInputs = [
     rubyEnv
@@ -138,6 +134,6 @@ stdenv.mkDerivation {
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ n0emis ];
+    maintainers = with maintainers; [ n0emis garbas taeer ];
   };
 }
