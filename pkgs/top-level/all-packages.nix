@@ -26338,7 +26338,7 @@ with pkgs;
   srain = callPackage ../applications/networking/irc/srain { };
 
   super-productivity = callPackage ../applications/office/super-productivity {
-    electron = electron_13;
+    electron = electron_17;
   };
 
   wlroots = wlroots_0_15;
