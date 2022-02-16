@@ -26,7 +26,8 @@
 <xref linkend="opt-services.postgresql.enable"/> = true;
 <xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql_11;
 </programlisting>
-   Note that you are required to specify the desired version of PostgreSQL (e.g. <literal>pkgs.postgresql_11</literal>). Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot provide a default value for <xref linkend="opt-services.postgresql.package"/> such as the most recent release of PostgreSQL.
+   Note that unless specified manually, the version of PostgreSQL is tied to <link xlink:href="options.html#opt-system.stateVersion">stateVersion</link>. Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot update <xref linkend="opt-services.postgresql.package"/> automatically to the most recent release of PostgreSQL.
+
   </para>
 
 <!--
