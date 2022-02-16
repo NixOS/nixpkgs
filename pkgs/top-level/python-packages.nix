@@ -8135,7 +8135,9 @@ in {
 
   python-registry = callPackage ../development/python-modules/python-registry { };
 
-  python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
+  python-rtmidi = callPackage ../development/python-modules/python-rtmidi {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
+  };
 
   python-sat = callPackage ../development/python-modules/python-sat { };
 
