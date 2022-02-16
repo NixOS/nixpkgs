@@ -45,16 +45,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.70.3";
+  version = "2.71.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Iz+khBweGeOW23YH1Y9rdbozE8UL8Pzgey41MtXrfUY=";
+    sha256 = "33BYdnULlS6ygqjPFdvXfcYJFSo2aXS0klqSskT+Y+E=";
   };
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
-    ./link-with-coreservices.patch
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
@@ -142,8 +141,8 @@ stdenv.mkDerivation rec {
     chmod +x docs/reference/gio/concat-files-helper.py
     patchShebangs docs/reference/gio/concat-files-helper.py
     patchShebangs glib/gen-unicode-tables.pl
-    patchShebangs tests/gen-casefold-txt.py
-    patchShebangs tests/gen-casemap-txt.py
+    patchShebangs glib/tests/gen-casefold-txt.py
+    patchShebangs glib/tests/gen-casemap-txt.py
   '' + lib.optionalString stdenv.hostPlatform.isWindows ''
     substituteInPlace gio/win32/meson.build \
       --replace "libintl, " ""
