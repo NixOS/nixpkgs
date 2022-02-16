@@ -406,10 +406,10 @@ in
               # Create initial databases
               if ! test -e "${cfg.dataDir}/${database.name}"; then
                   echo "Creating initial database: ${database.name}"
-                  ( echo 'create database `${database.name}`;'
+                  ( echo 'CREATE DATABASE `${database.name}`;'
 
                     ${optionalString (database.schema != null) ''
-                    echo 'use `${database.name}`;'
+                    echo 'USE `${database.name}`;'
 
                     # TODO: this silently falls through if database.schema does not exist,
                     # we should catch this somehow and exit, but can't do it here because we're in a subshell.
@@ -429,7 +429,7 @@ in
               ''
                 # Set up the replication master
 
-                ( echo "use mysql;"
+                ( echo "USE mysql;"
                   echo "CREATE USER '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password;"
                   echo "SET PASSWORD FOR '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' = PASSWORD('${cfg.replication.masterPassword}');"
                   echo "GRANT REPLICATION SLAVE ON *.* TO '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}';"
@@ -440,9 +440,9 @@ in
               ''
                 # Set up the replication slave
 
-                ( echo "stop slave;"
-                  echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
-                  echo "start slave;"
+                ( echo "STOP SLAVE;"
+                  echo "CHANGE MASTER TO master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
+                  echo "START SLAVE;"
                 ) | ${cfg.package}/bin/mysql -u ${superUser} -N
               ''}
 
