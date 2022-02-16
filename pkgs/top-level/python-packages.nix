@@ -8777,7 +8777,9 @@ in {
 
   rstcheck = callPackage ../development/python-modules/rstcheck { };
 
-  rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
+  rtmidi-python = callPackage ../development/python-modules/rtmidi-python {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
+  };
 
   rtoml = callPackage ../development/python-modules/rtoml { };
 
