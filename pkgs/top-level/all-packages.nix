@@ -31989,6 +31989,8 @@ with pkgs;
 
   blas = callPackage ../build-support/alternatives/blas { };
 
+  blas-ilp64 = blas.override { isILP64 = true; };
+
   blas-reference = callPackage ../development/libraries/science/math/blas { };
 
   brial = callPackage ../development/libraries/science/math/brial { };
@@ -32010,6 +32012,8 @@ with pkgs;
   jags = callPackage ../applications/science/math/jags { };
 
   lapack = callPackage ../build-support/alternatives/lapack { };
+
+  lapack-ilp64 = lapack.override { isILP64 = true; };
 
   lapack-reference = callPackage ../development/libraries/science/math/liblapack { };
   liblapack = lapack-reference;
