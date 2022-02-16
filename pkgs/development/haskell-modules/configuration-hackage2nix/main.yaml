@@ -134,6 +134,8 @@ default-package-overrides:
   # On the recommendation of hnix author:
   # https://github.com/NixOS/nixpkgs/pull/154461#issuecomment-1015511883
   - hnix < 0.15
+  # needs http-client >= 0.7.11 which isn't part of Stackage LTS 18
+  - http-client-restricted < 0.0.5
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.

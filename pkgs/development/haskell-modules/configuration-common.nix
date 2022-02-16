@@ -1268,13 +1268,6 @@ self: super: {
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom-core = doDistribute (unmarkBroken (dontCheck (doJailbreak super.reflex-dom-core)));
 
-  # add unreleased commit fixing version constraint as a patch
-  # Can be removed if https://github.com/lpeterse/haskell-utc/issues/8 is resolved
-  utc = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/lpeterse/haskell-utc/commit/e4502c08591e80d411129bb7c0414539f6302aaf.diff";
-    sha256 = "0v6kv1d4syjzgzc2s7a76c6k4vminlcq62n7jg3nn9xd00gwmmv7";
-  }) super.utc;
-
   # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarbal of jsaddle-warp.
   jsaddle-warp = dontCheck super.jsaddle-warp;
 
@@ -1458,10 +1451,6 @@ self: super: {
   # 2021-11-20: Testsuite hangs.
   # https://github.com/haskell/haskell-language-server/issues/2375
   hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
-
-  # 2021-11-23: Too strict bounds on ghcide, pending new release
-  hls-rename-plugin = assert super.hls-rename-plugin.version == "1.0.0.0";
-    doJailbreak super.hls-rename-plugin;
 
   # 2021-03-21: Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562

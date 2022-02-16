@@ -414,6 +414,7 @@ broken-packages:
   - bkr
   - blakesum
   - blas
+  - blatex
   - blaze-html-contrib
   - blaze-html-hexpat
   - blaze-html-truncate
@@ -986,7 +987,6 @@ broken-packages:
   - data-validation
   - data-variant
   - DataVersion
-  - dates
   - datetime
   - datetime-sb
   - dawdle
@@ -1005,6 +1005,7 @@ broken-packages:
   - dclabel
   - dclabel-eci11
   - dcpu16
+  - ddate
   - ddc-base
   - ddc-code
   - dead-code-detection
@@ -1120,6 +1121,7 @@ broken-packages:
   - dmcc
   - dmenu
   - dnscache
+  - dns-patterns
   - dnsrbl
   - dnssd
   - dobutok
@@ -2223,7 +2225,6 @@ broken-packages:
   - hlongurl
   - hlrdb-core
   - hls-exactprint-utils
-  - hls-rename-plugin
   - hlwm
   - hmarkup
   - hmatrix-banded
@@ -2251,6 +2252,7 @@ broken-packages:
   - hobbes
   - hocilib
   - hocker
+  - hocon
   - hodatime
   - HODE
   - hoe
@@ -2749,6 +2751,7 @@ broken-packages:
   - kmp-dfa
   - koellner-phonetic
   - koji-install
+  - koneko
   - Konf
   - kontra-config
   - kparams
@@ -3315,6 +3318,7 @@ broken-packages:
   - nanomsg
   - nanomsg-haskell
   - nanoparsec
+  - nanopass
   - NanoProlog
   - nanovg-simple
   - nanq
@@ -3912,6 +3916,7 @@ broken-packages:
   - prints
   - PriorityChansConverger
   - priority-queue
+  - pro-abstract
   - probable
   - process-conduit
   - processing
@@ -4816,6 +4821,7 @@ broken-packages:
   - SybWidget
   - syb-with-class-instances-text
   - sydtest-aeson
+  - sydtest-hedgehog
   - sydtest-hedis
   - sydtest-hspec
   - sydtest-mongo
@@ -5040,6 +5046,7 @@ broken-packages:
   - tkyprof
   - tmp-proc-example
   - todo
+  - todos
   - tofromxml
   - to-haskell
   - toilet
@@ -5245,6 +5252,7 @@ broken-packages:
   - urxml
   - users-mysql-haskell
   - users-persistent
+  - utc
   - utf
   - utf8-prelude
   - utf8-validator
@@ -5296,6 +5304,7 @@ broken-packages:
   - vector-space-points
   - vector-static
   - Vec-Transform
+  - velma
   - Verba
   - verbalexpressions
   - verdict
@@ -5430,6 +5439,7 @@ broken-packages:
   - windowslive
   - winerror
   - Wired
+  - wireguard-hs
   - wires
   - wiring
   - witty
@@ -5553,6 +5563,7 @@ broken-packages:
   - yeshql-postgresql-simple
   - yesod-angular
   - yesod-angular-ui
+  - yesod-articles
   - yesod-auth-account
   - yesod-auth-account-fork
   - yesod-auth-bcrypt
