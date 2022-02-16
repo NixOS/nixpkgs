@@ -56,13 +56,13 @@ let
     gemset = ./gemset.nix;
     groups = [
       "assets"
-      "unicorn"   # server
+      "unicorn" # server
       "nulldb"
       "test"
       "mysql"
       "puma"
       "development"
-      "postgres"  # database
+      "postgres" # database
     ];
     gemConfig = defaultGemConfig // {
       pg = attrs: {
@@ -93,7 +93,8 @@ let
     packageJSON = sourceDir + "/package.json";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
   inherit pname version;
 

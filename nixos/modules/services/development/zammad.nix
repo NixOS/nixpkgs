@@ -19,11 +19,12 @@ let
   environment = {
     RAILS_ENV = "production";
     NODE_ENV = "production";
-    RAILS_SERVE_STATIC_FILES="true";
-    RAILS_LOG_TO_STDOUT="true";
+    RAILS_SERVE_STATIC_FILES = "true";
+    RAILS_LOG_TO_STDOUT = "true";
   };
   databaseConfig = settingsFormat.generate "database.yml" cfg.database.settings;
-in {
+in
+{
 
   options = {
     services.zammad = {
@@ -125,7 +126,7 @@ in {
 
         settings = mkOption {
           type = settingsFormat.type;
-          default = {};
+          default = { };
           example = literalExpression ''
             {
             }
@@ -193,13 +194,15 @@ in {
       group = "zammad";
     };
 
-    users.groups.zammad = {};
+    users.groups.zammad = { };
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.user == "zammad";
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == "zammad";
         message = "services.zammad.database.user must be set to \"zammad\" if services.zammad.database.createLocally is set to true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.zammad.database.createLocally is set to true";
       }
     ];
@@ -209,7 +212,8 @@ in {
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
@@ -219,7 +223,8 @@ in {
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
         }
       ];
