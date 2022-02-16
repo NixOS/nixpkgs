@@ -253,11 +253,11 @@ with pkgs;
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
-  cen64 = callPackage ../misc/emulators/cen64 { };
+  cen64 = callPackage ../applications/emulators/cen64 { };
 
   btdu = callPackage ../tools/misc/btdu { };
 
-  uxn = callPackage ../misc/emulators/uxn { };
+  uxn = callPackage ../applications/emulators/uxn { };
 
   cereal = callPackage ../development/libraries/cereal { };
 
@@ -375,7 +375,7 @@ with pkgs;
 
   protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript { };
 
-  proton-caller = callPackage ../misc/emulators/proton-caller { };
+  proton-caller = callPackage ../applications/emulators/proton-caller { };
 
   ptags = callPackage ../development/tools/misc/ptags { };
 
@@ -2367,9 +2367,9 @@ with pkgs;
   breakpointHook = assert stdenv.isLinux;
     makeSetupHook { } ../build-support/setup-hooks/breakpoint-hook.sh;
 
-  py65 = python3Packages.callPackage ../misc/emulators/py65 { };
+  py65 = python3Packages.callPackage ../applications/emulators/py65 { };
 
-  simh = callPackage ../misc/emulators/simh { };
+  simh = callPackage ../applications/emulators/simh { };
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
@@ -2494,19 +2494,19 @@ with pkgs;
 
   cde = callPackage ../tools/package-management/cde { };
 
-  cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
+  cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
 
-  cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
+  cdemu-client = callPackage ../applications/emulators/cdemu/client.nix { };
 
   ceres-solver = callPackage ../development/libraries/ceres-solver {
     gflags = null; # only required for examples/tests
   };
 
-  craftos-pc = callPackage ../misc/emulators/craftos-pc { };
+  craftos-pc = callPackage ../applications/emulators/craftos-pc { };
 
-  gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
+  gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
-  image-analyzer = callPackage ../misc/emulators/cdemu/analyzer.nix { };
+  image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
 
   cbor-diag = callPackage ../development/tools/cbor-diag { };
 
@@ -2874,9 +2874,9 @@ with pkgs;
 
   djv = callPackage ../applications/graphics/djv { };
 
-  dlx = callPackage ../misc/emulators/dlx { };
+  dlx = callPackage ../applications/emulators/dlx { };
 
-  dgen-sdl = callPackage ../misc/emulators/dgen-sdl { };
+  dgen-sdl = callPackage ../applications/emulators/dgen-sdl { };
 
   dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
 
@@ -3671,7 +3671,7 @@ with pkgs;
 
   ropgadget = with python3Packages; toPythonApplication ropgadget;
 
-  ryujinx = callPackage ../misc/emulators/ryujinx { };
+  ryujinx = callPackage ../applications/emulators/ryujinx { };
 
   scour = with python3Packages; toPythonApplication scour;
 
@@ -3693,7 +3693,7 @@ with pkgs;
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
-  simplenes = callPackage ../misc/emulators/simplenes { };
+  simplenes = callPackage ../applications/emulators/simplenes { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
@@ -4159,7 +4159,7 @@ with pkgs;
     citrix_workspace_21_12_0
   ;
 
-  citra = libsForQt5.callPackage ../misc/emulators/citra { };
+  citra = libsForQt5.callPackage ../applications/emulators/citra { };
 
   cmigemo = callPackage ../tools/text/cmigemo { };
 
@@ -4787,11 +4787,11 @@ with pkgs;
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
-  dolphin-emu = callPackage ../misc/emulators/dolphin-emu { };
-  dolphin-emu-beta = qt5.callPackage ../misc/emulators/dolphin-emu/master.nix {
+  dolphin-emu = callPackage ../applications/emulators/dolphin-emu { };
+  dolphin-emu-beta = qt5.callPackage ../applications/emulators/dolphin-emu/master.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
   };
-  dolphin-emu-primehack = qt5.callPackage ../misc/emulators/dolphin-emu/primehack.nix {
+  dolphin-emu-primehack = qt5.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
   };
 
@@ -5169,7 +5169,7 @@ with pkgs;
 
   epstool = callPackage ../tools/graphics/epstool { };
 
-  epsxe = callPackage ../misc/emulators/epsxe { };
+  epsxe = callPackage ../applications/emulators/epsxe { };
 
   escrotum = callPackage ../tools/graphics/escrotum { };
 
@@ -5389,7 +5389,7 @@ with pkgs;
 
   fio = callPackage ../tools/system/fio { };
 
-  firebird-emu = libsForQt5.callPackage ../misc/emulators/firebird-emu { };
+  firebird-emu = libsForQt5.callPackage ../applications/emulators/firebird-emu { };
 
   flamerobin = callPackage ../applications/misc/flamerobin { };
 
@@ -7361,7 +7361,7 @@ with pkgs;
     nodejs = nodejs-14_x;
   };
 
-  np2kai = callPackage ../misc/emulators/np2kai { };
+  np2kai = callPackage ../applications/emulators/np2kai { };
 
   openipmi = callPackage ../tools/system/openipmi { };
 
@@ -7792,11 +7792,11 @@ with pkgs;
 
   mdp = callPackage ../applications/misc/mdp { };
 
-  mednafen = callPackage ../misc/emulators/mednafen { };
+  mednafen = callPackage ../applications/emulators/mednafen { };
 
-  mednafen-server = callPackage ../misc/emulators/mednafen/server.nix { };
+  mednafen-server = callPackage ../applications/emulators/mednafen/server.nix { };
 
-  mednaffe = callPackage ../misc/emulators/mednaffe { };
+  mednaffe = callPackage ../applications/emulators/mednaffe { };
 
   megacli = callPackage ../tools/misc/megacli { };
 
@@ -7812,7 +7812,7 @@ with pkgs;
 
   mfoc = callPackage ../tools/security/mfoc { };
 
-  mgba = libsForQt5.callPackage ../misc/emulators/mgba { };
+  mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
 
   microdnf = callPackage ../tools/package-management/microdnf { };
 
@@ -8032,7 +8032,7 @@ with pkgs;
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
-  nestopia = callPackage ../misc/emulators/nestopia { };
+  nestopia = callPackage ../applications/emulators/nestopia { };
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
@@ -9272,7 +9272,7 @@ with pkgs;
 
   repseek = callPackage ../applications/science/biology/repseek { };
 
-  reicast = callPackage ../misc/emulators/reicast { };
+  reicast = callPackage ../applications/emulators/reicast { };
 
   reredirect = callPackage ../tools/misc/reredirect { };
 
@@ -9458,7 +9458,7 @@ with pkgs;
 
   rubocop = rubyPackages.rubocop;
 
-  ruffle = callPackage ../misc/emulators/ruffle { };
+  ruffle = callPackage ../applications/emulators/ruffle { };
 
   runningx = callPackage ../tools/X11/runningx { };
 
@@ -10310,7 +10310,7 @@ with pkgs;
 
   tiledb = callPackage ../development/libraries/tiledb { };
 
-  tilem = callPackage ../misc/emulators/tilem { };
+  tilem = callPackage ../applications/emulators/tilem { };
 
   timemachine = callPackage ../applications/audio/timemachine { };
 
@@ -14092,7 +14092,7 @@ with pkgs;
   mspdebug = callPackage ../development/misc/msp430/mspdebug.nix { };
 
   vc4-newlib = callPackage ../development/misc/vc4/newlib.nix {};
-  resim = callPackage ../misc/emulators/resim {};
+  resim = callPackage ../applications/emulators/resim {};
 
   or1k-newlib = callPackage ../development/misc/or1k/newlib.nix {};
 
@@ -16381,7 +16381,7 @@ with pkgs;
 
   duckdb = callPackage ../development/libraries/duckdb {};
 
-  duckstation = libsForQt5.callPackage ../misc/emulators/duckstation {};
+  duckstation = libsForQt5.callPackage ../applications/emulators/duckstation {};
 
   easyloggingpp = callPackage ../development/libraries/easyloggingpp {};
 
@@ -18333,7 +18333,7 @@ with pkgs;
     hdf5 = hdf5_1_10;
   };
 
-  libmirage = callPackage ../misc/emulators/cdemu/libmirage.nix { };
+  libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
   libmkv = callPackage ../development/libraries/libmkv { };
 
@@ -24051,7 +24051,7 @@ with pkgs;
 
   poppler_data = callPackage ../data/misc/poppler-data { };
 
-  qmc2 = libsForQt514.callPackage ../misc/emulators/qmc2 { };
+  qmc2 = libsForQt514.callPackage ../applications/emulators/qmc2 { };
 
   quattrocento = callPackage ../data/fonts/quattrocento {};
 
@@ -24158,7 +24158,7 @@ with pkgs;
     fonts = [ "Terminus" ];
   };
 
-  termtekst = callPackage ../misc/emulators/termtekst { };
+  termtekst = callPackage ../applications/emulators/termtekst { };
 
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
@@ -26709,7 +26709,7 @@ with pkgs;
 
   kdevelop = libsForQt5.callPackage ../applications/editors/kdevelop5/wrapper.nix { };
 
-  kega-fusion = pkgsi686Linux.callPackage ../misc/emulators/kega-fusion { };
+  kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
 
   kepubify = callPackage ../tools/misc/kepubify { };
 
@@ -26881,7 +26881,7 @@ with pkgs;
 
   kvirc = libsForQt514.callPackage ../applications/networking/irc/kvirc { };
 
-  lambda-delta = callPackage ../misc/emulators/lambda-delta { };
+  lambda-delta = callPackage ../applications/emulators/lambda-delta { };
 
   lame = callPackage ../development/libraries/lame { };
 
@@ -27014,7 +27014,7 @@ with pkgs;
 
   lighttable = callPackage ../applications/editors/lighttable {};
 
-  libdsk = callPackage ../misc/emulators/libdsk { };
+  libdsk = callPackage ../applications/emulators/libdsk { };
 
   liblinphone = callPackage ../development/libraries/liblinphone { };
 
@@ -27199,7 +27199,7 @@ with pkgs;
 
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 
-  melonDS = libsForQt5.callPackage ../misc/emulators/melonDS { };
+  melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
 
   meme-image-generator = callPackage ../applications/graphics/meme-image-generator { };
 
@@ -27845,7 +27845,7 @@ with pkgs;
 
   obconf = callPackage ../tools/X11/obconf { };
 
-  oberon-risc-emu = callPackage ../misc/emulators/oberon-risc-emu { };
+  oberon-risc-emu = callPackage ../applications/emulators/oberon-risc-emu { };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {};
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
@@ -27996,9 +27996,9 @@ with pkgs;
 
   pcloud = callPackage ../applications/networking/pcloud { };
 
-  pcsxr = callPackage ../misc/emulators/pcsxr { };
+  pcsxr = callPackage ../applications/emulators/pcsxr { };
 
-  pcsx2 = callPackage ../misc/emulators/pcsx2 {
+  pcsx2 = callPackage ../applications/emulators/pcsx2 {
     wxGTK = wxGTK30-gtk3;
   };
 
@@ -28528,7 +28528,7 @@ with pkgs;
 
   rootlesskit = callPackage ../tools/virtualization/rootlesskit {};
 
-  rpcs3 = libsForQt5.callPackage ../misc/emulators/rpcs3 { };
+  rpcs3 = libsForQt5.callPackage ../applications/emulators/rpcs3 { };
 
   rsclock = callPackage ../applications/misc/rsclock { };
 
@@ -28569,7 +28569,7 @@ with pkgs;
 
   sacc = callPackage ../applications/networking/gopher/sacc { };
 
-  sameboy = callPackage ../misc/emulators/sameboy { };
+  sameboy = callPackage ../applications/emulators/sameboy { };
 
   sayonara = libsForQt514.callPackage ../applications/audio/sayonara { };
 
@@ -28699,7 +28699,7 @@ with pkgs;
     curses = ncurses;
   };
 
-  stella = callPackage ../misc/emulators/stella { };
+  stella = callPackage ../applications/emulators/stella { };
 
   linuxstopmotion = libsForQt5.callPackage ../applications/video/linuxstopmotion { };
 
@@ -29817,7 +29817,7 @@ with pkgs;
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
 
   kodi-retroarch-advanced-launchers =
-    callPackage ../misc/emulators/retroarch/kodi-advanced-launchers.nix { };
+    callPackage ../applications/emulators/retroarch/kodi-advanced-launchers.nix { };
 
   xca = libsForQt5.callPackage ../applications/misc/xca { };
 
@@ -32263,7 +32263,7 @@ with pkgs;
 
   crypto-org-wallet = callPackage ../applications/blockchains/crypto-org-wallet { };
 
-  caprice32 = callPackage ../misc/emulators/caprice32 { };
+  caprice32 = callPackage ../applications/emulators/caprice32 { };
 
   cubicle = callPackage ../applications/science/logic/cubicle {
     ocamlPackages = ocaml-ng.ocamlPackages_4_05;
@@ -32776,11 +32776,11 @@ with pkgs;
 
   antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };
 
-  ares = callPackage ../misc/emulators/ares { };
+  ares = callPackage ../applications/emulators/ares { };
 
-  atari800 = callPackage ../misc/emulators/atari800 { };
+  atari800 = callPackage ../applications/emulators/atari800 { };
 
-  ataripp = callPackage ../misc/emulators/atari++ { };
+  ataripp = callPackage ../applications/emulators/atari++ { };
 
   atlantis = callPackage ../applications/networking/cluster/atlantis { };
 
@@ -32794,7 +32794,7 @@ with pkgs;
     swt = swt_jdk8;
   };
 
-  attract-mode = callPackage ../misc/emulators/attract-mode { };
+  attract-mode = callPackage ../applications/emulators/attract-mode { };
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
 
@@ -32816,7 +32816,7 @@ with pkgs;
 
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
 
-  ccemux = callPackage ../misc/emulators/ccemux { };
+  ccemux = callPackage ../applications/emulators/ccemux { };
 
   click = callPackage ../applications/networking/cluster/click { };
 
@@ -32894,13 +32894,13 @@ with pkgs;
 
   cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 { };
 
-  darcnes = callPackage ../misc/emulators/darcnes { };
+  darcnes = callPackage ../applications/emulators/darcnes { };
 
   darling-dmg = callPackage ../tools/filesystems/darling-dmg { };
 
   depotdownloader = callPackage ../tools/misc/depotdownloader { };
 
-  desmume = callPackage ../misc/emulators/desmume { };
+  desmume = callPackage ../applications/emulators/desmume { };
 
   dbacl = callPackage ../tools/misc/dbacl { };
 
@@ -32916,11 +32916,11 @@ with pkgs;
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
-  dosbox = callPackage ../misc/emulators/dosbox { };
+  dosbox = callPackage ../applications/emulators/dosbox { };
 
-  dosbox-staging = callPackage ../misc/emulators/dosbox-staging { };
+  dosbox-staging = callPackage ../applications/emulators/dosbox-staging { };
 
-  emu2 = callPackage ../misc/emulators/emu2 { };
+  emu2 = callPackage ../applications/emulators/emu2 { };
 
   apt = callPackage ../tools/package-management/apt { };
 
@@ -32932,7 +32932,7 @@ with pkgs;
 
   ecdsatool = callPackage ../tools/security/ecdsatool { };
 
-  emulationstation = callPackage ../misc/emulators/emulationstation { };
+  emulationstation = callPackage ../applications/emulators/emulationstation { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
@@ -32942,7 +32942,7 @@ with pkgs;
 
   glee = callPackage ../tools/graphics/glee { };
 
-  fakenes = callPackage ../misc/emulators/fakenes { };
+  fakenes = callPackage ../applications/emulators/fakenes { };
 
   faust = res.faust2;
 
@@ -32976,7 +32976,7 @@ with pkgs;
 
   faustStk = callPackage ../applications/audio/faustStk  { };
 
-  fceux = libsForQt5.callPackage ../misc/emulators/fceux { };
+  fceux = libsForQt5.callPackage ../applications/emulators/fceux { };
 
   flockit = callPackage ../tools/backup/flockit { };
 
@@ -32992,7 +32992,7 @@ with pkgs;
 
   foomatic-filters = callPackage ../misc/drivers/foomatic-filters {};
 
-  fuse-emulator = callPackage ../misc/emulators/fuse-emulator {};
+  fuse-emulator = callPackage ../applications/emulators/fuse-emulator {};
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-libav;
@@ -33001,7 +33001,7 @@ with pkgs;
 
   gammu = callPackage ../applications/misc/gammu { };
 
-  gensgs = pkgsi686Linux.callPackage ../misc/emulators/gens-gs { };
+  gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
 
   ghostscript = callPackage ../misc/ghostscript { };
 
@@ -33027,9 +33027,9 @@ with pkgs;
 
   gummi = callPackage ../applications/misc/gummi { };
 
-  gxemul = callPackage ../misc/emulators/gxemul { };
+  gxemul = callPackage ../applications/emulators/gxemul { };
 
-  hatari = callPackage ../misc/emulators/hatari { };
+  hatari = callPackage ../applications/emulators/hatari { };
 
   hck = callPackage ../tools/text/hck {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -33140,7 +33140,7 @@ with pkgs;
 
   loop = callPackage ../tools/misc/loop { };
 
-  maiko = callPackage ../misc/emulators/maiko { inherit (xorg) libX11; };
+  maiko = callPackage ../applications/emulators/maiko { inherit (xorg) libX11; };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 {
     icu = icu58;
@@ -33148,7 +33148,7 @@ with pkgs;
 
   mamba = callPackage ../applications/audio/mamba { };
 
-  mame = libsForQt514.callPackage ../misc/emulators/mame {
+  mame = libsForQt514.callPackage ../applications/emulators/mame {
     inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
   };
 
@@ -33168,7 +33168,7 @@ with pkgs;
 
   morph = callPackage ../tools/package-management/morph { };
 
-  mupen64plus = callPackage ../misc/emulators/mupen64plus { };
+  mupen64plus = callPackage ../applications/emulators/mupen64plus { };
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 
@@ -33505,7 +33505,7 @@ with pkgs;
 
   OSCAR = qt5.callPackage ../applications/misc/OSCAR { };
 
-  pcem = callPackage ../misc/emulators/pcem { };
+  pcem = callPackage ../applications/emulators/pcem { };
 
   pgmanage = callPackage ../applications/misc/pgmanage { };
 
@@ -33535,13 +33535,13 @@ with pkgs;
 
   pounce = callPackage ../servers/pounce { };
 
-  ppsspp = libsForQt5.callPackage ../misc/emulators/ppsspp { };
+  ppsspp = libsForQt5.callPackage ../applications/emulators/ppsspp { };
 
   pt = callPackage ../applications/misc/pt { };
 
   protocol = python3Packages.callPackage ../applications/networking/protocol { };
 
-  punes = libsForQt5.callPackage ../misc/emulators/punes { };
+  punes = libsForQt5.callPackage ../applications/emulators/punes { };
 
   pykms = callPackage ../tools/networking/pykms { };
 
@@ -33551,11 +33551,11 @@ with pkgs;
 
   pwntools = with python3Packages; toPythonApplication pwntools;
 
-  uae = callPackage ../misc/emulators/uae { };
+  uae = callPackage ../applications/emulators/uae { };
 
-  fsuae = callPackage ../misc/emulators/fs-uae { };
+  fsuae = callPackage ../applications/emulators/fs-uae { };
 
-  fsuae-launcher = callPackage ../misc/emulators/fs-uae/launcher.nix { };
+  fsuae-launcher = callPackage ../applications/emulators/fs-uae/launcher.nix { };
 
   putty = callPackage ../applications/networking/remote/putty {
     gtk2 = gtk2-x11;
@@ -33581,12 +33581,12 @@ with pkgs;
 
   renderizer = callPackage ../development/tools/renderizer {};
 
-  retroarchBare = callPackage ../misc/emulators/retroarch {
+  retroarchBare = callPackage ../applications/emulators/retroarch {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
   };
 
-  wrapRetroArch = { retroarch }: callPackage ../misc/emulators/retroarch/wrapper.nix {
+  wrapRetroArch = { retroarch }: callPackage ../applications/emulators/retroarch/wrapper.nix {
     inherit retroarch;
   };
 
@@ -33599,11 +33599,11 @@ with pkgs;
       (builtins.attrValues libretro);
   };
 
-  libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {
+  libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix {
     retroarch = retroarchBare;
   });
 
-  retrofe = callPackage ../misc/emulators/retrofe { };
+  retrofe = callPackage ../applications/emulators/retrofe { };
 
   rfc-bibtex = python3Packages.callPackage ../development/python-modules/rfc-bibtex { };
 
@@ -33912,11 +33912,11 @@ with pkgs;
 
   vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
 
-  vbam = callPackage ../misc/emulators/vbam { };
+  vbam = callPackage ../applications/emulators/vbam { };
 
   vgmstream = callPackage ../applications/audio/vgmstream { };
 
-  vice = callPackage ../misc/emulators/vice { };
+  vice = callPackage ../applications/emulators/vice { };
 
   viddy = callPackage ../tools/misc/viddy { };
 
@@ -34016,7 +34016,7 @@ with pkgs;
     wineRelease = "wayland";
   });
 
-  winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
+  winetricks = callPackage ../applications/emulators/wine/winetricks.nix {
     inherit (gnome) zenity;
   };
 
@@ -34106,7 +34106,7 @@ with pkgs;
 
   yabai = callPackage ../os-specific/darwin/yabai { };
 
-  yabause = libsForQt5.callPackage ../misc/emulators/yabause {
+  yabause = libsForQt5.callPackage ../applications/emulators/yabause {
     freeglut = null;
     openal = null;
   };
@@ -34129,11 +34129,11 @@ with pkgs;
 
   yaxg = callPackage ../tools/graphics/yaxg {};
 
-  yuzu-mainline = import ../misc/emulators/yuzu {
+  yuzu-mainline = import ../applications/emulators/yuzu {
     branch = "mainline";
     inherit libsForQt5 fetchFromGitHub;
   };
-  yuzu-ea = import ../misc/emulators/yuzu {
+  yuzu-ea = import ../applications/emulators/yuzu {
     branch = "early-access";
     inherit libsForQt5 fetchFromGitHub;
   };
@@ -34156,34 +34156,34 @@ with pkgs;
 
   zoneminder = callPackage ../servers/zoneminder { };
 
-  zsnes = pkgsi686Linux.callPackage ../misc/emulators/zsnes { };
+  zsnes = pkgsi686Linux.callPackage ../applications/emulators/zsnes { };
 
   xcp = callPackage ../tools/misc/xcp { };
 
-  xcpc = callPackage ../misc/emulators/xcpc { };
+  xcpc = callPackage ../applications/emulators/xcpc { };
 
   zxcvbn-c = callPackage ../development/libraries/zxcvbn-c { };
 
   zxing-cpp = callPackage ../development/libraries/zxing-cpp { };
 
-  snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
+  snes9x-gtk = callPackage ../applications/emulators/snes9x-gtk { };
 
-  openmsx = callPackage ../misc/emulators/openmsx {
+  openmsx = callPackage ../applications/emulators/openmsx {
     python = python3;
   };
 
-  higan = callPackage ../misc/emulators/higan { };
+  higan = callPackage ../applications/emulators/higan { };
 
-  bsnes-hd = callPackage ../misc/emulators/bsnes-hd {
+  bsnes-hd = callPackage ../applications/emulators/bsnes-hd {
     inherit (gnome2) gtksourceview;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
   };
 
-  yapesdl = callPackage ../misc/emulators/yapesdl { };
+  yapesdl = callPackage ../applications/emulators/yapesdl { };
 
-  x16-emulator = callPackage ../misc/emulators/commanderx16/emulator.nix { };
-  x16-rom = callPackage ../misc/emulators/commanderx16/rom.nix { };
-  x16-run = (callPackage ../misc/emulators/commanderx16/run.nix { }) {
+  x16-emulator = callPackage ../applications/emulators/commanderx16/emulator.nix { };
+  x16-rom = callPackage ../applications/emulators/commanderx16/rom.nix { };
+  x16-run = (callPackage ../applications/emulators/commanderx16/run.nix { }) {
     emulator = x16-emulator;
     rom = x16-rom;
   };
@@ -34543,7 +34543,7 @@ with pkgs;
 
   xsos = callPackage ../os-specific/linux/xsos { };
 
-  zesarux = callPackage ../misc/emulators/zesarux { };
+  zesarux = callPackage ../applications/emulators/zesarux { };
 
   zk = callPackage ../applications/office/zk {};
 
