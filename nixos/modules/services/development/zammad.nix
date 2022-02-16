@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }:
 
+with lib;
+
 let
   cfg = config.services.zammad;
   serviceConfig = {
@@ -9,7 +11,7 @@ let
     User = "zammad";
     Group = "zammad";
     PrivateTmp = true;
-    StateDirectory = builtins.baseNameOf cfg.dataDir;
+    StateDirectory = "zammad";
     WorkingDirectory = cfg.dataDir;
 
     EnvironmentFile = cfg.secretsFile;
@@ -24,38 +26,44 @@ in {
 
   options = {
     services.zammad = {
-      enable = lib.mkEnableOption "Zammad, a web-based, open source user support/ticketing solution.";
+      enable = mkEnableOption "Zammad, a web-based, open source user support/ticketing solution.";
 
-      package = lib.mkOption {
-        type = lib.types.package;
+      package = mkOption {
+        type = types.package;
         default = pkgs.zammad;
-        defaultText = "pkgs.zammad";
+        defaultText = literalExpression "pkgs.zammad";
         description = "Zammad package to use.";
       };
 
-      dataDir = lib.mkOption {
-        type = lib.types.path;
+      dataDir = mkOption {
+        type = types.path;
         default = "/var/lib/zammad";
         description = ''
           Path to a folder that will contain Zammad working directory.
         '';
       };
 
-      host = lib.mkOption {
-        type = lib.types.str;
+      host = mkOption {
+        type = types.str;
         default = "127.0.0.1";
         example = "192.168.23.42";
         description = "Host address.";
       };
 
-      port = lib.mkOption {
-        type = lib.types.int;
+      openPorts = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to open firewall ports for Zammad";
+      };
+
+      port = mkOption {
+        type = types.port;
         default = 3000;
         description = "Web service port.";
       };
 
-      websocketPort = lib.mkOption {
-        type = lib.types.int;
+      websocketPort = mkOption {
+        type = types.port;
         default = 6042;
         description = "Websocket service port.";
       };
@@ -88,9 +96,9 @@ in {
 
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
-    networking.firewall.allowedTCPPorts = [
+    networking.firewall.allowedTCPPorts = mkIf cfg.openPorts [
       config.services.zammad.port
       config.services.zammad.websocketPort
     ];
