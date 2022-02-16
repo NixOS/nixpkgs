@@ -149,6 +149,7 @@ in {
         cp -r --no-preserve=owner ${cfg.package}/* ${cfg.dataDir}
         chmod -R +w ${cfg.dataDir}
         export DATABASE_URL="postgresql://${cfg.dbUsername}:$PGPASSWORD@localhost:${toString(config.services.postgresql.port)}/${cfg.dbName}";
+        pushd ${cfg.dataDir}
         if [ `${config.services.postgresql.package}/bin/psql \
                   --host localhost \
                   --port ${toString(config.services.postgresql.port)} \
@@ -159,16 +160,19 @@ in {
                             WHERE s.nspname NOT IN ('pg_catalog', 'pg_toast', 'information_schema') \
                               AND s.nspname NOT LIKE 'pg_temp%';" | sed -n 3p` -eq 0 ]; then
           echo "Initialize database"
-          ${cfg.dataDir}/bin/rake db:migrate
-          ${cfg.dataDir}/bin/rake db:seed
+          ./bin/rake --no-system db:migrate
+          ./bin/rake --no-system db:seed
         else
           echo "Migrate database"
-          ${cfg.dataDir}/bin/rake db:migrate
+          ./bin/rake --no-system db:migrate
         fi
+        popd
         echo "Done"
       '';
 
       serviceConfig = serviceConfig // {
+        # loading all the gems takes a long time
+        TimeoutStartSec=600;
         ExecStart = pkgs.writeShellScript "zammad-web-start" ''
           set -eu
           export DATABASE_URL="postgresql://${cfg.dbUsername}:$PGPASSWORD@localhost:${toString(config.services.postgresql.port)}/${cfg.dbName}"
