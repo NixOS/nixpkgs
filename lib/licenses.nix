@@ -596,6 +596,11 @@ in mkLicense lset) ({
     spdxId = "MIT";
     fullName = "MIT License";
   };
+  # https://spdx.org/licenses/MIT-feh.html
+  mit-feh = {
+    spdxId = "MIT-feh";
+    fullName = "feh License";
+  };
 
   mitAdvertising = {
     spdxId = "MIT-advertising";
