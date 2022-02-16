@@ -126,5 +126,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;
+    knownVulnerabilities = [
+      "Binary builds of GNU Icecat have not seen an update since 2019, while Firefox has received many security advisories."
+    ];
   };
 }
