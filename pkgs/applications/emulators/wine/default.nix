@@ -29,6 +29,7 @@
   v4lSupport ? false,
   saneSupport ? false,
   gphoto2Support ? false,
+  krb5Support ? false,
   ldapSupport ? false,
   pulseaudioSupport ? false,
   udevSupport ? false,
@@ -36,6 +37,7 @@
   vulkanSupport ? false,
   sdlSupport ? false,
   vkd3dSupport ? false,
+  usbSupport ? false,
   mingwSupport ? wineRelease != "stable",
   waylandSupport ? wineRelease == "wayland",
   embedInstallers ? false # The Mono and Gecko MSI installers
@@ -48,10 +50,10 @@ let wine-build = build: release:
           inherit
             cupsSupport gettextSupport dbusSupport openalSupport cairoSupport
             odbcSupport netapiSupport cursesSupport vaSupport pcapSupport
-            v4lSupport saneSupport gphoto2Support ldapSupport fontconfigSupport
+            v4lSupport saneSupport gphoto2Support krb5Support ldapSupport fontconfigSupport
             alsaSupport pulseaudioSupport xineramaSupport gtkSupport openclSupport
             tlsSupport openglSupport gstreamerSupport udevSupport vulkanSupport
-            sdlSupport vkd3dSupport mingwSupport waylandSupport embedInstallers;
+            sdlSupport usbSupport vkd3dSupport mingwSupport waylandSupport embedInstallers;
         };
       });
 

@@ -56,6 +56,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional v4lSupport             pkgs.libv4l
   ++ lib.optional saneSupport            pkgs.sane-backends
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
+  ++ lib.optional krb5Support            pkgs.libkrb5
   ++ lib.optional ldapSupport            pkgs.openldap
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
   ++ lib.optional alsaSupport            pkgs.alsa-lib
@@ -64,6 +65,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional udevSupport            pkgs.udev
   ++ lib.optional vulkanSupport          pkgs.vulkan-loader
   ++ lib.optional sdlSupport             pkgs.SDL2
+  ++ lib.optional usbSupport             pkgs.libusb1
   ++ vkd3dArches
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1;
     [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav
