@@ -9944,6 +9944,21 @@ let
     };
   };
 
+  HashStoredIterator = buildPerlModule {
+    pname = "Hash-StoredIterator";
+    version = "0.008";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSCHWERN/Hash-StoredIterator-0.008.tar.gz";
+      sha256 = "b9cbc4dcd8233e8d1d7f1481ddb79a4a5f9db7180cb3ef02b4bcbee05e65ea0c";
+    };
+    buildInputs = [ Test2Suite ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "Functions for accessing a hashes internal iterator";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HashUtilFieldHashCompat = buildPerlPackage {
     pname = "Hash-Util-FieldHash-Compat";
     version = "0.11";

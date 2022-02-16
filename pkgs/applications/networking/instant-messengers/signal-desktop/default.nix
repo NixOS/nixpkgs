@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
-, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
+, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
 , cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
@@ -56,7 +56,6 @@ in stdenv.mkDerivation rec {
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     gtk3
     libX11
     libXScrnSaver

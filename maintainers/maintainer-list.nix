@@ -145,6 +145,12 @@
     githubId = 16829510;
     name = "Aaron Janse";
   };
+  aaronjheng = {
+    email = "wentworth@outlook.com";
+    github = "aaronjheng";
+    githubId = 806876;
+    name = "Aaron Jheng";
+  };
   aaronschif = {
     email = "aaronschif@gmail.com";
     github = "aaronschif";
@@ -6073,6 +6079,12 @@
     githubId = 810075;
     name = "Juan Rodal";
   };
+  juboba = {
+    email = "juboba@gmail.com";
+    github = "juboba";
+    githubId = 1189739;
+    name = "Julio Borja Barra";
+  };
   juliendehos = {
     email = "dehos@lisic.univ-littoral.fr";
     github = "juliendehos";
@@ -7103,6 +7115,12 @@
     github = "Lunarequest";
     githubId = 30698906;
     name = "Luna D Dragon";
+  };
+  LunNova = {
+    email = "nixpkgs-maintainer@lunnova.dev";
+    github = "LunNova";
+    githubId = 782440;
+    name = "Luna Nova";
   };
   lionello = {
     email = "lio@lunesu.com";
@@ -8910,9 +8928,9 @@
     githubId = 2946283;
     name = "Brian Cohen";
   };
-  novoxudonoser = {
+  novoxd = {
     email = "radnovox@gmail.com";
-    github = "novoxudonoser";
+    github = "novoxd";
     githubId = 6052922;
     name = "Kirill Struokov";
   };

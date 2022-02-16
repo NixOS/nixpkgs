@@ -308,6 +308,8 @@ in {
 
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
+  aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
+
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
@@ -377,6 +379,8 @@ in {
   aiopvapi = callPackage ../development/python-modules/aiopvapi { };
 
   aiopvpc = callPackage ../development/python-modules/aiopvpc { };
+
+  aiopyarr = callPackage ../development/python-modules/aiopyarr { };
 
   aiopylgtv = callPackage ../development/python-modules/aiopylgtv { };
 
@@ -757,6 +761,8 @@ in {
   auroranoaa = callPackage ../development/python-modules/auroranoaa { };
 
   aurorapy = callPackage ../development/python-modules/aurorapy { };
+
+  autarco = callPackage ../development/python-modules/autarco { };
 
   auth0-python = callPackage ../development/python-modules/auth0-python { };
 
@@ -2531,6 +2537,8 @@ in {
 
   einops = callPackage ../development/python-modules/einops { };
 
+  eiswarnung = callPackage ../development/python-modules/eiswarnung { };
+
   elgato = callPackage ../development/python-modules/elgato { };
 
   elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
@@ -2836,6 +2844,8 @@ in {
   filterpy = callPackage ../development/python-modules/filterpy { };
 
   finalfusion = callPackage ../development/python-modules/finalfusion { };
+
+  findimports = callPackage ../development/python-modules/findimports { };
 
   fingerprints = callPackage ../development/python-modules/fingerprints { };
 
@@ -4899,7 +4909,7 @@ in {
 
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
-  Markups = callPackage ../development/python-modules/Markups { };
+  markups = callPackage ../development/python-modules/markups { };
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
@@ -5379,6 +5389,8 @@ in {
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
   nestedtext = callPackage ../development/python-modules/nestedtext { };
+
+  net2grid = callPackage ../development/python-modules/net2grid { };
 
   netaddr = callPackage ../development/python-modules/netaddr { };
 
@@ -7356,6 +7368,8 @@ in {
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { };
 
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
+
+  pyqt5_sip = callPackage ../development/python-modules/pyqt/sip.nix { };
 
   pyqt5_with_qtmultimedia = self.pyqt5.override {
     withMultimedia = true;
@@ -9753,6 +9767,8 @@ in {
   testfixtures = callPackage ../development/python-modules/testfixtures { };
 
   textfsm = callPackage ../development/python-modules/textfsm { };
+
+  textile = callPackage ../development/python-modules/textile { };
 
   testing-common-database = callPackage ../development/python-modules/testing-common-database { };
 

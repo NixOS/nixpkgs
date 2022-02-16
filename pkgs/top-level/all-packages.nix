@@ -1258,6 +1258,8 @@ with pkgs;
 
   amazon-ecs-cli = callPackage ../tools/virtualization/amazon-ecs-cli { };
 
+  amazon-qldb-shell = callPackage ../development/tools/amazon-qldb-shell { };
+
   amber = callPackage ../tools/text/amber {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -1332,7 +1334,7 @@ with pkgs;
 
   ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
 
-  archivebox = python3Packages.callPackage ../applications/misc/archivebox { };
+  archivebox = callPackage ../applications/misc/archivebox { };
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
@@ -4348,6 +4350,8 @@ with pkgs;
     inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
   };
 
+  artim-dark = callPackage ../data/themes/artim-dark {};
+
   bore = callPackage ../tools/networking/bore {
     inherit (darwin) Libsystem;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
@@ -4383,6 +4387,8 @@ with pkgs;
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
   checkmate = callPackage ../development/tools/checkmate { };
+
+  circup = callPackage ../development/tools/circup { };
 
   civetweb = callPackage ../development/libraries/civetweb { };
 
@@ -6069,7 +6075,7 @@ with pkgs;
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
-  google-clasp = callPackage ../development/misc/google-clasp { };
+  google-clasp = nodePackages."@google/clasp";
 
   google-compute-engine = with python38.pkgs; toPythonApplication google-compute-engine;
 
@@ -6632,6 +6638,8 @@ with pkgs;
   };
 
   innoextract = callPackage ../tools/archivers/innoextract { };
+
+  input-remapper = python3Packages.callPackage ../tools/inputmethods/input-remapper { };
 
   input-utils = callPackage ../os-specific/linux/input-utils { };
 
@@ -8931,6 +8939,8 @@ with pkgs;
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
 
+  podman-tui = callPackage ../applications/virtualization/podman-tui { };
+
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
   poedit = callPackage ../tools/text/poedit {
@@ -10952,10 +10962,6 @@ with pkgs;
 
   ts = callPackage ../tools/system/ts { };
 
-  transfig = callPackage ../tools/graphics/transfig {
-    libpng = libpng12;
-  };
-
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
   ttwatch = callPackage ../tools/misc/ttwatch { };
@@ -11875,9 +11881,7 @@ with pkgs;
 
   elm2nix = haskell.lib.compose.justStaticExecutables haskellPackages.elm2nix;
 
-  elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  });
+  elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
 
   apache-flex-sdk = callPackage ../development/compilers/apache-flex-sdk { };
 
@@ -14510,7 +14514,7 @@ with pkgs;
 
   checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
-  chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome2.GConf; };
+  chromedriver = callPackage ../development/tools/selenium/chromedriver { };
 
   chromium-xorg-conf = callPackage ../os-specific/linux/chromium-xorg-conf { };
 
@@ -15243,12 +15247,9 @@ with pkgs;
     jre_headless = jre8_headless;
   };
 
-  nwjs = callPackage ../development/tools/nwjs {
-    gconf = gnome2.GConf;
-  };
+  nwjs = callPackage ../development/tools/nwjs { };
 
   nwjs-sdk = callPackage ../development/tools/nwjs {
-    gconf = gnome2.GConf;
     sdk = true;
   };
 
@@ -21059,6 +21060,7 @@ with pkgs;
     # _compat can probably be removed on next minor version after 0.10.0
     lua = lua5_2_compat;
     withExtraLibs = [];
+    withExtraLuaPackages = _: [];
   };
 
   prosody-filer = callPackage ../servers/xmpp/prosody-filer { };
@@ -25947,6 +25949,8 @@ with pkgs;
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };
 
+  lemonade = callPackage ../applications/misc/lemonade { };
+
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
   librespot = callPackage ../applications/audio/librespot {
@@ -26077,7 +26081,7 @@ with pkgs;
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
-  google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
+  google-chrome = callPackage ../applications/networking/browsers/google-chrome { };
 
   google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
 
@@ -26444,8 +26448,6 @@ with pkgs;
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icewm = callPackage ../applications/window-managers/icewm {};
-
-  icecat-bin = callPackage ../applications/networking/browsers/icecat-bin { };
 
   icon-library = callPackage ../applications/graphics/icon-library { };
 
@@ -28060,6 +28062,8 @@ with pkgs;
 
   phrasendrescher = callPackage ../tools/security/phrasendrescher { };
 
+  phrase-cli = callPackage ../tools/misc/phrase-cli { };
+
   phraseapp-client = callPackage ../tools/misc/phraseapp-client { };
 
   phwmon = callPackage ../applications/misc/phwmon { };
@@ -28674,6 +28678,8 @@ with pkgs;
   spotify-tui = callPackage ../applications/audio/spotify-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
+
+  sptlrx = callPackage ../applications/audio/sptlrx { };
 
   squishyball = callPackage ../applications/audio/squishyball {
     ncurses = ncurses5;

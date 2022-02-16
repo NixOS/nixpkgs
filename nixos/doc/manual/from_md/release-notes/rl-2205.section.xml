@@ -124,6 +124,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/sezanzeb/input-remapper">input-remapper</link>,
+          an easy to use tool to change the mapping of your input device
+          buttons. Available at
+          <link xlink:href="options.html#opt-services.input-remapper.enable">services.input-remapper</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://invoiceplane.com">InvoicePlane</link>,
           web application for managing and creating invoices. Available
           at
@@ -150,6 +158,14 @@
           internet connection from your device to your PC and vice versa
           through a USB cable. Available at
           <link linkend="opt-services.tetrd.enable">services.tetrd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
+          a very simple server for the Gemini hypertext protocol.
+          Available as
+          <link xlink:href="options.html#opt-services.agate.enable">services.agate</link>.
         </para>
       </listitem>
       <listitem>
@@ -263,6 +279,23 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>home-assistant</literal> module now requires
+          users that don’t want their configuration to be managed
+          declaratively to set
+          <literal>services.home-assistant.config = null;</literal>.
+          This is required due to the way default settings are handled
+          with the new settings style.
+        </para>
+        <para>
+          Additionally the default list of
+          <literal>extraComponents</literal> now includes the minimal
+          dependencies to successfully complete the
+          <link xlink:href="https://www.home-assistant.io/getting-started/onboarding/">onboarding</link>
+          procedure.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.emacsPackages.orgPackages</literal> is removed
           because org elpa is deprecated. The packages in the top level
           of <literal>pkgs.emacsPackages</literal>, such as org and
@@ -276,6 +309,17 @@
         <para>
           <literal>services.kubernetes.addons.dashboard</literal> was
           removed due to it being an outdated version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.kubernetes.scheduler.{port,address}</literal>
+          now set <literal>--secure-port</literal> and
+          <literal>--bind-address</literal> instead of
+          <literal>--port</literal> and <literal>--address</literal>,
+          since the former have been deprecated and are no longer
+          functional in kubernetes&gt;=1.23. Ensure that you are not
+          relying on the insecure behaviour before upgrading.
         </para>
       </listitem>
       <listitem>

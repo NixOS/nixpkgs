@@ -14,7 +14,6 @@ fontconfig,
 freetype,
 gdk-pixbuf,
 glib,
-gnome2,
 gtk3,
 lib,
 libdrm,
@@ -50,7 +49,6 @@ let
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     gtk3
     libdrm
     libnotify
