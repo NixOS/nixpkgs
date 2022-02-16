@@ -12,8 +12,6 @@ buildGoModule rec {
   pname = "containerd";
   version = "1.6.0";
 
-  outputs = [ "out" "man" ];
-
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
@@ -32,14 +30,13 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make binaries man "VERSION=v${version}" "REVISION=${src.rev}"
+    make binaries "VERSION=v${version}" "REVISION=${src.rev}"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     install -Dm555 bin/* -t $out/bin
-    installManPage man/*.[1-9]
     installShellCompletion --bash contrib/autocomplete/ctr
     installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
     runHook postInstall
