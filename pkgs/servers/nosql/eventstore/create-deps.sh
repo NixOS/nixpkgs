@@ -8,7 +8,7 @@ set -euo pipefail
 #       this script is inspired:
 #       - pkgs/servers/nosql/eventstore/create-deps.sh
 #       - pkgs/development/dotnet-modules/python-language-server/create_deps.sh
-#       - pkgs/misc/emulators/ryujinx/updater.sh
+#       - pkgs/applications/emulators/ryujinx/updater.sh
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
