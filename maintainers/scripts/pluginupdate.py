@@ -1,4 +1,4 @@
-# Used by pkgs/misc/vim-plugins/update.py and pkgs/applications/editors/kakoune/plugins/update.py
+# Used by pkgs/applications/editors/vim/plugins/update.py and pkgs/applications/editors/kakoune/plugins/update.py
 
 # format:
 # $ nix run nixpkgs.python3Packages.black -c black update.py
