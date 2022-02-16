@@ -272,7 +272,6 @@ stdenv.mkDerivation rec {
     "-Ddirectfb=disabled"
     "-Dflite=disabled"
     "-Dkms=disabled" # renders to libdrm output
-    "-Dofa=disabled"
     "-Dlv2=disabled"
     "-Dsbc=disabled"
     "-Dspandsp=disabled"
