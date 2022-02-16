@@ -258,7 +258,6 @@ let
             # Don't record the configure flags since this causes unnecessary
             # runtime dependencies
             ''
-              set -x
               for i in main/build-defs.h.in scripts/php-config.in; do
                 substituteInPlace $i \
                   --replace '@CONFIGURE_COMMAND@' '(omitted)' \
@@ -282,10 +281,13 @@ let
               fi
             '' + lib.optionalString stdenv.isDarwin ''
               substituteInPlace configure --replace "-lstdc++" "-lc++"
-            '' + ''
-              make test TESTS='--show-diff tests/blacklist.phpt'
             '';
-            # Temporary build step to debug an issue
+
+          checkPhase = ''
+            runHook preCheck
+            make test TESTS='--show-diff'
+            runHook postCheck
+          '';
 
           postInstall = ''
             test -d $out/etc || mkdir $out/etc
