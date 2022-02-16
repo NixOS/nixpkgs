@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+}:
 
 stdenv.mkDerivation rec {
   pname = "hercules";
@@ -10,8 +13,14 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "IBM mainframe emulator";
     homepage = "http://www.hercules-390.eu";
+    description = "IBM mainframe emulator";
+    longDescription = ''
+      Hercules is an open source software implementation of the mainframe
+      System/370 and ESA/390 architectures, in addition to the latest 64-bit
+      z/Architecture. Hercules runs under Linux, Windows, Solaris, FreeBSD, and
+      Mac OS X.
+    '';
     license = licenses.qpl;
     maintainers = [ maintainers.anna328p ];
   };
