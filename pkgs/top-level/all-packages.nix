@@ -2107,6 +2107,8 @@ with pkgs;
 
   droidcam = callPackage ../applications/video/droidcam { };
 
+  droidmote = callPackage ../tools/inputmethods/droidmote { };
+
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
   echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage (../tools/security/echidna) { });
