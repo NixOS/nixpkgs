@@ -15,6 +15,7 @@
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , libclc
+, jdupes
 }:
 
 /** Packaging design:
@@ -232,6 +233,9 @@ self = stdenv.mkDerivation {
         mv $dev/$pc $driversdev/$pc
       fi
     done
+
+    # NAR doesn't support hard links, so convert them to symlinks.
+    ${jdupes}/bin/jdupes -Hlr "$drivers"
 
     # add RPATH so the drivers can find the moved libgallium and libdricore9
     # moved here to avoid problems with stripping patchelfed files
