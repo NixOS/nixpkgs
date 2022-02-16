@@ -6,10 +6,6 @@
 , withPpp = stdenv.isLinux;
 }:
 
-  withSystemd = stdenv.isLinux;
-  withPpp     = stdenv.isLinux;
-
-in
 stdenv.mkDerivation rec {
   pname = "openfortivpn";
   version = "1.17.1";
