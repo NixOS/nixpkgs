@@ -2,9 +2,10 @@
 , openssl
 , ppp
 , systemd
+, withSystemd = stdenv.isLinux;
+, withPpp = stdenv.isLinux;
 }:
 
-let
   withSystemd = stdenv.isLinux;
   withPpp     = stdenv.isLinux;
 
