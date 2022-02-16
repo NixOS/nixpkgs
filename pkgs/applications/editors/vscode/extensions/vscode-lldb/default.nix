@@ -42,7 +42,7 @@ let
     doCheck = false;
   };
 
-  nodeDeps = nodePackages."vscode-lldb-build-deps-../../misc/vscode-extensions/vscode-lldb/build-deps";
+  nodeDeps = nodePackages."vscode-lldb-build-deps-../../applications/editors/vscode/extensions/vscode-lldb/build-deps";
 
 in stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";

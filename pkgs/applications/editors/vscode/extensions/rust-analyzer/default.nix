@@ -29,7 +29,7 @@ let
     sha256 = "sha256-vh7z8jupVxXPOko3sWUsOB7eji/7lKfwJ/CE3iw97Sw=";
   };
 
-  build-deps = nodePackages."rust-analyzer-build-deps-../../misc/vscode-extensions/rust-analyzer/build-deps";
+  build-deps = nodePackages."rust-analyzer-build-deps-../../applications/editors/vscode/extensions/rust-analyzer/build-deps";
   # FIXME: Making a new derivation to link `node_modules` and run `npm run package`
   # will cause a build failure.
   vsix = build-deps.override {
