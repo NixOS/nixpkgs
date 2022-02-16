@@ -4,11 +4,10 @@ import ../make-test-python.nix (
     {
       name = "zammad";
 
-      meta.maintainers = with lib.maintainers; [ garbas ];
+      meta.maintainers = with lib.maintainers; [ garbas taeer ];
 
       nodes.machine = {
         services.zammad.enable = true;
-        services.zammad.secretsFile = "${./test_secrets}";
       };
 
       testScript = ''

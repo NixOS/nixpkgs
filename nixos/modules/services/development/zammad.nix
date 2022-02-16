@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.zammad;
+  settingsFormat = pkgs.formats.yaml { };
   serviceConfig = {
     Type = "simple";
     Restart = "always";
@@ -16,12 +17,13 @@ let
 
     EnvironmentFile = cfg.secretsFile;
   };
-  env = {
+  environment = {
     RAILS_ENV = "production";
     NODE_ENV = "production";
     RAILS_SERVE_STATIC_FILES="true";
     RAILS_LOG_TO_STDOUT="true";
   };
+  databaseConfig = settingsFormat.generate "database.yml" cfg.database.settings;
 in {
 
   options = {
@@ -68,20 +70,77 @@ in {
         description = "Websocket service port.";
       };
 
-      dbName = lib.mkOption {
-        type = lib.types.str;
-        default = "zammad";
-        description = "The name of the database to use.";
+      database = {
+        type = mkOption {
+          type = types.enum [ "PostgreSQL" "MySQL" ];
+          default = "PostgreSQL";
+          example = "MySQL";
+          description = "Database engine to use.";
+        };
+
+        host = mkOption {
+          type = types.nullOr types.str;
+          default = {
+            PostgreSQL = "/run/postgresql";
+            MySQL = "localhost";
+          }.${cfg.database.type};
+          description = ''
+            Database host address.
+          '';
+        };
+
+        port = mkOption {
+          type = types.nullOr types.port;
+          default = null;
+          description = "Database port. Use <literal>null</literal> for default port.";
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "zammad";
+          description = ''
+            Database name.
+          '';
+        };
+
+        user = mkOption {
+          type = types.nullOr types.str;
+          default = "zammad";
+          description = "Database user.";
+        };
+
+        passwordFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/run/keys/zammad-dbpassword";
+          description = ''
+            A file containing the password for <option>services.zammad.database.user</option>.
+          '';
+        };
+
+        createLocally = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Whether to create a local database automatically.";
+        };
+
+        settings = mkOption {
+          type = settingsFormat.type;
+          default = {};
+          example = literalExpression ''
+            {
+            }
+          '';
+          description = ''
+            The <filename>database.yml</filename> configuration file as key value set.
+            See <link xlink:href='TODO' />
+            for list of configuration parameters.
+          '';
+        };
       };
 
-      dbUsername = lib.mkOption {
-        type = lib.types.str;
-        default = "zammad";
-        description = "The username to use to connect to the database.";
-      };
-
-      secretsFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
+      secretsFile = mkOption {
+        type = types.nullOr types.path;
         default = null;
         description = ''
           Path of a file containing secrets the format of EnvironmentFile as
@@ -98,6 +157,22 @@ in {
 
   config = mkIf cfg.enable {
 
+    services.zammad.database.settings = {
+      production = (mapAttrs (_: v: mkDefault v) {
+        adapter = {
+          PostgreSQL = "postgresql";
+          MySQL = "mysql2";
+        }.${cfg.database.type};
+        database = cfg.database.name;
+        pool = 50;
+        timeout = 5000;
+        encoding = "utf8";
+        username = cfg.database.user;
+        host = cfg.database.host;
+        port = lib.mkIf (cfg.database.port != null) cfg.database.port
+      });
+    };
+
     networking.firewall.allowedTCPPorts = mkIf cfg.openPorts [
       config.services.zammad.port
       config.services.zammad.websocketPort
@@ -111,58 +186,69 @@ in {
 
     users.groups.zammad = {};
 
-    services.postgresql = {
+    assertions = [
+      { assertion = cfg.database.createLocally -> cfg.database.user == "zammad";
+        message = "services.zammad.database.user must be set to \"zammad\" if services.zammad.database.createLocally is set to true";
+      }
+      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+        message = "a password cannot be specified if services.zammad.database.createLocally is set to true";
+      }
+    ];
+
+    services.mysql = optionalAttrs (cfg.database.createLocally && cfg.database.type == "MySQL") {
       enable = true;
-      ensureDatabases = [ cfg.dbName ];
+      package = mkDefault pkgs.mariadb;
+      ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        {
-          name = cfg.dbUsername;
-          ensurePermissions."DATABASE ${cfg.dbName}" = "ALL PRIVILEGES";
+        { name = cfg.database.user;
+          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
     };
 
-    systemd.services.zammad-setup = {
-      after = [ "postgresql.service" ];
-      requires = [ "postgresql.service" ];
-      serviceConfig.EnvironmentFile = cfg.secretsFile;
-      script = ''
-        echo "Setting password for database '${cfg.dbName}' and user '${cfg.dbUsername}'"
-        ${pkgs.util-linux}/bin/runuser -u ${config.services.postgresql.superUser} -- \
-          ${config.services.postgresql.package}/bin/psql \
-            -c "ALTER ROLE ${cfg.dbUsername} WITH PASSWORD '$PGPASSWORD'"
-        mkdir -p ${cfg.dataDir}
-      '';
+    services.postgresql = optionalAttrs (cfg.database.createLocally && cfg.database.type == "PostgreSQL") {
+      enable = true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        { name = cfg.database.user;
+          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+        }
+      ];
     };
 
     systemd.services.zammad-web = {
+      inherit environment;
+      serviceConfig = serviceConfig // {
+        # loading all the gems takes time
+        TimeoutStartSec = 600;
+        Restart = "no";
+      };
       after = [
         "network.target"
         "postgresql.service"
-        "zammad-setup.service"
       ];
       requires = [
         "postgresql.service"
-        "zammad-setup.service"
       ];
       description = "Zammad web";
       wantedBy = [ "multi-user.target" ];
-      environment = env;
       preStart = ''
         # Blindly copy the whole project here.
-        chmod -R +w ${cfg.dataDir}/
-        rm -rf ${cfg.dataDir}/public/assets/*
-        rm -rf ${cfg.dataDir}/tmp/*
-        rm -rf ${cfg.dataDir}/log/*
-        cp -r --no-preserve=owner ${cfg.package}/* ${cfg.dataDir}
-        chmod -R +w ${cfg.dataDir}
-        export DATABASE_URL="postgresql://${cfg.dbUsername}:$PGPASSWORD@localhost:${toString(config.services.postgresql.port)}/${cfg.dbName}";
-        pushd ${cfg.dataDir}
+        chmod -R u+w .
+        rm -rf ./public/assets/*
+        rm -rf ./tmp/*
+        rm -rf ./log/*
+        cp -r --no-preserve=owner ${cfg.package}/* .
+        chmod -R u+w .
+        # config file
+        cp ${databaseConfig} ./config/database.yml
         if [ `${config.services.postgresql.package}/bin/psql \
-                  --host localhost \
-                  --port ${toString(config.services.postgresql.port)} \
-                  --username ${cfg.dbUsername} \
-                  --dbname ${cfg.dbName} \
+                  --host ${cfg.database.host} \
+                  ${optionalString
+                    (cfg.database.port != null) 
+                    "--port ${toString cfg.database.port}"} \
+                  --username ${cfg.database.user} \
+                  --dbname ${cfg.database.name} \
                   --command "SELECT COUNT(*) FROM pg_class c \
                             JOIN pg_namespace s ON s.oid = c.relnamespace \
                             WHERE s.nspname NOT IN ('pg_catalog', 'pg_toast', 'information_schema') \
@@ -174,56 +260,30 @@ in {
           echo "Migrate database"
           ./bin/rake --no-system db:migrate
         fi
-        popd
         echo "Done"
       '';
-
-      serviceConfig = serviceConfig // {
-        # loading all the gems takes a long time
-        TimeoutStartSec=600;
-        ExecStart = pkgs.writeShellScript "zammad-web-start" ''
-          set -eu
-          export DATABASE_URL="postgresql://${cfg.dbUsername}:$PGPASSWORD@localhost:${toString(config.services.postgresql.port)}/${cfg.dbName}"
-          ${cfg.dataDir}/script/rails server -b ${cfg.host} -p ${toString(cfg.port)}
-        '';
-      };
+      script = "./script/rails server -b ${cfg.host} -p ${toString cfg.port}";
     };
 
     systemd.services.zammad-websocket = {
+      inherit serviceConfig environment;
       after = [ "zammad-web.service" ];
-      requires = [
-        "zammad-web.service"
-      ];
+      requires = [ "zammad-web.service" ];
       description = "Zammad websocket";
       wantedBy = [ "multi-user.target" ];
-      environment = env;
-      serviceConfig = serviceConfig // {
-        ExecStart = pkgs.writeShellScript "zammad-websocket-start" ''
-          set -eu
-          export DATABASE_URL="postgresql://${cfg.dbUsername}:$PGPASSWORD@localhost:${toString(config.services.postgresql.port)}/${cfg.dbName}"
-          ${cfg.dataDir}/script/websocket-server.rb -b ${cfg.host} -p ${toString(cfg.websocketPort)} start
-        '';
-      };
+      script = "./script/websocket-server.rb -b ${cfg.host} -p ${toString cfg.websocketPort} start";
     };
 
     systemd.services.zammad-scheduler = {
+      inherit environment;
+      serviceConfig = serviceConfig // { Type = "forking"; };
       after = [ "zammad-web.service" ];
-      requires = [
-        "zammad-web.service"
-      ];
+      requires = [ "zammad-web.service" ];
       description = "Zammad scheduler";
       wantedBy = [ "multi-user.target" ];
-      environment = env;
-      serviceConfig = serviceConfig // {
-        Type = "forking";
-        ExecStart = pkgs.writeShellScript "zammad-scheduler-start" ''
-          set -eu
-          export DATABASE_URL="postgresql://${cfg.dbUsername}:$PGPASSWORD@localhost:${toString(config.services.postgresql.port)}/${cfg.dbName}"
-          ${cfg.dataDir}/script/scheduler.rb start
-        '';
-      };
+      script = "./script/scheduler.rb start";
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ garbas ];
+  meta.maintainers = with lib.maintainers; [ garbas taeer ];
 }
