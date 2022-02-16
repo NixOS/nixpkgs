@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "3.7.4";
 
   src = fetchurl {
-    url = "http://ftp.debian.org/debian/pool/main/a/apt-cacher-ng/apt-cacher-ng_${version}.orig.tar.xz";
+    url = "https://ftp.debian.org/debian/pool/main/a/apt-cacher-ng/apt-cacher-ng_${version}.orig.tar.xz";
     sha256 = "0pwsj9rf6a6q7cnfbpcrfq2gjcy7sylqzqqr49g2zi39lrrh8533";
   };
 
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ bzip2 fuse libevent xz openssl systemd tcp_wrappers zlib c-ares ];
 
   meta = with lib; {
-    description = "A caching proxy specialized for linux distribution files";
+    description = "A caching proxy specialized for Linux distribution files";
     homepage = "https://www.unix-ag.uni-kl.de/~bloch/acng/";
-    license = licenses.gpl2;
+    license = licenses.bsdOriginal;
     platforms = platforms.linux;
     maintainers = [ maintainers.makefu ];
   };
