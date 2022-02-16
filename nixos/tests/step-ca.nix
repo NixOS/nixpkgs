@@ -9,6 +9,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     '';
   in
   {
+    name = "step-ca";
     nodes =
       {
         caserver =
@@ -42,8 +43,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
         caclient =
           { config, pkgs, ... }: {
-            security.acme.server = "https://caserver:8443/acme/acme/directory";
-            security.acme.email = "root@example.org";
+            security.acme.defaults.server = "https://caserver:8443/acme/acme/directory";
+            security.acme.defaults.email = "root@example.org";
             security.acme.acceptTerms = true;
 
             security.pki.certificateFiles = [ "${test-certificates}/root_ca.crt" ];
