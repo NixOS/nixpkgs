@@ -21,7 +21,7 @@ let
     package_version="$3"
     version_policy="$4"
 
-    flvFlags=("$package_name" "$version_policy" "stable")
+    flvFlags=("$package_name" "$version_policy" "''${GNOME_UPDATE_STABILITY:-stable}")
 
     if (( $# >= 5 )); then
       upper_bound="$5"
