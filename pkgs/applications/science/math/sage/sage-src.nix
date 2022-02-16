@@ -144,6 +144,17 @@ stdenv.mkDerivation rec {
       rev = "53532ddd4e2dc92469c1590ebf0c40f8f69bf579";
       sha256 = "sha256-6SoSBvIlqvNwZV3jTB6uPdUtaWIOeNmddi2poK/WvGs=";
     })
+
+    # TODO: This will not be necessary when Sphinx 4.4.1 is released,
+    # since some warnings introduced in 4.4.0 will be disabled by then
+    # (https://github.com/sphinx-doc/sphinx/pull/10126).
+    # https://trac.sagemath.org/ticket/33272
+    (fetchSageDiff {
+      base = "9.5";
+      name = "sphinx-4.4-warnings.patch";
+      rev = "97d7958bed441cf2ccc714d88f83d3a8426bc085";
+      sha256 = "sha256-y1STE0oxswnijGCsBw8eHWWqpmT1XMznIfA0vvX9pFA=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
