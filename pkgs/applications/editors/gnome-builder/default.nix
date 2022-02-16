@@ -4,8 +4,8 @@
 , cmark
 , appstream-glib
 , desktop-file-utils
-, fetchurl
 , fetchpatch
+, fetchurl
 , flatpak
 , gnome
 , libgit2-glib
@@ -40,21 +40,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "41.3";
+  version = "42.alpha1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "4iUPyOnp8gAsRS5ZUNgmhXNNPESAs1Fnq1CKyHAlCeE=";
+    sha256 = "AtJ+Op2ChWWgcREWFb3zqyp1CzBb/469BwJXK3DuWnc=";
   };
 
   patches = [
-    # Fix build with latest libportal
-    # https://gitlab.gnome.org/GNOME/gnome-builder/-/merge_requests/486
+    # Fix building docs
+    # https://gitlab.gnome.org/GNOME/gnome-builder/-/merge_requests/530
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/b3bfa0df53a3749c3b73cb6c4bad5cab3fa549a1.patch";
-      sha256 = "B/uCcYavFvOAPhLHZ4MRNENDd6VytILiGYwDZRUSxTE=";
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/e2b369ec056ff43701803c5e5185fa2ac391d238.patch";
+      sha256 = "OI2CMtA0M9u6/5xmWm4i+bXOKDXmtYprCONNCU2aOj0=";
     })
   ];
 
@@ -103,10 +103,6 @@ stdenv.mkDerivation rec {
     xvfb-run
   ];
 
-  prePatch = ''
-    patchShebangs build-aux/meson/post_install.py
-  '';
-
   mesonFlags = [
     "-Ddocs=true"
 
@@ -121,6 +117,10 @@ stdenv.mkDerivation rec {
   # Some tests fail due to being unable to find the Vte typelib, and I don't
   # understand why. Somebody should look into fixing this.
   doCheck = true;
+
+  postPatch = ''
+    patchShebangs build-aux/meson/post_install.py
+  '';
 
   checkPhase = ''
     export NO_AT_BRIDGE=1
