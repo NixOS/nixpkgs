@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.zammad;
   settingsFormat = pkgs.formats.yaml { };
+  filterNull = filterAttrs (_: v: v != null);
   serviceConfig = {
     Type = "simple";
     Restart = "always";
@@ -14,8 +15,6 @@ let
     PrivateTmp = true;
     StateDirectory = "zammad";
     WorkingDirectory = cfg.dataDir;
-
-    EnvironmentFile = cfg.secretsFile;
   };
   environment = {
     RAILS_ENV = "production";
@@ -139,26 +138,36 @@ in {
         };
       };
 
-      secretsFile = mkOption {
+      secretKeyBaseFile = mkOption {
         type = types.nullOr types.path;
         default = null;
+        example = "/run/keys/secret_key_base";
         description = ''
-          Path of a file containing secrets the format of EnvironmentFile as
-          described by systemd.exec(5). You must to define:
-            - PGPASSWORD
-            - SECRET_KEY_BASE
-          SECRET_KEY_BASE can be generated using:
-            ruby -e "require 'securerandom'; puts SecureRandom.hex(64)"
+          The path to a file containing the
+          <literal>secret_key_base</literal> secret.
+
+          Zammad uses <literal>secret_key_base</literal> to encrypt
+          the cookie store, which contains session data, and to digest
+          user auth tokens.
+
+          Needs to be a 64 byte long string of hexadecimal
+          characters. You can generate one by running
+
+          <screen>
+          <prompt>$ </prompt>openssl rand -hex 64 >/path/to/secret_key_base_file
+          </screen>
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
         '';
       };
     };
-
   };
 
   config = mkIf cfg.enable {
 
     services.zammad.database.settings = {
-      production = (mapAttrs (_: v: mkDefault v) {
+      production = mapAttrs (_: v: mkDefault v) (filterNull {
         adapter = {
           PostgreSQL = "postgresql";
           MySQL = "mysql2";
@@ -169,7 +178,7 @@ in {
         encoding = "utf8";
         username = cfg.database.user;
         host = cfg.database.host;
-        port = lib.mkIf (cfg.database.port != null) cfg.database.port
+        port = cfg.database.port;
       });
     };
 
@@ -242,6 +251,20 @@ in {
         chmod -R u+w .
         # config file
         cp ${databaseConfig} ./config/database.yml
+        chmod -R u+w .
+        ${optionalString (cfg.database.passwordFile != null) ''
+        {
+          echo -n "  password: "
+          cat ${cfg.database.passwordFile}
+        } >> ./config/database.yml
+        ''}
+        ${optionalString (cfg.secretKeyBaseFile != null) ''
+        {
+          echo "production: "
+          echo -n "  secret_key_base: "
+          cat ${cfg.secretKeyBaseFile}
+        } > ./config/secrets.yml
+        ''}
         if [ `${config.services.postgresql.package}/bin/psql \
                   --host ${cfg.database.host} \
                   ${optionalString
