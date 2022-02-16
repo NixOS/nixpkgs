@@ -5243,6 +5243,7 @@ broken-packages:
   - urxml
   - users-mysql-haskell
   - users-persistent
+  - utc
   - utf
   - utf8-prelude
   - utf8-validator
