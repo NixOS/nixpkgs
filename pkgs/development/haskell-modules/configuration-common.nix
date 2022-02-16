@@ -1459,10 +1459,6 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/2375
   hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
 
-  # 2021-11-23: Too strict bounds on ghcide, pending new release
-  hls-rename-plugin = assert super.hls-rename-plugin.version == "1.0.0.0";
-    doJailbreak super.hls-rename-plugin;
-
   # 2021-03-21: Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
   # 2021-11-13: Too strict upper bound on implicit-hie-cradle

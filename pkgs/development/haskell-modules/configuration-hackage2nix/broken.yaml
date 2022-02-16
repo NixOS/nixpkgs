@@ -2222,7 +2222,6 @@ broken-packages:
   - hlongurl
   - hlrdb-core
   - hls-exactprint-utils
-  - hls-rename-plugin
   - hlwm
   - hmarkup
   - hmatrix-banded
