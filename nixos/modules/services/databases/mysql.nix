@@ -152,6 +152,21 @@ in
         '';
       };
 
+      dropInitialAnonymousUsers = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          By default, a MySQL installation has an anonymous user, allowing anyone
+          to log into MySQL without having to have a user account created for
+          them. This is intended only for testing. You should remove them
+          before moving into a production environment.
+
+          This option will drop anonymous users on the first run of MySQL server.
+          It won't affect users on existing servers.
+        '';
+      };
+
       initialDatabases = mkOption {
         type = types.listOf (types.submodule {
           options = {
@@ -422,6 +437,14 @@ in
               echo "Dropping initial database 'test'"
               ( echo "DROP DATABASE test;"
                 echo "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
+                echo "FLUSH PRIVILEGES;"
+              ) | ${cfg.package}/bin/mysql -u ${superUser} -N
+            ''}
+
+            # https://github.com/twitter-forks/mysql/blob/master/scripts/mysql_secure_installation.sh#L157
+            ${optionalString cfg.dropInitialAnonymousUsers ''
+              echo "Removing anonymous users"
+              ( echo "DELETE FROM mysql.user WHERE User=''\'''\';"
                 echo "FLUSH PRIVILEGES;"
               ) | ${cfg.package}/bin/mysql -u ${superUser} -N
             ''}
