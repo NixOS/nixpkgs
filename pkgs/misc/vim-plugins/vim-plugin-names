@@ -756,6 +756,7 @@ simnalamburt/vim-mundo
 simrat39/rust-tools.nvim
 simrat39/symbols-outline.nvim
 sindrets/diffview.nvim
+sindrets/winshift.nvim
 SirVer/ultisnips
 sjl/gundo.vim
 sjl/splice.vim
