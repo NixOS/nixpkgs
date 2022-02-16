@@ -1,23 +1,41 @@
-{ lib, stdenv, fetchurl, openssl, curl, SDL }:
+{ lib
+, stdenv
+, fetchurl
+, SDL
+, curl
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "tinyemu";
-  version = "2018-09-23";
+  version = "2019-12-21";
+
   src = fetchurl {
     url = "https://bellard.org/tinyemu/${pname}-${version}.tar.gz";
-    sha256 = "0d6payyqf4lpvmmzvlpq1i8wpbg4sf3h6llsw0xnqdgq3m9dan4v";
+    hash = "sha256-voNR8hIYGbMXL87c5csYJvoSyH2ht+2Y8mnT6AKgVVU=";
   };
-  buildInputs = [ openssl curl SDL ];
+
+  buildInputs = [
+    SDL
+    curl
+    openssl
+  ];
+
   makeFlags = [ "DESTDIR=$(out)" "bindir=/bin" ];
+
   preInstall = ''
     mkdir -p "$out/bin"
   '';
-  meta = {
+
+  meta = with lib; {
     homepage = "https://bellard.org/tinyemu/";
     description = "A system emulator for the RISC-V and x86 architectures";
-    longDescription = "TinyEMU is a system emulator for the RISC-V and x86 architectures. Its purpose is to be small and simple while being complete.";
-    license = with lib.licenses; [ mit bsd2 ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jhhuh ];
+    longDescription = ''
+      TinyEMU is a system emulator for the RISC-V and x86 architectures. Its
+      purpose is to be small and simple while being complete.
+    '';
+    license = with licenses; [ mit bsd2 ];
+    maintainers = with maintainers; [ jhhuh AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
