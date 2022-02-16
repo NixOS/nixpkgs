@@ -143,7 +143,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open RTL synthesis framework and tools";
-    homepage    = "http://www.clifford.at/yosys/";
+    homepage    = "https://yosyshq.net/yosys/";
     license     = licenses.isc;
     platforms   = platforms.all;
     maintainers = with maintainers; [ shell thoughtpolice emily ];
