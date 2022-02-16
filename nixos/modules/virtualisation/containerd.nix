@@ -53,6 +53,7 @@ in
     virtualisation.containerd = {
       args.config = toString containerdConfigChecked;
       settings = {
+        version = 2;
         plugins."io.containerd.grpc.v1.cri" = {
          containerd.snapshotter =
            lib.mkIf config.boot.zfs.enabled (lib.mkOptionDefault "zfs");
