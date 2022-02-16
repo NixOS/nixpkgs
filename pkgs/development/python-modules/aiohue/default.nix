@@ -1,8 +1,9 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , aiohttp
 , asyncio-throttle
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -13,9 +14,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-V+de9tcZBLaUVpyFLKDH9jv8Nq+UuauxnurGHbGW8xY=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-libs";
+    repo = pname;
+    rev = version;
+    hash = "sha256-DTB6q9TGKd+aGtkVZcJS7XioK5Wwl0GGpAdk2P3igEM=";
   };
 
   propagatedBuildInputs = [
