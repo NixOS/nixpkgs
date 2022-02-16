@@ -38,7 +38,7 @@ in
       RestrictAddressFamilies = optionals (any (collector: (collector == "logind" || collector == "systemd")) cfg.enabledCollectors) [
         # needs access to dbus via unix sockets (logind/systemd)
         "AF_UNIX"
-      ] ++ optionals (any (collector: (collector == "network_route" || collector == "wifi")) cfg.enabledCollectors) [
+      ] ++ optionals (any (collector: (collector == "netdev" || collector == "network_route" || collector == "wifi")) cfg.enabledCollectors) [
         # needs netlink sockets for wireless collector
         "AF_NETLINK"
       ];
