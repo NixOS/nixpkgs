@@ -36,6 +36,8 @@ buildPythonPackage rec {
     "responses"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Python module for mocking out the requests Python library";
     homepage = "https://github.com/getsentry/responses";

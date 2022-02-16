@@ -1,18 +1,16 @@
 { buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pytestCheckHook
 , brotli
-, cairosvg
 , flit-core
 , fonttools
 , pydyf
 , pyphen
 , cffi
-, cssselect
-, lxml
+, cssselect2
+, pillow
 , html5lib
-, tinycss
+, tinycss2
 , zopfli
 , glib
 , harfbuzz
@@ -45,7 +43,6 @@ buildPythonPackage rec {
       pangoft2 = "${pango.out}/lib/libpangoft2-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       gobject = "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       pango = "${pango.out}/lib/libpango-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
-      pangocairo = "${pango.out}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
@@ -56,16 +53,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     brotli
-    cairosvg
     cffi
-    cssselect
+    cssselect2
+    pillow
     fonttools
     html5lib
-    lxml
     flit-core
     pydyf
     pyphen
-    tinycss
+    tinycss2
     zopfli
   ];
 
@@ -80,9 +76,12 @@ buildPythonPackage rec {
     # sensitive to sandbox environments
     "test_tab_size"
     "test_tabulation_character"
+    "test_http"
   ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
+  makeWrapperArgs = [ "--set FONTCONFIG_FILE ${fontconfig.out}/etc/fonts/fonts.conf" ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
