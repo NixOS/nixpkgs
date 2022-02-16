@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , cmake
 , ninja
 , intltool
@@ -33,6 +34,8 @@
 , nspr
 , icu
 , libcanberra-gtk3
+, geocode-glib
+, cmark
 , bogofilter
 , gst_all_1
 , procps
@@ -43,12 +46,18 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.42.4";
+  version = "3.43.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+oprem1GsinbXfIv3nZCVFIjV/4b7NexjlNt/piJCmU=";
+    sha256 = "nBAQtBOGT5fE4VB96MWaNR9LMXT3DSIiig+dXjmz3pg=";
   };
+
+  patches = [
+    # Fix build with gweather4
+    # https://gitlab.gnome.org/GNOME/evolution/-/merge_requests/102
+    ./0001-M-102-Port-to-libgweather4.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -78,6 +87,8 @@ stdenv.mkDerivation rec {
     highlight
     icu
     libcanberra-gtk3
+    geocode-glib
+    cmark
     libgdata
     libgweather
     libical
@@ -107,6 +118,7 @@ stdenv.mkDerivation rec {
     "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
     "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
     "-DWITH_OPENLDAP=${openldap}"
+    "-DWITH_GWEATHER4=ON"
   ];
 
   requiredSystemFeatures = [
