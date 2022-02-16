@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, python3, libxslt, texlive
-, enableAllFeatures ? false, imagemagick ? null, fig2dev ? null, inkscape ? null, fontconfig ? null, ghostscript ? null
+, enableAllFeatures ? false, imagemagick, fig2dev, inkscape, fontconfig, ghostscript
 
 , tex ? texlive.combine { # satisfy all packages that ./configure mentions
     inherit (texlive) scheme-basic epstopdf anysize appendix changebar
@@ -12,13 +12,6 @@
 
 # NOTE: enableAllFeatures just purifies the expression, it doesn't actually
 # enable any extra features.
-
-assert enableAllFeatures ->
-  imagemagick != null &&
-  fig2dev != null &&
-  inkscape != null &&
-  fontconfig != null &&
-  ghostscript != null;
 
 stdenv.mkDerivation rec {
   pname = "dblatex";
