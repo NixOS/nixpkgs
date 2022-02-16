@@ -138,6 +138,20 @@ in
         '';
       };
 
+      dropInitialTestDatabase = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          By default, MySQL comes with a database named 'test' that anyone can
+          access. This is intended only for testing, and should be removed
+          before moving into a production environment.
+
+          This option will drop 'test' database on the first run of MySQL server.
+          It won't affect 'test' database on existing servers.
+        '';
+      };
+
       initialDatabases = mkOption {
         type = types.listOf (types.submodule {
           options = {
@@ -402,6 +416,15 @@ in
             ( echo "CREATE USER IF NOT EXISTS '${cfg.user}'@'localhost' IDENTIFIED WITH ${if isMariaDB then "unix_socket" else "auth_socket"};"
               echo "GRANT ALL PRIVILEGES ON *.* TO '${cfg.user}'@'localhost' WITH GRANT OPTION;"
             ) | ${cfg.package}/bin/mysql -u ${superUser} -N
+
+            # https://github.com/twitter-forks/mysql/blob/865aae5f23e2091e1316ca0e6c6651d57f786c76/scripts/mysql_secure_installation.sh#L178
+            ${optionalString cfg.dropInitialTestDatabase ''
+              echo "Dropping initial database 'test'"
+              ( echo "DROP DATABASE test;"
+                echo "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
+                echo "FLUSH PRIVILEGES;"
+              ) | ${cfg.package}/bin/mysql -u ${superUser} -N
+            ''}
 
             ${concatMapStrings (database: ''
               # Create initial databases
