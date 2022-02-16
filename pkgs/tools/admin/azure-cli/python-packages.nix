@@ -481,18 +481,6 @@ let
         };
       });
 
-      PyGithub = super.PyGithub.overridePythonAttrs(oldAttrs: rec {
-        version = "1.38";
-
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "sha256-HtCPd17FBnvIRStyveLbuVz05S/yvVDMMsackf+tknI=";
-        };
-
-        doCheck = false;
-      });
-
       knack = super.knack.overridePythonAttrs(oldAttrs: rec {
         version = "0.9.0";
 
