@@ -726,8 +726,12 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
+ - clash-ghc_1_6_1
  - clash-lib
+ - clash-lib-hedgehog
+ - clash-lib_1_6_1
  - clash-multisignal
+ - clash-prelude-hedgehog
  - clash-prelude-quickcheck
  - clash-shake
  - clash-systemverilog
@@ -1192,7 +1196,7 @@ dont-distribute-packages:
  - funnyprint
  - funsat
  - fused-effects-squeal
- - futhark_0_21_5
+ - futhark_0_21_6
  - fwgl-glfw
  - fwgl-javascript
  - fxpak
@@ -2141,9 +2145,7 @@ dont-distribute-packages:
  - mkbndl
  - mlist
  - mmark-cli
- - mmark-cli_0_0_5_1
  - mmark-ext
- - mmark-ext_0_2_1_4
  - mmtl-base
  - moan
  - modify-fasta
