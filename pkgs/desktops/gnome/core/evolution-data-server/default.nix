@@ -1,18 +1,57 @@
-{ fetchurl, lib, stdenv, substituteAll, pkg-config, gnome, python3, gobject-introspection
-, intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3, gcr, p11-kit
-, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre, vala, cmake, ninja
-, libkrb5, openldap, webkitgtk, libaccounts-glib, json-glib, glib, gtk3, libphonenumber
-, gnome-online-accounts, libgweather, libgdata, gsettings-desktop-schemas, boost, protobuf }:
+{ stdenv
+, lib
+, fetchurl
+, substituteAll
+, pkg-config
+, gnome
+, python3
+, gobject-introspection
+, gettext
+, libsoup
+, libxml2
+, libsecret
+, icu
+, sqlite
+, tzdata
+, libcanberra-gtk3
+, gcr
+, p11-kit
+, db
+, nspr
+, nss
+, libical
+, gperf
+, wrapGAppsHook
+, glib-networking
+, pcre
+, vala
+, cmake
+, ninja
+, libkrb5
+, openldap
+, webkitgtk
+, libaccounts-glib
+, json-glib
+, glib
+, gtk3
+, libphonenumber
+, gnome-online-accounts
+, libgweather
+, libgdata
+, gsettings-desktop-schemas
+, boost
+, protobuf
+}:
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.42.4";
+  version = "3.43.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "fftBs+bAWBHUSajeTfx3q5sZ+O3yCzL92FeRhmIm0lI=";
+    sha256 = "jmV4HGQPoNm0+AEP9Q6Cpo11VTZWrVDZPxMRJ1y7RBw=";
   };
 
   patches = [
@@ -20,22 +59,54 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit tzdata;
     })
+
+    # Fix build with gweather4
+    # https://gitlab.gnome.org/GNOME/evolution-data-server/-/merge_requests/93
+    ./0001-M-93-Port-to-libgweather4.patch
   ];
 
   prePatch = ''
-    substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch --subst-var-by ESD_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
+    substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
+      --subst-var-by ESD_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
       --subst-var-by GDS_GSETTINGS_PATH ${glib.getSchemaPath gsettings-desktop-schemas}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
 
   nativeBuildInputs = [
-    cmake ninja pkg-config intltool python3 gperf wrapGAppsHook gobject-introspection vala
+    cmake
+    ninja
+    pkg-config
+    gettext
+    python3
+    gperf
+    wrapGAppsHook
+    gobject-introspection
+    vala
   ];
+
   buildInputs = [
-    glib libsoup libxml2 gtk3 gnome-online-accounts
-    gcr p11-kit libgweather libgdata libaccounts-glib json-glib
-    icu sqlite libkrb5 openldap webkitgtk glib-networking
-    libcanberra-gtk3 pcre libphonenumber boost protobuf
+    glib
+    libsoup
+    libxml2
+    gtk3
+    gnome-online-accounts
+    gcr
+    p11-kit
+    libgweather
+    libgdata
+    libaccounts-glib
+    json-glib
+    icu
+    sqlite
+    libkrb5
+    openldap
+    webkitgtk
+    glib-networking
+    libcanberra-gtk3
+    pcre
+    libphonenumber
+    boost
+    protobuf
   ];
 
   propagatedBuildInputs = [
@@ -55,6 +126,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
     "-DWITH_PHONENUMBER=ON"
+    "-DWITH_GWEATHER4=ON"
   ];
 
   passthru = {
