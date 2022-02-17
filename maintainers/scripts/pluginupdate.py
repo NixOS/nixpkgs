@@ -423,7 +423,8 @@ class CleanEnvironment(object):
 
 def get_current_plugins(editor: Editor) -> List[Plugin]:
     with CleanEnvironment():
-        cmd = ["nix", "eval", "--extra-experimental-features", "nix-command", "--impure", "--json", "--expr", editor.get_plugins]
+        cmd = ["nix", "eval", "--extra-experimental-features", "nix-command", "--impure",
+                "--json", "--expr", editor.get_plugins]
         log.debug("Running command %s", cmd)
         out = subprocess.check_output(cmd)
     data = json.loads(out)
@@ -454,6 +455,7 @@ def prefetch_plugin(
     print(f"prefetch {name}")
     plugin_path, sha256 = repo.prefetch(commit)
 
+    print(f"plugin_path/sha256 %s/%s", plugin_path, sha256)
     return (
         Plugin(name, commit, has_submodules, sha256, store_path=plugin_path, date=date),
         repo.redirect,

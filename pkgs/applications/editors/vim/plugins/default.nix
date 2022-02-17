@@ -20,7 +20,11 @@ let
   };
 
   plugins = callPackage ./generated.nix {
-    inherit buildVimPluginFrom2Nix;
+    inherit buildVimPluginFrom2Nix luaPackages;
+  };
+
+  lua-plugins = callPackage ./lua-generated.nix {
+    inherit buildVimPluginFrom2Nix luaPackages;
   };
 
   # TL;DR
@@ -40,8 +44,9 @@ let
   extensible-self = lib.makeExtensible
     (extends aliases
       (extends overrides
+      (extends lua-plugins
         (extends plugins initialPackages)
-      )
+      ))
     );
 in
   extensible-self
