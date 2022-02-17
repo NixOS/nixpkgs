@@ -11059,6 +11059,16 @@
     github = "shikanime";
     githubId = 22115108;
   };
+  shiryel = {
+    email = "contact@shiryel.com";
+    name = "Shiryel";
+    github = "shiryel";
+    githubId = 35617139;
+    keys = [{
+      longkeyid = "ed25519/0xC4041EA6B32633DE";
+      fingerprint = "AB63 4CD9 3322 BD42 6231  F764 C404 1EA6 B326 33DE";
+    }];
+  };
   shlevy = {
     email = "shea@shealevy.com";
     github = "shlevy";
