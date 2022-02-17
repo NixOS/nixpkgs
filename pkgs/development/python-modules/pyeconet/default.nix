@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pyeconet";
-  version = "0.1.14";
+  version = "0.1.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-x0mkC2k65VrDhv7UavgDUuRWIQoAJMDtA7jNXNUJuVg=";
+    sha256 = "sha256-zxD2sjKWB/bmxwpVFgkKTngMhr4bVuW+qkSt+pbxqPY=";
   };
 
   propagatedBuildInputs = [
