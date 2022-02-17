@@ -877,6 +877,12 @@
       </listitem>
       <listitem>
         <para>
+          The <link xlink:href="https://dino.im">Dino</link> XMPP client
+          was updated to 0.3, adding support for audio and video calls.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.mattermost.plugins</literal> has been added
           to allow the declarative installation of Mattermost plugins.
           Plugins are automatically repackaged using autoPatchelf.
