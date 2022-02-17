@@ -6149,6 +6149,8 @@ in {
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
+  pyoverkiz = callPackage ../development/python-modules/pyoverkiz { };
+
   pyownet = callPackage ../development/python-modules/pyownet { };
 
   pypoint = callPackage ../development/python-modules/pypoint { };
