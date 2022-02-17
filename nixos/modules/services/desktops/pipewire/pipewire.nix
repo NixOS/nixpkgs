@@ -25,15 +25,18 @@ let
     client = lib.importJSON ./daemon/client.conf.json;
     client-rt = lib.importJSON ./daemon/client-rt.conf.json;
     jack = lib.importJSON ./daemon/jack.conf.json;
+    minimal = lib.importJSON ./daemon/minimal.conf.json;
     pipewire = lib.importJSON ./daemon/pipewire.conf.json;
     pipewire-pulse = lib.importJSON ./daemon/pipewire-pulse.conf.json;
   };
+
+  useSessionManager = cfg.wireplumber.enable || cfg.media-session.enable;
 
   configs = {
     client = recursiveUpdate defaults.client cfg.config.client;
     client-rt = recursiveUpdate defaults.client-rt cfg.config.client-rt;
     jack = recursiveUpdate defaults.jack cfg.config.jack;
-    pipewire = recursiveUpdate defaults.pipewire cfg.config.pipewire;
+    pipewire = recursiveUpdate (if useSessionManager then defaults.pipewire else defaults.minimal) cfg.config.pipewire;
     pipewire-pulse = recursiveUpdate defaults.pipewire-pulse cfg.config.pipewire-pulse;
   };
 in {
