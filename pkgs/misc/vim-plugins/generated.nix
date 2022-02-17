@@ -6459,6 +6459,18 @@ final: prev:
     meta.homepage = "https://github.com/tomtom/tcomment_vim/";
   };
 
+  telescope-asynctasks-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-asynctasks.nvim";
+    version = "2021-10-22";
+    src = fetchFromGitHub {
+      owner = "GustavoKatel";
+      repo = "telescope-asynctasks.nvim";
+      rev = "80bd6570e5423d14ad1e6fd56a199955ac1b895f";
+      sha256 = "Ow7iSmosMs/hGEfnKKorZhS4tKVKal+pkZ52LIFsEu4=";
+    };
+    meta.homepage = "https://github.com/GustavoKatel/telescope-asynctasks.nvim";
+  };
+
   telescope-cheat-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-cheat.nvim";
     version = "2021-12-05";
