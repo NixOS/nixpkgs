@@ -195,6 +195,18 @@ final: prev:
     meta.homepage = "https://github.com/prabirshrestha/asyncomplete.vim/";
   };
 
+  asyncrun-vim = buildVimPluginFrom2Nix {
+    pname = "asyncrun.vim";
+    version = "2022-02-03";
+    src = fetchFromGitHub {
+      owner = "skywind3000";
+      repo = "asyncrun.vim";
+      rev = "fc6d524b9d81850c15b9b374a1b4a1374e243ec3";
+      sha256 = "/144rx2txz+VnPI8y4w1z9DY5nBEmp64arApRGiHQXU=";
+    };
+    meta.homepage = "https://github.com/skywind3000/asyncrun.vim";
+  };
+
   ats-vim = buildVimPluginFrom2Nix {
     pname = "ats-vim";
     version = "2020-09-04";
