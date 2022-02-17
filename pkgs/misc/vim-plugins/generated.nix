@@ -6616,6 +6616,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope.nvim/";
   };
 
+  telescope-ultisnips-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-ultisnips.nvim";
+    version = "2021-09-27";
+    src = fetchFromGitHub {
+      owner = "fhill2";
+      repo = "telescope-ultisnips.nvim";
+      rev = "f48b6d4f53b31507d3fd514905c6940409e8ada8";
+      sha256 = "h2PfstopgjCMFYVOnzEX7gkkIHCamcJPJux5B+qYYww=";
+    };
+    meta.homepage = "https://github.com/fhill2/telescope-ultisnips.nvim";
+  };
+
   tender-vim = buildVimPluginFrom2Nix {
     pname = "tender.vim";
     version = "2021-05-24";
