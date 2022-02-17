@@ -1,6 +1,7 @@
 { podman-unwrapped
 , runCommand
 , makeWrapper
+, symlinkJoin
 , lib
 , extraPackages ? []
 , podman # Docker compat
@@ -13,7 +14,12 @@
 , cni-plugins # not added to path
 , iptables
 , iproute2
+, catatonit
 }:
+
+# do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
+
+# adding aardvark-dns/netavark to `helpersBin` requires changes to the modules and tests
 
 let
   podman = podman-unwrapped;
@@ -28,6 +34,16 @@ let
     iptables
     iproute2
   ] ++ extraPackages);
+
+  helpersBin = symlinkJoin {
+    name = "${podman.pname}-helper-binary-wrapper-${podman.version}";
+
+    # this only works for some binaries, others may need to be be added to `binPath` or in the modules
+    paths = [
+      catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+      podman.rootlessport
+    ];
+  };
 
 in runCommand podman.name {
   name = "${podman.pname}-wrapper-${podman.version}";
@@ -54,5 +70,6 @@ in runCommand podman.name {
   ln -s ${podman-unwrapped}/lib $out/lib
   ln -s ${podman-unwrapped}/share $out/share
   makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \
+    --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin \
     --prefix PATH : ${binPath}
 ''
