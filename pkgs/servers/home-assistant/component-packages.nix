@@ -636,7 +636,7 @@
     "orvibo" = ps: with ps; [ orvibo ];
     "osramlightify" = ps: with ps; [ ]; # missing inputs: lightify
     "otp" = ps: with ps; [ pyotp ];
-    "overkiz" = ps: with ps; [ ]; # missing inputs: pyoverkiz
+    "overkiz" = ps: with ps; [ pyoverkiz ];
     "ovo_energy" = ps: with ps; [ ovoenergy ];
     "owntracks" = ps: with ps; [ pynacl pyturbojpeg aiohttp-cors hass-nabucasa paho-mqtt ];
     "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt python-openzwave-mqtt ];
@@ -1399,6 +1399,7 @@
     "openuv"
     "openweathermap"
     "opnsense"
+    "overkiz"
     "ovo_energy"
     "owntracks"
     "ozw"
