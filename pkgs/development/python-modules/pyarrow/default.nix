@@ -68,6 +68,17 @@ buildPythonPackage rec {
     mv tests pyarrow/tests
   '';
 
+  pythonImportsCheck = map (module: "pyarrow.${module}") [
+    "compute"
+    "csv"
+    "dataset"
+    "flight"
+    "fs"
+    "hdfs"
+    "json"
+    "parquet"
+  ];
+
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/";
