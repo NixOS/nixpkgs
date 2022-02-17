@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://pmd.github.io/";
     changelog = "https://pmd.github.io/pmd-${version}/pmd_release_notes.html";
     platforms = platforms.unix;
-    license = with licenses; [ bsdOriginal asl20 lgpl3Plus ];
+    license = with licenses; [ bsdOriginal asl20 ];
   };
 }
