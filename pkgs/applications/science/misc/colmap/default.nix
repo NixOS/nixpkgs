@@ -30,7 +30,7 @@ mkDerivation rec {
        with a graphical and command-line interface.
     '';
     homepage = "https://colmap.github.io/index.html";
-    license = licenses.bsd2;
+    license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lebastr ];
   };
