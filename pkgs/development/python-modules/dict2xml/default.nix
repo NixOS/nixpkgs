@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "dict2xml";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bfn8n8sb3slwx7ra8m8fbfy65k20h2qxcqfq99hwqrrkgcffihl";
+    sha256 = "sha256-ZgCqMx8X7uODNhH3GJmkOnZhLKdVoVdpzyBJLEsaoBY=";
   };
 
   propagatedBuildInputs = [ six ];
