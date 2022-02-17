@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -28,11 +29,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # https://github.com/nficano/humps/pull/240
-    substituteInPlace pyproject.toml \
-      --replace 'version = "3.0.2"' 'version = "${version}"'
-  '';
+  patches = [
+    # Fix naming, https://github.com/nficano/humps/pull/246
+    (fetchpatch {
+      name = "fix-naming.patch";
+      url = "https://github.com/nficano/humps/commit/118f6bce785d170b10dd3afee467d26dcc8b425d.patch";
+      sha256 = "sha256-oQxkLsihnHZlHiZEupwG9Dr1Ss1w+KjDsBtbEVDced4=";
+    })
+  ];
 
   pythonImportsCheck = [
     "humps"
