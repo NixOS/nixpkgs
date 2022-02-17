@@ -544,6 +544,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>systemd-nspawn@.service</literal> settings have been
+          reverted to the default systemd behaviour. User namespaces are
+          now activated by default. If you want to keep running nspawn
+          containers without user namespaces you need to set
+          <literal>systemd.nspawn.&lt;name&gt;.execConfig.PrivateUsers = false</literal>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The terraform 0.12 compatibility has been removed and the
           <literal>terraform.withPlugins</literal> and
           <literal>terraform-providers.mkProvider</literal>
