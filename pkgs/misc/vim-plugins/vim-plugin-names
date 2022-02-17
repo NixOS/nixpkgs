@@ -169,6 +169,7 @@ FelikZ/ctrlp-py-matcher
 feline-nvim/feline.nvim
 fenetikm/falcon
 fhill2/floating.nvim
+fhill2/telescope-ultisnips.nvim
 fiatjaf/neuron.vim
 filipdutescu/renamer.nvim
 fisadev/vim-isort
