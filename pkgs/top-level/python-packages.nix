@@ -5645,6 +5645,8 @@ in {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
+
   oocsi = callPackage ../development/python-modules/oocsi { };
 
   open-garage = callPackage ../development/python-modules/open-garage { };
