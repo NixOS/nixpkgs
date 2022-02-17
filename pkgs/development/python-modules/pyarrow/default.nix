@@ -1,4 +1,20 @@
-{ lib, stdenv, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools-scm, six }:
+{ lib
+, stdenv
+, buildPythonPackage
+, python
+, isPy3k
+, arrow-cpp
+, cmake
+, cython
+, hypothesis
+, numpy
+, pandas
+, pytestCheckHook
+, pytest-lazy-fixture
+, pkg-config
+, setuptools-scm
+, six
+}:
 
 let
   zero_or_one = cond: if cond then 1 else 0;
@@ -16,7 +32,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake cython pkg-config setuptools-scm ];
   propagatedBuildInputs = [ numpy six ];
-  checkInputs = [ hypothesis pandas pytestCheckHook pytest-lazy-fixture ];
+  checkInputs = [
+    hypothesis
+    pandas
+    pytestCheckHook
+    pytest-lazy-fixture
+  ];
 
   PYARROW_BUILD_TYPE = "release";
 
@@ -87,3 +108,5 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ veprbl cpcloud ];
   };
 }
+
+
