@@ -747,6 +747,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lua/";
   };
 
+  cmp-nvim-ultisnips = buildVimPluginFrom2Nix {
+    pname = "cmp-nvim-ultisnips";
+    version = "2022-01-31";
+    src = fetchFromGitHub {
+      owner = "quangnguyen30192";
+      repo = "cmp-nvim-ultisnips";
+      rev = "0e8f501facdcc5bfdb5664ee185e040464a79625";
+      sha256 = "tQ3xkJ34q5+ioi6lQY7F/ZjGngzmv4FDkpNeU5sRqK0=";
+    };
+    meta.homepage = "https://github.com/quangnguyen30192/cmp-nvim-ultisnips";
+  };
+
   cmp-omni = buildVimPluginFrom2Nix {
     pname = "cmp-omni";
     version = "2022-01-08";

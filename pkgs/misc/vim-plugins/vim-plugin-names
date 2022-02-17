@@ -654,6 +654,7 @@ pwntester/octo.nvim
 python-mode/python-mode
 qnighy/lalrpop.vim
 qpkorr/vim-bufkill
+quangnguyen30192/cmp-nvim-ultisnips
 Quramy/tsuquyomi
 racer-rust/vim-racer
 radenling/vim-dispatch-neovim
