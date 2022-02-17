@@ -1597,6 +1597,8 @@ in {
 
   CommonMark = callPackage ../development/python-modules/commonmark { };
 
+  compdb = callPackage ../development/python-modules/compdb { };
+
   compiledb = callPackage ../development/python-modules/compiledb { };
 
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
