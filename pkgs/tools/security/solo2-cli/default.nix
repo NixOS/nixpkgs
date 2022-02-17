@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ PCSC IOKit CoreFoundation AppKit ];
 
   postInstall = ''
+    install -D 70-solo2.rules $out/lib/udev/rules.d/70-solo2.rules
     installShellCompletion target/*/release/solo2.{bash,fish,zsh}
   '';
 
