@@ -4,14 +4,18 @@
 , python
 , isPy3k
 , arrow-cpp
+, cffi
+, cloudpickle
 , cmake
 , cython
+, fsspec
 , hypothesis
 , numpy
 , pandas
 , pytestCheckHook
 , pytest-lazy-fixture
 , pkg-config
+, scipy
 , setuptools-scm
 , six
 }:
@@ -31,7 +35,7 @@ buildPythonPackage rec {
   sourceRoot = "apache-arrow-${version}/python";
 
   nativeBuildInputs = [ cmake cython pkg-config setuptools-scm ];
-  propagatedBuildInputs = [ numpy six ];
+  propagatedBuildInputs = [ numpy six cloudpickle scipy fsspec cffi ];
   checkInputs = [
     hypothesis
     pandas
@@ -108,5 +112,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ veprbl cpcloud ];
   };
 }
-
-
