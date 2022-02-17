@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.0.2";
+  version = "1.1.beta";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    hash = "sha256-D7Qq8yAWkr/G5I4k8G1+viJkEJSrCBAg31Q+g3U9FcQ=";
+    hash = "sha256-D1hJMidnGtCC+6gz6lqp+qL+9UVzIRL7IjGptwk/X+M=";
   };
 
   nativeBuildInputs = [
@@ -90,6 +90,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv $out/share/{doc,gtk-doc}
   '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with lib; {
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
