@@ -35,6 +35,7 @@ crystal.buildCrystalPackage rec {
   meta = with lib; {
     description =
       "A Crystal library for creating and running tasks. Also generates Lucky projects";
+    homepage = "https://luckyframework.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
