@@ -8125,13 +8125,6 @@
     githubId = 1001112;
     name = "Marcin Janczyk";
   };
-  mjlbach = {
-    email = "m.j.lbach@gmail.com";
-    matrix = "@atrius:matrix.org";
-    github = "mjlbach";
-    githubId = 13316262;
-    name = "Michael Lingelbach";
-  };
   mjp = {
     email = "mike@mythik.co.uk";
     github = "MikePlayle";

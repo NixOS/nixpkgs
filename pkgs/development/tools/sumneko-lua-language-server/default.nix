@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "Lua Language Server coded by Lua ";
     homepage = "https://github.com/sumneko/lua-language-server";
     license = licenses.mit;
-    maintainers = with maintainers; [ mjlbach ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "lua-language-server";
   };
