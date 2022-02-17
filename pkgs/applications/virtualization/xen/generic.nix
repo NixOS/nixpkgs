@@ -1,11 +1,11 @@
 config:
-{ lib, stdenv, cmake, pkg-config, which
+{ lib, stdenv, cmake, pkg-config, which, ninja
 
 # Xen
 , bison, bzip2, checkpolicy, dev86, figlet, flex, gettext, glib
 , acpica-tools, libaio, libiconv, libuuid, ncurses, openssl, perl
-, python2Packages
-# python2Packages.python
+, python3Packages
+# python3Packages.python
 , xz, yajl, zlib
 
 # Xen Optional
@@ -17,10 +17,11 @@ config:
 , lvm2, util-linux, procps, systemd
 
 # Documentation
-# python2Packages.markdown
+# python3Packages.markdown
 , fig2dev, ghostscript, texinfo, pandoc
 
 , binutils-unwrapped
+, breakpointHook
 
 , ...} @ args:
 
@@ -63,25 +64,26 @@ stdenv.mkDerivation (rec {
   name = "xen-${version}";
 
   dontUseCmakeConfigure = true;
+  dontUseNinjaBuild = true;
 
-  hardeningDisable = [ "stackprotector" "fortify" "pic" ];
+  hardeningDisable = [ ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    cmake which
+    cmake which ninja
 
     # Xen
     bison bzip2 checkpolicy dev86 figlet flex gettext glib acpica-tools libaio
-    libiconv libuuid ncurses openssl perl python2Packages.python xz yajl zlib
+    libiconv libuuid ncurses openssl perl python3Packages.python xz yajl zlib
 
     # oxenstored
     ocamlPackages.findlib ocamlPackages.ocaml systemd
 
     # Python fixes
-    python2Packages.wrapPython
+    python3Packages.wrapPython
 
     # Documentation
-    python2Packages.markdown fig2dev ghostscript texinfo pandoc
+    python3Packages.markdown fig2dev ghostscript texinfo pandoc
 
     # Others
   ] ++ (concatMap (x: x.buildInputs or []) (attrValues config.xenfiles))
@@ -121,8 +123,8 @@ stdenv.mkDerivation (rec {
     # We want to do this before getting prefetched stuff to speed things up
     # (prefetched stuff has lots of files)
     find . -type f | xargs sed -i 's@/usr/bin/\(python\|perl\)@/usr/bin/env \1@g'
-    find . -type f -not -path "./tools/hotplug/Linux/xendomains.in" \
-      | xargs sed -i 's@/bin/bash@${stdenv.shell}@g'
+    #find . -type f -not -path "./tools/hotplug/Linux/xendomains.in" \
+    #  | xargs sed -i 's@/bin/bash@${stdenv.shell}@g'
 
     # Get prefetched stuff
     ${withXenfiles (name: x: ''
@@ -130,82 +132,24 @@ stdenv.mkDerivation (rec {
       cp -r ${x.src} tools/${name}
       chmod -R +w tools/${name}
     '')}
+
+    patchShebangs ./tools/qemu-xen/scripts/tracetool.py
   '';
 
   patches = [
     ./0000-fix-ipxe-src.patch
-    ./0000-fix-install-python.patch
-    ./0004-makefile-use-efi-ld.patch
-    ./0005-makefile-fix-efi-mountdir-use.patch
+    ./fix-pkg-config.patch
   ] ++ (config.patches or []);
 
   postPatch = ''
-    ### Hacks
-
-    # Work around a bug in our GCC wrapper: `gcc -MF foo -v' doesn't
-    # print the GCC version number properly.
-    substituteInPlace xen/Makefile \
-      --replace '$(CC) $(CFLAGS) -v' '$(CC) -v'
-
-    # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
-    mkdir -p tools/include/gnu
-    touch tools/include/gnu/stubs-32.h
-
-    ### Fixing everything else
-
-    substituteInPlace tools/libfsimage/common/fsimage_plugin.c \
-      --replace /usr $out
-
-    substituteInPlace tools/blktap2/lvm/lvm-util.c \
-      --replace /usr/sbin/vgs ${lvm2}/bin/vgs \
-      --replace /usr/sbin/lvs ${lvm2}/bin/lvs
-
-    substituteInPlace tools/misc/xenpvnetboot \
-      --replace /usr/sbin/mount ${util-linux}/bin/mount \
-      --replace /usr/sbin/umount ${util-linux}/bin/umount
-
-    substituteInPlace tools/xenmon/xenmon.py \
-      --replace /usr/bin/pkill ${procps}/bin/pkill
-
-    substituteInPlace tools/xenstat/Makefile \
-      --replace /usr/include/curses.h ${ncurses.dev}/include/curses.h
-
-    ${optionalString (builtins.compareVersions config.version "4.8" >= 0) ''
-      substituteInPlace tools/hotplug/Linux/launch-xenstore.in \
-        --replace /bin/mkdir mkdir
-    ''}
-
-    ${optionalString (builtins.compareVersions config.version "4.6" < 0) ''
-      # TODO: use this as a template and support our own if-up scripts instead?
-      substituteInPlace tools/hotplug/Linux/xen-backend.rules.in \
-        --replace "@XEN_SCRIPT_DIR@" $out/etc/xen/scripts
-
-      # blktap is not provided by xen, but by xapi
-      sed -i '/blktap/d' tools/hotplug/Linux/xen-backend.rules.in
-    ''}
-
-    ${withTools "patches" (name: x: ''
-      ${concatMapStringsSep "\n" (p: ''
-        echo "# Patching with ${p}"
-        patch -p1 < ${p}
-      '') x.patches}
-    '')}
-
-    ${withTools "postPatch" (name: x: x.postPatch)}
-
-    ${config.postPatch or ""}
   '';
 
   postConfigure = ''
-    substituteInPlace tools/hotplug/Linux/xendomains \
-      --replace /bin/ls ls
   '';
 
   EFI_LD = "${efiBinutils}/bin/ld";
   EFI_VENDOR = "nixos";
 
-  # TODO: Flask needs more testing before enabling it by default.
-  #makeFlags = [ "XSM_ENABLE=y" "FLASK_ENABLE=y" "PREFIX=$(out)" "CONFIG_DIR=/etc" "XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files" ];
   makeFlags = [ "PREFIX=$(out) CONFIG_DIR=/etc" "XEN_SCRIPT_DIR=/etc/xen/scripts" ]
            ++ (config.makeFlags or []);
 

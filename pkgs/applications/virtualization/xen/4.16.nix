@@ -38,11 +38,11 @@ let
 in
 
 callPackage (import ./generic.nix (rec {
-  version = "4.10.4";
+  version = "4.16.0";
 
   src = fetchurl {
     url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
-    sha256 = "0ipkr7b3v3y183n6nfmz7q3gnzxa20011df4jpvxi6pmr8cpnkwh";
+    sha256 = "15g91rnjamdn7jdid79jpx476nl1inpfp6jb06i91l0lws87mj5d";
   };
 
   # Sources needed to build tools and firmwares.
@@ -53,7 +53,7 @@ callPackage (import ./generic.nix (rec {
         # rev = "refs/tags/qemu-xen-${version}";
         # use revision hash - reproducible but must be updated with each new version
         rev = "qemu-xen-${version}";
-        sha256 = "0laxvhdjz1njxjvq3jzw2yqvdr9gdn188kqjf2gcrfzgih7xv2ym";
+        sha256 = "sha256-PNpsjkP3Y15k7gSQCC7PUuOdX0oB0B6YiTLH003/ejc=";
       };
       buildInputs = qemuDeps;
       postPatch = ''
@@ -69,8 +69,8 @@ callPackage (import ./generic.nix (rec {
         url = "https://xenbits.xen.org/git-http/qemu-xen-traditional.git";
         # rev = "refs/tags/xen-${version}";
         # use revision hash - reproducible but must be updated with each new version
-        rev = "c8ea0457495342c417c3dc033bba25148b279f60";
-        sha256 = "0v5nl3c08kpjg57fb8l191h1y57ykp786kz6l525jgplif28vx13";
+        rev = "xen-${version}";
+        sha256 = "1dc6dhjp4y2irmi9yiyw1kzmm1habyy8j1s2zkf6qyak850krqj7";
       };
       buildInputs = qemuDeps;
       patches = [
@@ -85,8 +85,8 @@ callPackage (import ./generic.nix (rec {
     "firmware/seabios-dir-remote" = {
       src = fetchgit {
         url = "https://xenbits.xen.org/git-http/seabios.git";
-        rev = "f0cdc36d2f2424f6b40438f7ee7cc502c0eff4df";
-        sha256 = "1wq5pjkjrfzqnq3wyr15mcn1l4c563m65gdyf8jm97kgb13pwwfm";
+        rev = "rel-1.15.0";
+        sha256 = "0gnsfmbgcvihsap8sz8c2n3qs439q44i3pwrms2nv3xcnf1sclj9";
       };
       patches = [ ./0000-qemu-seabios-enable-ATA_DMA.patch ];
       meta.description = "Xen's fork of Seabios";
@@ -95,8 +95,8 @@ callPackage (import ./generic.nix (rec {
     "firmware/ovmf-dir-remote" = {
       src = fetchgit {
         url = "https://xenbits.xen.org/git-http/ovmf.git";
-        rev = "173bf5c847e3ca8b42c11796ce048d8e2e916ff8";
-        sha256 = "07zmdj90zjrzip74fvd4ss8n8njk6cim85s58mc6snxmqqv7gmcr";
+        rev = "7b4a99be8a39c12d3a7fc4b8db9f0eab4ac688d5";
+        sha256 = "0zsdmdp7xqq80jd4cmw59dp7axd85lkhq8lddshlmcm5z5acfcid";
       };
       meta.description = "Xen's fork of OVMF";
     };
@@ -105,8 +105,8 @@ callPackage (import ./generic.nix (rec {
     "firmware/etherboot/ipxe.git" = {
       src = fetchgit {
         url = "https://git.ipxe.org/ipxe.git";
-        rev = "356f6c1b64d7a97746d1816cef8ca22bdd8d0b5d";
-        sha256 = "15n400vm3id5r8y3k6lrp9ab2911a9vh9856f5gvphkazfnmns09";
+        rev = "3c040ad387099483102708bb1839110bc788cefb";
+        sha256 = "1cmh5grj7zyg5iiqpbsjqslniibb2730zvxsiq86bc0699j1sr6b";
       };
       meta.description = "Xen's fork of iPXE";
     };
@@ -167,12 +167,12 @@ callPackage (import ./generic.nix (rec {
 
   postPatch = ''
     # Avoid a glibc >= 2.25 deprecation warnings that get fatal via -Werror.
-    sed 1i'#include <sys/sysmacros.h>' \
-      -i tools/blktap2/control/tap-ctl-allocate.c \
-      -i tools/libxl/libxl_device.c
-    # Makefile didn't include previous PKG_CONFIG_PATH so glib wasn't found
-    substituteInPlace tools/Makefile \
-      --replace 'PKG_CONFIG_PATH=$(XEN_ROOT)/tools/pkg-config' 'PKG_CONFIG_PATH=$(XEN_ROOT)/tools/pkg-config:$(PKG_CONFIG_PATH)'
+    #sed 1i'#include <sys/sysmacros.h>' \
+    #  -i tools/blktap2/control/tap-ctl-allocate.c \
+    #  -i tools/libxl/libxl_device.c
+    ## Makefile didn't include previous PKG_CONFIG_PATH so glib wasn't found
+    #substituteInPlace tools/Makefile \
+    #  --replace 'PKG_CONFIG_PATH=$(XEN_ROOT)/tools/pkg-config' 'PKG_CONFIG_PATH=$(XEN_ROOT)/tools/pkg-config:$(PKG_CONFIG_PATH)'
   '';
 
   passthru = {

@@ -1,0 +1,69 @@
+diff --git a/tools/libs/ctrl/Makefile b/tools/libs/ctrl/Makefile
+index 519246b0d6..01f150f8ad 100644
+--- a/tools/libs/ctrl/Makefile
++++ b/tools/libs/ctrl/Makefile
+@@ -47,7 +47,7 @@ CFLAGS += -include $(XEN_ROOT)/tools/config.h
+ CFLAGS-$(CONFIG_Linux) += -D_GNU_SOURCE
+ 
+ LIBHEADER := xenctrl.h xenctrl_compat.h
+-PKG_CONFIG := xencontrol.pc
++PKG_CONFIG_FILE := xencontrol.pc
+ PKG_CONFIG_NAME := Xencontrol
+ 
+ NO_HEADERS_CHK := y
+diff --git a/tools/libs/libs.mk b/tools/libs/libs.mk
+index ebdb2a4782..fb780d980d 100644
+--- a/tools/libs/libs.mk
++++ b/tools/libs/libs.mk
+@@ -1,7 +1,7 @@
+ # Common Makefile for building a lib.
+ #
+ # Variables taken as input:
+-#   PKG_CONFIG: name of pkg-config file (xen$(LIBNAME).pc if empty)
++#   PKG_CONFIG_FILE: name of pkg-config file (xen$(LIBNAME).pc if empty)
+ #   MAJOR:   major version of lib (Xen version if empty)
+ #   MINOR:   minor version of lib (0 if empty)
+ 
+@@ -29,7 +29,7 @@ endif
+ comma:= ,
+ empty:=
+ space:= $(empty) $(empty)
+-PKG_CONFIG ?= $(LIB_FILE_NAME).pc
++PKG_CONFIG_FILE ?= $(LIB_FILE_NAME).pc
+ PKG_CONFIG_NAME ?= Xen$(LIBNAME)
+ PKG_CONFIG_DESC ?= The $(PKG_CONFIG_NAME) library for Xen hypervisor
+ PKG_CONFIG_VERSION := $(MAJOR).$(MINOR)
+@@ -38,13 +38,13 @@ PKG_CONFIG_LIB := $(LIB_FILE_NAME)
+ PKG_CONFIG_REQPRIV := $(subst $(space),$(comma),$(strip $(foreach lib,$(patsubst ctrl,control,$(USELIBS_$(LIBNAME))),xen$(lib))))
+ 
+ ifneq ($(CONFIG_LIBXC_MINIOS),y)
+-PKG_CONFIG_INST := $(PKG_CONFIG)
++PKG_CONFIG_INST := $(PKG_CONFIG_FILE)
+ $(PKG_CONFIG_INST): PKG_CONFIG_PREFIX = $(prefix)
+ $(PKG_CONFIG_INST): PKG_CONFIG_INCDIR = $(includedir)
+ $(PKG_CONFIG_INST): PKG_CONFIG_LIBDIR = $(libdir)
+ endif
+ 
+-PKG_CONFIG_LOCAL := $(PKG_CONFIG_DIR)/$(PKG_CONFIG)
++PKG_CONFIG_LOCAL := $(PKG_CONFIG_DIR)/$(PKG_CONFIG_FILE)
+ 
+ LIBHEADER ?= $(LIB_FILE_NAME).h
+ LIBHEADERS = $(foreach h, $(LIBHEADER), $(XEN_INCLUDE)/$(h))
+@@ -114,7 +114,7 @@ install: build
+ 	$(SYMLINK_SHLIB) lib$(LIB_FILE_NAME).so.$(MAJOR).$(MINOR) $(DESTDIR)$(libdir)/lib$(LIB_FILE_NAME).so.$(MAJOR)
+ 	$(SYMLINK_SHLIB) lib$(LIB_FILE_NAME).so.$(MAJOR) $(DESTDIR)$(libdir)/lib$(LIB_FILE_NAME).so
+ 	for i in $(LIBHEADERS); do $(INSTALL_DATA) $$i $(DESTDIR)$(includedir); done
+-	$(INSTALL_DATA) $(PKG_CONFIG) $(DESTDIR)$(PKG_INSTALLDIR)
++	$(INSTALL_DATA) $(PKG_CONFIG_FILE) $(DESTDIR)$(PKG_INSTALLDIR)
+ 
+ .PHONY: uninstall
+ uninstall:
+@@ -134,7 +134,7 @@ clean:
+ 	rm -rf *.rpm $(LIB) *~ $(DEPS_RM) $(LIB_OBJS) $(PIC_OBJS)
+ 	rm -f lib$(LIB_FILE_NAME).so.$(MAJOR).$(MINOR) lib$(LIB_FILE_NAME).so.$(MAJOR)
+ 	rm -f headers.chk headers.lst
+-	rm -f $(PKG_CONFIG)
++	rm -f $(PKG_CONFIG_FILE)
+ 	rm -f _paths.h
+ 
+ .PHONY: distclean
