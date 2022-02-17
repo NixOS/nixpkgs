@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://dev.mysql.com/downloads/connector/cpp/";
     description = "C++ library for connecting to mysql servers";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
 }
