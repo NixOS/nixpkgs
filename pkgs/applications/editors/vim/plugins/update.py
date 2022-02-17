@@ -13,6 +13,9 @@
 # refer to:
 #
 # https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/vim.section.md#updating-plugins-in-nixpkgs-updating-plugins-in-nixpkgs
+#
+# (or the equivalent file /doc/languages-frameworks/vim.section.md from Nixpkgs master tree).
+#
 
 import inspect
 import os
@@ -27,7 +30,8 @@ log.addHandler(logging.StreamHandler())
 
 # Import plugin update library from maintainers/scripts/pluginupdate.py
 ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
-sys.path.insert(0, os.path.join(ROOT.parent.parent.parent, "maintainers", "scripts"))
+# Ideally, ROOT.(parent^5) points to root of Nixpkgs official tree
+sys.path.insert(0, os.path.join(ROOT.parent.parent.parent.parent.parent, "maintainers", "scripts"))
 import pluginupdate
 
 GET_PLUGINS = f"""(with import <localpkgs> {{}};
