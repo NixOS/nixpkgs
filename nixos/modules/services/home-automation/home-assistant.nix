@@ -58,8 +58,8 @@ let
   package = (cfg.package.override (oldArgs: {
     # Respect overrides that already exist in the passed package and
     # concat it with values passed via the module.
-    extraComponents = oldArgs.extraComponents ++ extraComponents;
-    extraPackages = ps: (oldArgs.extraPackages ps) ++ (cfg.extraPackages ps);
+    extraComponents = oldArgs.extraComponents or [] ++ extraComponents;
+    extraPackages = ps: (oldArgs.extraPackages or (_: []) ps) ++ (cfg.extraPackages ps);
   }));
 in {
   imports = [

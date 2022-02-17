@@ -42,7 +42,7 @@ let
     # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
-    , libName ? "firefox" # Important for tor package or the like
+    , libName ? browser.libName or "firefox" # Important for tor package or the like
     , nixExtensions ? null
     }:
 
@@ -152,24 +152,7 @@ let
       #                           #
       #############################
 
-      # TODO: remove this after the next release (21.03)
-      configPlugins = lib.filter (a: builtins.hasAttr a cfg) [
-        "enableAdobeFlash"
-        "enableAdobeReader"
-        "enableBluejeans"
-        "enableDjvu"
-        "enableFriBIDPlugin"
-        "enableGoogleTalkPlugin"
-        "enableMPlayer"
-        "enableVLC"
-        "icedtea"
-        "jre"
-      ];
-      pluginsError =
-        "Your configuration mentions ${lib.concatMapStringsSep ", " (p: applicationName + "." + p) configPlugins}. All plugin related options have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins).";
-
-    in if configPlugins != [] then throw pluginsError else
-      (stdenv.mkDerivation {
+    in stdenv.mkDerivation {
       inherit pname version;
 
       desktopItem = makeDesktopItem {
@@ -219,8 +202,8 @@ let
 
         find . -type f \( -not -name "${applicationName}" \) -exec ln -sT "${browser}"/{} "$out"/{} \;
 
-        find . -type f -name "${applicationName}" -print0 | while read -d $'\0' f; do
-          cp -P --no-preserve=mode,ownership "${browser}/$f" "$out/$f"
+        find . -type f \( -name "${applicationName}" -o -name "${applicationName}-bin" \) -print0 | while read -d $'\0' f; do
+          cp -P --no-preserve=mode,ownership --remove-destination "${browser}/$f" "$out/$f"
           chmod a+rwx "$out/$f"
         done
 
@@ -369,5 +352,5 @@ let
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };
-    });
+    };
 in lib.makeOverridable wrapper

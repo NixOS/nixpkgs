@@ -14,6 +14,8 @@ let
       rev = "109b4c887ffb63962c7017a66fc4a1f48becb48e";
       sha256 = "sha256-w029FHpOv5K49wE1OJMOlkTe+2cv+ORYqEHxs59GDBI=";
     };
+
+    patches = [];
   });
 
   rubyEnv = bundlerEnv rec {
