@@ -11686,6 +11686,18 @@ final: prev:
     meta.homepage = "https://github.com/gcmt/wildfire.vim/";
   };
 
+  winshift-nvim = buildVimPluginFrom2Nix {
+    pname = "winshift.vim";
+    version = "2021-11-15";
+    src = fetchFromGitHub {
+      owner = "sindrets";
+      repo = "winshift.vim";
+      rev = "aaa04b97640165eb0877bfc04943f4282887470b";
+      sha256 = "g5v/qd1FNg7mMZif7Liga3BAnZV7Mi7hkqnCUEFk52U=";
+    };
+    meta.homepage = "https://github.com/sindrets/winshift.nvim";
+  };
+
   wmgraphviz-vim = buildVimPluginFrom2Nix {
     pname = "wmgraphviz.vim";
     version = "2018-04-26";
