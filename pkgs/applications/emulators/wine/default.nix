@@ -6,7 +6,7 @@
 # };
 # Make additional configurations on demand:
 # wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
-{ lib, stdenv, callPackage,
+{ lib, stdenv, callPackage, darwin,
   wineRelease ? "stable",
   wineBuild ? if stdenv.hostPlatform.system == "x86_64-linux" then "wineWow" else "wine32",
   gettextSupport ? false,
@@ -40,7 +40,8 @@
   usbSupport ? false,
   mingwSupport ? wineRelease != "stable",
   waylandSupport ? wineRelease == "wayland",
-  embedInstallers ? false # The Mono and Gecko MSI installers
+  embedInstallers ? false, # The Mono and Gecko MSI installers
+  moltenvk ? darwin.moltenvk # Allow users to override MoltenVK easily
 }:
 
 let wine-build = build: release:
@@ -55,6 +56,7 @@ let wine-build = build: release:
             tlsSupport openglSupport gstreamerSupport udevSupport vulkanSupport
             sdlSupport usbSupport vkd3dSupport mingwSupport waylandSupport embedInstallers;
         };
+        inherit moltenvk;
       });
 
 in if wineRelease == "staging" then

@@ -5,6 +5,7 @@
   supportFlags,
   patches,
   vkd3dArches,
+  moltenvk,
   buildScript ? null, configureFlags ? []
 }:
 
@@ -87,7 +88,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
   ++ lib.optional (xineramaSupport && !waylandSupport) pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
-  ++ lib.optional vulkanSupport          pkgs.vulkan-loader
+  ++ lib.optional vulkanSupport          (if stdenv.isDarwin then moltenvk else pkgs.vulkan-loader)
   ++ lib.optional sdlSupport             pkgs.SDL2
   ++ lib.optional usbSupport             pkgs.libusb1
   ++ vkd3dArches

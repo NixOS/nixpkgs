@@ -12,7 +12,7 @@ rec {
     fontconfigSupport = stdenv.isLinux;
     alsaSupport = stdenv.isLinux;
     openglSupport = true;
-    vulkanSupport = stdenv.isLinux;
+    vulkanSupport = true;
     tlsSupport = true;
     cupsSupport = true;
     dbusSupport = stdenv.isLinux;
@@ -40,7 +40,7 @@ rec {
     gphoto2Support = true;
     krb5Support = true;
     ldapSupport = true;
-    vkd3dSupport = stdenv.isLinux;
+    vkd3dSupport = true;
     embedInstallers = true;
   };
 
