@@ -10567,6 +10567,8 @@ in {
 
   ws4py = callPackage ../development/python-modules/ws4py { };
 
+  wsdiscovery = callPackage ../development/python-modules/wsdiscovery { };
+
   wsgi-intercept = callPackage ../development/python-modules/wsgi-intercept { };
 
   wsgiprox = callPackage ../development/python-modules/wsgiprox { };
