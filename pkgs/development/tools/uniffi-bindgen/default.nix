@@ -2,12 +2,10 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
 , ktlint
 , yapf
 , rubocop
 , rustfmt
-, libiconv
 , makeWrapper
 }:
 
@@ -22,15 +20,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-EGyJrW0U/dnKT7OWgd8LehCyvj6mxud3QWbBVyhoK4Y=";
   };
 
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoLock.lockFileContents = builtins.readFile ./Cargo.lock;
   cargoHash = "sha256-Fw+yCAI32NdFKJGPuNU6t0FiEfohoVD3VQfInNJuooI=";
 
   cargoBuildFlags = [ "-p uniffi_bindgen" ];
   cargoTestFlags = [ "-p uniffi_bindgen" ];
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
 
   postFixup = ''
     wrapProgram "$out/bin/uniffi-bindgen" \
