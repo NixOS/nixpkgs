@@ -69,7 +69,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.45";
+    version = "0.3.46";
 
     outputs = [
       "out"
@@ -87,7 +87,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-OnQd98qfOekAsVXLbciZLNPrM84KBX6fOx/f8y2BYI0=";
+      sha256 = "sha256-29p6nEaIDeOAAnRJXwJWEnMTCNzAGVi9f8856I1R+fg=";
     };
 
     patches = [
@@ -214,6 +214,7 @@ let
             "nix-support/client-rt.conf.json"
             "nix-support/client.conf.json"
             "nix-support/jack.conf.json"
+            "nix-support/minimal.conf.json"
             "nix-support/pipewire.conf.json"
             "nix-support/pipewire-pulse.conf.json"
           ];
