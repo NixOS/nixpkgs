@@ -223,6 +223,7 @@ guns/vim-clojure-highlight
 guns/vim-clojure-static
 guns/vim-sexp
 guns/xterm-color-table.vim
+GustavoKatel/telescope-asynctasks.nvim
 gyim/vim-boxdraw
 haringsrob/nvim_context_vt
 hashivim/vim-packer
