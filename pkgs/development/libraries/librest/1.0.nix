@@ -1,54 +1,66 @@
 { lib
 , stdenv
 , fetchurl
+, meson
+, ninja
 , pkg-config
+, gi-docgen
 , glib
+, json-glib
 , libsoup
-, libxml2
 , gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_412
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "rest";
-  version = "0.8.1";
+  version = "0.9.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0513aad38e5d3cedd4ae3c551634e3be1b9baaa79775e53b2dba9456f15b01c9";
+    sha256 = "hbK8k0ESgTlTm1PuU/BTMxC8ljkv1kWGOgQEELgevmY=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
+    gi-docgen
     gobject-introspection
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_412
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     glib
+    json-glib
     libsoup
-    libxml2
   ];
 
-  configureFlags = [
-    "--enable-gtk-doc"
+  mesonFlags = [
+    "-Dexamples=false"
+
     # Remove when https://gitlab.gnome.org/GNOME/librest/merge_requests/2 is merged.
-    "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt"
+    "-Dca_certificates=true"
+    "-Dca_certificates_path=/etc/ssl/certs/ca-certificates.crt"
   ];
+
+  postPatch = ''
+    # https://gitlab.gnome.org/GNOME/librest/-/merge_requests/19
+    substituteInPlace meson.build \
+      --replace "con." "conf."
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "librest";
+      attrPath = "librest_1_0";
       versionPolicy = "odd-unstable";
-      freeze = true;
     };
   };
 
