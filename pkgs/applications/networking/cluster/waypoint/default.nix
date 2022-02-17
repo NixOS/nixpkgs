@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1vcwzksixc9n016gf8zavkdk7ba33zkmymclvjwb32pwsanvzdz7";
   };
 
-  vendorSha256 = "1yl9lmqvw70a6z0c85vkzvdzyzqjizfa1rahfw8gb175fax1f0sz";
+  vendorSha256 = "0v4xk1ia6zhh4h2rgpinfl0hs300lk84vabm35mjahch7kmvfhvb";
 
   nativeBuildInputs = [ go-bindata installShellFiles ];
 

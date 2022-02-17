@@ -1,38 +1,38 @@
 { lib
-, paho-mqtt
 , buildPythonPackage
 , fetchPypi
-, aiohttp
+, httpx
 , pythonOlder
+, zeep
 }:
 
 buildPythonPackage rec {
-  pname = "pyeconet";
-  version = "0.1.15";
+  pname = "onvif-zeep-async";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zxD2sjKWB/bmxwpVFgkKTngMhr4bVuW+qkSt+pbxqPY=";
+    hash = "sha256-O4H6oL9cFvgX6whoESA7eRI6+VoT1ncRk/tehQT1WcM=";
   };
 
   propagatedBuildInputs = [
-    paho-mqtt
-    aiohttp
+    httpx
+    zeep
   ];
-
-  # Tests require credentials
-  doCheck = false;
 
   pythonImportsCheck = [
-    "pyeconet"
+    "onvif"
   ];
 
+  # Tests are not shipped
+  doCheck = false;
+
   meta = with lib; {
-    description = "Python interface to the EcoNet API";
-    homepage = "https://github.com/w1ll1am23/pyeconet";
+    description = "ONVIF Client Implementation in Python";
+    homepage = "https://github.com/hunterjm/python-onvif-zeep-async";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
