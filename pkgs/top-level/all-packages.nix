@@ -9755,6 +9755,10 @@ with pkgs;
 
   sixpair = callPackage ../tools/misc/sixpair {};
 
+  sketchybar = callPackage ../os-specific/darwin/sketchybar {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa SkyLight;
+  };
+
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
   sks = callPackage ../servers/sks { };

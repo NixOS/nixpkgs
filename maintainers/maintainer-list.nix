@@ -1200,6 +1200,12 @@
     githubId = 262763;
     name = "Ayaz Hafiz";
   };
+  azuwis = {
+    email = "azuwis@gmail.com";
+    github = "azuwis";
+    githubId = 9315;
+    name = "Zhong Jianxin";
+  };
   b4dm4n = {
     email = "fabianm88@gmail.com";
     github = "B4dM4n";
