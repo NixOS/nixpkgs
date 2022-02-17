@@ -23,6 +23,7 @@ buildPythonPackage rec {
   PYARROW_WITH_DATASET = zero_or_one true;
   PYARROW_WITH_FLIGHT = zero_or_one _arrow-cpp.enableFlight;
   PYARROW_WITH_PARQUET = zero_or_one true;
+  PYARROW_WITH_HDFS = zero_or_one true;
 
   PYARROW_CMAKE_OPTIONS = [
     "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
