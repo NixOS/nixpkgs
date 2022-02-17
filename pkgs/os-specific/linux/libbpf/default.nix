@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    sha256 = "sha256-ieJ19igGCoPKGX6J0mQG+QD7QcXHX2SVzZUjMwxum/M=";
+    sha256 = "sha256-NFVJ8JquWVzu+QoaaOMzhnu6/IqdP1FPhtJFidXA4L4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
