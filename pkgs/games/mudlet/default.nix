@@ -1,5 +1,25 @@
-{ fetchFromGitHub, lib, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, libsecret, qtmultimedia, qttools, yajl, libzip, hunspell
-, boost, libGLU, lua, cmake,  which, pkg-config, }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, git
+, pkg-config
+, qttools
+, which
+, wrapQtAppsHook
+, boost
+, hunspell
+, libGLU
+, libsForQt5
+, libsecret
+, libzip
+, lua
+, pcre
+, pugixml
+, qtbase
+, qtmultimedia
+, yajl
+}:
 
 let
   luaEnv = lua.withPackages(ps: with ps; [
@@ -15,18 +35,39 @@ stdenv.mkDerivation rec {
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-JaPE11MmBzmhadPE4Kp2TK5RJJVe/nkXD/Jhy/M0tOY=";
+    hash = "sha256-JaPE11MmBzmhadPE4Kp2TK5RJJVe/nkXD/Jhy/M0tOY=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook git qttools which ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+    qttools
+    which
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
-    pcre pugixml qtbase libsForQt5.qtkeychain qtmultimedia luaEnv libsecret libzip libGLU yajl boost hunspell
+    boost
+    hunspell
+    libGLU
+    libsForQt5.qtkeychain
+    libsecret
+    libzip
+    luaEnv
+    pcre
+    pugixml
+    qtbase
+    qtmultimedia
+    yajl
   ];
 
   WITH_FONTS = "NO";
   WITH_UPDATER = "NO";
 
   installPhase =  ''
+    runHook preInstall
+
     mkdir -pv $out/lib
     cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog.so $out/lib
     mkdir -pv $out/bin
@@ -43,13 +84,15 @@ stdenv.mkDerivation rec {
     makeQtWrapper $out/mudlet $out/bin/mudlet \
       --prefix LD_LIBRARY_PATH : "${libsForQt5.qtkeychain}/lib/" \
       --run "cd $out";
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Crossplatform mud client";
-    homepage = "https://mudlet.org";
+    homepage = "https://www.mudlet.org/";
     maintainers = [ maintainers.wyvie maintainers.pstn ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }
