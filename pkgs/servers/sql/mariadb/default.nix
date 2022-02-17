@@ -5,7 +5,7 @@
 , curl, libiconv, ncurses, openssl, pcre2
 , libkrb5, liburing, systemd
 , CoreServices, cctools, perl
-, jemalloc, less
+, jemalloc, less, libedit
 # Server components
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , cracklib, judy, libevent, libxml2
@@ -42,7 +42,7 @@ common = rec { # attributes common to both builds
   buildInputs = [
     curl libiconv ncurses openssl pcre2 zlib
   ] ++ optionals stdenv.hostPlatform.isLinux [ libkrb5 liburing systemd ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
     ++ optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ];
 
   prePatch = ''
