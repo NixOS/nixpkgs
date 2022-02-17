@@ -8227,6 +8227,8 @@ in {
 
   pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
 
+  pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
+
   pytorchWithCuda = self.pytorch.override {
     cudaSupport = true;
   };
