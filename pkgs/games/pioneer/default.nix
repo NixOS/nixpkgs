@@ -6,7 +6,7 @@
 , assimp
 , curl
 , freetype
-, glew
+#, glew
 , libGL
 , libGLU
 , libpng
@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     assimp
     curl
     freetype
-    glew
     libGL
     libGLU
     libpng
@@ -54,7 +53,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DPIONEER_DATA_DIR:PATH=${placeholder "out"}/share/pioneer/data"
-    "-DUSE_SYSTEM_LIBGLEW:BOOL=YES"
     "-DUSE_SYSTEM_LIBLUA:BOOL=YES"
   ];
 
