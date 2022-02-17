@@ -613,7 +613,7 @@
     "ondilo_ico" = ps: with ps; [ aiohttp-cors ondilo ];
     "onewire" = ps: with ps; [ pi1wire pyownet ];
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
-    "onvif" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: WSDiscovery onvif-zeep-async
+    "onvif" = ps: with ps; [ wsdiscovery ha-ffmpeg ]; # missing inputs: onvif-zeep-async
     "open_meteo" = ps: with ps; [ open-meteo ];
     "openalpr_cloud" = ps: with ps; [ ];
     "openalpr_local" = ps: with ps; [ ];
