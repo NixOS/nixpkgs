@@ -148,6 +148,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
+  moltenvk = callPackage ../os-specific/darwin/moltenvk { };
+
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 
   stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
