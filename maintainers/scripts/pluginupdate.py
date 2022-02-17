@@ -634,6 +634,7 @@ def update_plugins(editor: Editor, args):
 
     autocommit = not args.no_commit
 
+    nixpkgs_repo = None
     if autocommit:
         nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
         commit(nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
