@@ -174,6 +174,8 @@ with pkgs;
 
   quickemu = callPackage ../development/quickemu { };
 
+  distrobox = callPackage ../development/distrobox { };
+
   aether = callPackage ../applications/networking/aether { };
 
   alda = callPackage ../development/interpreters/alda { };
