@@ -7726,6 +7726,8 @@ with pkgs;
 
   librest = callPackage ../development/libraries/librest { };
 
+  librest_1_0 = callPackage ../development/libraries/librest/1.0.nix { };
+
   inherit (callPackages ../development/libraries/libwebsockets { })
     libwebsockets_3_1
     libwebsockets_3_2
