@@ -32,14 +32,19 @@ let
 
         nativeBuildInputs = [ makeWrapper ];
 
-        # make-localhost-default-database-server.patch:
-        #   This changes the default value of the database server field
-        #   from 127.0.0.1 to localhost.
-        #   unix socket authentication only works with localhost,
-        #   but password-based SQL authentication works with both.
-        # TODO: is upstream interested in this?
-        # -> discussion at https://github.com/matomo-org/matomo/issues/12646
-        patches = [ ./make-localhost-default-database-host.patch ];
+        patches = [
+          # This changes the default value of the database server field
+          # from 127.0.0.1 to localhost.
+          # unix socket authentication only works with localhost,
+          # but password-based SQL authentication works with both.
+          # TODO: is upstream interested in this?
+          # -> discussion at https://github.com/matomo-org/matomo/issues/12646
+          ./make-localhost-default-database-host.patch
+
+          # This changes the default config for path.geoip2 so that it doesn't point
+          # to the nix store.
+          ./change-path-geoip2.patch
+        ];
 
         # this bootstrap.php adds support for getting PIWIK_USER_PATH
         # from an environment variable. Point it to a mutable location
@@ -73,6 +78,7 @@ let
           "misc/composer/build-xhprof.sh"
           "misc/composer/clean-xhprof.sh"
           "misc/cron/archive.sh"
+          "plugins/GeoIp2/config/config.php"
           "plugins/Installation/FormDatabaseSetup.php"
           "vendor/pear/archive_tar/sync-php4"
           "vendor/szymach/c-pchart/coverage.sh"
