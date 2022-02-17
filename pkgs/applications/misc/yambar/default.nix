@@ -27,7 +27,8 @@
 
 let
   # Courtesy of sternenseemann and FRidh
-  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
+  mesonFeatureFlag = feature: flag:
+    "-D${feature}=${if flag then "enabled" else "disabled"}";
 in
 stdenv.mkDerivation rec {
   pname = "yambar";
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = "yambar";
     rev = version;
-    sha256 = "0d8n9hvmxj7759pfqssqcl9wvb986qsph8bnjsjm9bf97mflhy6d";
+    hash = "sha256-zXhIXT3JrVSllnYheDU2KK3NE2VYa+xuKufIXjdMFjU=";
   };
 
   nativeBuildInputs = [
