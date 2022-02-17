@@ -80,8 +80,7 @@ buildPythonPackage rec {
     sqlalchemy
     tables
     toolz
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    # TODO: remove when ibis 3.0.0 is released
+  ] ++ lib.optionals (pythonOlder "3.8" && lib.versionOlder version "3.0.0") [
     importlib-metadata
   ];
 
@@ -144,8 +143,7 @@ buildPythonPackage rec {
     done
 
     wait
-
-    # TODO: remove when 3.0.0 is released
+  '' + lib.optionalString (lib.versionOlder version "3.0.0") ''
     export PYTEST_BACKENDS="${backendsString}"
   '';
 
