@@ -1,7 +1,6 @@
 { lib, stdenv
 , cmake
 , coreutils
-, glibc
 , gccForLibs
 , which
 , perl
@@ -9,26 +8,20 @@
 , ninja
 , pkg-config
 , sqlite
-, swig
 , bash
 , libxml2
 , clang_10
 , python3
 , ncurses
 , libuuid
-, libbsd
 , icu
 , libgcc
-, autoconf
-, libtool
-, automake
 , libblocksruntime
 , curl
 , rsync
 , git
 , libgit2
 , fetchFromGitHub
-, fetchpatch
 , findutils
 , makeWrapper
 , gnumake
@@ -159,23 +152,21 @@ let
 
   devInputs = [
     curl
-    glibc
+    stdenv.cc.libc
     icu
     libblocksruntime
-    libbsd
     libedit
     libgcc
     libuuid
     libxml2
     ncurses
     sqlite
-    swig
   ];
 
   python = (python3.withPackages (ps: [ps.six]));
 
   cmakeFlags = [
-    "-DGLIBC_INCLUDE_PATH=${stdenv.cc.libc.dev}/include"
+    "-DGLIBC_INCLUDE_PATH=${stdenv.cc.libc_dev}/include"
     "-DC_INCLUDE_DIRS=${lib.makeSearchPathOutput "dev" "include" devInputs}:${libxml2.dev}/include/libxml2"
     "-DGCC_INSTALL_PREFIX=${gccForLibs}"
   ];
@@ -185,15 +176,12 @@ stdenv.mkDerivation {
   name = "swift-${versions.swift}";
 
   nativeBuildInputs = [
-    autoconf
-    automake
     bash
     cmake
     coreutils
     findutils
     git
     gnumake
-    libtool
     makeWrapper
     ninja
     perl
@@ -248,6 +236,9 @@ stdenv.mkDerivation {
 
     # TODO: eliminate use of env.
     find -type f -print0 | xargs -0 sed -i \
+      -e 's|/usr/bin/env python3|${python3}/bin/python3|g' \
+      -e 's|/usr/bin/env python|${python3}/bin/python3|g' \
+      -e 's|/usr/bin/env bash|${bash}/bin/bash|g' \
       -e 's|/usr/bin/env|${coreutils}/bin/env|g' \
       -e 's|/usr/bin/make|${gnumake}/bin/make|g' \
       -e 's|/bin/mkdir|${coreutils}/bin/mkdir|g' \
@@ -260,7 +251,7 @@ stdenv.mkDerivation {
     patch -p1 -d swift -i ${./patches/0003-build-presets-linux-don-t-build-extra-libs.patch}
     patch -p1 -d swift -i ${./patches/0004-build-presets-linux-plumb-extra-cmake-options.patch}
     substituteInPlace swift/cmake/modules/SwiftConfigureSDK.cmake \
-      --replace '/usr/include' "${stdenv.cc.libc.dev}/include"
+      --replace '/usr/include' "${stdenv.cc.libc_dev}/include"
     sed -i swift/utils/build-presets.ini \
       -e 's/^test-installable-package$/# \0/' \
       -e 's/^test$/# \0/' \
@@ -275,11 +266,11 @@ stdenv.mkDerivation {
     patch -p1 -d llvm-project/clang -i ${./patches/0006-clang-purity.patch}
     patch -p1 -d llvm-project/compiler-rt -i ${../llvm/common/compiler-rt/libsanitizer-no-cyclades-11.patch}
     substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
-      --replace 'SysRoot + "/lib' '"${glibc}/lib" "' \
-      --replace 'SysRoot + "/usr/lib' '"${glibc}/lib" "' \
-      --replace 'LibDir = "lib";' 'LibDir = "${glibc}/lib";' \
-      --replace 'LibDir = "lib64";' 'LibDir = "${glibc}/lib";' \
-      --replace 'LibDir = X32 ? "libx32" : "lib64";' 'LibDir = "${glibc}/lib";'
+      --replace 'SysRoot + "/lib' '"${stdenv.cc.libc}/lib" "' \
+      --replace 'SysRoot + "/usr/lib' '"${stdenv.cc.libc}/lib" "' \
+      --replace 'LibDir = "lib";' 'LibDir = "${stdenv.cc.libc}/lib";' \
+      --replace 'LibDir = "lib64";' 'LibDir = "${stdenv.cc.libc}/lib";' \
+      --replace 'LibDir = X32 ? "libx32" : "lib64";' 'LibDir = "${stdenv.cc.libc}/lib";'
 
     # Substitute ncurses for curses in llbuild.
     sed -i 's/curses/ncurses/' llbuild/*/*/CMakeLists.txt
