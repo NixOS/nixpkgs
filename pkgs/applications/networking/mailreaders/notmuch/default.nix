@@ -2,9 +2,11 @@
 , pkg-config, gnupg
 , xapian, gmime, talloc, zlib
 , doxygen, perl, texinfo
+, notmuch
 , pythonPackages
 , emacs
 , ruby
+, testVersion
 , which, dtach, openssl, bash, gdb, man
 , withEmacs ? true
 , withRuby ? true
@@ -95,6 +97,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     pythonSourceRoot = "notmuch-${version}/bindings/python";
+    tests.version = testVersion { package = notmuch; };
     inherit version;
   };
 
