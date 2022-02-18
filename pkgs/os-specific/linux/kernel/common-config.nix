@@ -446,6 +446,9 @@ let
       NLS_CODEPAGE_437 = module; # VFAT default for the codepage= mount option
       NLS_ISO8859_1    = module; # VFAT default for the iocharset= mount option
 
+      # Needed to use the installation iso image. Not included in all defconfigs (e.g. arm64)
+      ISO9660_FS = module;
+
       DEVTMPFS = yes;
 
       UNICODE = whenAtLeast "5.2" yes; # Casefolding support for filesystems
