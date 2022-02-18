@@ -52,10 +52,6 @@ buildPythonPackage rec {
 
   PYARROW_CMAKE_OPTIONS = [
     "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
-
-    # This doesn't use setup hook to call cmake so we need to workaround #54606
-    # ourselves
-    "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
   ];
 
   ARROW_HOME = _arrow-cpp;
