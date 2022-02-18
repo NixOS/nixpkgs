@@ -13,6 +13,8 @@ stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs tool
+    sed -i 's@ncurses_dir=.*@ncurses_dir="${ncurses}"@' tool
+    sed -i 's@portmidi_dir=.*@portmidi_dir="${portmidi}"@' tool
   '';
 
   installPhase = ''
