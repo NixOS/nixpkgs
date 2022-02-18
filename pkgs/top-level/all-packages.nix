@@ -27865,7 +27865,9 @@ with pkgs;
 
   oberon-risc-emu = callPackage ../applications/emulators/oberon-risc-emu { };
 
-  obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {};
+  obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
+    ffmpeg_4 = ffmpeg-full;
+  };
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};
 
