@@ -18,13 +18,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "7.1.0-24";
+  version = "7.1.0-25";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = version;
-    hash = "sha256-tTdtVUQDBfVS3Rze1KKKR4wL8t8+ka5Ku9qcl+DP6Eo=";
+    hash = "sha256-zSbngA56YnJ1W+ZlA6Q850NTtZovjue51zEgbKI3iqc=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
