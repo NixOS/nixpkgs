@@ -827,6 +827,11 @@ self: super: builtins.intersectAttrs super {
   # time
   random = dontCheck super.random;
 
+  # mockery's tests depend on hspec-discover which dependso on mockery for its tests
+  mockery = dontCheck super.mockery;
+  # same for logging-facade
+  logging-facade = dontCheck super.logging-facade;
+
   # Since this package is primarily used by nixpkgs maintainers and is probably
   # not used to link against by anyone, we can make it’s closure smaller and
   # add its runtime dependencies in `haskellPackages` (as opposed to cabal2nix).

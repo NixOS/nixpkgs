@@ -49,16 +49,6 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
-  # `pinch`s test suite uses a function called `openSocket` that's available
-  # in `network` versions 3.1.2.0 and bigger.
-  # There's an open PR updating the lower bound for `network`:
-  # > https://github.com/abhinav/pinch/pull/46
-  # With that said version tracked for `network` right now is 3.1.1.1 so we're
-  # replacing the network pinch uses with `network_3_1_2_7` for now.
-  pinch = super.pinch.overrideScope (self : super: {
-    network = self.network_3_1_2_7;
-  });
-
   # We can remove this once fakedata version gets to 1.0.1 as the test suite
   # works fine there.
   fakedata = dontCheck super.fakedata;
@@ -187,16 +177,8 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  # hnix.patch needed until the next release is bumped
-  hnix = generateOptparseApplicativeCompletion "hnix"
-    (overrideCabal (drv: {
-      # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
-      doCheck = false;
-    }) (super.hnix.override {
-      # needs newer version of relude and semialign than stackage has
-      relude = self.relude_1_0_0_1;
-      semialign = self.semialign_1_2_0_1;
-    }));
+  # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
+  hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck super.hnix);
 
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
@@ -859,11 +841,6 @@ self: super: {
     })
     super.hledger-lib;
 
-  # hledger-lib 1.24 depends on doctest >= 0.18
-  hledger-lib_1_24_1 = super.hledger-lib_1_24_1.override {
-    doctest = self.doctest_0_18_2;
-  };
-
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal (drv: {
@@ -1356,7 +1333,6 @@ self: super: {
     hspec = dontCheck self.hspec_2_9_4;
     hspec-core = dontCheck self.hspec-core_2_9_4;
     hspec-discover = dontCheck super.hspec-discover_2_9_4;
-    tasty-hspec = self.tasty-hspec_1_2;
   }));
   hasura-ekg-core = doJailbreak (super.hasura-ekg-core.overrideScope (self: super: {
     hspec = dontCheck self.hspec_2_9_4;
@@ -1577,11 +1553,6 @@ self: super: {
 
   # Allow building with older versions of http-client.
   http-client-restricted = doJailbreak super.http-client-restricted;
-
-  # 2020-02-11: https://github.com/ekmett/lens/issues/969
-  # A change in vector 0.2.12 broke the lens doctests.
-  # This is fixed on lens master. Remove this override on assert fail.
-  lens = assert super.lens.version == "4.19.2"; doJailbreak (dontCheck super.lens);
 
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-osc = dontCheck super.vivid-osc;
@@ -1861,12 +1832,8 @@ self: super: {
   gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  # 2021-05-09: Restrictive bound on hspec-golden. Dep removed in newer versions.
-  tomland = assert super.tomland.version == "1.3.2.0"; doJailbreak super.tomland;
-
   # 2022-01-16 haskell-ci needs Cabal 3.6,
   haskell-ci = super.haskell-ci.overrideScope (self: super: {
-    attoparsec = self.attoparsec_0_14_4;
     Cabal = self.Cabal_3_6_2_0;
   });
 
@@ -1880,10 +1847,6 @@ self: super: {
       sha256 = "169jaqm4xs2almmvqsk567wayxs0g6kn0l5877c03hzr3d9ykrav";
     };
   } self.haskell-ci;
-
-  Frames-streamly = super.Frames-streamly.override {
-    relude = super.relude_1_0_0_1;
-  };
 
   # 2021-05-09: compilation requires patches from master,
   # remove at next release (current is 0.1.0.4).
@@ -1921,21 +1884,6 @@ self: super: {
   # 2021-05-14: Testsuite is failing.
   # https://github.com/kcsongor/generic-lens/issues/133
   generic-optics = dontCheck super.generic-optics;
-
-  # 2021-05-19: Allow random 1.2.0
-  # Remove at (presumably next release) which is > 1.3.1.0
-  hashable = overrideCabal (drv: {
-    patches = [
-      (pkgs.fetchpatch {
-        url = "https://github.com/haskell-unordered-containers/hashable/commit/78fa8fdb4f8bec5d221f34110d6afa0d0a00b5f9.patch";
-        sha256 = "0bzgp9qf53zk4rzk73x5cf2kfqncvlmihcallpplaibpslzalyi4";
-      })
-    ] ++ (drv.patches or []);
-    # fix line endings preventing patch from applying
-    prePatch = ''
-      ${pkgs.buildPackages.dos2unix}/bin/dos2unix hashable.cabal
-    '' + (drv.prePatch or "");
-  }) super.hashable;
 
   # Too strict bound on random
   # https://github.com/haskell-hvr/missingh/issues/56
@@ -1975,34 +1923,12 @@ self: super: {
   # https://github.com/Porges/email-validate-hs/issues/58
   email-validate = doJailbreak super.email-validate;
 
-  # 2021-10-02: Make optics 0.4 packages work together
-  optics-th_0_4 = super.optics-th_0_4.override {
-    optics-core = self.optics-core_0_4;
-  };
-  optics-extra_0_4 = super.optics-extra_0_4.override {
-    optics-core = self.optics-core_0_4;
-  };
-  optics_0_4 = super.optics_0_4.override {
-    optics-core = self.optics-core_0_4;
-    optics-extra = self.optics-extra_0_4;
-    optics-th = self.optics-th_0_4;
-  };
-
   # https://github.com/plow-technologies/hspec-golden-aeson/issues/17
-  hspec-golden-aeson_0_9_0_0 = dontCheck super.hspec-golden-aeson_0_9_0_0;
+  hspec-golden-aeson = dontCheck super.hspec-golden-aeson;
 
-  # 2021-10-02: Doesn't compile with optics < 0.4
-  # 2021-11-05: streamly-0.8.0 is required for libyaml-streamly and
-  #             yaml-streamly, as these aren't leaf packages it's not really
-  #             appropriate to override them themselves (although ghcup is
-  #             currently the only consumer)
   # 2021-11-05: jailBreak the too tight upper bound on haskus-utils-variant
   ghcup = doJailbreak (super.ghcup.overrideScope (self: super: {
-    hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
-    optics = self.optics_0_4;
-    streamly = doJailbreak self.streamly_0_8_1_1;
     Cabal = self.Cabal_3_6_2_0;
-    libyaml-streamly = markUnbroken super.libyaml-streamly;
   }));
 
   # Break out of "Cabal < 3.2" constraint.
@@ -2018,9 +1944,12 @@ self: super: {
 
   # Release 1.0.0.0 added version bounds (was unrestricted before),
   # but with too strict lower bounds for our lts-18.
-  graphql = assert pkgs.lib.versionOlder self.parser-combinators.version "1.3.0";
-    assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
-    doJailbreak super.graphql;
+  # Disable aeson for now, future release should support it
+  graphql = assert pkgs.lib.versionOlder self.hspec.version "2.9.0";
+    assert super.graphql.version == "1.0.2.0";
+    appendConfigureFlags [
+      "-f-json"
+    ] (doJailbreak super.graphql);
 
   # https://github.com/ajscholl/basic-cpuid/pull/1
   basic-cpuid = appendPatch (pkgs.fetchpatch {
@@ -2036,13 +1965,9 @@ self: super: {
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
-  # 2021-09-13: hls 1.6 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
-  # (hls is nearly the only consumer, but consists of 18 packages, so we bump lsp globally.)
-  lsp = doDistribute self.lsp_1_4_0_0;
-  lsp-types = doDistribute self.lsp-types_1_4_0_1;
   # Not running the "example" test because it requires a binary from lsps test
   # suite which is not part of the output of lsp.
-  lsp-test = doDistribute (overrideCabal (old: { testTarget = "tests func-test"; }) self.lsp-test_0_14_0_2);
+  lsp-test = overrideCabal (old: { testTarget = "tests func-test"; }) super.lsp-test;
 
   # 2021-09-14: Tests are flaky.
   hls-splice-plugin = dontCheck super.hls-splice-plugin;
@@ -2058,15 +1983,6 @@ self: super: {
   hw-xml = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
     doJailbreak super.hw-xml;
 
-  # Needs network >= 3.1.2
-  quic = super.quic.overrideScope (self: super: {
-    network = self.network_3_1_2_7;
-  });
-
-  http3 = super.http3.overrideScope (self: super: {
-    network = self.network_3_1_2_7;
-  });
-
   # Fixes https://github.com/NixOS/nixpkgs/issues/140613
   # https://github.com/recursion-schemes/recursion-schemes/issues/128
   recursion-schemes = appendPatch ./patches/recursion-schemes-128.patch super.recursion-schemes;
@@ -2076,7 +1992,6 @@ self: super: {
   # file revision on hackage was gifted CRLF line endings
   gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
 
-  # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
   hadolint = overrideCabal (drv: {
     # Test suite depends on ordering of unordered-containers returned values
     # which was upgraded in LTS 18.19
@@ -2084,42 +1999,15 @@ self: super: {
     testFlags = [
       "--skip" "/Hadolint.Formatter.Sarif/Formatter: Sarif/print empty results/"
     ] ++ drv.testFlags or [];
-  }) (super.hadolint.overrideScope (self: super: {
-    language-docker = self.language-docker_10_4_0;
-    hspec = dontCheck self.hspec_2_9_4;
-    hspec-core = dontCheck self.hspec-core_2_9_4;
-    hspec-discover = dontCheck self.hspec-discover_2_9_4;
-    colourista = doJailbreak super.colourista;
-  }));
+  }) super.hadolint;
 
-  # These should be updated in lockstep
-  hledger_1_24_1 = super.hledger_1_24_1.override {
-    hledger-lib = self.hledger-lib_1_24_1;
-  };
-
-  # Needs brick > 0.64
-  nix-tree = super.nix-tree.override {
-    brick = self.brick_0_67;
-  };
-
-  # build newer version for `pkgs.shellcheck`
-  ShellCheck_0_8_0 = doDistribute super.ShellCheck_0_8_0;
+  nix-tree = super.nix-tree;
 
   # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
   photoname = dontCheck super.photoname;
 
   # Upgrade of unordered-containers in Stackage causes ordering-sensitive test to fail
-  # https://github.com/chrisdone/lucid/issues/123
   # https://github.com/commercialhaskell/stackage/issues/6366
-  lucid = assert super.lucid.version == "2.9.12.1"; overrideCabal (drv: {
-    testFlags = [
-      "--skip" "/attributes-with/mixed/"
-    ] ++ drv.testFlags or [];
-  }) super.lucid;
-  # Basically the entire doctest suite of swagger2 fails for the same reason
-  swagger2 = assert super.swagger2.version == "2.6"; overrideCabal (drv: {
-    testTarget = "spec";
-  }) super.swagger2;
   # https://github.com/kapralVV/Unique/issues/9
   Unique = assert super.Unique.version == "0.4.7.9"; overrideCabal (drv: {
     testFlags = [
@@ -2210,11 +2098,6 @@ self: super: {
       "-p" "!/Test mkSelectRequest/"
     ] ++ drv.testFlags or [];
   }) super.minio-hs;
-
-  # golden files expect an old version of hpack, so tests fail intermittently
-  # TODO: maybe disable golden test suite altogether? this will happen again as
-  #       hpack emits its version into the generated files…
-  hpack-dhall = assert super.hpack-dhall.version == "0.5.3"; dontCheck super.hpack-dhall;
 
   # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
   memory-cd = dontCheck super.memory-cd;

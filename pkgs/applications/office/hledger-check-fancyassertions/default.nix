@@ -1,12 +1,8 @@
 {lib, stdenvNoCC, haskellPackages, fetchurl, writers}:
 
-let
-  hledger-lib = haskellPackages.hledger-lib_1_24_1;
-in
-
 stdenvNoCC.mkDerivation rec {
   pname = "hledger-check-fancyassertions";
-  inherit (hledger-lib) version;
+  inherit (haskellPackages.hledger-lib) version;
 
   src = fetchurl {
     name = "hledger-check-fancyassertion-${version}.hs";
@@ -20,13 +16,12 @@ stdenvNoCC.mkDerivation rec {
   executable = writers.writeHaskell
     "hledger-check-fancyassertions"
     {
-      libraries = [
+      libraries = with haskellPackages; [
         hledger-lib
-      ] ++ (with haskellPackages; [
         base base-compat base-compat-batteries filepath
         megaparsec microlens optparse-applicative string-qq text time
         transformers
-      ]);
+      ];
       inherit (haskellPackages) ghc;
     }
     src;
