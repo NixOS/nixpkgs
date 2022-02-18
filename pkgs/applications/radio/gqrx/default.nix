@@ -5,7 +5,6 @@
 , qt5
 , gnuradio3_8Minimal
 , thrift
-, log4cpp
 , mpir
 , fftwFloat
 , alsa-lib
@@ -39,7 +38,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
   buildInputs = [
-    log4cpp
+    gnuradio3_8Minimal.unwrapped.log4cpp
     mpir
     fftwFloat
     alsa-lib
