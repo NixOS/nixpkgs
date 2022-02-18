@@ -10,6 +10,8 @@
   pam,
   enablePython ? false,
   python3,
+
+  nixosTests,
 }:
 
 # python binding generates a shared library which are unavailable with musl build
@@ -82,6 +84,10 @@ stdenv.mkDerivation rec {
       # change to `--enable-python-bindings=no` in the future
       # leave for now to avoid rebuilds on !enablePython before 24.11 fully lands
       [ "--disable-python-bindings" ];
+
+  passthru.tests = {
+    pam = nixosTests.pam-pwquality;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/libpwquality/libpwquality";
