@@ -10536,6 +10536,8 @@ with pkgs;
 
   trytond = with python3Packages; toPythonApplication trytond;
 
+  tuntox = callPackage ../tools/networking/tuntox { };
+
   omapd = callPackage ../tools/security/omapd { };
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
