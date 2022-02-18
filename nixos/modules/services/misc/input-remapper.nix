@@ -23,7 +23,7 @@ let cfg = config.services.input-remapper; in
     services.dbus.packages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
     environment.systemPackages = [ cfg.package ];
-    systemd.services.input-remapper.wantedBy = [ "graphical.target" ];
+    systemd.services.input-remapper.wantedBy = cfg.serviceWantedBy;
   };
 
   meta.maintainers = with lib.maintainers; [ LunNova ];
