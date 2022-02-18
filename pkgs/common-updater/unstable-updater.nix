@@ -16,7 +16,25 @@ let
   updateScript = writeShellScript "unstable-update-script.sh" ''
     set -ex
 
-    url="$1"
+    url=""
+    branch=""
+
+    while (( $# > 0 )); do
+        flag="$1"
+        shift 1
+        case "$flag" in
+          --url=*)
+            url="''${flag#*=}"
+            ;;
+          --branch=*)
+            branch="''${flag#*=}"
+            ;;
+          *)
+            echo "$0: unknown option ‘''${flag}’"
+            exit 1
+            ;;
+        esac
+    done
 
     # By default we set url to src.url
     if [[ -z "$url" ]]; then
@@ -27,9 +45,18 @@ let
 
     # Get info about HEAD from a shallow git clone
     tmpdir="$(${coreutils}/bin/mktemp -d)"
-    ${git}/bin/git clone --bare --depth=1 \
-      ${lib.optionalString (branch != null) "--branch ${branch}"} \
-      "$url" "$tmpdir"
+
+    cloneArgs=(
+      --bare
+      --depth=1
+    )
+
+    if [[ -n "$branch" ]]; then
+        cloneArgs+=(--branch="$branch")
+    fi
+
+    ${git}/bin/git clone "''${cloneArgs[@]}" "$url" "$tmpdir"
+
     pushd "$tmpdir"
     commit_date="$(${git}/bin/git show -s --pretty='format:%cs')"
     commit_sha="$(${git}/bin/git show -s --pretty='format:%H')"
@@ -43,5 +70,10 @@ let
         --rev="$commit_sha"
   '';
 
-in [ updateScript url ]
+in [
+  updateScript
+  "--url=${builtins.toString url}"
+] ++ lib.optionals (branch != null) [
+  "--branch=${branch}"
+]
 
