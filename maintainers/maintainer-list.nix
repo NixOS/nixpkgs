@@ -13894,4 +13894,10 @@
     github = "nigelgbanks";
     githubId = 487373;
   };
+  tusj = {
+    name = "Sindre Devik";
+    email = "sindre.devik@gmail.com";
+    github = "tusj";
+    githubId = 1783654;
+  };
 }
