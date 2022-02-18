@@ -3,7 +3,27 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # pycfmodel is pinned, https://github.com/Skyscanner/cfripper/issues/204
+      pycfmodel = super.pycfmodel.overridePythonAttrs (oldAttrs: rec {
+        version = "0.13.0";
+
+        src = fetchFromGitHub {
+          owner = "Skyscanner";
+          repo = "pycfmodel";
+          rev = version;
+          hash = "sha256-BlnLf0C/wxPXhoAH0SRB22eGWbbZ05L20rNy6qfOI+A=";
+        };
+      });
+    };
+  };
+in
+with py.pkgs;
+
+buildPythonApplication rec {
   pname = "cfripper";
   version = "1.3.3";
 
@@ -14,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-y3h/atfFl/wDmr+YBdsWrCez4PQBEcl3xNDyTwXZIp4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with py.pkgs; [
     boto3
     cfn-flip
     click
@@ -25,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with py.pkgs; [
     moto
     pytestCheckHook
   ];
