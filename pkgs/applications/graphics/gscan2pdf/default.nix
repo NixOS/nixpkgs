@@ -13,7 +13,7 @@ perlPackages.buildPerlPackage rec {
   version = "2.12.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
     sha256 = "sha256-MFWW9DTJ/svtgN3fbw+zeGpgg3pgIoC9jZ1HkG5p6sc=";
   };
 
