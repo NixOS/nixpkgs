@@ -1975,13 +1975,15 @@ self: super: {
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
   hls-stylish-haskell-plugin = doJailbreak super.hls-stylish-haskell-plugin;
 
-  # 2021-09-29: unnecessary lower bound on generic-lens
-  hw-ip = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
-    doJailbreak super.hw-ip;
-  hw-eliasfano = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
-    doJailbreak super.hw-eliasfano;
-  hw-xml = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
-    doJailbreak super.hw-xml;
+  # Too strict bounds on hspec
+  # https://github.com/haskell-works/hw-hspec-hedgehog/issues/62
+  # https://github.com/haskell-works/hw-prim/issues/132
+  # https://github.com/haskell-works/hw-ip/issues/107
+  # https://github.com/haskell-works/bits-extra/issues/57
+  hw-hspec-hedgehog = doJailbreak super.hw-hspec-hedgehog;
+  hw-prim = doJailbreak super.hw-prim;
+  hw-ip = doJailbreak super.hw-ip;
+  bits-extra = doJailbreak super.bits-extra;
 
   # Fixes https://github.com/NixOS/nixpkgs/issues/140613
   # https://github.com/recursion-schemes/recursion-schemes/issues/128
