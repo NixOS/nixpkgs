@@ -49,6 +49,12 @@ self: super: {
   # cabal-install-parsers is written for Cabal 3.6
   cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_6_2_0; };
 
+  # Pick right versions for GHC-specific packages
+  ghc-api-compat = doDistribute self.ghc-api-compat_8_10_7;
+  ghc-lib = doDistribute self.ghc-lib_8_10_7_20210828;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_8_10_7_20210828;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_8_10_0_23;
+
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
   system-fileio = doJailbreak super.system-fileio;

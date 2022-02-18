@@ -1758,24 +1758,28 @@ self: super: {
   # May be possible to remove at the next release (1.11.0)
   taskell = doJailbreak super.taskell;
 
-  # ghc-bignum is not buildable if none of the three backends
-  # is explicitly enabled. We enable Native for now as it doesn't
-  # depend on anything else as oppossed to GMP and FFI.
-  # Apply patch which fixes a compilation failure we encountered.
-  # Can be removed if the following issue is resolved / the patch
-  # is merged and released:
-  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19638
-  # * https://gitlab.haskell.org/ghc/ghc/-/merge_requests/5454
-  ghc-bignum = overrideCabal (old: {
-    configureFlags = (old.configureFlags or []) ++ [ "-f" "Native" ];
-    patches = (old.patches or []) ++ [
+  # Polyfill for GHCs from the integer-simple days that don't bundle ghc-bignum
+  ghc-bignum = super.ghc-bignum or self.mkDerivation {
+    pname = "ghc-bignum";
+    version = "1.0";
+    sha256 = "0xl848q8z6qx2bi6xil0d35lra7wshwvysyfblki659d7272b1im";
+    description = "GHC BigNum library";
+    license = pkgs.lib.licenses.bsd3;
+    # ghc-bignum is not buildable if none of the three backends
+    # is explicitly enabled. We enable Native for now as it doesn't
+    # depend on anything else as oppossed to GMP and FFI.
+    # Apply patch which fixes a compilation failure we encountered.
+    # Will need to be kept until we can drop ghc-bignum entirely,
+    # i. e. if GHC 8.10.* and 8.8.* have been removed.
+    configureFlags = [ "-f" "Native" ];
+    patches = [
       (pkgs.fetchpatch {
         url = "https://gitlab.haskell.org/ghc/ghc/-/commit/08d1588bf38d83140a86817a7a615db486357d4f.patch";
         sha256 = "1qx4r031y72px291vz38bng9sb23r8zb35s03v5hhawlmgzfzcb5";
         stripLen = 2;
       })
     ];
-  }) super.ghc-bignum;
+  };
 
   # 2021-04-09: outdated base and alex-tools
   # PR pending https://github.com/glguy/language-lua/pull/6
