@@ -1,38 +1,39 @@
 # pkgs/development/haskell-modules/configuration-hackage2nix.yaml
 
-compiler: ghc-8.10.7
+compiler: ghc-9.0.2
 
 core-packages:
   - array-0.5.4.0
-  - base-4.14.1.0
+  - base-4.15.1.0
   - binary-0.8.8.0
-  - bytestring-0.10.12.0
-  - Cabal-3.2.1.0
-  - containers-0.6.2.1
-  - deepseq-1.4.4.0
-  - directory-1.3.6.0
+  - bytestring-0.10.12.1
+  - Cabal-3.4.1.0
+  - containers-0.6.4.1
+  - deepseq-1.4.5.0
+  - directory-1.3.6.2
   - exceptions-0.10.4
   - filepath-1.4.2.1
-  - ghc-8.10.4
-  - ghc-boot-8.10.4
-  - ghc-boot-th-8.10.4
+  - ghc-9.0.2
+  - ghc-bignum-1.1
+  - ghc-boot-9.0.2
+  - ghc-boot-th-9.0.2
   - ghc-compact-0.1.0.0
-  - ghc-heap-8.10.4
-  - ghc-prim-0.6.1
-  - ghci-8.10.4
-  - haskeline-0.8.0.1
+  - ghc-heap-9.0.2
+  - ghc-prim-0.7.0
+  - ghci-9.0.2
+  - haskeline-0.8.2
   - hpc-0.6.1.0
-  - integer-gmp-1.0.3.0
-  - libiserv-8.10.4
+  - integer-gmp-1.1
+  - libiserv-9.0.2
   - mtl-2.2.2
   - parsec-3.1.14.0
   - pretty-1.1.3.6
-  - process-1.6.9.0
-  - rts-1.0
+  - process-1.6.13.2
+  - rts-1.0.2
   - stm-2.5.0.0
-  - template-haskell-2.16.0.0
-  - terminfo-0.4.1.4
-  - text-1.2.4.1
+  - template-haskell-2.17.0.0
+  - terminfo-0.4.1.5
+  - text-1.2.5.0
   - time-1.9.3
   - transformers-0.5.6.2
   - unix-2.7.2.2
@@ -80,8 +81,8 @@ default-package-overrides:
   - dhall-nix < 1.1.22
   # reflex-dom-pandoc is only used by neuron which needs a version < 1.0.0.0
   - reflex-dom-pandoc < 1.0.0.0
-  # 2021-09-07: pin to our current GHC version
-  - ghc-api-compat == 8.10.7
+  # 2022-02-18: pin to our current GHC version
+  - ghc-api-compat == 9.0.*
   # 2021-10-13: weeder 2.3.0 require GHC == 9.0.*; remove pin when GHC version changes
   - weeder < 2.3.0
   # 2021-10-10: taskwarrior 0.4 requires aeson > 2.0.1.0
@@ -162,9 +163,10 @@ extra-packages:
   - sbv == 7.13                         # required for pkgs.petrinizer
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
-  - ghc-lib == 9.0.*                    # 2021-11-05: Need one GHC 9.0.2 compatible version
-  - ghc-lib-parser == 9.0.*             # 2021-11-05: Need one GHC 9.0.2 compatible version
-  - ghc-lib-parser-ex == 9.0.*          # 2021-11-05: Need one GHC 9.0.2 compatible version
+  - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
   - brick == 0.64.*                     # 2021-12-03: matterhorn depends on brick < 0.65
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
