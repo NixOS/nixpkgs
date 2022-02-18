@@ -12,6 +12,14 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-/5b9V1m7hBI6qsLr1/nE9bWj2SPX9SmdlzzFqS3Nc6Q=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "relax-qdarkstyle-version-bound.patch";
+      url = "https://github.com/Electron-Cash/Electron-Cash/pull/2396.patch";
+      sha256 = "sha256-r4c1E4ZPYNmuYLhreJjjEk5MlYUzvzN67Oo35jMnYEc=";
+    })
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     # requirements
     pyaes
@@ -47,9 +55,6 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapQtAppsHook ];
 
   postPatch = ''
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "qdarkstyle==2.6.8" "qdarkstyle<3"
-
     substituteInPlace setup.py \
       --replace "(share_dir" "(\"share\""
   '';
