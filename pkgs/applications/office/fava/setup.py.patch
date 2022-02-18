@@ -1,0 +1,10 @@
+diff --git a/setup.py b/setup.py
+new file mode 100644
+index 0000000..7f1a176
+--- /dev/null
++++ b/setup.py
+@@ -0,0 +1,4 @@
++from setuptools import setup
++
++if __name__ == "__main__":
++    setup()

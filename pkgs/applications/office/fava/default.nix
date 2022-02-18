@@ -2,12 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.19";
+  version = "1.21";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "def7c0210bf0ce8dfffdb46ce21b3efcf71eba5a4e903565258419e4c53c2d43";
+    sha256 = "d1a1422848e65e7eb275d80d322f6de2bcea1dc37b5412e8cf72c483d6a998d6";
   };
+
+  patches = [ ./setup.py.patch ];
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
@@ -44,6 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://beancount.github.io/fava";
     changelog = "https://beancount.github.io/fava/changelog.html";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [ bhipple tusj ];
   };
 }
