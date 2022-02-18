@@ -26,6 +26,7 @@ let
 
     patches = [
       ./tag-date.patch
+      ./setuptools-distutils-C++.patch
     ];
 
     buildPhase = ''
