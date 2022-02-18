@@ -34500,6 +34500,8 @@ with pkgs;
 
   quartus-prime-lite = callPackage ../applications/editors/quartus-prime {};
 
+  usb-blaster-udev-rules = callPackage ../os-specific/linux/usb-blaster-udev-rules {};
+
   go-license-detector = callPackage ../development/tools/misc/go-license-detector { };
 
   hashdeep = callPackage ../tools/security/hashdeep { };
