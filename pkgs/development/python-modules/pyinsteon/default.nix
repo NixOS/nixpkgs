@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.0.15";
+  version = "1.0.16";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-bR+2885JdGoVHBIZQG8iF0OXsECew7m5N9vopKtGp3I=";
+    sha256 = "sha256-V0niLQAplN/uZ0YeN6g8uax3U/d0LUT4aXxe3ENXIHc=";
   };
 
   propagatedBuildInputs = [
