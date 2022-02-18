@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, testVersion, duf }:
 
 buildGoModule rec {
   pname = "duf";
@@ -14,6 +14,10 @@ buildGoModule rec {
   vendorSha256 = "sha256-oihi7E67VQmym9U1gdD802AYxWRrSowhzBiKg0CBDPc=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+
+  passthru.tests.version = testVersion {
+    package = duf;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/muesli/duf/";
