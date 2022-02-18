@@ -218,9 +218,9 @@
 /nixos/modules/services/mail/rspamd.nix     @peti
 
 # Emacs
-/pkgs/applications/editors/emacs-modes @adisbladis
-/pkgs/applications/editors/emacs       @adisbladis
-/pkgs/top-level/emacs-packages.nix     @adisbladis
+/pkgs/applications/editors/emacs/elisp-packages @adisbladis
+/pkgs/applications/editors/emacs                @adisbladis
+/pkgs/top-level/emacs-packages.nix              @adisbladis
 
 # Neovim
 /pkgs/applications/editors/neovim      @jonringer @teto
