@@ -125,6 +125,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/118d527f2e4baec5fe8060b22a6212468b8e4d3f.patch";
       sha256 = "sha256-ox+JSpc0pqd3bMi5Ot7ljQyk70SX8g+BLufR06mZPps=";
     })
+    (fetchpatch {
+      # (mostly?) fixes I/O errors in VMs, particularly when using zvols as storage.
+      # See https://gitlab.com/qemu-project/qemu/-/issues/649
+      name = "fix-io-errors.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/cc071629539dc1f303175a7e2d4ab854c0a8b20f.patch";
+      sha256 = "sha256-xom9fVYodRVaqMC01dCV4D48Afk+nLhxncX1YWMXkk8=";
+    })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./sigrtminmax.patch
