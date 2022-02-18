@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mocnik-science";
     repo = "osm-python-tools";
-    rev = "v.${version}";
+    rev = "v${version}";
     sha256 = "sha256-335zo/kOX4OpUwHas2aaPibY6zNmDaaHJpolbTQWqKk=";
   };
 
