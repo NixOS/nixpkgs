@@ -25,6 +25,10 @@
   # If you use Xmodmap to set keyboard mappings (or your DE does)
   # it is required to correctly map keys
 , withXmodmap ? true
+  # Some tests are flakey under high CPU load and could cause intermittent
+  # failures when building. Override this to true to run tests anyway
+  # See upstream issue: https://github.com/sezanzeb/input-remapper/issues/306
+, withDoCheck ? false
   # Version and rev and hash are package arguments to allow overriding
   # while ensuring the values in prePatch and src match
   # https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7
@@ -66,7 +70,7 @@ buildPythonApplication {
     substituteInPlace inputremapper/logger.py --replace "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
   '');
 
-  doCheck = true;
+  doCheck = withDoCheck;
   checkInputs = [
     psutil
   ];
