@@ -84,10 +84,8 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
   preCheck = ''
-    mv pyarrow/tests tests
-    rm -rf pyarrow
-    mkdir pyarrow
-    mv tests pyarrow/tests
+    shopt -s extglob
+    rm -r pyarrow/!(tests)
   '';
 
   pythonImportsCheck = map (module: "pyarrow.${module}") [
