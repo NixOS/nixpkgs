@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "colord";
-  version = "1.4.5";
+  version = "1.4.6";
 
   outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
-    sha256 = "05sydi6qqqx1rrqwnga1vbg9srkf89wdcfw5w4p4m7r37m2flx5p";
+    sha256 = "sha256-dAdjGie/5dG2cueuQndwAcEF2GC3tzkig8jGMA3ojm8=";
   };
 
   patches = [
