@@ -214,7 +214,6 @@ with lib.maintainers; {
       mguentner
       ekleog
       ralith
-      mjlbach
       dandellion
       sumnerevans
     ];

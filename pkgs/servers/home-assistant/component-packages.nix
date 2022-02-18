@@ -613,7 +613,7 @@
     "ondilo_ico" = ps: with ps; [ aiohttp-cors ondilo ];
     "onewire" = ps: with ps; [ pi1wire pyownet ];
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
-    "onvif" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: WSDiscovery onvif-zeep-async
+    "onvif" = ps: with ps; [ wsdiscovery ha-ffmpeg onvif-zeep-async ];
     "open_meteo" = ps: with ps; [ open-meteo ];
     "openalpr_cloud" = ps: with ps; [ ];
     "openalpr_local" = ps: with ps; [ ];
@@ -636,7 +636,7 @@
     "orvibo" = ps: with ps; [ orvibo ];
     "osramlightify" = ps: with ps; [ ]; # missing inputs: lightify
     "otp" = ps: with ps; [ pyotp ];
-    "overkiz" = ps: with ps; [ ]; # missing inputs: pyoverkiz
+    "overkiz" = ps: with ps; [ pyoverkiz ];
     "ovo_energy" = ps: with ps; [ ovoenergy ];
     "owntracks" = ps: with ps; [ pynacl pyturbojpeg aiohttp-cors hass-nabucasa paho-mqtt ];
     "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt python-openzwave-mqtt ];
@@ -1388,6 +1388,7 @@
     "oncue"
     "ondilo_ico"
     "onewire"
+    "onvif"
     "open_meteo"
     "openalpr_cloud"
     "openalpr_local"
@@ -1398,6 +1399,7 @@
     "openuv"
     "openweathermap"
     "opnsense"
+    "overkiz"
     "ovo_energy"
     "owntracks"
     "ozw"

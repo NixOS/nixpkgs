@@ -5645,6 +5645,8 @@ in {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
+
   oocsi = callPackage ../development/python-modules/oocsi { };
 
   open-garage = callPackage ../development/python-modules/open-garage { };
@@ -6082,6 +6084,8 @@ in {
 
   pipdate = callPackage ../development/python-modules/pipdate { };
 
+  pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
+
   pip-tools = callPackage ../development/python-modules/pip-tools { };
 
   pipx = callPackage ../development/python-modules/pipx { };
@@ -6148,6 +6152,8 @@ in {
   pynws = callPackage ../development/python-modules/pynws { };
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
+
+  pyoverkiz = callPackage ../development/python-modules/pyoverkiz { };
 
   pyownet = callPackage ../development/python-modules/pyownet { };
 
@@ -6910,7 +6916,9 @@ in {
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
 
-  pygit2 = callPackage ../development/python-modules/pygit2 { };
+  pygit2 = callPackage ../development/python-modules/pygit2 {
+    libgit2 = pkgs.libgit2_1_3_0;
+  };
 
   PyGithub = callPackage ../development/python-modules/pyGithub { };
 
@@ -10564,6 +10572,8 @@ in {
   wrf-python = callPackage ../development/python-modules/wrf-python { };
 
   ws4py = callPackage ../development/python-modules/ws4py { };
+
+  wsdiscovery = callPackage ../development/python-modules/wsdiscovery { };
 
   wsgi-intercept = callPackage ../development/python-modules/wsgi-intercept { };
 

@@ -5,13 +5,13 @@
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.22";
+  version = "2.23";
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
     rev = "v${version}";
-    sha256 = "11n970ad0j57vlll5j30ngkrfyil23v1b29ickbnblcldvjbgwa5";
+    sha256 = "sha256-CLQWbwwJnr6Al223GvV1hVNK13p2iAyjNF7PhdaU9N0=";
   };
 
   # We have not packaged tests.
@@ -36,8 +36,9 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://rednotebook.sourceforge.io/";
+    changelog = "https://github.com/jendrikseipp/rednotebook/blob/v${version}/CHANGELOG.md";
     description = "A modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ orivej tstrobel ];
   };
 }

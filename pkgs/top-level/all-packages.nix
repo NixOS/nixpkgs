@@ -347,6 +347,10 @@ with pkgs;
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
+  probe-rs-cli = callPackage ../development/tools/rust/probe-rs-cli {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+
   probe-run = callPackage ../development/tools/rust/probe-run {
     inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
   };
@@ -3501,6 +3505,8 @@ with pkgs;
   mpdcron = callPackage ../tools/audio/mpdcron { };
 
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
+
+  mpd-discord-rpc = callPackage ../tools/audio/mpd-discord-rpc { };
 
   mpd-mpris = callPackage ../tools/audio/mpd-mpris { };
 
@@ -9389,6 +9395,10 @@ with pkgs;
 
   rnnoise-plugin = callPackage ../development/libraries/rnnoise-plugin {};
 
+  rnote = callPackage ../applications/graphics/rnote {
+    inherit (gst_all_1) gstreamer;
+  };
+
   rnp = callPackage ../tools/security/rnp { };
 
   rnv = callPackage ../tools/text/xml/rnv { };
@@ -9754,6 +9764,10 @@ with pkgs;
   };
 
   sixpair = callPackage ../tools/misc/sixpair {};
+
+  sketchybar = callPackage ../os-specific/darwin/sketchybar {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa SkyLight;
+  };
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
@@ -12537,8 +12551,8 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx15;
-  openjfx = openjfx15;
+  inherit (javaPackages) openjfx11 openjfx15 openjfx17;
+  openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;
@@ -12635,7 +12649,20 @@ with pkgs;
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
     gmp = gmp6;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
-    libgit2 = libgit2_0_27;
+    libgit2 = libgit2.overrideAttrs (_: rec {
+      version = "0.27.10";
+      src = fetchFromGitHub {
+        owner = "libgit2";
+        repo = "libgit2";
+        rev = "v${version}";
+        sha256 = "09jz2fzv0zl5058s0g1cpnw87a2rgg8wnjwlygi18i2n9nn6m0ad";
+      };
+      patches = [];
+      meta.knownVulnerabilities = [
+        "CVE-2020-12278"
+        "CVE-2020-12279"
+      ];
+    });
   };
 
   julia_15 = callPackage ../development/compilers/julia/1.5.nix {
@@ -15703,7 +15730,9 @@ with pkgs;
 
   ttyd = callPackage ../servers/ttyd { };
 
-  turbogit = callPackage ../development/tools/turbogit { };
+  turbogit = callPackage ../development/tools/turbogit {
+    libgit2 = libgit2_1_3_0;
+  };
 
   tweak = callPackage ../applications/editors/tweak { };
 
@@ -16714,32 +16743,19 @@ with pkgs;
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
-  libgit2 = callPackage ../development/libraries/git2 {
+  libgit2 = callPackage ../development/libraries/libgit2 {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  libgit2_0_27 = libgit2.overrideAttrs (_: rec {
-    version = "0.27.10";
-    src = fetchFromGitHub {
+  libgit2_1_3_0 = libgit2.overrideAttrs (_: rec {
+    version = "1.3.0";
+    src = pkgs.fetchFromGitHub {
       owner = "libgit2";
       repo = "libgit2";
       rev = "v${version}";
-      sha256 = "09jz2fzv0zl5058s0g1cpnw87a2rgg8wnjwlygi18i2n9nn6m0ad";
+      sha256 = "sha256-7atNkOBzX+nU1gtFQEaE+EF1L+eex+Ajhq2ocoJY920=";
     };
-    meta.knownVulnerabilities = [
-      "CVE-2020-12278"
-      "CVE-2020-12279"
-    ];
-  });
-
-  libgit2_1_1 = libgit2.overrideAttrs (_: rec {
-    version = "1.1.1";
-    src = fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "v${version}";
-      sha256 = "sha256-SxceIxT0aeiiiZCeSIe6EOa+MyVpQVaiv/ZZn6fkwIc=";
-    };
+    patches = [];
   });
 
   libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
@@ -20396,7 +20412,7 @@ with pkgs;
 
   vulkan-extension-layer = callPackage ../tools/graphics/vulkan-extension-layer { };
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
-  vulkan-loader = callPackage ../development/libraries/vulkan-loader { };
+  vulkan-loader = callPackage ../development/libraries/vulkan-loader { inherit (darwin) moltenvk; };
   vulkan-tools = callPackage ../tools/graphics/vulkan-tools { };
   vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
   vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
@@ -25707,9 +25723,7 @@ with pkgs;
   };
 
   firefox-bin = wrapFirefox firefox-bin-unwrapped {
-    applicationName = "firefox";
     pname = "firefox-bin";
-    desktopName = "Firefox";
   };
 
   firefox-beta-bin-unwrapped = firefox-bin-unwrapped.override {
@@ -25719,7 +25733,6 @@ with pkgs;
   };
 
   firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
-    applicationName = "firefox";
     pname = "firefox-beta-bin";
     desktopName = "Firefox Beta";
   };
@@ -25731,7 +25744,6 @@ with pkgs;
   };
 
   firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
-    applicationName = "firefox";
     nameSuffix = "-devedition";
     pname = "firefox-devedition-bin";
     desktopName = "Firefox DevEdition";
