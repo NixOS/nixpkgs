@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, gitUpdater
 , gnome-themes-extra
 , gtk-engine-murrine
 , jdupes
@@ -24,7 +25,7 @@ lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVaria
 lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "midblack" "rimless" "normal" ] tweaks
 lib.checkListOfEnum "${pname}: grub screens" [ "1080p" "2k" "4k" ] grubScreens
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   inherit pname;
   version = "unstable-2022-02-04";
 
@@ -84,6 +85,8 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Flat Gtk+ theme based on Elegant Design";
