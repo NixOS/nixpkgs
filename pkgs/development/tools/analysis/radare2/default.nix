@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib; do
+    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib $out/lib/libr_anal.${version}.dylib; do
       install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $file
     done
   '';
