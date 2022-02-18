@@ -58,8 +58,8 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_6 = common {
-    version = "2.6.0";
-    sha256 = "sha256-xEPeMcNJVOeZtoN+d+aRwolpW8mFSEQx76HTRdlhPhg=";
+    version = "2.6.1";
+    sha256 = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
   };
 
   stable = self.nix_2_6;
