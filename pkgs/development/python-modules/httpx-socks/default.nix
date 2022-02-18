@@ -56,6 +56,12 @@ buildPythonPackage rec {
     "httpx_socks"
   ];
 
+  disabledTests = [
+    # Tests don't work in the sandbox
+    "test_proxy"
+    "test_secure_proxy"
+  ];
+
   meta = with lib; {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
     homepage = "https://github.com/romis2012/httpx-socks";
