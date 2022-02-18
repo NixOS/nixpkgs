@@ -8125,13 +8125,6 @@
     githubId = 1001112;
     name = "Marcin Janczyk";
   };
-  mjlbach = {
-    email = "m.j.lbach@gmail.com";
-    matrix = "@atrius:matrix.org";
-    github = "mjlbach";
-    githubId = 13316262;
-    name = "Michael Lingelbach";
-  };
   mjp = {
     email = "mike@mythik.co.uk";
     github = "MikePlayle";
@@ -13221,6 +13214,12 @@
     github = "xfix";
     githubId = 1297598;
     name = "Konrad Borowski";
+  };
+  xgroleau = {
+    email = "xgroleau@gmail.com";
+    github = "xgroleau";
+    githubId = 31734358;
+    name = "Xavier Groleau";
   };
   xiorcale = {
     email = "quentin.vaucher@pm.me";

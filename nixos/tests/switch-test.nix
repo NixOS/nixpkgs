@@ -145,6 +145,23 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           systemd.services.test.serviceConfig."X-Test" = "test";
         };
 
+        unitWithBackslash.configuration = {
+          systemd.services."escaped\\x2ddash" = {
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${pkgs.coreutils}/bin/true";
+              ExecReload = "${pkgs.coreutils}/bin/true";
+            };
+          };
+        };
+
+        unitWithBackslashModified.configuration = {
+          imports = [ unitWithBackslash.configuration ];
+          systemd.services."escaped\\x2ddash".serviceConfig.X-Test = "test";
+        };
+
         restart-and-reload-by-activation-script.configuration = {
           systemd.services = rec {
             simple-service = {
@@ -432,6 +449,25 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "the following new units were started:")
         assert_lacks(out, "as well:")
         assert_contains(out, "would start the following units: test.service\n")
+
+        # Ensure \ works in unit names
+        out = switch_to_specialisation("${machine}", "unitWithBackslash")
+        assert_contains(out, "stopping the following units: test.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: escaped\\x2ddash.service\n")
+        assert_lacks(out, "as well:")
+
+        out = switch_to_specialisation("${machine}", "unitWithBackslashModified")
+        assert_contains(out, "stopping the following units: escaped\\x2ddash.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_contains(out, "\nstarting the following units: escaped\\x2ddash.service\n")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
 
     with subtest("failing units"):
         # Let the simple service fail

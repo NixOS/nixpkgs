@@ -759,6 +759,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lua/";
   };
 
+  cmp-nvim-ultisnips = buildVimPluginFrom2Nix {
+    pname = "cmp-nvim-ultisnips";
+    version = "2022-01-31";
+    src = fetchFromGitHub {
+      owner = "quangnguyen30192";
+      repo = "cmp-nvim-ultisnips";
+      rev = "0e8f501facdcc5bfdb5664ee185e040464a79625";
+      sha256 = "tQ3xkJ34q5+ioi6lQY7F/ZjGngzmv4FDkpNeU5sRqK0=";
+    };
+    meta.homepage = "https://github.com/quangnguyen30192/cmp-nvim-ultisnips";
+  };
+
   cmp-omni = buildVimPluginFrom2Nix {
     pname = "cmp-omni";
     version = "2022-01-08";
@@ -6447,6 +6459,18 @@ final: prev:
     meta.homepage = "https://github.com/tomtom/tcomment_vim/";
   };
 
+  telescope-asynctasks-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-asynctasks.nvim";
+    version = "2021-10-22";
+    src = fetchFromGitHub {
+      owner = "GustavoKatel";
+      repo = "telescope-asynctasks.nvim";
+      rev = "80bd6570e5423d14ad1e6fd56a199955ac1b895f";
+      sha256 = "Ow7iSmosMs/hGEfnKKorZhS4tKVKal+pkZ52LIFsEu4=";
+    };
+    meta.homepage = "https://github.com/GustavoKatel/telescope-asynctasks.nvim";
+  };
+
   telescope-cheat-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-cheat.nvim";
     version = "2021-12-05";
@@ -6626,6 +6650,18 @@ final: prev:
       sha256 = "0gi31w0rpd14zmnnc883hji7vf8hi1njdprhm9lk3n6pslipgfmv";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope.nvim/";
+  };
+
+  telescope-ultisnips-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-ultisnips.nvim";
+    version = "2021-09-27";
+    src = fetchFromGitHub {
+      owner = "fhill2";
+      repo = "telescope-ultisnips.nvim";
+      rev = "f48b6d4f53b31507d3fd514905c6940409e8ada8";
+      sha256 = "h2PfstopgjCMFYVOnzEX7gkkIHCamcJPJux5B+qYYww=";
+    };
+    meta.homepage = "https://github.com/fhill2/telescope-ultisnips.nvim";
   };
 
   tender-vim = buildVimPluginFrom2Nix {

@@ -169,6 +169,7 @@ FelikZ/ctrlp-py-matcher
 feline-nvim/feline.nvim
 fenetikm/falcon
 fhill2/floating.nvim
+fhill2/telescope-ultisnips.nvim
 fiatjaf/neuron.vim
 filipdutescu/renamer.nvim
 fisadev/vim-isort
@@ -223,6 +224,7 @@ guns/vim-clojure-highlight
 guns/vim-clojure-static
 guns/vim-sexp
 guns/xterm-color-table.vim
+GustavoKatel/telescope-asynctasks.nvim
 gyim/vim-boxdraw
 haringsrob/nvim_context_vt
 hashivim/vim-packer
@@ -654,6 +656,7 @@ pwntester/octo.nvim
 python-mode/python-mode
 qnighy/lalrpop.vim
 qpkorr/vim-bufkill
+quangnguyen30192/cmp-nvim-ultisnips
 Quramy/tsuquyomi
 racer-rust/vim-racer
 radenling/vim-dispatch-neovim
