@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pugixml";
-  version = "1.12";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "pugixml";
     rev = "v${version}";
-    sha256 = "sha256-FLemG9T17n6l7vgb01OmO22BK59jv5uozVHeUnILEEQ=";
+    sha256 = "sha256-Udjx84mhLPJ1bU5WYDo73PAeeufS+vBLXZP0YbBvqLE=";
   };
 
   outputs = if shared then [ "out" "dev" ] else [ "out" ];
