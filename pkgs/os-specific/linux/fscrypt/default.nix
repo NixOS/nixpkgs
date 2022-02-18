@@ -4,13 +4,13 @@
 
 buildGoModule rec {
   pname = "fscrypt";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscrypt";
     rev = "v${version}";
-    sha256 = "0gi91vm0ai4vjzj6cfnjsfy8kbfxjiq2n7jnbhf5470qbx49qixr";
+    sha256 = "sha256-1pXeqG7RZRT6EgWVnjBp2Ea4Cr2Y3xXa//30JXIZJec=";
   };
 
   postPatch = ''
@@ -19,7 +19,7 @@ buildGoModule rec {
       --replace "/usr/local" "$out"
   '';
 
-  vendorSha256 = "1gw3q2pn8v6n9wkl5881rbxglislnr98a9gjqnqm894gnz7hfdzb";
+  vendorSha256 = "sha256-6zcHz7ePJFSxxfIlhVK2VEf6+soBoUInT9ZsZK/Ag78=";
 
   doCheck = false;
 
