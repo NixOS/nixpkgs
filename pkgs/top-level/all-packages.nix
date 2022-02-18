@@ -18924,6 +18924,8 @@ with pkgs;
 
   libyubikey = callPackage ../development/libraries/libyubikey { };
 
+  libyuv = callPackage ../development/libraries/libyuv { };
+
   libzapojit = callPackage ../development/libraries/libzapojit { };
 
   libzen = callPackage ../development/libraries/libzen { };
