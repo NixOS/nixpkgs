@@ -12,8 +12,6 @@
 , libpcap
 , orc
 , pkg-config
-, uhd
-, log4cpp
 , blas, lapack
 , matio
 , pugixml
@@ -52,7 +50,7 @@ gnuradio3_8.pkgs.mkDerivation rec {
     # UHD support is optional, but gnuradio is built with it, so there's
     # nothing to be gained by leaving it out.
     gnuradio3_8.unwrapped.uhd
-    log4cpp
+    gnuradio3_8.unwrapped.log4cpp
     blas lapack
     matio
     pugixml
