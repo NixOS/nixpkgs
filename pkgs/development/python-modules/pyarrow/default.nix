@@ -77,9 +77,6 @@ buildPythonPackage rec {
     # enabled in nixpkgs.
     # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11393
     "--deselect=pyarrow/tests/test_memory.py::test_env_var"
-    # Deselect a parquet dataset test because it erroneously fails to find the
-    # pyarrow._dataset module.
-    "--deselect=pyarrow/tests/parquet/test_dataset.py::test_parquet_dataset_deprecated_properties"
   ] ++ lib.optionals stdenv.isDarwin [
     # Requires loopback networking
     "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
