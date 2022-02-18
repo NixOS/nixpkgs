@@ -18,6 +18,7 @@
 , buildPythonApplication
 , procps
 , gtksourceview4
+, nixosTests
   # Change the default log level to debug for easier debugging of package issues
 , withDebugLogLevel ? false
   # Xmodmap is an optional dependency
@@ -145,6 +146,8 @@ buildPythonApplication {
     # Only install input-remapper prefixed binaries, we don't care about deprecated key-mapper ones
     install -m755 -D -t $out/bin/ bin/input-remapper*
   '';
+
+  passthru.tests = nixosTests.input-remapper;
 
   meta = with lib; {
     description = "An easy to use tool to change the mapping of your input device buttons";
