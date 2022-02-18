@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, testVersion, git, gh }:
 
 buildGoModule rec {
   pname = "gh";
@@ -27,6 +27,10 @@ buildGoModule rec {
     runHook postBuild
   '';
 
+  checkInputs = [
+    git
+  ];
+
   installPhase = ''
     runHook preInstall
     install -Dm755 bin/gh -t $out/bin
@@ -39,8 +43,9 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  # fails with `unable to find git executable in PATH`
-  doCheck = false;
+  passthru.tests.version = testVersion {
+    package = gh;
+  };
 
   meta = with lib; {
     description = "GitHub CLI tool";
