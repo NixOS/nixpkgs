@@ -324,6 +324,13 @@ let
         compilerNames.ghc8107
         compilerNames.ghc902
       ];
+      ghc-bignum = [
+        compilerNames.ghc884
+        compilerNames.ghc8107
+      ];
+      ghc-lib = released;
+      ghc-lib-parser = released;
+      ghc-lib-parser-ex = released;
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
