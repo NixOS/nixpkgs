@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "osmpythontools";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "mocnik-science";
     repo = "osm-python-tools";
     rev = "v${version}";
-    sha256 = "sha256-335zo/kOX4OpUwHas2aaPibY6zNmDaaHJpolbTQWqKk=";
+    sha256 = "sha256-7r42b/B9h7cMgM+wFS0Fink/3WjUNvz+PwLn3C5hawc=";
   };
 
   propagatedBuildInputs = [
