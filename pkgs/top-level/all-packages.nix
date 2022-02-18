@@ -2921,7 +2921,7 @@ with pkgs;
   duf = callPackage ../tools/misc/duf { };
 
   inherit (ocaml-ng.ocamlPackages_4_10) dune_1;
-  inherit (ocamlPackages) dune_2 dune-release;
+  inherit (ocamlPackages) dune_2 dune_3 dune-release;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
