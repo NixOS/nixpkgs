@@ -16,20 +16,15 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.1.4";
+  version = "2022.2.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Pv4Rh92d+Jb3ZKPgKVyrgVHr6PGTcIYybdFavbnjuPA=";
+    sha256 = "sha256-Pt57wI1cYTqT65zGOk1/GyvK0BqITxCzWIyXSNZ9D/0=";
   };
-
-  patches = [
-    # fix missing write permissions on src files before modifing them
-    ./fix-src-permissions.patch
-  ];
 
   postPatch = ''
     # remove all version pinning (E.g tornado==5.1.1 -> tornado)

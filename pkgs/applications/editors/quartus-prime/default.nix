@@ -25,6 +25,7 @@ in buildFHSUserEnv rec {
     # qsys requirements
     xorg.libXtst
     xorg.libXi
+    libudev0-shim
   ];
   multiPkgs = pkgs: with pkgs; let
     # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
