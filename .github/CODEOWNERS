@@ -229,7 +229,7 @@
 /pkgs/misc/vim-plugins         @jonringer @softinio
 
 # VsCode Extensions
-/pkgs/misc/vscode-extensions   @jonringer
+/pkgs/applications/editors/vscode/extensions   @jonringer
 
 # Prometheus exporter modules and tests
 /nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz
