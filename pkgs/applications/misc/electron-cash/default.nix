@@ -3,13 +3,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.2.5";
+  version = "4.2.6";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
     rev = version;
-    sha256 = "sha256-ALIrNnhpX46xdQdfJdx/9e/QtdyBEgi5xLrbuOBJR7o=";
+    sha256 = "sha256-/5b9V1m7hBI6qsLr1/nE9bWj2SPX9SmdlzzFqS3Nc6Q=";
   };
 
   propagatedBuildInputs = with python3Packages; [
