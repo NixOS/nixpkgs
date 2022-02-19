@@ -1583,6 +1583,8 @@ in {
 
   chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
 
+  chispa = callPackage ../development/python-modules/chispa { };
+
   ci-info = callPackage ../development/python-modules/ci-info { };
 
   ci-py = callPackage ../development/python-modules/ci-py { };
@@ -3160,6 +3162,8 @@ in {
   });
 
   gdown = callPackage ../development/python-modules/gdown { };
+
+  gdtoolkit = callPackage ../development/python-modules/gdtoolkit { };
 
   ge25519 = callPackage ../development/python-modules/ge25519 { };
 
