@@ -5,7 +5,7 @@
 , pkg-config
 , scdoc
 , stdenv
-, systemd
+, systemdSupport ? stdenv.isLinux, systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc ];
 
-  buildInputs = [ systemd ];
+  buildInputs = lib.optionals systemdSupport [ systemd ];
 
-  mesonFlags = [ "-Dlibseat-logind=systemd" "-Dlibseat-builtin=enabled" ];
+  mesonFlags = [ "-Dauto_features=auto" "-Dlibseat-builtin=enabled" ];
 
   meta = with lib; {
     description = "A universal seat management library";
