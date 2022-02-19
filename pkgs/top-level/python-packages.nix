@@ -2488,6 +2488,8 @@ in {
 
   dyn = callPackage ../development/python-modules/dyn { };
 
+  dynalite-devices = callPackage ../development/python-modules/dynalite-devices { };
+
   dynd = callPackage ../development/python-modules/dynd { };
 
   easydict = callPackage ../development/python-modules/easydict { };
