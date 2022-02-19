@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.19.0";
+  version = "3.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ed33557f252cf8b022b788ebd2b851c681979f200171498acde2b92d760db026";
+    sha256 = "sha256-WIH2lMPehrqkXCh+JbEI5nf99nt61OwLhP/pF6BbsnQ=";
   };
 
   propagatedBuildInputs = [
