@@ -460,7 +460,7 @@ in {
 
     xmm7360-pci = callPackage ../os-specific/linux/xmm7360-pci { };
 
-    xone = callPackage ../os-specific/linux/xone { };
+    xone = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/xone { } else null;
 
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
