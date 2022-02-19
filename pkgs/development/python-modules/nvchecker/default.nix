@@ -21,20 +21,39 @@
 buildPythonPackage rec {
   pname = "nvchecker";
   version = "2.7";
+  format = "setuptools";
 
-  # Tests not included in PyPI tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OPUqkHLG8PUlD5NP7q/BpKUvmAA8Jk1NvsPPVbImv0A=";
+    hash = "sha256-OPUqkHLG8PUlD5NP7q/BpKUvmAA8Jk1NvsPPVbImv0A=";
   };
 
-  nativeBuildInputs = [ installShellFiles docutils ];
-  propagatedBuildInputs = [ setuptools packaging tomli structlog appdirs tornado pycurl aiohttp ];
-  checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
+  nativeBuildInputs = [
+    installShellFiles
+    docutils
+  ];
+  
+  propagatedBuildInputs = [
+    setuptools
+    packaging
+    tomli
+    structlog
+    appdirs
+    tornado
+    pycurl
+    aiohttp
+  ];
 
-  disabled = pythonOlder "3.7";
+  checkInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    flaky
+    pytest-httpbin
+  ];
 
   postBuild = ''
     patchShebangs docs/myrst2man.py
@@ -45,7 +64,13 @@ buildPythonPackage rec {
     installManPage docs/_build/man/nvchecker.1
   '';
 
-  pytestFlagsArray = [ "-m 'not needs_net'" ];
+  pythonImportsCheck = [
+    "nvchecker"
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not needs_net'"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/lilydjwg/nvchecker";
