@@ -85,7 +85,7 @@ mkDerivation rec {
     ''
     + lib.optionalString voipSupport ''
       # add gstreamer plugins path to the wrapper
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
     ''
    + ")";
 
