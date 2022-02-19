@@ -25647,6 +25647,8 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
+  gurk-rs = callPackage ../applications/networking/instant-messengers/gurk-rs { };
+
   gjay = callPackage ../applications/audio/gjay { };
 
   photivo = callPackage ../applications/graphics/photivo { };
