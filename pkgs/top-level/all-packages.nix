@@ -4212,6 +4212,8 @@ with pkgs;
 
   colord-gtk = callPackage ../tools/misc/colord-gtk { };
 
+  colord-gtk4 = colord-gtk.override { withGtk4 = true; };
+
   colordiff = callPackage ../tools/text/colordiff { };
 
   connect = callPackage ../tools/networking/connect { };
