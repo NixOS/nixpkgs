@@ -1,0 +1,18 @@
+[Desktop Entry]
+Categories=Game;
+Exec=multimc
+Icon=multimc
+Keywords=game;Minecraft;
+MimeType=
+Name=MultiMC 5
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+Keywords=mmc
+
