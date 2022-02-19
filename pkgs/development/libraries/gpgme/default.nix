@@ -13,16 +13,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.16.0";
+  version = "1.17.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    sha256 = "1l4yw9fqc1blvx1sq1jnfvp1jijla3ca2jw90p4x9m8hvfpc933c";
+    sha256 = "1xb9k88rrafdi0n95nzx0d6bz7hcn9b44hciqbigrqkvxc6gblsf";
   };
 
   patches = [
-    # probably included in > 1.16.0
-    ./test_t-edit-sign.diff
     # https://dev.gnupg.org/rMc4cf527ea227edb468a84bf9b8ce996807bd6992
     ./fix_gpg_list_keys.diff
     # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
