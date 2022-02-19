@@ -312,7 +312,7 @@
     "generic" = ps: with ps; [ ];
     "generic_hygrostat" = ps: with ps; [ ];
     "generic_thermostat" = ps: with ps; [ sqlalchemy ];
-    "geniushub" = ps: with ps; [ ]; # missing inputs: geniushub-client
+    "geniushub" = ps: with ps; [ geniushub-client ];
     "geo_json_events" = ps: with ps; [ geojson-client ];
     "geo_location" = ps: with ps; [ ];
     "geo_rss_events" = ps: with ps; [ georss-generic-client ];
