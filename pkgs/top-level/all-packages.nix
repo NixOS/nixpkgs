@@ -24477,6 +24477,8 @@ with pkgs;
 
   argocd = callPackage ../applications/networking/cluster/argocd { };
 
+  argo-rollouts = callPackage ../applications/networking/cluster/argo-rollouts { };
+
   ario = callPackage ../applications/audio/ario { };
 
   arion = callPackage ../applications/virtualization/arion { };
