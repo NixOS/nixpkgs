@@ -3874,6 +3874,8 @@ in {
     inherit (pkgs) i2c-tools;
   };
 
+  i2csense = callPackage ../development/python-modules/i2csense { };
+
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   i3-py = callPackage ../development/python-modules/i3-py { };
