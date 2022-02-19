@@ -1,0 +1,423 @@
+From 8f7a4c8ab8e62c202884c2bd9ee2642bd46a75bc Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Thu, 30 Dec 2021 11:38:02 +0200
+Subject: [PATCH 1/4] fix[cmake]: Eigen&Ceres via native cmake targets
+
+Eliminates the need for custom FindEigen.cmake and hard-coded paths
+---
+ opensfm/src/CMakeLists.txt            |   2 +-
+ opensfm/src/bundle/CMakeLists.txt     |   7 +-
+ opensfm/src/cmake/FindCeres.cmake     |  60 ----------
+ opensfm/src/cmake/FindEigen.cmake     | 160 --------------------------
+ opensfm/src/foundation/CMakeLists.txt |   2 +-
+ opensfm/src/geo/CMakeLists.txt        |   3 +-
+ opensfm/src/geometry/CMakeLists.txt   |  20 ++--
+ opensfm/src/map/CMakeLists.txt        |   2 +-
+ opensfm/src/sfm/CMakeLists.txt        |   4 +-
+ 9 files changed, 23 insertions(+), 237 deletions(-)
+ delete mode 100644 opensfm/src/cmake/FindCeres.cmake
+ delete mode 100644 opensfm/src/cmake/FindEigen.cmake
+
+diff --git a/opensfm/src/CMakeLists.txt b/opensfm/src/CMakeLists.txt
+index 8f67492e..287d171b 100644
+--- a/opensfm/src/CMakeLists.txt
++++ b/opensfm/src/CMakeLists.txt
+@@ -54,7 +54,7 @@ endif()
+ 
+ find_package(LAPACK)
+ find_package(SuiteSparse)
+-find_package(Eigen REQUIRED)
++find_package(Eigen3 REQUIRED)
+ find_package(Ceres REQUIRED)
+ find_package(Gflags REQUIRED)
+ find_package(Glog REQUIRED)
+diff --git a/opensfm/src/bundle/CMakeLists.txt b/opensfm/src/bundle/CMakeLists.txt
+index 8d8c272c..e219c8a3 100644
+--- a/opensfm/src/bundle/CMakeLists.txt
++++ b/opensfm/src/bundle/CMakeLists.txt
+@@ -17,7 +17,7 @@ set(BUNDLE_FILES
+ add_library(bundle ${BUNDLE_FILES})
+ target_link_libraries(bundle
+   PRIVATE
+-    ${CERES_LIBRARIES}
++    Ceres::ceres
+     ${LAPACK_LIBRARIES}
+     ${SUITESPARSE_LIBRARIES}
+     foundation
+@@ -28,7 +28,7 @@ endif()
+ if (SUITESPARSE_FOUND)
+     target_include_directories(bundle PRIVATE ${SUITESPARSE_INCLUDE_DIRS})
+ endif()
+-target_include_directories(bundle PRIVATE ${CERES_INCLUDE_DIR} ${CMAKE_SOURCE_DIR})
++target_include_directories(bundle PRIVATE ${CMAKE_SOURCE_DIR})
+ 
+ if (OPENSFM_BUILD_TESTS)
+     set(BUNDLE_TEST_FILES
+@@ -36,11 +36,12 @@ if (OPENSFM_BUILD_TESTS)
+         test/bundle_data_test.cc
+     )
+     add_executable(bundle_test ${BUNDLE_TEST_FILES})
+-    target_include_directories(bundle_test PRIVATE ${CMAKE_SOURCE_DIR} ${EIGEN_INCLUDE_DIRS} ${GMOCK_INCLUDE_DIRS})
++    target_include_directories(bundle_test PRIVATE ${CMAKE_SOURCE_DIR} ${GMOCK_INCLUDE_DIRS})
+     target_link_libraries(bundle_test
+                         PUBLIC
+                         bundle
+                         geometry
++                        Eigen3::Eigen
+                         ${TEST_MAIN})
+     add_test(bundle_test bundle_test)
+ endif()
+diff --git a/opensfm/src/cmake/FindCeres.cmake b/opensfm/src/cmake/FindCeres.cmake
+deleted file mode 100644
+index 74e2a797..00000000
+--- a/opensfm/src/cmake/FindCeres.cmake
++++ /dev/null
+@@ -1,60 +0,0 @@
+-# - Find Ceres library
+-# Find the native Ceres includes and library
+-# This module defines
+-#  CERES_INCLUDE_DIRS, where to find ceres.h, Set when
+-#                      CERES_INCLUDE_DIR is found.
+-#  CERES_LIBRARIES, libraries to link against to use Ceres.
+-#  CERES_ROOT_DIR, The base directory to search for Ceres.
+-#                  This can also be an environment variable.
+-#  CERES_FOUND, If false, do not try to use Ceres.
+-#
+-# also defined, but not for general use are
+-#  CERES_LIBRARY, where to find the Ceres library.
+-
+-# If CERES_ROOT_DIR was defined in the environment, use it.
+-IF(NOT CERES_ROOT_DIR AND NOT $ENV{CERES_ROOT_DIR} STREQUAL "")
+-  SET(CERES_ROOT_DIR $ENV{CERES_ROOT_DIR})
+-ENDIF()
+-
+-SET(_ceres_SEARCH_DIRS
+-  ${CERES_ROOT_DIR}
+-  /usr/local
+-  /sw # Fink
+-  /opt/local # DarwinPorts
+-  /opt/csw # Blastwave
+-  /opt/lib/ceres
+-)
+-
+-FIND_PATH(CERES_INCLUDE_DIR
+-  NAMES
+-    ceres/ceres.h
+-  HINTS
+-    ${_ceres_SEARCH_DIRS}
+-  PATH_SUFFIXES
+-    include
+-)
+-
+-FIND_LIBRARY(CERES_LIBRARY
+-  NAMES
+-    ceres
+-  HINTS
+-    ${_ceres_SEARCH_DIRS}
+-  PATH_SUFFIXES
+-    lib64 lib
+-  )
+-
+-# handle the QUIETLY and REQUIRED arguments and set CERES_FOUND to TRUE if
+-# all listed variables are TRUE
+-INCLUDE(FindPackageHandleStandardArgs)
+-FIND_PACKAGE_HANDLE_STANDARD_ARGS(ceres DEFAULT_MSG
+-    CERES_LIBRARY CERES_INCLUDE_DIR)
+-
+-IF(CERES_FOUND)
+-  SET(CERES_LIBRARIES ${CERES_LIBRARY})
+-  SET(CERES_INCLUDE_DIRS ${CERES_INCLUDE_DIR})
+-ENDIF(CERES_FOUND)
+-
+-MARK_AS_ADVANCED(
+-  CERES_INCLUDE_DIR
+-  CERES_LIBRARY
+-)
+diff --git a/opensfm/src/cmake/FindEigen.cmake b/opensfm/src/cmake/FindEigen.cmake
+deleted file mode 100644
+index 2cd3e12c..00000000
+--- a/opensfm/src/cmake/FindEigen.cmake
++++ /dev/null
+@@ -1,160 +0,0 @@
+-# Ceres Solver - A fast non-linear least squares minimizer
+-# Copyright 2013 Google Inc. All rights reserved.
+-# http://code.google.com/p/ceres-solver/
+-#
+-# Redistribution and use in source and binary forms, with or without
+-# modification, are permitted provided that the following conditions are met:
+-#
+-# * Redistributions of source code must retain the above copyright notice,
+-#   this list of conditions and the following disclaimer.
+-# * Redistributions in binary form must reproduce the above copyright notice,
+-#   this list of conditions and the following disclaimer in the documentation
+-#   and/or other materials provided with the distribution.
+-# * Neither the name of Google Inc. nor the names of its contributors may be
+-#   used to endorse or promote products derived from this software without
+-#   specific prior written permission.
+-#
+-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+-# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+-# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+-# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+-# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+-# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+-# POSSIBILITY OF SUCH DAMAGE.
+-#
+-# Author: alexs.mac@gmail.com (Alex Stewart)
+-#
+-
+-# FindEigen.cmake - Find Eigen library, version >= 3.
+-#
+-# This module defines the following variables:
+-#
+-# EIGEN_FOUND: TRUE iff Eigen is found.
+-# EIGEN_INCLUDE_DIRS: Include directories for Eigen.
+-#
+-# EIGEN_VERSION: Extracted from Eigen/src/Core/util/Macros.h
+-# EIGEN_WORLD_VERSION: Equal to 3 if EIGEN_VERSION = 3.2.0
+-# EIGEN_MAJOR_VERSION: Equal to 2 if EIGEN_VERSION = 3.2.0
+-# EIGEN_MINOR_VERSION: Equal to 0 if EIGEN_VERSION = 3.2.0
+-#
+-# The following variables control the behaviour of this module:
+-#
+-# EIGEN_INCLUDE_DIR_HINTS: List of additional directories in which to
+-#                          search for eigen includes, e.g: /timbuktu/eigen3.
+-#
+-# The following variables are also defined by this module, but in line with
+-# CMake recommended FindPackage() module style should NOT be referenced directly
+-# by callers (use the plural variables detailed above instead).  These variables
+-# do however affect the behaviour of the module via FIND_[PATH/LIBRARY]() which
+-# are NOT re-called (i.e. search for library is not repeated) if these variables
+-# are set with valid values _in the CMake cache_. This means that if these
+-# variables are set directly in the cache, either by the user in the CMake GUI,
+-# or by the user passing -DVAR=VALUE directives to CMake when called (which
+-# explicitly defines a cache variable), then they will be used verbatim,
+-# bypassing the HINTS variables and other hard-coded search locations.
+-#
+-# EIGEN_INCLUDE_DIR: Include directory for CXSparse, not including the
+-#                    include directory of any dependencies.
+-
+-# Called if we failed to find Eigen or any of it's required dependencies,
+-# unsets all public (designed to be used externally) variables and reports
+-# error message at priority depending upon [REQUIRED/QUIET/<NONE>] argument.
+-MACRO(EIGEN_REPORT_NOT_FOUND REASON_MSG)
+-  UNSET(EIGEN_FOUND)
+-  UNSET(EIGEN_INCLUDE_DIRS)
+-  # Make results of search visible in the CMake GUI if Eigen has not
+-  # been found so that user does not have to toggle to advanced view.
+-  MARK_AS_ADVANCED(CLEAR EIGEN_INCLUDE_DIR)
+-  # Note <package>_FIND_[REQUIRED/QUIETLY] variables defined by FindPackage()
+-  # use the camelcase library name, not uppercase.
+-  IF (Eigen_FIND_QUIETLY)
+-    MESSAGE(STATUS "Failed to find Eigen - " ${REASON_MSG} ${ARGN})
+-  ELSEIF (Eigen_FIND_REQUIRED)
+-    MESSAGE(FATAL_ERROR "Failed to find Eigen - " ${REASON_MSG} ${ARGN})
+-  ELSE()
+-    # Neither QUIETLY nor REQUIRED, use no priority which emits a message
+-    # but continues configuration and allows generation.
+-    MESSAGE("-- Failed to find Eigen - " ${REASON_MSG} ${ARGN})
+-  ENDIF ()
+-ENDMACRO(EIGEN_REPORT_NOT_FOUND)
+-
+-# Search user-installed locations first, so that we prefer user installs
+-# to system installs where both exist.
+-#
+-# TODO: Add standard Windows search locations for Eigen.
+-LIST(APPEND EIGEN_CHECK_INCLUDE_DIRS
+-  /usr/local/include/eigen3
+-  /usr/local/homebrew/include/eigen3 # Mac OS X
+-  /opt/local/var/macports/software/eigen3 # Mac OS X.
+-  /opt/local/include/eigen3
+-  /usr/include/eigen3)
+-
+-# Search supplied hint directories first if supplied.
+-FIND_PATH(EIGEN_INCLUDE_DIR
+-  NAMES Eigen/Core
+-  PATHS ${EIGEN_INCLUDE_DIR_HINTS}
+-  ${EIGEN_CHECK_INCLUDE_DIRS})
+-IF (NOT EIGEN_INCLUDE_DIR OR
+-    NOT EXISTS ${EIGEN_INCLUDE_DIR})
+-  EIGEN_REPORT_NOT_FOUND(
+-    "Could not find eigen3 include directory, set EIGEN_INCLUDE_DIR to "
+-    "path to eigen3 include directory, e.g. /usr/local/include/eigen3.")
+-ENDIF (NOT EIGEN_INCLUDE_DIR OR
+-       NOT EXISTS ${EIGEN_INCLUDE_DIR})
+-
+-# Mark internally as found, then verify. EIGEN_REPORT_NOT_FOUND() unsets
+-# if called.
+-SET(EIGEN_FOUND TRUE)
+-
+-# Extract Eigen version from Eigen/src/Core/util/Macros.h
+-IF (EIGEN_INCLUDE_DIR)
+-  SET(EIGEN_VERSION_FILE ${EIGEN_INCLUDE_DIR}/Eigen/src/Core/util/Macros.h)
+-  IF (NOT EXISTS ${EIGEN_VERSION_FILE})
+-    EIGEN_REPORT_NOT_FOUND(
+-      "Could not find file: ${EIGEN_VERSION_FILE} "
+-      "containing version information in Eigen install located at: "
+-      "${EIGEN_INCLUDE_DIR}.")
+-  ELSE (NOT EXISTS ${EIGEN_VERSION_FILE})
+-    FILE(READ ${EIGEN_VERSION_FILE} EIGEN_VERSION_FILE_CONTENTS)
+-
+-    STRING(REGEX MATCH "#define EIGEN_WORLD_VERSION [0-9]+"
+-      EIGEN_WORLD_VERSION "${EIGEN_VERSION_FILE_CONTENTS}")
+-    STRING(REGEX REPLACE "#define EIGEN_WORLD_VERSION ([0-9]+)" "\\1"
+-      EIGEN_WORLD_VERSION "${EIGEN_WORLD_VERSION}")
+-
+-    STRING(REGEX MATCH "#define EIGEN_MAJOR_VERSION [0-9]+"
+-      EIGEN_MAJOR_VERSION "${EIGEN_VERSION_FILE_CONTENTS}")
+-    STRING(REGEX REPLACE "#define EIGEN_MAJOR_VERSION ([0-9]+)" "\\1"
+-      EIGEN_MAJOR_VERSION "${EIGEN_MAJOR_VERSION}")
+-
+-    STRING(REGEX MATCH "#define EIGEN_MINOR_VERSION [0-9]+"
+-      EIGEN_MINOR_VERSION "${EIGEN_VERSION_FILE_CONTENTS}")
+-    STRING(REGEX REPLACE "#define EIGEN_MINOR_VERSION ([0-9]+)" "\\1"
+-      EIGEN_MINOR_VERSION "${EIGEN_MINOR_VERSION}")
+-
+-    # This is on a single line s/t CMake does not interpret it as a list of
+-    # elements and insert ';' separators which would result in 3.;2.;0 nonsense.
+-    SET(EIGEN_VERSION "${EIGEN_WORLD_VERSION}.${EIGEN_MAJOR_VERSION}.${EIGEN_MINOR_VERSION}")
+-  ENDIF (NOT EXISTS ${EIGEN_VERSION_FILE})
+-ENDIF (EIGEN_INCLUDE_DIR)
+-
+-# Set standard CMake FindPackage variables if found.
+-IF (EIGEN_FOUND)
+-  SET(EIGEN_INCLUDE_DIRS ${EIGEN_INCLUDE_DIR})
+-ENDIF (EIGEN_FOUND)
+-
+-# Handle REQUIRED / QUIET optional arguments and version.
+-INCLUDE(FindPackageHandleStandardArgs)
+-FIND_PACKAGE_HANDLE_STANDARD_ARGS(Eigen
+-  REQUIRED_VARS EIGEN_INCLUDE_DIRS
+-  VERSION_VAR EIGEN_VERSION)
+-
+-# Only mark internal variables as advanced if we found Eigen, otherwise
+-# leave it visible in the standard GUI for the user to set manually.
+-IF (EIGEN_FOUND)
+-  MARK_AS_ADVANCED(FORCE EIGEN_INCLUDE_DIR)
+-ENDIF (EIGEN_FOUND)
+diff --git a/opensfm/src/foundation/CMakeLists.txt b/opensfm/src/foundation/CMakeLists.txt
+index 8da92eaf..40185227 100644
+--- a/opensfm/src/foundation/CMakeLists.txt
++++ b/opensfm/src/foundation/CMakeLists.txt
+@@ -15,13 +15,13 @@ target_link_libraries(foundation
+     pybind11
+     ${OpenCV_LIBS}
+     ${OpenMP_libomp_LIBRARY}
++    Eigen3::Eigen
+   PRIVATE
+     ${GFLAGS_LIBRARY}
+     ${GLOG_LIBRARY}
+ )
+ target_include_directories(foundation
+   PUBLIC
+-    ${EIGEN_INCLUDE_DIRS}
+     ${PYTHON_INCLUDE_DIRS}
+     ${CMAKE_SOURCE_DIR}
+     ${OpenMP_CXX_INCLUDE_DIR}
+diff --git a/opensfm/src/geo/CMakeLists.txt b/opensfm/src/geo/CMakeLists.txt
+index c1449434..a9cbae02 100644
+--- a/opensfm/src/geo/CMakeLists.txt
++++ b/opensfm/src/geo/CMakeLists.txt
+@@ -15,10 +15,11 @@ if (OPENSFM_BUILD_TESTS)
+         test/geo_test.cc
+     )
+     add_executable(geo_test ${GEO_TEST_FILES})
+-    target_include_directories(geo_test PRIVATE ${CMAKE_SOURCE_DIR} ${EIGEN_INCLUDE_DIRS})
++    target_include_directories(geo_test PRIVATE ${CMAKE_SOURCE_DIR})
+     target_link_libraries(geo_test
+                         PUBLIC
+                         geo
++                        Eigen3::Eigen
+                         ${TEST_MAIN})
+     add_test(geo_test geo_test)
+ endif()
+diff --git a/opensfm/src/geometry/CMakeLists.txt b/opensfm/src/geometry/CMakeLists.txt
+index b407444c..57c848d7 100644
+--- a/opensfm/src/geometry/CMakeLists.txt
++++ b/opensfm/src/geometry/CMakeLists.txt
+@@ -17,13 +17,14 @@ set(GEOMETRY_FILES
+     src/triangulation.cc
+     src/absolute_pose.cc
+     src/relative_pose.cc
+-)
++    )
+ add_library(geometry ${GEOMETRY_FILES})
+ target_link_libraries(geometry
+-  PRIVATE
++    PRIVATE
+     foundation
+-)
+-target_include_directories(geometry PUBLIC ${CMAKE_SOURCE_DIR} ${CERES_INCLUDE_DIR})
++    Ceres::ceres
++    )
++target_include_directories(geometry PUBLIC ${CMAKE_SOURCE_DIR})
+ 
+ if (OPENSFM_BUILD_TESTS)
+     set(GEOMETRY_TEST_FILES
+@@ -31,13 +32,14 @@ if (OPENSFM_BUILD_TESTS)
+         test/camera_functions_test.cc
+         test/covariance_test.cc
+         test/point_test.cc
+-    )
++        )
+     add_executable(geometry_test ${GEOMETRY_TEST_FILES})
+-    target_include_directories(geometry_test PRIVATE ${CMAKE_SOURCE_DIR} ${EIGEN_INCLUDE_DIRS})
++    target_include_directories(geometry_test PRIVATE ${CMAKE_SOURCE_DIR})
+     target_link_libraries(geometry_test
+-                        PUBLIC
+-                        geometry
+-                        ${TEST_MAIN})
++        PUBLIC
++        geometry
++        Eigen3::Eigen
++        ${TEST_MAIN})
+     add_test(geometry_test geometry_test)
+ endif()
+ 
+diff --git a/opensfm/src/map/CMakeLists.txt b/opensfm/src/map/CMakeLists.txt
+index 3e31be2e..b6f67bcd 100644
+--- a/opensfm/src/map/CMakeLists.txt
++++ b/opensfm/src/map/CMakeLists.txt
+@@ -21,6 +21,7 @@ add_library(map ${MAP_FILES})
+ target_link_libraries(map
+   PUBLIC
+     pybind11
++    Eigen3::Eigen
+   PRIVATE
+     geo
+     geometry
+@@ -28,7 +29,6 @@ target_link_libraries(map
+ 
+ target_include_directories(map
+   PUBLIC
+-    ${EIGEN_INCLUDE_DIRS}
+     ${PYTHON_INCLUDE_DIRS}
+     ${CMAKE_SOURCE_DIR}
+ )
+diff --git a/opensfm/src/sfm/CMakeLists.txt b/opensfm/src/sfm/CMakeLists.txt
+index cc7223a4..98c28f41 100644
+--- a/opensfm/src/sfm/CMakeLists.txt
++++ b/opensfm/src/sfm/CMakeLists.txt
+@@ -8,12 +8,14 @@ set(SFM_FILES
+ )
+ add_library(sfm ${SFM_FILES})
+ target_link_libraries(sfm
++  PUBLIC
++    Eigen3::Eigen
+   PRIVATE
+     foundation
+     map
+     bundle
+ )
+-target_include_directories(sfm PUBLIC ${EIGEN_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
++target_include_directories(sfm PUBLIC ${CMAKE_SOURCE_DIR})
+ 
+ if (OPENSFM_BUILD_TESTS)
+     set(SFM_TEST_FILES
+-- 
+2.33.1
+

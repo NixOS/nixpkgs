@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , opencv
 , opencv4
@@ -41,23 +42,18 @@ buildPythonPackage rec {
     owner = "mapillary";
     repo = pname;
     rev = "79aa4bdd8bd08dc0cd9e3086d170cedb29ac9760";
-    sha256 = "sha256-mEwqT7jzxIhN5IrCFEGHaJGHN2me8j3rMT1hUdGpg2Q=";
-    # FIXME: rm
-    fetchSubmodules = true;
+    sha256 = "sha256-dHBrkYwLA1OUxUSoe7DysyeEm9Yy70tIJvAsXivdjrM=";
   };
   patches = [
-    ./fix-cmake.patch
+    ./0001-fix-cmake-Eigen-Ceres-via-native-cmake-targets.patch
+    ./0002-cmake-find-system-distributed-gtest.patch
+    ./0003-cmake-use-system-pybind11.patch
+    ./0004-pybind_utils.h-conflicts-with-nixpkgs-pybind.patch
     ./fix-scripts.patch
   ];
   postPatch = ''
-    # Use upstream means of discovery instead
-    # (exported cmake targets and pkg-config).
-    # Also see the ./fix-cmake.patch
-    rm opensfm/src/cmake/FindEigen.cmake
-    rm opensfm/src/cmake/FindCeres.cmake
     rm opensfm/src/cmake/FindGlog.cmake
     rm opensfm/src/cmake/FindGflags.cmake
-    rm -rf opensfm/src/third_party/gtest
 
     # HAHOG is the default descriptor.
     # We'll test both HAHOG and SIFT because this is
@@ -77,6 +73,7 @@ buildPythonPackage rec {
     gflags
     gtest
     glog
+    pybind11
   ];
   propagatedBuildInputs = [
     numpy
