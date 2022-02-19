@@ -9,15 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "09i6a45lcd8gb0397hcffwsc5fqam8f7wk2yw9qgjjrb7i9n1235";
   };
   configurePhase = ''
- mkdir contrib/.git 
-'';
+    mkdir contrib/.git 
+  '';
   installPhase = ''
     mkdir -p $out/share/doc
     mv out/doc $out/share/doc/blesh
     mv out $out/share/blesh
   '';
 
- meta = with lib; {
+  meta = with lib; {
     homepage = "https://github.com/akinomyoga/ble.sh";
     description = "A full-featured line editor written in pure Bash";
     longDescription = "A full-featured line editor written in pure Bash with Syntax highlighting, auto suggestions, vim modes, etc. in Bash interactive sessions!";
