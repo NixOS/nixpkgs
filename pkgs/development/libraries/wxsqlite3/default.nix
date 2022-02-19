@@ -8,23 +8,25 @@
 , setfile
 , rez
 , derez
+, wxmac
 }:
 
 stdenv.mkDerivation rec {
   pname = "wxsqlite3";
-  version = "4.7.5";
+  version = "4.7.6";
 
   src = fetchFromGitHub {
     owner = "utelle";
     repo = "wxsqlite3";
     rev = "v${version}";
-    sha256 = "sha256-sclDnChXgnkOaB/dlUDc6ZqdREgBqsOfyBSkZGTfUz0=";
+    hash = "sha256-QoICP66eluD5phYVi1iK8tg1FL04EQjY29/4n6SIz3s=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ wxGTK sqlite ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa setfile rez derez ];
+  buildInputs = [ sqlite ]
+    ++ lib.optionals (!stdenv.isDarwin) [ wxGTK ]
+    ++ lib.optionals (stdenv.isDarwin) [ Cocoa setfile rez derez wxmac ];
 
   meta = with lib; {
     homepage = "https://utelle.github.io/wxsqlite3/";
