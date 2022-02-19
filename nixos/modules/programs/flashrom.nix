@@ -12,7 +12,7 @@ in
       default = false;
       description = ''
         Installs flashrom and configures udev rules for programmers
-        used by flashrom. Grants access to users in the "flashrom"
+        used by flashrom. Grants access to users in the "plugdev"
         group.
       '';
     };
@@ -21,6 +21,6 @@ in
   config = mkIf cfg.enable {
     services.udev.packages = [ pkgs.flashrom ];
     environment.systemPackages = [ pkgs.flashrom ];
-    users.groups.flashrom = { };
+    users.groups.plugdev = { };
   };
 }

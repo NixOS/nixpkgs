@@ -38,11 +38,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace util/z60_flashrom.rules \
-      --replace "plugdev" "flashrom"
-  '';
-
   makeFlags = [ "PREFIX=$(out)" "libinstall" ]
     ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes";
 
