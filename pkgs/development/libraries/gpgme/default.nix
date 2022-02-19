@@ -1,16 +1,27 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook, libgpg-error, gnupg, pkg-config, glib, pth, libassuan
-, file, which, ncurses
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, libgpg-error
+, gnupg
+, pkg-config
+, glib
+, pth
+, libassuan
+, file
+, which
+, ncurses
 , texinfo
 , buildPackages
 , qtbase ? null
-, pythonSupport ? false, swig2 ? null, python ? null
+, pythonSupport ? false
+, swig2 ? null
+, python ? null
 }:
-
 let
   inherit (stdenv.hostPlatform) system;
 in
-
 stdenv.mkDerivation rec {
   pname = "gpgme";
   version = "1.17.0";
@@ -29,22 +40,46 @@ stdenv.mkDerivation rec {
       url = "https://lists.gnupg.org/pipermail/gnupg-devel/attachments/20200415/f7be62d1/attachment.obj";
       sha256 = "00d4sxq63601lzdp2ha1i8fvybh7dzih4531jh8bx07fab3sw65g";
     })
+    # Support for Python 3.10, https://dev.gnupg.org/D545
+    ./support-python-310.patch
     # Disable python tests on Darwin as they use gpg (see configureFlags below)
   ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch
-  # Fix _AC_UNDECLARED_WARNING for autoconf≥2.70. See https://lists.gnupg.org/pipermail/gnupg-devel/2020-November/034643.html
+  # Fix _AC_UNDECLARED_WARNING for autoconf>=2.70
+  # See https://lists.gnupg.org/pipermail/gnupg-devel/2020-November/034643.html
   ++ lib.optional stdenv.cc.isClang ./fix-clang-autoconf-undeclared-warning.patch;
 
   outputs = [ "out" "dev" "info" ];
+
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
-  propagatedBuildInputs =
-    [ libgpg-error glib libassuan pth ]
-    ++ lib.optional (qtbase != null) qtbase;
+  nativeBuildInputs = [
+    autoreconfHook
+    gnupg
+    pkg-config
+    texinfo
+  ] ++ lib.optionals pythonSupport [
+    ncurses
+    python
+    swig2
+    which
+  ];
 
-  nativeBuildInputs = [ pkg-config gnupg texinfo autoreconfHook ]
-  ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
+  propagatedBuildInputs = [
+    glib
+    libassuan
+    libgpg-error
+    pth
+  ] ++ lib.optional (qtbase != null) [
+    qtbase
+  ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  checkInputs = [
+    which
+  ];
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
 
   dontWrapQtApps = true;
 
@@ -57,16 +92,15 @@ stdenv.mkDerivation rec {
   # which has a path length limit. Nix on darwin is using a build directory
   # that already has quite a long path and the resulting socket path doesn't
   # fit in the limit. https://github.com/NixOS/nix/pull/1085
-    ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
+  ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
 
   NIX_CFLAGS_COMPILE = toString (
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
     # debugging is disabled
     lib.optional (qtbase != null) "-DQT_NO_DEBUG"
     # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
-    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64");
-
-  checkInputs = [ which ];
+    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64"
+  );
 
   doCheck = true;
 
