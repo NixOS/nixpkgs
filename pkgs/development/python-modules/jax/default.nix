@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "${pname}-v${version}";
-    sha256 = "0ndpngx5k6lf6jqjck82bbp0gs943z0wh7vs9gwbyk2bw0da7w72";
+    rev = "jax-v${version}";
+    sha256 = "sha256-lu1/Uosgm/VQTDgoEXMu0NzHl/CjZ+sYikU8SJiv+C4=";
   };
 
   patches = [
