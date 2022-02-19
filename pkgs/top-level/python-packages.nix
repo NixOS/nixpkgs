@@ -3200,6 +3200,8 @@ in {
 
   generic = callPackage ../development/python-modules/generic { };
 
+  geniushub-client = callPackage ../development/python-modules/geniushub-client { };
+
   genome-collector = callPackage ../development/python-modules/genome-collector { };
 
   genpy = callPackage ../development/python-modules/genpy { };
