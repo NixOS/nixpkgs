@@ -2128,6 +2128,10 @@ self: super: {
   # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
   memory-cd = dontCheck super.memory-cd;
 
+  # https://github.com/haskell/fgl/pull/99
+  fgl = doJailbreak super.fgl;
+  fgl-arbitrary = doJailbreak super.fgl-arbitrary;
+
   # raaz-0.3 onwards uses backpack and it does not play nicely with
   # parallel builds using -j
   #
