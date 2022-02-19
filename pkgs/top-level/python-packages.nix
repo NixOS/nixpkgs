@@ -1280,6 +1280,8 @@ in {
 
   blurhash = callPackage ../development/python-modules/blurhash { };
 
+  bme280spi = callPackage ../development/python-modules/bme280spi { };
+
   bme680 = callPackage ../development/python-modules/bme680 { };
 
   bokeh = callPackage ../development/python-modules/bokeh { };
@@ -3875,6 +3877,8 @@ in {
   i2c-tools = callPackage ../development/python-modules/i2c-tools {
     inherit (pkgs) i2c-tools;
   };
+
+  i2csense = callPackage ../development/python-modules/i2csense { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
