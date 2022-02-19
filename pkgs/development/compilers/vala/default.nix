@@ -20,6 +20,8 @@ let
 
         "0.54" = ./disable-graphviz-0.46.1.patch;
 
+        "0.55" = ./disable-graphviz-0.46.1.patch;
+
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
     disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
@@ -68,7 +70,10 @@ let
 
     passthru = {
       updateScript = gnome.updateScript {
-        attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+        attrPath =
+          let
+            roundUpToEven = num: num + lib.mod num 2;
+          in "${pname}_${lib.versions.major version}_${builtins.toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
         packageName = pname;
         freeze = true;
       };
@@ -92,6 +97,11 @@ in rec {
   vala_0_54 = generic {
     version = "0.54.7";
     sha256 = "Ygecof8C5dF65yqppa3GGuav3P67DZ8GBjo2776soMc=";
+  };
+
+  vala_0_56 = generic {
+    version = "0.55.3";
+    sha256 = "wWGF59HyF4NqfOvGSar+g1ULt7GS+9Mn7eOIzSwtUEk=";
   };
 
   vala = vala_0_54;
