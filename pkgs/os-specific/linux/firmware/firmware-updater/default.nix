@@ -20,7 +20,7 @@ flutter.mkFlutterApp {
   meta = with lib; {
     description = "Firmware Updater for Linux";
     homepage = "https://github.com/canonical/firmware-updater";
-    license = licenses.free;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ mkg20001 ];
     platforms = platforms.linux;
   };
