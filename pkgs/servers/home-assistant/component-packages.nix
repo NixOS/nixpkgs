@@ -83,7 +83,7 @@
     "bbb_gpio" = ps: with ps; [ ]; # missing inputs: Adafruit_BBIO
     "bbox" = ps: with ps; [ ]; # missing inputs: pybbox
     "beewi_smartclim" = ps: with ps; [ ]; # missing inputs: beewi_smartclim
-    "bh1750" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
+    "bh1750" = ps: with ps; [ i2csense smbus-cffi ];
     "binary_sensor" = ps: with ps; [ ];
     "bitcoin" = ps: with ps; [ blockchain ];
     "bizkaibus" = ps: with ps; [ bizkaibus ];
@@ -98,7 +98,7 @@
     "bluesound" = ps: with ps; [ xmltodict ];
     "bluetooth_le_tracker" = ps: with ps; [ pygatt ];
     "bluetooth_tracker" = ps: with ps; [ bt-proximity pybluez ];
-    "bme280" = ps: with ps; [ smbus-cffi ]; # missing inputs: bme280spi i2csense
+    "bme280" = ps: with ps; [ bme280spi i2csense smbus-cffi ];
     "bme680" = ps: with ps; [ bme680 smbus-cffi ];
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
     "bmw_connected_drive" = ps: with ps; [ bimmer-connected ];
@@ -382,7 +382,7 @@
     "hp_ilo" = ps: with ps; [ python-hpilo ];
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
-    "htu21d" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
+    "htu21d" = ps: with ps; [ i2csense smbus-cffi ];
     "huawei_lte" = ps: with ps; [ huawei-lte-api stringcase url-normalize ];
     "hue" = ps: with ps; [ aiohue ];
     "huisbaasje" = ps: with ps; [ huisbaasje-client ];
