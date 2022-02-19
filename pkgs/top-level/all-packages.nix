@@ -11497,6 +11497,12 @@ with pkgs;
     interactive = true;
     withDocs = true;
   };
+  bashInteractiveFHS = callPackage ../shells/bash/5.1.nix {
+    binutils = stdenv.cc.bintools;
+    interactive = true;
+    withDocs = true;
+    forFHSEnv = true;
+  };
 
   bash-completion = callPackage ../shells/bash/bash-completion { };
 
