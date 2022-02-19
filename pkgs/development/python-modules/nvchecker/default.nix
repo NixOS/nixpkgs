@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.6.1";
+  version = "2.7";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Lfo/VzsklEbv/kiKV5GbzvycwekqykRLrZBhehC1MjY=";
+    sha256 = "sha256-OPUqkHLG8PUlD5NP7q/BpKUvmAA8Jk1NvsPPVbImv0A=";
   };
 
   nativeBuildInputs = [ installShellFiles docutils ];
