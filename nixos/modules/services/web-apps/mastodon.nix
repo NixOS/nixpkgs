@@ -24,6 +24,7 @@ let
     DB_PORT = toString(cfg.database.port);
     DB_NAME = cfg.database.name;
     LOCAL_DOMAIN = cfg.localDomain;
+    WEB_DOMAIN = cfg.webDomain;
     SMTP_SERVER = cfg.smtp.host;
     SMTP_PORT = toString(cfg.smtp.port);
     SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
@@ -212,6 +213,25 @@ in {
       localDomain = lib.mkOption {
         description = "The domain serving your Mastodon instance.";
         example = "social.example.org";
+        type = lib.types.str;
+      };
+
+      webDomain = lib.mkOption {
+        description = ''
+          You can use this option if you want the Mastodon username domain part to
+          be different from the domain you host Mastodon on.
+
+          For example, you can set <option>localDomain</option> to <code>example.org</code>
+          and <option>webDomain</option> to <code>social.example.org</code>.
+          Then you will be able to use Mastodon on the <code>social.example.org</code> domain,
+          but your username will look like <code>@me@example.org</code>.
+
+          This does require you to setup a <code>/.well-known/webfinger</code> location on
+          your <code>example.org</code> webserver, see: <link xlink:href="https://docs.joinmastodon.org/admin/config/#web-domain">https://docs.joinmastodon.org/admin/config/#web-domain</link>
+        '';
+        example = "social.example.org";
+        default = cfg.localDomain;
+        defaultText = lib.literalExpression "config.services.mastodon.localDomain";
         type = lib.types.str;
       };
 
@@ -576,7 +596,7 @@ in {
     services.nginx = lib.mkIf cfg.configureNginx {
       enable = true;
       recommendedProxySettings = true; # required for redirections to work
-      virtualHosts."${cfg.localDomain}" = {
+      virtualHosts."${cfg.webDomain}" = {
         root = "${cfg.package}/public/";
         forceSSL = true; # mastodon only supports https
         enableACME = true;
