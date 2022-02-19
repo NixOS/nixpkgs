@@ -38,8 +38,7 @@ mkYarnPackage rec {
   yarnLock = ./yarn.lock;
 
   pkgConfig.sharp = {
-    nativeBuildInputs = [ nodePackages.node-gyp python3 pkg-config ];
-    buildInputs = [ glib vips ];
+    buildInputs = [ glib vips nodePackages.node-gyp python3 pkg-config ];
     postInstall = ''
       node-gyp rebuild
     '';
