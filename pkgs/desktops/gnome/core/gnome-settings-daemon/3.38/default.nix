@@ -83,6 +83,16 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/28e28e9e598342c897ae5ca350d0da6f4aea057b.diff";
       sha256 = "U+suR7wYjLWPqmkJpHm6pPOWL7sjL6GhIFX8MHrBRAY=";
     })
+
+    # Port to gweather4
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/66cae69ad82cfc59435016fba737ce046ffb7e66.patch";
+      sha256 = "zf8/rkKdQQFNV/qx/jo4kx1KoLl7SUSu4/T1OBGrZ4c=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/f390e6e9d56ce7d3e3a725b8204d81c0b6240515.patch";
+      sha256 = "8mfnlhkSF9ogjVWE+IESzRQzrxHQSwUWsq5OLBM08iM=";
+    })
   ];
 
   nativeBuildInputs = [
