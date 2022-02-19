@@ -663,6 +663,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.gnome.experimental-features.realtime-scheduling</literal>
+          option has been removed, as GNOME Shell now
+          <link xlink:href="https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2060">uses
+          rtkit</link>. Use
+          <literal>security.rtkit.enable = true;</literal> instead. As
+          before, you will need to have it enabled using GSettings.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           If you previously used
           <literal>/etc/docker/daemon.json</literal>, you need to
           incorporate the changes into the new option
