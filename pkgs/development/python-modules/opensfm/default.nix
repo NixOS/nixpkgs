@@ -45,6 +45,27 @@ buildPythonPackage rec {
     # FIXME: rm
     fetchSubmodules = true;
   };
+  patches = [
+    ./fix-cmake.patch
+    ./fix-scripts.patch
+  ];
+  postPatch = ''
+    # Use upstream means of discovery instead
+    # (exported cmake targets and pkg-config).
+    # Also see the ./fix-cmake.patch
+    rm opensfm/src/cmake/FindEigen.cmake
+    rm opensfm/src/cmake/FindCeres.cmake
+    rm opensfm/src/cmake/FindGlog.cmake
+    rm opensfm/src/cmake/FindGflags.cmake
+    rm -rf opensfm/src/third_party/gtest
+
+    # HAHOG is the default descriptor.
+    # We'll test both HAHOG and SIFT because this is
+    # where segfaults might be introduced in future
+    echo 'feature_type: SIFT' >> data/berlin/config.yaml
+    echo 'feature_type: HAHOG' >> data/lund/config.yaml
+  '';
+
   nativeBuildInputs = [ cmake pkg-config sphinx ];
   buildInputs = [
     opencv
@@ -82,26 +103,7 @@ buildPythonPackage rec {
     "-Bcmake_build"
     "-Sopensfm/src"
   ];
-  patches = [
-    ./fix-cmake.patch
-    ./fix-scripts.patch
-  ];
-  postPatch = ''
-    # Use upstream means of discovery instead
-    # (exported cmake targets and pkg-config).
-    # Also see the ./fix-cmake.patch
-    rm opensfm/src/cmake/FindEigen.cmake
-    rm opensfm/src/cmake/FindCeres.cmake
-    rm opensfm/src/cmake/FindGlog.cmake
-    rm opensfm/src/cmake/FindGflags.cmake
-    rm -rf opensfm/src/third_party/gtest
 
-    # HAHOG is the default descriptor.
-    # We'll test both HAHOG and SIFT because this is
-    # where segfaults might be introduced in future
-    echo 'feature_type: SIFT' >> data/berlin/config.yaml
-    echo 'feature_type: HAHOG' >> data/lund/config.yaml
-  '';
   pythonImportsCheck = [ "opensfm" ];
 
   meta = {
