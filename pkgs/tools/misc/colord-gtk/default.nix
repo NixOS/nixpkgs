@@ -12,6 +12,7 @@
 , docbook_xml_dtd_412
 , libxslt
 , glib
+, withGtk4 ? false
 , gtk3
 , gtk4
 , pkg-config
@@ -49,8 +50,15 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     colord
-    gtk3
+  ] ++ (if withGtk4 then [
     gtk4
+  ] else [
+    gtk3
+  ]);
+
+  mesonFlags = [
+    "-Dgtk4=${lib.boolToString withGtk4}"
+    "-Dgtk3=${lib.boolToString (!withGtk4)}"
   ];
 
   meta = with lib; {
