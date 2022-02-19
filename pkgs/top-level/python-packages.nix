@@ -664,6 +664,8 @@ in {
 
   assertpy = callPackage ../development/python-modules/assertpy { };
 
+  asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
+
   asteval = callPackage ../development/python-modules/asteval { };
 
   astor = callPackage ../development/python-modules/astor { };
