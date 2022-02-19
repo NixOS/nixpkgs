@@ -23,9 +23,9 @@ buildGoModule rec {
     mkdir -p $out/bin
     install -Dm755 "$GOPATH/bin/cli" -T $out/bin/tctl
     install -Dm755 "$GOPATH/bin/authorization" -T $out/bin/tctl-authorization-plugin
-    install -Dm755 "$GOPATH/bin/cassandra" -T $out/bin/temporal-cassandra
     install -Dm755 "$GOPATH/bin/server" -T $out/bin/temporal-server
-    install -Dm755 "$GOPATH/bin/sql" -T $out/bin/temporal-sql
+    install -Dm755 "$GOPATH/bin/cassandra" -T $out/bin/temporal-cassandra-tool
+    install -Dm755 "$GOPATH/bin/sql" -T $out/bin/temporal-sql-tool
     runHook postInstall
   '';
 
