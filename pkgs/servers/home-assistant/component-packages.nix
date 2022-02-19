@@ -208,7 +208,7 @@
     "dunehd" = ps: with ps; [ pdunehd ];
     "dwd_weather_warnings" = ps: with ps; [ dwdwfsapi ];
     "dweet" = ps: with ps; [ ]; # missing inputs: dweepy
-    "dynalite" = ps: with ps; [ ]; # missing inputs: dynalite_devices
+    "dynalite" = ps: with ps; [ dynalite-devices ];
     "eafm" = ps: with ps; [ aioeafm ];
     "ebox" = ps: with ps; [ ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [ ]; # missing inputs: ebusdpy
@@ -1149,6 +1149,7 @@
     "dte_energy_bridge"
     "duckdns"
     "dunehd"
+    "dynalite"
     "eafm"
     "ecobee"
     "econet"
