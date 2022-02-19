@@ -63,6 +63,9 @@ let
       nukeReferences
     ];
 
+    # avoid pub phase
+    dontBuild = true;
+
     installPhase = ''
       . ${../fetchgit/deterministic-git}
 
@@ -207,6 +210,7 @@ let
 
     # ensure we're using a lockfile for the right package version
     if [ -e pubspec.lock ]; then
+      # FIXME: currently this is broken. in theory this should not break, but flutter has it's own way of doing things.
       # diff -u pubspec.lock $depsFolder/pubspec.lock
       true
     else
