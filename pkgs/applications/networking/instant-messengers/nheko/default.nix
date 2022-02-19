@@ -81,7 +81,7 @@ mkDerivation rec {
 
   preFixup = ''
     qtWrapperArgs+=( \
-      --prefix QT_PLUGIN_PATH : ${lib.makeSearchPath "/lib/qt5/plugins" [ qtbase ]}) \
+      --prefix QT_PLUGIN_PATH : ${lib.makeSearchPath "/lib/qt5/plugins" [ qtbase ]} \
     ''
     + lib.optionalString voipSupport ''
       # add gstreamer plugins path to the wrapper
