@@ -460,6 +460,8 @@ in {
 
     xmm7360-pci = callPackage ../os-specific/linux/xmm7360-pci { };
 
+    xone = callPackage ../os-specific/linux/xone { };
+
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
