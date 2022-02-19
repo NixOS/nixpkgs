@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/colord/intro.html";
     license = licenses.lgpl21Plus;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }
