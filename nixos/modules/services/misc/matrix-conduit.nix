@@ -95,6 +95,29 @@ in
                 instance will require manual migration of data.
               '';
             };
+            global.turn_uris = mkOption {
+              type = types.listOf types.str;
+              example = [ "turn:your.turn.url?transport=udp" "turn:your.turn.url?transport=tcp" ];
+              description = "`your.turn.url` has to match the REALM setting of your Coturn as well as `transport`.";
+            };
+            global.turn_secret = mkOption {
+              type = types.str;
+              description = "static-auth-secret of your turnserver.";
+            };
+            global.turn_username = mkOption {
+              type = types.str;
+              description = ''
+                If you have your TURN server configured to use a username and password, you can provide these instead of `turn_secret`.
+                Don't set `turn_secret` if you set this!
+              '';
+            };
+            global.turn_password = mkOption {
+              type = types.str;
+              description = ''
+                If you have your TURN server configured to use a username and password, you can provide these instead of `turn_secret`.
+                Don't set `turn_secret` if you set this!
+              '';
+            };
           };
         };
         default = {};
