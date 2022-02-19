@@ -19,13 +19,13 @@ assert withOpenCL -> ocl-icd != null;
 
 mkDerivation rec {
   pname = "mandelbulber";
-  version = "2.26";
+  version = "2.27";
 
   src = fetchFromGitHub {
     owner = "buddhi1980";
     repo = "mandelbulber2";
     rev = version;
-    sha256 = "sha256-RKpg7LBsrBFOlFozoDcALwGeZ9whPiCpFMZF5ljsp7Q=";
+    sha256 = "sha256-CNIt+DC3ZYyT8EY1t641y7jW7vn7Rr1PLOsy9bjKaDk=";
   };
 
   nativeBuildInputs = [
