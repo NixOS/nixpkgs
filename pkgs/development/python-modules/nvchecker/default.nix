@@ -1,21 +1,21 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, packaging
-, tomli
-, structlog
-, appdirs
-, pytest-asyncio
-, flaky
-, tornado
-, pycurl
 , aiohttp
-, pytest-httpbin
+, appdirs
+, buildPythonPackage
 , docutils
+, fetchFromGitHub
+, flaky
 , installShellFiles
+, packaging
+, pycurl
+, pytest-asyncio
+, pytest-httpbin
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, structlog
+, tomli
+, tornado
 }:
 
 buildPythonPackage rec {
@@ -33,26 +33,26 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    installShellFiles
     docutils
+    installShellFiles
   ];
-  
+
   propagatedBuildInputs = [
-    setuptools
-    packaging
-    tomli
-    structlog
-    appdirs
-    tornado
-    pycurl
     aiohttp
+    appdirs
+    packaging
+    pycurl
+    setuptools
+    structlog
+    tomli
+    tornado
   ];
 
   checkInputs = [
-    pytestCheckHook
-    pytest-asyncio
     flaky
+    pytest-asyncio
     pytest-httpbin
+    pytestCheckHook
   ];
 
   postBuild = ''
