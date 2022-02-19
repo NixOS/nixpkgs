@@ -1,39 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, opencv
-, opencv4
-, ceres-solver
-, suitesparse
-, metis
-, eigen
-, pkg-config
-, pybind11
-, numpy
-, pyyaml
-, lapack
-, gtest
-, gflags
-, glog
-, pytestCheckHook
-, networkx
-, pillow
-, exifread
-, gpxpy
-, pyproj
-, python-dateutil
-, joblib
-, repoze_lru
-, xmltodict
-, cloudpickle
-, scipy
-, sphinx
-, matplotlib
-, fpdf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  opencv,
+  opencv4,
+  ceres-solver,
+  suitesparse,
+  metis,
+  eigen,
+  pkg-config,
+  pybind11,
+  numpy,
+  pyyaml,
+  lapack,
+  gtest,
+  gflags,
+  glog,
+  pytestCheckHook,
+  networkx,
+  pillow,
+  exifread,
+  gpxpy,
+  pyproj,
+  python-dateutil,
+  joblib,
+  repoze_lru,
+  xmltodict,
+  cloudpickle,
+  scipy,
+  sphinx,
+  matplotlib,
+  fpdf,
 }:
-
 buildPythonPackage rec {
   pname = "OpenSfM";
   version = "0.5.2";
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     echo 'feature_type: HAHOG' >> data/lund/config.yaml
   '';
 
-  nativeBuildInputs = [ cmake pkg-config sphinx ];
+  nativeBuildInputs = [cmake pkg-config sphinx];
   buildInputs = [
     opencv
     ceres-solver.dev
@@ -93,7 +93,7 @@ buildPythonPackage rec {
     xmltodict
     cloudpickle
   ];
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   dontUseCmakeBuildDir = true;
   cmakeFlags = [
@@ -101,10 +101,10 @@ buildPythonPackage rec {
     "-Sopensfm/src"
   ];
 
-  pythonImportsCheck = [ "opensfm" ];
+  pythonImportsCheck = ["opensfm"];
 
   meta = {
-    maintainers = [ lib.maintainers.SomeoneSerge ];
+    maintainers = [lib.maintainers.SomeoneSerge];
     license = lib.licenses.bsd2;
     description = "Open source Structure-from-Motion pipeline from Mapillary";
     homepage = "https://opensfm.org/";
