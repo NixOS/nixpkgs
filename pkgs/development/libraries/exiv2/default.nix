@@ -11,13 +11,14 @@
 , graphviz
 , libxslt
 , libiconv
+, removeReferencesTo
 }:
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
   version = "0.27.5";
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [ "out" "lib" "dev" "doc" "man" "static" ];
 
   src = fetchFromGitHub {
     owner = "exiv2";
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     gettext
     graphviz
     libxslt
+    removeReferencesTo
   ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
@@ -94,7 +96,14 @@ stdenv.mkDerivation rec {
       rm *
       mv .exiv2 exiv2
     )
+
+    mkdir -p $static/lib
+    mv $lib/lib/*.a $static/lib/
+
+    remove-references-to -t ${stdenv.cc.cc} $lib/lib/*.so.*.*.* $out/bin/exiv2 $static/lib/*.a
   '';
+
+  disallowedReferences = [ stdenv.cc.cc ];
 
   meta = with lib; {
     homepage = "https://www.exiv2.org/";

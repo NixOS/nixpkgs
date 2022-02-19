@@ -130,11 +130,12 @@ self = stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ]
     ++ optional buildIde copyDesktopItems
+    ++ optional (buildIde && versionAtLeast "8.10") wrapGAppsHook
     ++ optional (!versionAtLeast "8.6") gnumake42;
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
       (if versionAtLeast "8.10"
-       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme wrapGAppsHook ]
+       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme ]
        else [ ocamlPackages.lablgtk ])
     ++ optional (versionAtLeast "8.14") ocamlPackages.dune_2
   ;

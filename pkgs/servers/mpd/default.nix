@@ -157,6 +157,10 @@ let
       outputs = [ "out" "doc" ]
         ++ lib.optional (builtins.elem "documentation" features_) "man";
 
+      CXXFLAGS = lib.optionals stdenv.isDarwin [
+        "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
+      ];
+
       mesonFlags = [
         "-Dtest=true"
         "-Dmanpages=true"

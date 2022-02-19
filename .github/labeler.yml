@@ -16,7 +16,7 @@
   - nixos/modules/services/editors/emacs.nix
   - nixos/modules/services/editors/emacs.xml
   - nixos/tests/emacs-daemon.nix
-  - pkgs/applications/editors/emacs-modes/**/*
+  - pkgs/applications/editors/emacs/elisp-packages/**/*
   - pkgs/applications/editors/emacs/**/*
   - pkgs/build-support/emacs/**/*
   - pkgs/top-level/emacs-packages.nix

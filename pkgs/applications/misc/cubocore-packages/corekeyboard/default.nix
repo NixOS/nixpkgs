@@ -2,14 +2,19 @@
 
 mkDerivation rec {
   pname = "corekeyboard";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0CbQ43BN4ORvtxs6FwNkgk/0jcVdFJq/tqvjUGYanM4=";
+    sha256 = "sha256-yJOcuE6HknDhXCr1qW/NJkerjvBABYntXos0owDDwcw=";
   };
+
+  patches = [
+    # Remove autostart
+    ./0001-fix-installPhase.patch
+  ];
 
   nativeBuildInputs = [
     cmake

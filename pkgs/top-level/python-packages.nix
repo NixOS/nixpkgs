@@ -664,6 +664,8 @@ in {
 
   assertpy = callPackage ../development/python-modules/assertpy { };
 
+  asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
+
   asteval = callPackage ../development/python-modules/asteval { };
 
   astor = callPackage ../development/python-modules/astor { };
@@ -1278,6 +1280,8 @@ in {
 
   blurhash = callPackage ../development/python-modules/blurhash { };
 
+  bme280spi = callPackage ../development/python-modules/bme280spi { };
+
   bme680 = callPackage ../development/python-modules/bme680 { };
 
   bokeh = callPackage ../development/python-modules/bokeh { };
@@ -1592,6 +1596,8 @@ in {
   chiavdf = callPackage ../development/python-modules/chiavdf { };
 
   chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
+
+  chispa = callPackage ../development/python-modules/chispa { };
 
   ci-info = callPackage ../development/python-modules/ci-info { };
 
@@ -2486,6 +2492,8 @@ in {
 
   dyn = callPackage ../development/python-modules/dyn { };
 
+  dynalite-devices = callPackage ../development/python-modules/dynalite-devices { };
+
   dynd = callPackage ../development/python-modules/dynd { };
 
   easydict = callPackage ../development/python-modules/easydict { };
@@ -3171,6 +3179,8 @@ in {
 
   gdown = callPackage ../development/python-modules/gdown { };
 
+  gdtoolkit = callPackage ../development/python-modules/gdtoolkit { };
+
   ge25519 = callPackage ../development/python-modules/ge25519 { };
 
   geant4 = toPythonModule (pkgs.geant4.override {
@@ -3189,6 +3199,8 @@ in {
   genanki = callPackage ../development/python-modules/genanki { };
 
   generic = callPackage ../development/python-modules/generic { };
+
+  geniushub-client = callPackage ../development/python-modules/geniushub-client { };
 
   genome-collector = callPackage ../development/python-modules/genome-collector { };
 
@@ -3869,6 +3881,8 @@ in {
   i2c-tools = callPackage ../development/python-modules/i2c-tools {
     inherit (pkgs) i2c-tools;
   };
+
+  i2csense = callPackage ../development/python-modules/i2csense { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
@@ -9357,6 +9371,8 @@ in {
   sphinxcontrib-plantuml = callPackage ../development/python-modules/sphinxcontrib-plantuml {
     inherit (pkgs) plantuml;
   };
+
+  sphinxcontrib-programoutput = callPackage ../development/python-modules/sphinxcontrib-programoutput { };
 
   sphinxcontrib-qthelp = callPackage ../development/python-modules/sphinxcontrib-qthelp { };
 

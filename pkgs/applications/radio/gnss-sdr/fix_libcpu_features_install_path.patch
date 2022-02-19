@@ -1,0 +1,47 @@
+--- a/CMakeLists.txt	1970-01-01 08:00:01.000000000 +0800
++++ b/CMakeLists.txt	2022-02-16 20:41:53.725290020 +0800
+@@ -1214,7 +1214,7 @@
+             BINARY_DIR ${CMAKE_BINARY_DIR}/volk_gnsssdr_module/build
+             CMAKE_ARGS ${VOLK_GNSSSDR_CMAKE_ARGS}
+                 -DCMAKE_BUILD_TYPE=$<$<CONFIG:None>:None>$<$<CONFIG:Debug>:Debug>$<$<CONFIG:Release>:Release>$<$<CONFIG:RelWithDebInfo>:RelWithDebInfo>$<$<CONFIG:MinSizeRel>:MinSizeRel>$<$<CONFIG:NoOptWithASM>:NoOptWithASM>$<$<CONFIG:Coverage>:Coverage>$<$<CONFIG:O2WithASM>:O2WithASM>$<$<CONFIG:O3WithASM>:O3WithASM>$<$<CONFIG:ASAN>:ASAN>
+-                -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}
++                -DCMAKE_INSTALL_LIBDIR=lib
+             DOWNLOAD_COMMAND ""
+             UPDATE_COMMAND ""
+             PATCH_COMMAND ""
+@@ -1247,7 +1247,7 @@
+                 )
+                 set(VOLK_GNSSSDR_BUILD_BYPRODUCTS
+                     ${VOLK_GNSSSDR_BUILD_BYPRODUCTS}
+-                    ${CMAKE_BINARY_DIR}/volk_gnsssdr_module/install/${CMAKE_INSTALL_LIBDIR}/${CMAKE_FIND_LIBRARY_PREFIXES}cpu_features${CMAKE_STATIC_LIBRARY_SUFFIX}
++                    ${CMAKE_BINARY_DIR}/volk_gnsssdr_module/install/lib/${CMAKE_FIND_LIBRARY_PREFIXES}cpu_features${CMAKE_STATIC_LIBRARY_SUFFIX}
+                 )
+             endif()
+             ExternalProject_Add(volk_gnsssdr_module
+@@ -1256,7 +1256,7 @@
+                 BINARY_DIR ${CMAKE_BINARY_DIR}/volk_gnsssdr_module/build
+                 CMAKE_ARGS ${VOLK_GNSSSDR_CMAKE_ARGS}
+                     -DCMAKE_BUILD_TYPE=$<$<CONFIG:None>:None>$<$<CONFIG:Debug>:Debug>$<$<CONFIG:Release>:Release>$<$<CONFIG:RelWithDebInfo>:RelWithDebInfo>$<$<CONFIG:MinSizeRel>:MinSizeRel>$<$<CONFIG:NoOptWithASM>:NoOptWithASM>$<$<CONFIG:Coverage>:Coverage>$<$<CONFIG:O2WithASM>:O2WithASM>$<$<CONFIG:O3WithASM>:O3WithASM>$<$<CONFIG:ASAN>:ASAN>
+-                    -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}
++                    -DCMAKE_INSTALL_LIBDIR=lib
+                 DOWNLOAD_COMMAND ""
+                 UPDATE_COMMAND ""
+                 PATCH_COMMAND ""
+@@ -1271,7 +1271,7 @@
+                 BINARY_DIR ${CMAKE_BINARY_DIR}/volk_gnsssdr_module/build
+                 CMAKE_ARGS ${VOLK_GNSSSDR_CMAKE_ARGS}
+                     -DCMAKE_BUILD_TYPE=$<$<CONFIG:None>:None>$<$<CONFIG:Debug>:Debug>$<$<CONFIG:Release>:Release>$<$<CONFIG:RelWithDebInfo>:RelWithDebInfo>$<$<CONFIG:MinSizeRel>:MinSizeRel>$<$<CONFIG:NoOptWithASM>:NoOptWithASM>$<$<CONFIG:Coverage>:Coverage>$<$<CONFIG:O2WithASM>:O2WithASM>$<$<CONFIG:O3WithASM>:O3WithASM>$<$<CONFIG:ASAN>:ASAN>
+-                    -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}
++                    -DCMAKE_INSTALL_LIBDIR=lib
+                 DOWNLOAD_COMMAND ""
+                 UPDATE_COMMAND ""
+                 PATCH_COMMAND ""
+@@ -1310,7 +1310,7 @@
+         if(CMAKE_VERSION VERSION_GREATER 3.0 AND SUPPORTED_CPU_FEATURES_ARCH)
+             if(NOT CpuFeatures_FOUND)
+                 set_target_properties(Volkgnsssdr::volkgnsssdr PROPERTIES
+-                    INTERFACE_LINK_LIBRARIES ${CMAKE_BINARY_DIR}/volk_gnsssdr_module/install/${CMAKE_INSTALL_LIBDIR}/${CMAKE_FIND_LIBRARY_PREFIXES}cpu_features${CMAKE_STATIC_LIBRARY_SUFFIX}
++                    INTERFACE_LINK_LIBRARIES ${CMAKE_BINARY_DIR}/volk_gnsssdr_module/install/lib/${CMAKE_FIND_LIBRARY_PREFIXES}cpu_features${CMAKE_STATIC_LIBRARY_SUFFIX}
+                 )
+             endif()
+         endif()

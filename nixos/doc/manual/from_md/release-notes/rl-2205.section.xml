@@ -238,6 +238,13 @@
           <link xlink:href="options.html#opt-services.headscale.enable">services.headscale</link>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://0xerr0r.github.io/blocky/">blocky</link>,
+          fast and lightweight DNS proxy as ad-blocker for local network
+          with many features.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
@@ -404,6 +411,15 @@
           <literal>/etc/docker/daemon.json</literal>, you need to
           incorporate the changes into the new option
           <literal>virtualisation.docker.daemon.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Ntopng (<literal>services.ntopng</literal>) is updated to
+          5.2.1 and uses a separate Redis instance if
+          <literal>system.stateVersion</literal> is at least
+          <literal>22.05</literal>. Existing setups shouldn’t be
+          affected.
         </para>
       </listitem>
       <listitem>
