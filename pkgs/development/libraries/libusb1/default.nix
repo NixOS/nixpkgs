@@ -12,23 +12,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libusb";
-  version = "1.0.24";
+  version = "1.0.25";
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb";
     rev = "v${version}";
-    sha256 = "18ri8ky422hw64zry7bpbarb1m0hiljyf64a0a9y093y7aad38i7";
+    sha256 = "141wygijjcgka0h31504cdlvih4l2j02j67pcbb2l527p7dbc5pn";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [ (fetchpatch {
-    # https://bugs.archlinux.org/task/69121
-    url = "https://github.com/libusb/libusb/commit/f6d2cb561402c3b6d3627c0eb89e009b503d9067.patch";
-    sha256 = "1dbahikcbwkjhyvks7wbp7fy2bf7nca48vg5z0zqvqzjb9y595cq";
-    excludes = [ "libusb/version_nano.h" ];
-  }) ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   propagatedBuildInputs =
