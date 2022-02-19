@@ -24883,7 +24883,7 @@ let
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ AlienBuild AlienLibxml2 ]
-      ++ lib.optional stdenv.isDarwin pkgs.libiconv ++ lib.optional stdenv.isDarwin pkgs.zlib ;
+      ++ lib.optionals stdenv.isDarwin with pkgs; [ libiconv zlib ];
     propagatedBuildInputs = [ XMLSAX ];
   };
 
