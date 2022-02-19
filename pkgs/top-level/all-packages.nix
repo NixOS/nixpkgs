@@ -18595,6 +18595,8 @@ with pkgs;
 
   libschrift = callPackage ../development/libraries/libschrift { };
 
+  libsciter = callPackage ../development/libraries/libsciter { };
+
   libsearpc = callPackage ../development/libraries/libsearpc { };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
