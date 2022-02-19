@@ -360,6 +360,10 @@ self: super: {
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
 
+  # Test suite works with aeson 2.0 only starting with 0.14.1
+  vinyl = assert pkgs.lib.versionOlder super.vinyl.version "0.14.1";
+    dontCheck super.vinyl;
+
   # https://github.com/Philonous/xml-picklers/issues/5
   xml-picklers = dontCheck super.xml-picklers;
 
