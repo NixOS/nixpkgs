@@ -57,8 +57,8 @@
     "aruba" = ps: with ps; [ pexpect ];
     "arwn" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "aseko_pool_live" = ps: with ps; [ aioaseko ];
-    "asterisk_cdr" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
-    "asterisk_mbox" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
+    "asterisk_cdr" = ps: with ps; [ asterisk-mbox ];
+    "asterisk_mbox" = ps: with ps; [ asterisk-mbox ];
     "asuswrt" = ps: with ps; [ aioasuswrt ];
     "atag" = ps: with ps; [ pyatag ];
     "aten_pe" = ps: with ps; [ atenpdu ];
