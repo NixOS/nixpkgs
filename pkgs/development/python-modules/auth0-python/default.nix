@@ -10,6 +10,9 @@
 buildPythonPackage rec {
   pname = "auth0-python";
   version = "3.20.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,7 +36,9 @@ buildPythonPackage rec {
     "test_options_are_used_and_override"
   ];
 
-  pythonImportsCheck = [ "auth0" ];
+  pythonImportsCheck = [
+    "auth0"
+  ];
 
   meta = with lib; {
     description = "Auth0 Python SDK";
