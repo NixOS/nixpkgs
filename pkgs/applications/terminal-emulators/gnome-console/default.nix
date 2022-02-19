@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, genericBranding ? false
-, fetchFromGitLab
+, fetchurl
 , gettext
 , gnome
 , libgtop
@@ -21,16 +20,13 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation {
-  pname = "kgx";
-  version = "unstable-2021-03-13";
+stdenv.mkDerivation rec {
+  pname = "gnome-console";
+  version = "42.beta";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "ZanderBrown";
-    repo = "kgx";
-    rev = "105adb6a8d09418a3ce622442aef6ae623dee787";
-    sha256 = "0m34y0nbcfkyicb40iv0iqaq6f9r3f66w43lr803j3351nxqvcz2";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "Lq/shyAhDcwB5HqpihvGx2+xwVU2Xax7/NerFwR36DQ=";
   };
 
   buildInputs = [
@@ -55,25 +51,19 @@ stdenv.mkDerivation {
     wrapGAppsHook
   ];
 
-  mesonFlags = lib.optional genericBranding "-Dgeneric=true";
-
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
-  '';
-
-  preFixup = ''
-    substituteInPlace $out/share/applications/org.gnome.zbrown.KingsCross.desktop \
-      --replace "Exec=kgx" "Exec=$out/bin/kgx"
-  '';
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+    };
+  };
 
   passthru.tests.test = nixosTests.terminal-emulators.kgx;
 
   meta = with lib; {
     description = "Simple user-friendly terminal emulator for the GNOME desktop";
-    homepage = "https://gitlab.gnome.org/ZanderBrown/kgx";
+    homepage = "https://gitlab.gnome.org/GNOME/console";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ zhaofengli ]);
     platforms = platforms.linux;
   };
 }
