@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "4.1.1";
+  version = "4.2.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cdbdb3e02ef0c0655bb55be8b05ec1cb830b5ec629923ccb24bfd71dede3d1c3";
+    sha256 = "sha256-NnTn4m9we40Ww2abP7mbz1CtdypZyN2GYBvj8zxhOpI=";
   };
 
   propagatedBuildInputs = [ six webob ];
