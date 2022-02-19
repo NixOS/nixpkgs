@@ -1,5 +1,4 @@
 { lib
-, fetchurl
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
@@ -34,20 +33,16 @@
 , fpdf
 }:
 
-let
-  pendingPRs.fixReports = fetchurl {
-    url = "https://github.com/mapillary/OpenSfM/commit/7c4477c6416417a935dd8cfb59e6e7e60cc2ba37.patch";
-    sha256 = "sha256-i6p/K2vIKouY8Fmp9iKdc7Xk2u7o51PQT5fhnKzqmhs=";
-  };
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "OpenSfM";
   version = "0.5.2";
+
   src = fetchFromGitHub {
     owner = "mapillary";
-    repo = "OpenSfM";
-    # Fixing by commit-id until the upstream issues are solved
-    rev = "2a1c9be07f47f6e26f87fedf8275fcf8ff7b8487";
-    sha256 = "sha256-CARPFuYypgV1YcqZp//Qws8YrV25Z+w/dWB7MbFAKys=";
+    repo = pname;
+    rev = "79aa4bdd8bd08dc0cd9e3086d170cedb29ac9760";
+    sha256 = "sha256-mEwqT7jzxIhN5IrCFEGHaJGHN2me8j3rMT1hUdGpg2Q=";
+    # FIXME: rm
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake pkg-config sphinx ];
@@ -81,6 +76,7 @@ in buildPythonPackage rec {
     cloudpickle
   ];
   checkInputs = [ pytestCheckHook ];
+
   dontUseCmakeBuildDir = true;
   cmakeFlags = [
     "-Bcmake_build"
@@ -89,7 +85,6 @@ in buildPythonPackage rec {
   patches = [
     ./fix-cmake.patch
     ./fix-scripts.patch
-    (toString pendingPRs.fixReports)
   ];
   postPatch = ''
     # Use upstream means of discovery instead
@@ -108,6 +103,7 @@ in buildPythonPackage rec {
     echo 'feature_type: HAHOG' >> data/lund/config.yaml
   '';
   pythonImportsCheck = [ "opensfm" ];
+
   meta = {
     maintainers = [ lib.maintainers.SomeoneSerge ];
     license = lib.licenses.bsd2;
