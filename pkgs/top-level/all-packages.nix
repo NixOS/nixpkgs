@@ -33508,7 +33508,7 @@ with pkgs;
 
   keynav = callPackage ../tools/X11/keynav { };
 
-  kgx = callPackage ../applications/terminal-emulators/kgx { };
+  gnome-console = callPackage ../applications/terminal-emulators/gnome-console { };
 
   kmon = callPackage ../tools/system/kmon { };
 

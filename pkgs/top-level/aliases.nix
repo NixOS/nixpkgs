@@ -549,6 +549,7 @@ mapAliases ({
   keybase-go = throw "'keybase-go' has been renamed to/replaced by 'keybase'"; # Converted to throw 2022-02-22
   keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived"; # Added 2019-12-10
   keysmith = libsForQt5.plasmaMobileGear.keysmith; # Added 2021-07-14
+  kgx = gnome-console; # Added 2022-02-19
   kibana7-oss = throw "kibana7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # Added 2021-06-09
   kicad-with-packages3d = kicad; # Added 2019-11-25
   kindlegen = throw "kindlegen has been removed from nixpkgs, as it's abandoned and no longer available for download"; # Added 2021-03-09
