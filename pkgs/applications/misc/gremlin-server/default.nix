@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tinkerpop.apache.org/";
     description = "Server of the Apache TinkerPop graph computing framework";
     license = licenses.asl20;
-    maintainers = [ maintainers.lewo ];
+    maintainers = [ maintainers.jrpotter ];
     platforms = platforms.all;
   };
 }
