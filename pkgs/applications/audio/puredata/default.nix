@@ -2,13 +2,13 @@
 , alsa-lib, libjack2, tk, fftw
 }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "puredata";
-  version = "0.50-2";
+  version = "0.52-1";
 
   src = fetchurl {
-    url = "http://msp.ucsd.edu/Software/pd-${version}.src.tar.gz";
-    sha256 = "0dz6r6jy0zfs1xy1xspnrxxks8kddi9c7pxz4vpg2ygwv83ghpg5";
+    url = "https://msp.puredata.info/Software/pd-${version}.src.tar.gz";
+    sha256 = "sha256-e9BKGM84MtiBpY/0XI6tAAzwkOd9rlYVXrI1n/ZPmyk=";
   };
 
   nativeBuildInputs = [ autoreconfHook gettext makeWrapper ];
