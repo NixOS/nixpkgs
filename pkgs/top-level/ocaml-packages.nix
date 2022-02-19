@@ -310,6 +310,8 @@ let
       then pkgs.dune_2
       else throw "dune_2 is not available for OCaml ${ocaml.version}";
 
+    dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
+
     dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
     dune-build-info = callPackage ../development/ocaml-modules/dune-build-info { };

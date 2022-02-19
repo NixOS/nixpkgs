@@ -1233,7 +1233,7 @@ with pkgs;
   lilo = callPackage ../tools/misc/lilo { };
 
   logseq = callPackage ../applications/misc/logseq {
-    electron = electron_16;
+    electron = electron_15;
   };
 
   natls = callPackage ../tools/misc/natls { };
@@ -2921,7 +2921,7 @@ with pkgs;
   duf = callPackage ../tools/misc/duf { };
 
   inherit (ocaml-ng.ocamlPackages_4_10) dune_1;
-  inherit (ocamlPackages) dune_2 dune-release;
+  inherit (ocamlPackages) dune_2 dune_3 dune-release;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
@@ -4236,6 +4236,8 @@ with pkgs;
   u3-tool = callPackage ../tools/filesystems/u3-tool { };
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
+
+  uniffi-bindgen = callPackage ../development/tools/uniffi-bindgen { };
 
   unify = with python3Packages; toPythonApplication unify;
 
@@ -25647,6 +25649,8 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
+  gurk-rs = callPackage ../applications/networking/instant-messengers/gurk-rs { };
+
   gjay = callPackage ../applications/audio/gjay { };
 
   photivo = callPackage ../applications/graphics/photivo { };
@@ -34499,6 +34503,8 @@ with pkgs;
   unstick = callPackage ../os-specific/linux/unstick {};
 
   quartus-prime-lite = callPackage ../applications/editors/quartus-prime {};
+
+  usb-blaster-udev-rules = callPackage ../os-specific/linux/usb-blaster-udev-rules {};
 
   go-license-detector = callPackage ../development/tools/misc/go-license-detector { };
 

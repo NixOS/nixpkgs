@@ -325,6 +325,8 @@ This generic command invokes a number of *phases*. Package builds are split into
 
 Each phase can be overridden in its entirety either by setting the environment variable `namePhase` to a string containing some shell commands to be executed, or by redefining the shell function `namePhase`. The former is convenient to override a phase from the derivation, while the latter is convenient from a build script. However, typically one only wants to *add* some commands to a phase, e.g. by defining `postInstall` or `preFixup`, as skipping some of the default actions may have unexpected consequences. The default script for each phase is defined in the file `pkgs/stdenv/generic/setup.sh`.
 
+When overriding a phase, for example `installPhase`, it is important to start with `runHook preInstall` and end it with `runHook postInstall`, otherwise `preInstall` and `postInstall` will not be run. Even if you don't use them directly, it is good practice to do so anyways for downstream users who would want to add a `postInstall` by overriding your derivation.
+
 While inside an interactive `nix-shell`, if you wanted to run all phases in the order they would be run in an actual build, you can invoke `genericBuild` yourself.
 
 ### Controlling phases {#ssec-controlling-phases}
@@ -337,7 +339,8 @@ There are a number of variables that control what phases are executed and in wha
 
 Specifies the phases. You can change the order in which phases are executed, or add new phases, by setting this variable. If it’s not set, the default value is used, which is `$prePhases unpackPhase patchPhase $preConfigurePhases configurePhase $preBuildPhases buildPhase checkPhase $preInstallPhases installPhase fixupPhase installCheckPhase $preDistPhases distPhase $postPhases`.
 
-Usually, if you just want to add a few phases, it’s more convenient to set one of the variables below (such as `preInstallPhases`), as you then don’t specify all the normal phases.
+It is discouraged to set this variable, as it is easy to miss some important functionality hidden in some of the less obviously needed phases (like `fixupPhase` which patches the shebang of scripts).
+Usually, if you just want to add a few phases, it’s more convenient to set one of the variables below (such as `preInstallPhases`).
 
 ##### `prePhases` {#var-stdenv-prePhases}
 

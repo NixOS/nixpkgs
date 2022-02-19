@@ -49,12 +49,12 @@
 , versionAttr ? {
   major = "3.10";
   minor = "1";
-  patch = "0";
+  patch = "1";
 }
 }:
 
 let
-  sourceSha256 = "sha256-bU6z7H08G8QIToogAMI2P5tHBtVZezlBDqSbnEsqAjE=";
+  sourceSha256 = "sha256-vsAK+GQzcpA9Vsa6q4RFEzVpbF7/+yZkMsemKn6VhIg=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -293,9 +293,15 @@ stdenv.mkDerivation rec {
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
-    inherit boost volk;
+    inherit
+      boost
+      volk
+      spdlog
+    ;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
+  } // lib.optionalAttrs (hasFeature "gr-pdu") {
+    inherit libiio libad9361;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit (libsForQt5) qwt;
   };

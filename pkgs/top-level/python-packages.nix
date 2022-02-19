@@ -3171,6 +3171,8 @@ in {
 
   gdown = callPackage ../development/python-modules/gdown { };
 
+  gdtoolkit = callPackage ../development/python-modules/gdtoolkit { };
+
   ge25519 = callPackage ../development/python-modules/ge25519 { };
 
   geant4 = toPythonModule (pkgs.geant4.override {
@@ -9357,6 +9359,8 @@ in {
   sphinxcontrib-plantuml = callPackage ../development/python-modules/sphinxcontrib-plantuml {
     inherit (pkgs) plantuml;
   };
+
+  sphinxcontrib-programoutput = callPackage ../development/python-modules/sphinxcontrib-programoutput { };
 
   sphinxcontrib-qthelp = callPackage ../development/python-modules/sphinxcontrib-qthelp { };
 
