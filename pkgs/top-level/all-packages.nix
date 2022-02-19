@@ -1792,6 +1792,8 @@ with pkgs;
 
   fspy = callPackage ../applications/misc/fspy { };
 
+  fluffychat = callPackage  ../applications/networking/instant-messengers/fluffychat { };
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genann = callPackage ../development/libraries/genann { };
@@ -22300,6 +22302,8 @@ with pkgs;
   fwupd-efi = callPackage ../os-specific/linux/firmware/fwupd-efi { };
 
   firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
+
+  firmware-updater = callPackage ../os-specific/linux/firmware/firmware-updater { };
 
   fwts = callPackage ../os-specific/linux/fwts { };
 
