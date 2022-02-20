@@ -3585,7 +3585,6 @@ broken-packages:
   - pandoc-filter-indent
   - pandoc-include
   - pandoc-lens
-  - pandoc-lua-marshal
   - pandoc-markdown-ghci-filter
   - pandoc-placetable
   - pandoc-pyplot
