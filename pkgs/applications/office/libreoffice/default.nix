@@ -25,7 +25,7 @@ assert builtins.elem variant [ "fresh" "still" ];
 
 let
   jre' = jre_minimal.override {
-    modules = [ "java.base" "java.desktop" ];
+    modules = [ "java.base" "java.desktop" "java.logging" ];
   };
 
   importVariant = f: import (./. + "/src-${variant}/${f}");

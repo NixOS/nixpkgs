@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "intellifire4py";
-  version = "0.9.8";
+  version = "0.9.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jeeftor";
     repo = pname;
     rev = version;
-    hash = "sha256-xuFCikmoQX95h0rzkO03I0IpUzLB2rbPo9IoxmstlmE=";
+    hash = "sha256-oI4iGnfitou8/Jhe7K4rnSPnmddfO+6FLZzqgNmaPV8=";
   };
 
   propagatedBuildInputs = [
