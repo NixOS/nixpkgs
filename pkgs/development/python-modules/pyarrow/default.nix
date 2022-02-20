@@ -1,4 +1,24 @@
-{ lib, stdenv, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools-scm, six }:
+{ lib
+, stdenv
+, buildPythonPackage
+, python
+, isPy3k
+, arrow-cpp
+, cffi
+, cloudpickle
+, cmake
+, cython
+, fsspec
+, hypothesis
+, numpy
+, pandas
+, pytestCheckHook
+, pytest-lazy-fixture
+, pkg-config
+, scipy
+, setuptools-scm
+, six
+}:
 
 let
   zero_or_one = cond: if cond then 1 else 0;
@@ -15,21 +35,23 @@ buildPythonPackage rec {
   sourceRoot = "apache-arrow-${version}/python";
 
   nativeBuildInputs = [ cmake cython pkg-config setuptools-scm ];
-  propagatedBuildInputs = [ numpy six ];
-  checkInputs = [ hypothesis pandas pytestCheckHook pytest-lazy-fixture ];
+  propagatedBuildInputs = [ numpy six cloudpickle scipy fsspec cffi ];
+  checkInputs = [
+    hypothesis
+    pandas
+    pytestCheckHook
+    pytest-lazy-fixture
+  ];
 
   PYARROW_BUILD_TYPE = "release";
 
   PYARROW_WITH_DATASET = zero_or_one true;
   PYARROW_WITH_FLIGHT = zero_or_one _arrow-cpp.enableFlight;
   PYARROW_WITH_PARQUET = zero_or_one true;
+  PYARROW_WITH_HDFS = zero_or_one true;
 
   PYARROW_CMAKE_OPTIONS = [
     "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
-
-    # This doesn't use setup hook to call cmake so we need to workaround #54606
-    # ourselves
-    "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
   ];
 
   ARROW_HOME = _arrow-cpp;
@@ -51,9 +73,6 @@ buildPythonPackage rec {
     # enabled in nixpkgs.
     # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11393
     "--deselect=pyarrow/tests/test_memory.py::test_env_var"
-    # Deselect a parquet dataset test because it erroneously fails to find the
-    # pyarrow._dataset module.
-    "--deselect=pyarrow/tests/parquet/test_dataset.py::test_parquet_dataset_deprecated_properties"
   ] ++ lib.optionals stdenv.isDarwin [
     # Requires loopback networking
     "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
@@ -61,11 +80,20 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
   preCheck = ''
-    mv pyarrow/tests tests
-    rm -rf pyarrow
-    mkdir pyarrow
-    mv tests pyarrow/tests
+    shopt -s extglob
+    rm -r pyarrow/!(tests)
   '';
+
+  pythonImportsCheck = map (module: "pyarrow.${module}") [
+    "compute"
+    "csv"
+    "dataset"
+    "flight"
+    "fs"
+    "hdfs"
+    "json"
+    "parquet"
+  ];
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";

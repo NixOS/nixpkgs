@@ -415,6 +415,15 @@
       </listitem>
       <listitem>
         <para>
+          Ntopng (<literal>services.ntopng</literal>) is updated to
+          5.2.1 and uses a separate Redis instance if
+          <literal>system.stateVersion</literal> is at least
+          <literal>22.05</literal>. Existing setups shouldn’t be
+          affected.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The backward compatibility in
           <literal>services.wordpress</literal> to configure sites with
           the old interface has been removed. Please use
@@ -679,6 +688,12 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>vpnc</literal> package has been changed to use
+          GnuTLS instead of OpenSSL by default for licensing reasons.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.vimPlugins.onedark-nvim</literal> now refers to
           <link xlink:href="https://github.com/navarasu/onedark.nvim">navarasu/onedark.nvim</link>
           (formerly refers to
@@ -924,6 +939,12 @@
           prompt, providing the options
           <literal>programs.starship.enable</literal> and
           <literal>programs.starship.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <link xlink:href="https://dino.im">Dino</link> XMPP client
+          was updated to 0.3, adding support for audio and video calls.
         </para>
       </listitem>
       <listitem>
