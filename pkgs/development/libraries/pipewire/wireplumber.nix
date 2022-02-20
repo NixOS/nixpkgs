@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     "-Delogind=disabled"
     "-Ddoc=${mesonEnableFeature enableDocs}"
     "-Dintrospection=${mesonEnableFeature enableGI}"
+    "-Dsystemd-system-service=true"
   ];
 
   passthru.updateScript = nix-update-script {
