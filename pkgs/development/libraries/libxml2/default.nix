@@ -134,6 +134,6 @@ stdenv.mkDerivation rec {
     description = "XML parsing library for C";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = with maintainers; [ eelco jtojnar ];
   };
 }
