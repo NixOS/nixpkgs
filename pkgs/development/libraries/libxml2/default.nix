@@ -1,8 +1,18 @@
-{ stdenv, lib, fetchurl, fetchpatch
-, zlib, xz, libintl, python, gettext, ncurses, findXMLCatalogs
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, zlib
+, xz
+, libintl
+, python
+, gettext
+, ncurses
+, findXMLCatalogs
 , libiconv
 , pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
-, icuSupport ? false, icu ? null
+, icuSupport ? false
+, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 }:
@@ -11,10 +21,15 @@ stdenv.mkDerivation rec {
   pname = "libxml2";
   version = "2.9.12";
 
+  outputs = [ "bin" "dev" "out" "man" "doc" ]
+    ++ lib.optional pythonSupport "py"
+    ++ lib.optional (enableStatic && enableShared) "static";
+
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
     sha256 = "14hxwzmf5xqppx77z7i0ni9lpzg1a84dqpf8j8l1fvy570g6imn8";
   };
+
   patches = [
     # Upstream bugs:
     #   https://bugzilla.gnome.org/show_bug.cgi?id=789714
@@ -37,25 +52,31 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ]
-    ++ lib.optional pythonSupport "py"
-    ++ lib.optional (enableStatic && enableShared) "static";
-
   strictDeps = true;
 
-  buildInputs = lib.optional pythonSupport python
-    ++ lib.optional (pythonSupport && python?isPy2 && python.isPy2) gettext
-    ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
-    ++ lib.optional (stdenv.isDarwin &&
-                     pythonSupport && python?isPy2 && python.isPy2) libintl
+  buildInputs = lib.optionals pythonSupport [
+    python
+  ] ++ lib.optionals (pythonSupport && python?isPy2 && python.isPy2) [
+    gettext
+  ] ++ lib.optionals (pythonSupport && python?isPy3 && python.isPy3) [
+    ncurses
+  ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
+    libintl
+  ] ++ lib.optionals stdenv.isFreeBSD [
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.
-    ++ lib.optional stdenv.isFreeBSD xz;
+    xz
+  ];
 
-  propagatedBuildInputs = [ zlib findXMLCatalogs ]
-    ++ lib.optional stdenv.isDarwin libiconv
-    ++ lib.optional icuSupport icu;
+  propagatedBuildInputs = [
+    zlib
+    findXMLCatalogs
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+  ] ++ lib.optionals icuSupport [
+    icu
+  ];
 
   configureFlags = [
     "--exec_prefix=$dev"
@@ -65,11 +86,20 @@ stdenv.mkDerivation rec {
     (lib.withFeatureAs pythonSupport "python" python)
   ];
 
+  installFlags = lib.optionals pythonSupport [
+    "pythondir=\"${placeholder "py"}/lib/${python.libPrefix}/site-packages\""
+  ];
+
+  enableParallelBuilding = true;
+
+  doCheck =
+    (stdenv.hostPlatform == stdenv.buildPlatform) &&
+    !stdenv.isDarwin &&
+    stdenv.hostPlatform.libc != "musl";
+
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
-
-  enableParallelBuilding = true;
 
   # disable test that's problematic with newer pythons: see
   # https://mail.gnome.org/archives/xml/2017-August/msg00014.html
@@ -77,13 +107,8 @@ stdenv.mkDerivation rec {
     echo "" > python/tests/tstLastError.py
   '';
 
-  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin &&
-    stdenv.hostPlatform.libc != "musl";
-
   preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
-  installFlags = lib.optional pythonSupport
-    "pythondir=\"${placeholder "py"}/lib/${python.libPrefix}/site-packages\"";
 
   postFixup = ''
     moveToOutput bin/xml2-config "$dev"
@@ -93,13 +118,16 @@ stdenv.mkDerivation rec {
     moveToOutput lib/libxml2.a "$static"
   '';
 
-  passthru = { inherit version; pythonSupport = pythonSupport; };
+  passthru = {
+    inherit version;
+    pythonSupport = pythonSupport;
+  };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://xmlsoft.org/";
-    description = "An XML parsing library for C";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.eelco ];
+    description = "XML parsing library for C";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ eelco ];
   };
 }
