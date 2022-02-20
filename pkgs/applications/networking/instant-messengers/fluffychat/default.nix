@@ -2,6 +2,8 @@
 , fetchFromGitLab
 , flutter
 , olm
+, imagemagick
+, makeDesktopItem
 }:
 
 flutter.mkFlutterApp rec {
@@ -17,8 +19,21 @@ flutter.mkFlutterApp rec {
     hash = "sha256-PJH3jMQc6u9R6Snn+9rNN8t+8kt6l3Xt7zKPbpqj13E=";
   };
 
+  desktopItem = makeDesktopItem {
+    name = "Fluffychat";
+    exec = "@out@/bin/fluffychat";
+    icon = "fluffychat";
+    desktopName = "Fluffychat";
+    genericName = "Chat with your friends (matrix client)";
+    categories = "Chat;Network;InstantMessaging;";
+  };
+
   buildInputs = [
     olm
+  ];
+
+  nativeBuildInputs = [
+    imagemagick
   ];
 
   flutterExtraFetchCommands = ''
@@ -30,6 +45,24 @@ flutter.mkFlutterApp rec {
     pushd $M
     bash scripts/prepare.sh
     popd
+  '';
+
+  postInstall = ''
+    FAV=$out/app/data/flutter_assets/assets/favicon.png
+    ICO=$out/share/icons
+
+    install -D $FAV $ICO/fluffychat.png
+    mkdir $out/share/applications
+    cp $desktopItem/share/applications/*.desktop $out/share/applications
+
+    for s in 24 32 42 64 128 256 512; do
+      D=$ICO/hicolor/''${s}x''${s}/apps
+      mkdir -p $D
+      convert $FAV -resize ''${s}x''${s} $D/fluffychat.png
+    done
+
+    substituteInPlace $out/share/applications/*.desktop \
+      --subst-var out
   '';
 
   meta = with lib; {
