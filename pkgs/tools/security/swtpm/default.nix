@@ -11,6 +11,7 @@
 
 # Tests
 , python3, which
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -64,6 +65,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   outputs = [ "out" "man" ];
+
+  passthru.tests = { inherit (nixosTests) systemd-cryptenroll; };
 
   meta = with lib; {
     description = "Libtpms-based TPM emulator";
