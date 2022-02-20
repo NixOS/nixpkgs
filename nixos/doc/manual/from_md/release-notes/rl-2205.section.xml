@@ -507,6 +507,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>multimc</literal> has been replaced with
+          <literal>multimc-bin</literal>, which is a self-updating
+          package that uses official binaries from upstream. Users with
+          existing installations need not take any steps, as the new
+          package stores data in the same locations as the previous one.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The iputils package, which is installed by default, no longer
           provides the legacy tools <literal>tftpd</literal> and
           <literal>traceroute6</literal>. More tools
@@ -859,15 +868,6 @@
           The option <literal>services.duplicati.dataDir</literal> has
           been added to allow changing the location of duplicati’s
           files.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>multimc</literal> has been replaced with a
-          self-updating package which uses official binaries from
-          upstream. Users with existing installations need not take any
-          steps, as the new package stores data in the same locations as
-          the previous one.
         </para>
       </listitem>
       <listitem>

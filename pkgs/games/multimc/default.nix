@@ -14,7 +14,7 @@
 }:
 let
 multimc = stdenv.mkDerivation rec {
-  name = "multimc";
+  name = "multimc-bin";
 
   src = ./.;
 
@@ -72,7 +72,7 @@ jvmSymlinks = stdenv.mkDerivation rec {
 };
 in
 buildFHSUserEnv {
-  name = "multimc";
+  name = "multimc-bin";
   targetPkgs = pkgs: with pkgs; with xorg; [
     # MultiMC and direct dependencies.
     multimc qt5.full zlib
