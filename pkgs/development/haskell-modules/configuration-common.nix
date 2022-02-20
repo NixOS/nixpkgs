@@ -1368,6 +1368,9 @@ self: super: {
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
 
+  # https://github.com/strake/filtrable.hs/issues/6
+  filtrable = doJailbreak super.filtrable;
+
   # hasura packages need some extra care
   graphql-engine = overrideCabal (drv: {
     patches = [ ./patches/graphql-engine-mapkeys.patch ];
