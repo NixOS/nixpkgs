@@ -40,8 +40,10 @@ stdenv.mkDerivation rec {
       url = "https://lists.gnupg.org/pipermail/gnupg-devel/attachments/20200415/f7be62d1/attachment.obj";
       sha256 = "00d4sxq63601lzdp2ha1i8fvybh7dzih4531jh8bx07fab3sw65g";
     })
-    # Support for Python 3.10, https://dev.gnupg.org/D545
-    ./support-python-310.patch
+    # Support Python 3.10 version detection without distutils, https://dev.gnupg.org/D545
+    ./python-310-detection-without-distutils.patch
+    # Find correct version string for Python >= 3.10, https://dev.gnupg.org/D546
+    ./python-find-version-string-above-310.patch
     # Disable python tests on Darwin as they use gpg (see configureFlags below)
   ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch
   # Fix _AC_UNDECLARED_WARNING for autoconf>=2.70
