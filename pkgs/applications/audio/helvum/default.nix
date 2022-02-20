@@ -16,20 +16,20 @@
 
 stdenv.mkDerivation rec {
   pname = "helvum";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "ryuukyu";
+    owner = "pipewire";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Kt6gnMRTOVXqjAjEZKlylcGhzl52ZzPNVbJhwzLhzkM=";
+    sha256 = "0nhv6zw2zzxz2bg2zj32w1brywnm5lv6j3cvmmvwshc389z2k5x1";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-kxJRY9GSPwnb431iYCfJdGcl5HjpFr2KkWrFDpGajp8=";
+    hash = "sha256-EIHO9qVPIXgezfFOaarlTU0an762nFmX1ELbQuAZ7rY";
   };
 
   nativeBuildInputs = [
@@ -51,21 +51,9 @@ stdenv.mkDerivation rec {
 
   LIBCLANG_PATH = "${libclang.lib}/lib";
 
-  patches = [
-    # enables us to use gtk4-update-icon-cache instead of gtk3 one
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/ryuukyu/helvum/-/merge_requests/24.patch";
-      sha256 = "sha256-WmI6taBL/6t587j06n0mwByQ8x0eUA5ECvGNjg2/vtk=";
-    })
-  ];
-
-  postPatch = ''
-    patchShebangs build-aux/cargo.sh
-  '';
-
   meta = with lib; {
     description = "A GTK patchbay for pipewire";
-    homepage = "https://gitlab.freedesktop.org/ryuukyu/helvum";
+    homepage = "https://gitlab.freedesktop.org/pipewire/helvum";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;

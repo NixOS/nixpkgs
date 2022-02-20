@@ -100,7 +100,7 @@ let
   # CUDA-related packages that are compatible with the currently packaged version
   # of TensorFlow, used to keep these versions in sync in related packages like `jaxlib`.
   tensorflow_compat_cudatoolkit = pkgs.cudatoolkit_11_2;
-  tensorflow_compat_cudnn = pkgs.cudnn_cudatoolkit_11_2;
+  tensorflow_compat_cudnn = pkgs.cudnn_8_1_cudatoolkit_11_2;
   tensorflow_compat_nccl = pkgs.nccl_cudatoolkit_11;
 
 in {
@@ -1935,7 +1935,7 @@ in {
 
   cupy = callPackage ../development/python-modules/cupy {
     cudatoolkit = pkgs.cudatoolkit_11;
-    cudnn = pkgs.cudnn_cudatoolkit_11;
+    cudnn = pkgs.cudnn_8_1_cudatoolkit_11;
     nccl = pkgs.nccl_cudatoolkit_11;
     cutensor = pkgs.cutensor_cudatoolkit_11;
   };
@@ -2828,6 +2828,8 @@ in {
   fenics = callPackage ../development/libraries/science/math/fenics {
     hdf5 = pkgs.hdf5_1_10;
   };
+
+  ffcv = callPackage ../development/python-modules/ffcv { };
 
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
@@ -8246,6 +8248,8 @@ in {
   pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
 
   pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
+
+  pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
 
   pytorchWithCuda = self.pytorch.override {
     cudaSupport = true;
