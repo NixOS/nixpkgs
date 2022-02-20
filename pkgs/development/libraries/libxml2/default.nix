@@ -14,7 +14,7 @@
 , libiconv
 , pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false
-, icu ? null
+, icu
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 , gnome
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   ];
 
   installFlags = lib.optionals pythonSupport [
-    "pythondir=\"${placeholder "py"}/lib/${python.libPrefix}/site-packages\""
+    "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
   ];
 
   enableParallelBuilding = true;
@@ -109,8 +109,9 @@ stdenv.mkDerivation rec {
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
-  preInstall = lib.optionalString pythonSupport
-    ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
+  preInstall = lib.optionalString pythonSupport ''
+    substituteInPlace python/libxml2mod.la --replace "${python}" "$py"
+  '';
 
   postFixup = ''
     moveToOutput bin/xml2-config "$dev"
