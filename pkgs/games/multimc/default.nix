@@ -2,6 +2,7 @@
 , jdk17, jre8
 , buildFHSUserEnv
 , runCommand
+, makeDesktopItem
 # `extraJVMs` allows the user to specify additional JVMs to be made available
 # in `/opt/jvms`. This is a path MultiMC searches for Java installs, so these
 # will all be presented in the Java "auto-detect" list in MultiMC.
@@ -33,6 +34,18 @@ multimc = stdenv.mkDerivation rec {
     license = licenses.mspl;
     maintainers = with maintainers; [ forkk ];
   };
+};
+
+desktopItem = makeDesktopItem rec {
+  name = "MultiMC 5";
+  desktopName = "multimc";
+  exec = "multimc";
+  icon = "multimc";
+  terminal = "false";
+  type = "Application";
+  categories = "Game;";
+  keywords = "game;Minecraft;mmc";
+  startupNotify = "true";
 };
 
 # List of JDKs to smylink inside the path where MultiMC looks for JVMs.
