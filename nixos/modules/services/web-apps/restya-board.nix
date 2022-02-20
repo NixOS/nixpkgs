@@ -235,7 +235,7 @@ in
       locations."~ \\.php$" = {
         tryFiles = "$uri =404";
         extraConfig = ''
-          include ${pkgs.nginx}/conf/fastcgi_params;
+          include ${config.services.nginx.package}/conf/fastcgi_params;
           fastcgi_pass    unix:${fpm.socket};
           fastcgi_index   index.php;
           fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;

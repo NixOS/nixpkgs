@@ -1613,6 +1613,8 @@ in {
 
   cirq-web = callPackage ../development/python-modules/cirq-web { };
 
+  ciscoconfparse = callPackage ../development/python-modules/ciscoconfparse { };
+
   ciscomobilityexpress = callPackage ../development/python-modules/ciscomobilityexpress { };
 
   ciso8601 = callPackage ../development/python-modules/ciso8601 { };
@@ -4048,6 +4050,8 @@ in {
 
   iowait = callPackage ../development/python-modules/iowait { };
 
+  ipaddr = callPackage ../development/python-modules/ipaddr { };
+
   ipaddress = callPackage ../development/python-modules/ipaddress { };
 
   ipdb = callPackage ../development/python-modules/ipdb { };
@@ -5328,6 +5332,10 @@ in {
 
   nanotime = callPackage ../development/python-modules/nanotime { };
 
+  napalm = callPackage ../development/python-modules/napalm { };
+
+  napalm-hp-procurve = callPackage ../development/python-modules/napalm/hp-procurve.nix { };
+
   napari = callPackage ../development/python-modules/napari {
     inherit (pkgs.libsForQt5) mkDerivationWith wrapQtAppsHook;
   };
@@ -5407,6 +5415,8 @@ in {
   netdisco = callPackage ../development/python-modules/netdisco { };
 
   netifaces = callPackage ../development/python-modules/netifaces { };
+
+  netmiko = callPackage ../development/python-modules/netmiko { };
 
   netio = callPackage ../development/python-modules/netio { };
 
@@ -8194,6 +8204,8 @@ in {
   pythran = callPackage ../development/python-modules/pythran {
     inherit (pkgs.llvmPackages) openmp;
   };
+
+  pyeapi = callPackage ../development/python-modules/pyeapi { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
 

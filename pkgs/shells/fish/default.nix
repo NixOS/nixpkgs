@@ -186,6 +186,7 @@ let
 
     nativeBuildInputs = [
       cmake
+      gettext
     ];
 
     buildInputs = [
@@ -200,8 +201,14 @@ let
       "-DMAC_CODESIGN_ID=OFF"
     ];
 
+    # The optional string is kind of an inelegant way to get fish to cross compile.
+    # Fish needs coreutils as a runtime dependency, and it gets put into
+    # CMAKE_PREFIX_PATH, which cmake uses to look up build time programs, so it
+    # was clobbering the PATH. It probably needs to be fixed at a lower level.
     preConfigure = ''
       patchShebangs ./build_tools/git_version_gen.sh
+    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      export CMAKE_PREFIX_PATH=
     '';
 
     # Required binaries during execution
