@@ -11,14 +11,16 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "2.4.0";
-  disabled = pythonOlder "3.6";
+  version = "2.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ox1CVq2M2eddZtpuZx0IfvuOm6RPsAs27WkMdZSeh0E=";
+    sha256 = "sha256-Ce1dwE2g/7o91NPkmlM0uv0eMB7WzFCExV/8ZCAn22Y=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -33,7 +35,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
- pythonImportsCheck = [ "platformdirs" ];
+  pythonImportsCheck = [
+    "platformdirs"
+  ];
 
   meta = with lib; {
     description = "Python module for determining appropriate platform-specific directories";

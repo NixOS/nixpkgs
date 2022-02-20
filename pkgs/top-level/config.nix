@@ -32,20 +32,6 @@ let
       feature = "run <literal>checkPhase</literal> by default";
     };
 
-    path = mkOption {
-      type = types.path;
-      default = ../..;
-      defaultText = lib.literalDocBook "a path expression";
-      internal = true;
-      description = ''
-        A reference to Nixpkgs' own sources.
-
-        This is overridable in order to avoid copying sources unnecessarily,
-        as a path expression that references a store path will not short-circuit
-        to the store path itself, but copy the store path instead.
-      '';
-    };
-
   };
 
 in {

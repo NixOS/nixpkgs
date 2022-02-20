@@ -18,6 +18,8 @@ buildPythonPackage rec {
     sha256 = "sha256-UrLy+j8YDWuS9pciEDKb/+UoCcw54XWiIUAEYC72/W0=";
   };
 
+  PACKAGE_VERSION = version;
+
   propagatedBuildInputs = [
     aiodns
     aiohttp

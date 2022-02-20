@@ -117,7 +117,7 @@ let
 in buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
-  version = "1.9.0";
+  version = "1.10.2";
 
   disabled = !isPy3k;
 
@@ -132,7 +132,7 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-gZmEhV1zzfr/5T2uNfS+8knzyJIxnv2COWVyiAzU9jM=";
+    sha256 = "sha256-QcvoJqpZJXPSc9HLCJHetrp/hMESuC5kYl90d7Id0ZU=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -304,7 +304,7 @@ in buildPythonPackage rec {
   passthru = {
     inherit cudaSupport;
     cudaArchList = final_cudaArchList;
-    # At least for 1.9.0 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
+    # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
   };
 

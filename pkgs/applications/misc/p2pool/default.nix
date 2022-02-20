@@ -6,6 +6,7 @@
 , lib
 , libsodium
 , libuv
+, nix-update-script
 , openssl
 , pkg-config
 , zeromq
@@ -13,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "p2pool";
-  version = "1.4";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
-    sha256 = "sha256-syeVRweQJTNzKVl9FuIQl36WwzoI/oV2ULZbSGiDkv0=";
+    sha256 = "sha256-ohfC10U7srs5IrFWPF5AKPwXPHaRxlYRK4ZZ0pE8tEs=";
     fetchSubmodules = true;
   };
 
@@ -33,6 +34,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "Decentralized pool for Monero mining";

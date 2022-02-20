@@ -1,7 +1,8 @@
 { pname, version, meta, updateScript ? null
 , binaryName ? "firefox", application ? "browser"
 , src, unpackPhase ? null, patches ? []
-, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? [] }:
+, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? []
+, extraPostPatch ? "", extraPassthru ? {} }:
 
 { lib, stdenv, pkg-config, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
@@ -134,9 +135,6 @@ buildStdenv.mkDerivation ({
   lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch ++
   lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch ++
 
-  # Fix wayland 1.20 compatibility (https://bugzilla.mozilla.org/show_bug.cgi?id=1745560:)
-  lib.optional (lib.versionOlder version "96") ./fix-build-with-wayland-1.20.patch ++
-
   patches;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
@@ -178,7 +176,9 @@ buildStdenv.mkDerivation ({
     rm -rf obj-x86_64-pc-linux-gnu
     substituteInPlace toolkit/xre/glxtest.cpp \
       --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
- '';
+
+    patchShebangs mach
+  '' + extraPostPatch;
 
   nativeBuildInputs =
     [
@@ -375,7 +375,7 @@ buildStdenv.mkDerivation ({
     inherit applicationName;
     inherit tests;
     inherit gtk3;
-  };
+  } // extraPassthru;
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
 

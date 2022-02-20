@@ -164,5 +164,20 @@ symlinkJoin {
   passthru = {
     preferLocalBuild = true;
     inherit (ghc) version meta;
+
+    # Inform users about backwards incompatibilities with <= 21.05
+    override = _: throw ''
+      The ghc.withPackages wrapper itself can now be overridden, but no longer
+      the result of calling it (as before). Consequently overrides need to be
+      adjusted: Instead of
+
+        (ghc.withPackages (p: [ p.my-package ])).override { withLLLVM = true; }
+
+      use
+
+        (ghc.withPackages.override { useLLVM = true; }) (p: [ p.my-package ])
+
+      Also note that withLLVM has been renamed to useLLVM for consistency with
+      the GHC Nix expressions.'';
   };
 }

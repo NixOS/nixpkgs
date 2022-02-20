@@ -119,6 +119,7 @@
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
 /pkgs/build-support/rust @zowoq
+/doc/languages-frameworks/rust.section.md @zowoq
 
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers
@@ -217,9 +218,9 @@
 /nixos/modules/services/mail/rspamd.nix     @peti
 
 # Emacs
-/pkgs/applications/editors/emacs-modes @adisbladis
-/pkgs/applications/editors/emacs       @adisbladis
-/pkgs/top-level/emacs-packages.nix     @adisbladis
+/pkgs/applications/editors/emacs/elisp-packages @adisbladis
+/pkgs/applications/editors/emacs                @adisbladis
+/pkgs/top-level/emacs-packages.nix              @adisbladis
 
 # Neovim
 /pkgs/applications/editors/neovim      @jonringer @teto

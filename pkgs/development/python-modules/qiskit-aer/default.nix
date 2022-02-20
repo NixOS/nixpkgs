@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.9.1";
+  version = "0.10.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = version;
-    sha256 = "sha256-SAJjU2zYz6UabOPV1KI2JB7CbJfUJcjbPKbo6iiCk/g=";
+    sha256 = "sha256-COvJCj18qRNQJUXKrtlYJQGLjna44IgtNZeNVJJaIHg=";
   };
 
   postPatch = ''
@@ -88,9 +88,11 @@ buildPythonPackage rec {
   ];
   # Slow tests
   disabledTests = [
-    "test_clifford" # fails on cvxpy >= 1.1.15. https://github.com/Qiskit/qiskit-aer/pull/1318. Remove in future.
     "test_snapshot" # TODO: these ~30 tests fail on setup due to pytest fixture issues?
     "test_initialize_2" # TODO: simulations appear incorrect, off by >10%.
+    # These tests fail on cvxpy >= 1.1.15
+    "test_clifford"
+    "test_approx_random"
 
     # these fail for some builds. Haven't been able to reproduce error locally.
     "test_kraus_gate_noise"

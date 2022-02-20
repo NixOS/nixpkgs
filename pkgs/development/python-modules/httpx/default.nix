@@ -1,11 +1,11 @@
 { lib
+, async_generator
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
 , brotlicffi
 , certifi
 , charset-normalizer
-, h2
 , httpcore
 , rfc3986
 , sniffio
@@ -20,24 +20,27 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.21.1";
+  version = "0.21.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ayhLP+1hPWAx2ds227CKp5cebVkD5B2Z59L+3dzdINc=";
+    sha256 = "01069b0kj6vnb26xazlz06rj4yncy5nkq76pajvzx0pmpjkniiz9";
   };
 
   propagatedBuildInputs = [
     brotlicffi
     certifi
     charset-normalizer
-    h2
     httpcore
     rfc3986
     sniffio
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    async_generator
   ];
 
   checkInputs = [
@@ -49,12 +52,20 @@ buildPythonPackage rec {
     uvicorn
   ];
 
-  pythonImportsCheck = [ "httpx" ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "rfc3986[idna2008]>=1.3,<2" "rfc3986>=1.3"
+  '';
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   disabledTests = [
     # httpcore.ConnectError: [Errno 101] Network is unreachable
@@ -69,6 +80,10 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/test_main.py"
+  ];
+
+  pythonImportsCheck = [
+    "httpx"
   ];
 
   __darwinAllowLocalNetworking = true;

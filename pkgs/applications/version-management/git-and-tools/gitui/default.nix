@@ -1,18 +1,30 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, perl, python3, Security, AppKit, openssl, xclip, pkg-config }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, libiconv
+, openssl
+, pkg-config
+, xclip
+, AppKit
+, Security
+}:
+
 rustPlatform.buildRustPackage rec {
   pname = "gitui";
-  version = "0.19.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "extrawurst";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PNyXmXHS8StJhx6Qko7zbXrX1CX3owC1HmyX9VV7tEg=";
+    sha256 = "sha256-zYM0JVhgFnp8JDBx9iEOt029sr8azIPX5jrtvUE/Pn0=";
   };
 
-  cargoSha256 = "sha256-Q6QUxIe5bkoEcxZZwhJbihaHhSsX8SLqWzmjp8hFsS4=";
+  cargoSha256 = "sha256-kbLI95GzCwm2OKzzpk7jvgtm8vArf29u5BiPRTh2OmE=";
 
-  nativeBuildInputs = [ python3 perl pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ openssl ]
     ++ lib.optional stdenv.isLinux xclip
     ++ lib.optionals stdenv.isDarwin [ libiconv Security AppKit ];
@@ -21,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = 1;
 
   meta = with lib; {
-    description = "Blazing fast terminal-ui for git written in rust";
+    description = "Blazing fast terminal-ui for Git written in Rust";
     homepage = "https://github.com/extrawurst/gitui";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne yanganto ];

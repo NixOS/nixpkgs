@@ -1,6 +1,0 @@
-url https://sourceforge.net/projects/smbnetfs/files/smbnetfs/
-version_link '[-][0-9.]+[a-z]*/$'
-version_link '[.]tar[.][a-z0-9]+/download$'
-SF_redirect
-version '.*[-]([0-9.]+[a-z]*)[.]tar[.].*' '\1'
-do_overwrite () { do_overwrite_just_version; }

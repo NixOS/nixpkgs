@@ -5,19 +5,21 @@
 , git
 , testVersion
 , buf
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.0.0-rc11";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-V6xaGnSoKuJC59uZLW8uSLqwseJHvLGjrvhzE8o9fho=";
+    sha256 = "sha256-jJaob2eaozMFRsXwW6ulgM5De3UmpLZddTHwq6PnaeE=";
   };
-  vendorSha256 = "sha256-442NHTREM2zC8VA7zAV35YSwX1lM/BXnx6p8a+avzps=";
+
+  vendorSha256 = "sha256-wPnrkfv6pJB6tkZo2oeMbWHbF9njGh1ZEWu8tkHDhGo=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -26,11 +28,14 @@ buildGoModule rec {
     ./skip_test_requiring_dotgit.patch
   ];
 
-  nativeBuildInputs = [ protobuf ];
-  # Required for TestGitCloner
-  checkInputs = [ git ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
+
+  checkInputs = [
+    git # Required for TestGitCloner
+    protobuf # Required for buftesting.GetProtocFilePaths
+  ];
 
   preCheck = ''
     # The tests need access to some of the built utilities
@@ -42,6 +47,7 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
 
+    # Binaries
     mkdir -p "$out/bin"
     # Only install required binaries, don't install testing binaries
     for FILE in \
@@ -50,6 +56,16 @@ buildGoModule rec {
       "protoc-gen-buf-lint"; do
       cp "$GOPATH/bin/$FILE" "$out/bin/"
     done
+
+    # Completions
+    installShellCompletion --cmd buf \
+      --bash <($GOPATH/bin/buf completion bash) \
+      --fish <($GOPATH/bin/buf completion fish) \
+      --zsh <($GOPATH/bin/buf completion zsh)
+
+    # Man Pages
+    mkdir man && $GOPATH/bin/buf manpages man
+    installManPage man/*
 
     runHook postInstall
   '';

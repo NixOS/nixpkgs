@@ -444,15 +444,15 @@ let
             account sufficient ${pam_krb5}/lib/security/pam_krb5.so
           '' +
           optionalString cfg.googleOsLoginAccountVerification ''
-            account [success=ok ignore=ignore default=die] ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so
-            account [success=ok default=ignore] ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_admin.so
+            account [success=ok ignore=ignore default=die] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
+            account [success=ok default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so
           '' +
           ''
 
             # Authentication management.
           '' +
           optionalString cfg.googleOsLoginAuthentication ''
-            auth [success=done perm_denied=bad default=ignore] ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so
+            auth [success=done perm_denied=die default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
           '' +
           optionalString cfg.rootOK ''
             auth sufficient pam_rootok.so
@@ -1035,7 +1035,7 @@ in
         setuid = true;
         owner = "root";
         group = "root";
-        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
+        source = "${pkgs.pam}/bin/unix_chkpwd";
       };
     };
 
@@ -1091,11 +1091,11 @@ in
         mr ${pam_ccreds}/lib/security/pam_ccreds.so,
       '' +
       optionalString (isEnabled (cfg: cfg.googleOsLoginAccountVerification)) ''
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so,
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_admin.so,
+        mr ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so,
+        mr ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so,
       '' +
       optionalString (isEnabled (cfg: cfg.googleOsLoginAuthentication)) ''
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so,
+        mr ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so,
       '' +
       optionalString (config.security.pam.enableSSHAgentAuth
                      && isEnabled (cfg: cfg.sshAgentAuth)) ''

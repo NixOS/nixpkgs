@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-machine-learning";
-  version = "0.2.1";
+  version = "0.3.0";
 
   disabled = pythonOlder "3.6";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2dfrkNZYSaXwiOCaRrPckq4BllANgc6BogyBcP0vosY=";
+    sha256 = "0jycs18apnwrksarpwpmp7scndyx91vnv6fchil4jyx4kym8mnf9";
   };
 
   propagatedBuildInputs = [

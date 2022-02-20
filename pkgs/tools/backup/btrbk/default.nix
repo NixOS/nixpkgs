@@ -7,7 +7,6 @@
 , perl
 , perlPackages
 , util-linux
-, asciidoc
 , asciidoctor
 , mbuffer
 , makeWrapper
@@ -19,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "btrbk";
-  version = "0.31.3";
+  version = "0.32.0";
 
   src = fetchurl {
     url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
-    sha256 = "1lx7vnf386nsik8mxrrfyx1h7mkqk5zs26sy0s0lynfxcm4lkxb2";
+    sha256 = "HmvNtIgFfeaiFuSRobWlcJqusPSYtqAqx+79+CeNVDQ=";
   };
 
-  nativeBuildInputs = [ asciidoc asciidoctor makeWrapper ];
+  nativeBuildInputs = [ asciidoctor makeWrapper ];
 
   buildInputs = with perlPackages; [ perl DateCalc ];
 

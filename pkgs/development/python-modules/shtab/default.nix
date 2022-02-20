@@ -5,6 +5,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, bashInteractive
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    bashInteractive
     pytest-timeout
     pytestCheckHook
   ];
@@ -36,11 +38,6 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg \
       --replace " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
   '';
-
-  disabledTests = [
-    # bash tests are failing
-    "bash"
-  ];
 
   pythonImportsCheck = [
     "shtab"

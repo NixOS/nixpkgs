@@ -10,8 +10,7 @@ in {
     enable = mkEnableOption "plausible";
 
     releaseCookiePath = mkOption {
-      default = null;
-      type = with types; nullOr (either str path);
+      type = with types; either str path;
       description = ''
         The path to the file with release cookie. (used for remote connection to the running node).
       '';
@@ -235,6 +234,8 @@ in {
           script = ''
             export CONFIG_DIR=$CREDENTIALS_DIRECTORY
 
+            export RELEASE_COOKIE="$(< $CREDENTIALS_DIRECTORY/RELEASE_COOKIE )"
+
             # setup
             ${pkgs.plausible}/createdb.sh
             ${pkgs.plausible}/migrate.sh
@@ -243,10 +244,8 @@ in {
                 psql -d plausible <<< "UPDATE users SET email_verified=true;"
               fi
             ''}
-            ${optionalString (cfg.releaseCookiePath != null) ''
-              export RELEASE_COOKIE="$(< $CREDENTIALS_DIRECTORY/RELEASE_COOKIE )"
-            ''}
-            plausible start
+
+            exec plausible start
           '';
 
           serviceConfig = {
@@ -257,8 +256,8 @@ in {
             LoadCredential = [
               "ADMIN_USER_PWD:${cfg.adminUser.passwordFile}"
               "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
-            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"]
-            ++ lib.optionals (cfg.releaseCookiePath != null) [ "RELEASE_COOKIE:${cfg.releaseCookiePath}"];
+              "RELEASE_COOKIE:${cfg.releaseCookiePath}"
+            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"];
           };
         };
       }

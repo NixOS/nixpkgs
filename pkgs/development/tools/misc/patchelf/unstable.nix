@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-${version}";
+  pname = "patchelf";
   version = "2021-11-16";
 
   src = fetchFromGitHub {

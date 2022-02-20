@@ -14,6 +14,12 @@ buildPythonPackage rec {
   pname = "testfixtures";
   version = "6.18.3";
   format = "setuptools";
+  # DO NOT CONTACT upstream.
+  # https://github.com/simplistix/ is only concerned with internal CI process.
+  # Any attempt by non-standard pip workflows to comment on issues will
+  # be met with hostility.
+  # https://github.com/simplistix/testfixtures/issues/169
+  # https://github.com/simplistix/testfixtures/issues/168
 
   disabled = pythonOlder "3.6";
 
@@ -22,6 +28,9 @@ buildPythonPackage rec {
     sha256 = "sha256-JgAQCulv/QgjNLN441VVD++LSlKab6TDT0cTCQXHQm0=";
   };
 
+  # no longer compatible with sybil
+  # https://github.com/simplistix/testfixtures/issues/169
+  doCheck = false;
   checkInputs = [
     mock
     pytestCheckHook

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lagrange";
-  version = "1.10.1";
+  version = "1.10.5";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${version}";
-    sha256 = "sha256-HwrIdQv4LDVLLuvukzp28AuKKbEMQeHSb0ZW+a9q4ug=";
+    sha256 = "sha256-n6viI9yEqb73691s499vRB48LCOV0LdTbMR81P+Q5pM=";
     fetchSubmodules = true;
   };
 

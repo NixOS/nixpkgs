@@ -1,0 +1,13 @@
+diff --git a/pkg/pgtune/misc.go b/pkg/pgtune/misc.go
+index 1fceb6e..3e76be5 100644
+--- a/pkg/pgtune/misc.go
++++ b/pkg/pgtune/misc.go
+@@ -35,7 +35,7 @@ const (
+ 	// If you want to lower this value, consider that Patroni will not accept anything less than 25 as
+ 	// a valid max_connections and will replace it with 100, per
+ 	// https://github.com/zalando/patroni/blob/00cc62726d6df25d31f9b0baa082c83cd3f7bef9/patroni/postgresql/config.py#L280
+-	minMaxConns = 25
++	minMaxConns = 20
+ )
+ 
+ // MaxConnectionsDefault is the recommended default value for max_connections.

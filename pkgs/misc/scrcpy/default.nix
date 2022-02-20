@@ -10,10 +10,10 @@
 }:
 
 let
-  version = "1.21";
+  version = "1.22";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "sha256-28zKtSPuJnluVeozZSZJ5LevSY7a6ap15NTXhpwKuEg=";
+    sha256 = "sha256-wF0nPux1M8DhBiguAlTPBOf16PDCkgyjlEiGX6sqQZs=";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9MzOaQj+lR1F+E/yoxbL/HMOOuKOU82zkPVq7x6AH3c=";
+    sha256 = "sha256-bYLvrCw6NNCZqgLWIEObnytgD74cE9pm/Z7dgB8S5x0=";
   };
 
   # postPatch:
@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
     echo -n > server/meson.build
   '';
 
-  mesonFlags = [ "-Doverride_server_path=${prebuilt_server}" ];
   postInstall = ''
     mkdir -p "$out/share/scrcpy"
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"

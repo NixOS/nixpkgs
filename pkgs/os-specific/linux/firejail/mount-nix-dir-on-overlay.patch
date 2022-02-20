@@ -1,6 +1,6 @@
---- a/src/firejail/fs.c
-+++ b/src/firejail/fs.c
-@@ -1143,6 +1143,16 @@
+--- a/src/firejail/fs_overlayfs.c
++++ b/src/firejail/fs_overlayfs.c
+@@ -327,6 +327,16 @@
  		errExit("mounting /dev");
  	fs_logger("whitelist /dev");
  
@@ -17,7 +17,7 @@
  	// mount-bind run directory
  	if (arg_debug)
  		printf("Mounting /run\n");
-@@ -1201,6 +1211,7 @@
+@@ -384,6 +394,7 @@
  	free(odiff);
  	free(owork);
  	free(dev);

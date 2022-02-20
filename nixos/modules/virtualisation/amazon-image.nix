@@ -155,7 +155,7 @@ in
     systemd.services."serial-getty@ttyS0".enable = true;
 
     # Creates symlinks for block device names.
-    services.udev.packages = [ pkgs.ec2-utils ];
+    services.udev.packages = [ pkgs.amazon-ec2-utils ];
 
     # Force getting the hostname from EC2.
     networking.hostName = mkDefault "";

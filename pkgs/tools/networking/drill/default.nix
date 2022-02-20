@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "drill";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "fcsonline";
     repo = pname;
     rev = version;
-    sha256 = "07zz0dj0wjwrc1rmayz7s8kpcv03i0ygl4vfwsam72qd4nf6v538";
+    sha256 = "sha256-LqqtSmmXr48jB7HyWi954fDNKOynEpQupGYl7QbXUAI=";
   };
 
-  cargoSha256 = "04gj9gaysjcm2d81ds2raak847hr8w84jgfdwqd51wi8xm32w5jf";
+  cargoSha256 = "sha256-SUF/gDy9t2B5N234HZHxMl0Hc0GrVUBw3xeI43c++Nc=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config

@@ -26,6 +26,16 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "pop-shell";
   };
 
+  postPatch = ''
+    for file in */main.js; do
+      substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
+    done
+  '';
+
+  preFixup = ''
+    chmod +x $out/share/gnome-shell/extensions/pop-shell@system76.com/*/main.js
+  '';
+
   meta = with lib; {
     description = "Keyboard-driven layer for GNOME Shell";
     license = licenses.gpl3Only;

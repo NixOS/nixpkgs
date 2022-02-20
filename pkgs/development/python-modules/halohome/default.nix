@@ -9,7 +9,8 @@
 
 buildPythonPackage rec {
   pname = "halohome";
-  version = "0.4.0";
+  version = "0.5.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "nayaverdier";
     repo = pname;
     rev = version;
-    sha256 = "W7cqBJmoBUT0VvXeNKxUK0FfAuprjfvFv6rgyL2gqYQ=";
+    sha256 = "sha256-xnUOObqVg1E7mTDKHZMoC95KI9ZIn0YpkQjoASa5Dds=";
   };
 
   propagatedBuildInputs = [

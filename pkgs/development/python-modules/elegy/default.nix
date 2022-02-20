@@ -4,6 +4,7 @@
 , deepmerge
 , dm-haiku
 , fetchFromGitHub
+, jaxlib
 , lib
 , poetry
 , pytestCheckHook
@@ -34,6 +35,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry
   ];
+
+  buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
     cloudpickle

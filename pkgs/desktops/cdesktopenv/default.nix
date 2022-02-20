@@ -46,6 +46,8 @@ in stdenv.mkDerivation rec {
     bison ncompress gawk autoPatchelfHook makeWrapper fakeroot
     rpcsvc-proto
   ];
+  # build fails otherwise
+  enableParallelBuilding = false;
 
   makeFlags = [
     "World"

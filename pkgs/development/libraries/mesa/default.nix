@@ -33,7 +33,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.3.3";
+  version = "21.3.5";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -47,18 +47,20 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "08c118j440xpfbjjxmwzm6dfnv4y35q540mmzkchhpbwx89lczxd";
+    sha256 = "0k2ary16ixsrp65m2n5djpr51nbwdgzpv81pfrnqbvk44jfjlfyr";
   };
 
   # TODO:
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
-    # fixes pkgsMusl.mesa build
+    # To fix flickering on Intel GPUs (iris), see https://github.com/NixOS/nixpkgs/issues/153377:
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl.patch";
-      sha256 = "sha256-Jyl7ILLhn8hBJG7afnEjE8H56Wz/1bxkvlqfrXK5U7I=";
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/07dc3d4238e57901ccf98e0b506d9aad2c86b9d9.diff";
+      sha256 = "sha256-3fa1qHJes3x1/iXsxfjgy9HnEGlOyFtJatSkU1a3XDI=";
     })
+    # fixes pkgsMusl.mesa build
+    ./musl.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-endian.patch";
       sha256 = "sha256-eRc91qCaFlVzrxFrNUPpAHd1gsqKsLCCN0IW8pBQcqk=";

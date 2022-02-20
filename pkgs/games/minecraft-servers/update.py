@@ -4,6 +4,7 @@
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import requests
@@ -150,6 +151,6 @@ def generate() -> Dict[str, Dict[str, str]]:
 
 
 if __name__ == "__main__":
-    with open("versions.json", "w") as file:
+    with open(Path(__file__).parent / "versions.json", "w") as file:
         json.dump(generate(), file, indent=2)
         file.write("\n")

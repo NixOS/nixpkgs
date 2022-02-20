@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchPypi
+, fetchpatch
 , imageio-ffmpeg
 , numpy
 , pillow
@@ -12,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.13.2";
+  version = "2.14.1";
   disabled = isPy27;
 
   src = fetchPypi {
-    sha256 = "5b7a55d07de88a2fd70f18a1608ca05ba2b55596a942fb2c390240201009a6c3";
+    sha256 = "sha256-cJwY+ACYHkKGq+S9hrbJtbtuKFtrkztboJYu+OeZQFg=";
     inherit pname version;
   };
 

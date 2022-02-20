@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-XA099gBp52g0RUbbFSE8uFa7gh56bO8H66KaFAtK1RU=";
   };
 
-  vendorSha256 = "sha256-rmuRZ8jRwSaAYgrOBgJwsEOAaUNJwhPJX9hEaJTX6/E=";
+  vendorSha256 = "sha256-Qx0QaPKpEq4U+G3qdfMN4EVyY5zI2SyzcK/U6o6loHE=";
 
   meta = with lib; {
     description = "Fast and multi-purpose HTTP toolkit";

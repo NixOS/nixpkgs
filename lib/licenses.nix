@@ -465,6 +465,11 @@ in mkLicense lset) ({
     spdxId = "imagemagick";
   };
 
+  imlib2 = {
+    spdxId = "Imlib2";
+    fullName = "Imlib2 License";
+  };
+
   inria-compcert = {
     fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "https://compcert.org/doc/LICENSE.txt";
@@ -590,6 +595,16 @@ in mkLicense lset) ({
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
+  };
+  # https://spdx.org/licenses/MIT-feh.html
+  mit-feh = {
+    spdxId = "MIT-feh";
+    fullName = "feh License";
+  };
+
+  mitAdvertising = {
+    spdxId = "MIT-advertising";
+    fullName = "Enlightenment License (e16)";
   };
 
   mpl10 = {

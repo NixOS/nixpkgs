@@ -229,5 +229,6 @@ in stdenv.mkDerivation {
     homepage = "https://www.virtualbox.org/";
     maintainers = with maintainers; [ sander ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "VirtualBox";
   };
 }

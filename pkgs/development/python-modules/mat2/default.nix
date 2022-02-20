@@ -7,7 +7,7 @@
 , bubblewrap
 , exiftool
 , ffmpeg
-, mime-types
+, mailcap
 , wrapGAppsHook
 , gdk-pixbuf
 , gobject-introspection
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.12.2";
+  version = "0.12.3";
 
   disabled = pythonOlder "3.5";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    sha256 = "sha256-KaHdBmTeBlCRaVkG3WsfDtFo45s/X69x7VGDYY7W5O8=";
+    hash = "sha256-TW+FwlZ+J1tanPL5WuwXtZJmtYB9LaimeIaPlN/jzqo=";
   };
 
   patches = [
@@ -40,8 +40,6 @@ buildPythonPackage rec {
       bwrap = "${bubblewrap}/bin/bwrap";
       exiftool = "${exiftool}/bin/exiftool";
       ffmpeg = "${ffmpeg}/bin/ffmpeg";
-      # remove once faf0f8a8a4134edbeec0a73de7f938453444186d is in master
-      mimetypes = "${mime-types}/etc/mime.types";
     } // lib.optionalAttrs dolphinIntegration {
       kdialog = "${plasma5Packages.kdialog}/bin/kdialog";
     }))
@@ -49,6 +47,11 @@ buildPythonPackage rec {
     ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
+    # fix gobject-introspection typelib path for Nautilus extension
+    (substituteAll {
+      src = ./fix_poppler.patch;
+      poppler_path = "${poppler_gi}/lib/girepository-1.0";
+    })
   ];
 
   postPatch = ''
@@ -78,7 +81,7 @@ buildPythonPackage rec {
     install -Dm 444 data/mat2.svg -t "$out/share/icons/hicolor/scalable/apps"
     install -Dm 444 doc/mat2.1 -t "$out/share/man/man1"
     install -Dm 444 nautilus/mat2.py -t "$out/share/nautilus-python/extensions"
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $pythonPath $propagatedBuildInputs"
     patchPythonScript "$out/share/nautilus-python/extensions/mat2.py"
   '' + lib.optionalString dolphinIntegration ''
     install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"

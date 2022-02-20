@@ -2,7 +2,7 @@
 {
   "arcmenu@arcmenu.com" = callPackage ./arcmenu { };
   "clock-override@gnomeshell.kryogenix.org" = callPackage ./clock-override { };
-  "dash-to-panel@jderose9.github.com" = callPackage ./dash-to-panel { };
+  "dash-to-dock@micxgx.gmail.com" = callPackage ./dash-to-dock { };
   "drop-down-terminal@gs-extensions.zzrough.org" = callPackage ./drop-down-terminal { };
   "EasyScreenCast@iacopodeenosee.gmail.com" = callPackage ./EasyScreenCast { };
   "emoji-selector@maestroschan.fr" = callPackage ./emoji-selector { };

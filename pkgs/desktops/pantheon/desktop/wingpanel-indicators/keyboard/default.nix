@@ -29,11 +29,18 @@ stdenv.mkDerivation rec {
     sha256 = "10zzsil5l6snz47nx887r22sl2n0j6bg4dhxmgk3j3xp3jhgmrgl";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      gkbd_keyboard_display = "${libgnomekbd}/bin/gkbd-keyboard-display";
+    })
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/wingpanel-indicator-keyboard/pull/110
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel-indicator-keyboard/commit/ea5df2f62a99a216ee5ed137268e710490a852a4.patch";
+      sha256 = "0fmdz10xgzsryj0f0dnpjrh9yygjkb91a7pxg0rwddxbprhnr7j0";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -52,18 +59,11 @@ stdenv.mkDerivation rec {
     xorg.xkeyboardconfig
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      gkbd_keyboard_display = "${libgnomekbd}/bin/gkbd-keyboard-display";
-    })
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/wingpanel-indicator-keyboard/pull/110
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-keyboard/commit/ea5df2f62a99a216ee5ed137268e710490a852a4.patch";
-      sha256 = "0fmdz10xgzsryj0f0dnpjrh9yygjkb91a7pxg0rwddxbprhnr7j0";
-    })
-  ];
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Keyboard Indicator for Wingpanel";

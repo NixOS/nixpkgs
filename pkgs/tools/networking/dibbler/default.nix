@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable DHCPv6 implementation";
-    homepage = "http://www.klub.com.pl/dhcpv6/";
-    license = licenses.gpl2;
+    homepage = "https://klub.com.pl/dhcpv6/";
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
   };

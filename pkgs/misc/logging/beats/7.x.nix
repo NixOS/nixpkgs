@@ -11,7 +11,7 @@ let beat = package: extraArgs: buildGoModule (rec {
     sha256 = "sha256-9Jl5Xo1iKdOY9ZE5JXKSL4ee+NdsN3KCY2dDYuxlzPI=";
   };
 
-  vendorSha256 = "sha256-tyxyM7RsTHTVVxc9gagPsSvFRaWGTmobKzyv9RODXBk=";
+  vendorSha256 = "sha256-fiqCccS2IAnTzfPfUqY0Wy9uRUuiYNtiVvpAFZJOPVI=";
 
   subPackages = [ package ];
 

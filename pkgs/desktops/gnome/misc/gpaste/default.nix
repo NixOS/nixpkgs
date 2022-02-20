@@ -17,14 +17,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.42.2";
+  version = "3.42.5";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-VWtq1jPwUHHIDpVaSYQ0FiihlfulRofFmacMyv/buMw=";
+    sha256 = "sha256-BpDA2V40V+VF2CB7ik+edMxrRtYSFnTQ48ec6pt8Jo4=";
   };
 
   patches = [

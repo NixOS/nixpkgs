@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.73.0";
+  version = "2.75.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6735874a29aefc1e989a132a2e24945e5b0d057d8b297a2da695cf8421a78810";
+    sha256 = "sha256-MN/F7TWaKsQpKMR7Pxx0Vam1+O+PFEJ/H5jLJh3zpe4=";
   };
 
   propagatedBuildInputs = [

@@ -6,13 +6,13 @@
   })
   (fetchNuGet {
     pname = "Microsoft.AspNetCore.JsonPatch";
-    version = "3.1.19";
-    sha256 = "1fh3k85k988jw35sf5hvm6jwmvzmslzpfvf3jk3sn3f3s6gyk0an";
+    version = "6.0.1";
+    sha256 = "0rsqng2b8a3zaha9c2x1195das5wwvmnz31xf14ancgha4lxq68r";
   })
   (fetchNuGet {
     pname = "Microsoft.AspNetCore.Mvc.NewtonsoftJson";
-    version = "3.1.19";
-    sha256 = "1nh08kjdc152m85ycwxn1q8r69f0l02p6cac6q57nzlyy5gyj2rs";
+    version = "6.0.1";
+    sha256 = "179b2774s68im71r32lv4nydcp586x86zggs8ml6jcfjrd9fs5b1";
   })
   (fetchNuGet {
     pname = "Microsoft.Azure.Amqp";
@@ -226,8 +226,8 @@
   })
   (fetchNuGet {
     pname = "Newtonsoft.Json";
-    version = "12.0.2";
-    sha256 = "0w2fbji1smd2y7x25qqibf1qrznmv4s6s0jvrbvr6alb7mfyqvh5";
+    version = "13.0.1";
+    sha256 = "0fijg0w6iwap8gvzyjnndds0q4b8anwxxvik7y8vgq97dram4srb";
   })
   (fetchNuGet {
     pname = "Newtonsoft.Json";

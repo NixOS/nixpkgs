@@ -12,14 +12,19 @@
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.66.1";
+  version = "0.67.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "todo.sr.ht";
     rev = version;
-    sha256 = "sha256-P0xaQpK7O9zipGSIa5jL1O0L/fKt51EMNGt7XndYQ+g=";
+    sha256 = "sha256-/QHsMlhzyah85ubZyx8j4GDUoITuWcLDJKosbZGeOZU=";
   };
+
+  patches = [
+    # Revert change breaking Unix socket support for Redis
+    patches/redis-socket/todo/0001-Revert-Add-webhook-queue-monitoring.patch
+  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 

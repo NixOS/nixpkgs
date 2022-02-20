@@ -20,7 +20,7 @@ then throw "nocrypto is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-nocrypto-${version}";
+  pname = "ocaml${ocaml.version}-nocrypto";
   version = "0.5.4";
 
   src = fetchurl {

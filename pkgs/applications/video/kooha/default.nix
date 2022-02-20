@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
   # Fixes https://github.com/NixOS/nixpkgs/issues/31168
   postPatch = ''
     patchShebangs build-aux/meson_post_install.py
+    substituteInPlace meson.build --replace '>= 1.0.0-alpha.1' '>= 1.0.0'
   '';
 
   installCheckPhase = ''

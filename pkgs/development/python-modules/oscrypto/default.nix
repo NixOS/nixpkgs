@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , asn1crypto
 , fetchPypi
@@ -34,6 +35,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "oscrypto" ];
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Encryption library for Python";

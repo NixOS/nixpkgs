@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
@@ -9,18 +8,20 @@
 , python3
 , gst-plugins-base
 , orc
+, gstreamer
 , gobject-introspection
 , enableZbar ? false
 , faacSupport ? false
 , faac
 , faad2
+, ldacbt
 , libass
 , libkate
-, libmms
 , lrdf
 , ladspaH
 , libnice
 , webrtc-audio-processing
+, webrtc-audio-processing_1
 , lilv
 , lv2
 , serd
@@ -28,7 +29,7 @@
 , sratom
 , libbs2b
 , libmodplug
-, mpeg2dec
+, libmpeg2
 , libmicrodns
 , openjpeg
 , libopus
@@ -40,6 +41,7 @@
 , fdk_aac
 , flite
 , gsm
+, json-glib
 , libaom
 , libdc1394
 , libde265
@@ -47,7 +49,7 @@
 , libdvdnav
 , libdvdread
 , libgudev
-, libofa
+, qrencode
 , libsndfile
 , libusb1
 , neon
@@ -89,31 +91,19 @@
 , CoreVideo
 , Foundation
 , MediaToolbox
+, enableGplPlugins ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.18.2";
+  version = "1.20.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "06ildd4rl6cynirv3p00d2ddf5is9svj4i7mkahldzhq24pq5mca";
+    sha256 = "sha256-AVuNTZo5Xr9ETUCHaGeiA03TMEs61IvDoN0MHucdwR0=";
   };
-
-  patches = [
-    # Use pkgconfig to inject the includedirs
-    ./fix_pkgconfig_includedir.patch
-    # Fix “error: cannot initialize a parameter of type 'unsigned long *' with an rvalue of type 'typename std::remove_reference<decltype(*(&opencv_dilate_erode_type))>::type *' (aka 'volatile unsigned long *')” on Darwin.
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/640a65bf966df065d41a511e2d76d1f26a2e770c.patch";
-      sha256 = "E5pig+qEfR58Jticr6ydFxZOhM3ZJ8zgrf5K4BdiB/Y=";
-      includes = [
-        "ext/opencv/gstcvdilateerode.cpp"
-      ];
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -122,6 +112,7 @@ stdenv.mkDerivation rec {
     orc # for orcc
     python3
     gettext
+    gstreamer # for gst-tester-1.0
     gobject-introspection
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
@@ -133,14 +124,14 @@ stdenv.mkDerivation rec {
     # gobject-introspection has to be in both nativeBuildInputs and
     # buildInputs. The build tries to link against libgirepository-1.0.so
     gobject-introspection
-    faad2
+    json-glib
+    ldacbt
     libass
     libkate
-    libmms
-    webrtc-audio-processing # webrtc
+    webrtc-audio-processing # required by webrtcdsp
+    #webrtc-audio-processing_1 # required by isac
     libbs2b
     libmodplug
-    mpeg2dec
     libmicrodns
     openjpeg
     libopenmpt
@@ -154,9 +145,9 @@ stdenv.mkDerivation rec {
     libde265
     libdvdnav
     libdvdread
+    qrencode
     libsndfile
     libusb1
-    mjpegtools
     neon
     openal
     opencv4
@@ -175,7 +166,6 @@ stdenv.mkDerivation rec {
     libGLU
     libgme
     openssl
-    x265
     libxml2
     libintl
     srt
@@ -184,6 +174,11 @@ stdenv.mkDerivation rec {
     zbar
   ] ++ lib.optionals faacSupport [
     faac
+  ] ++ lib.optionals enableGplPlugins [
+    libmpeg2
+    mjpegtools
+    faad2
+    x265
   ] ++ lib.optionals stdenv.isLinux [
     bluez
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
@@ -202,7 +197,6 @@ stdenv.mkDerivation rec {
     libdrm
     libgudev
     libnice
-    libofa
     sbc
     spandsp
 
@@ -238,7 +232,7 @@ stdenv.mkDerivation rec {
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
-    "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing
+    "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing, also this is AGPL so update license when adding support
     "-Dmagicleap=disabled" # required `ml_audio` library not packaged in nixpkgs as of writing
     "-Dmsdk=disabled" # not packaged in nixpkgs as of writing / no Windows support
     # As of writing, with `libmpcdec` in `buildInputs` we get
@@ -264,6 +258,10 @@ stdenv.mkDerivation rec {
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
     "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
+    "-Disac=disabled" # depends on `webrtc-audio-coding-1` not compatible with 0.3
+    "-Dgs=disabled" # depends on `google-cloud-cpp`
+    "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
+    "-Dopenaptx=disabled" # depends on older version of `libopenaptx` due to licensing conflict https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/2235
   ]
   ++ lib.optionals (!stdenv.isLinux) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
@@ -274,7 +272,6 @@ stdenv.mkDerivation rec {
     "-Ddirectfb=disabled"
     "-Dflite=disabled"
     "-Dkms=disabled" # renders to libdrm output
-    "-Dofa=disabled"
     "-Dlv2=disabled"
     "-Dsbc=disabled"
     "-Dspandsp=disabled"
@@ -295,7 +292,17 @@ stdenv.mkDerivation rec {
     "-Dapplemedia=disabled"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dintrospection=disabled"
-  ];
+  ] ++ (if enableGplPlugins then [
+    "-Dgpl=enabled"
+  ] else [
+    "-Ddts=disabled"
+    "-Dfaad=disabled"
+    "-Diqa=disabled"
+    "-Dmpeg2enc=disabled"
+    "-Dmplex=disabled"
+    "-Dresindvd=disabled"
+    "-Dx265=disabled"
+  ]);
 
   # Argument list too long
   strictDeps = true;
@@ -320,7 +327,7 @@ stdenv.mkDerivation rec {
       something - be it a good code review, some documentation, a set of tests,
       a real live maintainer, or some actual wide use.
     '';
-    license = licenses.lgpl2Plus;
+    license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];
   };

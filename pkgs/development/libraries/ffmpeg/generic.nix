@@ -1,7 +1,7 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
 , alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, libpulseaudio, soxr
-, x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
+, x264, x265, xvidcore, zimg, zlib, libopus, speex, nv-codec-headers, dav1d
 , srt ? null
 , openglSupport ? false, libGLU ? null, libGL ? null
 , libmfxSupport ? false, intel-media-sdk ? null
@@ -53,6 +53,8 @@ let
   reqMatch = requiredVersion: (cmpVer requiredVersion branch == 0);
 
   ifMinVer = minVer: flag: if reqMin minVer then flag else null;
+
+  ifVerOlder = maxVer: flag: if (lib.versionOlder branch maxVer) then flag else null;
 
   # Version specific fix
   verFix = withoutFix: fixVer: withFix: if reqMatch fixVer then withFix else withoutFix;
@@ -121,7 +123,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "0.6" "--enable-avdevice")
       "--enable-avfilter"
       (ifMinVer "0.6" "--enable-avformat")
-      (ifMinVer "1.0" "--enable-avresample")
+      (ifMinVer "1.0" (ifVerOlder "5.0" "--enable-avresample"))
       (ifMinVer "1.1" "--enable-avutil")
       "--enable-postproc"
       (ifMinVer "0.9" "--enable-swresample")
@@ -152,6 +154,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "1.2" "--enable-libsoxr")
       "--enable-libx264"
       "--enable-libxvid"
+      "--enable-libzimg"
       "--enable-zlib"
       (ifMinVer "2.8" "--enable-libopus")
       "--enable-libspeex"
@@ -174,7 +177,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvorbis xz soxr x264 x265 xvidcore zlib libopus speex srt nv-codec-headers
+    libvorbis xz soxr x264 x265 xvidcore zimg zlib libopus speex srt nv-codec-headers
   ] ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom

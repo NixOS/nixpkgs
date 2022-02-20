@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , arcan
 , audit
 , dbus
@@ -45,6 +46,14 @@ stdenv.mkDerivation rec {
     rev = "98d28a5f2c6860bb191fbc1c9e577c18e4c9a9b7";
     hash = "sha256-UTIVDKnYD/q0K6G7NJUKh1tHcqnsuiJ/cQxWuPMJ2G4=";
   };
+
+  patches = [
+    # fix build with meson 0.60
+    (fetchpatch {
+      url = "https://github.com/letoram/xarcan/commit/b67e514dbb59bffc23b75d47ca7f24e96c4aeb05.patch";
+      sha256 = "sha256-tSQmNy1Id6nDIN+03dc1+rEEF8fMq0yJBiscNM60xic=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

@@ -112,7 +112,7 @@ let
       # are absolute unless we go out of our way to make them relative (like with CF)
       # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
       # there (yet?) so it goes here until then.
-      preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
+      preHook = preHook + lib.optionalString buildPlatform.isDarwin ''
         export NIX_DONT_SET_RPATH_FOR_BUILD=1
       '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
@@ -168,6 +168,11 @@ let
       inherit overrides;
 
       inherit cc hasCC;
+
+      # Convenience for doing some very basic shell syntax checking by parsing a script
+      # without running any commands. Because this will also skip `shopt -s extglob`
+      # commands and extglob affects the Bash parser, we enable extglob always.
+      shellDryRun = "${stdenv.shell} -n -O extglob";
     }
 
     # Propagate any extra attributes.  For instance, we use this to

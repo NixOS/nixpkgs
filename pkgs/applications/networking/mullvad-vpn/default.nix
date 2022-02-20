@@ -1,7 +1,8 @@
 { stdenv, lib, fetchurl, dpkg
 , alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
+, gdk-pixbuf, glib, pango, nspr, nss, gtk3, mesa
 , xorg, autoPatchelfHook, systemd, libnotify, libappindicator
+, makeWrapper
 }:
 
 let deps = [
@@ -15,7 +16,6 @@ let deps = [
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     pango
     gtk3
     libappindicator
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    makeWrapper
   ];
 
   buildInputs = deps;
@@ -73,11 +74,13 @@ stdenv.mkDerivation rec {
     mv usr/bin/* $out/bin
     mv opt/Mullvad\ VPN/* $out/share/mullvad
 
-    sed -i 's|"\/opt\/Mullvad.*VPN|env MULLVAD_DISABLE_UPDATE_NOTIFICATION=1 "'$out'/bin|g' $out/share/applications/mullvad-vpn.desktop
-
     ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
     ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
     ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
+
+    wrapProgram $out/bin/mullvad-vpn --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1
+
+    sed -i "s|Exec.*$|Exec=$out/bin/mullvad-vpn $U|" $out/share/applications/mullvad-vpn.desktop
 
     runHook postInstall
   '';

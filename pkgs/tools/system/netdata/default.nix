@@ -16,14 +16,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.32.1";
+  version = "1.33.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-DbuR3x7d6synJELOxI+frK4LY9zFgPKmY7hGY8B5z7o=";
+    sha256 = "sha256-4rx8EHtOSd/lHcSHZCtiXkjJjL7B175cVGvFOZ9Bzi8=";
     fetchSubmodules = true;
   };
 

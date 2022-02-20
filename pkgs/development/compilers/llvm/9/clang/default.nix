@@ -30,7 +30,6 @@ let
       "-DCMAKE_CXX_FLAGS=-std=c++11"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
-      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"

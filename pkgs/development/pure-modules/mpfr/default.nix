@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
-  baseName = "mpfr";
+  pname = "pure-mpfr";
   version = "0.5";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-mpfr-${version}.tar.gz";
     sha256 = "39d2255c2c0c2d60ce727be178b5e5a06f7c92eb365976c49c4a34b1edc576e7";
   };
 

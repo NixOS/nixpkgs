@@ -6,11 +6,14 @@
 , pytestCheckHook
 , docutils
 , pygments
+, pytest-rerunfailures
+, pytest-asyncio
+, anyio
 }:
 
 buildPythonPackage rec {
   pname = "pytest-subprocess";
-  version = "1.3.2";
+  version = "1.4.1";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +21,7 @@ buildPythonPackage rec {
     owner = "aklajnert";
     repo = "pytest-subprocess";
     rev = version;
-    sha256 = "sha256-auPpqoPeYxmkWTVbbKhEZI6gJGH9Pf1D9YLkuD3FaX0=";
+    hash = "sha256-xNkOXBCQ4AH/JVmxFzI3VSouA6jkCbUom7AdckfjGiE=";
   };
 
   buildInputs = [
@@ -29,6 +32,9 @@ buildPythonPackage rec {
     pytestCheckHook
     docutils
     pygments
+    pytest-rerunfailures
+    pytest-asyncio
+    anyio
   ];
 
   meta = with lib; {

@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-sSXl2I5vZ8PVLaZWlMl5phcqQ1k1OBy5v+X0O8nHtvw=";
   };
 
-  vendorSha256 = "sha256-4XA7B0gmFE52VoKiPLsa0urPS7IdzrTBXuU4wZv/Lag=";
+  vendorSha256 = "sha256-aiqnJ1PjrwSC6YtixNvyTxgbs8z2radcETNhKHGlPk0=";
 
   # Requires network
   doCheck = false;

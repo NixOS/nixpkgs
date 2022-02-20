@@ -33,13 +33,17 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
+  asyncio-nats-client = nats-py; # added 2022-02-08
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   bt_proximity = bt-proximity; # added 2021-07-02
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # added 2019-11-27
+  carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
   class-registry = phx-class-registry; # added 2021-10-05
   ConfigArgParse = configargparse; # added 2021-03-18
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   dateutil = python-dateutil; # added 2021-07-03
+  demjson = throw "demjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
   dftfit = throw "dftfit dependency lammps-cython no longer builds"; # added 2021-07-04
   diff_cover = diff-cover; # added 2021-07-02
@@ -52,7 +56,9 @@ mapAliases ({
   dns = dnspython; # added 2017-12-10
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
+  eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
+  garminconnect-ha = garminconnect; # added 2022-02-05
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
   google_api_python_client = google-api-python-client; # added 2021-03-19
@@ -60,10 +66,12 @@ mapAliases ({
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   HAP-python = hap-python; # added 2021-06-01
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
+  hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   IMAPClient = imapclient; # added 2021-10-28
   jupyter_client = jupyter-client; # added 2021-10-15
   Keras = keras; # added 2021-11-25
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
+  Markups = markups; # added 2022-02-14
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   pam = python-pam; # added 2020-09-07.
   PasteDeploy = pastedeploy; # added 2021-10-07
@@ -72,6 +80,8 @@ mapAliases ({
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
+  pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
+  pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pysmart-smartx = pysmart; # added 2021-10-22
@@ -87,6 +97,7 @@ mapAliases ({
   pytest_xdist = pytest-xdist; # added 2021-01-04
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
+  qiskit-aqua = throw "qiskit-aqua has been removed due to deprecation, with its functionality moved to different qiskit packages";
   rdflib-jsonld = throw "rdflib-jsonld is not compatible with rdflib 6"; # added 2021-11-05
   repeated_test = throw "repeated_test is no longer maintained"; # added 2022-01-11
   requests_toolbelt = requests-toolbelt; # added 2017-09-26

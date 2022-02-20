@@ -3,55 +3,55 @@
 [
   {
     sha256 = {
-      "11-linux-aarch64" = "0hsjxp6ly7jsn9k94fddcl7afc5gda66jyppcnfvslishbizqd0i";
-      "17-linux-aarch64" = "09hzl80m7f5ppmcvryz9aq0yw9scdkp5dqhblrqnkzyhvdjl5ycn";
-      "11-linux-amd64" = "1ylk5l933z813k0k1xlayiv8fa0f1gmpr66bma51532iy3mch6rs";
-      "17-linux-amd64" = "1xn3shwkai61vvzsg595k8776a21ds00w2pjlscvfcbs1ag07n0i";
-      "11-darwin-amd64" = "0qpqnnmqxvxzj3mwz05acpg4n8ffqsz0sji8lbl03fgswpvgfavc";
-      "17-darwin-amd64" = "1akpsrd9r2igcls0cvhpqw3jrnh59m8z80knx83lmj0cj836a8v0";
+      "11-linux-aarch64" = "0n1cgd9rn5aw7rzbd45nlzpnqif095zwl3999vddlhpnjlyjdh0w";
+      "17-linux-aarch64" = "1iw27igiyzzl43yfgid1h6h7hd0xnv0rfdkp4r7r8i51sa3q7my7";
+      "11-linux-amd64" = "00vipkrhc7d5xxznm07pjrdjahhfg5s5vxg49xz8qxz2nwxhi1mw";
+      "17-linux-amd64" = "1m4v2s1b2878r6dqpcxvbqpc3s2l8l0xcbna37bbfx6rsc73wx2g";
+      "11-darwin-amd64" = "08v37avg439hywx2yqx0bnfpazwaja2xhyc0kj1imib6iadib042";
+      "17-darwin-amd64" = "16lg3qfx7j8w8cxc3abl7c19nj6jhkni99wmff153lyhyk8zjjnm";
     }.${javaVersionPlatform} or null;
-    url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.0/graalvm-ce-java${javaVersionPlatform}-21.3.0.tar.gz";
+    url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java${javaVersionPlatform}-22.0.0.2.tar.gz";
   }
   {
     sha256 = {
-      "11-linux-aarch64" = "0qlmg5fwvqsb5ab3irj2hrcd5jc94mibnlz1gvzpnq85rw1zcb6h";
-      "17-linux-aarch64" = "0jmarhwngs6vpbcgsix0dxhj42qj9vnk3vln8fhdxmydwnns8r1m";
-      "11-linux-amd64" = "0kvnjr55rizy53vn0ff9w27z1qh9d1vp3s7r1kdl0wyhrbhd8n49";
-      "17-linux-amd64" = "0h14sml42jda54agjs1prfnyjaxxsc67350fr51n8p20nl28lj6z";
-      "11-darwin-amd64" = "1mg8c8hh8wmbwsisgarmp35jd0dall1fwdv49mggp74hicbc32h3";
-      "17-darwin-amd64" = "0qz0xf2ph9gi45vvri7vphxh35m11nk7sa8nkwxl28l8bza0kb40";
+      "11-linux-aarch64" = "17h0yfw0lxsiblqv1nzpc6i71vh6hbwf1x6lp7kziass1a4ixm2i";
+      "17-linux-aarch64" = "1nvm04smzbis1jy9znac2a4yf9ajqvvmadcf5ffr521rm784g2br";
+      "11-linux-amd64" = "07g7fab0zj1h77a30kiswqm0hvr1m5s6crszcbyvha2v3x2a6145";
+      "17-linux-amd64" = "0c8qi7b63zkjrz3sz01bbmfni7pcz9nq1jv1f34lj9lcsm8gc9cc";
+      "11-darwin-amd64" = "0xn1frj1f4pzrd5gm6xwq31blgvz8l9249c97q3yh7p6rkk7vhh3";
+      "17-darwin-amd64" = "1dr80314fxcklmhi19jn3pqrsz3iivbvcxnphdzl978krm1afzq0";
     }.${javaVersionPlatform} or null;
-    url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.0/native-image-installable-svm-java${javaVersionPlatform}-21.3.0.jar";
+    url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java${javaVersionPlatform}-22.0.0.2.jar";
   }
   {
     sha256 = {
-      "11-linux-aarch64" = "02rvwl1nng8d3qn226rjx5yq2blxs4yz009ab928qanhmb4vhv8b";
-      "17-linux-aarch64" = "13kaxbgfp9pm6s28i5hfyg957iiwzrxf0ibibkv2yndgj64vj8xg";
-      "11-linux-amd64" = "0zz62zr7imjaw9a3j5m66xs7c72cqb1i74ab3rnlh0dgs1mdpljg";
-      "17-linux-amd64" = "1v2iwznlav8dsjj30nlhvsvv7pxmyzkhkp1p7spjjma09d34q4iv";
-      "11-darwin-amd64" = "1wiv0299b2xrc229alczmjfj1bsn90p0wdm64rr39xnyyhbqrr80";
-      "17-darwin-amd64" = "095sii8ibjcvvc6wnxk77ax151c4zgj8bpp81q3kyaazgpzvrk5s";
+      "11-linux-aarch64" = "103d91sz2dmlc5hcbi9v3d3irgb83755hz16vkknfhbbkhm5iyz0";
+      "17-linux-aarch64" = "0vas98knpvpajmv8bkgcf0fh7n5fy361nd47002cpppg6hrp7k9q";
+      "11-linux-amd64" = "0h4s1dgx2wn63pabdckl85s70s1kw97vp0c8z7izihdn2fy7w3z9";
+      "17-linux-amd64" = "1g98ashyvscwyn1k8mamih6qhcbxsk62x6ynd7x81ndy1karlv6q";
+      "11-darwin-amd64" = "1y8d6c2ri7hrvsv3aqbcp49pmxh9yppcsfnx0jcwm88wlach0p52";
+      "17-darwin-amd64" = "13a6rchnaczpmxga6g405z55913ayq5gwihzlvyy6shk6gwbcppw";
     }.${javaVersionPlatform} or null;
-    url = "https://github.com/oracle/truffleruby/releases/download/vm-21.3.0/ruby-installable-svm-java${javaVersionPlatform}-21.3.0.jar";
+    url = "https://github.com/oracle/truffleruby/releases/download/vm-22.0.0.2/ruby-installable-svm-java${javaVersionPlatform}-22.0.0.2.jar";
   }
   {
     sha256 = {
-      "11-linux-aarch64" = "1ck4c1z98h1zn4i6xhh1hb6w2jab6n17ddykb72xxw4vig9nhlc7";
-      "17-linux-aarch64" = "0p9gx5iq730br9wvacxs4403anxnjln6mx8v0dl4w4lhikjxsy8x";
-      "11-linux-amd64" = "0gy8jj9d9msmj0i44sysiwq3j2k2w2g47fhq6y1aq47n3kmwj9kv";
-      "17-linux-amd64" = "0qk8rgbmnk84isnb33x5bbh17bnnmq9yqasfgy5p953min6pbxj7";
-      "11-darwin-amd64" = "0agw6k3jn2jh8wyc9h8rvzlgs96qh4nlj0y8nyzsmidvwq2ahl00";
-      "17-darwin-amd64" = "0l1il0rq48sw6sha9jr0xphjgrm7q0kywy8z94mabm9maqh7l3rn";
+      "11-linux-aarch64" = "135zkpqm8z5nzcyn5h6vdx3c09f9wb6jgzmp0llcnx8w76p71154";
+      "17-linux-aarch64" = "0pij3kh70lxrzmbzx8zw97f9nb0rr492l7x3n13wcr859cr8akas";
+      "11-linux-amd64" = "0ppvsgs216jmm5p8m34lqg2kv0awadh1dlkxb7qzcw2b6x0grzf0";
+      "17-linux-amd64" = "1gf0jfmqy8lp6w7bimjp0j5abzmi0ndsn4hcjvfv7123lbj52zkz";
+      "11-darwin-amd64" = "1mq6013crjmrpf3yvxwv9p4yn0rcdzg5z9hq9l6fpf47i8522k6p";
+      "17-darwin-amd64" = "15l7p48vsca4cvqxbpb9lcmafysmdsxpv6avrpxajz705j3nsvmp";
     }.${javaVersionPlatform} or null;
-    url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.0/wasm-installable-svm-java${javaVersionPlatform}-21.3.0.jar";
+    url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/wasm-installable-svm-java${javaVersionPlatform}-22.0.0.2.jar";
   }
   {
     sha256 = {
-      "11-linux-amd64" = "1l5av2v459q88zfl83877h7b3426z3d86kp6wqjvz2441brvidi0";
-      "17-linux-amd64" = "100p1cgw0z4yfy4axb3gr32m8jnyx1f8bj6f6kk0mf3l8fv2kb7p";
-      "11-darwin-amd64" = "06694n74dzsfwlli1sjdsrfbj9ngw7bhrcayvy4sgy2va5qpdjs0";
-      "17-darwin-amd64" = "1qwg45q0760lsa62h0nk2zdv0r1npr82bh6p1z3md6pjppm7i025";
+      "11-linux-amd64" = "0m8cqqqdks34b2zv7i6qw9kzqxi1rfqsmknqa9wm0b7dqaxx209g";
+      "17-linux-amd64" = "12nszxp2yv35y8zkm94bnd0mnanah48y41r61ypymd19plaqmdxk";
+      "11-darwin-amd64" = "00g6akpv0gkw8gcxfbgcyipn6gj25yr32k1lb7iqj08bq4f2zvk7";
+      "17-darwin-amd64" = "1hd71qg0nmklyakl4cc29vl10fxalbyd2b5yn7x9iv6m0h1pp25g";
     }.${javaVersionPlatform} or null;
-    url = "https://github.com/graalvm/graalpython/releases/download/vm-21.3.0/python-installable-svm-java${javaVersionPlatform}-21.3.0.jar";
+    url = "https://github.com/graalvm/graalpython/releases/download/vm-22.0.0.2/python-installable-svm-java${javaVersionPlatform}-22.0.0.2.jar";
   }
 ]

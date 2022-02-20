@@ -10,6 +10,7 @@
 #          -> cpu-features
 #             -> node-gyp@3.8.0 -> python2
 #             -> cmake
+cd "$(dirname $(readlink -f $0))"
 
 node2nix \
   --14 \

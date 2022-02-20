@@ -11,7 +11,7 @@
 , lacaml
 , menhir
 , menhirLib
-, printbox
+, printbox-text
 }:
 
 buildDunePackage rec {
@@ -25,6 +25,11 @@ buildDunePackage rec {
     sha256 = "sha256:0knfh2s0jfnsc0vsq5yw5xla7m7i98xd0qv512dyh3jhkh7m00l9";
   };
 
+  # Ensure compatibility with printbox ≥ 0.6
+  preConfigure = ''
+    substituteInPlace lib/dune --replace printbox printbox-text
+  '';
+
   minimalOCamlVersion = "4.08";
 
   checkInputs = [ alcotest bppsuite ];
@@ -37,7 +42,7 @@ buildDunePackage rec {
     lacaml
     menhirLib
     ppx_deriving
-    printbox
+    printbox-text
   ];
 
   doCheck = true;

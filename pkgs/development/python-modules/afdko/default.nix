@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder
 , fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
 , brotli, fontmath, mutatormath, booleanoperations
 , ufoprocessor, ufonormalizer, psautohint, tqdm
@@ -37,8 +37,15 @@ buildPythonPackage rec {
   patches = [
     # Don't try to install cmake and ninja using pip
     ./no-pypi-build-tools.patch
+
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
+
+    # Fix compatibility with latest fonttools.
+    (fetchpatch {
+      url = "https://github.com/adobe-type-tools/afdko/commit/120752c50a562e4f6c12ff4be1e3bd96ed664e82.patch";
+      sha256 = "RDGIpNAuCmK+zqZOeOK7ddCjr9BuqPpcnbnxdtoE48M=";
+    })
   ];
 
   # setup.py will always (re-)execute cmake in buildPhase

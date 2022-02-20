@@ -6,11 +6,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1d5mqpc4g1wkqcwxp8m9k130i3ii3q7n1n4b1fyb5wijidmyn3xv";
+    sha256 = "07v3ddvvhi3bslwrlin45kz48i3va2lzd6ny0blj5i2z8z40qcfm";
   };
 
   outputs = [ "out" "doc" "man" ];

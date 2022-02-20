@@ -121,14 +121,15 @@
     version = "7.0.1";
   };
   addressable = {
+    dependencies = ["idn-ruby"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mpn7sbjl477h56gmxsjqb89r5s3w7vx5af994ssgc3iamvgzgvs";
+      sha256 = "sha256-920p0tH1S2xqSa7Fj5WDsI2X4IjCJ6P8upL2xlMdWQg=";
       type = "gem";
     };
-    version = "2.4.0";
+    version = "2.8.0";
   };
   ansi = {
     groups = ["default"];

@@ -114,10 +114,10 @@ stdenv'.mkDerivation rec {
     bashTools = callPackage ./bash-tools-test.nix {};
   };
 
-  name = "bazel-${version}";
+  pname = "bazel";
 
   src = fetchurl {
-    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
+    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
     sha256 = "d26dadf62959255d58e523da3448a6222af768fe1224e321b120c1d5bbe4b4f2";
   };
 

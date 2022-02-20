@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "2.4.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18e56447f636b447096977d468849c1e2d3cfa0af8e7b5acfcf83a64790c0aca";
+    sha256 = "69fe75d78ac8651e16dd61265b9e19626df5d630ae294fc31687aa6037b97a58";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

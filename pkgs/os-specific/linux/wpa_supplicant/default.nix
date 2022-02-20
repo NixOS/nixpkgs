@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix a bug when using two config files
+    ./Use-unique-IDs-for-networks-and-credentials.patch
   ] ++ lib.optionals readOnlyModeSSIDs [
     # Allow read-only networks
     ./0001-Implement-read-only-mode-for-ssids.patch

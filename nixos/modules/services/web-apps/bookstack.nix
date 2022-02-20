@@ -385,13 +385,13 @@ in {
                 else if isString v then v
                 else if true  == v then "true"
                 else if false == v then "false"
-                else if isSecret v then v._secret
+                else if isSecret v then hashString "sha256" v._secret
                 else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
             };
           };
           secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
           mkSecretReplacement = file: ''
-            replace-secret ${escapeShellArgs [ file file "${cfg.dataDir}/.env" ]}
+            replace-secret ${escapeShellArgs [ (builtins.hashString "sha256" file) file "${cfg.dataDir}/.env" ]}
           '';
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
           filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;

@@ -42,6 +42,14 @@
           upgrade notes</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          systemd services can now set
+          <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.reloadTriggers</link>
+          instead of <literal>reloadIfChanged</literal> for a more
+          granular distinction between reloads and restarts.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
@@ -81,6 +89,12 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/linux-apfs/linux-apfs-rw">apfs</link>,
+          a kernel module for mounting the Apple File System (APFS).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://frrouting.org/">FRRouting</link>, a
           popular suite of Internet routing protocol daemons (BGP, BFD,
           OSPF, IS-IS, VVRP and others). Available as
@@ -106,6 +120,14 @@
           <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
           a web interface for the PowerDNS server. Available at
           <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/sezanzeb/input-remapper">input-remapper</link>,
+          an easy to use tool to change the mapping of your input device
+          buttons. Available at
+          <link xlink:href="options.html#opt-services.input-remapper.enable">services.input-remapper</link>.
         </para>
       </listitem>
       <listitem>
@@ -140,6 +162,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
+          a very simple server for the Gemini hypertext protocol.
+          Available as
+          <link xlink:href="options.html#opt-services.agate.enable">services.agate</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm">ArchiSteamFarm</link>,
           a C# application with primary purpose of idling Steam cards
           from multiple accounts simultaneously. Available as
@@ -164,9 +194,23 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://moosefs.com">moosefs</link>, fault
+          tolerant petabyte distributed file system. Available as
+          <link linkend="opt-services.moosefs">moosefs</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/ThomasLeister/prosody-filer">prosody-filer</link>,
           a server for handling XMPP HTTP Upload requests. Available at
           <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/audreyt/ethercalc">ethercalc</link>,
+          an online collaborative spreadsheet. Available as
+          <link xlink:href="options.html#opt-services.ethercalc.enable">services.ethercalc</link>.
         </para>
       </listitem>
       <listitem>
@@ -183,6 +227,22 @@
           a browser-based version of the RStudio IDE for the R
           programming language. Available as
           <link xlink:href="options.html#opt-services.rstudio-server.enable">services.rstudio-server</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/juanfont/headscale">headscale</link>,
+          an Open Source implementation of the
+          <link xlink:href="https://tailscale.io">Tailscale</link>
+          Control Server. Available as
+          <link xlink:href="options.html#opt-services.headscale.enable">services.headscale</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://0xerr0r.github.io/blocky/">blocky</link>,
+          fast and lightweight DNS proxy as ad-blocker for local network
+          with many features.
         </para>
       </listitem>
     </itemizedlist>
@@ -213,6 +273,36 @@
       </listitem>
       <listitem>
         <para>
+          <literal>pkgs.ghc.withPackages</literal> as well as
+          <literal>haskellPackages.ghcWithPackages</literal> etc. now
+          needs be overridden directly, as opposed to overriding the
+          result of calling it. Additionally, the
+          <literal>withLLVM</literal> parameter has been renamed to
+          <literal>useLLVM</literal>. So instead of
+          <literal>(ghc.withPackages (p: [])).override { withLLVM = true; }</literal>,
+          one needs to use
+          <literal>(ghc.withPackages.override { useLLVM = true; }) (p: [])</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>home-assistant</literal> module now requires
+          users that don’t want their configuration to be managed
+          declaratively to set
+          <literal>services.home-assistant.config = null;</literal>.
+          This is required due to the way default settings are handled
+          with the new settings style.
+        </para>
+        <para>
+          Additionally the default list of
+          <literal>extraComponents</literal> now includes the minimal
+          dependencies to successfully complete the
+          <link xlink:href="https://www.home-assistant.io/getting-started/onboarding/">onboarding</link>
+          procedure.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.emacsPackages.orgPackages</literal> is removed
           because org elpa is deprecated. The packages in the top level
           of <literal>pkgs.emacsPackages</literal>, such as org and
@@ -226,6 +316,34 @@
         <para>
           <literal>services.kubernetes.addons.dashboard</literal> was
           removed due to it being an outdated version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.kubernetes.scheduler.{port,address}</literal>
+          now set <literal>--secure-port</literal> and
+          <literal>--bind-address</literal> instead of
+          <literal>--port</literal> and <literal>--address</literal>,
+          since the former have been deprecated and are no longer
+          functional in kubernetes&gt;=1.23. Ensure that you are not
+          relying on the insecure behaviour before upgrading.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The DHCP server (<literal>services.dhcpd4</literal>,
+          <literal>services.dhcpd6</literal>) has been hardened. The
+          service is now using the systemd’s
+          <literal>DynamicUser</literal> mechanism to run as an
+          unprivileged dynamically-allocated user with limited
+          capabilities. The dhcpd state files are now always stored in
+          <literal>/var/lib/dhcpd{4,6}</literal> and the
+          <literal>services.dhcpd4.stateDir</literal> and
+          <literal>service.dhcpd6.stateDir</literal> options have been
+          removed. If you were depending on root privileges or
+          set{uid,gid,cap} binaries in dhcpd shell hooks, you may give
+          dhcpd more capabilities with e.g.
+          <literal>systemd.services.dhcpd6.serviceConfig.AmbientCapabilities</literal>.
         </para>
       </listitem>
       <listitem>
@@ -273,10 +391,35 @@
       </listitem>
       <listitem>
         <para>
+          <literal>buildGoModule</literal> was updated to use
+          <literal>go_1_17</literal>, third party derivations that
+          specify &gt;= go 1.17 in the main <literal>go.mod</literal>
+          will need to regenerate their <literal>vendorSha256</literal>
+          hash.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>gnome-passwordsafe</literal> package updated to
+          <link xlink:href="https://gitlab.gnome.org/World/secrets/-/tags/6.0">version
+          6.x</link> and renamed to <literal>gnome-secrets</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           If you previously used
           <literal>/etc/docker/daemon.json</literal>, you need to
           incorporate the changes into the new option
           <literal>virtualisation.docker.daemon.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Ntopng (<literal>services.ntopng</literal>) is updated to
+          5.2.1 and uses a separate Redis instance if
+          <literal>system.stateVersion</literal> is at least
+          <literal>22.05</literal>. Existing setups shouldn’t be
+          affected.
         </para>
       </listitem>
       <listitem>
@@ -358,6 +501,19 @@
       </listitem>
       <listitem>
         <para>
+          The iputils package, which is installed by default, no longer
+          provides the legacy tools <literal>tftpd</literal> and
+          <literal>traceroute6</literal>. More tools
+          (<literal>ninfod</literal>, <literal>rarpd</literal>, and
+          <literal>rdisc</literal>) are going to be removed in the next
+          release. See
+          <link xlink:href="https://github.com/iputils/iputils/releases/tag/20211215">upstream’s
+          release notes</link> for more details and available
+          replacements.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.thelounge.private</literal> was removed in
           favor of <literal>services.thelounge.public</literal>, to
           follow with upstream changes.
@@ -367,6 +523,11 @@
         <para>
           <literal>pkgs.docbookrx</literal> was removed since it’s
           unmaintained
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>tilp2</literal> was removed together with its module
         </para>
       </listitem>
       <listitem>
@@ -417,6 +578,20 @@
       </listitem>
       <listitem>
         <para>
+          The existing <literal>pkgs.opentelemetry-collector</literal>
+          has been moved to
+          <literal>pkgs.opentelemetry-collector-contrib</literal> to
+          match the actual source being the <quote>contrib</quote>
+          edition. <literal>pkgs.opentelemetry-collector</literal> is
+          now the actual core release of opentelemetry-collector. If you
+          use the community contributions you should change the package
+          you refer to. If you don’t need them update your commands from
+          <literal>otelcontribcol</literal> to
+          <literal>otelcorecol</literal> and enjoy a 7x smaller binary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.noto-fonts-cjk</literal> is now deprecated in
           favor of <literal>pkgs.noto-fonts-cjk-sans</literal> and
           <literal>pkgs.noto-fonts-cjk-serif</literal> because they each
@@ -429,13 +604,58 @@
       </listitem>
       <listitem>
         <para>
-          The interface that allows activation scripts to restart units
-          has been reworked. Restarting and reloading is now done by a
-          single file
-          <literal>/run/nixos/activation-restart-list</literal> that
-          honors <literal>restartIfChanged</literal> and
-          <literal>reloadIfChanged</literal> of the units.
+          <literal>switch-to-configuration</literal> (the script that is
+          run when running <literal>nixos-rebuild switch</literal> for
+          example) has been reworked
         </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The interface that allows activation scripts to restart
+              units has been streamlined. Restarting and reloading is
+              now done by a single file
+              <literal>/run/nixos/activation-restart-list</literal> that
+              honors <literal>restartIfChanged</literal> and
+              <literal>reloadIfChanged</literal> of the units.
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  Preferring to reload instead of restarting can still
+                  be achieved using
+                  <literal>/run/nixos/activation-reload-list</literal>.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            <para>
+              The script now uses a proper ini-file parser to parse
+              systemd units. Some values are now only searched in one
+              section instead of in the entire unit. This is only
+              relevant for units that don’t use the NixOS systemd moule.
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  <literal>RefuseManualStop</literal>,
+                  <literal>X-OnlyManualStart</literal>,
+                  <literal>X-StopOnRemoval</literal>,
+                  <literal>X-StopOnReconfiguration</literal> are only
+                  searched in the <literal>[Unit]</literal> section
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <literal>X-ReloadIfChanged</literal>,
+                  <literal>X-RestartIfChanged</literal>,
+                  <literal>X-StopIfChanged</literal> are only searched
+                  in the <literal>[Service]</literal> section
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
@@ -464,6 +684,20 @@
           message less cluttered). This will not impact the behaviour of
           code using these functions as intended, namely as top-level
           wrapper for <literal>assert</literal> conditions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>vpnc</literal> package has been changed to use
+          GnuTLS instead of OpenSSL by default for licensing reasons.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.vimPlugins.onedark-nvim</literal> now refers to
+          <link xlink:href="https://github.com/navarasu/onedark.nvim">navarasu/onedark.nvim</link>
+          (formerly refers to
+          <link xlink:href="https://github.com/olimorris/onedarkpro.nvim">olimorris/onedarkpro.nvim</link>).
         </para>
       </listitem>
     </itemizedlist>
@@ -520,12 +754,48 @@
       </listitem>
       <listitem>
         <para>
+          The configuration portion of the <literal>nix-daemon</literal>
+          module has been reworked and exposed as
+          <link xlink:href="options.html#opt-nix-settings">nix.settings</link>:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Legacy options have been mapped to the corresponding
+              options under under
+              <link xlink:href="options.html#opt-nix.settings">nix.settings</link>
+              but may be deprecated in the future.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <link xlink:href="options.html#opt-nix.buildMachines.publicHostKey">nix.buildMachines.publicHostKey</link>
+              has been added.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           The
           <literal>writers.writePyPy2</literal>/<literal>writers.writePyPy3</literal>
           and corresponding
           <literal>writers.writePyPy2Bin</literal>/<literal>writers.writePyPy3Bin</literal>
           convenience functions to create executable Python 2/3 scripts
           using the PyPy interpreter were added.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          If you are using Wayland you can choose to use the Ozone
+          Wayland support in Chrome and several Electron apps by setting
+          the environment variable <literal>NIXOS_OZONE_WL=1</literal>
+          (for example via
+          <literal>environment.sessionVariables.NIXOS_OZONE_WL = &quot;1&quot;</literal>).
+          This is not enabled by default because Ozone Wayland is still
+          under heavy development and behavior is not always flawless.
+          Furthermore, not all Electron apps use the latest Electron
+          versions.
         </para>
       </listitem>
       <listitem>
@@ -609,6 +879,21 @@
       </listitem>
       <listitem>
         <para>
+          A new option
+          <literal>boot.initrd.extraModprobeConfig</literal> has been
+          added which can be used to configure kernel modules that are
+          loaded in the initrd.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nixos-generate-config</literal> now puts the dhcp
+          configuration in <literal>hardware-configuration.nix</literal>
+          instead of <literal>configuration.nix</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>fetchFromSourcehut</literal> now allows fetching
           repositories recursively using <literal>fetchgit</literal> or
           <literal>fetchhg</literal> if the argument
@@ -641,11 +926,25 @@
       </listitem>
       <listitem>
         <para>
+          The default value for
+          <literal>programs.spacefm.settings.graphical_su</literal> got
+          unset. It previously pointed to <literal>gksu</literal> which
+          has been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the
           <link xlink:href="https://starship.rs/">Starship</link> shell
           prompt, providing the options
           <literal>programs.starship.enable</literal> and
           <literal>programs.starship.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <link xlink:href="https://dino.im">Dino</link> XMPP client
+          was updated to 0.3, adding support for audio and video calls.
         </para>
       </listitem>
       <listitem>
@@ -689,6 +988,26 @@
           Reason is that the old name has been deprecated upstream.
           Using the old option name will still work, but produce a
           warning.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-services.networking.networkmanager.enableFccUnlock">services.networking.networkmanager.enableFccUnlock</link>
+          was added to support FCC unlock procedures. Since release
+          1.18.4, the ModemManager daemon no longer automatically
+          performs the FCC unlock procedure by default. See
+          <link xlink:href="https://modemmanager.org/docs/modemmanager/fcc-unlock/">the
+          docs</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>programs.tmux</literal> has a new option
+          <literal>plugins</literal> that accepts a list of packages
+          from the <literal>tmuxPlugins</literal> group. The specified
+          packages are added to the system and loaded by
+          <literal>tmux</literal>.
         </para>
       </listitem>
     </itemizedlist>

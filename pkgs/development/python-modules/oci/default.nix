@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.53.1";
+  version = "2.56.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "oracle";
     repo = "oci-python-sdk";
     rev = "v${version}";
-    hash = "sha256-TnLKT/F36jHEfT9K6DFM2GmPRccXz1GJWIF+EEQYRls=";
+    hash = "sha256-olrWv4c2DoZ7ddm58Wpb5jZntw8WEKJ6IzAND11tdjk=";
   };
 
   propagatedBuildInputs = [

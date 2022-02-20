@@ -72,13 +72,15 @@ in vscode-utils.buildVscodeMarketplaceExtension rec {
     icu
     curl
     openssl
+  ] ++ lib.optionals stdenv.isLinux [
     lttng-ust-2-10
     musl
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
     python3.pkgs.wrapPython
+  ] ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
   ];
 
   pythonPath = with python3.pkgs; [
@@ -101,6 +103,8 @@ in vscode-utils.buildVscodeMarketplaceExtension rec {
       cd pythonFiles/lib/python/debugpy/_vendored/pydevd/pydevd_attach_to_process
       declare kept_aside="${{
         "x86_64-linux" = "attach_linux_amd64.so";
+        "aarch64-darwin" = "attach_x86_64.dylib";
+        "x86_64-darwin" = "attach_x86_64.dylib";
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}"
       mv "$kept_aside" "$kept_aside.hidden"
       rm *.so *.dylib *.dll *.exe *.pdb
@@ -118,7 +122,7 @@ in vscode-utils.buildVscodeMarketplaceExtension rec {
 
   meta = with lib; {
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.jraygauthier ];
+    platforms = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
+    maintainers = with maintainers; [ jraygauthier jfchevrette ];
   };
 }

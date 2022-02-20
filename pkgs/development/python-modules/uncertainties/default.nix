@@ -14,7 +14,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ future ];
   checkInputs = [ nose numpy ];
 
-  checkPhase = "python setup.py nosetests -sv";
+  checkPhase = ''
+    nosetests -sv
+  '';
 
   meta = with lib; {
     homepage = "https://pythonhosted.org/uncertainties/";

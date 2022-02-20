@@ -3,6 +3,12 @@
 , callPackage
 , fetchFromGitHub
 , flit-core
+
+# important downstream dependencies
+, flit
+, black
+, mypy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -41,6 +47,7 @@ buildPythonPackage rec {
 
   passthru.tests = {
     pytest = callPackage ./tests.nix { };
+    inherit flit black mypy setuptools-scm;
   };
 
   meta = with lib; {

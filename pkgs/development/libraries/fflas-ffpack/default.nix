@@ -6,13 +6,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "fflas-ffpack";
-  version = "2.4.3";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = pname;
-    rev = version;
-    sha256 = "1ynbjd72qrwp0b4kpn0p5d7gddpvj8dlb5fwdxajr5pvkvi3if74";
+    rev = "v${version}";
+    sha256 = "sha256-Eztc2jUyKRVUiZkYEh+IFHkDuPIy+Gx3ZW/MsuOVaMc=";
   };
 
   checkInputs = [

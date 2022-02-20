@@ -2,25 +2,23 @@
 , lib
 , fetchFromGitLab
 , cairo
-, dbus
 , desktop-file-utils
 , gettext
 , glib
-, gtk3
-, libhandy_0
-, libsass
+, gtk4
+, libadwaita
 , meson
 , ninja
 , pango
 , pkg-config
 , python3
 , rustPlatform
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "contrast";
-  version = "0.0.3";
+  version = "0.0.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -28,13 +26,13 @@ stdenv.mkDerivation rec {
     owner = "design";
     repo = "contrast";
     rev = version;
-    sha256 = "0kk3mv7a6y258109xvgicmsi0lw0rcs00gfyivl5hdz7qh47iccy";
+    sha256 = "cypSbqLwSmauOoWOuppWpF3hvrxiqmkLspxAWzvlUC0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-ePkPiWGn79PHrMsSEql5OXZW5uRMdTP+w0/DCcm2KG4=";
+    hash = "sha256-W4FyqwJpimf0isQRCq9TegpTQPQfsumx40AFQCFG5VQ=";
   };
 
   nativeBuildInputs = [
@@ -47,29 +45,31 @@ stdenv.mkDerivation rec {
     rustPlatform.rust.cargo
     rustPlatform.cargoSetupHook
     rustPlatform.rust.rustc
-    wrapGAppsHook
+    wrapGAppsHook4
     glib # for glib-compile-resources
   ];
 
   buildInputs = [
     cairo
-    dbus
     glib
-    gtk3
-    libhandy_0
-    libsass
+    gtk4
+    libadwaita
     pango
   ];
 
   postPatch = ''
     patchShebangs build-aux/meson_post_install.py
+    # https://gitlab.gnome.org/World/design/contrast/-/merge_requests/23
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   meta = with lib; {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";
     homepage = "https://gitlab.gnome.org/World/design/contrast";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
   };
 }
 

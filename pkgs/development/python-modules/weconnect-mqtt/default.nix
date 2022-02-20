@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
-  version = "0.21.0";
+  version = "0.29.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";
     rev = "v${version}";
-    sha256 = "sha256-wagFjVXTjYFryaUiVeqU+T9ya+NzUFMX3uPlRZGe1v0=";
+    sha256 = "sha256-/hFlH0naE62d2dyYIJD/+TuSQDOVgS8tQsSX8JuReC0=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,8 @@ buildPythonPackage rec {
     substituteInPlace pytest.ini \
       --replace "--cov=weconnect_mqtt --cov-config=.coveragerc --cov-report html" "" \
       --replace "pytest-cov" ""
+    substituteInPlace requirements.txt \
+      --replace "weconnect[Images]~=0.35.1" "weconnect"
   '';
 
   checkInputs = [

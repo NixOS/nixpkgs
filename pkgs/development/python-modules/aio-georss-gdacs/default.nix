@@ -12,6 +12,8 @@
 buildPythonPackage rec {
   pname = "aio-georss-gdacs";
   version = "0.5";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -32,7 +34,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "aio_georss_gdacs" ];
+  pythonImportsCheck = [
+    "aio_georss_gdacs"
+  ];
 
   meta = with lib; {
     description = "Python library for accessing GeoRSS feeds";

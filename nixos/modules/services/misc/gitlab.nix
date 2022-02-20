@@ -72,7 +72,7 @@ let
     redis = {
       bin = "${pkgs.redis}/bin/redis-cli";
       host = "127.0.0.1";
-      port = 6379;
+      port = config.services.redis.servers.gitlab.port;
       database = 0;
       namespace = "resque:gitlab";
     };
@@ -450,7 +450,8 @@ in {
 
       redisUrl = mkOption {
         type = types.str;
-        default = "redis://localhost:6379/";
+        default = "redis://localhost:${toString config.services.redis.servers.gitlab.port}/";
+        defaultText = literalExpression ''redis://localhost:''${toString config.services.redis.servers.gitlab.port}/'';
         description = "Redis URL for all GitLab services except gitlab-shell";
       };
 
@@ -961,7 +962,11 @@ in {
     };
 
     # Redis is required for the sidekiq queue runner.
-    services.redis.enable = mkDefault true;
+    services.redis.servers.gitlab = {
+      enable = mkDefault true;
+      port = mkDefault 31636;
+      bind = mkDefault "127.0.0.1";
+    };
 
     # We use postgres as the main data store.
     services.postgresql = optionalAttrs databaseActuallyCreateLocally {
@@ -1099,7 +1104,9 @@ in {
       "d ${gitlabConfig.production.shared.path} 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/artifacts 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/lfs-objects 0750 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path}/packages 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/pages 0750 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path}/terraform_state 0750 ${cfg.user} ${cfg.group} -"
       "L+ /run/gitlab/config - - - - ${cfg.statePath}/config"
       "L+ /run/gitlab/log - - - - ${cfg.statePath}/log"
       "L+ /run/gitlab/tmp - - - - ${cfg.statePath}/tmp"
@@ -1129,8 +1136,8 @@ in {
 
         ExecStartPre = let
           preStartFullPrivileges = ''
-            shopt -s dotglob nullglob
-            set -eu
+            set -o errexit -o pipefail -o nounset
+            shopt -s dotglob nullglob inherit_errexit
 
             chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/*
             if [[ -n "$(ls -A '${cfg.statePath}'/config/)" ]]; then
@@ -1140,7 +1147,8 @@ in {
         in "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}";
 
         ExecStart = pkgs.writeShellScript "gitlab-config" ''
-          set -eu
+          set -o errexit -o pipefail -o nounset
+          shopt -s inherit_errexit
 
           umask u=rwx,g=rx,o=
 
@@ -1169,7 +1177,8 @@ in {
             rm -f '${cfg.statePath}/config/database.yml'
 
             ${if cfg.databasePasswordFile != null then ''
-                export db_password="$(<'${cfg.databasePasswordFile}')"
+                db_password="$(<'${cfg.databasePasswordFile}')"
+                export db_password
 
                 if [[ -z "$db_password" ]]; then
                   >&2 echo "Database password was an empty string!"
@@ -1193,10 +1202,11 @@ in {
 
             rm -f '${cfg.statePath}/config/secrets.yml'
 
-            export secret="$(<'${cfg.secrets.secretFile}')"
-            export db="$(<'${cfg.secrets.dbFile}')"
-            export otp="$(<'${cfg.secrets.otpFile}')"
-            export jws="$(<'${cfg.secrets.jwsFile}')"
+            secret="$(<'${cfg.secrets.secretFile}')"
+            db="$(<'${cfg.secrets.dbFile}')"
+            otp="$(<'${cfg.secrets.otpFile}')"
+            jws="$(<'${cfg.secrets.jwsFile}')"
+            export secret db otp jws
             jq -n '{production: {secret_key_base: $ENV.secret,
                     otp_key_base: $ENV.otp,
                     db_key_base: $ENV.db,
@@ -1230,7 +1240,8 @@ in {
         RemainAfterExit = true;
 
         ExecStart = pkgs.writeShellScript "gitlab-db-config" ''
-          set -eu
+          set -o errexit -o pipefail -o nounset
+          shopt -s inherit_errexit
           umask u=rwx,g=rx,o=
 
           initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
@@ -1243,13 +1254,13 @@ in {
     systemd.services.gitlab-sidekiq = {
       after = [
         "network.target"
-        "redis.service"
+        "redis-gitlab.service"
         "postgresql.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
       ];
       bindsTo = [
-        "redis.service"
+        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
       ] ++ optional (cfg.databaseHost == "") "postgresql.service";
@@ -1364,7 +1375,7 @@ in {
 
     systemd.services.gitlab-mailroom = mkIf (gitlabConfig.production.incoming_email.enabled or false) {
       description = "GitLab incoming mail daemon";
-      after = [ "network.target" "redis.service" "gitlab-config.service" ];
+      after = [ "network.target" "redis-gitlab.service" "gitlab-config.service" ];
       bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
@@ -1385,12 +1396,12 @@ in {
       after = [
         "gitlab-workhorse.service"
         "network.target"
-        "redis.service"
+        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
       ];
       bindsTo = [
-        "redis.service"
+        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
       ] ++ optional (cfg.databaseHost == "") "postgresql.service";

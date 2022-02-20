@@ -4,20 +4,21 @@
 , pytest
 , coverage
 , toml
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "pytest-cov";
-  version = "2.12.1";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mzl06m8qcgsac1r2krixrkqdwq0nqk8asrpkcj2ddr7qawfw716";
+    sha256 = "e7f0f5b1617d2210a2cabc266dfe2f4c75a8d32fb89eafb7ad9d06f6d076d470";
   };
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ coverage toml ];
+  propagatedBuildInputs = [ coverage toml tomli ];
 
   # xdist related tests fail with the following error
   # OSError: [Errno 13] Permission denied: 'py/_code'

@@ -40,8 +40,6 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
-  mesonFlags = [ "-Dlibreoffice=false" ];
-
   postPatch = ''
     chmod +x data/meson_post_install.py
     patchShebangs data/meson_post_install.py

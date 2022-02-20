@@ -1,17 +1,30 @@
-{ lib, stdenv, fetchurl, m4 }:
+{ lib, stdenv, fetchFromGitHub, callPackage
+, autoreconfHook, texinfo, libffi
+}:
 
 let
-  version = "0.7.3";
-in
-stdenv.mkDerivation {
+  swig = callPackage ./swig.nix { };
+  bootForth = callPackage ./boot-forth.nix { };
+in stdenv.mkDerivation rec {
+
   pname = "gforth";
-  inherit version;
-  src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/gforth/gforth-${version}.tar.gz";
-    sha256 = "1c1bahc9ypmca8rv2dijiqbangm1d9av286904yw48ph7ciz4qig";
+  version = "0.7.9_20220127";
+
+  src = fetchFromGitHub {
+    owner = "forthy42";
+    repo = "gforth";
+    rev = version;
+    sha256 = "sha256-3+ObHhsPvW44UFiN0GWOhwo7aiqhjwxNY8hw2Wv4MK0=";
   };
 
-  buildInputs = [ m4 ];
+  nativeBuildInputs = [
+    autoreconfHook texinfo bootForth swig
+  ];
+  buildInputs = [
+    libffi
+  ];
+
+  passthru = { inherit bootForth; };
 
   configureFlags = lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
 
@@ -22,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "The Forth implementation of the GNU project";
-    homepage = "https://www.gnu.org/software/gforth/";
+    homepage = "https://github.com/forthy42/gforth";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
   };

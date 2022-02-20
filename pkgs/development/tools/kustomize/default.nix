@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "kustomize";
-  version = "4.4.1";
+  version = "4.5.2";
   # rev is the commit of the tag, mainly for kustomize version command output
   rev = "b2d65ddc98e09187a8e38adc27c30bab078c1dbf";
 
@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "kustomize/v${version}";
-    sha256 = "sha256-gq5SrI1f6ctGIL0Arf8HQMfgnlglwWlsn1r27Ug70gs=";
+    sha256 = "sha256-l24uKKcTt5b7V/IHjJNMtVce55CEGdZVYlCzjUnEp1A=";
   };
 
   doCheck = true;
@@ -25,7 +25,7 @@ buildGoModule rec {
   # avoid finding test and development commands
   sourceRoot = "source/kustomize";
 
-  vendorSha256 = "sha256-2GbRk7A8VwGONmL74cc2TA+MLyJrSSOQPLaded5s90k=";
+  vendorSha256 = "sha256-GR1ohesxjxpMl1B7hWtBUAWWU8X7wHPAKdMoGM5L/VQ=";
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";

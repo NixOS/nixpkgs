@@ -14,6 +14,7 @@
 , numpy
 , pandas
 , parsy
+, poetry-core
 , pyarrow
 , pytest
 , pytest-mock
@@ -49,6 +50,8 @@ in
 buildPythonPackage rec {
   pname = "ibis-framework";
   version = "2.1.1";
+  format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -57,6 +60,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "sha256-n3fR6wvcSfIo7760seB+5SxtoYSqQmqkzZ9VlNQF200=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     atpublic
@@ -75,7 +80,9 @@ buildPythonPackage rec {
     sqlalchemy
     tables
     toolz
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.8" && lib.versionOlder version "3.0.0") [
+    importlib-metadata
+  ];
 
   checkInputs = [
     pytestCheckHook
@@ -85,8 +92,18 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  # these tests are broken upstream: https://github.com/ibis-project/ibis/issues/3291
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'atpublic = ">=2.3,<3"' 'atpublic = ">=2.3"'
+  '';
+
+  preBuild = ''
+    # setup.py exists only for developer convenience and is automatically generated
+    rm setup.py
+  '';
+
   disabledTests = [
+    # These tests are broken upstream: https://github.com/ibis-project/ibis/issues/3291
     "test_summary_numeric"
     "test_summary_non_numeric"
     "test_batting_most_hits"
@@ -126,11 +143,13 @@ buildPythonPackage rec {
     done
 
     wait
-
+  '' + lib.optionalString (lib.versionOlder version "3.0.0") ''
     export PYTEST_BACKENDS="${backendsString}"
   '';
 
-  pythonImportsCheck = [ "ibis" ] ++ (map (backend: "ibis.backends.${backend}") backends);
+  pythonImportsCheck = [
+    "ibis"
+  ] ++ (map (backend: "ibis.backends.${backend}") backends);
 
   meta = with lib; {
     description = "Productivity-centric Python Big Data Framework";

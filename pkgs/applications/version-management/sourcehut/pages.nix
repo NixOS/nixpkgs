@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "pagessrht";
-  version = "0.5.2";
+  version = "0.6.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "pages.sr.ht";
     rev = version;
-    sha256 = "sha256-yEM122uhF0MNkMlNXyvBSfkLogRQETeuBl2K66kivac=";
+    sha256 = "sha256-ob0+t9V2o8lhVC6fXbi1rNm0Mnbs+GoyAmhBqVZ13PA=";
   };
 
-  vendorSha256 = "sha256-udr+1y5ApQCSPhs3yQTTi9QfzRbz0A9COYuFMjQGa74=";
+  vendorSha256 = "sha256-b0sHSH0jkKoIVq045N96wszuLJDegkkj0v50nuDFleU=";
 
   postInstall = ''
     mkdir -p $out/share/sql/

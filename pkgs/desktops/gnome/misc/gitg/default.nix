@@ -12,11 +12,11 @@
 , bash
 , gobject-introspection
 , libsoup
-, gtksourceview
+, gtksourceview4
 , gsettings-desktop-schemas
 , adwaita-icon-theme
 , gnome
-, gtkspell3
+, gspell
 , shared-mime-info
 , libgee
 , libgit2-glib
@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gitg";
-  version = "3.32.1";
+  version = "41";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0npg4kqpwl992fgjd2cn3fh84aiwpdp9kd8z7rw2xaj2iazsm914";
+    sha256 = "f7Ybn7EPuqVI0j1wZbq9cq1j5iHeVYQMBlzm45hsRik=";
   };
 
   nativeBuildInputs = [
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
     glib
     gsettings-desktop-schemas
     gtk3
-    gtksourceview
-    gtkspell3
+    gtksourceview4
+    gspell
     json-glib
     libdazzle
     libgee

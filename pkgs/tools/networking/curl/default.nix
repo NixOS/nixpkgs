@@ -1,12 +1,8 @@
-{ stdenv, lib, fetchurl, pkg-config, perl
-, http2Support ? true, nghttp2
-, idnSupport ? false, libidn ? null
-, ldapSupport ? false, openldap ? null
-, zlibSupport ? true, zlib ? null
-, opensslSupport ? zlibSupport, openssl ? null
+{ lib, stdenv, fetchurl, pkg-config, perl
+, brotliSupport ? false, brotli ? null
+, c-aresSupport ? false, c-ares ? null
 , gnutlsSupport ? false, gnutls ? null
-, wolfsslSupport ? false, wolfssl ? null
-, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
+, gsaslSupport ? false, gsasl ? null
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
     # disable gss becuase of: undefined reference to `k5_bcmp'
@@ -17,8 +13,17 @@
     # not worth the effort.
     !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
   ), libkrb5 ? null
-, c-aresSupport ? false, c-ares ? null
-, brotliSupport ? false, brotli ? null
+, http2Support ? true, nghttp2 ? null
+, http3Support ? false, nghttp3, ngtcp2 ? null
+, idnSupport ? false, libidn2 ? null
+, ldapSupport ? false, openldap ? null
+, opensslSupport ? zlibSupport, openssl ? null
+, pslSupport ? false, libpsl ? null
+, rtmpSupport ? false, rtmpdump ? null
+, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
+, wolfsslSupport ? false, wolfssl ? null
+, zlibSupport ? true, zlib ? null
+, zstdSupport ? false, zstd ? null
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -26,31 +31,37 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-assert http2Support -> nghttp2 != null;
-assert idnSupport -> libidn != null;
-assert ldapSupport -> openldap != null;
-assert zlibSupport -> zlib != null;
-assert opensslSupport -> openssl != null;
 assert !(gnutlsSupport && opensslSupport);
 assert !(gnutlsSupport && wolfsslSupport);
 assert !(opensslSupport && wolfsslSupport);
-assert gnutlsSupport -> gnutls != null;
-assert wolfsslSupport -> wolfssl != null;
-assert scpSupport -> libssh2 != null;
-assert c-aresSupport -> c-ares != null;
 assert brotliSupport -> brotli != null;
+assert c-aresSupport -> c-ares != null;
+assert gnutlsSupport -> gnutls != null;
+assert gsaslSupport -> gsasl != null;
 assert gssSupport -> libkrb5 != null;
+assert http2Support -> nghttp2 != null;
+assert http3Support -> nghttp3 != null;
+assert http3Support -> ngtcp2 != null;
+assert idnSupport -> libidn2 != null;
+assert ldapSupport -> openldap != null;
+assert opensslSupport -> openssl != null;
+assert pslSupport -> libpsl !=null;
+assert rtmpSupport -> rtmpdump !=null;
+assert scpSupport -> libssh2 != null;
+assert wolfsslSupport -> wolfssl != null;
+assert zlibSupport -> zlib != null;
+assert zstdSupport -> zstd != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.80.0";
+  version = "7.81.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "170qb2w2p5fga0vqhhnzi417z4h4vy764sz16pzhm5fd9471a3fx";
+    sha256 = "sha256-Hno41wGOwGDx8W34OYVPCInpThIsTPpdOjfC3Fbx4lg=";
   };
 
   patches = [
@@ -70,17 +81,22 @@ stdenv.mkDerivation rec {
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
   propagatedBuildInputs = with lib;
-    optional http2Support nghttp2 ++
-    optional idnSupport libidn ++
-    optional ldapSupport openldap ++
-    optional zlibSupport zlib ++
-    optional gssSupport libkrb5 ++
+    optional brotliSupport brotli ++
     optional c-aresSupport c-ares ++
-    optional opensslSupport openssl ++
     optional gnutlsSupport gnutls ++
-    optional wolfsslSupport wolfssl ++
+    optional gsaslSupport gsasl ++
+    optional gssSupport libkrb5 ++
+    optional http2Support nghttp2 ++
+    optionals http3Support [ nghttp3 ngtcp2 ] ++
+    optional idnSupport libidn2 ++
+    optional ldapSupport openldap ++
+    optional opensslSupport openssl ++
+    optional pslSupport libpsl ++
+    optional rtmpSupport rtmpdump ++
     optional scpSupport libssh2 ++
-    optional brotliSupport brotli;
+    optional wolfsslSupport wolfssl ++
+    optional zlibSupport zlib ++
+    optional zstdSupport zstd;
 
   # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''
@@ -89,23 +105,28 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+      # Build without manual
+      "--disable-manual"
       # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
       # to nss-cacert from the default profile.
       "--without-ca-bundle"
       "--without-ca-path"
-      # The build fails when using wolfssl with --with-ca-fallback
-      (lib.withFeature (!wolfsslSupport) "ca-fallback")
-      "--disable-manual"
-      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
-      (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
-      (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
+      (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
-      (lib.withFeatureAs idnSupport "libidn" (lib.getDev libidn))
-      (lib.withFeature brotliSupport "brotli")
+      # The build fails when using wolfssl with --with-ca-fallback
+      (lib.withFeature (!wolfsslSupport) "ca-fallback")
+      (lib.withFeature http3Support "nghttp3")
+      (lib.withFeature http3Support "ngtcp2")
+      (lib.withFeature rtmpSupport "librtmp")
+      (lib.withFeature zstdSupport "zstd")
+      (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
+      (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
+      (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
+      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
+      (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
+      (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
     ]
-    ++ lib.optional wolfsslSupport "--with-wolfssl=${lib.getDev wolfssl}"
-    ++ lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
        # For the 'urandom', maybe it should be a cross-system option
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)

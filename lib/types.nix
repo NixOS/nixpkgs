@@ -32,7 +32,6 @@ let
     last
     length
     tail
-    unique
     ;
   inherit (lib.attrsets)
     attrNames
@@ -48,6 +47,7 @@ let
     mergeDefaultOption
     mergeEqualOption
     mergeOneOption
+    mergeUniqueOption
     showFiles
     showOption
     ;
@@ -470,6 +470,18 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
+    unique = { message }: type: mkOptionType rec {
+      name = "unique";
+      inherit (type) description check;
+      merge = mergeUniqueOption { inherit message; };
+      emptyValue = type.emptyValue;
+      getSubOptions = type.getSubOptions;
+      getSubModules = type.getSubModules;
+      substSubModules = m: uniq (type.substSubModules m);
+      functor = (defaultFunctor name) // { wrapped = type; };
+      nestedTypes.elemType = type;
+    };
+
     # Null or value of ...
     nullOr = elemType: mkOptionType rec {
       name = "nullOr";
@@ -599,6 +611,7 @@ rec {
     # A value from a set of allowed ones.
     enum = values:
       let
+        inherit (lib.lists) unique;
         show = v:
                if builtins.isString v then ''"${v}"''
           else if builtins.isInt v then builtins.toString v

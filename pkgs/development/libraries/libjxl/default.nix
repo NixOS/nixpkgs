@@ -8,6 +8,7 @@
 , giflib
 , gperftools
 , gtest
+, libhwy
 , libjpeg
 , libpng
 , libwebp
@@ -37,14 +38,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libjxl/libjxl/commit/88fe3fff3dc70c72405f57c69feffd9823930034.patch";
       sha256 = "1419fyiq4srpj72cynwyvqy8ldi7vn9asvkp5fsbmiqkyhb15jpk";
     })
-  ];
 
-  # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
-  # unless we disable highway's tests
-  postPatch = lib.optional stdenv.isDarwin ''
-    substituteInPlace third_party/highway/CMakeLists.txt \
-      --replace 'if(BUILD_TESTING)' 'if(false)'
-  '';
+    # "robust statistics" have been removed in upstream mainline as they are
+    # conidered to cause "interoperability problems". sure enough the tests
+    # fail with precision issues on aarch64.
+    (fetchpatch {
+      name = "remove-robust-and-descriptive-statistics.patch";
+      url = "https://github.com/libjxl/libjxl/commit/204f87a5e4d684544b13900109abf040dc0b402b.patch";
+      sha256 = "sha256-DoAaYWLmQ+R9GZbHMTYGe0gBL9ZesgtB+2WhmbARna8=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoc # for docs
@@ -76,6 +79,7 @@ stdenv.mkDerivation rec {
     brotli
     giflib
     gperftools # provides `libtcmalloc`
+    libhwy
     libjpeg
     libpng
     libwebp
@@ -91,6 +95,9 @@ stdenv.mkDerivation rec {
     # using the vendorered ones is easier.
     "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
 
+    # Use our version of highway, though it is still statically linked in
+    "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
+
     # TODO: Update this package to enable this (overridably via an option):
     # Viewer tools for evaluation.
     # "-DJPEGXL_ENABLE_VIEWERS=ON"
@@ -102,13 +109,17 @@ stdenv.mkDerivation rec {
     # "-DJPEGXL_ENABLE_PLUGINS=ON"
   ];
 
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+
   doCheck = true;
 
   # The test driver runs a test `LibraryCLinkageTest` which without
   # LD_LIBRARY_PATH setting errors with:
   #     /build/source/build/tools/tests/libjxl_test: error while loading shared libraries: libjxl.so.0
   # The required file is in the build directory (`$PWD`).
-  preCheck = ''
+  preCheck = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD
+  '' else ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
   '';
 
@@ -118,6 +129,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ nh2 ];
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isAarch64; # `internal compiler error`, see https://github.com/NixOS/nixpkgs/pull/103160#issuecomment-866388610
   };
 }

@@ -27,7 +27,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-topkg-${version}";
+  pname = "ocaml${ocaml.version}-topkg";
   inherit (param) version;
 
   src = fetchurl {

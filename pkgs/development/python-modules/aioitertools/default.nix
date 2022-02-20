@@ -1,20 +1,26 @@
 { lib
-
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
 , pythonAtLeast
 , pythonOlder
+
+# native
+, flit-core
+
+# propagates
 , typing-extensions
-, coverage
+
+# tests
 , python
-, toml
 }:
 
 buildPythonPackage rec {
   pname = "aioitertools";
   version = "0.8.0";
-  disabled = pythonOlder "3.7";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,11 +36,20 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ typing-extensions ];
-  checkInputs = [ coverage toml ];
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
+  pythonImportsCheck = [
+    "aioitertools"
+  ];
 
   checkPhase = ''
-    ${python.interpreter} -m coverage run -m aioitertools.tests
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = with lib; {

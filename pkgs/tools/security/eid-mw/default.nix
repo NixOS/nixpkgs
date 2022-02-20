@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Belgian electronic identity card (eID) middleware";
-    homepage = "https://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/";
+    homepage = "https://eid.belgium.be/en";
     license = licenses.lgpl3Only;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.

@@ -54,13 +54,13 @@ let base = {
   });
 
   firebird_3 = stdenv.mkDerivation (base // rec {
-    version = "3.0.7";
+    version = "3.0.8";
 
     src = fetchFromGitHub {
       owner = "FirebirdSQL";
       repo = "firebird";
-      rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
-      sha256 = "sha256-8nGan10qjW8dFF89BL/tUWtwMGhahBiODbOqRrHSrbs=";
+      rev = "v${version}";
+      sha256 = "sha256-l1V3CGxTybPY8pl6WhsExqdWJLiYsOv5BCrU/iD+I7k=";
     };
 
     buildInputs = base.buildInputs ++ [ zlib libtommath ];
@@ -69,13 +69,13 @@ let base = {
   });
 
   firebird_4 = stdenv.mkDerivation (base // rec {
-    version = "4.0.0";
+    version = "4.0.1";
 
     src = fetchFromGitHub {
       owner = "FirebirdSQL";
       repo = "firebird";
       rev = "v${version}";
-      sha256 = "sha256-Pc3hUAhXgpa6VOkjidfh/vS/60Gtjenid8nHnIH7s0E=";
+      sha256 = "sha256-0XUu1g/VTrklA3vCpX6HWr7sdW2eQupnelpFNSGcouM=";
     };
 
     buildInputs = base.buildInputs ++ [ zlib unzip libtommath libtomcrypt ];

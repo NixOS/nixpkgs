@@ -36,12 +36,12 @@ in {
       client1.wait_for_x()
       client2.wait_for_x()
 
-      client1.execute("teeworlds 'player_name Alice;connect server'&")
+      client1.execute("teeworlds 'player_name Alice;connect server' >&2 &")
       server.wait_until_succeeds(
           'journalctl -u teeworlds -e | grep --extended-regexp -q "team_join player=\'[0-9]:Alice"'
       )
 
-      client2.execute("teeworlds 'player_name Bob;connect server'&")
+      client2.execute("teeworlds 'player_name Bob;connect server' >&2 &")
       server.wait_until_succeeds(
           'journalctl -u teeworlds -e | grep --extended-regexp -q "team_join player=\'[0-9]:Bob"'
       )

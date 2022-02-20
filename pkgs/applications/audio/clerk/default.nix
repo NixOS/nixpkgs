@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , makeWrapper
 , rofi
-, mpc_cli
+, mpc-cli
 , perl
 , util-linux
 , python3Packages
@@ -28,11 +28,24 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  installPhase = ''
-    DESTDIR=$out PREFIX=/ make install
-    wrapProgram $out/bin/clerk \
-      --prefix PATH : "${lib.makeBinPath [ rofi mpc_cli perl util-linux libnotify ]}"
-  '';
+  installPhase =
+    let
+      binPath = lib.makeBinPath [
+        libnotify
+        mpc-cli
+        perl
+        rofi
+        util-linux
+      ];
+    in
+      ''
+        runHook preInstall
+
+        DESTDIR=$out PREFIX=/ make install
+        wrapProgram $out/bin/clerk --prefix PATH : "${binPath}"
+
+        runHook postInstall
+      '';
 
   meta = with lib; {
     description = "An MPD client built on top of rofi";

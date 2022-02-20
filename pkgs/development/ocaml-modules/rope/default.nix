@@ -23,7 +23,8 @@ let param =
 in
 
 stdenv.mkDerivation ({
-  name = "ocaml${ocaml.version}-rope-${param.version}";
+  pname = "ocaml${ocaml.version}-rope";
+  inherit (param) version;
 
   src = fetchurl {
     inherit (param) url sha256;

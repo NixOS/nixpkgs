@@ -15,6 +15,16 @@ let
         doCheck = false;
       });
 
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
+        };
+        SETUPTOOLS_SCM_PRETEND_VERSION = version;
+        doCheck = false;
+      });
+
     };
   };
 in
@@ -22,13 +32,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.727";
+  version = "2.0.873";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-hegbkmM8ZN6zO2iANGRr2QRW3ErdtwYaTo618uELev0=";
+    hash = "sha256-81gNvfaFqTEGReOP7LgcN5OLU3xeO62r/45b5lEEgow=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -60,6 +70,7 @@ buildPythonApplication rec {
     networkx
     packaging
     policyuniverse
+    prettytable
     pyyaml
     semantic-version
     tabulate
@@ -71,7 +82,6 @@ buildPythonApplication rec {
 
   checkInputs = with py.pkgs; [
     aioresponses
-    jsonschema
     mock
     pytest-asyncio
     pytest-mock
@@ -82,7 +92,11 @@ buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "cyclonedx-python-lib>=0.11.0,<1.0.0" "cyclonedx-python-lib>=0.11.0" \
-      --replace "jsonschema==3.0.2" "jsonschema>=3.0.2"
+      --replace "prettytable>=3.0.0" "prettytable"
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
   disabledTests = [
@@ -92,6 +106,11 @@ buildPythonApplication rec {
     "TestSarifReport"
     # Will probably be fixed in one of the next releases
     "test_valid_cyclonedx_bom"
+    "test_record_relative_path_with_direct_oberlay"
+    "test_record_relative_path_with_direct_prod2_oberlay"
+    # Requires prettytable release which is only available in staging
+    "test_skipped_check_exists"
+    "test_record_relative_path_with_relative_dir"
   ];
 
   disabledTestPaths = [
@@ -101,6 +120,9 @@ buildPythonApplication rec {
     "tests/terraform/"
     # Performance tests have no value for us
     "performance_tests/test_checkov_performance.py"
+    # Requires prettytable release which is only available in staging
+    "tests/sca_package/"
+    "tests/test_runner_filter.py"
   ];
 
   pythonImportsCheck = [

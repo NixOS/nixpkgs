@@ -131,7 +131,7 @@ in {
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      aliases = [ "bitwarden_rs" ];
+      aliases = [ "bitwarden_rs.service" ];
       after = [ "network.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {

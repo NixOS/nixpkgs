@@ -226,6 +226,15 @@ let
       '';
     };
 
+    near-cli = super.near-cli.override {
+      nativeBuildInputs = with pkgs; [
+        libusb
+        nodePackages.prebuild-install
+        nodePackages.node-gyp-build
+        pkg-config
+      ];
+    };
+
     node-inspector = super.node-inspector.override {
       buildInputs = [ self.node-pre-gyp ];
       meta.broken = since "10";
@@ -373,18 +382,24 @@ let
       meta.broken = since "10";
     };
 
-    tailwindcss = super.tailwindcss.override {
+    tailwindcss = super.tailwindcss.overrideAttrs (oldAttrs: {
+      plugins = [ ];
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
+        nodePath=""
+        for p in "$out" "${self.postcss}" $plugins; do
+          nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
+        done
         wrapProgram "$out/bin/tailwind" \
-          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+          --prefix NODE_PATH : "$nodePath"
         wrapProgram "$out/bin/tailwindcss" \
-          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+          --prefix NODE_PATH : "$nodePath"
+        unset nodePath
       '';
       passthru.tests = {
         simple-execution = pkgs.callPackage ./package-tests/tailwindcss.nix { inherit (self) tailwindcss; };
       };
-    };
+    });
 
     tedicross = super."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -413,6 +428,10 @@ let
     teck-programmer = super.teck-programmer.override {
       nativeBuildInputs = [ self.node-gyp-build ];
       buildInputs = [ pkgs.libusb1 ];
+    };
+
+    uppy-companion = super."@uppy/companion".override {
+      name = "uppy-companion";
     };
 
     vega-cli = super.vega-cli.override {

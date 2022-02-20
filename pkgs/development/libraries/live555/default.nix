@@ -1,23 +1,38 @@
-{ stdenv, fetchurl, lib, darwin }:
+{ lib
+, stdenv
+, fetchurl
+, darwin
+, openssl
 
-# Based on https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD
+# major and only downstream dependency
+, vlc
+}:
+
 stdenv.mkDerivation rec {
   pname = "live555";
-  version = "2019.11.22";
+  version = "2022.01.21";
 
-  src = fetchurl { # the upstream doesn't provide a stable URL
+  src = fetchurl {
     urls = [
-      "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
+      "http://www.live555.com/liveMedia/public/live.${version}.tar.gz"
       "https://download.videolan.org/contrib/live555/live.${version}.tar.gz"
+      "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
     ];
-    sha256 = "144y2wsfpaclkj7srx85f3y3parzn7vbjmzc2afc62wdsb9gn46d";
+    sha256 = "sha256-diV5wULbOrqMRDCyI9NjVaR6JUbYl9KWHUlvA/jjqQ4=";
   };
 
+  nativeBuildInputs = lib.optional stdenv.isDarwin darwin.cctools;
+
+  buildInputs = [ openssl ];
+
   postPatch = ''
-    sed 's,/bin/rm,rm,g' -i genMakefiles
-    sed \
+    substituteInPlace config.macosx-catalina \
+      --replace '/usr/lib/libssl.46.dylib' "${openssl.out}/lib/libssl.dylib" \
+      --replace '/usr/lib/libcrypto.44.dylib' "${openssl.out}/lib/libcrypto.dylib"
+    sed -i -e 's|/bin/rm|rm|g' genMakefiles
+    sed -i \
       -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
-      -i config.linux
+      config.linux
   '' + lib.optionalString (stdenv ? glibc) ''
     substituteInPlace liveMedia/include/Locale.hh \
       --replace '<xlocale.h>' '<locale.h>'
@@ -27,7 +42,7 @@ stdenv.mkDerivation rec {
     runHook preConfigure
 
     ./genMakefiles ${{
-      x86_64-darwin = "macosx";
+      x86_64-darwin = "macosx-catalina";
       i686-linux = "linux";
       x86_64-linux = "linux-64bit";
       aarch64-linux = "linux-64bit";
@@ -48,15 +63,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin darwin.cctools;
-
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    inherit vlc;
+  };
+
   meta = with lib; {
-    description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
     homepage = "http://www.live555.com/liveMedia/";
+    description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
     changelog = "http://www.live555.com/liveMedia/public/changelog.txt";
     license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isAarch64;
   };

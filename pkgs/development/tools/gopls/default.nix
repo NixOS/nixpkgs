@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   modRoot = "gopls";
-  vendorSha256 = "sha256-nKjJjtVHk/RLIHI/5v8tO4RcaLLZhr0A6llYGsB0ifQ=";
+  vendorSha256 = "sha256-8osb5C5G58x9KWCxqiepmN6J0jp+q6aR+As/pJeeTKM=";
 
   doCheck = false;
 

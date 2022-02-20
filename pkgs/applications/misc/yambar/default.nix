@@ -27,18 +27,19 @@
 
 let
   # Courtesy of sternenseemann and FRidh
-  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
+  mesonFeatureFlag = feature: flag:
+    "-D${feature}=${if flag then "enabled" else "disabled"}";
 in
 stdenv.mkDerivation rec {
   pname = "yambar";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "yambar";
     rev = version;
-    sha256 = "sha256-NzJrlPOkzstMbw37yBTah/uFYezlPB/1hrxCiXduSmc=";
+    hash = "sha256-zXhIXT3JrVSllnYheDU2KK3NE2VYa+xuKufIXjdMFjU=";
   };
 
   nativeBuildInputs = [

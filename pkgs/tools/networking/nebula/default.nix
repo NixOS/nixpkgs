@@ -1,6 +1,6 @@
-{ lib, buildGo117Module, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "nebula";
   version = "1.5.2";
 

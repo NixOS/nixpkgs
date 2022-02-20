@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://www.eterm.org";
+    homepage = "https://github.com/mej/Eterm"; # http://www.eterm.org is gone
     description = "Terminal emulator";
     license = licenses.bsd2;
     maintainers = [ maintainers.AndersonTorres ];

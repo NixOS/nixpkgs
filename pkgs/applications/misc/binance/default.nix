@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "binance";
-  version = "1.29.0";
+  version = "1.30.1";
 
   src = fetchurl {
     url = "https://github.com/binance/desktop/releases/download/v${version}/${pname}-${version}-amd64-linux.deb";
-    sha256 = "sha256-LQX5RUTVm6lBdRzCFMBq1NLGGiLBVyykJ1LY9FqINnY=";
+    sha256 = "sha256-Su8pVf5GSBK770D778MmrgYr0ov/JBTNcnL8EZzoG3U=";
   };
 
   nativeBuildInputs = [

@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Ddeveloper_build=false"
     "-Dgobject_overrides_dir_py3=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 

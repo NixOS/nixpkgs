@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-6Xuwl4IpzbVfJ2MhHeImPFWxL/Y6rhnBExlh64PeGdk=";
   };
 
-  vendorSha256 = "sha256-J/2R3XhGNmejc3jstJ0NWmJm/a1Re6UK6AuQb5gzh4E=";
+  vendorSha256 = "sha256-zbfQtTDbVWFVGQyjqlkv3mTvEPkKImzXAIXcmkh4wqk=";
 
   meta = with lib; {
     description = "Terminal file manager";

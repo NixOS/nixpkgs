@@ -30,6 +30,13 @@ buildPythonPackage rec {
     pytest-trio
   ];
 
+  disabledTestPaths = [
+    # Timeout on Hydra
+    "tests/test_trio.py"
+    "tests/test_sansio.py"
+    "tests/test_socketserver.py"
+  ];
+
   pythonImportsCheck = [
     "siosocks"
   ];

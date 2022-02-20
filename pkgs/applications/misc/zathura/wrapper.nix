@@ -11,7 +11,7 @@ symlinkJoin {
   in ''
     makeWrapper ${zathura_core.bin}/bin/zathura $out/bin/zathura \
       --prefix PATH ":" "${lib.makeBinPath [ file ]}" \
-      --add-flags --plugins-dir="$out/lib/zathura"
+      --prefix ZATHURA_PLUGINS_PATH : "$out/lib/zathura"
 
     # zathura fish completion references the zathura_core derivation to
     # check for supported plugins which live in the wrapper derivation,

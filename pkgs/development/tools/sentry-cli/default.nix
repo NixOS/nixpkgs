@@ -9,13 +9,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
-  version = "1.72.0";
+  version = "1.72.2";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-cli";
     rev = version;
-    sha256 = "sha256-2Aj2Y0c8JR8s6Ek7sZfU+5RENkoCVSAxtOvkHilfb48=";
+    sha256 = "sha256-iaU0+sbssHhenz7QgXI9n5J2P5b0Tbw7fdvekRmjEeY=";
   };
   doCheck = false;
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-sSIQ7Wa0otbq82WELxP3oFYa1FoaoZz2jCB59Ob6zNM=";
+  cargoSha256 = "sha256-vz0qSKFoM5kRgATshQ8W+yJTtWyQRvHp22t4nsJHqG0=";
 
   meta = with lib; {
     homepage = "https://docs.sentry.io/cli/";

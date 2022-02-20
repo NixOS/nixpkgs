@@ -16,13 +16,13 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "black" "blue" "brow
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "unstable-2021-12-24";
+  version = "2022-02-08";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "aa1f1446b6dbc6acfe3ee247e6841369c68e1495";
-    sha256 = "03f79h6kv5vbf92fhpi1wivzvcrfvvdvkhbmy805x4b4wl7qynki";
+    rev = version;
+    sha256 = "08a1jhirvn2x9hhjr0lqqqayhsf446cddapprxpsnsn9q6x2j2gp";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   # These fixup steps are slow and unnecessary for this package.
-  # Package may installs almost 400 000 small files.
+  # Package may install almost 400 000 small files.
   dontPatchELF = true;
   dontRewriteSymlinks = true;
 

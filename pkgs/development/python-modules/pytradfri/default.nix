@@ -9,15 +9,16 @@
 
 buildPythonPackage rec {
   pname = "pytradfri";
-  version = "8.0.1";
+  version = "9.0.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pytradfri";
     rev = version;
-    hash = "sha256-Wxz2P55lc7yJ1OXNXYWb25a+xtMs1sANNc7hE7nawHI=";
+    hash = "sha256-12ol+2CnoPfkxmDGJJAkoafHGpQuWC4lh0N7lSvx2DE=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +30,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pytradfri" ];
+  pythonImportsCheck = [
+    "pytradfri"
+  ];
 
   meta = with lib; {
     description = "Python package to communicate with the IKEA Trådfri ZigBee Gateway";

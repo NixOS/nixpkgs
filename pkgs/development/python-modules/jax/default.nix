@@ -6,6 +6,7 @@
 , numpy
 , opt-einsum
 , pytestCheckHook
+, pytest-xdist
 , pythonOlder
 , scipy
 , typing-extensions
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.2.27";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = pname;
     rev = "${pname}-v${version}";
-    sha256 = "0r1rs1zn0nzf8wpy6g5wrn2yrgi12gg2i7l285ka5d8wczjnbq47";
+    sha256 = "0bpqmyc4hg25i8cfnrx3y2bwgp6h5rri2a1q9i8gb6r0id97zvcn";
   };
 
   patches = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   checkInputs = [
     jaxlib
     pytestCheckHook
+    pytest-xdist
   ];
 
   # NOTE: Don't run the tests in the expiremental directory as they require flax
@@ -52,6 +54,7 @@ buildPythonPackage rec {
   # Not a big deal, this is how the JAX docs suggest running the test suite
   # anyhow.
   pytestFlagsArray = [
+    "-n auto"
     "-W ignore::DeprecationWarning"
     "tests/"
   ];

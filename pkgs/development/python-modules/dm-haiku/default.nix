@@ -4,6 +4,7 @@
 , dill
 , dm-tree
 , fetchFromGitHub
+, jaxlib
 , jmp
 , lib
 , pytestCheckHook
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     chex
     cloudpickle
     dm-tree
+    jaxlib
     pytestCheckHook
     tensorflow
   ];

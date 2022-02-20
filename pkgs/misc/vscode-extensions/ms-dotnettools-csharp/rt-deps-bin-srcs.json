@@ -1,15 +1,63 @@
 {
+  "OmniSharp__x86_64-darwin": {
+    "installPath": ".omnisharp/1.37.16",
+    "binaries": [
+      "./mono.osx",
+      "./run"
+    ],
+    "urls": [
+      "https://download.visualstudio.microsoft.com/download/pr/03c32aa6-7c7a-4936-82a0-fd8f816d112f/0ea1ea1eae48552a1992ed6df782353a/omnisharp-osx-1.37.16.zip",
+      "https://roslynomnisharp.blob.core.windows.net/releases/1.37.16/omnisharp-osx-1.37.16.zip"
+    ],
+    "sha256": "0hhgfx7zs1rljhn3n9c7lci7j15yp2448z3f1d3c47a95l1hmlip"
+  },
   "OmniSharp__x86_64-linux": {
-    "installPath": ".omnisharp/1.37.15",
+    "installPath": ".omnisharp/1.37.16",
     "binaries": [
       "./mono.linux-x86_64",
       "./run"
     ],
     "urls": [
-      "https://download.visualstudio.microsoft.com/download/pr/4fbf71ce-5375-4ca9-b70d-8024ba1b9e0a/b96375395e639233d546a4937be3bd32/omnisharp-linux-x64-1.37.15.zip",
-      "https://roslynomnisharp.blob.core.windows.net/releases/1.37.15/omnisharp-linux-x64-1.37.15.zip"
+      "https://download.visualstudio.microsoft.com/download/pr/03c32aa6-7c7a-4936-82a0-fd8f816d112f/9ae3ed99fc0c41c7139751dde6f2bc78/omnisharp-linux-x64-1.37.16.zip",
+      "https://roslynomnisharp.blob.core.windows.net/releases/1.37.16/omnisharp-linux-x64-1.37.16.zip"
     ],
-    "sha256": "0pchywkxy8niq0i6gq2r43cmf58blfhhj8w8zyibf0m9h09h165s"
+    "sha256": "0a2basc6dw42fnjv9zz93ff0bsw2i3446gvcjx5mn5d8dasi483i"
+  },
+  "Debugger__x86_64-darwin": {
+    "installPath": ".debugger/x86_64",
+    "binaries": [
+      "./vsdbg-ui",
+      "./vsdbg"
+    ],
+    "urls": [
+      "https://download.visualstudio.microsoft.com/download/pr/49f44239-bd47-4fb5-91be-4c91d7638fff/c1122f7141735472d9583c1124024c55/coreclr-debug-osx-x64.zip",
+      "https://vsdebugger.blob.core.windows.net/coreclr-debug-1-23-14/coreclr-debug-osx-x64.zip"
+    ],
+    "sha256": "08z3k0h25gdsbmlxwayd94672hp2z7zmwdmd0nyr9j82izj3ci2m"
+  },
+  "Debugger__aarch64-darwin": {
+    "installPath": ".debugger/arm64",
+    "binaries": [
+      "./vsdbg-ui",
+      "./vsdbg"
+    ],
+    "urls": [
+      "https://download.visualstudio.microsoft.com/download/pr/49f44239-bd47-4fb5-91be-4c91d7638fff/96a88189c7904a517f3bb59b2dba8bd1/coreclr-debug-osx-arm64.zip",
+      "https://vsdebugger.blob.core.windows.net/coreclr-debug-1-23-14/coreclr-debug-osx-arm64.zip"
+    ],
+    "sha256": "113kz02ihvb4y5fj01wamqz2jsql2q7n7f55s9kzs9dsrmq5ffa0"
+  },
+  "Debugger__aarch64-linux": {
+    "installPath": ".debugger",
+    "binaries": [
+      "./vsdbg-ui",
+      "./vsdbg"
+    ],
+    "urls": [
+      "https://download.visualstudio.microsoft.com/download/pr/49f44239-bd47-4fb5-91be-4c91d7638fff/7a723bfbda6d196c52084226b6835b36/coreclr-debug-linux-arm64.zip",
+      "https://vsdebugger.blob.core.windows.net/coreclr-debug-1-23-14/coreclr-debug-linux-arm64.zip"
+    ],
+    "sha256": "1d4a5q3f7qfk3jq2i4f6g50i9i4z8z7g8ss083y9n5c1yj3629kw"
   },
   "Debugger__x86_64-linux": {
     "installPath": ".debugger",
@@ -32,5 +80,15 @@
       "https://download.visualstudio.microsoft.com/download/pr/b8678010-2cd7-4201-a5e7-ba57920607d5/b846e9c7d7afdba54a72fae1dcb6c42c/razorlanguageserver-linux-x64-6.0.0-preview.5.21358.6.zip"
     ],
     "sha256": "0gb36nlb7fgcv03a0awna1qyrsky6ys5gkpsmvxc5j35f1yq337b"
+  },
+  "Razor__x86_64-darwin": {
+    "installPath": ".razor",
+    "binaries": [
+      "./rzls"
+    ],
+    "urls": [
+      "https://download.visualstudio.microsoft.com/download/pr/b8678010-2cd7-4201-a5e7-ba57920607d5/ad846449769eb2ae810d0236823a6aaa/razorlanguageserver-osx-x64-6.0.0-preview.5.21358.6.zip"
+    ],
+    "sha256": "0iqinpwwlqwajdq4i1qbb9hfpfmgy17av95bpw02ad2f9fnyh572"
   }
 }

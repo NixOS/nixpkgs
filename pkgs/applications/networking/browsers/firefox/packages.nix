@@ -7,10 +7,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    version = "96.0.2";
+    version = "97.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "5ceb1f023a9217c6a9c08b6525882d4091f989859cf209cc1d0ea22c846d05a967e1c47102ae052f7a5029d18118a558dd96da00437ee2c6fbf2896caf99d9dd";
+      sha512 = "8620aace77167593aab5acd230860eb3e67eeddc49c0aad0491b5dc20bd0ddb6089dbb8975aed241426f57b2ad772238b04d03b95390175f580cbd80bb6d5f6c";
     };
 
     meta = {
@@ -32,10 +32,10 @@ rec {
 
   firefox-esr-91 = common rec {
     pname = "firefox-esr";
-    version = "91.5.0esr";
+    version = "91.6.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "1712415b6b73c6a21edfefc39eaba5fcbbca54032f78627c0005d291501d16ef4daffb8b9a160d1d5361113ceba04eb5ddb21d903e3dd8d58838aa9596f2d781";
+      sha512 = "3dd1929f93cdd087a93fc3597f32d9005c986b59832954e01a8c2472b179c92ad611eaa73d3fc000a08b838a0b70da73ff5ba82d6009160655ba6894cf04520e";
     };
 
     meta = {
@@ -53,5 +53,30 @@ rec {
       attrPath = "firefox-esr-91-unwrapped";
       versionSuffix = "esr";
     };
+  };
+
+  librewolf =
+  let
+    librewolf-src = callPackage ./librewolf { };
+  in
+  (common rec {
+    pname = "librewolf";
+    binaryName = "librewolf";
+    version = librewolf-src.packageVersion;
+    src = librewolf-src.firefox;
+    inherit (librewolf-src) extraConfigureFlags extraPostPatch extraPassthru;
+
+    meta = {
+      description = "A fork of Firefox, focused on privacy, security and freedom";
+      homepage = "https://librewolf.net/";
+      maintainers = with lib.maintainers; [ squalus ];
+      inherit (firefox.meta) platforms badPlatforms broken maxSilent license;
+    };
+    updateScript = callPackage ./librewolf/update.nix {
+      attrPath = "librewolf-unwrapped";
+    };
+  }).override {
+    crashreporterSupport = false;
+    enableOfficialBranding = false;
   };
 }

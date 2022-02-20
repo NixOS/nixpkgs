@@ -300,18 +300,15 @@ in {
         interpreterSandboxPath = dirOf (dirOf interpreterReg);
       } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"));
     }) cfg.emulatedSystems);
-    # TODO: add a nix.extraPlatforms option to NixOS!
-    nix.extraOptions = lib.mkIf (cfg.emulatedSystems != []) ''
-      extra-platforms = ${toString (cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux")}
-    '';
-    nix.sandboxPaths = lib.mkIf (cfg.emulatedSystems != []) (
-      let
+    nix.settings = lib.mkIf (cfg.emulatedSystems != []) {
+      extra-platforms = cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux";
+      extra-sandbox-paths = let
         ruleFor = system: cfg.registrations.${system};
         hasWrappedRule = lib.any (system: (ruleFor system).wrapInterpreterInShell) cfg.emulatedSystems;
       in [ "/run/binfmt" ]
         ++ lib.optional hasWrappedRule "${pkgs.bash}"
-        ++ (map (system: (ruleFor system).interpreterSandboxPath) cfg.emulatedSystems)
-      );
+        ++ (map (system: (ruleFor system).interpreterSandboxPath) cfg.emulatedSystems);
+    };
 
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf"
       (lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine config.boot.binfmt.registrations));

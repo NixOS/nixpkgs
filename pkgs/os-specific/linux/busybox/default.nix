@@ -66,6 +66,8 @@ stdenv.mkDerivation rec {
     ./busybox-in-store.patch
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
+  separateDebugInfo = true;
+
   postPatch = "patchShebangs .";
 
   configurePhase = ''
@@ -119,6 +121,8 @@ stdenv.mkDerivation rec {
   postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
     makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
+
+  makeFlags = [ "SKIP_STRIP=y" ];
 
   postInstall = ''
     sed -e '

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.16.0";
+  version = "0.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "Levenshtein";
     rev = "v${version}";
-    sha256 = "agshUVkkqogj4FbonFd/rrGisMOomS62NND66YKZvjg=";
+    sha256 = "1a14cw2314jb5lrm979zipzk3av4630lxdr4jzj2wl5qh3yw4w52";
   };
 
   postPatch = ''

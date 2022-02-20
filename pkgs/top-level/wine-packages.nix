@@ -1,51 +1,45 @@
 { stdenv, config, callPackage, wineBuild }:
 
 rec {
-  fonts = callPackage ../misc/emulators/wine/fonts.nix {};
-  minimal = callPackage ../misc/emulators/wine {
+  fonts = callPackage ../applications/emulators/wine/fonts.nix {};
+  minimal = callPackage ../applications/emulators/wine {
     wineRelease = config.wine.release or "stable";
     inherit wineBuild;
   };
 
   base = minimal.override {
-    pngSupport = true;
-    jpegSupport = true;
-    tiffSupport = true;
     gettextSupport = true;
-    fontconfigSupport = true;
-    alsaSupport = true;
+    fontconfigSupport = stdenv.isLinux;
+    alsaSupport = stdenv.isLinux;
     openglSupport = true;
-    vulkanSupport = stdenv.isLinux;
+    vulkanSupport = true;
     tlsSupport = true;
     cupsSupport = true;
-    dbusSupport = true;
-    cairoSupport = true;
+    dbusSupport = stdenv.isLinux;
+    cairoSupport = stdenv.isLinux;
     cursesSupport = true;
-    saneSupport = true;
+    saneSupport = stdenv.isLinux;
     pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
-    udevSupport = true;
-    xineramaSupport = true;
-    xmlSupport = true;
+    udevSupport = stdenv.isLinux;
+    xineramaSupport = stdenv.isLinux;
     sdlSupport = true;
     mingwSupport = true;
+    usbSupport = true;
   };
 
   full = base.override {
-    gtkSupport = true;
+    gtkSupport = stdenv.isLinux;
     gstreamerSupport = true;
-    colorManagementSupport = true;
-    mpg123Support = true;
     openalSupport = true;
     openclSupport = true;
     odbcSupport = true;
-    netapiSupport = true;
-    vaSupport = true;
+    netapiSupport = stdenv.isLinux;
+    vaSupport = stdenv.isLinux;
     pcapSupport = true;
-    v4lSupport = true;
-    gsmSupport = true;
+    v4lSupport = stdenv.isLinux;
     gphoto2Support = true;
+    krb5Support = true;
     ldapSupport = true;
-    faudioSupport = true;
     vkd3dSupport = true;
     embedInstallers = true;
   };

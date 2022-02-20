@@ -20,7 +20,8 @@ let
     inherit version;
 
     src = subsurfaceSrc;
-    sourceRoot = "source/libdivecomputer";
+
+    prePatch = "cd libdivecomputer";
 
     nativeBuildInputs = [ autoreconfHook ];
 

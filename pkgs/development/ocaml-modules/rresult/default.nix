@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-rresult-${version}";
+  pname = "ocaml${ocaml.version}-rresult";
   version = "0.6.0";
   src = fetchurl {
     url = "https://erratique.ch/software/rresult/releases/rresult-${version}.tbz";

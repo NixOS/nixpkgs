@@ -127,7 +127,7 @@ in {
       description = "ConnMan VPN service";
       wantedBy = [ "multi-user.target" ];
       after = [ "syslog.target" ];
-      before = [ "connman" ];
+      before = [ "connman.service" ];
       serviceConfig = {
         Type = "dbus";
         BusName = "net.connman.vpn";
@@ -140,7 +140,7 @@ in {
       description = "D-BUS Service";
       serviceConfig = {
         Name = "net.connman.vpn";
-        before = [ "connman" ];
+        before = [ "connman.service" ];
         ExecStart = "${cfg.package}/sbin/connman-vpnd -n";
         User = "root";
         SystemdService = "connman-vpn.service";

@@ -46,7 +46,7 @@ let
    "8.13.2".sha256     = "1884vbmwmqwn9ngibax6dhnqh4cc02l0s2ajc6jb1xgr0i60whjk";
    "8.14.0".sha256     = "04y2z0qyvag66zanfyc3f9agvmzbn4lsr0p1l7ck6yjhqx7vbm17";
    "8.14.1".sha256     = "0sx78pgx0qw8v7v2r32zzy3l161zipzq95iacda628girim7psnl";
-   "8.15+rc1".sha256   = "sha256:0v9vnx5z2mbsmhdx08rpg0n8jn0d82mimpghn55vkwsscxmcrgnm";
+   "8.15.0".sha256     = "sha256:1ma76wfrpfsl72yh10w1ys2a0vi0mdc2jc79kdc8nrmxkhpw1nxx";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -130,11 +130,12 @@ self = stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ]
     ++ optional buildIde copyDesktopItems
+    ++ optional (buildIde && versionAtLeast "8.10") wrapGAppsHook
     ++ optional (!versionAtLeast "8.6") gnumake42;
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
       (if versionAtLeast "8.10"
-       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme wrapGAppsHook ]
+       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme ]
        else [ ocamlPackages.lablgtk ])
     ++ optional (versionAtLeast "8.14") ocamlPackages.dune_2
   ;
@@ -204,5 +205,6 @@ self = stdenv.mkDerivation {
     branch = coq-version;
     maintainers = with maintainers; [ roconnor thoughtpolice vbgl Zimmi48 ];
     platforms = platforms.unix;
+    mainProgram = "coqide";
   };
 }; in self

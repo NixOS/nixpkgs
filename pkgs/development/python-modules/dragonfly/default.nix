@@ -5,7 +5,7 @@
 , packaging
 , pynput
 , regex
-, lark-parser
+, lark
 , enum34
 , pyperclip
 , six
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'lark-parser == 0.8.*' 'lark-parser'
+    substituteInPlace setup.py --replace 'lark-parser == 0.8.*' 'lark'
     substituteInPlace dragonfly/actions/keyboard/_x11_xdotool.py \
       --replace 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"'
     substituteInPlace dragonfly/windows/x11_window.py \
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     packaging
     pynput
     regex
-    lark-parser
+    lark
     enum34
     pyperclip
     six

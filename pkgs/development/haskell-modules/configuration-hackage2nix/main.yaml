@@ -82,8 +82,6 @@ default-package-overrides:
   - reflex-dom-pandoc < 1.0.0.0
   # 2021-09-07: pin to our current GHC version
   - ghc-api-compat == 8.10.7
-  # 2021-09-14: Pin hiedb to version needed by ghcide
-  - hiedb == 0.4.0.*
   # 2021-10-13: weeder 2.3.0 require GHC == 9.0.*; remove pin when GHC version changes
   - weeder < 2.3.0
   # 2021-10-10: taskwarrior 0.4 requires aeson > 2.0.1.0
@@ -136,6 +134,8 @@ default-package-overrides:
   # On the recommendation of hnix author:
   # https://github.com/NixOS/nixpkgs/pull/154461#issuecomment-1015511883
   - hnix < 0.15
+  # needs http-client >= 0.7.11 which isn't part of Stackage LTS 18
+  - http-client-restricted < 0.0.5
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -169,10 +169,8 @@ extra-packages:
   - brick == 0.64.*                     # 2021-12-03: matterhorn depends on brick < 0.65
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - ormolu == 0.3.*                     # 2021-12-03: for HLS with GHC 9.0.2
-  # 2022-01-08 hls-plugin-api 1.2.0.2 needs lsp < 1.3, but newer than stackage
-  - lsp < 1.3
-  - lsp-types < 1.4
-  - lsp-test < 0.14.0.2
+  - fourmolu == 0.4.*                   # 2022-02-05: for HLS with GHC 9.0.2
+  - ghc-exactprint == 1.4.*             # 2022-02-07: preserve for now, 1.5.0 has a breaking change without type changes
 
 package-maintainers:
   abbradar:
@@ -607,7 +605,6 @@ dont-distribute-packages:
   - dialog
   - ghcjs-dom-webkit
   - gi-webkit
-  - hs-mesos
   - hsqml
   - hsqml-datamodel
   - hsqml-demo-manic
@@ -630,3 +627,6 @@ dont-distribute-packages:
 
   # glade relies on system libglade which is deprecated
   - glade
+
+  # mesos was removed from nixpkgs
+  - hs-mesos

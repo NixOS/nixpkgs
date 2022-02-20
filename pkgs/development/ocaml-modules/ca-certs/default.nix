@@ -18,7 +18,8 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ bos fpath rresult ptime mirage-crypto x509 astring logs ];
 
-  doCheck = true;
+  # Assumes nss-cacert < 3.74 https://github.com/mirage/ca-certs/issues/21
+  doCheck = false;
   checkInputs = [
     cacert    # for /etc/ssl/certs/ca-bundle.crt
     alcotest

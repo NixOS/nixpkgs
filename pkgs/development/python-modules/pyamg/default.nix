@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pyamg";
-  version = "4.1.0";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b4cacfcfd13379762a4551ac059a2e52a093b476ca1ad44b9202e736490a8863";
+    sha256 = "48d9be622049d8363cda84125c45d18b89e0ab7d99be5a93c0246f375ebad344";
   };
 
   propagatedBuildInputs = [

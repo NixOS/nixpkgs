@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rtss";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "Freaky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1936w161mkbcwicrxn51b42pgir5yjiw85s74lbfq70nddw18nyn";
+    sha256 = "sha256-WeeZsB42/4SlIaWwKvOqWiPNV5p0QOToynI8ozVVxJM=";
   };
 
-  cargoSha256 = "1b1xiaaxbw6y80pkzd594dikm372l1mmymf1wn2acmlz979nmas8";
+  cargoSha256 = "sha256-aHK9KBzRbU2IYr7vOdlz0Aw4iYGjD6VedbWPE/V7AVc=";
 
   meta = with lib; {
     description = "Annotate output with relative durations between lines";

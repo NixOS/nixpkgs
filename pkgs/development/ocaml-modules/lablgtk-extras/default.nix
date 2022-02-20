@@ -7,7 +7,7 @@ else
 
 stdenv.mkDerivation rec {
   version = "1.6";
-  name = "ocaml${ocaml.version}-lablgtk-extras-${version}";
+  pname = "ocaml${ocaml.version}-lablgtk-extras";
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";

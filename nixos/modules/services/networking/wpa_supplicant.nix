@@ -10,14 +10,45 @@ let
   cfg = config.networking.wireless;
   opt = options.networking.wireless;
 
+  wpa3Protocols = [ "SAE" "FT-SAE" ];
+  hasMixedWPA = opts:
+    let
+      hasWPA3 = !mutuallyExclusive opts.authProtocols wpa3Protocols;
+      others = subtractLists wpa3Protocols opts.authProtocols;
+    in hasWPA3 && others != [];
+
+  # Gives a WPA3 network higher priority
+  increaseWPA3Priority = opts:
+    opts // optionalAttrs (hasMixedWPA opts)
+      { priority = if opts.priority == null
+                     then 1
+                     else opts.priority + 1;
+      };
+
+  # Creates a WPA2 fallback network
+  mkWPA2Fallback = opts:
+    opts // { authProtocols = subtractLists wpa3Protocols opts.authProtocols; };
+
+  # Networks attrset as a list
+  networkList = mapAttrsToList (ssid: opts: opts // { inherit ssid; })
+                cfg.networks;
+
+  # List of all networks (normal + generated fallbacks)
+  allNetworks =
+    if cfg.fallbackToWPA2
+      then map increaseWPA3Priority networkList
+           ++ map mkWPA2Fallback (filter hasMixedWPA networkList)
+      else networkList;
+
   # Content of wpa_supplicant.conf
   generatedConfig = concatStringsSep "\n" (
-    (mapAttrsToList mkNetwork cfg.networks)
+    (map mkNetwork allNetworks)
     ++ optional cfg.userControlled.enable (concatStringsSep "\n"
       [ "ctrl_interface=/run/wpa_supplicant"
         "ctrl_interface_group=${cfg.userControlled.group}"
         "update_config=1"
       ])
+    ++ [ "pmf=1" ]
     ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
     ++ optional (cfg.extraConfig != "") cfg.extraConfig);
 
@@ -33,7 +64,7 @@ let
   finalConfig = ''"$RUNTIME_DIRECTORY"/wpa_supplicant.conf'';
 
   # Creates a network block for wpa_supplicant.conf
-  mkNetwork = ssid: opts:
+  mkNetwork = opts:
   let
     quote = x: ''"${x}"'';
     indent = x: "  " + x;
@@ -43,7 +74,7 @@ let
       else opts.pskRaw;
 
     options = [
-      "ssid=${quote ssid}"
+      "ssid=${quote opts.ssid}"
       (if pskString != null || opts.auth != null
         then "key_mgmt=${concatStringsSep " " opts.authProtocols}"
         else "key_mgmt=NONE")
@@ -172,6 +203,18 @@ in {
           Whether to periodically scan for (better) networks when the signal of
           the current one is low. This will make roaming between access points
           faster, but will consume more power.
+        '';
+      };
+
+      fallbackToWPA2 = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to fall back to WPA2 authentication protocols if WPA3 failed.
+          This allows old wireless cards (that lack recent features required by
+          WPA3) to connect to mixed WPA2/WPA3 access points.
+
+          To avoid possible downgrade attacks, disable this options.
         '';
       };
 

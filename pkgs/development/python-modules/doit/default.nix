@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "doit";
-  version = "0.34.1";
+  version = "0.34.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "49467c1bf8850a292e5fd0254ee1b219f6fd8202a0d3d4bf33af3c2dfb58d688";
+    sha256 = "sha256-OIER+Kals7RGIM7rKH0FhZJ8hdDW0/h5DTT7tFwM9sM=";
   };
 
   propagatedBuildInputs = [ cloudpickle ]

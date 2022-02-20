@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
     pname = "sapi-python-client";
-    version = "0.1.3";
+    version = "0.4.1";
 
     src = fetchFromGitHub {
         owner = "keboola";
         repo = pname;
         rev  = version;
-        sha256 = "1xja4v5d30hy26lfys21vcz1lcs88v8mvjxwl2dc3wxx2pzdvcf6";
+        sha256 = "189dzj06vzp7366h2qsfvbjmw9qgl7jbp8syhynn9yvrjqp4k8h3";
     };
 
     postPatch = ''

@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl, fetchpatch
 , autoreconfHook
 
+, doCheck ? true # test suite depends on dejagnu which cannot be used during bootstrapping
+, dejagnu
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -38,6 +40,10 @@ stdenv.mkDerivation rec {
   '';
 
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform; # Don't run the native `strip' when cross-compiling.
+
+  inherit doCheck;
+
+  checkInputs = [ dejagnu ];
 
   meta = with lib; {
     description = "A foreign function call interface library";

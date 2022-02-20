@@ -7,22 +7,23 @@
 , charset-normalizer
 , fetchPypi
 , idna
+, isPy27
+, isPy3k
+, pysocks
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
-, urllib3
-, isPy27
-, isPy3k
 , trustme
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.26.0";
+  version = "2.27.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uKpY+M95P/2HgtPYyxnmbvNverpDU+7IWedGeLAbB6c=";
+    hash = "sha256-aNfFb9WomZiHco7zBKbRLtx7508c+kdxT8i0FFJcmmE=";
   };
 
   patches = [
@@ -32,7 +33,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Use latest idna
-    substituteInPlace setup.py --replace ",<3" ""
+    substituteInPlace setup.py \
+      --replace ",<3" ""
   '';
 
   propagatedBuildInputs = [
@@ -48,6 +50,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pysocks
     pytest-mock
     pytest-xdist
     pytestCheckHook
@@ -73,11 +76,13 @@ buildPythonPackage rec {
     "TestTimeout"
   ];
 
-  pythonImportsCheck = [ "requests" ];
+  pythonImportsCheck = [
+    "requests"
+  ];
 
   meta = with lib; {
-    description = "Simple HTTP library for Python";
-    homepage = "http://docs.python-requests.org/en/latest/";
+    description = "HTTP library for Python";
+    homepage = "http://docs.python-requests.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixosTests, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.step-ca;
   settingsFormat = (pkgs.formats.json { });
@@ -82,8 +82,6 @@ in
       });
     in
     {
-      passthru.tests.step-ca = nixosTests.step-ca;
-
       assertions =
         [
           {

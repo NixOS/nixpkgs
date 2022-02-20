@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "love";
-  version = "0.10.2";
+  version = "11.4";
 
   src = fetchFromGitHub {
     owner = "love2d";
     repo = "love";
     rev = version;
-    sha256 = "19yfmlcx6w8yi4ndm5lni8lrsvnn77bxw5py0dc293nzzlaqa9ym";
+    sha256 = "sha256-C/Ifd0KjmaM5Y2fxBiDNz1GQoT4GeH/vyUCiira57U4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

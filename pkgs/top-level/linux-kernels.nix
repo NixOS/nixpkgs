@@ -288,6 +288,8 @@ in {
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
 
+    dpdk = pkgs.dpdk.override { inherit kernel; };
+
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
     evdi = callPackage ../os-specific/linux/evdi { };
@@ -436,7 +438,9 @@ in {
     veikk-linux-driver = callPackage ../os-specific/linux/veikk-linux-driver { };
     vendor-reset = callPackage ../os-specific/linux/vendor-reset { };
 
-    vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
+    vhba = callPackage ../applications/emulators/cdemu/vhba.nix { };
+
+    virtio_vmmci  = callPackage ../os-specific/linux/virtio_vmmci { };
 
     virtualbox = callPackage ../os-specific/linux/virtualbox {
       virtualbox = pkgs.virtualboxHardened;

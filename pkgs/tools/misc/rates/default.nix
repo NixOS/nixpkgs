@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rates";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "lunush";
     repo = pname;
     rev = version;
-    sha256 = "077qxs4kwfprsai07dninkhmj3ihnghdxan98iv8gmsl3pijbgwh";
+    sha256 = "sha256-ivJ6rD4+EYeMg6nOWzf3lp521+7NTBq5vCn7648q0T8=";
   };
 
-  cargoSha256 = "041sskiq152iywwqd8p7aqsqzbj359zl7ilnp8ahzdqprz3slk1w";
+  cargoSha256 = "sha256-dsWAxYFB096SZN5tfzEMokdQ8qw1aR/6Hmjtkdw1L8E=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

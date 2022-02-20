@@ -6,24 +6,24 @@
 , substituteAll
 , nix-update-script
   # To include additional plugins, pass them here as an overlay.
-, packageOverrides ? self: super: {}
+, packageOverrides ? self: super: { }
 }:
 let
   mkOverride = attrname: version: sha256:
-  self: super: {
-    ${attrname} = super.${attrname}.overridePythonAttrs (
-      oldAttrs: {
-        inherit version;
-        src = oldAttrs.src.override {
-          inherit version sha256;
-        };
-      }
-    );
-  };
+    self: super: {
+      ${attrname} = super.${attrname}.overridePythonAttrs (
+        oldAttrs: {
+          inherit version;
+          src = oldAttrs.src.override {
+            inherit version sha256;
+          };
+        }
+      );
+    };
 
   py = python3.override {
     self = py;
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: {}) (
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
       [
         # the following dependencies are non trivial to update since later versions introduce backwards incompatible
         # changes that might affect plugins, or due to other observed problems
@@ -57,7 +57,7 @@ let
                 inherit version;
                 sha256 = "6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c";
               };
-              doCheck= false;
+              doCheck = false;
             });
           }
         )
@@ -92,7 +92,7 @@ let
                   pysocks
                 ];
                 disabledTests = [
-                  "testConnect"  # requires network access
+                  "testConnect" # requires network access
                 ];
               }
             );
@@ -154,10 +154,60 @@ let
               disabledTests = [
                 "test_apply_simulates_delivery_info"
                 "test_auto_enabling_integrations_catches_import_error"
+                "test_leaks"
               ];
               disabledTestPaths = [
                 # Don't test integrations
                 "tests/integrations"
+                # test crashes on aarch64
+                "tests/test_transport.py"
+              ];
+            });
+          }
+        )
+
+        # Octoprint fails due to a newly added test in pytest-httpbin
+        # see https://github.com/NixOS/nixpkgs/issues/159864
+        (
+          self: super: {
+            pytest-httpbin = super.pytest-httpbin.overridePythonAttrs (oldAttrs: rec {
+              disabledTests = [
+                "test_redirect_location_is_https_for_secure_server"
+              ];
+            });
+          }
+        )
+
+        # All test fail on aarch64
+        (
+          self: super: {
+            azure-core = super.azure-core.overridePythonAttrs (oldAttrs: rec {
+              doCheck = stdenv.buildPlatform == "x86_64-linux";
+            });
+          }
+        )
+
+        # needs network
+        (
+          self: super: {
+            falcon = super.falcon.overridePythonAttrs (oldAttrs: rec {
+              #pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
+              disabledTestPaths = oldAttrs.disabledTestPaths ++ [
+                "tests/asgi/test_asgi_servers.py"
+              ];
+            });
+          }
+        )
+
+        # update broke some tests
+        (
+          self: super: {
+            sanic = super.sanic.overridePythonAttrs (oldAttrs: rec {
+              disabledTestPaths = oldAttrs.disabledTestPaths ++ [
+                "test_cli.py"
+                "test_cookies.py"
+                # requires network
+                "test_worker.py"
               ];
             });
           }
@@ -223,13 +273,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.7.2";
+              version = "1.7.3";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                sha256 = "sha256-jCfzUx3LQ7TlXKQU8qbhyS1P4Wew/SSgJHVSc1VLdx4=";
+                sha256 = "sha256-U6g7WysHHOlZ4p5BM4tw3GGAxQmxv6ltYgAp1rO/eCg=";
               };
 
               propagatedBuildInputs = with super; [
@@ -302,29 +352,30 @@ let
                 })
               ];
 
-              postPatch = let
-                ignoreVersionConstraints = [
-                  "cachelib"
-                  "colorlog"
-                  "emoji"
-                  "immutabledict"
-                  "PyYAML"
-                  "sarge"
-                  "sentry-sdk"
-                  "watchdog"
-                  "wrapt"
-                  "zeroconf"
-                ];
-              in
+              postPatch =
+                let
+                  ignoreVersionConstraints = [
+                    "cachelib"
+                    "colorlog"
+                    "emoji"
+                    "immutabledict"
+                    "PyYAML"
+                    "sarge"
+                    "sentry-sdk"
+                    "watchdog"
+                    "wrapt"
+                    "zeroconf"
+                  ];
+                in
                 ''
-                  sed -r -i \
-                    ${lib.concatStringsSep "\n" (
-                  map (
-                    e:
-                      ''-e 's@${e}[<>=]+.*@${e}",@g' \''
-                  ) ignoreVersionConstraints
-                )}
-                    setup.py
+                    sed -r -i \
+                      ${lib.concatStringsSep "\n" (
+                    map (
+                      e:
+                        ''-e 's@${e}[<>=]+.*@${e}",@g' \''
+                    ) ignoreVersionConstraints
+                  )}
+                      setup.py
                 '';
 
               dontUseSetuptoolsCheck = true;
@@ -360,4 +411,4 @@ let
     );
   };
 in
-  with py.pkgs; toPythonApplication octoprint
+with py.pkgs; toPythonApplication octoprint
