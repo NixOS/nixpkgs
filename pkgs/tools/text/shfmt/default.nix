@@ -16,6 +16,7 @@ buildGoModule rec {
   subPackages = [ "cmd/shfmt" ];
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  runVend = true;
 
   nativeBuildInputs = [ installShellFiles scdoc ];
 
