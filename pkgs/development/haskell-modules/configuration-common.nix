@@ -198,7 +198,6 @@ self: super: {
   angel = dontCheck super.angel;
   apache-md5 = dontCheck super.apache-md5;              # http://hydra.cryp.to/build/498709/nixlog/1/raw
   app-settings = dontCheck super.app-settings;          # http://hydra.cryp.to/build/497327/log/raw
-  aws = doJailbreak (dontCheck super.aws);              # needs aws credentials, jailbreak for base16-bytestring
   aws-kinesis = dontCheck super.aws-kinesis;            # needs aws credentials for testing
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
   binary-search = dontCheck super.binary-search;
@@ -2182,5 +2181,22 @@ self: super: {
   regex-compat-tdfa = appendPatches [
     ./patches/regex-compat-tdfa-ghc-9.0.patch
   ] super.regex-compat-tdfa;
+
+  # aws upstream seems to lack the necessary maintenance at the moment, luckily
+  # Joey Hess seems to have already looked into building git-annex with aeson 2.0
+  # https://github.com/aristidb/aws/issues/275
+  aws = overrideCabal (drv: {
+    patches = drv.patches or [] ++ [
+      (pkgs.fetchpatch {
+        name = "aws-aeson-2.0-compat.patch";
+        url = "https://github.com/aristidb/aws/pull/277/commits/7af7586c5d244d07f77d49e5fdc739e6e8e54816.patch";
+        sha256 = "1bsiyk1k671rwlyflka2whq972h72cwscrxkr9n2wzhxp70ap3g3";
+        excludes = [ "aws.cabal" ];
+      })
+    ];
+    # needs aws credentials, jailbreak for base16-bytestring
+    doCheck = false;
+    jailbreak = true;
+  }) super.aws;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
