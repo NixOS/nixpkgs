@@ -2138,6 +2138,10 @@ self: super: {
   sdp4unordered = disableLibraryProfiling super.sdp4unordered;
   sdp4vector = disableLibraryProfiling super.sdp4vector;
 
+  # Unnecessarily strict bound on template-haskell
+  # https://github.com/tree-sitter/haskell-tree-sitter/issues/298
+  tree-sitter = doJailbreak super.tree-sitter;
+
   # Test suite fails to compile
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
