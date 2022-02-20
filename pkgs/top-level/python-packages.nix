@@ -5416,6 +5416,8 @@ in {
 
   nevow = callPackage ../development/python-modules/nevow { };
 
+  newversion = callPackage ../development/python-modules/newversion { };
+
   nexia = callPackage ../development/python-modules/nexia { };
 
   nextcloudmonitor = callPackage ../development/python-modules/nextcloudmonitor { };
