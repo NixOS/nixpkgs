@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , zlib
 , pkg-config
 , autoreconfHook
@@ -22,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.9.12";
+  version = "2.9.13";
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "KKkvarHzEaz15HhWTEkIjvCsdwkNnHGbvF1Rjx/mLrk=";
+    sha256 = "J2EwYC0S/khOzANEfuXnWdBGVVj7yda9FE43RTBuvw4=";
   };
 
   patches = [
@@ -46,13 +45,6 @@ stdenv.mkDerivation rec {
     #   https://github.com/NixOS/nixpkgs/pull/63174
     #   https://github.com/NixOS/nixpkgs/pull/72342
     ./utf8-xmlErrorFuncHandler.patch
-
-    # Work around lxml API misuse.
-    # https://gitlab.gnome.org/GNOME/libxml2/issues/255
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libxml2/commit/85b1792e37b131e7a51af98a37f92472e8de5f3f.patch";
-      sha256 = "epqlNs2S0Zczox3KyCB6R2aJKh87lXydlZ0x6tLHweE=";
-    })
   ];
 
   strictDeps = true;
@@ -110,7 +102,7 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = lib.optionalString pythonSupport ''
-    substituteInPlace python/libxml2mod.la --replace "${python}" "$py"
+    substituteInPlace python/libxml2mod.la --replace "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
   '';
 
   postFixup = ''
