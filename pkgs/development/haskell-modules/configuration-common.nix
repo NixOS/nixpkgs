@@ -1923,7 +1923,17 @@ self: super: {
   # https://github.com/ConferOpenSource/composite/issues/50
   # Remove overrides when assert fails.
   composite-base = assert super.composite-base.version == "0.7.5.0";
-    doJailbreak super.composite-base;
+    overrideCabal (drv: {
+      patches = drv.patches or [] ++ [
+        (pkgs.fetchpatch {
+          name = "composite-base-template-haskell-2.17.patch";
+          url = "https://github.com/ConferOpenSource/composite/commit/4ca7562d46a0cdfae3afacf194134db768450a02.patch";
+          sha256 = "143rp8g2bskf2hxszahpg72gvagj4qnw87ikswlbal0p7gfd8zii";
+          stripLen = 1;
+        })
+      ];
+      jailbreak = true;
+    }) super.composite-base;
   composite-aeson = assert super.composite-aeson.version == "0.7.5.0";
     doJailbreak super.composite-aeson;
 
