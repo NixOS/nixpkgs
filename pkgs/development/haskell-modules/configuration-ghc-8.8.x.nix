@@ -121,8 +121,7 @@ self: super: {
   # additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
-  # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
+  ormolu = super.ormolu_0_2_0_0;
 
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
   vector = dontCheck super.vector;
@@ -130,4 +129,17 @@ self: super: {
   ghc-api-compat = doDistribute super.ghc-api-compat_8_6;
 
   mime-string = disableOptimization super.mime-string;
+
+  haskell-language-server = appendConfigureFlags [
+      "-f-fourmolu"
+      "-f-stylishhaskell"
+      "-f-brittany"
+      "-f-hlint"
+    ]
+  (super.haskell-language-server.override {
+    # Not buildable on 8.8
+    hls-fourmolu-plugin = null;
+    # https://github.com/haskell/haskell-language-server/issues/2728
+    hls-hlint-plugin = null;
+  });
 }

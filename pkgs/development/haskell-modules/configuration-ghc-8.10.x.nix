@@ -51,9 +51,10 @@ self: super: {
 
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute self.ghc-api-compat_8_10_7;
-  ghc-lib = doDistribute self.ghc-lib_8_10_7_20210828;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_8_10_7_20210828;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_8_10_0_23;
+
+  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
@@ -86,4 +87,19 @@ self: super: {
 
   mime-string = disableOptimization super.mime-string;
 
+  # Older compilers need the latest ghc-lib to build this package.
+  hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
+
+  haskell-language-server = appendConfigureFlags [
+      "-f-fourmolu"
+      "-f-stylishhaskell"
+      "-f-brittany"
+    ]
+  (super.haskell-language-server.override {
+    # Not buildable on 8.10
+    hls-fourmolu-plugin = null;
+  });
+
+  # ormolu 0.3 requires Cabal == 3.4
+  ormolu = super.ormolu_0_2_0_0;
 }

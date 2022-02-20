@@ -1458,7 +1458,33 @@ self: super: {
   # 2020-11-19: Checks nearly fixed, but still disabled because of flaky tests:
   # https://github.com/haskell/haskell-language-server/issues/610
   # https://github.com/haskell/haskell-language-server/issues/611
-  haskell-language-server = dontCheck super.haskell-language-server;
+  haskell-language-server = pkgs.lib.pipe super.haskell-language-server [
+    dontCheck
+    (appendConfigureFlags ["-ftactics"])
+    (overrideCabal (old: {
+      libraryHaskellDepends = old.libraryHaskellDepends ++ [
+        super.hls-tactics-plugin
+      ];
+    }))
+  ];
+
+  lsp = assert super.lsp.version == "1.4.0.0"; dontCheck super.lsp;
+
+  hls-test-utils = assert super.hls-test-utils.version == "1.2.0.0"; appendPatches [
+    (pkgs.fetchpatch {
+      url = "https://github.com/haskell/haskell-language-server/commit/074593987e9086e308b89ecde336de2c64861dc0.patch";
+      sha256 = "sha256-uTlIbGQKulP3963UPL2V9cqMoIvPscK+s2W/HtBmMWc=";
+      stripLen = 2;
+      extraPrefix = "";
+      includes = [ "*/Util.hs" ];
+    })
+    (pkgs.fetchpatch {
+      url = "https://github.com/haskell/haskell-language-server/commit/78305f21783807b04baebca4860c255bfe84d4ab.patch";
+      sha256 = "sha256-oe8Q8kBJBkel+pR5imFj43NVpm4afcyLgAUCWhrIoPk=";
+      stripLen = 2;
+      extraPrefix = "";
+    })
+   ] super.hls-test-utils;
 
   # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
   hls-eval-plugin = dontCheck super.hls-eval-plugin;
@@ -2211,15 +2237,6 @@ self: super: {
   # Test suite fails to compile
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
-
-  hie-bios = appendPatches [
-    # Accounts for a breaking change in GHC 9.0.2 via CPP
-    (pkgs.fetchpatch {
-      name = "hie-bios-ghc-9.0.2-compat.patch";
-      url = "https://github.com/haskell/hie-bios/commit/da0cb23384cc6e9b393792f8f25a3c174a4edafa.patch";
-      sha256 = "1qj67s93h6pxvdapw1sxy6izwp5y8vjaw67gw3lsnj8gs14fqq4h";
-    })
-  ] super.hie-bios;
 
   # Ships a custom cabal-doctest Setup.hs in the release tarball, but the actual
   # test suite is commented out, so the required dependency is missing naturally.

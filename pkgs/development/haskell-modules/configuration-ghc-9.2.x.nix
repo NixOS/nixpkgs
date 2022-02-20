@@ -47,13 +47,6 @@ self: super: {
     doHaddock = !pkgs.stdenv.isAarch64;
   } super.tf-random;
 
-  aeson = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/aeson-1.5.6.0.patch";
-    sha256 = "07rk7f0lhgilxvbg2grpl1p5x25wjf9m7a0wqmi2jr0q61p9a0nl";
-    # The revision information is newer than that included in the patch
-    excludes = ["*.cabal"];
-  }) (doJailbreak super.aeson);
-
   basement = overrideCabal (drv: {
     # This is inside a conditional block so `doJailbreak` doesn't work
     postPatch = "sed -i -e 's,<4.16,<4.17,' basement.cabal";
@@ -236,7 +229,8 @@ self: super: {
 
   # 2022-02-05: The following plugins don‘t work yet on ghc9.2.
   # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
-  haskell-language-server = appendConfigureFlags [
+  haskell-language-server = overrideCabal (old: {libraryHaskellDepends = builtins.filter (x: x != super.hls-tactics-plugin) old.libraryHaskellDepends;})
+    (appendConfigureFlags [
     "-f-alternateNumberFormat"
     "-f-class"
     "-f-eval"
@@ -244,6 +238,7 @@ self: super: {
     "-f-hlint"
     "-f-retrie"
     "-f-splice"
+    "-f-tactics"
   ] (super.haskell-language-server.override {
     hls-alternate-number-format-plugin = null;
     hls-class-plugin = null;
@@ -252,5 +247,5 @@ self: super: {
     hls-hlint-plugin = null;
     hls-retrie-plugin = null;
     hls-splice-plugin = null;
-  });
+  }));
 }

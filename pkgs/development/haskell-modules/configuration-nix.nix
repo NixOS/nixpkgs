@@ -994,4 +994,5 @@ self: super: builtins.intersectAttrs super {
   hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
   hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
+  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 }
