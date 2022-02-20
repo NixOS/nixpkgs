@@ -849,6 +849,8 @@ mapAliases ({
   pgp-tools = signing-party; # Added 2017-03-26
   pg_tmp = ephemeralpg; # Added 2018-01-16
 
+  phantomjs = throw "phantomjs 1.9.8 has been dropped due to lack of maintenance and security issues"; # Added 2022-02-20
+
   # Obsolete PHP version aliases
   php73 = throw "php73 has been dropped due to the lack of maintanence from upstream for future releases."; # Added 2021-06-03
   php73Packages = php73; # Added 2021-06-03
