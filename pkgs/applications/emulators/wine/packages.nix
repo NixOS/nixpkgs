@@ -1,16 +1,16 @@
-{ stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsCross, callPackage,
+{ stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsCross, callPackage, moltenvk,
   wineRelease ? "stable",
   supportFlags
 }:
 
 let
   src = lib.getAttr wineRelease (callPackage ./sources.nix {});
-  vkd3d = pkgs.callPackage ./vkd3d.nix {};
-  vkd3d_i686 = pkgsi686Linux.callPackage ./vkd3d.nix {};
+  vkd3d = pkgs.callPackage ./vkd3d.nix { inherit moltenvk; };
+  vkd3d_i686 = pkgsi686Linux.callPackage ./vkd3d.nix { inherit moltenvk; };
 in with src; {
   wine32 = pkgsi686Linux.callPackage ./base.nix {
     name = "wine-${version}";
-    inherit src version supportFlags patches;
+    inherit src version supportFlags patches moltenvk;
     pkgArches = [ pkgsi686Linux ];
     vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d_i686 ];
     geckos = [ gecko32 ];
@@ -20,7 +20,7 @@ in with src; {
   };
   wine64 = callPackage ./base.nix {
     name = "wine64-${version}";
-    inherit src version supportFlags patches;
+    inherit src version supportFlags patches moltenvk;
     pkgArches = [ pkgs ];
     vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d ];
     mingwGccs = with pkgsCross; [ mingwW64.buildPackages.gcc ];
@@ -31,7 +31,7 @@ in with src; {
   };
   wineWow = callPackage ./base.nix {
     name = "wine-wow-${version}";
-    inherit src version supportFlags patches;
+    inherit src version supportFlags patches moltenvk;
     stdenv = stdenv_32bit;
     pkgArches = [ pkgs pkgsi686Linux ];
     vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d vkd3d_i686 ];
