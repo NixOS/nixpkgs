@@ -2235,4 +2235,7 @@ self: super: {
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
+  # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
+  system-fileio = doJailbreak super.system-fileio;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
