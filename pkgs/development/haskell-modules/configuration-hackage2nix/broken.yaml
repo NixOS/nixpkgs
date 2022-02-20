@@ -4514,7 +4514,6 @@ broken-packages:
   - simplexmq
   - simple-zipper
   - singleton-dict
-  - singletons-th
   - singleton-typelits
   - singnal
   - singular-factory
