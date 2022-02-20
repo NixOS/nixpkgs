@@ -2,24 +2,41 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "0.21.0";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0q7wsnq5zdskxwzsxwm98jfnv2frnwca1dkhwndcn9yyz2gyw57m";
+    sha256 = "sha256-GrysmFPdSoS7BVK8UVv0R1KBgh3Yu0chNNKbODxhIw8=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "1wlig9gls7s1k1swxwhl82vfga30bady8286livxc4y2zp0vb18w";
+  cargoSha256 = "sha256-Nb+45pkXWRCuggxVdMtC5TsKl85eolNWskrTPKFuR4I=";
 
   nativeBuildInputs = [ python3 cmake clang ];
   buildInputs = [ llvmPackages.libclang ] ++
    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
-  doCheck = true;
+  cargoBuildFlags = [ "--package wasmtime-cli --package wasmtime-c-api" ];
+
+  outputs = [ "out" "dev" ];
+
+  postInstall = ''
+    # move libs from out to dev
+    install -d -m755 $dev/lib
+    install -m644 $out/lib/*.a $dev/lib
+    install -m755 $out/lib/*.so $dev/lib
+    rm -r $out/lib
+
+    install -d -m744 $dev/include/wasmtime
+    install -m644 $src/crates/c-api/include/*.h $dev/include
+    install -m644 $src/crates/c-api/include/wasmtime/*.h $dev/include/wasmtime
+    install -m644 $src/crates/c-api/wasm-c-api/include/* $dev/include
+  '';
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
