@@ -1089,6 +1089,8 @@ with pkgs;
 
   xcd = callPackage ../tools/misc/xcd { };
 
+  xrootd = callPackage ../tools/networking/xrootd { };
+
   xtrt = callPackage ../tools/archivers/xtrt { };
 
   yabridge = callPackage ../tools/audio/yabridge {
