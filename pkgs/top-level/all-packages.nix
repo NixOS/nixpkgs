@@ -1882,6 +1882,10 @@ with pkgs;
     openjdk = openjdk11;
   };
 
+  gremlin-server = callPackage ../applications/misc/gremlin-server {
+    openjdk = openjdk11;
+  };
+
   grex = callPackage ../tools/misc/grex {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
