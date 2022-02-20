@@ -4983,7 +4983,6 @@ broken-packages:
   - th-instance-reification
   - th-kinds
   - th-kinds-fork
-  - th-lego
   - thock
   - thorn
   - th-pprint
