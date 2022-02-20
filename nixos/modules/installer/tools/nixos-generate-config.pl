@@ -52,6 +52,7 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
         $rootDir = $ARGV[$n];
         die "$0: ‘--root’ requires an argument\n" unless defined $rootDir;
         $rootDir =~ s/\/*$//; # remove trailing slashes
+        $rootDir = File::Spec->rel2abs($rootDir); # resolve absolute path
     }
     elsif ($arg eq "--force") {
         $force = 1;
