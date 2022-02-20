@@ -2202,4 +2202,7 @@ self: super: {
     jailbreak = true;
   }) super.aws;
 
+  # The shipped Setup.hs file is broken.
+  csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

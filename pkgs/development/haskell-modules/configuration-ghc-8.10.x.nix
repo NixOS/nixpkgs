@@ -71,9 +71,6 @@ self: super: {
   shellmet = doJailbreak super.shellmet;
   shower = doJailbreak super.shower;
 
-  # The shipped Setup.hs file is broken.
-  csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
-
   # Apply patch from https://github.com/finnsson/template-helper/issues/12#issuecomment-611795375 to fix the build.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
     name = "language-haskell-extract-0.2.4.patch";
