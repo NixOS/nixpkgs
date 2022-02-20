@@ -1,6 +1,7 @@
 { lib, stdenv, bash
 , jdk17, jre8
 , buildFHSUserEnv
+, runCommand
 # `extraJVMs` allows the user to specify additional JVMs to be made available
 # in `/opt/jvms`. This is a path MultiMC searches for Java installs, so these
 # will all be presented in the Java "auto-detect" list in MultiMC.
@@ -58,18 +59,13 @@ javaSymlinkPath = "opt/jdks";
 # This works better than pointing MultiMC at a JVM inside the nix store, as
 # doing that may result in said JVM disappearing when the user collects
 # garbage.
-jvmSymlinks = stdenv.mkDerivation rec {
-  name = "multimc-jvm-symlinks";
-  src = null;
-  dontUnpack = true;
-  installPhase = let
-    jvmInstallCmds = builtins.attrValues (builtins.mapAttrs (name: value:
-      "cp -rsHf ${value} $out/${javaSymlinkPath}/${name}"
-    ) jvms);
-  in ''
+jvmSymlinks = runCommand "multimc-jvm-symlinks" {} ''
     mkdir -p $out/${javaSymlinkPath}
   '' + (builtins.concatStringsSep "\n" jvmInstallCmds);
-};
+
+jvmInstallCmds = builtins.attrValues (builtins.mapAttrs (name: value:
+  "cp -rsHf ${value} $out/${javaSymlinkPath}/${name}"
+) jvms);
 in
 buildFHSUserEnv {
   name = "multimc";
