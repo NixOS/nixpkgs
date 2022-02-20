@@ -30,13 +30,8 @@ in stdenv.mkDerivation rec {
     python3.pkgs.pyelftools
   ];
   buildInputs = [
-    jansson
-    libbpf
-    libelf
-    libpcap
     numactl
-    openssl.dev
-    zlib
+    openssl
     python3
   ] ++ lib.optionals mod kernel.moduleBuildDependencies;
 
@@ -46,6 +41,10 @@ in stdenv.mkDerivation rec {
     rdma-core
     # Requested by pkg-config.
     libbsd
+    libbpf
+    libelf
+    libpcap
+    jansson
   ];
 
   postPatch = ''
