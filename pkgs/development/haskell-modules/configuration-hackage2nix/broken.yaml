@@ -742,8 +742,6 @@ broken-packages:
   - combinatorial-problems
   - combinator-interactive
   - combobuffer
-  - comfort-array-shape
-  - comfort-fftw
   - Command
   - commander
   - Commando
