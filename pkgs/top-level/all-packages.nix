@@ -1089,6 +1089,8 @@ with pkgs;
 
   xcd = callPackage ../tools/misc/xcd { };
 
+  xrootd = callPackage ../tools/networking/xrootd { };
+
   xtrt = callPackage ../tools/archivers/xtrt { };
 
   yabridge = callPackage ../tools/audio/yabridge {
@@ -1877,6 +1879,10 @@ with pkgs;
   };
 
   gremlin-console = callPackage ../applications/misc/gremlin-console {
+    openjdk = openjdk11;
+  };
+
+  gremlin-server = callPackage ../applications/misc/gremlin-server {
     openjdk = openjdk11;
   };
 
@@ -3757,6 +3763,8 @@ with pkgs;
   };
 
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
+
+  skeema = callPackage ../tools/system/skeema {};
 
   syslogng = callPackage ../tools/system/syslog-ng { };
 
@@ -7072,6 +7080,8 @@ with pkgs;
   libcpuid = callPackage ../tools/misc/libcpuid { };
 
   libcsptr = callPackage ../development/libraries/libcsptr { };
+
+  libgovirt = callPackage ../applications/virtualization/libgovirt { };
 
   libscrypt = callPackage ../development/libraries/libscrypt { };
 
@@ -10527,6 +10537,8 @@ with pkgs;
   tryton = callPackage ../applications/office/tryton { };
 
   trytond = with python3Packages; toPythonApplication trytond;
+
+  tuntox = callPackage ../tools/networking/tuntox { };
 
   omapd = callPackage ../tools/security/omapd { };
 
@@ -19709,10 +19721,6 @@ with pkgs;
   readline = readline6;
   readline6 = readline63;
 
-  readline5 = callPackage ../development/libraries/readline/5.x.nix { };
-
-  readline62 = callPackage ../development/libraries/readline/6.2.nix { };
-
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
@@ -21352,6 +21360,15 @@ with pkgs;
   };
 
   myserver = callPackage ../servers/http/myserver { };
+
+  napalm = with python3Packages; toPythonApplication (
+    napalm.overridePythonAttrs (attrs: {
+      # add community frontends that depend on the napalm python package
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [
+        napalm-hp-procurve
+      ];
+    })
+  );
 
   nas = callPackage ../servers/nas { };
 
