@@ -3,6 +3,8 @@
 , fetchurl
 , fetchpatch
 , zlib
+, pkg-config
+, autoreconfHook
 , xz
 , libintl
 , python
@@ -54,6 +56,11 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
   buildInputs = lib.optionals pythonSupport [
     python
