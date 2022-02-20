@@ -220,7 +220,7 @@ let
       # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
-      ln -s "${pkgsBuildHost.jre8}/bin/java" third_party/jdk/current/bin/
+      ln -s "${pkgsBuildHost.jre8_headless}/bin/java" third_party/jdk/current/bin/
 
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
