@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--exec_prefix=$dev"
+    "--exec-prefix=${placeholder "dev"}"
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
