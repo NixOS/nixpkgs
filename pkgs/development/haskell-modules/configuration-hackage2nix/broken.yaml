@@ -12,7 +12,6 @@ broken-packages:
   - abstract-par-accelerate
   - abt
   - AC-BuildPlatform
-  - acc
   - accelerate-fftw
   - accelerate-llvm-native
   - accelerate-random
