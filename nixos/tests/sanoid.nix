@@ -47,6 +47,17 @@ in {
             target = "root@target:pool/sanoid";
             extraArgs = [ "--no-sync-snap" "--create-bookmark" ];
           };
+          # Sync the same dataset to different targets
+          "pool/sanoid1" = {
+            source = "pool/sanoid";
+            target = "root@target:pool/sanoid1";
+            extraArgs = [ "--no-sync-snap" "--create-bookmark" ];
+          };
+          "pool/sanoid2" = {
+            source = "pool/sanoid";
+            target = "root@target:pool/sanoid2";
+            extraArgs = [ "--no-sync-snap" "--create-bookmark" ];
+          };
           # Take snapshot and sync
           "pool/syncoid".target = "root@target:pool/syncoid";
 
@@ -93,7 +104,6 @@ in {
         "mkdir -m 700 -p /var/lib/syncoid",
         "cat '${snakeOilPrivateKey}' > /var/lib/syncoid/id_ecdsa",
         "chmod 600 /var/lib/syncoid/id_ecdsa",
-        "chown -R syncoid:syncoid /var/lib/syncoid/",
     )
 
     assert len(source.succeed("zfs allow pool")) == 0, "Pool shouldn't have delegated permissions set before snapshotting"
@@ -116,6 +126,9 @@ in {
     target.succeed("cat /mnt/pool/sanoid/test.txt")
     source.systemctl("start --wait syncoid-pool-syncoid.service")
     target.succeed("cat /mnt/pool/syncoid/test.txt")
+    source.systemctl("start --wait syncoid-pool-sanoid{1,2}.service")
+    target.succeed("cat /mnt/pool/sanoid1/test.txt")
+    target.succeed("cat /mnt/pool/sanoid2/test.txt")
 
     source.systemctl("start --wait syncoid-pool.service")
     target.succeed("[[ -d /mnt/pool/full-pool/syncoid ]]")
