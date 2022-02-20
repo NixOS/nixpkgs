@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svgbob";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchCrate {
     inherit version;
     crateName = "svgbob_cli";
-    sha256 = "sha256-yYRBV0s19J0M02wenGayy7Ebx6wDhiLiGmb+os29u9I=";
+    sha256 = "sha256-IPv6ZHgFJdH0hH9y1bQ+BHCS9EjX0Et2yuKwiYUW9gs=";
   };
 
-  cargoSha256 = "sha256-R4W+Oe7Ks2D9qE1IpV6/AMMMwZnCfJ5DzxFAMpV2rFE=";
+  cargoSha256 = "sha256-mSeVrBQIoJ/uvxzLj15sreQHU2PAa3Xihdok89XpXeQ=";
 
   meta = with lib; {
     description = "Convert your ascii diagram scribbles into happy little SVG";
