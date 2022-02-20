@@ -79,6 +79,7 @@ let
       flutter config --enable-linux-desktop
       flutter packages get
       flutter build linux || true # so it downloads tools
+      ${lib.optionalString (args ? flutterExtraFetchCommands) args.flutterExtraFetchCommands}
 
       RES="$TMP"
 
@@ -130,6 +131,7 @@ let
     '';
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
