@@ -2,7 +2,7 @@
 , fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
 
 let
-  version = "3.9.5";
+  version = "3.11.1";
   pname = "standardnotes";
   name = "${pname}-${version}";
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
@@ -13,8 +13,8 @@ let
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   sha256 = {
-    i686-linux = "sha256-7Mo8ELFV6roZ3IYWBtB2rRDAzJrq4ht9f1v6uohsauw=";
-    x86_64-linux = "sha256-9VPYII9E8E3yL7UuU0+GmaK3qxWX4bwfACDl7F7sngo=";
+    i686-linux = "3e83a7eef5c29877eeffefb832543b21627cf027ae6e7b4f662865b6b842649a";
+    x86_64-linux = "fd461e98248a2181afd2ef94a41a291d20f7ffb20abeaf0cfcf81a9f94e27868";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   src = fetchurl {
