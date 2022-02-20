@@ -2900,7 +2900,6 @@ broken-packages:
   - linden
   - linear-accelerate
   - linear-algebra-cblas
-  - linear-base
   - linear-code
   - linear-generics
   - linear-maps
