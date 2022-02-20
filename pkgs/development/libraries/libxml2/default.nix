@@ -15,6 +15,7 @@
 , icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional (enableStatic && enableShared) "static";
 
   src = fetchurl {
-    url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
-    sha256 = "14hxwzmf5xqppx77z7i0ni9lpzg1a84dqpf8j8l1fvy570g6imn8";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "KKkvarHzEaz15HhWTEkIjvCsdwkNnHGbvF1Rjx/mLrk=";
   };
 
   patches = [
@@ -121,6 +122,11 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit version;
     pythonSupport = pythonSupport;
+
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
   };
 
   meta = with lib; {
