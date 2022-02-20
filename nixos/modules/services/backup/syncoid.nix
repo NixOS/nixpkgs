@@ -284,6 +284,10 @@ in
             path = [ "/run/booted-system/sw" ];
             # Prevents missing snapshots during DST changes
             environment.TZ = "UTC";
+            # A custom LD_LIBRARY_PATH is needed to access in `getent passwd`
+            # the systemd's entry about the DynamicUser=,
+            # so that ssh won't fail with: "No user exists for uid $UID".
+            environment.LD_LIBRARY_PATH = config.system.nssModules.path;
             serviceConfig = {
               ExecStartPre =
                 (map (buildAllowCommand c.localSourceAllow) (localDatasetName c.source)) ++
@@ -346,23 +350,7 @@ in
               RootDirectory = "/run/syncoid/${escapeUnitName name}";
               RootDirectoryStartOnly = true;
               BindPaths = [ "/dev/zfs" ];
-              BindReadOnlyPaths = [ builtins.storeDir "/etc" "/run" "/bin/sh"
-                # A custom LD_LIBRARY_PATH is needed to access in `getent passwd`
-                # the systemd's entry about the DynamicUser=,
-                # so that ssh won't fail with: "No user exists for uid $UID".
-                # Unfortunately, Bash is incompatible with libnss_systemd.so:
-                # https://www.mail-archive.com/bug-bash@gnu.org/msg24306.html
-                # Hence the wrapping of ssh is done here as a mounted path,
-                # because Nixpkgs' wrapping of syncoid enforces the use
-                # of the ${pkgs.openssh}/bin/ssh path.
-                # This problem does not arise on NixOS systems where stdenv.hostPlatform.libc == "musl",
-                # because then Bash is built with --without-bash-malloc
-                ("${pkgs.writeShellScript "ssh-with-support-for-DynamicUser" ''
-                  export LD_LIBRARY_PATH="${config.system.nssModules.path}"
-                  exec -a ${pkgs.openssh}/bin/ssh /bin/ssh "$@"
-                ''}:${pkgs.openssh}/bin/ssh")
-                "${pkgs.openssh}/bin/ssh:/bin/ssh"
-              ];
+              BindReadOnlyPaths = [ builtins.storeDir "/etc" "/run" "/bin/sh" ];
               # Avoid useless mounting of RootDirectory= in the own RootDirectory= of ExecStart='s mount namespace.
               InaccessiblePaths = [ "-+/run/syncoid/${escapeUnitName name}" ];
               MountAPIVFS = true;
