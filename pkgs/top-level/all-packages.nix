@@ -27522,6 +27522,8 @@ with pkgs;
 
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 
+  melody = callPackage ../tools/misc/melody { };
+
   melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
 
   meme-image-generator = callPackage ../applications/graphics/meme-image-generator { };
