@@ -102,12 +102,6 @@ stdenv.mkDerivation rec {
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
-  # disable test that's problematic with newer pythons: see
-  # https://mail.gnome.org/archives/xml/2017-August/msg00014.html
-  preCheck = lib.optionalString (pythonSupport && !(python?pythonOlder && python.pythonOlder "3.5")) ''
-    echo "" > python/tests/tstLastError.py
-  '';
-
   preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
 
