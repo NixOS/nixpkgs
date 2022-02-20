@@ -1355,7 +1355,15 @@ self: super: {
   stm-containers = dontCheck super.stm-containers;
 
   # Fails with "supports custom headers"
-  Spock-core = dontCheck super.Spock-core;
+  # Patch for GHC 9.0 support
+  Spock-core = dontCheck (appendPatches [
+    (pkgs.fetchpatch {
+      name = "Spock-core-GHC-9.0.patch";
+      url = "https://github.com/agrafix/Spock/commit/25c75961c4aaaa2e81c9e2afd3d758f2b643f9df.patch";
+      sha256 = "03854yvda7dclz60fb1b5q8qx6zq2yjbvlyj994352xsz0lz2qan";
+      stripLen = 1;
+    })
+  ] super.Spock-core);
 
   # hasura packages need some extra care
   graphql-engine = overrideCabal (drv: {
