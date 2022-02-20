@@ -1325,20 +1325,11 @@ in
           val = tempaddrValues.${opt}.sysctl;
          in nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" val));
 
-    # Capabilities won't work unless we have at-least a 4.3 Linux
-    # kernel because we need the ambient capability
-    security.wrappers = if (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") then {
+    security.wrappers = {
       ping = {
         owner = "root";
         group = "root";
         capabilities = "cap_net_raw+p";
-        source = "${pkgs.iputils.out}/bin/ping";
-      };
-    } else {
-      ping = {
-        setuid = true;
-        owner = "root";
-        group = "root";
         source = "${pkgs.iputils.out}/bin/ping";
       };
     };

@@ -2280,7 +2280,7 @@ with pkgs;
   libtensorflow-bin = callPackage ../development/libraries/science/math/tensorflow/bin.nix {
     cudaSupport = config.cudaSupport or false;
     cudatoolkit = cudatoolkit_10_0;
-    cudnn = cudnn_cudatoolkit_10_0;
+    cudnn = cudnn_7_4_cudatoolkit_10_0;
   };
 
   libtensorflow =
@@ -2885,7 +2885,10 @@ with pkgs;
 
   ditaa = callPackage ../tools/graphics/ditaa { };
 
-  dino = callPackage ../applications/networking/instant-messengers/dino { };
+  dino = callPackage ../applications/networking/instant-messengers/dino {
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+    gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
+  };
 
   djv = callPackage ../applications/graphics/djv { };
 
@@ -4517,18 +4520,22 @@ with pkgs;
 
   cudnnPackages = callPackages ../development/libraries/science/math/cudnn { };
   inherit (cudnnPackages)
-    cudnn_cudatoolkit_10
-    cudnn_cudatoolkit_10_0
-    cudnn_cudatoolkit_10_1
-    cudnn_cudatoolkit_10_2
-    cudnn_cudatoolkit_11
-    cudnn_cudatoolkit_11_0
-    cudnn_cudatoolkit_11_1
-    cudnn_cudatoolkit_11_2
-    cudnn_cudatoolkit_11_3
-    cudnn_cudatoolkit_11_4;
+    cudnn_7_4_cudatoolkit_10_0
+    cudnn_7_6_cudatoolkit_10_2
+    cudnn_7_6_cudatoolkit_10
+    cudnn_8_1_cudatoolkit_11_0
+    cudnn_8_1_cudatoolkit_11_1
+    cudnn_8_1_cudatoolkit_11_2
+    cudnn_8_1_cudatoolkit_11
+    cudnn_8_3_cudatoolkit_11_0
+    cudnn_8_3_cudatoolkit_11_1
+    cudnn_8_3_cudatoolkit_11_2
+    cudnn_8_3_cudatoolkit_11_3
+    cudnn_8_3_cudatoolkit_11_4
+    cudnn_8_3_cudatoolkit_11_5
+    cudnn_8_3_cudatoolkit_11;
 
-  cudnn = cudnn_cudatoolkit_10;
+  cudnn = cudnn_7_6_cudatoolkit_10;
 
   cutensorPackages = callPackages ../development/libraries/science/math/cutensor { };
   inherit (cutensorPackages)
@@ -7339,6 +7346,8 @@ with pkgs;
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nixnote2 = libsForQt514.callPackage ../applications/misc/nixnote2 { };
+
+  nodenv = callPackage ../development/tools/nodenv { };
 
   nodejs = hiPrio nodejs-16_x;
 
@@ -19230,6 +19239,8 @@ with pkgs;
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
+  nvidia-vaapi-driver = callPackage ../development/libraries/nvidia-vaapi-driver { };
+
   nvidia-video-sdk = callPackage ../development/libraries/nvidia-video-sdk { };
 
   nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
@@ -30957,7 +30968,7 @@ with pkgs;
 
   katagoWithCuda = katago.override {
     enableCuda = true;
-    cudnn = cudnn_cudatoolkit_11;
+    cudnn = cudnn_8_3_cudatoolkit_11;
     cudatoolkit = cudatoolkit_11;
   };
 
