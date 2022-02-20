@@ -850,6 +850,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  vol-sl = {
+    fullName = "Volatility Software License, Version 1.0";
+    url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
+  };
+
   vsl10 = {
     spdxId = "VSL-1.0";
     fullName = "Vovida Software License v1.0";
