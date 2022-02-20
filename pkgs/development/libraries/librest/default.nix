@@ -4,6 +4,7 @@
 , pkg-config
 , glib
 , libsoup
+, libxml2
 , gobject-introspection
 , gnome
 }:
@@ -11,6 +12,8 @@
 stdenv.mkDerivation rec {
   pname = "rest";
   version = "0.8.1";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -22,9 +25,10 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     glib
     libsoup
+    libxml2
   ];
 
   configureFlags = [
