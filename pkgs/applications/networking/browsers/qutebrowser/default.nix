@@ -5,6 +5,7 @@
 , withPdfReader      ? true
 , withMediaPlayback  ? true
 , backend            ? "webengine"
+, pipewireSupport    ? stdenv.isLinux
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
@@ -121,7 +122,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
       "''${qtWrapperArgs[@]}"
       --add-flags '--backend ${backend}'
       --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
-      ${lib.optionalString (!stdenv.isDarwin && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+      ${lib.optionalString (pipewireSupport && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
     )
   '';
 
