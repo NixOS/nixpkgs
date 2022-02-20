@@ -3764,6 +3764,8 @@ with pkgs;
 
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
 
+  skeema = callPackage ../tools/system/skeema {};
+
   syslogng = callPackage ../tools/system/syslog-ng { };
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
