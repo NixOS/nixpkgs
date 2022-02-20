@@ -9892,6 +9892,12 @@
     githubId = 20524473;
     name = "Psyanticy";
   };
+  psydvl = {
+    email = "psydvl@fea.st";
+    github = "psydvl";
+    githubId = 43755002;
+    name = "Dmitriy P";
+  };
   ptival = {
     email = "valentin.robert.42@gmail.com";
     github = "Ptival";
