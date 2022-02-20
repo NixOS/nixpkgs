@@ -1365,6 +1365,9 @@ self: super: {
     })
   ] super.Spock-core);
 
+  # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
+  Spock = dontCheck super.Spock;
+
   # hasura packages need some extra care
   graphql-engine = overrideCabal (drv: {
     patches = [ ./patches/graphql-engine-mapkeys.patch ];

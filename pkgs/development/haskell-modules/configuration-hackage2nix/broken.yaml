@@ -4642,7 +4642,6 @@ broken-packages:
   - splint
   - split-morphism
   - splitter
-  - Spock
   - Spock-api-ghcjs
   - spoonutil
   - spoty
