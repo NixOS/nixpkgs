@@ -479,6 +479,8 @@ with pkgs;
 
   dump1090 = callPackage ../applications/radio/dump1090 { };
 
+  dwarf2json = callPackage ../tools/misc/dwarf2json { };
+
   ebook2cw = callPackage ../applications/radio/ebook2cw { };
 
   edwin = callPackage ../data/fonts/edwin { };
