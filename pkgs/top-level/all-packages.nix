@@ -23477,8 +23477,8 @@ with pkgs;
 
   util-linuxMinimal = if stdenv.isLinux then util-linux.override {
     nlsSupport = false;
-    ncurses = null;
-    systemd = null;
+    ncursesSupport = false;
+    systemdSupport = false;
   } else util-linux;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
