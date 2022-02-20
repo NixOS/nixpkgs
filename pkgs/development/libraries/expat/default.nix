@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "expat";
-  version = "2.4.5";
+  version = "2.4.6";
 
   src = fetchurl {
     url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8q+Px83GOoeSDaOM1tEssRPDw6P0N0lbG2VB4M/zJXk=";
+    sha256 = "sha256-3lV5S3qbwhSFL9wHW+quzYVO/hNhWX5iaO6HlGlRKJs=";
   };
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
