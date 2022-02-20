@@ -25,6 +25,9 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
 
+    mkdir -p $out/share
+    cp -r ./schema $out/share/
+
     install -Dm755 "$GOPATH/bin/server" -T $out/bin/temporal-server
     install -Dm755 "$GOPATH/bin/cassandra" -T $out/bin/temporal-cassandra-tool
     install -Dm755 "$GOPATH/bin/sql" -T $out/bin/temporal-sql-tool
