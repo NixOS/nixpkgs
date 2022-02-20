@@ -254,9 +254,10 @@ let
     mkdir -p $out/bin
     mv $built $out/app
 
-    for f in $built/data/flutter_assets/assets/*.desktop; do
+    for f in $(find $out/app -iname "*.desktop" -type f); do
       install -D $f $out/share/applications/$(basename $f)
     done
+
     for f in $(find $out/app -maxdepth 1 -type f); do
       ln -s $f $out/bin/$(basename $f)
     done
