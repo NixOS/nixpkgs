@@ -136,6 +136,9 @@ self: super: {
     })
   ] super.flat;
 
+  # Too strict bound on hspec: https://github.com/ivan-m/graphviz/issues/55
+  graphviz = doJailbreak super.graphviz;
+
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
 
@@ -2231,5 +2234,15 @@ self: super: {
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
+
+  random-fu = assert pkgs.lib.versionOlder super.random-fu.version "0.3.0.0";
+    overrideCabal (drv: {
+      version = "0.3.0.0";
+      sha256 = "1iz4b8742pshzsscy6pq39x4pndvyrydzrn968fzav9b1y6ib7d1";
+      revision = null;
+      editedCabalFile = null;
+    }) (super.random-fu.overide {
+      rvar = self.rvar_0_3_0_0;
+    });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
