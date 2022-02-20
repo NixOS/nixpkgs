@@ -1,4 +1,4 @@
-From e3ad95205928f760a5c3d80b9b667cf8e65b9e69 Mon Sep 17 00:00:00 2001
+From c35b110a83286e7413d7309eb218eb43b52f7d48 Mon Sep 17 00:00:00 2001
 From: Someone Serge <sergei.kozlukov@aalto.fi>
 Date: Sat, 19 Feb 2022 14:36:12 +0200
 Subject: [PATCH 4/4] pybind_utils.h: conflicts with nixpkgs' pybind

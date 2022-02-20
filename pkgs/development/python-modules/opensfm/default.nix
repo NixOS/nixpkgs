@@ -53,7 +53,10 @@ buildPythonPackage rec {
     sha256 = "sha256-dHBrkYwLA1OUxUSoe7DysyeEm9Yy70tIJvAsXivdjrM=";
   };
   patches = [
-    ./0001-fix-cmake-Eigen-Ceres-via-native-cmake-targets.patch
+    (fetchpatch {
+      url = "https://github.com/mapillary/OpenSfM/pull/872/commits/a76671db11038f3f4dfe5b8f17582fb447ad7dd5.patch";
+      sha256 = "sha256-4nizQiZIjucdydOLrETvs1xdV3qiYqAQ7x1HECKvlHs=";
+    })
     ./0002-cmake-find-system-distributed-gtest.patch
     ./0003-cmake-use-system-pybind11.patch
     ./0004-pybind_utils.h-conflicts-with-nixpkgs-pybind.patch

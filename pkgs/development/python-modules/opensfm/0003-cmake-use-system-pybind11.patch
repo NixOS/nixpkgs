@@ -1,4 +1,4 @@
-From fee118c249dfb817940dd6b8535e1236837de3c6 Mon Sep 17 00:00:00 2001
+From 36820fbab1abeeebd99f14e368093e0e3f934ca7 Mon Sep 17 00:00:00 2001
 From: Someone Serge <sergei.kozlukov@aalto.fi>
 Date: Sat, 19 Feb 2022 02:37:54 +0200
 Subject: [PATCH 3/4] cmake: use system pybind11
@@ -17,7 +17,7 @@ Subject: [PATCH 3/4] cmake: use system pybind11
  10 files changed, 5 insertions(+), 11 deletions(-)
 
 diff --git a/opensfm/src/CMakeLists.txt b/opensfm/src/CMakeLists.txt
-index 66775101..187a9643 100644
+index 640d47a6..6e391ffa 100644
 --- a/opensfm/src/CMakeLists.txt
 +++ b/opensfm/src/CMakeLists.txt
 @@ -54,6 +54,8 @@ endif()
@@ -29,7 +29,7 @@ index 66775101..187a9643 100644
  find_package(LAPACK)
  find_package(SuiteSparse)
  find_package(Eigen3 REQUIRED)
-@@ -73,7 +75,6 @@ else()
+@@ -82,7 +84,6 @@ else()
  endif()
  
  ####### Third party libraries #######
@@ -38,10 +38,10 @@ index 66775101..187a9643 100644
  add_subdirectory(third_party/vlfeat)
  
 diff --git a/opensfm/src/bundle/CMakeLists.txt b/opensfm/src/bundle/CMakeLists.txt
-index e219c8a3..013dc7be 100644
+index 7cd9cf74..307e963a 100644
 --- a/opensfm/src/bundle/CMakeLists.txt
 +++ b/opensfm/src/bundle/CMakeLists.txt
-@@ -51,7 +51,7 @@ target_link_libraries(pybundle PRIVATE
+@@ -52,7 +52,7 @@ target_link_libraries(pybundle PRIVATE
    bundle
    geometry
    foundation
@@ -100,7 +100,7 @@ index a9cbae02..75620d06 100644
  set_target_properties(pygeo PROPERTIES
      LIBRARY_OUTPUT_DIRECTORY "${opensfm_SOURCE_DIR}/.."
 diff --git a/opensfm/src/geometry/CMakeLists.txt b/opensfm/src/geometry/CMakeLists.txt
-index 57c848d7..0a457095 100644
+index e6dda2c2..51bfd6c5 100644
 --- a/opensfm/src/geometry/CMakeLists.txt
 +++ b/opensfm/src/geometry/CMakeLists.txt
 @@ -48,7 +48,6 @@ target_link_libraries(pygeometry
