@@ -1078,6 +1078,20 @@ self: super: {
   # dontCheck: The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
   xmobar = dontCheck super.xmobar;
 
+  # Pick GHC 9.0 compatibility patch from 1.0.5.5 release
+  heterocephalus = assert super.heterocephalus.version == "1.0.5.4";
+    overrideCabal (drv: {
+      patches = drv.patches or [] ++ [
+        (pkgs.fetchpatch {
+          url = "https://github.com/arowM/heterocephalus/commit/3d55a4031f2e555d42a3f418acd5013609f528a1.patch";
+          sha256 = "1apyn9pfzs8amaph80rnn0w8svs4g1cdw8d4f8i4md64yl0cf3r3";
+        })
+      ];
+      libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
+        self.template-haskell-compat-v0208
+      ];
+    }) super.heterocephalus;
+
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
