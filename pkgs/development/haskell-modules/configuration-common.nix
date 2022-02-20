@@ -858,21 +858,6 @@ self: super: {
   servant-docs = doJailbreak super.servant-docs;
   snap-templates = doJailbreak super.snap-templates; # https://github.com/snapframework/snap-templates/issues/22
 
-  # hledger-lib requires the latest version of pretty-simple
-  hledger-lib = appendPatch
-    # This patch has been merged but not released yet:
-    # https://github.com/simonmichael/hledger/pull/1512. It is
-    # important for ledger-autosync test suite:
-    # https://github.com/egh/ledger-autosync/issues/123
-    (pkgs.fetchpatch {
-      name   = "hledger-properly-escape-quotes-csv.patch";
-      url    = "https://github.com/simonmichael/hledger/commit/c9a72e1615e2ddc2824f2e248456e1042eb31e1d.patch";
-      sha256 = "10knvrd5bl9nrmi27i0pm82sfr64jy04xgbjp228qywyijpr3pqv";
-      includes = [ "Hledger/Read/CsvReader.hs" ];
-      stripLen = 1;
-    })
-    super.hledger-lib;
-
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal (drv: {
