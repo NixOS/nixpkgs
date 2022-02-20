@@ -2177,4 +2177,10 @@ self: super: {
     '';
   }) super.linear-base;
 
+  # Fixes compilation with GHC 9.0 and above
+  # https://hub.darcs.net/shelarcy/regex-compat-tdfa/issue/3
+  regex-compat-tdfa = appendPatches [
+    ./patches/regex-compat-tdfa-ghc-9.0.patch
+  ] super.regex-compat-tdfa;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
