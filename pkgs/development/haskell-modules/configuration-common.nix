@@ -275,6 +275,9 @@ self: super: {
   HTF = overrideCabal (orig: {
     # The scripts in scripts/ are needed to build the test suite.
     preBuild = "patchShebangs --build scripts";
+    # test suite doesn't compile with aeson >= 2.0
+    # https://github.com/skogsbaer/HTF/issues/114
+    doCheck = false;
   }) super.HTF;
   htsn = dontCheck super.htsn;
   htsn-import = dontCheck super.htsn-import;
