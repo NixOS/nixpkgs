@@ -76,6 +76,10 @@ buildPythonPackage rec {
     testpath
   ];
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_clipboard_get" # uses pbpaste
+  ];
+
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
     homepage = "http://ipython.org/";
