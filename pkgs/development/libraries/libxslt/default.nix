@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     description = "A C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = with maintainers; [ eelco jtojnar ];
     broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
   };
 }
