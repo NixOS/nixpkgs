@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102823
-  NIX_CFLAGS_COMPILE = "-fno-ipa-modref";
+  # https://github.com/g-truc/glm/pull/1087
+  NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=OFF"
