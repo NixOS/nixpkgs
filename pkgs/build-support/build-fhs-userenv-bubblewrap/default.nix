@@ -81,7 +81,13 @@ let
   createLdConfCache = ''
     cat > /etc/ld.so.conf <<EOF
     /run/opengl-driver/lib
+    /run/opengl-driver/lib/dri
+    /run/opengl-driver/lib/gbm
+    /run/opengl-driver/lib/vdpau
     /run/opengl-driver-32/lib
+    /run/opengl-driver-32/lib/dri
+    /run/opengl-driver-32/lib/gbm
+    /run/opengl-driver-32/lib/vdpau
     /lib
     /lib/x86_64-linux-gnu
     /lib64
