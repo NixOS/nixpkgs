@@ -20509,10 +20509,22 @@ with pkgs;
   wxGTK = wxGTK28;
 
   wxGTK28 = callPackage ../development/libraries/wxwidgets/wxGTK28.nix { };
-  wxGTK29 = callPackage ../development/libraries/wxwidgets/wxGTK29.nix { };
-  wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix { };
-  wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix { };
-  wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix { };
+  wxGTK29 = callPackage ../development/libraries/wxwidgets/wxGTK29.nix {
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
+  };
+  wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix {
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
+  };
+  wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix {
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
+  };
+  wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix {
+    inherit (darwin.stubs) derez rez setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel WebKit;
+  };
 
   wxGTK30-gtk2 = wxGTK30.override { withGtk2 = true; };
   wxGTK30-gtk3 = wxGTK30.override { withGtk2 = false; };

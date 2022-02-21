@@ -20,14 +20,17 @@
 , withGtk2 ? true
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withWebKit ? false, webkitgtk
-, darwin
+, setfile
+, AGL
+, Carbon
+, Cocoa
+, Kernel
+, QTKit
 }:
 
 assert withGtk2 -> (!withWebKit);
 
 let
-  inherit (darwin.stubs) setfile;
-  inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
   inherit (gnome2) GConf;
   inherit (gst_all_1) gst-plugins-base gstreamer;
   gtk = if withGtk2 then gtk2 else gtk3;

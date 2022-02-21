@@ -14,13 +14,14 @@
 , compat26 ? true
 , unicode ? true
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, darwin
+, setfile
+, AGL
+, Carbon
+, Cocoa
+, Kernel
+, QuickTime
 }:
 
-let
-  inherit (darwin.stubs) setfile;
-  inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
-in
 stdenv.mkDerivation rec {
   pname = "wxGTK";
   version = "2.9.5";
