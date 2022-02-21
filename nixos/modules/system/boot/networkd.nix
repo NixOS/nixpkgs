@@ -1753,6 +1753,10 @@ in
 
     (mkIf config.systemd.network.enable {
 
+      boot.extraModprobeConfig = ''
+        options bonding max_bonds=0
+      '';
+
       users.users.systemd-network.group = "systemd-network";
 
       systemd.additionalUpstreamSystemUnits = [
