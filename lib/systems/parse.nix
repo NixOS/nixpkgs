@@ -470,6 +470,7 @@ rec {
             if lib.versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
+          else if args.cpu=="mips64el" then abis.gnuabi64  # gnuabin32 is also possible on mips64
           else abis.gnu
         else                     abis.unknown;
     };

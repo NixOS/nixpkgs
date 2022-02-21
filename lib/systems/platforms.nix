@@ -566,6 +566,8 @@ rec {
 
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then fuloong2f_n32
 
+    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mips64el then (import ./examples.nix { lib = lib; }).mips64el-linux-gnuabi64
+
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then powernv
 
     else pc;
