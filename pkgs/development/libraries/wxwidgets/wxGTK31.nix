@@ -23,9 +23,6 @@
 , darwin
 }:
 
-assert withMesa -> libGLU != null && libGL != null;
-assert withWebKit -> webkitgtk != null;
-
 assert withGtk2 -> (!withWebKit);
 
 let

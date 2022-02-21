@@ -17,7 +17,6 @@
 , darwin
 }:
 
-assert withMesa -> libGLU != null && libGL != null;
 let
   inherit (darwin.stubs) setfile;
   inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;

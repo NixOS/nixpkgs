@@ -17,8 +17,6 @@
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 }:
 
-assert withMesa -> libGLU != null && libGL != null;
-
 stdenv.mkDerivation rec {
   pname = "wxGTK";
   version = "2.8.12.1";
