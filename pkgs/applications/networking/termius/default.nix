@@ -8,6 +8,7 @@
 , lib
 , udev
 , wrapGAppsHook
+, libxshmfence
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
 
-  buildInputs = atomEnv.packages;
+  buildInputs = atomEnv.packages libxshmfence;
 
   unpackPhase = ''
     runHook preUnpack
