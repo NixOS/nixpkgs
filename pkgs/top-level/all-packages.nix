@@ -16523,6 +16523,8 @@ with pkgs;
 
   fcl = callPackage ../development/libraries/fcl { };
 
+  febio = callPackage ../development/libraries/febio { };
+
   ffcast = callPackage ../tools/X11/ffcast { };
 
   fflas-ffpack = callPackage ../development/libraries/fflas-ffpack { };
