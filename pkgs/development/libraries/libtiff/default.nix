@@ -30,6 +30,16 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/libtiff/libtiff/-/commit/03047a26952a82daaa0792957ce211e0aa51bc64.patch";
       sha256 = "0cfih55f5qpc84mvlwsffik80bgz6drkflkhrdyqq8m84jw3mbwb";
     })
+    (fetchpatch {
+      name = "CVE-2022-0561.patch";
+      url = "https://gitlab.com/freedesktop-sdk/mirrors/gitlab/libtiff/libtiff/-/commit/eecb0712f4c3a5b449f70c57988260a667ddbdef.patch";
+      sha256 = "0m57fdxyvhhr9cc260lvkkn2g4zr4n4v9nricc6lf9h6diagd7mk";
+    })
+    (fetchpatch {
+      name = "CVE-2022-0562.patch";
+      url = "https://gitlab.com/freedesktop-sdk/mirrors/gitlab/libtiff/libtiff/-/commit/561599c99f987dc32ae110370cfdd7df7975586b.patch";
+      sha256 = "0ycirjjc1vigj03kwjb92n6jszsl9p17ccw5hry7lli9gxyyr0an";
+    })
   ];
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
