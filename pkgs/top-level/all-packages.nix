@@ -31080,6 +31080,8 @@ with pkgs;
 
   mrrescue = callPackage ../games/mrrescue { };
 
+  multimc-bin = callPackage ../games/multimc { };
+
   mudlet = libsForQt5.callPackage ../games/mudlet {
     lua = lua5_1;
   };
