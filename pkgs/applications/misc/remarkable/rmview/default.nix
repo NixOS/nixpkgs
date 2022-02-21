@@ -18,10 +18,6 @@ python3Packages.buildPythonApplication rec {
     pyrcc5 -o src/rmview/resources.py resources.qrc
   '';
 
-  preFixup = ''
-    wrapQtApp "$out/bin/rmview"
-  '';
-
   meta = with lib; {
     description = "Fast live viewer for reMarkable 1 and 2";
     homepage = "https://github.com/bordaigorl/rmview";
