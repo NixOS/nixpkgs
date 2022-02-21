@@ -7,6 +7,15 @@ let
   defaultPort = 8080;
   defaultUsername = "admin";
   defaultPassword = "password";
+  adminCredentialsFile = pkgs.writeText "admin-credentials" ''
+            ADMIN_USERNAME=${defaultUsername}
+            ADMIN_PASSWORD=${defaultPassword}
+          '';
+  customAdminCredentialsFile = pkgs.writeText "admin-credentials" ''
+            ADMIN_USERNAME=${username}
+            ADMIN_PASSWORD=${password}
+          '';
+
 in
 with lib;
 {
@@ -17,13 +26,19 @@ with lib;
     default =
       { ... }:
       {
-        services.miniflux.enable = true;
+        services.miniflux = {
+          enable = true;
+          inherit adminCredentialsFile;
+        };
       };
 
     withoutSudo =
       { ... }:
       {
-        services.miniflux.enable = true;
+        services.miniflux = {
+          enable = true;
+          inherit adminCredentialsFile;
+        };
         security.sudo.enable = false;
       };
 
@@ -36,10 +51,7 @@ with lib;
             CLEANUP_FREQUENCY = "48";
             LISTEN_ADDR = "localhost:${toString port}";
           };
-          adminCredentialsFile = pkgs.writeText "admin-credentials" ''
-            ADMIN_USERNAME=${username}
-            ADMIN_PASSWORD=${password}
-          '';
+          adminCredentialsFile = customAdminCredentialsFile;
         };
       };
   };
