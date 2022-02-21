@@ -1087,6 +1087,8 @@ with pkgs;
     use64 = true;
   };
 
+  writedisk = callPackage ../tools/misc/writedisk { };
+
   xcd = callPackage ../tools/misc/xcd { };
 
   xrootd = callPackage ../tools/networking/xrootd { };
