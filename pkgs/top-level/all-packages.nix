@@ -20523,7 +20523,7 @@ with pkgs;
   };
   wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix {
     inherit (darwin.stubs) derez rez setfile;
-    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel WebKit;
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel WebKit;
   };
 
   wxGTK30-gtk2 = wxGTK30.override { withGtk2 = true; };
