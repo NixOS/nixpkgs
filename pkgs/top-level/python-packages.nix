@@ -2470,6 +2470,8 @@ in {
 
   ds4drv = callPackage ../development/python-modules/ds4drv { };
 
+  dsinternals = callPackage ../development/python-modules/dsinternals { };
+
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
@@ -5442,6 +5444,8 @@ in {
 
   nevow = callPackage ../development/python-modules/nevow { };
 
+  newversion = callPackage ../development/python-modules/newversion { };
+
   nexia = callPackage ../development/python-modules/nexia { };
 
   nextcloudmonitor = callPackage ../development/python-modules/nextcloudmonitor { };
@@ -8169,7 +8173,9 @@ in {
 
   python-registry = callPackage ../development/python-modules/python-registry { };
 
-  python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
+  python-rtmidi = callPackage ../development/python-modules/python-rtmidi {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
+  };
 
   python-sat = callPackage ../development/python-modules/python-sat { };
 
@@ -8815,7 +8821,9 @@ in {
 
   rstcheck = callPackage ../development/python-modules/rstcheck { };
 
-  rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
+  rtmidi-python = callPackage ../development/python-modules/rtmidi-python {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
+  };
 
   rtoml = callPackage ../development/python-modules/rtoml { };
 

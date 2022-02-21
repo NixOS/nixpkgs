@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.12.1";
+  version = "3.12.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xIStWb03CygnqB92AXf0uxMLw7pLhSE3mLQ8l1J6dZM=";
+    sha256 = "sha256-CsxelHZbg25oBRM3P5UYlbWgsnR/L/w8vSFgHK1FKKI=";
   };
 
   propagatedBuildInputs = [

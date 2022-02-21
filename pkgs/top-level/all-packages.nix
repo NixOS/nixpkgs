@@ -15359,8 +15359,6 @@ with pkgs;
 
   pgcli = pkgs.python3Packages.pgcli;
 
-  phantomjs = callPackage ../development/tools/phantomjs { };
-
   phantomjs2 = libsForQt514.callPackage ../development/tools/phantomjs2 { };
 
   picotool = callPackage ../development/tools/picotool { };
